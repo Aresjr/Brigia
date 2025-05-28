@@ -2,22 +2,40 @@ version: "3.9"
 
 services:
   backend:
-    build: ./backend
-    container_name: fastapi-backend
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8008 --reload
+    build:
+      context: ./backend
+    container_name: brigia-backend
+    command: >
+      sh -c "
+        if [ \"$ENV\" = 'prod' ]; then
+          uvicorn app.main:app --host 0.0.0.0 --port ${BACKEND_PORT};
+        else
+          uvicorn app.main:app --host 0.0.0.0 --port ${BACKEND_PORT} --reload;
+        fi
+      "
+    environment:
+      - ENV=${ENV}
     volumes:
       - ./backend:/app
     ports:
-      - "8008:8008"
-    environment:
-      - PYTHONUNBUFFERED=1
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
 
   frontend:
-    build: ./frontend
-    container_name: frontend-app
-    command: npm run dev
+    build:
+      context: ./frontend
+    container_name: brigia-frontend
+    command: >
+      sh -c "
+        if [ \"$ENV\" = 'prod' ]; then
+          npm run build && npx serve -s dist -l ${FRONTEND_PORT};
+        else
+          npm run dev -- --host 0.0.0.0 --port ${FRONTEND_PORT};
+        fi
+      "
+    environment:
+      - ENV=${ENV}
     volumes:
       - ./frontend:/app
       - /app/node_modules
     ports:
-      - "8080:8080"
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
