@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -27,6 +26,7 @@ export const SidebarFooter = ({ expanded, profile }: SidebarFooterProps) => {
     if (error) {
       toast.error(error.message);
     } else {
+      sessionStorage.removeItem('supabase.auth.token');
       navigate("/auth");
     }
   };
