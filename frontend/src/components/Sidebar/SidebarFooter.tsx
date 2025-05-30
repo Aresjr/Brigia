@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Profile } from "./types";
+import { clearSession } from "@/api";
 
 interface SidebarFooterProps {
   expanded: boolean;
@@ -26,7 +27,7 @@ export const SidebarFooter = ({ expanded, profile }: SidebarFooterProps) => {
     if (error) {
       toast.error(error.message);
     } else {
-      sessionStorage.removeItem('supabase.auth.token');
+      clearSession();
       navigate("/auth");
     }
   };

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { isLogged, getSession } from '../api';
 
 type ProtectedLayoutProps = {
   children: React.ReactNode;
@@ -24,38 +24,24 @@ const ProtectedLayout = ({
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const {
-          data: {
-            session
-          }
-        } = await supabase.auth.getSession();
-        if (!session) {
+        const logged = await isLogged();
+        if (!logged) {
+          toast.error("Você deve se autenticar para ver essa página");
           navigate("/auth");
           return;
         }
+        const session = getSession();
         setUserId(session.user.id);
         setLoading(false);
       } catch (error) {
         console.error("Erro ao verificar a sessão:", error);
-        toast.error("Erro na autenticação. Tente entrar novamente.");
+        toast.error("Você deve se autenticar para ver essa página");
         navigate("/auth");
       }
     };
     checkSession();
-    const {
-      data: authListener
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === "SIGNED_OUT") {
-        navigate("/auth");
-      } else if (session) {
-        setUserId(session.user.id);
-        setLoading(false);
-      }
-    });
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
   }, [navigate]);
+
   const handleSidebarExpand = (expanded: boolean) => {
     setSidebarExpanded(expanded);
   };
