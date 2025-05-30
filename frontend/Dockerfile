@@ -2,15 +2,19 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy and install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the app
 COPY . .
 
-# Expose port for Vite
+ARG VITE_BACKEND_URL
+ARG VITE_SUPABASE_URL
+ARG VITE_SUPABASE_PUBLISHABLE_KEY
+
+ENV VITE_BACKEND_URL=${VITE_BACKEND_URL}
+ENV VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+ENV VITE_SUPABASE_PUBLISHABLE_KEY=${VITE_SUPABASE_PUBLISHABLE_KEY}
+
 EXPOSE 8080
 
-# Default command
 CMD ["npm", "run", "dev"]

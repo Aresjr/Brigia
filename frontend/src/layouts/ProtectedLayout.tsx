@@ -27,7 +27,7 @@ const ProtectedLayout = ({
         const logged = await isLogged();
         if (!logged) {
           toast.error("Você deve se autenticar para ver essa página");
-          navigate("/auth");
+          navigate("/login");
           return;
         }
         const session = getSession();
@@ -36,7 +36,7 @@ const ProtectedLayout = ({
       } catch (error) {
         console.error("Erro ao verificar a sessão:", error);
         toast.error("Você deve se autenticar para ver essa página");
-        navigate("/auth");
+        navigate("/login");
       }
     };
     checkSession();

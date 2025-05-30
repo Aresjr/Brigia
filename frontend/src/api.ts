@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: import.meta.env.BACKEND_PORT || 'http://localhost:8008'
+    baseURL: import.meta.env.VITE_BACKEND_URL || 'http://localhost:8008'
 });
 
 export const login = async (email: string, password: string) => {

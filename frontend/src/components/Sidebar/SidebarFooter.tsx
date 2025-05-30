@@ -28,7 +28,7 @@ export const SidebarFooter = ({ expanded, profile }: SidebarFooterProps) => {
       toast.error(error.message);
     } else {
       clearSession();
-      navigate("/auth");
+      navigate("/login");
     }
   };
 
