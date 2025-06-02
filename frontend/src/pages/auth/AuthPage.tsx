@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2, Mail, Lock } from "lucide-react";
-import { login } from "@/api";
+import { login } from "@/api/auth.ts";
 
 export default function AuthPage() {
   const [loading, setLoading] = useState(false);

@@ -41,6 +41,7 @@ services:
       "
     environment:
       - ENV=${ENV}
+      - CHOKIDAR_USEPOLLING=true
     volumes:
       - ./frontend:/app
       - /app/node_modules

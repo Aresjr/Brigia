@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { DataItem, MedicalPlan } from "@/models/models";
-import { supabase } from "@/integrations/supabase/client";
 import { enrichItemsWithMedicalPlanNames } from "@/components/DataTable/DataTableUtils";
+import {getMedicalPlans} from "@/api/medicalPlansApi.ts";
 
 export function useDataTableState(
   isLoading: boolean,
@@ -28,13 +28,10 @@ export function useDataTableState(
   const { data: medicalPlansData = [] } = useQuery<MedicalPlan[]>({
     queryKey: ["medicalPlansLookup"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("medical_plans")
-        .select("id, name");
+      const { data, error } = await getMedicalPlans();
       
       if (error) throw error;
-      
-      // Convert all IDs to strings to match MedicalPlan interface
+
       return data.map((plan: any) => ({
         ...plan,
         id: String(plan.id)

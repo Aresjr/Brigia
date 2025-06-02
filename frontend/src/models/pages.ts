@@ -27,7 +27,6 @@ const pageTitles = {
     },
     "/pacientes": {
         "title": "Pacientes",
-        "table": TableName.PATIENTS,
         "component": PatientsTable,
         "columns": "cpf, created_at, id, identification_color, last_appointment, name, next_appointment, sex, birth_date, cellphone"
     },

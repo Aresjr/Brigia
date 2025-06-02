@@ -22,6 +22,63 @@ supabase: Client = create_client(
     settings.SUPABASE_JWT_SECRET
 )
 
+@router.get("/", response_model=PaginatedPatients)
+async def list_patients(
+        is_deleted: bool = False,
+        medical_plan_id: Optional[int] = None,
+        page: int = 1,
+        size: int = 20,
+        order_by: Optional[OrderBy] = OrderBy.NAME_ASC,
+        search: Optional[str] = None
+):
+    try:
+        offset = (page - 1) * size
+
+        count_query = supabase.table("a_patients").select("id", count="exact")
+        query = supabase.table("a_patients").select("*")
+
+        if not is_deleted:
+            count_query = count_query.eq("is_deleted", False)
+            query = query.eq("is_deleted", False)
+
+        if medical_plan_id:
+            count_query = count_query.eq("medical_plan_id", medical_plan_id)
+            query = query.eq("medical_plan_id", medical_plan_id)
+
+        if search:
+            search_term = f"%{search}%"
+            count_query = count_query.or_(f"name.ilike.{search_term},email.ilike.{search_term},cpf.ilike.{search_term}")
+            query = query.or_(f"name.ilike.{search_term},email.ilike.{search_term},cpf.ilike.{search_term}")
+
+        count_response = count_query.execute()
+        total = count_response.count if count_response.count is not None else 0
+
+        if order_by:
+            order_field = order_by.value
+            if order_field.startswith("-"):
+                query = query.order(order_field[1:], desc=True)
+            else:
+                query = query.order(order_field)
+
+        query = query.range(offset, offset + size - 1)
+
+        response = query.execute()
+
+        total_pages = (total + size - 1) // size
+
+        return PaginatedPatients(
+            items=response.data or [],
+            total=total,
+            page=page,
+            size=size,
+            pages=total_pages
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"code": "list_failed", "message": str(e)}
+        )
+
 @router.post("/", response_model=Patient, status_code=201)
 async def create_patient(patient: PatientCreate):
     try:
@@ -68,63 +125,6 @@ async def create_patient(patient: PatientCreate):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail={"code": "invalid_request", "message": str(e)}
-        )
-
-@router.get("/", response_model=PaginatedPatients)
-async def list_patients(
-    is_deleted: bool = False,
-    medical_plan_id: Optional[int] = None,
-    page: int = 1,
-    size: int = 20,
-    order_by: Optional[OrderBy] = OrderBy.NAME_ASC,
-    search: Optional[str] = None
-):
-    try:
-        offset = (page - 1) * size
-        
-        count_query = supabase.table("a_patients").select("id", count="exact")
-        query = supabase.table("a_patients").select("*")
-        
-        if not is_deleted:
-            count_query = count_query.eq("is_deleted", False)
-            query = query.eq("is_deleted", False)
-        
-        if medical_plan_id:
-            count_query = count_query.eq("medical_plan_id", medical_plan_id)
-            query = query.eq("medical_plan_id", medical_plan_id)
-        
-        if search:
-            search_term = f"%{search}%"
-            count_query = count_query.or_(f"name.ilike.{search_term},email.ilike.{search_term},cpf.ilike.{search_term}")
-            query = query.or_(f"name.ilike.{search_term},email.ilike.{search_term},cpf.ilike.{search_term}")
-        
-        count_response = count_query.execute()
-        total = count_response.count if count_response.count is not None else 0
-        
-        if order_by:
-            order_field = order_by.value
-            if order_field.startswith("-"):
-                query = query.order(order_field[1:], desc=True)
-            else:
-                query = query.order(order_field)
-        
-        query = query.range(offset, offset + size - 1)
-        
-        response = query.execute()
-        
-        total_pages = (total + size - 1) // size
-        
-        return PaginatedPatients(
-            items=response.data or [],
-            total=total,
-            page=page,
-            size=size,
-            pages=total_pages
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail={"code": "list_failed", "message": str(e)}
         )
 
 @router.get("/{patient_id}", response_model=Patient)

@@ -1,19 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "@/components/DataTable/DataTable";
-import { getPagesWithTables, getTableColumns, getTableName } from "@/models/pages";
-import { TableName } from "@/models/tables";
-import { getFetchFromTableName } from "@/services/dbService";
 import { DataItem } from "@/models/models";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { FormDialog } from "@/components/Forms/FormDialog";
+import {getPatients} from "@/api/patientsApi.ts";
 
 const Patients = () => {
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
     const [editingItem, setEditingItem] = useState<DataItem | null>(null);
     const [formError, setFormError] = useState<string | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
+
+    console.log("Got here!");
 
     const selectAll = () => {
         const allIds = items.map(item => String(item.id));
@@ -25,20 +25,24 @@ const Patients = () => {
     };
 
     const fetchData = async () => {
-        const tableName : TableName = getTableName(location.pathname);
-        const tableColumns = getTableColumns(location.pathname);
 
-        const data = await getFetchFromTableName(tableName, tableColumns);
-        
-        return data.map((item: any) => ({
-            ...item,
-            id: String(item.id),
-            medical_plan_id: item.medical_plan_id ? String(item.medical_plan_id) : undefined
-        })) as DataItem[];
+        try {
+            const data = await getPatients();
+
+            return data.map((item: any) => ({
+                ...item,
+                id: String(item.id),
+                medical_plan_id: item.medical_plan_id ? String(item.medical_plan_id) : undefined
+            })) as DataItem[];
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            toast.error("Erro ao buscar pacientes");
+            return [];
+        }
     };
 
     const handleDelete = async (id: string) => {
-        const tableName = getTableName(location.pathname);
+        const tableName = getPatients();
         if (!tableName) return;
         try {
             if (tableName === 'patients') {
@@ -76,9 +80,8 @@ const Patients = () => {
     } = useQuery({
         queryKey: ['items', location.pathname],
         queryFn: fetchData,
-        enabled: getPagesWithTables.includes(location.pathname)
+        enabled: true
     });
-
 
     return (
         <>

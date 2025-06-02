@@ -1,8 +1,4 @@
-import axios from 'axios';
-
-const api = axios.create({
-    baseURL: import.meta.env.VITE_BACKEND_URL || 'http://localhost:8008'
-});
+import {api, getSession} from './index';
 
 export const login = async (email: string, password: string) => {
     try {
@@ -15,15 +11,6 @@ export const login = async (email: string, password: string) => {
     } catch (error) {
         throw error.response?.data || error;
     }
-}
-
-export const getSession = () => {
-    const session = sessionStorage.getItem('session');
-    return session ? JSON.parse(session) : null;
-}
-
-export const clearSession = () => {
-    sessionStorage.removeItem('session');
 }
 
 export const isLogged = async (): Promise<boolean> => {

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
-import { isLogged, getSession } from '../api';
+import { getSession } from '@/api';
+import { isLogged } from '@/api/auth.ts';
 
 type ProtectedLayoutProps = {
   children: React.ReactNode;
@@ -14,7 +14,6 @@ const ProtectedLayout = ({
 }: ProtectedLayoutProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const queryClient = useQueryClient();
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
