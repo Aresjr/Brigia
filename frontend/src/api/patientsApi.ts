@@ -3,9 +3,14 @@ import api from './index';
 const url = '/patients';
 
 export const getPatients = async () => {
-    const res = await api.get(url + "?size=9999");
+    const res = await api.get(`${url}?size=9999`);
     return res.data.items;
 };
+
+export const getPatient = async (id: string | number) => {
+    const res = await api.get(`${url}/${id}`);
+    return res.data;
+}
 
 export const createPatient = async (patientData: any) => {
     const res = await api.post(url, patientData);
@@ -13,6 +18,11 @@ export const createPatient = async (patientData: any) => {
 };
 
 export const getPatientsCount = async () => {
-    const res = await api.get(url + "/count");
+    const res = await api.get(`${url}/count`);
     return res.data.count;
+}
+
+export const deletePatient = async (id: string | number) => {
+    const res = await api.delete(`${url}/${id}`);
+    return res.data;
 }

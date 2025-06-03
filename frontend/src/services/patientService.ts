@@ -1,21 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import { DataItem, PatientAddress } from "../models/models";
-import { TableName } from "../models/tables";
-
-export async function getPatientAddress(patientId: number | string): Promise<PatientAddress> {
-    const { data, error } = await supabase
-        .from(TableName.PATIENTS)
-        .select(`address_cep, address_rua, address_complemento, address_bairro, address_cidade, address_uf`)
-        .eq("id", Number(patientId))
-        .maybeSingle();
-
-    if (error) {
-        console.error("Erro ao buscar o endereço do paciente:", error);
-        return null;
-    }
-
-    return data as PatientAddress | null;
-}
+import { DataItem } from "../models/models";
 
 export async function getPatientMedicalPlans(patientId: number): Promise<string[]> {
 

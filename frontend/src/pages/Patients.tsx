@@ -2,10 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { DataItem } from "@/models/models";
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { FormDialog } from "@/components/Forms/FormDialog";
-import {getPatients} from "@/api/patientsApi.ts";
+import {deletePatient, getPatients} from "@/api/patientsApi.ts";
 
 const Patients = () => {
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -40,24 +39,10 @@ const Patients = () => {
     };
 
     const handleDelete = async (id: string) => {
-        const tableName = getPatients();
-        if (!tableName) return;
+
         try {
-            if (tableName === 'patients') {
-                const {
-                    error
-                } = await supabase.from(tableName).update({
-                    is_deleted: true
-                }).eq('id', parseInt(id, 10));
-                if (error) throw error;
-                toast.success("Paciente marcado como excluído");
-            } else {
-                const {
-                    error
-                } = await supabase.from(tableName).delete().eq('id', parseInt(id, 10));
-                if (error) throw error;
-                toast.success("Registro excluído");
-            }
+            await deletePatient(id);
+            toast.success("Registro excluído");
             refetch();
         } catch (error) {
 

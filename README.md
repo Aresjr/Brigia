@@ -42,3 +42,5 @@ SUPABASE_JWT_ALGO=HS256
 - [ ] Finish Professionals page
 - [ ] Migrate to **Next.js** for SSR and routing improvements  
   ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white)
+- [ ] Add i18n support for multiple languages
+  ![i18n](https://img.shields.io/badge/i18n-000000?style=flat-square&logo=i18next&logoColor=white)

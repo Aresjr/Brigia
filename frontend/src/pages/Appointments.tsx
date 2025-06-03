@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { format, startOfWeek, endOfWeek, eachDayOfInterval, addDays, isWithinInterval, startOfDay, endOfDay, isToday, isSameDay, isValid } from "date-fns";
+import { Card, CardContent } from "@/components/ui/card";
+import { format, startOfWeek, endOfWeek, eachDayOfInterval, isWithinInterval, isToday, isSameDay, isValid } from "date-fns";
 import { pt } from "date-fns/locale";
 import { useQuery } from "@tanstack/react-query";
 import { getAppointments } from "@/services/dbService";
@@ -13,7 +13,6 @@ import { CalendarClock, CalendarDays, Calendar as CalendarIcon } from "lucide-re
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { formatDate } from "@/utils/dateUtils";
 
 const Appointments = () => {
   const [view, setView] = useState<"daily" | "weekly" | "monthly">("daily");

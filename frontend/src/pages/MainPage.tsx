@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MessageSquare } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import ProtectedLayout from "@/layouts/ProtectedLayout";
 import {getPageTitle} from "@/models/pages";
 import { DataItem } from "@/models/models";
@@ -41,19 +40,8 @@ const MainPage = () => {
             const session = await getSession();
             if (!session?.user) return;
 
-            const {
-                error
-            } = await supabase.from('profiles').update({
-                [key]: value
-            }).eq('user_id', session.user.id);
-            if (error) throw error;
-            setProfile(prev => prev ? {
-                ...prev,
-                [key]: value
-            } : null);
-            if (key === 'theme') {
-                setTheme(value);
-            }
+            //TODO - implement
+
             toast.success('Configurações salvas');
         } catch (error: any) {
             toastError({

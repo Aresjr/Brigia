@@ -4,7 +4,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { supabase } from "@/integrations/supabase/client";
 import { Profile } from "@/components/Sidebar/types";
 import { UserCircle } from "lucide-react";
 import {getSession} from "@/api/auth.ts";
@@ -47,9 +46,8 @@ const SettingsPage = () => {
     try {
       const fileName = `avatar_${Date.now()}_${file.name}`;
       // Upload the file to Supabase storage
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(fileName, file);
+        //TODO - implement avatar upload
+      const uploadError = null;
 
       if (uploadError) {
         console.error('Error uploading avatar:', uploadError);
@@ -61,16 +59,9 @@ const SettingsPage = () => {
         return;
       }
 
-      // Get the public URL of the uploaded file
-      const { data: { publicUrl } } = supabase.storage
-        .from('avatars')
-        .getPublicUrl(fileName);
-
       // Update the profile with the new avatar URL
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({ avatar_url: publicUrl })
-        .eq('id', typeof profile.id === 'string' ? parseInt(profile.id, 10) : profile.id);
+        //TODO - implement
+      const updateError = null;
 
       if (updateError) {
         console.error('Error updating profile:', updateError);
@@ -81,6 +72,8 @@ const SettingsPage = () => {
         });
         return;
       }
+
+      const publicUrl = null;
 
       setProfile({ ...profile, avatar_url: publicUrl });
       toast({
@@ -100,10 +93,8 @@ const SettingsPage = () => {
     if (!profile) return;
 
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ name: name })
-        .eq('id', typeof profile.id === 'string' ? parseInt(profile.id, 10) : profile.id);
+        //TODO - implement backend call to change name
+      const error = null;
 
       if (error) {
         console.error('Error updating name:', error);
@@ -132,10 +123,8 @@ const SettingsPage = () => {
         if (!profile) return;
 
         try {
-            const { error } = await supabase
-                .from('profiles')
-                .update({ establishment: establishment })
-                .eq('id', typeof profile.id === 'string' ? parseInt(profile.id, 10) : profile.id);
+            //TODO - implement backend call to change establishment
+            const error = null;
 
             if (error) {
                 console.error('Error updating establishment:', error);

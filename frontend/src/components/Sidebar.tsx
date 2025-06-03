@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { SidebarHeader } from "./Sidebar/SidebarHeader";
@@ -7,7 +6,7 @@ import { SidebarContent } from "./Sidebar/SidebarContent";
 import { SidebarFooter } from "./Sidebar/SidebarFooter";
 import { Profile } from "./Sidebar/types";
 import { useMenuItems } from "./Sidebar/menuItems";
-import { getProfile } from "@/services/dbService";
+import { getSession } from "@/api/auth";
 
 interface SidebarProps {
   onExpand: (expanded: boolean) => void;
@@ -43,13 +42,9 @@ export default function Sidebar({
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const {
-        data: {
-          session
-        }
-      } = await supabase.auth.getSession();
+      const session = await getSession();
       if (session?.user) {
-        const profileData = await getProfile(session.user.id);
+        const profileData = session.profile;
         setProfile(profileData);
       }
     };

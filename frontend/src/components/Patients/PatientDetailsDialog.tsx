@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { UserCircle, Edit, History } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { getPatientAddress } from "@/services/patientService";
+import {getPatient} from "@/api/patientsApi.ts";
 
 interface PatientDetailsDialogProps {
   isOpen: boolean;
@@ -38,9 +38,7 @@ export const PatientDetailsDialog = ({
 
   const { data: patientAddress } = useQuery<PatientAddress>({
     queryKey: ["patientAddress", patient.id],
-    queryFn: async () => {
-      return getPatientAddress(patient.id);
-    },
+    queryFn: async () => getPatient(patient.id),
     enabled: !!patient.id && isOpen
   });
 
