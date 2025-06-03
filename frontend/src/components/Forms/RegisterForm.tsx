@@ -3,7 +3,6 @@ import { DataItem } from "@/models/models";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { 
   PatientBasicInfo, 
   PatientContactInfo, 
@@ -12,6 +11,7 @@ import {
 } from "./PatientForm";
 import { identificationColors, validatePatientForm, processInitialData } from "./utils/formUtils";
 import { getPatientMedicalPlans } from "@/services/patientService";
+import {getMedicalPlans} from "@/api/medicalPlansApi.ts";
 
 interface RegisterFormProps {
   pathname: string;
@@ -32,10 +32,7 @@ export const RegisterForm = ({ pathname, onSubmit, initialData }: RegisterFormPr
   const { data: medicalPlans = [] } = useQuery({
     queryKey: ["medicalPlansOptions"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("medical_plans")
-        .select("id, name")
-        .order("name");
+      const { data, error } = await getMedicalPlans();
       
       if (error) throw error;
       return data.map((plan: any) => ({
@@ -130,9 +127,9 @@ export const RegisterForm = ({ pathname, onSubmit, initialData }: RegisterFormPr
       
       if (pathname === "/pacientes" && profilePicture) {
         const fileName = `${Date.now()}_${profilePicture.name}`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('patient_avatars')
-          .upload(fileName, profilePicture);
+
+        //TODO - implement
+        const uploadError = null;
         
         if (uploadError) {
           toast({
@@ -143,12 +140,7 @@ export const RegisterForm = ({ pathname, onSubmit, initialData }: RegisterFormPr
           setIsSubmitting(false);
           return;
         }
-        
-        const { data: { publicUrl } } = supabase.storage
-          .from('patient_avatars')
-          .getPublicUrl(fileName);
-        
-        submitData.image_url = publicUrl;
+
       }
       
       onSubmit(submitData);

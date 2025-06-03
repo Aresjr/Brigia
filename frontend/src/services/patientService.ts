@@ -1,12 +1,9 @@
-import { supabase } from "@/integrations/supabase/client";
 import { DataItem } from "../models/models";
+import {getPatientMedicalPlan} from "@/api/patientsApi.ts";
 
 export async function getPatientMedicalPlans(patientId: number): Promise<string[]> {
 
-    const { data, error } = await supabase
-    .from("patient_medical_plans")
-    .select("medical_plan_id")
-    .eq("patient_id", patientId);
+    const { data, error } = await getPatientMedicalPlan(patientId);
   
     if (error) {
         console.error("Erro ao buscar os convênios do paciente:", error);

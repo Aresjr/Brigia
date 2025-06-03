@@ -5,8 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { UserCircle, Edit, History } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import {getPatient} from "@/api/patientsApi.ts";
+import {getPatient, getPatientMedicalPlan} from "@/api/patientsApi.ts";
 
 interface PatientDetailsDialogProps {
   isOpen: boolean;
@@ -25,10 +24,7 @@ export const PatientDetailsDialog = ({
   const { data: patientMedicalPlans = [] } = useQuery({
     queryKey: ["patientMedicalPlans", patient.id],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("patient_medical_plans")
-        .select(`*, medical_plans (id, name, description) `)
-        .eq("patient_id", Number(patient.id));
+      const { data, error } = await getPatientMedicalPlan(patient.id);
 
       if (error) throw error;
       return data || [];

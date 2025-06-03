@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi.responses import Response
 from typing import Optional
 from supabase import create_client, Client
 
@@ -10,7 +11,7 @@ from ..models.patients import (
     PatientBase,
     PatientCreate,
     OrderBy,
-    PaginatedPatients
+    PaginatedPatients, PatientMedicalPlan
 )
 
 router = APIRouter(
@@ -230,6 +231,30 @@ async def delete_patient(patient_id: int, permanent: bool = False):
             }).eq("id", patient_id).execute()
         
         return None
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.get("/{patient_id}/medical-plan", response_model=PatientMedicalPlan)
+async def get_patient_medical_plan(patient_id: int):
+    try:
+        response = supabase.table("a_patient_medical_plans").select("*").eq("patient_id", patient_id).execute()
+
+        if not response.data or len(response.data) == 0:
+            return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+        medical_plan = response.data[0]
+
+        print(medical_plan)
+
+        return PatientMedicalPlan(
+            id=medical_plan["medical_plan_id"],
+            description=medical_plan["description"],
+            card_number=medical_plan["card_number"] if "card_number" in medical_plan else None,
+            holder_name=medical_plan["holder_name"],
+            expiration_date=medical_plan["expiration_date"] if "expiration_date" in medical_plan else None
+        )
     except HTTPException:
         raise
     except Exception as e:

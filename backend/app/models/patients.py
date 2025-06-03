@@ -67,3 +67,12 @@ class PaginatedPatients(BaseModel):
     page: int
     size: int
     pages: int
+
+class PatientMedicalPlan(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    description: str
+    card_number: Optional[str] = None
+    holder_name: Optional[str] = None
+    expiration_date: Optional[date] = None

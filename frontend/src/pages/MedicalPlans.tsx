@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { DataTable } from "@/components/DataTable/DataTable";
-import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataItem } from "@/models/models";
 import { MedicalPlanSidePanelForm } from "./form/MedicalPlanSidePanelForm";
-import {getMedicalPlans} from "@/api/medicalPlansApi.ts";
+import {deleteMedicalPlan, getMedicalPlans} from "@/api/medicalPlansApi.ts";
 
 export default function MedicalPlans() {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -15,87 +14,14 @@ export default function MedicalPlans() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const fetchMedicalPlans = async (): Promise<DataItem[]> => {
-    const { data, error } = await supabase
-      .from("medical_plans")
-      .select("*")
-      .order("name", { ascending: true });
-
-    if (error) throw error;
-
-    return data.map((item: any) => ({
-      id: String(item.id),
-      name: item.name,
-      description: item.description || "",
-      created_at: item.created_at,
-      medical_plans: item
-    }));
-  };
-
   const { data: medicalPlans = [], isLoading, error } = useQuery({
     queryKey: ["medicalPlans"],
     queryFn: getMedicalPlans
   });
 
-  const createMutation = useMutation({
-    mutationFn: async (data: Omit<DataItem, "id" | "created_at">) => {
-      const { data: result, error } = await supabase
-        .from("medical_plans")
-        .insert([
-          {
-            name: data.name,
-            description: data.description
-          }
-        ])
-        .select();
-      
-      if (error) throw new Error("Failed to create medical plan. Please try again.");
-      return result[0];
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["medicalPlans"] });
-      toast({
-        description: "Convênio criado"
-      });
-      setEditingItem(null);
-    },
-    onError: (error: any) => {
-      setFormError("Erro ao criar convênio. Tente novamente.");
-    }
-  });
-
-  const updateMutation = useMutation({
-    mutationFn: async (data: DataItem) => {
-      const { data: result, error } = await supabase
-        .from("medical_plans")
-        .update({
-          name: data.name,
-          description: data.description
-        })
-        .eq("id", typeof data.id === 'string' ? parseInt(data.id, 10) : data.id)
-        .select();
-      
-      if (error) throw new Error("Failed to update medical plan. Please try again.");
-      return result[0];
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["medicalPlans"] });
-      toast({
-        description: "Convênio atualizado"
-      });
-      setEditingItem(null);
-    },
-    onError: (error: any) => {
-      setFormError("Erro ao atualizar o convênio. Tente novamente.");
-    }
-  });
-
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from("medical_plans")
-        .delete()
-        .eq("id", parseInt(id, 10));
+      const { error } = await deleteMedicalPlan(id);
       
       if (error) throw new Error("Failed to delete medical plan. Please try again.");
       return id;
@@ -115,14 +41,6 @@ export default function MedicalPlans() {
       });
     }
   });
-
-  const handleSubmit = (data: Omit<DataItem, "id" | "created_at">) => {
-    if (editingItem) {
-      updateMutation.mutate({ ...data, id: editingItem.id, created_at: editingItem.created_at });
-    } else {
-      createMutation.mutate(data);
-    }
-  };
 
   const handleEdit = (item: DataItem) => {
     setEditingItem(item);
