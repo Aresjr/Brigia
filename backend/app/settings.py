@@ -2,6 +2,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     ENV: str
+    FRONTEND_PORT: str
     SUPABASE_PROJECT_ID: str
     SUPABASE_JWT_SECRET: str
     SUPABASE_JWT_ALGO: str = "HS256"

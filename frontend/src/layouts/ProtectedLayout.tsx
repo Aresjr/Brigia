@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import { toast } from "sonner";
 import {isLogged} from '@/api/auth.ts';

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.settings import settings
-from app.routes import (
+from .settings import settings
+from .routes import (
     auth_route as auth,
     medical_plans_route as medical_plans,
     patients_route as patients,
@@ -21,13 +21,12 @@ else:
     app = FastAPI()
 
 origins = [
-    "http://localhost",
-    "http://localhost:8080",
-    "http://*.nemeia.com.br",
+    "http://localhost:" + str(settings.FRONTEND_PORT),
+    "http://*.nemeia.com.br:" + str(settings.FRONTEND_PORT)
 ]
 
 app.add_middleware(
-    CORSMiddleware,
+    CORSMiddleware,  # type: ignore
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
