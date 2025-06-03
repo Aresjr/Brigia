@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from typing import Optional
 from supabase import create_client, Client
+
+from ..models.common import CountResponse
 from ..settings import settings
 from ..middleware.auth import get_current_user
 from ..models.patients import (
@@ -125,6 +127,17 @@ async def create_patient(patient: PatientCreate):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail={"code": "invalid_request", "message": str(e)}
+        )
+
+@router.get("/count", response_model=CountResponse, status_code=200)
+async def count_patients(is_deleted: bool = False):
+    try:
+        response = supabase.table("a_patients").select("id", count="exact").eq("is_deleted", is_deleted).execute()
+        return { "count": int(response.count or 0) }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"code": "count_failed", "message": str(e)}
         )
 
 @router.get("/{patient_id}", response_model=Patient)

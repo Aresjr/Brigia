@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -9,7 +8,6 @@ import { SidebarFooter } from "./Sidebar/SidebarFooter";
 import { Profile } from "./Sidebar/types";
 import { useMenuItems } from "./Sidebar/menuItems";
 import { getProfile } from "@/services/dbService";
-import { TableName } from "@/models/tables";
 
 interface SidebarProps {
   onExpand: (expanded: boolean) => void;

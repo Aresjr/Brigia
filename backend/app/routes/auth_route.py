@@ -1,8 +1,9 @@
-from fastapi import APIRouter, HTTPException, status
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from fastapi import APIRouter, Cookie, HTTPException, Response, status
 from supabase import create_client, Client
+
+from ..models.auth import LoginResponse, LoginCredentials, UserBase
+from ..models.profiles import ProfileBase
 from ..settings import settings
-from ..models.profiles import Profile, ProfileBase
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -12,36 +13,9 @@ supabase: Client = create_client(
 )
 
 
-class LoginCredentials(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-    
-    email: EmailStr = Field(..., min_length=1)
-    password: str = Field(..., min_length=1)
-
-
-class UserResponse(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
-    id: str
-    email: str
-    profile: Profile
-
-
-class LoginResponse(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-    
-    access_token: str
-    token_type: str
-    user: UserResponse
-
-
 @router.post("/login", response_model=LoginResponse)
-async def login(credentials: LoginCredentials):
-    """
-    Login with email and password and return user data with profile
-    """
+async def login(credentials: LoginCredentials, response: Response):
     try:
-        # Authenticate user
         try:
             auth_response = supabase.auth.sign_in_with_password({
                 "email": credentials.email,
@@ -66,13 +40,11 @@ async def login(credentials: LoginCredentials):
                     "message": "Invalid credentials"
                 }
             )
-        
-        # Get user profile
+
         try:
             profile_response = supabase.table("a_profiles").select("*").eq("user_id", auth_response.user.id).execute()
             
             if not profile_response.data:
-                # Create default profile if it doesn't exist
                 profile_response = supabase.table("a_profiles").insert({
                     "user_id": auth_response.user.id,
                     "name": auth_response.user.email.split("@")[0],  # Use email username as default name
@@ -99,17 +71,30 @@ async def login(credentials: LoginCredentials):
                     "message": f"Failed to retrieve user profile: {str(e)}"
                 }
             )
-        
+
+        access_token = auth_response.session.access_token
+        refresh_token = auth_response.session.refresh_token
+
+        response.set_cookie("access_token", access_token, httponly=True, secure=True, samesite="strict", max_age=1800)  # 30 min
+        response.set_cookie("refresh_token", refresh_token, httponly=True, secure=True, samesite="strict", max_age=604800)  # 7 days
+
+        # Format the response according to LoginResponse model
         return LoginResponse(
-            access_token=auth_response.session.access_token,
-            token_type="bearer",
-            user=UserResponse(
+            message="Login successful",
+            user=UserBase(
                 id=auth_response.user.id,
-                email=auth_response.user.email,
-                profile=profile_response.data[0]
+                email=auth_response.user.email
+            ),
+            profile=ProfileBase(
+                name=profile_response.data[0]["name"],
+                avatar_url=profile_response.data[0].get("avatar_url"),
+                role=profile_response.data[0]["role"],
+                theme=profile_response.data[0]["theme"],
+                language=profile_response.data[0]["language"],
+                establishment=profile_response.data[0].get("establishment")
             )
         )
-            
+
     except HTTPException:
         raise
     except Exception as e:
@@ -120,3 +105,28 @@ async def login(credentials: LoginCredentials):
                 "message": str(e)
             }
         )
+
+@router.post("/refresh")
+async def refresh(response: Response, refresh_token: str = Cookie(None)):
+    if not refresh_token:
+        raise HTTPException(status_code=401, detail="Missing refresh token")
+
+    try:
+        session = supabase.auth.refresh_session(refresh_token)
+        new_access = session.session.access_token
+        new_refresh = session.session.refresh_token
+
+        response.set_cookie("access_token", new_access, httponly=True, secure=True, samesite="strict", max_age=1800)
+        response.set_cookie("refresh_token", new_refresh, httponly=True, secure=True, samesite="strict", max_age=604800)
+
+        return {"message": "Session refreshed"}
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Refresh failed: {str(e)}")
+
+@router.post("/logout")
+async def logout(response: Response):
+    response.delete_cookie("access_token")
+    response.delete_cookie("refresh_token")
+
+    return {"message": "Logged out"}
+

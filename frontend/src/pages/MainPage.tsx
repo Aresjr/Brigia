@@ -16,6 +16,7 @@ import { useTheme } from "next-themes";
 import { Profile } from "@/components/Sidebar/types.ts";
 import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
+import {getSession} from "@/api/auth.ts";
 import Index from "./Index";
 import Patients from "./Patients";
 import MedicalPlans from "./MedicalPlans";
@@ -37,9 +38,7 @@ const MainPage = () => {
 
     const updateSettings = async (key: keyof Profile, value: string) => {
         try {
-            const {
-                data: { session }
-            } = await supabase.auth.getSession();
+            const session = await getSession();
             if (!session?.user) return;
 
             const {

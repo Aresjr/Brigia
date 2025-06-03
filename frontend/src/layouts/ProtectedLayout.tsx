@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import { toast } from "sonner";
-import { getSession } from '@/api';
-import { isLogged } from '@/api/auth.ts';
+import {isLogged} from '@/api/auth.ts';
 
 type ProtectedLayoutProps = {
   children: React.ReactNode;
@@ -13,13 +12,9 @@ const ProtectedLayout = ({
   children
 }: ProtectedLayoutProps) => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
-  
-  const prevPathRef = React.useRef(location.pathname);
-  
+
   useEffect(() => {
     const checkSession = async () => {
       try {
@@ -29,8 +24,6 @@ const ProtectedLayout = ({
           navigate("/login");
           return;
         }
-        const session = getSession();
-        setUserId(session.user.id);
         setLoading(false);
       } catch (error) {
         console.error("Erro ao verificar a sessão:", error);

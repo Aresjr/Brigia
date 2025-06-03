@@ -2,15 +2,12 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { HexColorPicker } from 'react-colorful';
 import { supabase } from "@/integrations/supabase/client";
 import { Profile } from "@/components/Sidebar/types";
-import { useQuery } from "@tanstack/react-query";
 import { UserCircle } from "lucide-react";
+import {getSession} from "@/api/auth.ts";
 
 const SettingsPage = () => {
   const { toast } = useToast();
@@ -19,8 +16,6 @@ const SettingsPage = () => {
   const [name, setName] = useState('');
   const [establishment, setEstablishment] = useState('');
   const [role, setRole] = useState('');
-  const [color, setColor] = useState('#ffffff');
-  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
 
   useEffect(() => {
     document.title = "Bem Estar Saúde - Configurações";
@@ -30,28 +25,14 @@ const SettingsPage = () => {
     const fetchProfile = async () => {
       setIsLoading(true);
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const session = await getSession();
+
         if (!session?.user) return;
 
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('user_id', session.user.id)
-          .single();
-
-        if (error) {
-          console.error("Error fetching profile:", error);
-          toast({
-            title: "Error",
-            description: "Failed to load profile",
-            variant: "destructive"
-          });
-        } else {
-          setProfile(data);
-          setName(data.name || '');
-          setEstablishment(data.establishment || '');
-          setRole(data.role || '');
-        }
+        setProfile(session.profile);
+        setName(session.profile.name || '');
+        setEstablishment(session.profile.establishment || '');
+        setRole(session.profile.role || '');
       } finally {
         setIsLoading(false);
       }

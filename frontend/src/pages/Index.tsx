@@ -6,7 +6,8 @@ import { Cake } from "lucide-react";
 import { DataItem } from "@/models/models";
 import { SearchBar } from "@/components/DataTable/SearchBar";
 import { format } from "date-fns";
-import { getPatientsCount, getBirthdayPatients } from "@/services/patientService";
+import { getBirthdayPatients } from "@/services/patientService";
+import { getPatientsCount } from "@/api/patientsApi";
 
 const Index = () => {
     const location = useLocation();

@@ -11,3 +11,8 @@ export const createPatient = async (patientData: any) => {
     const res = await api.post(url, patientData);
     return res.data;
 };
+
+export const getPatientsCount = async () => {
+    const res = await api.get(url + "/count");
+    return res.data.count;
+}

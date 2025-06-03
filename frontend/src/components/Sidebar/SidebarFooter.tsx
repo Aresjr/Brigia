@@ -9,10 +9,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Profile } from "./types";
-import { clearSession } from "@/api";
+import {logout} from "@/api/auth.ts";
 
 interface SidebarFooterProps {
   expanded: boolean;
@@ -23,11 +22,10 @@ export const SidebarFooter = ({ expanded, profile }: SidebarFooterProps) => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await logout();
     if (error) {
       toast.error(error.message);
     } else {
-      clearSession();
       navigate("/login");
     }
   };

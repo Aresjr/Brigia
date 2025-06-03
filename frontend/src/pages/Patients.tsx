@@ -13,8 +13,6 @@ const Patients = () => {
     const [formError, setFormError] = useState<string | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
 
-    console.log("Got here!");
-
     const selectAll = () => {
         const allIds = items.map(item => String(item.id));
         setSelectedItems(allIds);

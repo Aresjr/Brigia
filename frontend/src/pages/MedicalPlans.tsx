@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataItem } from "@/models/models";
 import { MedicalPlanSidePanelForm } from "./form/MedicalPlanSidePanelForm";
+import {getMedicalPlans} from "@/api/medicalPlansApi.ts";
 
 export default function MedicalPlans() {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -33,7 +34,7 @@ export default function MedicalPlans() {
 
   const { data: medicalPlans = [], isLoading, error } = useQuery({
     queryKey: ["medicalPlans"],
-    queryFn: fetchMedicalPlans
+    queryFn: getMedicalPlans
   });
 
   const createMutation = useMutation({

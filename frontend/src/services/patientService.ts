@@ -17,19 +17,6 @@ export async function getPatientAddress(patientId: number | string): Promise<Pat
     return data as PatientAddress | null;
 }
 
-export async function getPatientsCount(): Promise<number> {
-    const { count, error } = await supabase
-    .from("patients")
-    .select('*', { count: 'exact', head: true })
-    .eq('is_deleted', false);
-
-    if (error) {
-        console.error("Erro ao buscar o total de pacientes:", error);
-    }
-
-    return count || 0;
-}
-
 export async function getPatientMedicalPlans(patientId: number): Promise<string[]> {
 
     const { data, error } = await supabase
