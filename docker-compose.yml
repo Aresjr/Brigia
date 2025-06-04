@@ -28,9 +28,7 @@ services:
     build:
       context: ./frontend
       args:
-        VITE_SUPABASE_URL: ${SUPABASE_URL}
         VITE_BACKEND_URL: ${BACKEND_URL}
-        VITE_SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY}
     container_name: brigia-frontend
     command: >
       sh -c "
