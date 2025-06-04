@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { format, startOfWeek, endOfWeek, eachDayOfInterval, isWithinInterval, isToday, isSameDay, isValid } from "date-fns";
 import { pt } from "date-fns/locale";
 import { useQuery } from "@tanstack/react-query";
-import { getAppointments } from "@/services/dbService";
 import { Appointment } from "@/models/models";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,6 +12,7 @@ import { CalendarClock, CalendarDays, Calendar as CalendarIcon } from "lucide-re
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {getAppointments} from "@/api/appointmentsApi.ts";
 
 const Appointments = () => {
   const [view, setView] = useState<"daily" | "weekly" | "monthly">("daily");

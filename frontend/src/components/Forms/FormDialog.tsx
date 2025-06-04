@@ -4,7 +4,6 @@ import { RegisterForm } from "./RegisterForm";
 import { DataItem } from "@/models/models";
 import { getPageTitle, getTableName } from "@/models/pages";
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
 
@@ -49,18 +48,10 @@ export const FormDialog = ({
       if (!tableName) return;
       setFormError(null);
       try {
+          //TODO - implement and make sure each page has its own update logic
           if (editingItem) {
-              const {
-                  error
-              } = await supabase.from(tableName).update(data).eq('id', 
-                typeof editingItem.id === 'string' ? parseInt(editingItem.id, 10) : editingItem.id);
-              if (error) throw error;
               toast.success("Registro atualizado");
           } else {
-              const {
-                  error
-              } = await supabase.from(tableName).insert([data]);
-              if (error) throw error;
               toast.success("Registro criado");
           }
           onOpenChange(false);
@@ -101,21 +92,14 @@ export const FormDialog = ({
       if (pathname === "/pacientes" && data.medical_plan_ids) {
         if (editingItem?.id) {
           const patientId = typeof editingItem.id === 'string' ? parseInt(editingItem.id) : editingItem.id;
-          
-          await supabase
-            .from('patient_medical_plans')
-            .delete()
-            .eq('patient_id', patientId);
-          
+
           if (data.medical_plan_ids.length > 0) {
             const planInserts = data.medical_plan_ids.map(planId => ({
               patient_id: patientId,
               medical_plan_id: parseInt(planId)
             }));
-            
-            await supabase
-              .from('patient_medical_plans')
-              .insert(planInserts);
+
+            //TODO - make sure to send the medical plans to backend
           }
         }
         

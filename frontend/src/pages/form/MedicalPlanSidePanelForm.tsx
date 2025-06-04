@@ -2,11 +2,11 @@
 import { Sheet, SheetContent,  SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { DataItem } from "@/models/models";
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
 import { TableName } from "@/models/tables";
 import { MedicalPlansForm } from "./MedicalPlansForm";
+import {createMedicalPlan, updateMedicalPlan} from "@/api/medicalPlansApi.ts";
 
 interface MedicalPlanFormProps {
   isOpen: boolean;
@@ -32,17 +32,12 @@ export const MedicalPlanSidePanelForm = ({
       setFormError(null);
       try {
           if (editingItem) {
-              const {
-                  error
-              } = await supabase.from(tableName).update(data).eq('id', 
-                typeof editingItem.id === 'string' ? parseInt(editingItem.id, 10) : editingItem.id);
-              if (error) throw error;
+              await updateMedicalPlan(editingItem.id, data);
+
               toast.success("Registro atualizado");
           } else {
-              const {
-                  error
-              } = await supabase.from(tableName).insert([data]);
-              if (error) throw error;
+              await createMedicalPlan(data);
+
               toast.success("Registro criado");
           }
           onOpenChange(false);
