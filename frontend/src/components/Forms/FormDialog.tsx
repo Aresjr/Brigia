@@ -2,7 +2,7 @@
 import { Sheet, SheetContent,  SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { RegisterForm } from "./RegisterForm";
 import { DataItem } from "@/models/models";
-import { getPageTitle, getTableName } from "@/models/pages";
+import { getPageTitle } from "@/models/pages";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
@@ -44,8 +44,7 @@ export const FormDialog = ({
   }, [editingItem, pathname]);
 
     const handleSubmit = async (data: Omit<DataItem, 'id' | 'created_at'>) => {
-      const tableName = getTableName(location.pathname);
-      if (!tableName) return;
+
       setFormError(null);
       try {
           //TODO - implement and make sure each page has its own update logic

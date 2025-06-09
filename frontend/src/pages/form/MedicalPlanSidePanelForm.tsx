@@ -4,7 +4,6 @@ import { DataItem } from "@/models/models";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
-import { TableName } from "@/models/tables";
 import { MedicalPlansForm } from "./MedicalPlansForm";
 import {createMedicalPlan, updateMedicalPlan} from "@/api/medicalPlansApi.ts";
 
@@ -28,7 +27,6 @@ export const MedicalPlanSidePanelForm = ({
   }, [editingItem]);
 
     const handleSubmit = async (data: Omit<DataItem, 'id' | 'created_at'>) => {
-      const tableName = TableName.MEDICAL_PLANS;
       setFormError(null);
       try {
           if (editingItem) {

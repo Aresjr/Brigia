@@ -3,9 +3,11 @@ import os
 import pytest
 from fastapi.testclient import TestClient
 
-from backend.app.main import app
+# Add the project root to the Python path
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, project_root)
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from app.main import app
 
 @pytest.fixture(autouse=True)
 def setup_test_environment():
