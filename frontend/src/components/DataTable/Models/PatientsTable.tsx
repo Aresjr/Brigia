@@ -1,57 +1,61 @@
 import {
     Table, TableBody, TableCell, TableHead, TableHeader as TableHeaderRoot, TableRow
 } from "@/components/ui/table.tsx";
-import {Pagination} from "@/components/DataTable/Pagination.tsx";
-import {format} from "date-fns";
-import {formatDate} from "@/utils/dateUtils.ts";
-import {Patient} from "@/models/models";
+import { Pagination } from "@/components/DataTable/Pagination.tsx";
+import { Patient } from "@/models/models";
+import { PATIENT_TABLE_COLUMNS, PATIENT_TABLE_FORMATTERS } from "./PatientsTableConfig";
+
+interface PatientsTableProps {
+    items: Patient[];
+    allSelected: boolean;
+    selectedItems: string[];
+    filteredItems: Patient[];
+    onToggleItem: (id: string) => void;
+    onToggleAll: () => void;
+    handleRowClick: (e: React.MouseEvent, item: Patient) => void;
+    onContextMenu: (e: React.MouseEvent, id: string) => void;
+    onSort: (key: string) => void;
+    currentPage: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
+}
 
 export const PatientsTable = ({
-                                  items, allSelected, selectedItems, onToggleItem, filteredItems, handleRowClick, onToggleAll, onContextMenu, onSort, currentPage, totalPages, onPageChange
-                              }) => {
-
+    items,
+    allSelected,
+    selectedItems,
+    filteredItems,
+    onToggleItem,
+    onToggleAll,
+    handleRowClick,
+    onContextMenu,
+    onSort,
+    currentPage,
+    totalPages,
+    onPageChange
+}: PatientsTableProps) => {
     return (
         <>
             <Table>
                 <TableHeaderRoot className="bg-[#524ED2]">
                     <TableRow className="hover:bg-[#B0CFF9]">
-                        <TableHead onClick={onToggleAll} className="w-[64px] text-white">
-                            <div className="flex items-center">
-                                <input
-                                    type="checkbox"
-                                    checked={allSelected}
-                                    onChange={onToggleAll}
-                                />
-                            </div>
-                        </TableHead>
-                        <TableHead onClick={() => onSort('name')}
-                                   className="cursor-pointer hover:bg-[#6560E7] text-white">
-                            Nome
-                        </TableHead>
-                        <TableHead onClick={() => onSort('cpf')}
-                                   className="cursor-pointer hover:bg-[#6560E7] text-white whitespace-nowrap">
-                            CPF
-                        </TableHead>
-                        <TableHead onClick={() => onSort('birth_date')}
-                                   className="cursor-pointer hover:bg-[#6560E7] text-white whitespace-nowrap">
-                            Data de Nascimento
-                        </TableHead>
-                        <TableHead onClick={() => onSort('cellphone')}
-                                   className="cursor-pointer hover:bg-[#6560E7] text-white whitespace-nowrap">
-                            Telefone
-                        </TableHead>
-                        <TableHead onClick={() => onSort('last_appointment')}
-                                   className="cursor-pointer hover:bg-[#6560E7] text-white whitespace-nowrap">
-                            Último Agendamento
-                        </TableHead>
-                        <TableHead onClick={() => onSort('next_appointment')}
-                                   className="cursor-pointer hover:bg-[#6560E7] text-white whitespace-nowrap">
-                            Próximo Agendamento
-                        </TableHead>
-                        <TableHead onClick={() => onSort('created_at')}
-                                   className="cursor-pointer hover:bg-[#6560E7] text-white whitespace-nowrap">
-                            Data de Criação
-                        </TableHead>
+                        {PATIENT_TABLE_COLUMNS.map(column => (
+                            <TableHead
+                                key={column.key}
+                                onClick={column.key === 'selection' ? onToggleAll : () => onSort(column.key)}
+                                className={`${column.width ? `w-[${column.width}]` : ''} ${column.key === 'selection' ? 'text-white' : 'cursor-pointer hover:bg-[#6560E7] text-white whitespace-nowrap'}`}
+                            >
+                                {column.key === 'selection' ? (
+                                    <div className="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            checked={allSelected}
+                                            onChange={onToggleAll}
+                                        />
+                                    </div>
+                                ) : column.label}
+                            </TableHead>
+                        ))}
                     </TableRow>
                 </TableHeaderRoot>
                 <TableBody>
@@ -87,16 +91,12 @@ export const PatientsTable = ({
                                     {item.name}
                                 </div>
                             </TableCell>
-                            <TableCell className="whitespace-nowrap">{item.cpf}</TableCell>
-                            <TableCell
-                                className="whitespace-nowrap">{item.birth_date ? formatDate(item.birth_date) : '-'}</TableCell>
-                            <TableCell className="whitespace-nowrap">{item.cellphone || '-'}</TableCell>
-                            <TableCell
-                                className="whitespace-nowrap">{item.last_appointment ? format(new Date(item.last_appointment), 'dd/MM/yyyy HH:mm') : '-'}</TableCell>
-                            <TableCell
-                                className="whitespace-nowrap">{item.next_appointment ? format(new Date(item.next_appointment), 'dd/MM/yyyy HH:mm') : '-'}</TableCell>
-                            <TableCell
-                                className="whitespace-nowrap">{item.created_at ? format(new Date(item.created_at), 'dd/MM/yyyy HH:mm') : '-'}</TableCell>
+                            <TableCell>{item.cpf}</TableCell>
+                            <TableCell>{PATIENT_TABLE_FORMATTERS.birth_date(item.birth_date)}</TableCell>
+                            <TableCell>{PATIENT_TABLE_FORMATTERS.cellphone(item.cellphone)}</TableCell>
+                            <TableCell>{PATIENT_TABLE_FORMATTERS.last_appointment(item.last_appointment)}</TableCell>
+                            <TableCell>{PATIENT_TABLE_FORMATTERS.next_appointment(item.next_appointment)}</TableCell>
+                            <TableCell>{PATIENT_TABLE_FORMATTERS.created_at(item.created_at)}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

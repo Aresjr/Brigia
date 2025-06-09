@@ -1,72 +1,24 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { DataTable } from "@/components/DataTable/DataTable";
-import { DataItem } from "@/models/models";
-import { useState } from "react";
-import { toast } from "sonner";
 import { FormDialog } from "@/components/Forms/FormDialog";
-import {deletePatient, getPatients} from "@/api/patientsApi.ts";
+import { usePatientManagement } from "@/hooks/usePatientManagement";
 
 const Patients = () => {
-    const queryClient = useQueryClient();
-    const [selectedItems, setSelectedItems] = useState<string[]>([]);
-    const [editingItem, setEditingItem] = useState<DataItem | null>(null);
-    const [formError, setFormError] = useState<string | null>(null);
-    const [isFormOpen, setIsFormOpen] = useState(false);
-
-    const selectAll = () => {
-        const allIds = items.map(item => String(item.id));
-        setSelectedItems(allIds);
-    };
-
-    const selectNone = () => {
-        setSelectedItems([]);
-    };
-
-    const fetchData = async () => {
-
-        try {
-            const data = await getPatients();
-
-            return data.map((item: any) => ({
-                ...item,
-                id: String(item.id),
-                medical_plan_id: item.medical_plan_id ? String(item.medical_plan_id) : undefined
-            })) as DataItem[];
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            toast.error("Erro ao buscar pacientes");
-            return [];
-        }
-    };
-
     const {
-        data: items = [],
+        items,
         isLoading,
-        error
-    } = useQuery({
-        queryKey: ['patients'],
-        queryFn: fetchData,
-        enabled: true
-    });
-
-    const handleDelete = async (id: string) => {
-        try {
-            await deletePatient(id);
-            setSelectedItems(prev => prev.filter(itemId => itemId !== id));
-
-            await queryClient.invalidateQueries({
-                queryKey: ['patients']
-            });
-
-            toast.success("Registro excluído");
-        } catch (error) {
-            toastError({
-                description: "Erro ao excluir o registro",
-                variant: "destructive"
-            });
-            console.error('Error:', error);
-        }
-    };
+        error,
+        selectedItems,
+        editingItem,
+        formError,
+        isFormOpen,
+        setIsFormOpen,
+        handleDelete,
+        handleNewRecord,
+        handleEdit,
+        handleToggleItem,
+        selectAll,
+        selectNone
+    } = usePatientManagement();
 
     return (
         <>
@@ -77,24 +29,11 @@ const Patients = () => {
                 error={error as Error}
                 pathname={location.pathname}
                 selectedItems={selectedItems}
-                onToggleItem={id => {
-                    setSelectedItems(prev =>
-                        prev.includes(id) ?
-                            prev.filter(itemId => itemId !== id) :
-                            [...prev, id]
-                    );
-                }}
+                onToggleItem={handleToggleItem}
                 onSelectAll={selectAll}
                 onSelectNone={selectNone}
-                onNewRecord={() => {
-                    setEditingItem(null);
-                    setFormError(null);
-                    setIsFormOpen(true);
-                }}
-                onEdit={item => {
-                    setEditingItem(item);
-                    setIsFormOpen(true);
-                }}
+                onNewRecord={handleNewRecord}
+                onEdit={handleEdit}
                 onDelete={handleDelete}
                 formError={formError}
             />
@@ -102,13 +41,10 @@ const Patients = () => {
                 isOpen={isFormOpen}
                 onOpenChange={setIsFormOpen}
                 pathname={location.pathname}
-                editingItem={editingItem} />
+                editingItem={editingItem}
+            />
         </>
     );
 };
 
 export default Patients;
-function toastError(arg0: { description: string; variant: string; }) {
-    throw new Error("Function not implemented.");
-}
-
