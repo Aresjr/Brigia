@@ -20,6 +20,7 @@ SUPABASE_JWT_SECRET=jwt-secret
 SUPABASE_JWT_ALGO=HS256
 ```
 
+---
 ## Roadmap
 
 ### Backend
@@ -28,7 +29,6 @@ SUPABASE_JWT_ALGO=HS256
 - [X] Create a backend application using **FastAPI**
 - [X] Use auth in HTTP-only Cookie instead of saving auth token in local session
 
----
 ![Status: In Progress](https://img.shields.io/badge/status-in_progress-yellow)
 - [ ] Finish Professionals endpoints
 - [ ] Use SQLAlchemy for database access in backend instead of direct calling Supabase
@@ -40,8 +40,9 @@ SUPABASE_JWT_ALGO=HS256
 - [X] Point Patient frontend calls to backend instead of directly to Supabase
 - [X] Point Medical Plans frontend calls to backend instead of directly to Supabase
 - [X] Completely remove Supabase from frontend
----
+
 ![Status: In Progress](https://img.shields.io/badge/status-in_progress-yellow)
+- [ ] Remove deleted patients from the list after deletion
 - [ ] Fix patients filtering
 - [ ] Create page for deleted patients
 - [ ] Finish Professionals page

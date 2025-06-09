@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { DataItem } from "@/models/models";
 import { useState } from "react";
@@ -7,6 +7,7 @@ import { FormDialog } from "@/components/Forms/FormDialog";
 import {deletePatient, getPatients} from "@/api/patientsApi.ts";
 
 const Patients = () => {
+    const queryClient = useQueryClient();
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
     const [editingItem, setEditingItem] = useState<DataItem | null>(null);
     const [formError, setFormError] = useState<string | null>(null);
@@ -38,37 +39,39 @@ const Patients = () => {
         }
     };
 
-    const handleDelete = async (id: string) => {
-
-        try {
-            await deletePatient(id);
-            toast.success("Registro excluído");
-            refetch();
-        } catch (error) {
-
-            toastError({
-                description: "Erro ao excluir o registro",
-                variant: "destructive"
-            });
-    
-            console.error('Error:', error);
-        }
-    };
-
     const {
         data: items = [],
         isLoading,
-        error,
-        refetch
+        error
     } = useQuery({
-        queryKey: ['items', location.pathname],
+        queryKey: ['patients'],
         queryFn: fetchData,
         enabled: true
     });
 
+    const handleDelete = async (id: string) => {
+        try {
+            await deletePatient(id);
+            setSelectedItems(prev => prev.filter(itemId => itemId !== id));
+
+            await queryClient.invalidateQueries({
+                queryKey: ['patients']
+            });
+
+            toast.success("Registro excluído");
+        } catch (error) {
+            toastError({
+                description: "Erro ao excluir o registro",
+                variant: "destructive"
+            });
+            console.error('Error:', error);
+        }
+    };
+
     return (
         <>
             <DataTable
+                key={items.length}
                 items={items}
                 isLoading={isLoading}
                 error={error as Error}
