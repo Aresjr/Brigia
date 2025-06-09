@@ -24,9 +24,7 @@ export const PatientDetailsDialog = ({
   const { data: patientMedicalPlans = [] } = useQuery({
     queryKey: ["patientMedicalPlans", patient.id],
     queryFn: async () => {
-      const { data, error } = await getPatientMedicalPlan(patient.id);
-
-      if (error) throw error;
+      const data = await getPatientMedicalPlan(patient.id);
       return data || [];
     },
     enabled: !!patient.id && isOpen
@@ -142,7 +140,7 @@ export const PatientDetailsDialog = ({
                   <div className="space-y-2">
                     {patientMedicalPlans.map((plan: any, index: number) => (
                         <div key={index} className="bg-muted/30 p-3 rounded-md space-y-1">
-                          <p className="font-medium">{plan.medical_plans?.name || "Convênio Desconhecido"}</p>
+                          <p className="font-medium">{plan?.name || "Convênio Desconhecido"}</p>
                           {plan.card_number && (
                               <p className="text-sm"><span className="font-medium">Carteirinha:</span> {plan.card_number}</p>
                           )}

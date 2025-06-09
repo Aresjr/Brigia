@@ -8,7 +8,6 @@ class MedicalPlanBase(BaseModel):
     
     name: str = Field(..., description="Name of the medical plan")
     description: Optional[str] = Field(None, description="Description of the medical plan")
-    status: str = Field(default="active", description="Status of the medical plan")
 
 
 class MedicalPlanCreate(MedicalPlanBase):
@@ -22,3 +21,4 @@ class MedicalPlan(MedicalPlanBase):
     id: int
     created_at: datetime
     is_deleted: bool = False
+
