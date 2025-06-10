@@ -109,7 +109,13 @@ async def login(credentials: LoginCredentials, response: Response):
 @router.post("/refresh")
 async def refresh(response: Response, refresh_token: str = Cookie(None)):
     if not refresh_token:
-        raise HTTPException(status_code=401, detail="Missing refresh token")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={
+                "code": "missing_token",
+                "message": "Missing refresh token"
+            }
+        )
 
     try:
         session = supabase.auth.refresh_session(refresh_token)
@@ -121,7 +127,16 @@ async def refresh(response: Response, refresh_token: str = Cookie(None)):
 
         return {"message": "Session refreshed"}
     except Exception as e:
-        raise HTTPException(status_code=401, detail=f"Refresh failed: {str(e)}")
+        response.delete_cookie("access_token")
+        response.delete_cookie("refresh_token")
+        
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={
+                "code": "invalid_token",
+                "message": "Invalid or expired refresh token"
+            }
+        )
 
 @router.post("/logout")
 async def logout(response: Response):

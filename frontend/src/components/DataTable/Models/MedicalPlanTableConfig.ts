@@ -5,6 +5,7 @@ export const MEDICAL_PLAN_TABLE_COLUMNS = [
         key: 'selection',
         label: '',
         width: '64px',
+        minWidth: null,
         sortable: false
     },
     {
@@ -25,6 +26,7 @@ export const MEDICAL_PLAN_TABLE_COLUMNS = [
         key: 'created_at',
         label: 'Data de Criação',
         width: '180px',
+        minWidth: null,
         sortable: true
     }
 ] as const;
