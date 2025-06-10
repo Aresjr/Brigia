@@ -26,7 +26,7 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: ./frontend-next
       args:
         VITE_BACKEND_URL: ${BACKEND_URL}
     container_name: brigia-frontend
@@ -35,14 +35,14 @@ services:
         if [ \"$ENV\" = 'prod' ]; then
           npm run build && npx serve -s dist -l ${FRONTEND_PORT};
         else
-          npm run dev -- --host 0.0.0.0 --port ${FRONTEND_PORT};
+          npm run dev -- --port ${FRONTEND_PORT};
         fi
       "
     environment:
       - ENV=${ENV}
       - CHOKIDAR_USEPOLLING=true
     volumes:
-      - ./frontend:/app
+      - ./frontend-next:/app
       - /app/node_modules
     ports:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
