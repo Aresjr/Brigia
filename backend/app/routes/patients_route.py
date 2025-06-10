@@ -142,6 +142,20 @@ async def count_patients(is_deleted: bool = False):
             detail={"code": "count_failed", "message": str(e)}
         )
 
+@router.get("/birthday", response_model=List[Patient], status_code=200)
+async def get_birthday_patients():
+    try:
+        response = (supabase.rpc("get_patients_born_today").execute())
+
+        print(response)
+
+        if not response.data:
+            return []
+
+        return response.data
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
 @router.get("/{patient_id}", response_model=Patient)
 async def get_patient(patient_id: int):
     try:

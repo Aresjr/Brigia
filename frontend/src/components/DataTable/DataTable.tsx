@@ -1,17 +1,18 @@
-import {Card, CardContent} from "@/components/ui/card";
-import {Loader2} from "lucide-react";
-import {ContextMenu} from "./ContextMenu";
-import {DataItem} from "@/models/models";
-import {PatientDetailsDialog} from "../Patients/PatientDetailsDialog";
-import {useDataTableState} from "@/hooks/useDataTableState";
-import {DeleteConfirmationDialog} from "./DeleteConfirmationDialog";
-import {SearchBar} from "./SearchBar";
-import {TableActions} from "./TableActions";
-import {TableContent} from "./TableContent";
-import {Dialog, DialogContent, DialogTitle} from "@/components/ui/dialog";
-import {getPageTitle} from "@/models/pages";
-import {useCallback} from "react";
-import {filterItemsLocally, sortItems} from "@/components/DataTable/DataTableUtils.ts";
+import { Card, CardContent } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
+import { ContextMenu } from "./ContextMenu";
+import { DataItem } from "@/models/models";
+import { PatientDetailsDialog } from "../Patients/PatientDetailsDialog";
+import { useDataTableState } from "@/hooks/useDataTableState";
+import { DeleteConfirmationDialog } from "./DeleteConfirmationDialog";
+import { SearchBar } from "./SearchBar";
+import { TableActions } from "./TableActions";
+import { TableContent } from "./TableContent";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { useLocation } from 'react-router-dom';
+import { routes } from '@/routes/routes';
+import { useCallback } from "react";
+import { filterItemsLocally, sortItems } from "@/components/DataTable/DataTableUtils.ts";
 
 interface DataTableProps {
     items: DataItem[];
@@ -29,18 +30,20 @@ interface DataTableProps {
 }
 
 export const DataTable = ({
-                              items,
-                              isLoading,
-                              error,
-                              pathname,
-                              selectedItems,
-                              onToggleItem,
-                              onSelectAll,
-                              onSelectNone,
-                              onNewRecord,
-                              onEdit,
-                              onDelete
-                          }: DataTableProps) => {
+    items,
+    isLoading,
+    error,
+    pathname,
+    selectedItems,
+    onToggleItem,
+    onSelectAll,
+    onSelectNone,
+    onNewRecord,
+    onEdit,
+    onDelete
+}: DataTableProps) => {
+    const location = useLocation();
+    const currentRoute = routes.find(route => route.path === location.pathname);
 
     const applyLocalFilters = useCallback(
         (displayItems, searchTerm, pathname, sortConfig, colorFilter, setFilteredItems) => {
@@ -160,7 +163,7 @@ export const DataTable = ({
         <div className="py-4 -mx-[32px] rounded-none px-[32px] bg-gray-50">
             <div className="flex items-center justify-between bg-gray-50">
                 <h1 className="text-2xl font-bold">
-                    { getPageTitle(pathname) }
+                    {currentRoute?.title || 'Dashboard'}
                 </h1>
                 <div className="flex items-center gap-2">
                     <SearchBar
@@ -216,3 +219,4 @@ export const DataTable = ({
                                   onCancel={cancelDeleteSelected} onConfirm={confirmDeleteSelected}/>
     </div>;
 };
+

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {logout} from "@/api/auth.ts";
 
 let isRefreshing = false;
 let failedQueue = [];
@@ -47,7 +48,8 @@ api.interceptors.response.use(
                 return api(originalRequest); // 🔁 Retry the original request
             } catch (refreshError) {
                 processQueue(refreshError, null);
-                return Promise.reject(refreshError);
+                await Promise.reject(refreshError);
+                return logout();
             } finally {
                 isRefreshing = false;
             }

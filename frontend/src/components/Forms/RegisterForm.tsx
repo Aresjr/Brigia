@@ -10,8 +10,8 @@ import {
   AddressFields
 } from "./PatientForm";
 import { identificationColors, validatePatientForm, processInitialData } from "./utils/formUtils";
-import { getPatientMedicalPlans } from "@/services/patientService";
 import {getMedicalPlans} from "@/api/medicalPlansApi.ts";
+import {getPatientMedicalPlan} from "@/api/patientsApi.ts";
 
 interface RegisterFormProps {
   pathname: string;
@@ -51,7 +51,7 @@ export const RegisterForm = ({ pathname, onSubmit, initialData }: RegisterFormPr
         ? parseInt(initialData.id) 
         : initialData?.id;
 
-      return await getPatientMedicalPlans(patientId);
+      return await getPatientMedicalPlan(patientId);
     },
     enabled: !!initialData?.id && pathname === "/pacientes",
   });

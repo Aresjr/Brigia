@@ -82,46 +82,12 @@ export interface PatientAddress {
   address_uf?: string;
 }
 
-export interface Professional {
-  id: string | number;
-  name: string;
-  email?: string;
-  birth_date: string;
-  cpf: string;
-  cellphone: string;
-  identification_color: string;
-  specialty?: string;
-  crm?: string;
-  created_at: string;
-}
-
 export interface User {
   id: string | number;
   avatar_url?: string;
   name: string;
   role: string;
   created_at: string;
-}
-
-export interface Procedure {
-  id: number;
-  description: string;
-  created_at: string;
-  is_deleted?: boolean;
-}
-
-export interface Appointment {
-  id: number;
-  patient_id: number;
-  professional_id: number;
-  start_date: string;
-  end_date: string;
-  description?: string;
-  medical_plan_id?: number;
-  is_paid: boolean;
-  cost?: number;
-  created_at: string;
-  is_deleted?: boolean;
 }
 
 interface AddressData {

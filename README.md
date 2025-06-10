@@ -35,7 +35,6 @@ SUPABASE_JWT_ALGO=HS256
 
 ### Frontend
 
-
 ![Status: Done](https://img.shields.io/badge/status-done-green)
 - [X] Point Patient frontend calls to backend instead of directly to Supabase
 - [X] Point Medical Plans frontend calls to backend instead of directly to Supabase

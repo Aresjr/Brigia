@@ -16,7 +16,7 @@ import { Profile } from "@/components/Sidebar/types.ts";
 import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
 import {getSession} from "@/api/auth.ts";
-import Index from "./Index";
+import Home from "./Home";
 import Patients from "./Patients";
 import MedicalPlans from "./MedicalPlans";
 
@@ -54,7 +54,7 @@ const MainPage = () => {
     const getPageContent = () => {
         switch (location.pathname) {
           case '/':
-            return <Index />;
+            return <Home />;
           case '/pacientes':
             return <Patients />;
           case '/convenios':

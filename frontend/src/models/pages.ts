@@ -1,7 +1,5 @@
 import { PatientsTable } from "@/components/DataTable/Models/PatientsTable.tsx";
 import { MedicalPlansTable } from "@/components/DataTable/Models/MedicalPlansTable.tsx";
-import { ProfessionalsTable } from "@/components/DataTable/Models/ProfessionalsTable.tsx";
-import Appointments from "@/pages/Appointments";
 
 export const getPageTitle = (pathname: string) => {
   return pageTitles[pathname]["title"];
@@ -26,19 +24,6 @@ const pageTitles = {
     "/convenios": {
         "title": "Convênios",
         "component": MedicalPlansTable
-    },
-    "/profissionais": {
-        "title": "Profissionais",
-        "component": ProfessionalsTable,
-        "columns": "id, name, email, created_at, specialty, cellphone, cpf, sex, birth_date, crm, identification_color"
-    },
-    "/procedimentos": {
-        "title": "Procedimentos",
-        "component": null
-    },
-    "/agendamentos": {
-        "title": "Agendamentos",
-        "component": Appointments
     }
 };
 

@@ -31,3 +31,8 @@ export const deletePatient = async (id: string | number) => {
     const res = await api.delete(`${url}/${id}`);
     return res.data;
 }
+
+export const getBirthdayPatients = async () => {
+    const res = await api.get(`${url}/birthday`);
+    return res.data;
+}
