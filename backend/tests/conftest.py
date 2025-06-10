@@ -3,13 +3,10 @@ import os
 import pytest
 from fastapi.testclient import TestClient
 
-from ..app.main import app
+# Add the parent directory to Python path first
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-sys.path.append("..")
-
-# Add the project root to the Python path
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, project_root)
+from app.main import app  # Now we can import using the absolute import
 
 @pytest.fixture(autouse=True)
 def setup_test_environment():
