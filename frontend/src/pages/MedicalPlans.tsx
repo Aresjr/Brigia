@@ -1,98 +1,136 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { DataTable } from "@/components/DataTable/DataTable";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { DataItem } from "@/models/models";
 import { MedicalPlanSidePanelForm } from "./form/MedicalPlanSidePanelForm";
-import {deleteMedicalPlan, getMedicalPlans} from "@/api/medicalPlansApi.ts";
+import { deleteMedicalPlan, getMedicalPlans } from "@/api/medicalPlansApi.ts";
+import { MedicalPlanTable } from "@/components/DataTable/Models/MedicalPlanTable";
+import { useDataTableState } from "@/hooks/useDataTableState";
+import { filterItemsLocally, sortItems } from "@/components/DataTable/DataTableUtils";
+import { useCallback } from "react";
 
 export default function MedicalPlans() {
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<DataItem | null>(null);
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [formError, setFormError] = useState<string | null>(null);
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
+    const [isFormOpen, setIsFormOpen] = useState(false);
+    const [editingItem, setEditingItem] = useState<DataItem | null>(null);
+    const [selectedItems, setSelectedItems] = useState<string[]>([]);
+    const [formError, setFormError] = useState<string | null>(null);
+    const { toast } = useToast();
+    const queryClient = useQueryClient();
 
-  const { data: medicalPlans = [], isLoading, error } = useQuery({
-    queryKey: ["medicalPlans"],
-    queryFn: getMedicalPlans
-  });
+    const { data: items = [], isLoading, error } = useQuery({
+        queryKey: ["medicalPlans"],
+        queryFn: getMedicalPlans
+    });
 
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await deleteMedicalPlan(id);
-      
-      if (error) throw new Error("Failed to delete medical plan. Please try again.");
-      return id;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["medicalPlans"] });
-      toast({
-        description: "Convênio excluído"
-      });
-      setSelectedItems([]);
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: "Failed to delete medical plan. Please try again.",
-        variant: "destructive"
-      });
-    }
-  });
+    const applyLocalFilters = useCallback(
+        (displayItems, searchTerm, pathname, sortConfig, colorFilter, setFilteredItems) => {
+            let filtered = filterItemsLocally(displayItems, searchTerm, pathname);
+            const sorted = sortItems(filtered, sortConfig.key, sortConfig.direction);
+            setFilteredItems(sorted);
+        }, []);
 
-  const handleEdit = (item: DataItem) => {
-    setEditingItem(item);
-    setIsFormOpen(true);
-  };
+    const {
+        contextMenu,
+        searchTerm,
+        setSearchTerm,
+        filterField,
+        setFilterField,
+        paginatedItems,
+        filteredItems,
+        showDeleteConfirmation,
+        setShowDeleteConfirmation,
+        itemsToDelete,
+        setItemsToDelete,
+        currentPage,
+        setCurrentPage,
+        totalPages,
+        handleSort,
+        handleContextMenu,
+        closeContextMenu
+    } = useDataTableState(isLoading, items, location.pathname, applyLocalFilters);
 
-  const handleDelete = (id: string) => {
-    if (window.confirm("Are you sure you want to delete this medical plan?")) {
-      deleteMutation.mutate(id);
-    }
-  };
+    const handleDelete = async (id: string) => {
+        try {
+            await deleteMedicalPlan(id);
+            setSelectedItems(prev => prev.filter(itemId => itemId !== id));
+            await queryClient.invalidateQueries({ queryKey: ['medicalPlans'] });
+            toast({
+                title: "Convênio excluído com sucesso",
+                variant: "default",
+            });
+        } catch (error) {
+            toast({
+                title: "Erro ao excluir convênio",
+                description: "Ocorreu um erro ao excluir o convênio",
+                variant: "destructive",
+            });
+            console.error('Error:', error);
+        }
+    };
 
-  const toggleItem = (id: string) => {
-    setSelectedItems(prevItems =>
-      prevItems.includes(id)
-        ? prevItems.filter(item => item !== id)
-        : [...prevItems, id]
+    const handleNewRecord = () => {
+        setEditingItem(null);
+        setFormError(null);
+        setIsFormOpen(true);
+    };
+
+    const handleEdit = (item: DataItem) => {
+        setEditingItem(item);
+        setIsFormOpen(true);
+    };
+
+    const handleExportSelected = () => {
+        // Implementation for export
+    };
+
+    const handleDeleteSelected = () => {
+        if (selectedItems.length === 0) return;
+        setItemsToDelete(selectedItems);
+        setShowDeleteConfirmation(true);
+    };
+
+    return (
+        <>
+            <div className="space-y-6">
+                <div className="py-4 -mx-[32px] rounded-none px-[32px] bg-gray-50">
+                    <div className="flex items-center justify-between bg-gray-50">
+                        <h1 className="text-2xl font-bold">Convênios</h1>
+                    </div>
+                </div>
+
+                <MedicalPlanTable
+                    items={items}
+                    allSelected={selectedItems.length === items.length}
+                    selectedItems={selectedItems}
+                    filteredItems={paginatedItems}
+                    onToggleItem={(id) => {
+                        setSelectedItems(prev =>
+                            prev.includes(id) ?
+                                prev.filter(itemId => itemId !== id) :
+                                [...prev, id]
+                        );
+                    }}
+                    onToggleAll={() => {
+                        if (selectedItems.length === items.length) {
+                            setSelectedItems([]);
+                        } else {
+                            setSelectedItems(items.map(item => item.id.toString()));
+                        }
+                    }}
+                    handleRowClick={(_, item) => handleEdit(item)}
+                    onContextMenu={handleContextMenu}
+                    onSort={handleSort}
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                />
+            </div>
+
+            <MedicalPlanSidePanelForm
+                open={isFormOpen}
+                onOpenChange={setIsFormOpen}
+                editingItem={editingItem}
+            />
+        </>
     );
-  };
-
-  const selectAll = () => {
-    setSelectedItems(medicalPlans.map(item => item.id.toString()));
-  };
-
-  const selectNone = () => {
-    setSelectedItems([]);
-  };
-
-  return (
-    <>
-      <DataTable
-        items={medicalPlans}
-        isLoading={isLoading}
-        error={error as Error}
-        pathname="/convenios"
-        selectedItems={selectedItems}
-        onToggleItem={toggleItem}
-        onSelectAll={selectAll}
-        onSelectNone={selectNone}
-        onNewRecord={() => {
-          setEditingItem(null);
-          setFormError(null);
-          setIsFormOpen(true);
-        }}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        formError={formError}
-      />
-      <MedicalPlanSidePanelForm
-        isOpen={isFormOpen}
-        onOpenChange={setIsFormOpen}
-        editingItem={editingItem} />
-    </>
-  );
 }
