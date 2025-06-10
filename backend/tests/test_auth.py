@@ -175,7 +175,7 @@ def test_login_with_profile_creation(mock_supabase):
 def test_login_invalid_credentials(mock_supabase):
     """Test login with invalid credentials"""
     # Mock auth failure
-    mock_supabase.auth.sign_in_with_password.side_effect = Exception("Invalid credentials")
+    mock_supabase.auth.sign_in_with_password.side_effect = Exception("Credenciais inválidas")
     
     response = client.post(
         "/auth/login",
@@ -188,7 +188,7 @@ def test_login_invalid_credentials(mock_supabase):
     assert response.status_code == 401
     data = response.json()
     assert data["detail"]["code"] == "invalid_credentials"
-    assert data["detail"]["message"] == "Invalid credentials"
+    assert data["detail"]["message"] == "Credenciais inválidas"
 
 
 def test_login_profile_error(mock_supabase):
@@ -241,7 +241,7 @@ def test_login_profile_error(mock_supabase):
 
 def test_login_failure(mock_supabase):
     """Test failed login attempt"""
-    mock_supabase.auth.sign_in_with_password.side_effect = Exception("Invalid credentials")
+    mock_supabase.auth.sign_in_with_password.side_effect = Exception("Credenciais inválidas")
     
     response = client.post(
         "/auth/login",
@@ -251,7 +251,7 @@ def test_login_failure(mock_supabase):
     assert response.status_code == 401
     data = response.json()
     assert data["detail"]["code"] == "invalid_credentials"
-    assert data["detail"]["message"] == "Invalid credentials"
+    assert data["detail"]["message"] == "Credenciais inválidas"
 
 def test_login_invalid_payload():
     """Test login with invalid request payload"""

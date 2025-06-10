@@ -22,7 +22,7 @@ export default function AuthPage() {
       await login(email, password);
       navigate("/");
     } catch (error: any) {
-      toast.error(error.message || 'Login failed');
+      toast.error(error.detail.message || 'Não foi possível fazer o login');
     } finally {
       setLoading(false);
     }

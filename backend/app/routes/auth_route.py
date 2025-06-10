@@ -27,7 +27,7 @@ async def login(credentials: LoginCredentials, response: Response):
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail={
                         "code": "invalid_credentials",
-                        "message": "Invalid credentials"
+                        "message": "Credenciais inválidas"
                     }
                 )
         except HTTPException:
@@ -37,7 +37,7 @@ async def login(credentials: LoginCredentials, response: Response):
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail={
                     "code": "invalid_credentials",
-                    "message": "Invalid credentials"
+                    "message": "Credenciais inválidas"
                 }
             )
 
