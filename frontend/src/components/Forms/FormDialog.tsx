@@ -4,7 +4,6 @@ import { RegisterForm } from "./RegisterForm";
 import { DataItem } from "@/models/models";
 import { getPageTitle } from "@/models/pages";
 import { useState, useEffect } from "react";
-import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
 
 interface FormDialogProps {
@@ -22,7 +21,6 @@ export const FormDialog = ({
 }: FormDialogProps) => {
   const [preparedData, setPreparedData] = useState<DataItem | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
-  const { toast: toastError } = useToast();
 
   useEffect(() => {
     if (editingItem && pathname === "/pacientes") {
@@ -78,10 +76,7 @@ export const FormDialog = ({
         friendlyErrorMessage = "Erro ao salvar o Paciente";
     }
 
-    toastError({
-        description: friendlyErrorMessage,
-        variant: "destructive"
-    });
+    toast.error(friendlyErrorMessage);
 
     setFormError(friendlyErrorMessage);
   }

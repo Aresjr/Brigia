@@ -3,8 +3,8 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { DataItem } from "@/models/models";
 import InputMask from "react-input-mask";
-import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import {toast} from "sonner";
 
 interface AddressFieldsProps {
   formData: Partial<DataItem>;
@@ -23,7 +23,6 @@ interface ViaCepResponse {
 }
 
 export const AddressFields = ({ formData, setFormData, errors }: AddressFieldsProps) => {
-  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
   const updateAddressField = (field: string, value: string) => {
@@ -45,10 +44,8 @@ export const AddressFields = ({ formData, setFormData, errors }: AddressFieldsPr
       const data: ViaCepResponse = await response.json();
       
       if (data.erro) {
-        toast({
-          title: "CEP não encontrado",
-          description: "Verifique o CEP informado e tente novamente.",
-          variant: "destructive"
+        toast.error("CEP não encontrado", {
+          description: "Verifique o CEP informado e tente novamente."
         });
         return;
       }
@@ -64,10 +61,8 @@ export const AddressFields = ({ formData, setFormData, errors }: AddressFieldsPr
       });
     } catch (error) {
       console.error("Erro ao buscar o endereço:", error);
-      toast({
-        title: "Erro ao buscar o endereço",
-        description: "Houve um problema ao buscar o endereço pelo CEP. Tente novamente mais tarde.",
-        variant: "destructive"
+      toast.error("Erro ao buscar o endereço", {
+        description: "Houve um problema ao buscar o endereço pelo CEP. Tente novamente mais tarde."
       });
     } finally {
       setIsLoading(false);

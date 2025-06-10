@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { DataItem } from "@/models/models";
 import { useEffect, useState } from "react";
-import { useToast } from "@/hooks/use-toast";
 import { processInitialData } from "@/components/Forms/utils/formUtils";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {toast} from "sonner";
 
 interface MedicalPlansFormProps {
   onSubmit: (data: Omit<DataItem, 'id' | 'created_at'>) => void;
@@ -12,7 +12,6 @@ interface MedicalPlansFormProps {
 }
 
 export const MedicalPlansForm = ({ onSubmit, initialData }: MedicalPlansFormProps) => {
-  const { toast } = useToast();
   const [formData, setFormData] = useState<Partial<DataItem>>({
     name: ''
   });
@@ -34,10 +33,8 @@ export const MedicalPlansForm = ({ onSubmit, initialData }: MedicalPlansFormProp
     e.preventDefault();
     
     if (!validateForm()) {
-      toast({
-        title: "Erro de validação",
-        description: "Por favor, corrija os erros no formulário.",
-        variant: "destructive"
+      toast.error("Erro de validação", {
+        description: "Por favor, corrija os erros no formulário."
       });
       return;
     }

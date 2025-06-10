@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { DataItem } from "@/models/models";
 import { MedicalPlanSidePanelForm } from "./form/MedicalPlanSidePanelForm";
@@ -8,13 +7,13 @@ import { MedicalPlanTable } from "@/components/DataTable/Models/MedicalPlanTable
 import { useDataTableState } from "@/hooks/useDataTableState";
 import { filterItemsLocally, sortItems } from "@/components/DataTable/DataTableUtils";
 import { useCallback } from "react";
+import {toast} from "sonner";
 
 export default function MedicalPlans() {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<DataItem | null>(null);
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
     const [formError, setFormError] = useState<string | null>(null);
-    const { toast } = useToast();
     const queryClient = useQueryClient();
 
     const { data: items = [], isLoading, error } = useQuery({
@@ -54,15 +53,10 @@ export default function MedicalPlans() {
             await deleteMedicalPlan(id);
             setSelectedItems(prev => prev.filter(itemId => itemId !== id));
             await queryClient.invalidateQueries({ queryKey: ['medicalPlans'] });
-            toast({
-                title: "Convênio excluído com sucesso",
-                variant: "default",
-            });
+            toast.success("Convênio excluído com sucesso");
         } catch (error) {
-            toast({
-                title: "Erro ao excluir convênio",
-                description: "Ocorreu um erro ao excluir o convênio",
-                variant: "destructive",
+            toast.success("Erro ao excluir convênio", {
+                description: "Ocorreu um erro ao excluir o convênio"
             });
             console.error('Error:', error);
         }

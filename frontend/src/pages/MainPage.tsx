@@ -13,7 +13,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Profile } from "@/components/Sidebar/types.ts";
-import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
 import {getSession} from "@/api/auth.ts";
 import Home from "./Home";
@@ -28,7 +27,6 @@ const MainPage = () => {
     const [editingItem, setEditingItem] = useState<DataItem | null>(null);
     const [profile, setProfile] = useState<Profile | null>(null);
     const { theme, setTheme } = useTheme();
-    const { toast: toastError } = useToast();
 
     useEffect(() => {
         const pageTitle = getPageTitle(location.pathname);
@@ -44,10 +42,7 @@ const MainPage = () => {
 
             toast.success('Configurações salvas');
         } catch (error: any) {
-            toastError({
-                description: 'Erro ao atualizar as configurações',
-                variant: "destructive"
-            });
+            toast.error("Erro ao atualizar as configurações");
         }
     };
 

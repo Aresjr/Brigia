@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { DataItem } from "@/models/models";
 import { useEffect, useState } from "react";
-import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import { 
   PatientBasicInfo, 
@@ -12,6 +11,7 @@ import {
 import { identificationColors, validatePatientForm, processInitialData } from "./utils/formUtils";
 import {getMedicalPlans} from "@/api/medicalPlansApi.ts";
 import {getPatientMedicalPlan} from "@/api/patientsApi.ts";
+import {toast} from "sonner";
 
 interface RegisterFormProps {
   pathname: string;
@@ -20,7 +20,6 @@ interface RegisterFormProps {
 }
 
 export const RegisterForm = ({ pathname, onSubmit, initialData }: RegisterFormProps) => {
-  const { toast } = useToast();
   const [formData, setFormData] = useState<Partial<DataItem>>({
     name: ''
   });
@@ -112,10 +111,8 @@ export const RegisterForm = ({ pathname, onSubmit, initialData }: RegisterFormPr
     e.preventDefault();
     
     if (!validateForm()) {
-      toast({
-        title: "Erro de validação",
-        description: "Por favor, corrija os erros no formulário.",
-        variant: "destructive"
+      toast.error("Erro de validação", {
+        description: "Por favor, corrija os erros no formulário."
       });
       return;
     }
@@ -132,10 +129,8 @@ export const RegisterForm = ({ pathname, onSubmit, initialData }: RegisterFormPr
         const uploadError = null;
         
         if (uploadError) {
-          toast({
-            title: "Erro de upload",
+          toast.error("Erro de upload", {
             description: "Falha ao enviar a foto do perfil.",
-            variant: "destructive"
           });
           setIsSubmitting(false);
           return;

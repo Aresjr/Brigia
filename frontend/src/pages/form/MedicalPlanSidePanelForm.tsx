@@ -2,7 +2,6 @@
 import { Sheet, SheetContent,  SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { DataItem } from "@/models/models";
 import { useState, useEffect } from "react";
-import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
 import { MedicalPlansForm } from "./MedicalPlansForm";
 import {createMedicalPlan, updateMedicalPlan} from "@/api/medicalPlansApi.ts";
@@ -20,7 +19,6 @@ export const MedicalPlanSidePanelForm = ({
 }: MedicalPlanFormProps) => {
   const [preparedData, setPreparedData] = useState<DataItem | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
-  const { toast: toastError } = useToast();
 
   useEffect(() => {
     setPreparedData(editingItem);
@@ -50,10 +48,7 @@ export const MedicalPlanSidePanelForm = ({
     const errorMessage = error.message || '';
     let friendlyErrorMessage = 'Erro ao Salvar o Convênio';
 
-    toastError({
-        description: friendlyErrorMessage,
-        variant: "destructive"
-    });
+    toast.error(friendlyErrorMessage);
 
     setFormError(friendlyErrorMessage);
   }
