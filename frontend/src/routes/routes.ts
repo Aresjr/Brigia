@@ -4,6 +4,12 @@ const Home = lazy(() => import('@/pages/Home'));
 const Patients = lazy(() => import('@/pages/Patients'));
 const MedicalPlans = lazy(() => import('@/pages/MedicalPlans'));
 
+interface PageMetadata {
+    columns?: string;
+    defaultSort?: string;
+    defaultFilter?: string;
+}
+
 export const ROUTES = {
     HOME: '/',
     PATIENTS: '/pacientes',
@@ -17,6 +23,7 @@ interface RouteConfig {
     component: React.LazyExoticComponent<() => JSX.Element>;
     title: string;
     icon?: string;
+    metadata?: PageMetadata;
 }
 
 export const routes: RouteConfig[] = [
@@ -39,3 +46,4 @@ export const routes: RouteConfig[] = [
         icon: 'building'
     }
 ];
+

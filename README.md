@@ -39,10 +39,11 @@ SUPABASE_JWT_ALGO=HS256
 - [X] Point Patient frontend calls to backend instead of directly to Supabase
 - [X] Point Medical Plans frontend calls to backend instead of directly to Supabase
 - [X] Completely remove Supabase from frontend
+- [X] Remove deleted patients from the list after deletion
+- [X] Fix patients filtering
+- [X] Fix variable width in Tables
 
 ![Status: In Progress](https://img.shields.io/badge/status-in_progress-yellow)
-- [ ] Remove deleted patients from the list after deletion
-- [ ] Fix patients filtering
 - [ ] Create page for deleted patients
 - [ ] Finish Professionals page
 - [ ] Finish Appointments page

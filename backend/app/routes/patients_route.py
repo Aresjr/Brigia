@@ -147,8 +147,6 @@ async def get_birthday_patients():
     try:
         response = (supabase.rpc("get_patients_born_today").execute())
 
-        print(response)
-
         if not response.data:
             return []
 

@@ -163,7 +163,7 @@ export const DataTable = ({
         <div className="py-4 -mx-[32px] rounded-none px-[32px] bg-gray-50">
             <div className="flex items-center justify-between bg-gray-50">
                 <h1 className="text-2xl font-bold">
-                    {currentRoute?.title || 'Dashboard'}
+                    {currentRoute?.title || 'Página Inicial'}
                 </h1>
                 <div className="flex items-center gap-2">
                     <SearchBar
