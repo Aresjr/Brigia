@@ -17,7 +17,6 @@ BACKEND_URL=http://localhost:8008
 
 SUPABASE_PROJECT_ID=your_project_id
 SUPABASE_JWT_SECRET=jwt-secret
-SUPABASE_JWT_ALGO=HS256
 ```
 
 ---
