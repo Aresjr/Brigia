@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .settings import settings
 from .routes import (
     auth_route as auth,
     medical_plans_route as medical_plans,
@@ -10,6 +9,7 @@ from .routes import (
     procedure_prices_route as procedure_prices,
     appointments_route as appointments
 )
+from .settings import settings
 
 if settings.ENV == "prod":
     app = FastAPI(

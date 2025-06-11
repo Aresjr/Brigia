@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException, Depends, status, Query
-from typing import Optional, List
+from fastapi import APIRouter, HTTPException, Depends, status
+from typing import Optional
 from datetime import datetime, timezone
 from supabase import create_client, Client
+
 from ..settings import settings
 from ..middleware.auth import get_current_user
 from ..models.appointments import (

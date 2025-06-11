@@ -1,8 +1,9 @@
 from fastapi import Cookie, HTTPException
 from fastapi.security import HTTPBearer
 from supabase import create_client
-from ..settings import settings
 import jwt
+
+from ..settings import settings
 
 security = HTTPBearer()
 supabase = create_client(
