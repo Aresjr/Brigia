@@ -55,10 +55,10 @@ const Home = () => {
                                         {patient.identification_color && (
                                             <Badge
                                                 variant="outline"
-                                                className="w-2 h-2 rounded-full p-0 border-0"
+                                                className="w-18 h-18 rounded-full p-2 border-2"
                                                 style={{
                                                     backgroundColor: identificationColorOptions.find(
-                                                        opt => opt.value === patient.identification_color
+                                                        opt => opt.color === patient.identification_color
                                                     )?.color
                                                 }}
                                             />

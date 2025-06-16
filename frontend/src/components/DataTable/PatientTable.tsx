@@ -194,6 +194,11 @@ export function PatientTable({
                     />
                 </TableHead>
                 <TableHead
+                    className="cursor-pointer w-12"
+                    onClick={() => handleSort("identification_color")}
+                >
+                </TableHead>
+                <TableHead
                     className="cursor-pointer text-white"
                     onClick={() => handleSort("name")}
                 >
@@ -231,6 +236,16 @@ export function PatientTable({
                     onContextMenu={(e) => handleContextMenu(e, String(item.id))}
                 >
                     {renderCheckboxCell(item)}
+                    <TableCell>
+                        <div className="flex items-center gap-2">
+                            {item.identification_color && (
+                                <span
+                                    className="w-4 h-4 rounded-full"
+                                    style={{ backgroundColor: item.identification_color }}
+                                />
+                            )}
+                        </div>
+                    </TableCell>
                     <TableCell>{item.name}</TableCell>
                     <TableCell>{item.email}</TableCell>
                     <TableCell>{item.cellphone}</TableCell>
