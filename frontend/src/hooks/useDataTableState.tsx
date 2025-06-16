@@ -1,23 +1,19 @@
-
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { DataItem, MedicalPlan } from "@/models/models";
-import { enrichItemsWithMedicalPlanNames } from "@/components/DataTable/DataTableUtils";
-import {getMedicalPlans} from "@/api/medicalPlansApi.ts";
+import { BaseEntity } from "@/models/models";
 
-export function useDataTableState(
+export function useDataTableState<T extends BaseEntity>(
   isLoading: boolean,
-  items: DataItem[],
+  items: T[],
   pathname: string,
-  applyLocalFilters
+  applyLocalFilters: (items: T[], searchTerm: string, pathname: string, sortConfig: { key: keyof T; direction: 'asc' | 'desc' }, colorFilter: string, setFiltered: (items: T[]) => void) => void
 ) {
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; id: string | null }>({ x: 0, y: 0, id: null });
   const [searchTerm, setSearchTerm] = useState("");
   const [filterField, setFilterField] = useState<string>("name");
   const [colorFilter, setColorFilter] = useState<string>("");
-  const [filteredItems, setFilteredItems] = useState<DataItem[]>([]);
-  const [sortConfig, setSortConfig] = useState<{ key: keyof DataItem; direction: 'asc' | 'desc' }>({ key: "created_at", direction: 'desc' });
-  const [viewingPatient, setViewingPatient] = useState<DataItem | null>(null);
+  const [filteredItems, setFilteredItems] = useState<T[]>([]);
+  const [sortConfig, setSortConfig] = useState<{ key: keyof T; direction: 'asc' | 'desc' }>({ key: "created_at" as keyof T, direction: 'desc' });
+  const [viewingPatient, setViewingPatient] = useState<T | null>(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [itemsToDelete, setItemsToDelete] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,33 +21,12 @@ export function useDataTableState(
   const ITEMS_PER_PAGE = 15;
   const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
 
-  const { data: medicalPlansData = [] } = useQuery<MedicalPlan[]>({
-    queryKey: ["medicalPlansLookup"],
-    queryFn: async () => {
-      const { data, error } = await getMedicalPlans();
-      
-      if (error) throw error;
-
-      return data.map((plan: any) => ({
-        ...plan,
-        id: String(plan.id)
-      })) as MedicalPlan[];
-    },
-    enabled: pathname === "/pacientes"
-  });
-
-  const displayItems = enrichItemsWithMedicalPlanNames(
-      items,
-    medicalPlansData,
-    pathname
-  );
-
   const paginatedItems = filteredItems.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
 
-  const handleSort = (key: keyof DataItem) => {
+  const handleSort = (key: keyof T) => {
     let direction: 'asc' | 'desc' = 'asc';
     if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
       direction = 'desc';
@@ -81,9 +56,9 @@ export function useDataTableState(
 
   useEffect(() => {
     if (!isLoading) {
-      applyLocalFilters(displayItems, searchTerm, pathname, sortConfig, colorFilter, setFilteredItems);
+      applyLocalFilters(items, searchTerm, pathname, sortConfig, colorFilter, setFilteredItems);
     }
-  }, [searchTerm, pathname, colorFilter, sortConfig, setFilteredItems, isLoading]);
+  }, [items, searchTerm, pathname, colorFilter, sortConfig, setFilteredItems, isLoading, applyLocalFilters]);
 
   return {
     contextMenu,
@@ -105,10 +80,9 @@ export function useDataTableState(
     currentPage,
     setCurrentPage,
     totalPages,
-    medicalPlansData,
     handleSort,
     handleContextMenu,
     closeContextMenu,
-    handleConfirmDelete,
+    handleConfirmDelete
   };
 }

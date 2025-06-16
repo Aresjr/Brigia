@@ -36,3 +36,8 @@ export const getBirthdayPatients = async () => {
     const res = await api.get(`${url}/birthday`);
     return res.data;
 }
+
+export const updatePatient = async (id: string | number, patientData: any) => {
+    const res = await api.put(`${url}/${id}`, patientData);
+    return res.data;
+}

@@ -1,6 +1,5 @@
-
 import { Sheet, SheetContent,  SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { DataItem } from "@/models/models";
+import { Patient } from "@/models/models";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { MedicalPlansForm } from "./MedicalPlansForm";
@@ -9,7 +8,7 @@ import {createMedicalPlan, updateMedicalPlan} from "@/api/medicalPlansApi.ts";
 interface MedicalPlanFormProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  editingItem: DataItem | null;
+  editingItem: Patient | null;
 }
 
 export const MedicalPlanSidePanelForm = ({ 
@@ -17,14 +16,14 @@ export const MedicalPlanSidePanelForm = ({
   onOpenChange,
   editingItem
 }: MedicalPlanFormProps) => {
-  const [preparedData, setPreparedData] = useState<DataItem | null>(null);
+  const [preparedData, setPreparedData] = useState<Patient | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     setPreparedData(editingItem);
   }, [editingItem]);
 
-    const handleSubmit = async (data: Omit<DataItem, 'id' | 'created_at'>) => {
+    const handleSubmit = async (data: Omit<Patient, 'id' | 'created_at'>) => {
       setFormError(null);
       try {
           if (editingItem) {
@@ -53,7 +52,7 @@ export const MedicalPlanSidePanelForm = ({
     setFormError(friendlyErrorMessage);
   }
 
-  const handleFormSubmit = async (data: Omit<DataItem, 'id' | 'created_at'>) => {
+  const handleFormSubmit = async (data: Omit<Patient, 'id' | 'created_at'>) => {
     try {
       handleSubmit(data);
     } catch (error) {

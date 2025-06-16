@@ -1,8 +1,10 @@
-import { DataTable } from "@/components/DataTable/DataTable";
+import { PatientTable } from "@/components/DataTable/PatientTable";
 import { FormDialog } from "@/components/Forms/FormDialog";
+import { useLocation } from "react-router-dom";
 import { usePatientManagement } from "@/hooks/usePatientManagement";
 
 const Patients = () => {
+    const location = useLocation();
     const {
         items,
         isLoading,
@@ -22,21 +24,22 @@ const Patients = () => {
 
     return (
         <>
-            <DataTable
-                key={items.length}
-                items={items}
-                isLoading={isLoading}
-                error={error as Error}
-                pathname={location.pathname}
-                selectedItems={selectedItems}
-                onToggleItem={handleToggleItem}
-                onSelectAll={selectAll}
-                onSelectNone={selectNone}
-                onNewRecord={handleNewRecord}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-                formError={formError}
-            />
+            <div className="space-y-4 table-fixed w-full">
+                <PatientTable
+                    items={items}
+                    isLoading={isLoading}
+                    error={error}
+                    pathname={location.pathname}
+                    selectedItems={selectedItems}
+                    onToggleItem={handleToggleItem}
+                    onSelectAll={selectAll}
+                    onSelectNone={selectNone}
+                    onNewRecord={handleNewRecord}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    formError={formError}
+                />
+            </div>
             <FormDialog
                 isOpen={isFormOpen}
                 onOpenChange={setIsFormOpen}

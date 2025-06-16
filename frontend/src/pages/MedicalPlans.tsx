@@ -1,17 +1,20 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { DataItem } from "@/models/models";
 import { MedicalPlanSidePanelForm } from "./form/MedicalPlanSidePanelForm";
 import { deleteMedicalPlan, getMedicalPlans } from "@/api/medicalPlansApi.ts";
 import { MedicalPlanTable } from "@/components/DataTable/Models/MedicalPlanTable";
 import { useDataTableState } from "@/hooks/useDataTableState";
+import { useMedicalPlanEnrichment } from "@/hooks/useMedicalPlanEnrichment";
 import { filterItemsLocally, sortItems } from "@/components/DataTable/DataTableUtils";
 import { useCallback } from "react";
-import {toast} from "sonner";
+import { toast } from "sonner";
+import { useLocation } from "react-router-dom";
+import { MedicalPlan } from "@/models/models";
 
 export default function MedicalPlans() {
+    const location = useLocation();
     const [isFormOpen, setIsFormOpen] = useState(false);
-    const [editingItem, setEditingItem] = useState<DataItem | null>(null);
+    const [editingItem, setEditingItem] = useState<MedicalPlan | null>(null);
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
     const [formError, setFormError] = useState<string | null>(null);
     const queryClient = useQueryClient();
@@ -27,6 +30,8 @@ export default function MedicalPlans() {
             const sorted = sortItems(filtered, sortConfig.key, sortConfig.direction);
             setFilteredItems(sorted);
         }, []);
+
+    const enrichedItems = useMedicalPlanEnrichment(items, location.pathname);
 
     const {
         contextMenu,
@@ -46,7 +51,7 @@ export default function MedicalPlans() {
         handleSort,
         handleContextMenu,
         closeContextMenu
-    } = useDataTableState(isLoading, items, location.pathname, applyLocalFilters);
+    } = useDataTableState(isLoading, enrichedItems, location.pathname, applyLocalFilters);
 
     const handleDelete = async (id: string) => {
         try {
@@ -68,7 +73,7 @@ export default function MedicalPlans() {
         setIsFormOpen(true);
     };
 
-    const handleEdit = (item: DataItem) => {
+    const handleEdit = (item: MedicalPlan) => {
         setEditingItem(item);
         setIsFormOpen(true);
     };

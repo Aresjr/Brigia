@@ -1,16 +1,15 @@
-
 import { Input } from "@/components/ui/input";
-import { DataItem } from "@/models/models";
-import InputMask from "react-input-mask";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Patient, MedicalPlan } from "@/models/models";
+import InputMask from 'react-input-mask';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 
 interface PatientContactInfoProps {
-  formData: Partial<DataItem>;
-  setFormData: (data: Partial<DataItem>) => void;
-  errors: Record<string, string>;
-  medicalPlans: Array<{ id: string | number; name: string }>;
+    formData: Partial<Patient>;
+    setFormData: (data: Partial<Patient>) => void;
+    errors: Record<string, string>;
+    medicalPlans: MedicalPlan[];
 }
 
 export const PatientContactInfo = ({ 
@@ -103,16 +102,21 @@ export const PatientContactInfo = ({
         <label className="block text-sm font-medium mb-1">Convênios</label>
 
         <Select
-            value={formData.medical_plan_id ? String(formData.medical_plan_id) : ''}
-            onValueChange={(value) => setFormData({ ...formData, medical_plan_id: value })}
+            value={formData.medical_plan_id ? String(formData.medical_plan_id) : "none"}
+            onValueChange={(value) => setFormData({
+                ...formData,
+                medical_plan_id: value === "none" ? undefined : value
+            })}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Selecione um plano de saúde" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="none">Nenhum</SelectItem>
-            {medicalPlans.map((plan) => (
-                <SelectItem key={String(plan.id)} value={String(plan.id)}>{plan.name}</SelectItem>
+            {medicalPlans?.map((plan) => (
+                <SelectItem key={String(plan.id)} value={String(plan.id)}>
+                    {plan.name}
+                </SelectItem>
             ))}
           </SelectContent>
         </Select>

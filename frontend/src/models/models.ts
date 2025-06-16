@@ -1,100 +1,87 @@
-
-export interface DataItem {
+// Common base interface for all entities
+export interface BaseEntity {
     id: string | number;
-    name: string;
-    email?: string;
     created_at: string;
-    description?: string;
-    specialty?: string;
-    provider?: string;
-    duration?: number;
-    date?: string;
-    reason?: string;
+    is_deleted?: boolean;
+}
+
+// Patient specific interface
+export interface Patient extends BaseEntity, AddressFields {
+    name: string;
     birth_date?: string;
-    image_url?: string;
-    // Patient fields
     cpf?: string;
     sex?: string;
     cellphone?: string;
+    email?: string;
+    image_url?: string;
     last_appointment?: string;
     next_appointment?: string;
-    is_deleted?: boolean;
     medical_plan_id?: string | number;
-    medical_plan_ids?: string[]; // Support for multiple medical plans
+    medical_plan_ids?: string[];
     medical_plan_name?: string;
     identification_color?: string;
-    // User fields
+    medical_plans: MedicalPlan[];
+}
+
+// User specific interface
+export interface User extends BaseEntity {
+    name: string;
+    email?: string;
     role?: string;
     theme?: string | null;
     avatar_url?: string | null;
     establishment?: string | null;
-    // Address fields (legacy format - for backward compatibility)
-    address?: AddressData;
-    // New direct address fields
+}
+
+// Professional specific interface
+export interface Professional extends BaseEntity, AddressFields {
+    email?: string;
+    specialty?: string;
+    crm?: string;
+    procedure_ids?: number[];
+}
+
+// Appointment specific interface
+export interface Appointment extends BaseEntity {
+    provider?: string;
+    duration?: number;
+    date?: string;
+    reason?: string;
+    start_date?: string;
+    end_date?: string;
+    patient_id?: number;
+}
+
+export interface MedicalPlan extends BaseEntity {
+    name: string;
+    description?: string;
+}
+
+export interface PatientAddress {
     address_cep?: string;
     address_rua?: string;
     address_complemento?: string;
     address_bairro?: string;
     address_cidade?: string;
     address_uf?: string;
-    medical_plans: MedicalPlan[];
-    // Professional fields
-    crm?: string;
-    procedure_ids?: number[]; // IDs of procedures a professional can perform
-    // Appointment fields
-    start_date?: string;
-    end_date?: string;
-    patient_id?: number;
-    professional_id?: number;
-    is_paid?: boolean;
-    cost?: number;
-}
-
-export interface MedicalPlan {
-    id: string | number;
-    name: string;
-    description?: string;
-    card_number: number;
-    expiration_date: string;
-    holder_name: string;
-}
-
-export interface Patient {
-  id: string | number;
-  name: string;
-  email?: string;
-  birth_date: string;
-  cpf: string;
-  cellphone: string;
-  identification_color: string;
-  medical_plan_id: string | number;
-  last_appointment: string;
-  next_appointment: string;
-  created_at: string;
-}
-
-export interface PatientAddress {
-  address_cep?: string;
-  address_rua?: string;
-  address_complemento?: string;
-  address_bairro?: string;
-  address_cidade?: string;
-  address_uf?: string;
-}
-
-export interface User {
-  id: string | number;
-  avatar_url?: string;
-  name: string;
-  role: string;
-  created_at: string;
 }
 
 interface AddressData {
-  cep?: string;
-  rua?: string;
-  complemento?: string;
-  bairro?: string;
-  cidade?: string;
-  uf?: string;
+    cep?: string;
+    rua?: string;
+    complemento?: string;
+    bairro?: string;
+    cidade?: string;
+    uf?: string;
+}
+
+// Address related fields
+export interface AddressFields {
+    address?: AddressData;
+    address_cep?: string;
+    address_rua?: string;
+    address_complemento?: string;
+    address_bairro?: string;
+    address_cidade?: string;
+    address_uf?: string;
 }

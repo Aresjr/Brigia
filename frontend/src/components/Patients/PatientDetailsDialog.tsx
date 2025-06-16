@@ -1,17 +1,19 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
-import { DataItem, PatientAddress } from "@/models/models";
+import {PatientAddress, Patient} from "@/models/models";
 import { format } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { UserCircle, Edit, History } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import {getPatient, getPatientMedicalPlan} from "@/api/patientsApi.ts";
+import { identificationColorOptions } from "@/components/Forms/utils/formUtils";
+import {Badge} from "@/components/ui/badge.tsx";
 
 interface PatientDetailsDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  patient: DataItem;
-  onEdit?: (patient: DataItem) => void;
+  patient: Patient;
+  onEdit?: (patient: Patient) => void;
 }
 
 export const PatientDetailsDialog = ({
@@ -85,10 +87,15 @@ export const PatientDetailsDialog = ({
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 {patient.identification_color && (
-                  <div 
-                    className="h-4 w-4 rounded-full flex-shrink-0" 
-                    style={{backgroundColor: patient.identification_color}}
-                  />
+                    <Badge
+                        variant="outline"
+                        className="w-2 h-2 rounded-full p-0 border-0"
+                        style={{
+                            backgroundColor: identificationColorOptions.find(
+                                opt => opt.value === patient.identification_color
+                            )?.color
+                        }}
+                    />
                 )}
                 <h2 className="text-xl font-bold">{patient.name}</h2>
               </div>
@@ -141,15 +148,6 @@ export const PatientDetailsDialog = ({
                     {patientMedicalPlans.map((plan: any, index: number) => (
                         <div key={index} className="bg-muted/30 p-3 rounded-md space-y-1">
                           <p className="font-medium">{plan?.name || "Convênio Desconhecido"}</p>
-                          {plan.card_number && (
-                              <p className="text-sm"><span className="font-medium">Carteirinha:</span> {plan.card_number}</p>
-                          )}
-                          {plan.holder_name && (
-                              <p className="text-sm"><span className="font-medium">Titular:</span> {plan.holder_name}</p>
-                          )}
-                          {plan.expiration_date && (
-                              <p className="text-sm"><span className="font-medium">Validade:</span> {format(new Date(plan.expiration_date), "MM/yyyy")}</p>
-                          )}
                         </div>
                     ))}
                   </div>

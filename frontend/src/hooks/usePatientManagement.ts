@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { createPatient, deletePatient, getPatients, updatePatient } from '@/api/patientsApi';
+import { Patient } from '@/models/models';
 import { toast } from 'sonner';
-import { deletePatient, getPatients } from '@/api/patientsApi';
-import { DataItem } from '@/models/models';
 
 export const usePatientManagement = () => {
     const queryClient = useQueryClient();
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
-    const [editingItem, setEditingItem] = useState<DataItem | null>(null);
+    const [editingItem, setEditingItem] = useState<Patient | null>(null);
     const [formError, setFormError] = useState<string | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
 
@@ -24,7 +24,7 @@ export const usePatientManagement = () => {
                     ...item,
                     id: String(item.id),
                     medical_plan_id: item.medical_plan_id ? String(item.medical_plan_id) : undefined
-                })) as DataItem[];
+                })) as Patient[];
             } catch (error) {
                 console.error('Error fetching data:', error);
                 toast.error("Erro ao buscar pacientes");
@@ -52,7 +52,7 @@ export const usePatientManagement = () => {
         setIsFormOpen(true);
     };
 
-    const handleEdit = (item: DataItem) => {
+    const handleEdit = (item: Patient) => {
         setEditingItem(item);
         setIsFormOpen(true);
     };

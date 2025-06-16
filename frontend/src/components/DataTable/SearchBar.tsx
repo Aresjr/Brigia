@@ -3,7 +3,7 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useState, useRef, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { identificationColors } from "../Forms/utils/formUtils";
+import { identificationColorOptions } from "../Forms/utils/formUtils";
 
 interface SearchBarProps {
   searchTerm: string;
@@ -64,10 +64,10 @@ export const SearchBar = ({
         />
         <Search className="absolute right-3 top-2.5 h-4 w-4 text-muted-foreground" />
       </div>
-      
+
       {pathname === "/pacientes" && setColorFilter && (
-        <Select 
-          value={colorFilter || "all"} 
+        <Select
+          value={colorFilter || "all"}
           onValueChange={(value) => {
             setColorFilter(value === "all" ? "" : value);
           }}
@@ -81,10 +81,10 @@ export const SearchBar = ({
                 <span>Todas</span>
               </div>
             </SelectItem>
-            {identificationColors.map((color) => (
+            {identificationColorOptions.map((color) => (
               <SelectItem key={color.value} value={color.value}>
                 <div className="flex items-center">
-                  <div 
+                  <div
                     className="w-4 h-4 rounded-full mr-2"
                     style={{ backgroundColor: color.value }}
                   />
@@ -95,6 +95,7 @@ export const SearchBar = ({
           </SelectContent>
         </Select>
       )}
+
     </div>
   );
 };

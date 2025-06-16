@@ -2,8 +2,10 @@ import {
     Table, TableBody, TableCell, TableHead, TableHeader as TableHeaderRoot, TableRow
 } from "@/components/ui/table.tsx";
 import { Pagination } from "@/components/DataTable/Pagination.tsx";
-import { Patient } from "@/models/models";
+import {Patient as Patient} from "@/models/models";
 import { PATIENT_TABLE_COLUMNS, PATIENT_TABLE_FORMATTERS } from "./PatientsTableConfig";
+import { identificationColorOptions } from "@/components/Forms/utils/formUtils";
+import {Badge} from "@/components/ui/badge.tsx";
 
 interface PatientsTableProps {
     items: Patient[];
@@ -92,9 +94,14 @@ export const PatientsTable = ({
                                         ) : column.key === 'name' ? (
                                             <div className="flex items-center gap-2">
                                                 {item.identification_color && (
-                                                    <div
-                                                        className="h-4 w-4 rounded-full flex-shrink-0"
-                                                        style={{backgroundColor: item.identification_color}}
+                                                    <Badge
+                                                        variant="outline"
+                                                        className="w-2 h-2 rounded-full p-0 border-0"
+                                                        style={{
+                                                            backgroundColor: identificationColorOptions.find(
+                                                                opt => opt.value === item.identification_color
+                                                            )?.color
+                                                        }}
                                                     />
                                                 )}
                                                 {item.name}

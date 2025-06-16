@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { MessageSquare } from "lucide-react";
 import ProtectedLayout from "@/layouts/ProtectedLayout";
 import {getPageTitle} from "@/models/pages";
-import { DataItem } from "@/models/models";
+import { Patient, User, Professional, Appointment } from "@/models/models";
 import { ChatDialog } from "@/components/Chat/ChatDialog";
 import { FormDialog } from "@/components/Forms/FormDialog";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -24,7 +24,7 @@ const MainPage = () => {
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-    const [editingItem, setEditingItem] = useState<DataItem | null>(null);
+    const [editingItem, setEditingItem] = useState<Patient | User | Professional | Appointment | null>(null);
     const [profile, setProfile] = useState<Profile | null>(null);
     const { theme, setTheme } = useTheme();
 

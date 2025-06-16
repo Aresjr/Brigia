@@ -22,7 +22,13 @@ export default function AuthPage() {
       await login(email, password);
       navigate("/");
     } catch (error: any) {
-      toast.error(error.detail.message || 'Não foi possível fazer o login');
+      console.log("toast.error");
+      toast.error( error.detail.message || 'Não foi possível fazer o login', {
+        style: {
+          backgroundColor: 'green',
+          color: 'white'
+        }
+      });
     } finally {
       setLoading(false);
     }

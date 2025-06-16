@@ -1,25 +1,33 @@
 import { Button } from "@/components/ui/button";
-import { DataItem } from "@/models/models";
+import { MedicalPlan } from "@/models/models";
 import { useEffect, useState } from "react";
-import { processInitialData } from "@/components/Forms/utils/formUtils";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {toast} from "sonner";
+import { toast } from "sonner";
 
 interface MedicalPlansFormProps {
-  onSubmit: (data: Omit<DataItem, 'id' | 'created_at'>) => void;
-  initialData?: DataItem | null;
+  onSubmit: (data: Omit<MedicalPlan, 'id' | 'created_at'>) => void;
+  initialData?: MedicalPlan | null;
 }
 
+const processInitialData = (data: MedicalPlan | null): Partial<MedicalPlan> => {
+  if (!data) return { name: '' };
+
+  return {
+    name: data.name,
+    description: data.description || ''
+  };
+};
+
 export const MedicalPlansForm = ({ onSubmit, initialData }: MedicalPlansFormProps) => {
-  const [formData, setFormData] = useState<Partial<DataItem>>({
+  const [formData, setFormData] = useState<Partial<MedicalPlan>>({
     name: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (initialData) {
-      const processedData = processInitialData(initialData, null);
+      const processedData = processInitialData(initialData);
       
       setFormData(processedData);
     }
@@ -42,8 +50,8 @@ export const MedicalPlansForm = ({ onSubmit, initialData }: MedicalPlansFormProp
     setIsSubmitting(true);
     
     try {
-      const submitData = { ...formData } as Omit<DataItem, 'id' | 'created_at'>;
-      
+      const submitData = { ...formData } as Omit<MedicalPlan, 'id' | 'created_at'>;
+
       onSubmit(submitData);
     } catch (error: any) {
 

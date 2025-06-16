@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Cake } from "lucide-react";
+import {Cake} from "lucide-react";
 import { format } from "date-fns";
 import { getPatientsCount, getBirthdayPatients } from "@/api/patientsApi";
+import { identificationColorOptions } from "@/components/Forms/utils/formUtils";
+import {Badge} from "@/components/ui/badge.tsx";
 
 const Home = () => {
 
@@ -51,9 +53,14 @@ const Home = () => {
                                             </div>
                                         </div>
                                         {patient.identification_color && (
-                                            <div
-                                                className="w-3 h-3 rounded-full"
-                                                style={{ backgroundColor: patient.identification_color }}
+                                            <Badge
+                                                variant="outline"
+                                                className="w-2 h-2 rounded-full p-0 border-0"
+                                                style={{
+                                                    backgroundColor: identificationColorOptions.find(
+                                                        opt => opt.value === patient.identification_color
+                                                    )?.color
+                                                }}
                                             />
                                         )}
                                     </div>

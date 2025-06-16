@@ -1,29 +1,29 @@
-import {DataItem, MedicalPlan} from "@/models/models";
+import { MedicalPlan, Patient, BaseEntity } from "@/models/models";
 
 export const enrichItemsWithMedicalPlanNames = (
-    itemsToEnrich: DataItem[],
+    patients: Patient[],
     medicalPlans: MedicalPlan[],
     pathname: string
-): DataItem[] => {
-    if (pathname !== "/pacientes") return itemsToEnrich;
+): Patient[] => {
+    if (pathname !== "/pacientes") return patients;
 
-    return itemsToEnrich.map(item => {
-        if (item.medical_plan_id) {
-            const plan = medicalPlans.find(p => String(p.id) === String(item.medical_plan_id));
+    return patients.map(patient => {
+        if (patient.medical_plan_id) {
+            const plan = medicalPlans.find(p => String(p.id) === String(patient.medical_plan_id));
             return {
-                ...item,
+                ...patient,
                 medical_plan_name: plan ? plan.name : 'Plano desconhecido'
             };
         }
-        return item;
+        return patient;
     });
 };
 
-export const sortItems = (
-    itemsToSort: DataItem[],
-    sortKey: keyof DataItem,
+export const sortItems = <T extends BaseEntity>(
+    itemsToSort: T[],
+    sortKey: keyof T,
     direction: 'asc' | 'desc'
-): DataItem[] => {
+): T[] => {
     return [...itemsToSort].sort((a, b) => {
         const aValue = a[sortKey];
         const bValue = b[sortKey];
@@ -48,11 +48,11 @@ export const sortItems = (
     });
 };
 
-export const filterItemsLocally = (
-    items: DataItem[],
+export const filterItemsLocally = <T extends BaseEntity>(
+    items: T[],
     searchTerm: string,
     pathname: string
-): DataItem[] => {
+): T[] => {
     if (!searchTerm.trim()) {
         return items;
     }
@@ -62,18 +62,25 @@ export const filterItemsLocally = (
     return items.filter(item => {
         let matchesSearch = item.name.toLowerCase().includes(searchTermLower);
 
-        if (item.email) {
-            matchesSearch = matchesSearch || item.email.toLowerCase().includes(searchTermLower);
+        // Type guard for PatientData
+        const isPatient = (item: T): item is T & Patient => {
+            return 'email' in item && 'cpf' in item;
+        };
+
+        if ('email' in item) {
+            matchesSearch = matchesSearch || (item as { email?: string }).email?.toLowerCase().includes(searchTermLower) || false;
         }
 
-        if (pathname === "/pacientes") {
+        if (pathname === "/pacientes" && isPatient(item)) {
             if (item.cpf) matchesSearch = matchesSearch || item.cpf.toLowerCase().includes(searchTermLower);
             if (item.cellphone) matchesSearch = matchesSearch || item.cellphone.toLowerCase().includes(searchTermLower);
             if (item.birth_date) matchesSearch = matchesSearch || item.birth_date.toLowerCase().includes(searchTermLower);
             if (item.sex) matchesSearch = matchesSearch || item.sex.toLowerCase().includes(searchTermLower);
             if (item.medical_plan_name) matchesSearch = matchesSearch || item.medical_plan_name.toLowerCase().includes(searchTermLower);
         } else if (pathname === "/convenios") {
-            if (item.description) matchesSearch = matchesSearch || item.description.toLowerCase().includes(searchTermLower);
+            if ('description' in item) {
+                matchesSearch = matchesSearch || ((item as { description?: string }).description?.toLowerCase().includes(searchTermLower) || false);
+            }
         }
 
         return matchesSearch;
