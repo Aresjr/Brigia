@@ -11,9 +11,10 @@ import { filterItemsLocally, sortItems } from "@/components/DataTable/DataTableU
 import { SearchBarWithColorFilter } from "./SearchBarWithColorFilter";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Pagination } from "./Pagination";
+import { PatientDetailsDialog } from "@/components/Patients/PatientDetailsDialog";
 
 interface PatientTableProps {
-    items: Patient[];
+    patients: Patient[];
     isLoading: boolean;
     error: Error | null;
     pathname: string;
@@ -24,12 +25,11 @@ interface PatientTableProps {
     onNewRecord: () => void;
     onEdit: (item: Patient) => void;
     onDelete: (id: string) => void;
-    onView?: (item: Patient) => void;
     formError?: string | null;
 }
 
 export function PatientTable({
-    items,
+    patients,
     isLoading,
     error,
     pathname,
@@ -39,11 +39,14 @@ export function PatientTable({
     onSelectNone,
     onNewRecord,
     onEdit,
-    onDelete,
-    onView
+    onDelete
 }: PatientTableProps) {
     const location = useLocation();
     const currentRoute = routes.find(route => route.path === location.pathname);
+
+    // Add state for patient details dialog
+    const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+    const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
     // Search and filter states
     const [searchTerm, setSearchTerm] = useState("");
@@ -69,12 +72,12 @@ export function PatientTable({
     const ITEMS_PER_PAGE = 15;
 
     const applyFilters = useCallback(() => {
-        let filtered = filterItemsLocally(items, searchTerm, pathname);
+        let filtered = filterItemsLocally(patients, searchTerm, pathname);
         if (colorFilter) {
             filtered = filtered.filter(item => item.identification_color === colorFilter);
         }
         return sortItems(filtered, sortConfig.key, sortConfig.direction);
-    }, [items, searchTerm, pathname, colorFilter, sortConfig]);
+    }, [patients, searchTerm, pathname, colorFilter, sortConfig]);
 
     // Effect to update filtered items
     useEffect(() => {
@@ -110,7 +113,7 @@ export function PatientTable({
 
     const handleEditFromContext = () => {
         if (!contextMenu.id) return;
-        const item = items.find(item => item.id.toString() === contextMenu.id);
+        const item = patients.find(item => item.id.toString() === contextMenu.id);
         if (item) {
             onEdit(item);
         }
@@ -118,7 +121,7 @@ export function PatientTable({
 
     const handleExportSelected = () => {
         if (selectedItems.length === 0) return;
-        const selectedData = items.filter(item => selectedItems.includes(item.id.toString()));
+        const selectedData = patients.filter(item => selectedItems.includes(item.id.toString()));
         let csvContent = "data:text/csv;charset=utf-8,";
         const allKeys = new Set<string>();
         selectedData.forEach(item => {
@@ -189,8 +192,8 @@ export function PatientTable({
                 <TableHead className="w-12">
                     <input
                         type="checkbox"
-                        checked={items.length > 0 && selectedItems.length === items.length}
-                        onChange={selectedItems.length === items.length ? onSelectNone : onSelectAll}
+                        checked={patients.length > 0 && selectedItems.length === patients.length}
+                        onChange={selectedItems.length === patients.length ? onSelectNone : onSelectAll}
                     />
                 </TableHead>
                 <TableHead
@@ -205,10 +208,10 @@ export function PatientTable({
                     Nome
                 </TableHead>
                 <TableHead
-                    className="cursor-pointer text-white w-52"
-                    onClick={() => handleSort("email")}
+                    className="cursor-pointer text-white w-36"
+                    onClick={() => handleSort("cpf")}
                 >
-                    Email
+                    CPF
                 </TableHead>
                 <TableHead
                     className="cursor-pointer text-white w-36"
@@ -217,22 +220,39 @@ export function PatientTable({
                     Telefone
                 </TableHead>
                 <TableHead
-                    className="cursor-pointer text-white w-30"
-                    onClick={() => handleSort("created_at")}
+                    className="cursor-pointer text-white w-36"
+                    onClick={() => handleSort("medical_plan_name")}
                 >
-                    Criado em
+                    Convênio
+                </TableHead>
+                <TableHead
+                    className="cursor-pointer text-white w-30"
+                    onClick={() => handleSort("last_appointment")}
+                >
+                    Última Consulta
+                </TableHead>
+                <TableHead
+                    className="cursor-pointer text-white w-30"
+                    onClick={() => handleSort("next_appointment")}
+                >
+                    Próxima Consulta
                 </TableHead>
             </TableRow>
         </TableHeader>
     );
 
+    const handleRowClick = (item: Patient) => {
+        setSelectedPatient(item);
+        setIsDetailsOpen(true);
+    };
+
     const renderTableBody = () => (
         <TableBody>
-            {paginatedItems.map(item => (
+            {paginatedItems.map((item : Patient) => (
                 <TableRow
                     key={item.id}
-                    className={selectedItems.includes(String(item.id)) ? 'bg-muted' : undefined}
-                    onClick={() => onView?.(item)}
+                    className={selectedItems.includes(String(item.id)) ? 'bg-muted' : 'cursor-pointer hover:bg-muted/50'}
+                    onClick={() => handleRowClick(item)}
                     onContextMenu={(e) => handleContextMenu(e, String(item.id))}
                 >
                     {renderCheckboxCell(item)}
@@ -247,9 +267,11 @@ export function PatientTable({
                         </div>
                     </TableCell>
                     <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.email}</TableCell>
+                    <TableCell>{item.cpf}</TableCell>
                     <TableCell>{item.cellphone}</TableCell>
-                    <TableCell>{new Date(item.created_at).toLocaleDateString()}</TableCell>
+                    <TableCell>{item.medical_plan_name}</TableCell>
+                    <TableCell>{new Date(item.last_appointment).toLocaleDateString()}</TableCell>
+                    <TableCell>{new Date(item.next_appointment).toLocaleDateString()}</TableCell>
                 </TableRow>
             ))}
         </TableBody>
@@ -275,7 +297,7 @@ export function PatientTable({
                     </Table>
                 </div>
 
-                {items.length > 0 && (
+                {patients.length > 0 && (
                     <Pagination
                         currentPage={currentPage}
                         totalPages={totalPages}
@@ -353,6 +375,12 @@ export function PatientTable({
                 onOpenChange={setShowDeleteConfirmation}
                 onCancel={cancelDeleteSelected}
                 onConfirm={confirmDeleteSelected}
+            />
+
+            <PatientDetailsDialog
+                patient={selectedPatient}
+                open={isDetailsOpen}
+                onOpenChange={setIsDetailsOpen}
             />
         </div>
     );

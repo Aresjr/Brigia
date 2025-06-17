@@ -26,7 +26,7 @@ const Patients = () => {
         <>
             <div className="space-y-4 table-fixed w-full">
                 <PatientTable
-                    items={items}
+                    patients={items}
                     isLoading={isLoading}
                     error={error}
                     pathname={location.pathname}

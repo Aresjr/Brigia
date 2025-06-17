@@ -10,36 +10,39 @@ import { identificationColorOptions } from "@/components/Forms/utils/formUtils";
 import {Badge} from "@/components/ui/badge.tsx";
 
 interface PatientDetailsDialogProps {
-  isOpen: boolean;
+  open: boolean;
   onOpenChange: (open: boolean) => void;
-  patient: Patient;
+  patient: Patient | null;
   onEdit?: (patient: Patient) => void;
 }
 
 export const PatientDetailsDialog = ({
-  isOpen, 
-  onOpenChange, 
+  open,
+  onOpenChange,
   patient,
   onEdit
 }: PatientDetailsDialogProps) => {
-
   const { data: patientMedicalPlans = [] } = useQuery({
-    queryKey: ["patientMedicalPlans", patient.id],
+    queryKey: ["patientMedicalPlans", patient?.id],
     queryFn: async () => {
+      if (!patient?.id) return [];
       const data = await getPatientMedicalPlan(patient.id);
       return data || [];
     },
-    enabled: !!patient.id && isOpen
+    enabled: !!patient?.id && open
   });
 
   const { data: patientAddress } = useQuery<PatientAddress>({
-    queryKey: ["patientAddress", patient.id],
-    queryFn: async () => getPatient(patient.id),
-    enabled: !!patient.id && isOpen
+    queryKey: ["patientAddress", patient?.id],
+    queryFn: async () => {
+      if (!patient?.id) return null;
+      return getPatient(patient.id);
+    },
+    enabled: !!patient?.id && open
   });
 
   const handleEdit = () => {
-    if (onEdit) {
+    if (onEdit && patient) {
       const patientWithAddressAndDetails = {
         ...patient,
         name: patient.name,
@@ -72,133 +75,141 @@ export const PatientDetailsDialog = ({
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={onOpenChange}>
+    <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="sm:max-w-lg overflow-y-auto">
-        <SheetHeader>
-          <SheetTitle className="flex items-center gap-4">
-            <div className="flex-shrink-0">
-              <Avatar className="h-16 w-16">
-                <AvatarImage src={patient.image_url || ""} />
-                <AvatarFallback className="bg-primary/10">
-                  <UserCircle className="h-8 w-8 text-primary" />
-                </AvatarFallback>
-              </Avatar>
-            </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-2">
-                {patient.identification_color && (
-                    <Badge
-                        variant="outline"
-                        className="w-2 h-2 rounded-full p-0 border-0"
-                        style={{
-                            backgroundColor: identificationColorOptions.find(
-                                opt => opt.value === patient.identification_color
-                            )?.color
-                        }}
-                    />
-                )}
-                <h2 className="text-xl font-bold">{patient.name}</h2>
-              </div>
-              <p className="text-muted-foreground">{patient.email}</p>
-            </div>
-          </SheetTitle>
-        </SheetHeader>
-        
-        <div className="mt-6 space-y-4">
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">CPF</h3>
-              <p>{patient.cpf || "N/A"}</p>
-            </div>
-            
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">Data de Nascimento</h3>
-              <p>{patient.birth_date ? formatBirthDate(patient.birth_date) : "N/A"}</p>
-            </div>
-            
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">Sexo</h3>
-              <p>{formatSex(patient.sex)}</p>
-            </div>
-            
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">Telefone</h3>
-              <p>{patient.cellphone || "N/A"}</p>
-            </div>
-            
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">Última Consulta</h3>
-              <p>{patient.last_appointment ? format(new Date(patient.last_appointment), "dd/MM/yyyy HH:mm") : "N/A"}</p>
-            </div>
-            
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">Próxima Consulta</h3>
-              <p>{patient.next_appointment ? format(new Date(patient.next_appointment), "dd/MM/yyyy HH:mm") : "N/A"}</p>
-            </div>
-
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">Criado em</h3>
-              <p>{format(new Date(patient.created_at), "dd/MM/yyyy")}</p>
-            </div>
-
-            <div className="col-span-2">
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">Convênios</h3>
-              {patientMedicalPlans && patientMedicalPlans.length > 0 ? (
-                  <div className="space-y-2">
-                    {patientMedicalPlans.map((plan: any, index: number) => (
-                        <div key={index} className="bg-muted/30 p-3 rounded-md space-y-1">
-                          <p className="font-medium">{plan?.name || "Convênio Desconhecido"}</p>
-                        </div>
-                    ))}
-                  </div>
-              ) : (
-                  <p className="text-sm text-muted-foreground">Sem convênios cadastrados</p>
-              )}
-            </div>
-            
-            <div className="col-span-2">
-              <h3 className="text-sm font-medium text-muted-foreground">Endereço</h3>
-              {patientAddress ? (
-                <div className="bg-muted/30 p-3 rounded-md space-y-1">
-                  {patientAddress.address_cep && (
-                    <p className="text-sm"><span className="font-medium">CEP:</span> {patientAddress.address_cep}</p>
-                  )}
-                  {patientAddress.address_rua && (
-                    <p className="text-sm"><span className="font-medium">Rua:</span> {patientAddress.address_rua}</p>
-                  )}
-                  {patientAddress.address_complemento && (
-                    <p className="text-sm"><span className="font-medium">Complemento:</span> {patientAddress.address_complemento}</p>
-                  )}
-                  {patientAddress.address_bairro && (
-                    <p className="text-sm"><span className="font-medium">Bairro:</span> {patientAddress.address_bairro}</p>
-                  )}
-                  <p className="text-sm">
-                    <span className="font-medium">Cidade/UF:</span> {patientAddress.address_cidade || "N/A"}{patientAddress.address_uf ? ` - ${patientAddress.address_uf}` : ""}
-                  </p>
+        {patient ? (
+          <>
+            <SheetHeader>
+              <SheetTitle className="flex items-center gap-4">
+                <div className="flex-shrink-0">
+                  <Avatar className="h-16 w-16">
+                    <AvatarImage src={patient.image_url || ""} />
+                    <AvatarFallback className="bg-primary/10">
+                      <UserCircle className="h-8 w-8 text-primary" />
+                    </AvatarFallback>
+                  </Avatar>
                 </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">Nenhuma informação de endereço disponível</p>
-              )}
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    {patient.identification_color && (
+                        <Badge
+                            variant="outline"
+                            className="w-2 h-2 rounded-full p-0 border-0"
+                            style={{
+                                backgroundColor: identificationColorOptions.find(
+                                    opt => opt.value === patient.identification_color
+                                )?.color
+                            }}
+                        />
+                    )}
+                    <h2 className="text-xl font-bold">{patient.name}</h2>
+                  </div>
+                  <p className="text-muted-foreground">{patient.email}</p>
+                </div>
+              </SheetTitle>
+            </SheetHeader>
+
+            <div className="mt-6 space-y-4">
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">CPF</h3>
+                  <p>{patient.cpf || "N/A"}</p>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Data de Nascimento</h3>
+                  <p>{patient.birth_date ? formatBirthDate(patient.birth_date) : "N/A"}</p>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Sexo</h3>
+                  <p>{formatSex(patient.sex)}</p>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Telefone</h3>
+                  <p>{patient.cellphone || "N/A"}</p>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Última Consulta</h3>
+                  <p>{patient.last_appointment ? format(new Date(patient.last_appointment), "dd/MM/yyyy HH:mm") : "N/A"}</p>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Próxima Consulta</h3>
+                  <p>{patient.next_appointment ? format(new Date(patient.next_appointment), "dd/MM/yyyy HH:mm") : "N/A"}</p>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Criado em</h3>
+                  <p>{format(new Date(patient.created_at), "dd/MM/yyyy")}</p>
+                </div>
+
+                <div className="col-span-2">
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Convênios</h3>
+                  {patientMedicalPlans && patientMedicalPlans.length > 0 ? (
+                      <div className="space-y-2">
+                        {patientMedicalPlans.map((plan: any, index: number) => (
+                            <div key={index} className="bg-muted/30 p-3 rounded-md space-y-1">
+                              <p className="font-medium">{plan?.name || "Convênio Desconhecido"}</p>
+                            </div>
+                        ))}
+                      </div>
+                  ) : (
+                      <p className="text-sm text-muted-foreground">Sem convênios cadastrados</p>
+                  )}
+                </div>
+
+                <div className="col-span-2">
+                  <h3 className="text-sm font-medium text-muted-foreground">Endereço</h3>
+                  {patientAddress ? (
+                    <div className="bg-muted/30 p-3 rounded-md space-y-1">
+                      {patientAddress.address_cep && (
+                        <p className="text-sm"><span className="font-medium">CEP:</span> {patientAddress.address_cep}</p>
+                      )}
+                      {patientAddress.address_rua && (
+                        <p className="text-sm"><span className="font-medium">Rua:</span> {patientAddress.address_rua}</p>
+                      )}
+                      {patientAddress.address_complemento && (
+                        <p className="text-sm"><span className="font-medium">Complemento:</span> {patientAddress.address_complemento}</p>
+                      )}
+                      {patientAddress.address_bairro && (
+                        <p className="text-sm"><span className="font-medium">Bairro:</span> {patientAddress.address_bairro}</p>
+                      )}
+                      <p className="text-sm">
+                        <span className="font-medium">Cidade/UF:</span> {patientAddress.address_cidade || "N/A"}{patientAddress.address_uf ? ` - ${patientAddress.address_uf}` : ""}
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">Nenhuma informação de endereço disponível</p>
+                  )}
+                </div>
+              </div>
             </div>
+
+            <SheetFooter className="mt-6 flex flex-col sm:flex-row gap-2">
+              <Button
+                onClick={handleEdit}
+                className="w-full gap-2"
+              >
+                <Edit className="h-4 w-4" />
+                Editar Paciente
+              </Button>
+              <Button
+                variant="secondary"
+                className="w-full gap-2"
+              >
+                <History className="h-4 w-4" />
+                Ver Histórico
+              </Button>
+            </SheetFooter>
+          </>
+        ) : (
+          <div className="p-4 text-center">
+            <p className="text-sm text-muted-foreground">Nenhum paciente selecionado.</p>
           </div>
-        </div>
-        
-        <SheetFooter className="mt-6 flex flex-col sm:flex-row gap-2">
-          <Button 
-            onClick={handleEdit} 
-            className="w-full gap-2"
-          >
-            <Edit className="h-4 w-4" />
-            Editar Paciente
-          </Button>
-          <Button 
-            variant="secondary"
-            className="w-full gap-2"
-          >
-            <History className="h-4 w-4" />
-            Ver Histórico
-          </Button>
-        </SheetFooter>
+        )}
       </SheetContent>
     </Sheet>
   );

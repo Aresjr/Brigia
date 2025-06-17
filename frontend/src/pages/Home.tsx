@@ -5,15 +5,16 @@ import { format } from "date-fns";
 import { getPatientsCount, getBirthdayPatients } from "@/api/patientsApi";
 import { identificationColorOptions } from "@/components/Forms/utils/formUtils";
 import {Badge} from "@/components/ui/badge.tsx";
+import {Patient} from "@/models/models.ts";
 
 const Home = () => {
 
-    const { data: patientCount } = useQuery({
+    const {data: patientCount} = useQuery({
         queryKey: ['patient-count'],
         queryFn: getPatientsCount
     });
 
-    const { data: birthdayPatients } = useQuery({
+    const {data: birthdayPatients} = useQuery({
         queryKey: ['birthday-patients'],
         queryFn: getBirthdayPatients
     });
@@ -37,14 +38,14 @@ const Home = () => {
                 <Card>
                     <CardHeader className="pb-2">
                         <CardTitle className="text-lg flex items-center">
-                            <Cake className="h-5 w-5 mr-2 text-blue-500" />
+                            <Cake className="h-5 w-5 mr-2 text-blue-500"/>
                             Aniversariantes de Hoje
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         {birthdayPatients && birthdayPatients.length > 0 ? (
                             <div className="space-y-2">
-                                {birthdayPatients.map(patient => (
+                                {birthdayPatients.map((patient: Patient) => (
                                     <div key={patient.id} className="flex items-center justify-between p-2 border rounded-md">
                                         <div>
                                             <div className="font-medium">{patient.name}</div>

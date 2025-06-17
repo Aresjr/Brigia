@@ -38,8 +38,14 @@ async def list_patients(
     try:
         offset = (page - 1) * size
 
+        # Using nested select with foreign table
         count_query = supabase.table("a_patients").select("id", count="exact")
-        query = supabase.table("a_patients").select("*")
+        query = supabase.from_("a_patients").select("""
+            *,
+            a_medical_plans!medical_plan_id (
+                name
+            )
+        """)
 
         if not is_deleted:
             count_query = count_query.eq("is_deleted", False)
@@ -68,10 +74,17 @@ async def list_patients(
 
         response = query.execute()
 
+        # Transform the response data to flatten the medical plan name
+        transformed_data = []
+        for item in response.data:
+            medical_plan = item.pop('a_medical_plans', None)
+            item['medical_plan_name'] = medical_plan['name'] if medical_plan else None
+            transformed_data.append(item)
+
         total_pages = (total + size - 1) // size
 
         return PaginatedPatients(
-            items=response.data or [],
+            items=transformed_data,
             total=total,
             page=page,
             size=size,
