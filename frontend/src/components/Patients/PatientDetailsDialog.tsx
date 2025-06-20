@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { UserCircle, Edit, History } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import {getPatient, getPatientMedicalPlan} from "@/api/patientsApi.ts";
+import {getPatient} from "@/api/patientsApi.ts";
 import { identificationColorOptions } from "@/components/Forms/utils/formUtils";
 import {Badge} from "@/components/ui/badge.tsx";
 
@@ -22,15 +22,6 @@ export const PatientDetailsDialog = ({
   patient,
   onEdit
 }: PatientDetailsDialogProps) => {
-  const { data: patientMedicalPlans = [] } = useQuery({
-    queryKey: ["patientMedicalPlans", patient?.id],
-    queryFn: async () => {
-      if (!patient?.id) return [];
-      const data = await getPatientMedicalPlan(patient.id);
-      return data || [];
-    },
-    enabled: !!patient?.id && open
-  });
 
   const { data: patientAddress } = useQuery<PatientAddress>({
     queryKey: ["patientAddress", patient?.id],
@@ -42,12 +33,16 @@ export const PatientDetailsDialog = ({
   });
 
   const handleEdit = () => {
-    if (onEdit && patient) {
+    if (patient) {
+      // Prepare patient data with all necessary fields for the form
       const patientWithAddressAndDetails = {
         ...patient,
-        name: patient.name,
-        email: patient.email,
-        identification_color: patient.identification_color
+        address_cep: patientAddress?.address_cep,
+        address_rua: patientAddress?.address_rua,
+        address_complemento: patientAddress?.address_complemento,
+        address_bairro: patientAddress?.address_bairro,
+        address_cidade: patientAddress?.address_cidade,
+        address_uf: patientAddress?.address_uf,
       };
       onEdit(patientWithAddressAndDetails);
       onOpenChange(false);
@@ -147,17 +142,15 @@ export const PatientDetailsDialog = ({
                 </div>
 
                 <div className="col-span-2">
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Convênios</h3>
-                  {patientMedicalPlans && patientMedicalPlans.length > 0 ? (
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Convênio</h3>
+                  {patient.medical_plan_name ? (
                       <div className="space-y-2">
-                        {patientMedicalPlans.map((plan: any, index: number) => (
-                            <div key={index} className="bg-muted/30 p-3 rounded-md space-y-1">
-                              <p className="font-medium">{plan?.name || "Convênio Desconhecido"}</p>
+                            <div className="bg-muted/30 p-3 rounded-md space-y-1">
+                              <p className="font-medium">{patient.medical_plan_name || "Convênio Desconhecido"}</p>
                             </div>
-                        ))}
                       </div>
                   ) : (
-                      <p className="text-sm text-muted-foreground">Sem convênios cadastrados</p>
+                      <p className="text-sm text-muted-foreground">Sem convênio cadastrado</p>
                   )}
                 </div>
 

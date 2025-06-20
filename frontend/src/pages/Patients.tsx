@@ -40,12 +40,14 @@ const Patients = () => {
                     formError={formError}
                 />
             </div>
-            <FormDialog
-                isOpen={isFormOpen}
-                onOpenChange={setIsFormOpen}
-                pathname={location.pathname}
-                editingItem={editingItem}
-            />
+            {isFormOpen && (
+                <FormDialog
+                    isOpen={isFormOpen}
+                    onOpenChange={setIsFormOpen}
+                    pathname={location.pathname}
+                    editingItem={editingItem}
+                />
+            )}
         </>
     );
 };

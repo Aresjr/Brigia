@@ -12,11 +12,6 @@ export const getPatient = async (id: string | number) => {
     return res.data;
 }
 
-export const getPatientMedicalPlan = async (id: string | number) => {
-    const res = await api.get(`${url}/${id}/medical-plan`);
-    return res.data;
-}
-
 export const createPatient = async (patientData: any) => {
     const res = await api.post(url, patientData);
     return res.data;

@@ -381,6 +381,7 @@ export function PatientTable({
                 patient={selectedPatient}
                 open={isDetailsOpen}
                 onOpenChange={setIsDetailsOpen}
+                onEdit={onEdit}
             />
         </div>
     );
