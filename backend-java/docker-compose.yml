@@ -17,3 +17,15 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
+  grafana-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+    container_name: grafana-agent
+    volumes:
+      - ./logs:/app/logs
+    environment:
+      - HOSTNAME=grafana-agent
+      - GF_USERNAME=${GRAFANA_USERNAME}
+      - GF_PASSWORD=${GRAFANA_PASSWORD}
+    command: --config.file=/etc/agent-config/grafana-agent.yaml
