@@ -4,6 +4,8 @@ import br.com.nemeia.brigia.dto.PatientResponse;
 import br.com.nemeia.brigia.model.Patient;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class PatientMapper {
 
@@ -33,5 +35,11 @@ public class PatientMapper {
             patient.getAddressUf(),
             patient.getMedicalPlanId()
         );
+    }
+
+    public List<PatientResponse> toResponseList(List<Patient> patients) {
+        return patients.stream()
+                .map(this::toResponse)
+                .toList();
     }
 }

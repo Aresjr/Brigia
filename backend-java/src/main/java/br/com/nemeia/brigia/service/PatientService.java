@@ -1,30 +1,40 @@
 package br.com.nemeia.brigia.service;
 
+import br.com.nemeia.brigia.dto.PagedResponse;
 import br.com.nemeia.brigia.dto.PatientResponse;
 import br.com.nemeia.brigia.mapper.PatientMapper;
+import br.com.nemeia.brigia.model.Patient;
 import br.com.nemeia.brigia.repository.PatientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class PatientService {
 
-    private final PatientRepository patientRepository;
-    private final PatientMapper patientMapper;
+    private final PatientRepository repository;
+    private final PatientMapper mapper;
 
-    @Autowired
-    public PatientService(PatientRepository patientRepository, PatientMapper patientMapper) {
-        this.patientRepository = patientRepository;
-        this.patientMapper = patientMapper;
-    }
+    public PagedResponse<PatientResponse> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Page<Patient> result = repository.findAll(pageable);
 
-    public List<PatientResponse> findAllPatients() {
-        return patientRepository.findAll()
-                .stream()
-                .map(patientMapper::toResponse)
-                .collect(Collectors.toList());
+        List<PatientResponse> responses = mapper.toResponseList(result.getContent());
+        log.info("Retornando {} pacientes da página {} com tamanho {}", responses.size(), page, size);
+
+        return new PagedResponse<>(
+                responses,
+                result.getNumber(),
+                result.getTotalPages(),
+                result.getTotalElements()
+        );
     }
 }
