@@ -1,0 +1,19 @@
+services:
+  backend:
+    build:
+      context: ./
+    container_name: brigia-backend
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=${ENV}
+      - FRONTEND_PORT=${FRONTEND_PORT}
+      - SUPABASE_PROJECT_ID=${SUPABASE_PROJECT_ID}
+      - SUPABASE_JWT_SECRET=${SUPABASE_JWT_SECRET}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"

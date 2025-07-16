@@ -12,7 +12,7 @@
 	<artifactId>brigia</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Brigia</name>
-	<description>Brigia</description>
+	<description>Brigia - EMR</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -86,6 +86,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>brigia-backend</finalName>
 	</build>
 
 </project>
