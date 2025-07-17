@@ -1,7 +1,7 @@
 services:
   backend:
     build:
-      context: ./
+      context: .
     container_name: brigia-backend
     env_file:
       - .env
@@ -18,14 +18,16 @@ services:
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
   grafana-agent:
-    build:
-      context: .
-      dockerfile: Dockerfile.agent
+    image: grafana/agent:v0.40.2
     container_name: grafana-agent
     volumes:
       - ./logs:/app/logs
+      - ./grafana-agent.yaml:/etc/agent-config/grafana-agent.yaml
     environment:
       - HOSTNAME=grafana-agent
-      - GF_USERNAME=${GRAFANA_USERNAME}
-      - GF_PASSWORD=${GRAFANA_PASSWORD}
-    command: --config.file=/etc/agent-config/grafana-agent.yaml
+      - GCLOUD_HOSTED_METRICS_ID=${GCLOUD_HOSTED_METRICS_ID}
+      - GCLOUD_HOSTED_LOGS_ID=${GCLOUD_HOSTED_LOGS_ID}
+      - GRAFANA_API_KEY=${GRAFANA_API_KEY}
+      - GCLOUD_HOSTED_METRICS_URL=${GCLOUD_HOSTED_METRICS_URL}
+      - GCLOUD_HOSTED_LOGS_URL=${GCLOUD_HOSTED_LOGS_URL}
+    command: --config.file=/etc/agent-config/grafana-agent.yaml --server.http.address=:12345
