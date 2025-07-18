@@ -18,11 +18,10 @@ services:
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
   grafana-agent:
-    image: grafana/agent:v0.40.2
-    container_name: grafana-agent
+    image: grafana/alloy
     volumes:
       - ./logs:/app/logs
-      - ./grafana-agent.yaml:/etc/agent-config/grafana-agent.yaml
+      - ./config.alloy:/etc/alloy/config.alloy
     environment:
       - HOSTNAME=grafana-agent
       - GCLOUD_HOSTED_METRICS_ID=${GCLOUD_HOSTED_METRICS_ID}
@@ -30,4 +29,3 @@ services:
       - GRAFANA_API_KEY=${GRAFANA_API_KEY}
       - GCLOUD_HOSTED_METRICS_URL=${GCLOUD_HOSTED_METRICS_URL}
       - GCLOUD_HOSTED_LOGS_URL=${GCLOUD_HOSTED_LOGS_URL}
-    command: --config.file=/etc/agent-config/grafana-agent.yaml --server.http.address=:12345
