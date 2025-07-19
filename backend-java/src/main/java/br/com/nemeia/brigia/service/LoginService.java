@@ -40,7 +40,8 @@ public class LoginService {
                     .header("Content-Type", "application/json")
                     .bodyValue(request.toString())
                     .retrieve()
-                    .onStatus(status -> !status.is2xxSuccessful(), clientResponse -> clientResponse.bodyToMono(String.class)
+                    .onStatus(status -> !status.is2xxSuccessful(),
+                            clientResponse -> clientResponse.bodyToMono(String.class)
                             .flatMap(errorBody -> Mono.error(new RuntimeException("Falha na autenticação"))))
                     .bodyToMono(String.class)
                     .block();

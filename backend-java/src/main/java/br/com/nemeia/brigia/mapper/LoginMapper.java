@@ -14,11 +14,11 @@ public class LoginMapper {
                 json.get("access_token").getAsString(),
                 json.get("user").getAsJsonObject().get("id").getAsString(),
                 json.get("user").getAsJsonObject().get("email").getAsString(),
-                "Nome", //json.get("user").getAsJsonObject().get("user_metadata").getAsJsonObject().get("name").getAsString(),
-                "avatar_url", //json.get("user").getAsJsonObject().get("user_metadata").getAsJsonObject().get("avatar_url").getAsString(),
-                "user", //json.get("user").getAsJsonObject().get("role").getAsString(),
-                "light", //json.get("user").getAsJsonObject().get("user_metadata").getAsJsonObject().get("theme").getAsString(),
-                1 //json.get("user").getAsJsonObject().get("establishment").getAsString()
+                "Nome",
+                "avatar_url",
+                "user",
+                "light",
+                1
         );
     }
 
