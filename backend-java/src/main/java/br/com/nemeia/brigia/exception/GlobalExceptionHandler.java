@@ -14,6 +14,12 @@ import java.time.Instant;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCredentials(InvalidCredentialsException ex, HttpServletRequest request) {
+        log.error("Erro ao autenticar: {}", ex.getMessage());
+        return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED, request);
+    }
+
     @ExceptionHandler(PatientNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFound(PatientNotFoundException ex, HttpServletRequest request) {
         log.error("Paciente não encontrado: {}", ex.getMessage());
