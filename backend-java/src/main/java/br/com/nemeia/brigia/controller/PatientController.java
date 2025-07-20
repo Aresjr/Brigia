@@ -5,6 +5,7 @@ import br.com.nemeia.brigia.dto.PatientResponse;
 import br.com.nemeia.brigia.service.PatientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,8 +17,8 @@ public class PatientController {
     private final PatientService patientService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
     public PagedResponse<PatientResponse> getAllPatients(
-            @CookieValue(name = "sb-access-token", required = false) String accessToken,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
