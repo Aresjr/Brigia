@@ -1,7 +1,7 @@
 package br.com.nemeia.brigia.mapper;
 
 import br.com.nemeia.brigia.dto.PatientResponse;
-import br.com.nemeia.brigia.model.Patient;
+import br.com.nemeia.brigia.model.Paciente;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -9,36 +9,36 @@ import java.util.List;
 @Component
 public class PatientMapper {
 
-    public PatientResponse toResponse(Patient patient) {
-        if (patient == null) {
+    public PatientResponse toResponse(Paciente paciente) {
+        if (paciente == null) {
             return null;
         }
 
         return new PatientResponse(
-            patient.getId(),
-            patient.getEmail(),
-            patient.getCreatedAt(),
-            patient.getCpf(),
-            patient.getBirthDate(),
-            patient.getSex(),
-            patient.getCellphone(),
-            patient.getLastAppointment(),
-            patient.getNextAppointment(),
-            patient.getIsDeleted(),
-            patient.getImageUrl(),
-            patient.getIdentificationColor(),
-            patient.getAddressCep(),
-            patient.getAddressRua(),
-            patient.getAddressComplemento(),
-            patient.getAddressBairro(),
-            patient.getAddressCidade(),
-            patient.getAddressUf(),
-            patient.getMedicalPlanId()
+            paciente.getId(),
+            paciente.getEmail(),
+            paciente.getCriadoEm(),
+            paciente.getCpf(),
+            paciente.getDataNascimento(),
+            paciente.getSexo(),
+            paciente.getCelular(),
+            paciente.getUltimaConsulta(),
+            paciente.getProximaConsulta(),
+            paciente.getExcluido(),
+            paciente.getUrlImagem(),
+            paciente.getCorIdentificacao(),
+            paciente.getCep(),
+            paciente.getRua(),
+            paciente.getComplemento(),
+            paciente.getBairro(),
+            paciente.getCidade(),
+            paciente.getUf(),
+            paciente.getConvenio()
         );
     }
 
-    public List<PatientResponse> toResponseList(List<Patient> patients) {
-        return patients.stream()
+    public List<PatientResponse> toResponseList(List<Paciente> pacientes) {
+        return pacientes.stream()
                 .map(this::toResponse)
                 .toList();
     }

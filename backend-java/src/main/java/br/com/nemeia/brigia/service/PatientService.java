@@ -4,7 +4,7 @@ import br.com.nemeia.brigia.dto.PagedResponse;
 import br.com.nemeia.brigia.dto.PatientResponse;
 import br.com.nemeia.brigia.exception.PatientNotFoundException;
 import br.com.nemeia.brigia.mapper.PatientMapper;
-import br.com.nemeia.brigia.model.Patient;
+import br.com.nemeia.brigia.model.Paciente;
 import br.com.nemeia.brigia.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class PatientService {
 
     public PagedResponse<PatientResponse> getPaged(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-        Page<Patient> result = repository.findAll(pageable);
+        Page<Paciente> result = repository.findAll(pageable);
 
         List<PatientResponse> responses = mapper.toResponseList(result.getContent());
         log.info("Retornando {} pacientes da página {} com tamanho {}", responses.size(), page, size);
