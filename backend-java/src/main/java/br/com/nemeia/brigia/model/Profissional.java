@@ -4,13 +4,12 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "a_profissional")
-public class Profissional {
+public class Profissional extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,9 +39,11 @@ public class Profissional {
 
     private String uf;
 
-    private List<Especialidade> especialidades;
-
-    private LocalDateTime criadoEm;
-
-    private Boolean excluido;
+    @ManyToMany
+    @JoinTable(
+            name = "a_profissional_especialidade",
+            joinColumns = @JoinColumn(name = "profissional_id"),
+            inverseJoinColumns = @JoinColumn(name = "especialidade_id")
+    )
+    private Set<Especialidade> especialidades;
 }

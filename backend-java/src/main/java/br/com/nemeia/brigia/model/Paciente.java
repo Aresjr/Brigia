@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "a_paciente")
-public class Paciente {
+public class Paciente extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,11 +45,7 @@ public class Paciente {
 
     private String uf;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "convenio_id")
     private Convenio convenio;
-
-    private LocalDateTime criadoEm;
-
-    private Boolean excluido;
 }

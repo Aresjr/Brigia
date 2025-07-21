@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "a_agendamento")
-public class Agendamento {
+public class Agendamento extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,17 +16,18 @@ public class Agendamento {
 
     private LocalDateTime data;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "profissional_id")
     private Profissional profissional;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "procedimento_id")
     private Procedimento procedimento;
 
-
+    @Enumerated(EnumType.STRING)
+    private StatusAgendamento status;
 }

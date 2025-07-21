@@ -1,16 +1,12 @@
 package br.com.nemeia.brigia.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import java.time.LocalDateTime;
-
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "a_convenio")
-public class Convenio {
+public class Convenio extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +15,4 @@ public class Convenio {
     private String nome;
 
     private String descricao;
-
-    private LocalDateTime criadoEm;
 }
