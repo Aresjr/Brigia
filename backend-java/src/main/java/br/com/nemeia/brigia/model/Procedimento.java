@@ -1,9 +1,12 @@
 package br.com.nemeia.brigia.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "a_procedimento")
 public class Procedimento extends BaseModel {

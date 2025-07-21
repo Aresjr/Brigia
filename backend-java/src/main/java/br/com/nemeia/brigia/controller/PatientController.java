@@ -2,7 +2,7 @@ package br.com.nemeia.brigia.controller;
 
 import br.com.nemeia.brigia.dto.PagedResponse;
 import br.com.nemeia.brigia.dto.PatientCountResponse;
-import br.com.nemeia.brigia.dto.PatientResponse;
+import br.com.nemeia.brigia.dto.PacienteResponse;
 import br.com.nemeia.brigia.service.PatientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class PatientController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-    public PagedResponse<PatientResponse> getAllPatients(
+    public PagedResponse<PacienteResponse> getAllPatients(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
@@ -31,7 +31,7 @@ public class PatientController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-    public PatientResponse getPatientById(
+    public PacienteResponse getPatientById(
             @PathVariable Integer id
     ) {
         log.info("GET /patients/{} - fetching patient by ID", id);
@@ -49,7 +49,7 @@ public class PatientController {
 
     @GetMapping("/birthday")
     @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-    public List<PatientResponse> birthdayPatients() {
+    public List<PacienteResponse> birthdayPatients() {
         log.info("GET /patients/birthday");
         return patientService.getBirthdayPatients();
     }

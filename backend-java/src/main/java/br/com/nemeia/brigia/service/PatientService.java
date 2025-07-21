@@ -1,9 +1,9 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.dto.PagedResponse;
-import br.com.nemeia.brigia.dto.PatientResponse;
+import br.com.nemeia.brigia.dto.PacienteResponse;
 import br.com.nemeia.brigia.exception.PatientNotFoundException;
-import br.com.nemeia.brigia.mapper.PatientMapper;
+import br.com.nemeia.brigia.mapper.PacienteMapper;
 import br.com.nemeia.brigia.model.Paciente;
 import br.com.nemeia.brigia.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +23,13 @@ import java.util.List;
 public class PatientService {
 
     private final PatientRepository repository;
-    private final PatientMapper mapper;
+    private final PacienteMapper mapper;
 
-    public PagedResponse<PatientResponse> getPaged(int page, int size) {
+    public PagedResponse<PacienteResponse> getPaged(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         Page<Paciente> result = repository.findAll(pageable);
 
-        List<PatientResponse> responses = mapper.toResponseList(result.getContent());
+        List<PacienteResponse> responses = mapper.toResponseList(result.getContent());
         log.info("Retornando {} pacientes da página {} com tamanho {}", responses.size(), page, size);
 
         return new PagedResponse<>(
@@ -44,12 +44,12 @@ public class PatientService {
         return repository.countByIsDeleted(isDeleted);
     }
 
-    public List<PatientResponse> getBirthdayPatients() {
+    public List<PacienteResponse> getBirthdayPatients() {
         return repository.findAllByBirthDateIs(LocalDate.now())
                 .stream().map(mapper::toResponse).toList();
     }
 
-    public PatientResponse getPatientById(Integer id) {
+    public PacienteResponse getPatientById(Integer id) {
         return repository.findById(id)
                 .map(mapper::toResponse)
                 .orElseThrow(() -> new PatientNotFoundException("Paciente não encontrado com ID: " + id));

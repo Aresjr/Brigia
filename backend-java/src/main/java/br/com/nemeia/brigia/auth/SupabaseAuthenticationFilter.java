@@ -44,7 +44,7 @@ public class SupabaseAuthenticationFilter extends OncePerRequestFilter {
             try {
                 Claims claims = parseToken(token);
 
-                String email = claims.get("email", String.class);
+                String email = claims.get("email", String.class); //TODO - alterar para o ID da tabela de usuário
                 if (email != null) {
                     List<String> roles = getRoles(claims);
                     UserAuth userAuth = new UserAuth(email, roles);
