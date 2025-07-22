@@ -20,8 +20,8 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED, request);
     }
 
-    @ExceptionHandler(PatientNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(PatientNotFoundException ex, HttpServletRequest request) {
+    @ExceptionHandler(PacienteNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(PacienteNotFoundException ex, HttpServletRequest request) {
         log.error("Paciente não encontrado: {}", ex.getMessage());
         return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND, request);
     }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class MedicalPlanMapper {
+public class ConvenioMapper {
 
     public MedicalPlanResponse toResponse(Convenio convenio) {
         if (convenio == null) {
