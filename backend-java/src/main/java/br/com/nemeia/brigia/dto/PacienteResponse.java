@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record PacienteResponse(
-    Integer id,
+    Long id,
     String email,
     String cpf,
     LocalDate dataNascimento,
@@ -20,6 +20,6 @@ public record PacienteResponse(
     String bairro,
     String cidade,
     String uf,
-    Integer convenioId,
+    Long convenioId,
     LocalDateTime criadoEm
 ) {}

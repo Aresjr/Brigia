@@ -26,7 +26,7 @@ public class MedicalPlanController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-    public MedicalPlanResponse getMedicalPlanById(@PathVariable Integer id) {
+    public MedicalPlanResponse getMedicalPlanById(@PathVariable Long id) {
         log.info("GET /medical-plans/{} - fetching medical plan by ID", id);
         return medicalPlanService.getById(id);
     }

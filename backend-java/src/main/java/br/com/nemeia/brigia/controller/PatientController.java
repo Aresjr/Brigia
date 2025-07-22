@@ -32,7 +32,7 @@ public class PatientController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
     public PacienteResponse getPatientById(
-            @PathVariable Integer id
+            @PathVariable Long id
     ) {
         log.info("GET /patients/{} - fetching patient by ID", id);
         return patientService.getPatientById(id);
