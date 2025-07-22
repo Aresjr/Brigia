@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class PatientService {
+public class PacienteService {
 
     private final PacienteRepository repository;
     private final PacienteMapper mapper;
@@ -44,7 +44,7 @@ public class PatientService {
         return repository.countByIsDeleted(isDeleted);
     }
 
-    public List<PacienteResponse> getBirthdayPatients() {
+    public List<PacienteResponse> getAniversariantes() {
         return repository.findAllByBirthDateIs(LocalDate.now())
                 .stream().map(mapper::toResponse).toList();
     }

@@ -1,9 +1,9 @@
 package br.com.nemeia.brigia.controller;
 
 import br.com.nemeia.brigia.dto.PagedResponse;
-import br.com.nemeia.brigia.dto.PatientCountResponse;
+import br.com.nemeia.brigia.dto.PacientesTotaisResponse;
 import br.com.nemeia.brigia.dto.PacienteResponse;
-import br.com.nemeia.brigia.service.PatientService;
+import br.com.nemeia.brigia.service.PacienteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/patients")
+@RequestMapping("/pacientes")
 @RequiredArgsConstructor
 @Slf4j
-public class PatientController {
+public class PacienteController {
 
-    private final PatientService patientService;
+    private final PacienteService pacienteService;
 
     @GetMapping
     @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
@@ -25,8 +25,8 @@ public class PatientController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
-        log.info("GET /patients - page: {}, size: {}", page, size);
-        return patientService.getPaged(page, size);
+        log.info("GET /pacientes - page: {}, size: {}", page, size);
+        return pacienteService.getPaged(page, size);
     }
 
     @GetMapping("/{id}")
@@ -34,23 +34,23 @@ public class PatientController {
     public PacienteResponse getPatientById(
             @PathVariable Long id
     ) {
-        log.info("GET /patients/{} - fetching patient by ID", id);
-        return patientService.getPatientById(id);
+        log.info("GET /pacientes/{} - buscando paciente por ID", id);
+        return pacienteService.getPatientById(id);
     }
 
-    @GetMapping("/count")
+    @GetMapping("/total")
     @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-    public PatientCountResponse countPatients(
+    public PacientesTotaisResponse countPatients(
             @RequestParam(defaultValue = "false") Boolean isDeleted
     ) {
-        log.info("GET /patients/count");
-        return new PatientCountResponse(patientService.getTotal(isDeleted));
+        log.info("GET /pacientes/total");
+        return new PacientesTotaisResponse(pacienteService.getTotal(isDeleted));
     }
 
-    @GetMapping("/birthday")
+    @GetMapping("/aniversariantes")
     @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-    public List<PacienteResponse> birthdayPatients() {
-        log.info("GET /patients/birthday");
-        return patientService.getBirthdayPatients();
+    public List<PacienteResponse> aniversariantes() {
+        log.info("GET /pacientes/aniversariantes");
+        return pacienteService.getAniversariantes();
     }
 }
