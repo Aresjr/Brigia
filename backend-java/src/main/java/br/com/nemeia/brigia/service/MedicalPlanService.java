@@ -22,7 +22,7 @@ public class MedicalPlanService {
         return mapper.toResponseList(repository.findAll());
     }
 
-    public MedicalPlanResponse getById(Integer id) {
+    public MedicalPlanResponse getById(Long id) {
         return repository.findById(id)
                 .map(mapper::toResponse)
                 .orElseThrow(() -> new MedicalPlanNotFoundException("Plano não encontrado com ID: " + id));

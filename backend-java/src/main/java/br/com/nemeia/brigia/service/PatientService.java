@@ -49,7 +49,7 @@ public class PatientService {
                 .stream().map(mapper::toResponse).toList();
     }
 
-    public PacienteResponse getPatientById(Integer id) {
+    public PacienteResponse getPatientById(Long id) {
         return repository.findById(id)
                 .map(mapper::toResponse)
                 .orElseThrow(() -> new PatientNotFoundException("Paciente não encontrado com ID: " + id));
