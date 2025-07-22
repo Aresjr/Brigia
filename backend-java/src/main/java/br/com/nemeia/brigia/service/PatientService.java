@@ -5,7 +5,7 @@ import br.com.nemeia.brigia.dto.PacienteResponse;
 import br.com.nemeia.brigia.exception.PatientNotFoundException;
 import br.com.nemeia.brigia.mapper.PacienteMapper;
 import br.com.nemeia.brigia.model.Paciente;
-import br.com.nemeia.brigia.repository.PatientRepository;
+import br.com.nemeia.brigia.repository.PacienteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class PatientService {
 
-    private final PatientRepository repository;
+    private final PacienteRepository repository;
     private final PacienteMapper mapper;
 
     public PagedResponse<PacienteResponse> getPaged(int page, int size) {

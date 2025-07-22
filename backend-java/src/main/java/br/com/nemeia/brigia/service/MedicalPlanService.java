@@ -3,7 +3,7 @@ package br.com.nemeia.brigia.service;
 import br.com.nemeia.brigia.dto.MedicalPlanResponse;
 import br.com.nemeia.brigia.exception.MedicalPlanNotFoundException;
 import br.com.nemeia.brigia.mapper.MedicalPlanMapper;
-import br.com.nemeia.brigia.repository.MedicalPlanRepository;
+import br.com.nemeia.brigia.repository.ConvenioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 public class MedicalPlanService {
 
-    private final MedicalPlanRepository repository;
+    private final ConvenioRepository repository;
     private final MedicalPlanMapper mapper;
 
     public List<MedicalPlanResponse> getAll() {
