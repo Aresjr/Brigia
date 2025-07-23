@@ -11,6 +11,6 @@ WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
 
-EXPOSE ${BACKEND_PORT}
+EXPOSE 8009
 
-ENTRYPOINT ["sh", "-c", "java -jar -Dserver.port=${BACKEND_PORT} app.jar"]
+ENTRYPOINT ["sh", "-c", "java -jar app.jar"]

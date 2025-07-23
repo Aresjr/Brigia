@@ -16,9 +16,12 @@ public class Especialidade extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "nome")
     private String nome;
 
+    @Column(name = "descricao")
     private String descricao;
 }

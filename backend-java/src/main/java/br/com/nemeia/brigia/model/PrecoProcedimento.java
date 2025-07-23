@@ -19,10 +19,6 @@ public class PrecoProcedimento extends BaseModel {
     @EmbeddedId
     private ProcedimentoConvenioId id;
 
-    @ManyToOne
-    @JoinColumn(name = "procedimento_id")
-    private Procedimento procedimento;
-
     @Column(name = "preco", nullable = false)
     private BigDecimal preco;
 }

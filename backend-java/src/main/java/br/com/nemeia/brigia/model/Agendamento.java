@@ -15,8 +15,10 @@ public class Agendamento extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "data")
     private LocalDateTime data;
 
     @ManyToOne
@@ -32,5 +34,6 @@ public class Agendamento extends BaseModel {
     private Procedimento procedimento;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private StatusAgendamento status;
 }
