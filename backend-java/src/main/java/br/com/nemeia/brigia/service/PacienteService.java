@@ -40,12 +40,12 @@ public class PacienteService {
         );
     }
 
-    public long getTotal(Boolean isDeleted) {
-        return repository.countByIsDeleted(isDeleted);
+    public long getTotal(Boolean excluido) {
+        return repository.countByExcluido(excluido);
     }
 
     public List<PacienteResponse> getAniversariantes() {
-        return repository.findAllByBirthDateIs(LocalDate.now())
+        return repository.findAllByDataNascimentoIs(LocalDate.now())
                 .stream().map(mapper::toResponse).toList();
     }
 

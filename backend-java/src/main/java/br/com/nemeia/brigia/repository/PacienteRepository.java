@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
 
-     Long countByIsDeleted(Boolean isDeleted);
+     Long countByExcluido(Boolean excluido);
 
-     List<Paciente> findAllByBirthDateIs(LocalDate date);
+     List<Paciente> findAllByDataNascimentoIs(LocalDate date);
 }

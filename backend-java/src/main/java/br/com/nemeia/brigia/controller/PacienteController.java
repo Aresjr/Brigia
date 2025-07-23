@@ -41,10 +41,10 @@ public class PacienteController {
     @GetMapping("/total")
     @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
     public PacientesTotaisResponse countPatients(
-            @RequestParam(defaultValue = "false") Boolean isDeleted
+            @RequestParam(defaultValue = "false") Boolean excluido
     ) {
         log.info("GET /pacientes/total");
-        return new PacientesTotaisResponse(pacienteService.getTotal(isDeleted));
+        return new PacientesTotaisResponse(pacienteService.getTotal(excluido));
     }
 
     @GetMapping("/aniversariantes")
