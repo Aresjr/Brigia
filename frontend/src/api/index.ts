@@ -6,7 +6,7 @@ let isRefreshing = false;
 let failedQueue: Array<{ resolve: (value?: unknown) => void; reject: (reason?: any) => void }> = [];
 
 export const api = axios.create({
-    baseURL: import.meta.env.VITE_BACKEND_URL || 'http://localhost:8008',
+    baseURL: import.meta.env.VITE_BACKEND_URL || 'http://localhost:8009',
     withCredentials: true
 });
 
