@@ -9,6 +9,9 @@ services:
       POSTGRES_DB: ${DB_NAME}
     ports:
       - "${DB_PORT}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    command: postgres -c log_min_messages=WARNING -c log_statement=none
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
       interval: 5s
@@ -20,6 +23,8 @@ services:
     build:
       context: .
     container_name: backend
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
     depends_on:
       db:
         condition: service_healthy
@@ -48,3 +53,6 @@ services:
 #      - GRAFANA_API_KEY=${GRAFANA_API_KEY}
 #      - GCLOUD_HOSTED_METRICS_URL=${GCLOUD_HOSTED_METRICS_URL}
 #      - GCLOUD_HOSTED_LOGS_URL=${GCLOUD_HOSTED_LOGS_URL}
+
+volumes:
+  db_data:
