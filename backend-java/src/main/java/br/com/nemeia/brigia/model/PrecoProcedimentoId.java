@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Embeddable
-public class ProcedimentoConvenioId {
+public class PrecoProcedimentoId {
 
     @Column(name = "procedimento_id")
     private Long procedimentoId;

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @ToString(callSuper = true)
@@ -24,4 +26,12 @@ public class Especialidade extends BaseModel {
 
     @Column(name = "descricao")
     private String descricao;
+
+    @ManyToMany
+    @JoinTable(
+            name = "a_profissional_especialidade",
+            joinColumns = @JoinColumn(name = "especialidade_id"),
+            inverseJoinColumns = @JoinColumn(name = "profissional_id")
+    )
+    private Set<Profissional> profissionais;
 }

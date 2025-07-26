@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 public class PrecoProcedimento extends BaseModel {
 
     @EmbeddedId
-    private ProcedimentoConvenioId id;
+    private PrecoProcedimentoId id;
 
     @Column(name = "preco", nullable = false)
     private BigDecimal preco;

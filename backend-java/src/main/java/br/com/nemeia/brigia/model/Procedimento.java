@@ -16,6 +16,12 @@ public class Procedimento extends BaseModel {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "codigo")
+    private String codigo;
+
     @Column(name = "descricao")
     private String descricao;
+
+    @Column(name = "observacoes")
+    private String observacoes;
 }
