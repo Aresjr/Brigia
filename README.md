@@ -6,6 +6,8 @@ Open Source EMR with AI features
   docker compose up --build
 ```
 
+http://localhost:8009/swagger-ui/index.html
+
 ## Environment Variables needed:
 The current project uses Supabase for the database and authentication.
 You can set the environment variables directly in OS or create a `.env` file in the root directory of the project with the following content:
