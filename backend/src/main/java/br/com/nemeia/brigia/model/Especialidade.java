@@ -13,7 +13,7 @@ import java.util.Set;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "a_especialidade")
+@Table(name = "especialidade")
 public class Especialidade extends BaseModel {
 
     @Id
@@ -29,7 +29,7 @@ public class Especialidade extends BaseModel {
 
     @ManyToMany
     @JoinTable(
-            name = "a_profissional_especialidade",
+            name = "profissional_especialidade",
             joinColumns = @JoinColumn(name = "especialidade_id"),
             inverseJoinColumns = @JoinColumn(name = "profissional_id")
     )

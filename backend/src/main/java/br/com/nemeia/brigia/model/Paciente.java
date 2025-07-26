@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "a_paciente")
+@Table(name = "paciente")
 public class Paciente extends BaseModel {
 
     @Id

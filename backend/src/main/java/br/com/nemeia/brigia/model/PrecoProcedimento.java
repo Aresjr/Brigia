@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "a_preco_procedimento")
+@Table(name = "preco_procedimento")
 public class PrecoProcedimento extends BaseModel {
 
     @EmbeddedId

@@ -8,7 +8,7 @@ import lombok.*;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "a_procedimento")
+@Table(name = "procedimento")
 public class Procedimento extends BaseModel {
 
     @Id
