@@ -3,7 +3,9 @@ package br.com.nemeia.brigia.service;
 import br.com.nemeia.brigia.dto.LoginRequest;
 import br.com.nemeia.brigia.dto.LoginResponse;
 import br.com.nemeia.brigia.exception.InvalidCredentialsException;
+import br.com.nemeia.brigia.exception.LoginServiceUnavailableException;
 import br.com.nemeia.brigia.mapper.LoginMapper;
+import com.google.gson.JsonObject;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -32,24 +34,31 @@ public class LoginService {
 
     private final LoginMapper mapper;
 
-    public LoginResponse login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request, HttpServletResponse httpServletResponse) {
         try {
             String responseBody = webClient.post()
-                    .uri(supabaseUrl + "/auth/v1/token?grant_type=password")
-                    .header("apikey", supabaseKey)
-                    .header("Content-Type", "application/json")
-                    .bodyValue(request.toString())
-                    .retrieve()
-                    .onStatus(status -> !status.is2xxSuccessful(),
-                            clientResponse -> clientResponse.bodyToMono(String.class)
-                            .flatMap(errorBody -> Mono.error(new RuntimeException("Falha na autenticação"))))
-                    .bodyToMono(String.class)
-                    .block();
+                .uri(supabaseUrl + "/auth/v1/token?grant_type=password")
+                .header("apikey", supabaseKey)
+                .header("Content-Type", "application/json")
+                .bodyValue(request.toString())
+                .retrieve()
+                .onStatus(status -> !status.is2xxSuccessful(),
+                        clientResponse -> clientResponse.bodyToMono(String.class)
+                        .flatMap(errorBody -> Mono.error(
+                                new InvalidCredentialsException("Usuário e senha inválidos"))))
+                .bodyToMono(String.class)
+                .block();
 
-            return mapper.toLoginResponse(responseBody);
+            JsonObject response = mapper.toJson(responseBody);
+            addAccessTokenToResponse(httpServletResponse, mapper.getAccessToken(response));
+
+            return mapper.toLoginResponse(response);
+        } catch (InvalidCredentialsException e) {
+            log.error("Credenciais inválidas: ", e);
+            throw e;
         } catch (Exception e) {
             log.error("Erro ao realizar login: ", e);
-            throw new InvalidCredentialsException("Erro ao autenticar");
+            throw new LoginServiceUnavailableException("Serviço de login indisponível, tente novamente mais tarde.");
         }
     }
 

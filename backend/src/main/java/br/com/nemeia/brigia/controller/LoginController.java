@@ -18,9 +18,9 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request, HttpServletResponse response) {
-        LoginResponse loginResponse = loginService.login(request);
-        loginService.addAccessTokenToResponse(response, loginResponse.accessToken());
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request,
+                                               HttpServletResponse httpServletResponse) {
+        LoginResponse loginResponse = loginService.login(request, httpServletResponse);
         return ResponseEntity.ok(loginResponse);
     }
 }

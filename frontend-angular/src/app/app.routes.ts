@@ -3,6 +3,7 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { IndexComponent } from './features/index/index.component';
 import { PacientesComponent } from './features/pacientes/pacientes.component';
+import { AuthGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -11,7 +12,12 @@ export const routes: Routes = [
     component: MainLayoutComponent,
     children: [
       { path: '', component: IndexComponent },
-      { path: 'pacientes', component: PacientesComponent }
-    ]
-  }
+      {
+        path: 'pacientes',
+        component: PacientesComponent,
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+      },
+    ],
+  },
 ];

@@ -8,18 +8,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoginMapper {
 
-    public LoginResponse toLoginResponse(String responseBody) {
-        JsonObject json = new Gson().fromJson(responseBody, JsonObject.class);
+    public JsonObject toJson(String responseBody) {
+        return new Gson().fromJson(responseBody, JsonObject.class);
+    }
+
+    public LoginResponse toLoginResponse(JsonObject json) {
         return new LoginResponse(
-                json.get("access_token").getAsString(),
-                json.get("user").getAsJsonObject().get("id").getAsString(),
-                json.get("user").getAsJsonObject().get("email").getAsString(),
-                "Nome",
-                "avatar_url",
-                "user",
-                "light",
-                1
+            "Nome",
+            "avatar_url",
+            "user",
+            "light",
+            1
         );
+    }
+
+    public String getAccessToken(JsonObject json) {
+        return json.get("access_token").getAsString();
     }
 
 }
