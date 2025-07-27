@@ -2,10 +2,10 @@ package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.dto.LoginRequest;
 import br.com.nemeia.brigia.dto.LoginResponse;
+import br.com.nemeia.brigia.dto.UsuarioResponse;
 import br.com.nemeia.brigia.exception.InvalidCredentialsException;
 import br.com.nemeia.brigia.exception.LoginServiceUnavailableException;
 import br.com.nemeia.brigia.mapper.LoginMapper;
-import com.google.gson.JsonObject;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +34,8 @@ public class LoginService {
 
     private final LoginMapper mapper;
 
+    private final UsuarioService usuarioService;
+
     public LoginResponse login(LoginRequest request, HttpServletResponse httpServletResponse) {
         try {
             String responseBody = webClient.post()
@@ -49,10 +51,10 @@ public class LoginService {
                 .bodyToMono(String.class)
                 .block();
 
-            JsonObject response = mapper.toJson(responseBody);
-            addAccessTokenToResponse(httpServletResponse, mapper.getAccessToken(response));
+            addAccessTokenToResponse(httpServletResponse, mapper.getAccessToken(responseBody));
 
-            return mapper.toLoginResponse(response);
+            UsuarioResponse usuario = usuarioService.getByEmail(request.email());
+            return mapper.toLoginResponse(usuario);
         } catch (InvalidCredentialsException e) {
             log.error("Credenciais inválidas: ", e);
             throw e;

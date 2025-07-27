@@ -24,6 +24,13 @@ public class Usuario {
     @Column(name = "nome", nullable = false)
     private String nome;
 
+    @ManyToOne
+    @JoinColumn(name = "unidade_id", nullable = false)
+    private Unidade unidade;
+
+    @Column(name = "avatar_url", nullable = false)
+    private String avatarUrl;
+
     @Column(name = "roles", nullable = false)
     private List<RoleUsuario> roles;
 }
