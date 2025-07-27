@@ -1,46 +1,65 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent {
-  
+export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  loading = false;
-  errorMessage = '';
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private toastr: ToastrService
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', Validators.required],
     });
   }
+
+  ngOnInit(): void {}
 
   onSubmit(): void {
-    if (this.loginForm.invalid) return;
+    if (this.loginForm.valid) {
+      this.authService.login(this.loginForm.value).subscribe({
+        next: (response) => {
+          console.log('Login successful:', response);
+          this.toastr.success('Login realizado com sucesso!');
+          // You can store the token and user info in localStorage/sessionStorage here
+          this.router.navigate(['/']);
+        },
+        error: (error) => {
+          console.error('Login failed:', error);
+          let errorMessage = 'Erro ao fazer login. Por favor, tente novamente.';
 
-    this.loading = true;
-    this.errorMessage = '';
+          if (error.status === 401) {
+            errorMessage = 'Email ou senha inválidos.';
+          } else if (error.status === 403) {
+            errorMessage = 'Acesso não autorizado.';
+          } else if (error.error?.message) {
+            errorMessage = error.error.message;
+          }
 
-    const { email, password } = this.loginForm.value;
-
-    this.authService.login({ email, password }).subscribe({
-      next: (response) => {
-        console.log('✅ Login bem-sucedido:', response);
-        this.loading = false;
-        // TODO: redirecionar para dashboard
-      },
-      error: (err) => {
-        console.error('❌ Erro no login', err);
-        this.errorMessage = 'Credenciais inválidas. Tente novamente.';
-        this.loading = false;
-      }
-    });
+          this.toastr.error(errorMessage);
+        },
+      });
+    } else {
+      this.toastr.error('Por favor, preencha todos os campos corretamente.');
+    }
   }
-
 }

@@ -13,7 +13,7 @@
         </div>
       </div>
     </div>
-    <form>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="p-6 pt-0 space-y-4">
         <div class="space-y-2">
           <label
@@ -39,11 +39,11 @@
             </svg>
             <input
               type="email"
-              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-10 bg-blue-50"
+              class="flex h-10 w-full rounded-md border border-input px-3 py-2 text-base focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-10 bg-blue-50"
               id="email"
-              placeholder="m@example.com"
+              formControlName="email"
+              placeholder="usuario@email.com"
               required=""
-              value="aresnemeia@gmail.com"
             />
           </div>
         </div>
@@ -73,8 +73,9 @@
               type="password"
               class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-10 bg-blue-50"
               id="password"
+              formControlName="password"
               required=""
-              value="admin123"
+              placeholder="Digite sua senha"
             />
           </div>
         </div>

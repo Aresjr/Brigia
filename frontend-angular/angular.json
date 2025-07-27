@@ -20,9 +20,7 @@
             "outputPath": "dist/frontend-angular",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -35,10 +33,7 @@
                 "input": "src/assets"
               }
             ],
-            "styles": [
-              "src/styles.scss",
-              "src/styles/index.css"
-            ],
+            "styles": ["src/styles.scss", "src/styles/index.css"],
             "scripts": []
           },
           "configurations": {
@@ -75,7 +70,10 @@
               "buildTarget": "frontend-angular:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "port": 8081
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
@@ -83,10 +81,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -99,9 +94,7 @@
                 "input": "src/assets"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         }
