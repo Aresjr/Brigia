@@ -1,37 +1,33 @@
 package br.com.nemeia.brigia.service;
 
+import br.com.nemeia.brigia.auth.JwtService;
 import br.com.nemeia.brigia.dto.LoginRequest;
 import br.com.nemeia.brigia.dto.LoginResponse;
-import br.com.nemeia.brigia.dto.UsuarioResponse;
 import br.com.nemeia.brigia.exception.InvalidCredentialsException;
 import br.com.nemeia.brigia.exception.LoginUnavailableException;
 import br.com.nemeia.brigia.exception.UsuarioNotFoundException;
 import br.com.nemeia.brigia.mapper.LoginMapper;
+import br.com.nemeia.brigia.model.Usuario;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class LoginService {
 
-    @Value("${supabase.url}")
-    private String supabaseUrl;
-
-    @Value("${supabase.key}")
-    private String supabaseKey;
-
     @Value("${env}")
     private String env;
 
-    private final WebClient webClient = WebClient.builder().build();
+    private final PasswordEncoder passwordEncoder;
+
+    private final JwtService jwtService;
 
     private final LoginMapper mapper;
 
@@ -39,22 +35,16 @@ public class LoginService {
 
     public LoginResponse login(LoginRequest request, HttpServletResponse httpServletResponse) {
         try {
-            String responseBody = webClient.post()
-                .uri(supabaseUrl + "/auth/v1/token?grant_type=password")
-                .header("apikey", supabaseKey)
-                .header("Content-Type", "application/json")
-                .bodyValue(request.toString())
-                .retrieve()
-                .onStatus(status -> !status.is2xxSuccessful(),
-                        clientResponse -> clientResponse.bodyToMono(String.class)
-                        .flatMap(errorBody -> Mono.error(
-                                new InvalidCredentialsException("Usuário e senha inválidos"))))
-                .bodyToMono(String.class)
-                .block();
+            Usuario usuario = usuarioService.getByEmail(request.email());
 
-            addAccessTokenToResponse(httpServletResponse, mapper.getAccessToken(responseBody));
+            if (!passwordEncoder.matches(request.password(), usuario.getSenha())) {
+                log.error("Senha inválida para o usuário: {}", request.email());
+                throw new InvalidCredentialsException("Senha inválida");
+            }
 
-            UsuarioResponse usuario = usuarioService.getByEmail(request.email());
+            String token = jwtService.generateToken(usuario);
+            addAccessTokenToResponse(httpServletResponse, token);
+
             return mapper.toLoginResponse(usuario);
         } catch (InvalidCredentialsException e) {
             log.error("Credenciais inválidas: ", e);
@@ -69,7 +59,7 @@ public class LoginService {
     }
 
     public void addAccessTokenToResponse(HttpServletResponse response, String accessToken) {
-        Cookie cookie = new Cookie("sb-access-token", accessToken);
+        Cookie cookie = new Cookie("access-token", accessToken);
         cookie.setHttpOnly(true);
         cookie.setSecure("prod".equals(env));
         cookie.setPath("/");
