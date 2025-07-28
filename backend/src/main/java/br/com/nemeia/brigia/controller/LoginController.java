@@ -1,7 +1,7 @@
 package br.com.nemeia.brigia.controller;
 
-import br.com.nemeia.brigia.dto.LoginRequest;
-import br.com.nemeia.brigia.dto.LoginResponse;
+import br.com.nemeia.brigia.dto.request.LoginRequest;
+import br.com.nemeia.brigia.dto.response.LoginResponse;
 import br.com.nemeia.brigia.service.LoginService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class LoginController {
 
-    private final LoginService loginService;
+  private final LoginService loginService;
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request,
-                                               HttpServletResponse httpServletResponse) {
-        LoginResponse loginResponse = loginService.login(request, httpServletResponse);
-        return ResponseEntity.ok(loginResponse);
-    }
+  @PostMapping("/login")
+  public ResponseEntity<LoginResponse> login(
+      @RequestBody LoginRequest request, HttpServletResponse httpServletResponse) {
+    LoginResponse loginResponse = loginService.login(request, httpServletResponse);
+    return ResponseEntity.ok(loginResponse);
+  }
 }

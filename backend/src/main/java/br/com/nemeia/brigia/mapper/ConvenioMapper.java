@@ -1,30 +1,23 @@
 package br.com.nemeia.brigia.mapper;
 
-import br.com.nemeia.brigia.dto.ConvenioResponse;
+import br.com.nemeia.brigia.dto.response.ConvenioResponse;
 import br.com.nemeia.brigia.model.Convenio;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ConvenioMapper {
 
-    public ConvenioResponse toResponse(Convenio convenio) {
-        if (convenio == null) {
-            return null;
-        }
-
-        return new ConvenioResponse(
-            convenio.getId(),
-            convenio.getNome(),
-            convenio.getDescricao(),
-            convenio.getCriadoEm()
-        );
+  public ConvenioResponse toResponse(Convenio convenio) {
+    if (convenio == null) {
+      return null;
     }
 
-    public List<ConvenioResponse> toResponseList(List<Convenio> patients) {
-        return patients.stream()
-                .map(this::toResponse)
-                .toList();
-    }
+    return new ConvenioResponse(
+        convenio.getId(), convenio.getNome(), convenio.getDescricao(), convenio.getCriadoEm());
+  }
+
+  public List<ConvenioResponse> toResponseList(List<Convenio> patients) {
+    return patients.stream().map(this::toResponse).toList();
+  }
 }

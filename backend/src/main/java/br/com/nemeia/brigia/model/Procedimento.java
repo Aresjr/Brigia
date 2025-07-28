@@ -11,17 +11,17 @@ import lombok.*;
 @Table(name = "procedimento")
 public class Procedimento extends BaseModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
 
-    @Column(name = "codigo")
-    private String codigo;
+  @Column(name = "codigo")
+  private String codigo;
 
-    @Column(name = "descricao")
-    private String descricao;
+  @Column(name = "descricao")
+  private String descricao;
 
-    @Column(name = "observacoes")
-    private String observacoes;
+  @Column(name = "observacoes")
+  private String observacoes;
 }

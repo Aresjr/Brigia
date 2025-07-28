@@ -8,9 +8,9 @@ import lombok.Data;
 @Embeddable
 public class PrecoProcedimentoId {
 
-    @Column(name = "procedimento_id")
-    private Long procedimentoId;
+  @Column(name = "procedimento_id")
+  private Long procedimentoId;
 
-    @Column(name = "convenio_id")
-    private Long convenioId;
+  @Column(name = "convenio_id")
+  private Long convenioId;
 }

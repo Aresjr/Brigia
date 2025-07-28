@@ -1,4 +1,4 @@
-package br.com.nemeia.brigia.dto;
+package br.com.nemeia.brigia.dto.response;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,5 +21,4 @@ public record PacienteResponse(
     String cidade,
     String uf,
     Long convenioId,
-    LocalDateTime criadoEm
-) {}
+    LocalDateTime criadoEm) {}

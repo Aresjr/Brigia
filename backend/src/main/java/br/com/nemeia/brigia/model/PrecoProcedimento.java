@@ -1,12 +1,11 @@
 package br.com.nemeia.brigia.model;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -16,9 +15,8 @@ import java.math.BigDecimal;
 @Table(name = "preco_procedimento")
 public class PrecoProcedimento extends BaseModel {
 
-    @EmbeddedId
-    private PrecoProcedimentoId id;
+  @EmbeddedId private PrecoProcedimentoId id;
 
-    @Column(name = "preco", nullable = false)
-    private BigDecimal preco;
+  @Column(name = "preco", nullable = false)
+  private BigDecimal preco;
 }

@@ -1,8 +1,8 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.auth.JwtService;
-import br.com.nemeia.brigia.dto.LoginRequest;
-import br.com.nemeia.brigia.dto.LoginResponse;
+import br.com.nemeia.brigia.dto.request.LoginRequest;
+import br.com.nemeia.brigia.dto.response.LoginResponse;
 import br.com.nemeia.brigia.exception.InvalidCredentialsException;
 import br.com.nemeia.brigia.exception.LoginUnavailableException;
 import br.com.nemeia.brigia.exception.UsuarioNotFoundException;
@@ -12,7 +12,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,49 +21,50 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class LoginService {
 
-    @Value("${env}")
-    private String env;
+  @Value("${env}")
+  private String env;
 
-    private final PasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
 
-    private final JwtService jwtService;
+  private final JwtService jwtService;
 
-    private final LoginMapper mapper;
+  private final LoginMapper mapper;
 
-    private final UsuarioService usuarioService;
+  private final UsuarioService usuarioService;
 
-    public LoginResponse login(LoginRequest request, HttpServletResponse httpServletResponse) {
-        try {
-            Usuario usuario = usuarioService.getByEmail(request.email());
+  public LoginResponse login(LoginRequest request, HttpServletResponse httpServletResponse) {
+    try {
+      Usuario usuario = usuarioService.getByEmail(request.email());
 
-            if (!passwordEncoder.matches(request.password(), usuario.getSenha())) {
-                log.error("Senha inválida para o usuário: {}", request.email());
-                throw new InvalidCredentialsException("Senha inválida");
-            }
+      if (!passwordEncoder.matches(request.password(), usuario.getSenha())) {
+        log.error("Senha inválida para o usuário: {}", request.email());
+        throw new InvalidCredentialsException("Senha inválida");
+      }
 
-            String token = jwtService.generateToken(usuario);
-            addAccessTokenToResponse(httpServletResponse, token);
+      String token = jwtService.generateToken(usuario);
+      addAccessTokenToResponse(httpServletResponse, token);
 
-            return mapper.toLoginResponse(usuario);
-        } catch (InvalidCredentialsException e) {
-            log.error("Credenciais inválidas: ", e);
-            throw e;
-        } catch (UsuarioNotFoundException e) {
-            log.error("Usuário não encontrado: ", e);
-            throw e;
-        } catch (Exception e) {
-            log.error("Erro ao realizar login: ", e);
-            throw new LoginUnavailableException("Serviço de login indisponível, tente novamente mais tarde.");
-        }
+      return mapper.toLoginResponse(usuario);
+    } catch (InvalidCredentialsException e) {
+      log.error("Credenciais inválidas: ", e);
+      throw e;
+    } catch (UsuarioNotFoundException e) {
+      log.error("Usuário não encontrado: ", e);
+      throw e;
+    } catch (Exception e) {
+      log.error("Erro ao realizar login: ", e);
+      throw new LoginUnavailableException(
+          "Serviço de login indisponível, tente novamente mais tarde.");
     }
+  }
 
-    public void addAccessTokenToResponse(HttpServletResponse response, String accessToken) {
-        Cookie cookie = new Cookie("access-token", accessToken);
-        cookie.setHttpOnly(true);
-        cookie.setSecure("prod".equals(env));
-        cookie.setPath("/");
-        cookie.setMaxAge(3600);
+  public void addAccessTokenToResponse(HttpServletResponse response, String accessToken) {
+    Cookie cookie = new Cookie("access-token", accessToken);
+    cookie.setHttpOnly(true);
+    cookie.setSecure("prod".equals(env));
+    cookie.setPath("/");
+    cookie.setMaxAge(3600);
 
-        response.addCookie(cookie);
-    }
+    response.addCookie(cookie);
+  }
 }
