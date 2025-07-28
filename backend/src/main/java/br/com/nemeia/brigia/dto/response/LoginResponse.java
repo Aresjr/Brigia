@@ -3,4 +3,5 @@ package br.com.nemeia.brigia.dto.response;
 import br.com.nemeia.brigia.model.RoleUsuario;
 import java.util.List;
 
-public record LoginResponse(String name, String avatarUrl, List<RoleUsuario> roles, Long unidade) {}
+public record LoginResponse(
+    String name, String email, String avatarUrl, List<RoleUsuario> roles, Long unidade) {}

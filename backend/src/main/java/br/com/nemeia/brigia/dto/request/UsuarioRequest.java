@@ -3,6 +3,7 @@ package br.com.nemeia.brigia.dto.request;
 import br.com.nemeia.brigia.model.RoleUsuario;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 
@@ -14,5 +15,5 @@ public record UsuarioRequest(
         String senha,
     @NotBlank(message = "O nome é obrigatório") String nome,
     String avatarUrl,
-    @NotBlank(message = "O nível de acesso é obrigatório") List<RoleUsuario> roles,
+    @NotEmpty(message = "O nível de acesso é obrigatório") List<RoleUsuario> roles,
     Long unidade) {}

@@ -3,6 +3,8 @@ package br.com.nemeia.brigia.model;
 import jakarta.persistence.*;
 import java.util.List;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Data
 @Entity
@@ -27,11 +29,11 @@ public class Usuario {
   @JoinColumn(name = "unidade_id", nullable = false)
   private Unidade unidade;
 
-  @Column(name = "avatar_url", nullable = false)
+  @Column(name = "avatar_url")
   private String avatarUrl;
 
-  @ElementCollection(fetch = FetchType.EAGER)
   @Enumerated(EnumType.STRING)
   @Column(name = "roles", nullable = false)
+  @JdbcTypeCode(SqlTypes.ARRAY)
   private List<RoleUsuario> roles;
 }

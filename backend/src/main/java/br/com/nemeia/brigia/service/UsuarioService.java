@@ -2,14 +2,18 @@ package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.dto.request.UsuarioRequest;
 import br.com.nemeia.brigia.dto.response.UsuarioResponse;
+import br.com.nemeia.brigia.exception.UnidadeNotFoundException;
 import br.com.nemeia.brigia.exception.UsuarioNotFoundException;
 import br.com.nemeia.brigia.mapper.UsuarioMapper;
+import br.com.nemeia.brigia.model.Unidade;
 import br.com.nemeia.brigia.model.Usuario;
+import br.com.nemeia.brigia.repository.UnidadeRepository;
 import br.com.nemeia.brigia.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +24,10 @@ public class UsuarioService {
   private final UsuarioRepository repository;
 
   private final UsuarioMapper mapper;
+
+  private final UnidadeRepository unidadeRepository;
+
+  private final PasswordEncoder passwordEncoder;
 
   public Usuario getByEmail(String email) {
     return repository
@@ -40,6 +48,22 @@ public class UsuarioService {
   }
 
   public UsuarioResponse create(@Valid UsuarioRequest request) {
-    return null;
+
+    Unidade unidade =
+        unidadeRepository
+            .findById(request.unidade())
+            .orElseThrow(
+                () ->
+                    new UnidadeNotFoundException(
+                        "Unidade não encontrada com o ID: " + request.unidade()));
+
+    log.info("Criando usuário: {}", request.email());
+    Usuario usuario = mapper.toEntity(request);
+
+    String encryptedPassword = passwordEncoder.encode(request.senha());
+    usuario.setSenha(encryptedPassword);
+
+    usuario.setUnidade(unidade);
+    return mapper.toResponse(repository.save(usuario));
   }
 }
