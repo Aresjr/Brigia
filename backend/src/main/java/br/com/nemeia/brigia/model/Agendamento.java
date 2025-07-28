@@ -33,7 +33,7 @@ public class Agendamento extends BaseModel {
     @JoinColumn(name = "procedimento_id")
     private Procedimento procedimento;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "status", length = 15, nullable = false)
     private StatusAgendamento status;
 }

@@ -31,6 +31,8 @@ public class Usuario {
     @Column(name = "avatar_url", nullable = false)
     private String avatarUrl;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
     @Column(name = "roles", nullable = false)
     private List<RoleUsuario> roles;
 }

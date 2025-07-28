@@ -4,7 +4,8 @@ import br.com.nemeia.brigia.dto.LoginRequest;
 import br.com.nemeia.brigia.dto.LoginResponse;
 import br.com.nemeia.brigia.dto.UsuarioResponse;
 import br.com.nemeia.brigia.exception.InvalidCredentialsException;
-import br.com.nemeia.brigia.exception.LoginServiceUnavailableException;
+import br.com.nemeia.brigia.exception.LoginUnavailableException;
+import br.com.nemeia.brigia.exception.UsuarioNotFoundException;
 import br.com.nemeia.brigia.mapper.LoginMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -58,9 +59,12 @@ public class LoginService {
         } catch (InvalidCredentialsException e) {
             log.error("Credenciais inválidas: ", e);
             throw e;
+        } catch (UsuarioNotFoundException e) {
+            log.error("Usuário não encontrado: ", e);
+            throw e;
         } catch (Exception e) {
             log.error("Erro ao realizar login: ", e);
-            throw new LoginServiceUnavailableException("Serviço de login indisponível, tente novamente mais tarde.");
+            throw new LoginUnavailableException("Serviço de login indisponível, tente novamente mais tarde.");
         }
     }
 

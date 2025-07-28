@@ -20,16 +20,15 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED, request);
     }
 
-    @ExceptionHandler(LoginServiceUnavailableException.class)
-    public ResponseEntity<ErrorResponse> handleLoginServiceUnavailableException(LoginServiceUnavailableException ex,
-                                                                                HttpServletRequest request) {
+    @ExceptionHandler(LoginUnavailableException.class)
+    public ResponseEntity<ErrorResponse> handleLoginUnavailableException(LoginUnavailableException ex, HttpServletRequest request) {
         log.error("Erro ao autenticar: {}", ex.getMessage());
         return buildErrorResponse(ex.getMessage(), HttpStatus.SERVICE_UNAVAILABLE, request);
     }
 
-    @ExceptionHandler(PacienteNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(PacienteNotFoundException ex, HttpServletRequest request) {
-        log.error("Paciente não encontrado: {}", ex.getMessage());
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(NotFoundException ex, HttpServletRequest request) {
+        log.error("Entidade não encontrada: {}", ex.getMessage());
         return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND, request);
     }
 
