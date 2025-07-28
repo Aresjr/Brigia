@@ -7,29 +7,25 @@ interface LoginRequest {
   password: string;
 }
 
-interface LoginResponse {
-  accessToken: string;
-  id: string;
+export interface LoginResponse {
   email: string;
   name: string;
   avatarUrl: string;
-  role: string;
-  theme: string;
-  establishment: number;
+  roles: string[];
+  unidade: number;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
   private API_URL = 'http://localhost:8009/auth';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   login(payload: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.API_URL}/login`, payload, {
-      withCredentials: true
+      withCredentials: true,
     });
   }
 }

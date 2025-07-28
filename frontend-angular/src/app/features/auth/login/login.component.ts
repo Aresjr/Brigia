@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../auth.service';
+import { AuthService, LoginResponse } from '../auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
@@ -38,7 +38,9 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
-          console.log('Login successful:', response);
+          this.populateLocalStorage(response);
+          console.log('localStorage');
+          console.log(localStorage);
           this.toastr.success('Login realizado com sucesso!');
           this.router.navigate(['/']);
         },
@@ -60,5 +62,13 @@ export class LoginComponent implements OnInit {
     } else {
       this.toastr.error('Por favor, preencha todos os campos corretamente.');
     }
+  }
+
+  populateLocalStorage(response: LoginResponse) {
+    localStorage.setItem('email', response.email);
+    localStorage.setItem('name', response.name);
+    localStorage.setItem('avatarUrl', response.avatarUrl);
+    localStorage.setItem('roles', JSON.stringify(response.roles));
+    localStorage.setItem('unidade', response.unidade.toString());
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
@@ -8,23 +8,33 @@ import { ToastrService } from 'ngx-toastr';
 export class AuthGuard implements CanActivate {
   constructor(private router: Router, private toastr: ToastrService) {}
 
-  canActivate(): boolean {
-    return this.checkAuth();
+  canActivate(route: ActivatedRouteSnapshot): boolean {
+    return this.checkAuth(route);
   }
 
-  canActivateChild(): boolean {
-    return this.checkAuth();
+  canActivateChild(route: ActivatedRouteSnapshot): boolean {
+    return this.checkAuth(route);
   }
 
-  private checkAuth(): boolean {
-    const token = null; //localStorage.getItem('token'); // ou outro método de verificação
+  private checkAuth(route: ActivatedRouteSnapshot): boolean {
+    const expectedRoles = route.data['roles'] as string[];
 
-    if (token) {
-      return true;
-    } else {
+    if (localStorage.getItem('email') === null) {
       this.toastr.error('Você precisa estar logado para acessar essa página.');
+      this.router.navigate(['/login']);
+      return false;
+    }
+
+    const userRoles = JSON.parse(localStorage.getItem('roles') || '[]');
+
+    const hasAccess = expectedRoles.some((role) => userRoles.includes(role));
+
+    if (!hasAccess) {
+      this.toastr.error('Você não tem acesso a esta página.');
       this.router.navigate(['/']);
       return false;
     }
+
+    return true;
   }
 }
