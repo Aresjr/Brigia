@@ -35,5 +35,4 @@ public class GenericExceptionHandler extends BaseExceptionHandler {
     log.error("Entidade não encontrada: {}", ex.getMessage());
     return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND, request);
   }
-
 }
