@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "frontend-angular": {
+    "brigia": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/frontend-angular",
+            "outputPath": "dist/brigia",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -64,10 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "frontend-angular:build:production"
+              "buildTarget": "brigia:build:production"
             },
             "development": {
-              "buildTarget": "frontend-angular:build:development"
+              "buildTarget": "brigia:build:development"
             }
           },
           "defaultConfiguration": "development",

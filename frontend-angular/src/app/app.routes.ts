@@ -17,7 +17,7 @@ export const routes: Routes = [
         component: PacientesComponent,
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
-        data: { roles: ['ADMIN'] },
+        data: { roles: ['SECRETARIA', 'ADMIN'] },
       },
     ],
   },

@@ -1,6 +1,12 @@
 <div id="root">
   <div id="modal-root"></div>
-  <section tabindex="-1" aria-live="polite" aria-relevant="additions text" aria-atomic="false"></section>
+  <section
+    aria-label="Notifications alt+T"
+    tabindex="-1"
+    aria-live="polite"
+    aria-relevant="additions text"
+    aria-atomic="false"
+  ></section>
   <div class="flex min-h-screen bg-background">
     <aside class="h-screen sticky top-0 border-r border-border w-64">
       <nav class="h-full flex flex-col bg-gray-50">
@@ -8,12 +14,14 @@
           <div class="flex items-center mb-4">
             <div class="flex items-center">
               <img
-                src="images/bem-estar-saude-logo-sidebar.png"
+                src="/bem-estar-saude-logo-sidebar.png"
                 alt="Bem Estar Saúde Logo"
-                class="h-10 object-contain" />
+                class="h-10 object-contain"
+              />
             </div>
             <button
-              class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 w-10 ml-auto" >
+              class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 w-10 ml-auto"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -24,9 +32,9 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="lucide lucide-chevron-first" >
+                class="lucide lucide-chevron-first"
+              >
                 <path d="m17 18-6-6 6-6"></path>
-                <path d="M7 6v12"></path>
                 <path d="M7 6v12"></path>
               </svg>
             </button>
@@ -42,22 +50,29 @@
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              class="lucide lucide-search absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" >
+              class="lucide lucide-search absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground"
+            >
               <circle cx="11" cy="11" r="8"></circle>
               <path d="m21 21-4.3-4.3"></path>
             </svg>
             <input
               class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-8 pl-9"
               placeholder="Pesquisar"
-              value="" />
+              value=""
+            />
           </div>
         </div>
-        <div data-orientation="horizontal" role="none" class="shrink-0 bg-border h-[1px] w-full"></div>
+        <div
+          data-orientation="horizontal"
+          role="none"
+          class="shrink-0 bg-border h-[1px] w-full"
+        ></div>
         <div class="flex-1 overflow-y-auto">
           <ul class="px-3 py-2">
             <li>
               <button
-                class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 h-10 px-4 py-2 w-full justify-start my-1 bg-[#524ED2] text-white hover:bg-[#524ED2]/90" >
+                class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 h-10 px-4 py-2 w-full justify-start my-1 bg-[#524ED2] text-white hover:bg-[#524ED2]/90"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -68,17 +83,20 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-house h-4 w-4 mr-3" >
+                  class="lucide lucide-house h-4 w-4 mr-3"
+                >
                   <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path>
                   <path
-                    d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" > </path>
+                    d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+                  ></path>
                 </svg>
                 Página Inicial
               </button>
             </li>
             <li>
               <button
-                class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:text-accent-foreground h-10 px-4 py-2 w-full justify-start my-1 hover:bg-gray-200" >
+                class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:text-accent-foreground h-10 px-4 py-2 w-full justify-start my-1 hover:bg-gray-200"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -89,18 +107,19 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-users h-4 w-4 mr-3" >
+                  class="lucide lucide-users h-4 w-4 mr-3"
+                >
                   <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                   <circle cx="9" cy="7" r="4"></circle>
                   <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg>
-                Pacientes
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg
+                >Pacientes
               </button>
             </li>
             <li>
               <button
-                class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:text-accent-foreground h-10 px-4 py-2 w-full justify-start my-1 hover:bg-gray-200" >
+                class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:text-accent-foreground h-10 px-4 py-2 w-full justify-start my-1 hover:bg-gray-200"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -111,7 +130,8 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-calendar h-4 w-4 mr-3" >
+                  class="lucide lucide-calendar h-4 w-4 mr-3"
+                >
                   <path d="M8 2v4"></path>
                   <path d="M16 2v4"></path>
                   <rect width="18" height="18" x="3" y="4" rx="2"></rect>
@@ -123,7 +143,8 @@
             <li>
               <div>
                 <button
-                  class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:text-accent-foreground h-10 px-4 py-2 w-full justify-start hover:bg-gray-200" >
+                  class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:text-accent-foreground h-10 px-4 py-2 w-full justify-start hover:bg-gray-200"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -134,14 +155,13 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-user-plus h-4 w-4 mr-3" >
+                    class="lucide lucide-user-plus h-4 w-4 mr-3"
+                  >
                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                     <circle cx="9" cy="7" r="4"></circle>
                     <line x1="19" x2="19" y1="8" y2="14"></line>
-                    <line x1="22" x2="16" y1="11" y2="11"></line>
-                  </svg>
-                  Cadastros
-                  <svg
+                    <line x1="22" x2="16" y1="11" y2="11"></line></svg
+                  >Cadastros<svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"
@@ -151,7 +171,8 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-chevron-right h-4 w-4 ml-auto" >
+                    class="lucide lucide-chevron-right h-4 w-4 ml-auto"
+                  >
                     <path d="m9 18 6-6-6-6"></path>
                   </svg>
                 </button>
@@ -166,10 +187,13 @@
             id="radix-:r0:"
             aria-haspopup="menu"
             aria-expanded="false"
-            data-state="closed" >
-            <span class="relative flex shrink-0 overflow-hidden rounded-full h-6 w-6">
-              <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">
-                <svg
+            data-state="closed"
+          >
+            <span
+              class="relative flex shrink-0 overflow-hidden rounded-full h-6 w-6"
+              ><span
+                class="flex h-full w-full items-center justify-center rounded-full bg-muted"
+                ><svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
                   height="24"
@@ -179,62 +203,17 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-circle-user h-4 w-4" >
+                  class="lucide lucide-circle-user h-4 w-4"
+                >
                   <circle cx="12" cy="12" r="10"></circle>
                   <circle cx="12" cy="10" r="3"></circle>
-                  <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path>
-                </svg>
-              </span>
-            </span>
-            <span class="ml-2">Usuário</span>
+                  <path
+                    d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"
+                  ></path></svg></span></span
+            ><span class="ml-2">Usuário</span>
           </button>
         </div>
       </nav>
     </aside>
-
-    <div class="flex-1 px-[32px] pb-12 bg-gray-200">
-      <div class="space-y-4 relative">
-        <div class="space-y-8">
-          <div class="py-4 -mx-[32px] rounded-none px-[32px] bg-gray-50">
-            <div class="flex items-center justify-between bg-gray-50">
-              <h1 class="text-2xl font-bold">Página Inicial</h1>
-            </div>
-          </div>
-          <router-outlet></router-outlet>
-        </div>
-        <button
-          class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-[#524ED2] text-white hover:bg-[#524ED2]/90 h-10 w-10 fixed bottom-4 right-4 rounded-full shadow-lg" >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="lucide lucide-message-square h-4 w-4" >
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          </svg>
-        </button>
-        <button
-          class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-[#524ED2] text-white hover:bg-[#524ED2]/90 h-10 fixed right-4 bottom-4 rounded-full p-3 shadow-lg" >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="lucide lucide-message-circle h-6 w-6" >
-            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
-          </svg>
-        </button>
-      </div>
-    </div>
   </div>
 </div>
