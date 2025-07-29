@@ -12,9 +12,9 @@ import { MenuItemComponent } from "../../shared/menu-item/menu-item.component";
   styleUrl: './main-layout.component.scss'
 })
 export class MainLayoutComponent {
-  isSubmenuOpen = false;
-
   constructor(private router: Router) {}
+
+  submenuState: Record<string, boolean> = {};
 
   isRouteActive(route: string): boolean {
     return this.router.isActive(route, {
@@ -25,7 +25,11 @@ export class MainLayoutComponent {
     });
   }
 
-  toggleSubmenu() {
-    this.isSubmenuOpen = !this.isSubmenuOpen;
+  toggleSubmenu(menu: string) {
+    this.submenuState[menu] = !this.submenuState[menu];
+  }
+
+  isSubmenuOpen(menu: string): boolean {
+    return this.submenuState[menu] || false;
   }
 }

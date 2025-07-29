@@ -1,103 +1,76 @@
-<div id="root">
-  <div id="modal-root"></div>
-  <section tabindex="-1" aria-live="polite" aria-relevant="additions text" aria-atomic="false"></section>
-  <div class="flex min-h-screen bg-background">
-    <aside class="h-screen sticky top-0 border-r border-border w-64">
-      <nav class="h-full flex flex-col bg-gray-50">
-        <div class="p-4 pb-2">
-          <div class="flex items-center mb-4">
-            <div class="flex items-center">
-              <img src="images/bem-estar-saude-logo-sidebar.png" alt="Bem Estar Saúde Logo" class="h-10 object-contain" />
-            </div>
-            <button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10 ml-auto" >
-              <lucide-icon name="chevron-first" class="w-4 h-4"></lucide-icon>
-            </button>
+<div class="flex min-h-screen bg-background">
+  <aside class="h-screen sticky top-0 border-r border-border w-64">
+    <nav class="h-full flex flex-col bg-gray-50">
+      <div class="p-4 pb-2">
+        <div class="flex items-center mb-4">
+          <div class="flex items-center">
+            <img src="images/bem-estar-saude-logo-sidebar.png" alt="Bem Estar Saúde Logo" class="h-10 object-contain" />
           </div>
-          <div class="flex-1 relative">
-            <lucide-icon name="search" class="w-4 h-4 absolute left-1 top-1/2 transform -translate-y-1/2 text-muted-foreground"></lucide-icon>
-            <input class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-8 pl-9" placeholder="Pesquisar" />
-          </div>
-        </div>
-        <div data-orientation="horizontal" role="none" class="shrink-0 bg-border h-[1px] w-full"></div>
-        <div class="flex-1 overflow-y-auto">
-          <ul class="px-3 py-2">
-            <li>
-              <app-menu-item label="Página Inicial" icon="home" route="/"></app-menu-item>
-            </li>
-            <li>
-              <app-menu-item label="Pacientes" icon="users" route="/pacientes"></app-menu-item>
-            </li>
-            <li>
-              <app-menu-item label="Agendamentos" icon="calendar" route="/agendamentos"></app-menu-item>
-            </li>
-            <li>
-              <div>
-                <button
-                  (click)="toggleSubmenu()"
-                  class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground h-10 px-4 py-2 w-full justify-start hover:bg-gray-200" >
-                  <lucide-icon name="user-plus" class="w-4 h-4 mr-2"></lucide-icon>
-                  Cadastros
-                  <lucide-icon 
-                    [name]="isSubmenuOpen ? 'chevron-down' : 'chevron-right'" 
-                    class="w-4 h-4 ml-auto transition-transform" >
-                  </lucide-icon>
-                </button>
-                <div 
-                  class="overflow-hidden ease-in-out" [class.max-h-0]="!isSubmenuOpen" [class.max-h-48]="isSubmenuOpen">
-                  <ul class="pl-6 py-1">
-                    <li>
-                      <app-menu-item label="Procedimentos" route="/procedimentos" icon="clipboard-list"></app-menu-item>
-                    </li>
-                    <li>
-                      <app-menu-item label="Profissionais" route="/profissionais" icon="stethoscope"></app-menu-item>
-                    </li>
-                    <li>
-                      <app-menu-item label="Tabela de Preços" route="/tabela-precos" icon="building"></app-menu-item>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div class="border-t border-border p-3">
-          <button
-            class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full justify-start"
-            type="button"
-            id="radix-:r0:"
-            aria-haspopup="menu"
-            aria-expanded="false"
-            data-state="closed" >
-            <span class="relative flex shrink-0 overflow-hidden rounded-full h-6 w-6">
-              <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">
-                <lucide-icon name="circle-user" class="w-4 h-4 mr-2"></lucide-icon>
-              </span>
-            </span>
-            <span class="ml-2">Usuário</span>
+          <button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10 ml-auto" >
+            <lucide-icon name="chevron-first" class="w-4 h-4"></lucide-icon>
           </button>
         </div>
-      </nav>
-    </aside>
-
-
-    <div class="flex-1 px-[32px] pb-12 bg-gray-200">
-      <div class="space-y-4 relative">
-        <div class="space-y-8">
-          <div class="py-4 -mx-[32px] rounded-none px-[32px] bg-gray-50">
-            <div class="flex items-center justify-between bg-gray-50">
-              <h1 class="text-2xl font-bold">Página Inicial</h1>
-            </div>
-          </div>
-          <router-outlet></router-outlet>
+        <div class="flex-1 relative">
+          <lucide-icon name="search" class="w-4 h-4 absolute left-1 top-1/2 transform -translate-y-1/2 text-muted-foreground"></lucide-icon>
+          <input class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-8 pl-9" placeholder="Pesquisar" />
         </div>
+      </div>
+      <div data-orientation="horizontal" role="none" class="shrink-0 bg-border h-[1px] w-full"></div>
+      <div class="flex-1 overflow-y-auto">
+        <ul class="px-3 py-2">
+          <li>
+            <app-menu-item label="Página Inicial" icon="home" route="/"></app-menu-item>
+          </li>
+          <li>
+            <app-menu-item label="Pacientes" icon="users" route="/pacientes"></app-menu-item>
+          </li>
+          <li>
+            <app-menu-item label="Agendamentos" icon="calendar" route="/agendamentos"></app-menu-item>
+          </li>
+          <li>
+            <div>
+              <app-menu-item label="Cadastros" icon="user-plus" [hasSubmenu]="true" [submenuOpen]="isSubmenuOpen('cadastros')" (clicked)="toggleSubmenu('cadastros')"></app-menu-item>
+              <div 
+                class="overflow-hidden ease-in-out" [class.max-h-0]="!isSubmenuOpen('cadastros')" [class.max-h-48]="isSubmenuOpen('cadastros')">
+                <ul class="pl-4 py-1">
+                  <li>
+                    <app-menu-item label="Procedimentos" route="/procedimentos" icon="clipboard-list"></app-menu-item>
+                  </li>
+                  <li>
+                    <app-menu-item label="Profissionais" route="/profissionais" icon="stethoscope"></app-menu-item>
+                  </li>
+                  <li>
+                    <app-menu-item label="Tabela de Preços" route="/tabela-precos" icon="building"></app-menu-item>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="border-t border-border p-3">
         <button
-          class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#524ED2] text-white hover:bg-[#524ED2]/90 h-10 w-10 fixed bottom-4 right-4 rounded-full shadow-lg" >
-          <lucide-icon name="message-square" class="w-4 h-4 mr-2"></lucide-icon>
+          class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full justify-start"
+          type="button" >
+          <span class="relative flex shrink-0 overflow-hidden rounded-full h-6 w-6">
+            <span class="flex h-full w-full items-center justify-center rounded-full bg-muted">
+              <lucide-icon name="circle-user" class="w-4 h-4 mr-2"></lucide-icon>
+            </span>
+          </span>
+          <span class="ml-2">Usuário</span>
         </button>
-        <button
-          class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#524ED2] text-white hover:bg-[#524ED2]/90 h-10 fixed right-4 bottom-4 rounded-full p-3 shadow-lg" >
-          <lucide-icon name="message-circle" class="w-4 h-4 mr-2"></lucide-icon>
-        </button>
+      </div>
+    </nav>
+  </aside>
+  <div class="flex-1 px-[32px] pb-12 bg-gray-200">
+    <div class="space-y-4 relative">
+      <div class="space-y-8">
+        <div class="py-4 -mx-[32px] rounded-none px-[32px] bg-gray-50">
+          <div class="flex items-center justify-between bg-gray-50">
+            <h1 class="text-2xl font-bold">Página Inicial</h1>
+          </div>
+        </div>
+        <router-outlet></router-outlet>
       </div>
     </div>
   </div>
