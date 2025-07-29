@@ -7,53 +7,28 @@
         <div class="p-4 pb-2">
           <div class="flex items-center mb-4">
             <div class="flex items-center">
-              <img
-                src="images/bem-estar-saude-logo-sidebar.png"
-                alt="Bem Estar Saúde Logo"
-                class="h-10 object-contain" />
+              <img src="images/bem-estar-saude-logo-sidebar.png" alt="Bem Estar Saúde Logo" class="h-10 object-contain" />
             </div>
-            <button
-              class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10 ml-auto" >
+            <button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10 ml-auto" >
               <lucide-icon name="chevron-first" class="w-4 h-4"></lucide-icon>
             </button>
           </div>
           <div class="flex-1 relative">
             <lucide-icon name="search" class="w-4 h-4 absolute left-1 top-1/2 transform -translate-y-1/2 text-muted-foreground"></lucide-icon>
-            <input
-              class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-8 pl-9"
-              placeholder="Pesquisar"
-              value="" />
+            <input class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-8 pl-9" placeholder="Pesquisar" />
           </div>
         </div>
         <div data-orientation="horizontal" role="none" class="shrink-0 bg-border h-[1px] w-full"></div>
         <div class="flex-1 overflow-y-auto">
           <ul class="px-3 py-2">
             <li>
-              <button
-                routerLink="/"
-                [class]="isRouteActive('/') ? 'bg-[#524ED2] text-white hover:bg-[#524ED2]/90' : 'hover:bg-gray-200'"
-                class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 w-full justify-start my-1" >
-                <lucide-icon name="home" class="w-4 h-4 mr-2"></lucide-icon>
-                Página Inicial
-              </button>
+              <app-menu-item label="Página Inicial" icon="home" route="/"></app-menu-item>
             </li>
             <li>
-              <button
-                routerLink="/pacientes"
-                [class]="isRouteActive('/pacientes') ? 'bg-[#524ED2] text-white hover:bg-[#524ED2]/90' : 'hover:bg-gray-200'"
-                class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 w-full justify-start my-1" >
-                <lucide-icon name="users" class="w-4 h-4 mr-2"></lucide-icon>
-                Pacientes
-              </button>
+              <app-menu-item label="Pacientes" icon="users" route="/pacientes"></app-menu-item>
             </li>
             <li>
-              <button
-                routerLink="/agendamentos"
-                [class]="isRouteActive('/agendamentos') ? 'bg-[#524ED2] text-white hover:bg-[#524ED2]/90' : 'hover:bg-gray-200'"
-                class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 w-full justify-start my-1" >
-                <lucide-icon name="calendar" class="w-4 h-4 mr-2"></lucide-icon>
-                Agendamentos
-              </button>
+              <app-menu-item label="Agendamentos" icon="calendar" route="/agendamentos"></app-menu-item>
             </li>
             <li>
               <div>
@@ -68,36 +43,16 @@
                   </lucide-icon>
                 </button>
                 <div 
-                  class="overflow-hidden transition-all duration-300 ease-in-out"
-                  [class.max-h-0]="!isSubmenuOpen"
-                  [class.max-h-48]="isSubmenuOpen">
+                  class="overflow-hidden ease-in-out" [class.max-h-0]="!isSubmenuOpen" [class.max-h-48]="isSubmenuOpen">
                   <ul class="pl-6 py-1">
                     <li>
-                      <button 
-                        routerLink="/cadastros/profissionais"
-                        [class]="isRouteActive('/cadastros/profissionais') ? 'bg-[#524ED2] text-white hover:bg-[#524ED2]/90' : 'hover:bg-gray-200'"
-                        class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 w-full justify-start">
-                        <lucide-icon name="stethoscope" class="w-4 h-4 mr-2"></lucide-icon>
-                        Profissionais
-                      </button>
+                      <app-menu-item label="Procedimentos" route="/procedimentos" icon="clipboard-list"></app-menu-item>
                     </li>
                     <li>
-                      <button 
-                        routerLink="/cadastros/procedimentos"
-                        [class]="isRouteActive('/cadastros/procedimentos') ? 'bg-[#524ED2] text-white hover:bg-[#524ED2]/90' : 'hover:bg-gray-200'"
-                        class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 w-full justify-start">
-                        <lucide-icon name="clipboard-list" class="w-4 h-4 mr-2"></lucide-icon>
-                        Procedimentos
-                      </button>
+                      <app-menu-item label="Profissionais" route="/profissionais" icon="stethoscope"></app-menu-item>
                     </li>
                     <li>
-                      <button 
-                        routerLink="/cadastros/estabelecimentos"
-                        [class]="isRouteActive('/cadastros/estabelecimentos') ? 'bg-[#524ED2] text-white hover:bg-[#524ED2]/90' : 'hover:bg-gray-200'"
-                        class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 w-full justify-start">
-                        <lucide-icon name="building" class="w-4 h-4 mr-2"></lucide-icon>
-                        Estabelecimentos
-                      </button>
+                      <app-menu-item label="Tabela de Preços" route="/tabela-precos" icon="building"></app-menu-item>
                     </li>
                   </ul>
                 </div>
@@ -123,6 +78,7 @@
         </div>
       </nav>
     </aside>
+
 
     <div class="flex-1 px-[32px] pb-12 bg-gray-200">
       <div class="space-y-4 relative">
