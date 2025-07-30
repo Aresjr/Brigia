@@ -11,6 +11,7 @@ import br.com.nemeia.brigia.repository.UnidadeRepository;
 import br.com.nemeia.brigia.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,11 +30,8 @@ public class UsuarioService {
 
   private final PasswordEncoder passwordEncoder;
 
-  public Usuario getByEmail(String email) {
-    return repository
-        .findByEmail(email)
-        .orElseThrow(
-            () -> new UsuarioNotFoundException("Usuário não encontrado com o email: " + email));
+  public Optional<Usuario> getByEmail(String email) {
+    return repository.findByEmail(email);
   }
 
   public List<UsuarioResponse> getAll() {

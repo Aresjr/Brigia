@@ -5,7 +5,6 @@ import br.com.nemeia.brigia.dto.request.LoginRequest;
 import br.com.nemeia.brigia.dto.response.LoginResponse;
 import br.com.nemeia.brigia.exception.InvalidCredentialsException;
 import br.com.nemeia.brigia.exception.LoginUnavailableException;
-import br.com.nemeia.brigia.exception.UsuarioNotFoundException;
 import br.com.nemeia.brigia.mapper.LoginMapper;
 import br.com.nemeia.brigia.model.Usuario;
 import jakarta.servlet.http.Cookie;
@@ -34,11 +33,12 @@ public class LoginService {
 
   public LoginResponse login(LoginRequest request, HttpServletResponse httpServletResponse) {
     try {
-      Usuario usuario = usuarioService.getByEmail(request.email());
+      Usuario usuario =
+          usuarioService.getByEmail(request.email()).orElseThrow(InvalidCredentialsException::new);
 
       if (!passwordEncoder.matches(request.password(), usuario.getSenha())) {
         log.error("Senha inválida para o usuário: {}", request.email());
-        throw new InvalidCredentialsException("Senha inválida");
+        throw new InvalidCredentialsException();
       }
 
       String token = jwtService.generateToken(usuario);
@@ -47,9 +47,6 @@ public class LoginService {
       return mapper.toLoginResponse(usuario);
     } catch (InvalidCredentialsException e) {
       log.error("Credenciais inválidas: ", e);
-      throw e;
-    } catch (UsuarioNotFoundException e) {
-      log.error("Usuário não encontrado: ", e);
       throw e;
     } catch (Exception e) {
       log.error("Erro ao realizar login: ", e);

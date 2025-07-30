@@ -15,41 +15,62 @@ export const routes: Routes = [
     path: '',
     component: MainLayoutComponent,
     children: [
-      { path: '', component: IndexComponent },
+      { 
+        path: '',
+        component: IndexComponent,
+        data: {
+          title: 'Página Inicial'
+        }
+      },
       {
         path: 'agendamentos',
         component: AgendamentosComponent,
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
-        data: { roles: ['SECRETARIA', 'ADMIN'] },
+        data: {
+          roles: ['SECRETARIA', 'ADMIN'],
+          title: 'Agendamentos'
+        },
       },
       {
         path: 'pacientes',
         component: PacientesComponent,
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
-        data: { roles: ['SECRETARIA', 'ADMIN'] },
+        data: {
+          roles: ['SECRETARIA', 'ADMIN'],
+          title: 'Pacientes'
+        },
       },
       {
         path: 'procedimentos',
         component: ProcedimentosComponent,
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
-        data: { roles: ['SECRETARIA', 'ADMIN'] },
+        data: {
+          roles: ['SECRETARIA', 'ADMIN'],
+          title: 'Procedimentos'
+        },
       },
       {
         path: 'profissionais',
         component: ProfissionaisComponent,
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
-        data: { roles: ['SECRETARIA', 'ADMIN'] },
+        data: {
+          roles: ['SECRETARIA', 'ADMIN'],
+          title: 'Profissionais'
+        },
       },
       {
         path: 'tabela-precos',
         component: TabelaPrecosComponent,
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
-        data: { roles: ['SECRETARIA', 'ADMIN'] },
+        data: {
+          roles: ['SECRETARIA', 'ADMIN'],
+          title: 'Tabela de Preços'
+        },
       },
     ],
   },
