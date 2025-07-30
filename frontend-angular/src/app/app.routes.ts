@@ -19,6 +19,7 @@ export const routes: Routes = [
         path: '',
         component: IndexComponent,
         data: {
+          roles: ['SECRETARIA', 'ADMIN'],
           title: 'Página Inicial'
         }
       },

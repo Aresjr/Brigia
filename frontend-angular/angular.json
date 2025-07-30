@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/brigia",
+            "outputPath": "dist",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -31,7 +31,8 @@
               {
                 "glob": "**/*",
                 "input": "src/assets"
-              }
+              },
+              "src/_redirects"
             ],
             "styles": ["src/styles.scss", "src/styles/index.css"],
             "scripts": []
@@ -62,6 +63,13 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.bemestar.ts"
+                }
+              ],
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": "src/assets/bemestar",
+                  "output": "/assets"
                 }
               ]
             }
