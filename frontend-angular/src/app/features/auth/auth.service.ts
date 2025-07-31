@@ -27,4 +27,8 @@ export class AuthService {
       withCredentials: true,
     });
   }
+
+  logout(): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/auth/logout`, {}, { withCredentials: true });
+  }
 }

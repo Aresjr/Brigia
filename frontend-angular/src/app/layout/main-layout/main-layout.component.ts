@@ -22,6 +22,8 @@ export class MainLayoutComponent {
   ) { }
 
   ngOnInit() {
+    this.redirectIfGetParam();
+
     const title = this.getDeepestChildTitle(this.route);
     this.updateTitle(title);
 
@@ -37,15 +39,6 @@ export class MainLayoutComponent {
 
   pageTitle: string = '';
   submenuState: Record<string, boolean> = {};
-
-  isRouteActive(route: string): boolean {
-    return this.router.isActive(route, {
-      paths: 'exact',
-      queryParams: 'exact',
-      fragment: 'ignored',
-      matrixParams: 'ignored'
-    });
-  }
 
   toggleSubmenu(menu: string) {
     this.submenuState[menu] = !this.submenuState[menu];
@@ -66,5 +59,20 @@ export class MainLayoutComponent {
   private updateTitle(title: string) {
       this.pageTitle = title;
       this.titleService.setTitle(`${environment.clientName} | ${this.pageTitle}`);
+  }
+
+  private redirectIfGetParam() {
+    const params = new URLSearchParams(window.location.search);
+    const redirectRoute = params.get('route') || '';
+    if (redirectRoute != '') {
+      sessionStorage.setItem('redirect', redirectRoute);
+    }
+    const redirect = sessionStorage.getItem('redirect') || '';
+    console.log('Redirecting to:', redirect);
+    if (redirect) {
+      sessionStorage.removeItem('redirect');
+      this.router.navigate([redirect]);
+      return;
+    }
   }
 }

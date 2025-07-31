@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class LoginService {
+public class AuthService {
 
   @Value("${env}")
   private String env;
@@ -61,7 +61,15 @@ public class LoginService {
     cookie.setSecure("prod".equals(env));
     cookie.setPath("/");
     cookie.setMaxAge(3600);
+    response.addCookie(cookie);
+  }
 
+  public void logout(HttpServletResponse response) {
+    Cookie cookie = new Cookie("access-token", null);
+    cookie.setHttpOnly(true);
+    cookie.setSecure(true);
+    cookie.setPath("/");
+    cookie.setMaxAge(0);
     response.addCookie(cookie);
   }
 }
