@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PacientesService } from './pacientes.service';
 import { Paciente } from './paciente.interface';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-pacientes',
@@ -12,23 +13,25 @@ import { Paciente } from './paciente.interface';
 })
 export class PacientesComponent implements OnInit {
   pacientes: Paciente[] = [];
-  carregando = true;
+  isLoading = true;
 
-  constructor(private pacientesService: PacientesService) {}
+  constructor(private pacientesService: PacientesService,
+              private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.carregarPacientes();
   }
 
   carregarPacientes(): void {
-    this.carregando = true;
+    this.isLoading = true;
     this.pacientesService.listarPacientes().subscribe({
       next: (response) => {
         this.pacientes = response.items;
-        this.carregando = false;
+        this.isLoading = false;
       },
       error: () => {
-        this.carregando = false;
+        this.toastr.error('Erro ao carregar Pacientes');
+        this.isLoading = false;
       }
     });
   }

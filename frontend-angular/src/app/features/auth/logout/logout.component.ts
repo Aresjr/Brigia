@@ -13,11 +13,11 @@ export class LogoutComponent implements OnInit {
   ngOnInit(): void {
     this.authService.logout().subscribe({
       next: () => {
-        //localStorage.clear();
+        localStorage.clear();
         this.router.navigate(['/login']);
       },
       error: () => {
-        //localStorage.clear();
+        localStorage.clear();
         this.router.navigate(['/login']);
       },
     });
