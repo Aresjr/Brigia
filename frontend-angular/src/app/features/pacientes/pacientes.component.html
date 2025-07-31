@@ -1,4 +1,4 @@
-<div class="container mx-auto mt-4 mb-2">
+<div class="container mx-auto mt-4 mb-2 rounded-lg">
 
         @if (isLoading) {
             <div class="flex justify-center items-center h-32">
@@ -9,32 +9,44 @@
                 <p class="text-gray-500">Nenhum paciente encontrado.</p>
             </div>
         } @else {
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto rounded-lg">
                 <table class="min-w-full table-auto">
                     <thead class="text-white bg-[#524ED2]">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nome</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">CPF</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Data de Nascimento</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Celular</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Próxima Consulta</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Ações</th>
+                            <th (click)="ordenar('nome')" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider w-auto cursor-pointer hover:bg-[#423DC2]">
+                                Nome <span class="ml-1">{{getSortIcon('nome')}}</span>
+                            </th>
+                            <th (click)="ordenar('cpf')" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider w-40 cursor-pointer hover:bg-[#423DC2]">
+                                CPF <span class="ml-1">{{getSortIcon('cpf')}}</span>
+                            </th>
+                            <th (click)="ordenar('dataNascimento')" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider w-40 cursor-pointer hover:bg-[#423DC2]">
+                                Nascimento <span class="ml-1">{{getSortIcon('dataNascimento')}}</span>
+                            </th>
+                            <th (click)="ordenar('celular')" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider w-40 cursor-pointer hover:bg-[#423DC2]">
+                                Celular <span class="ml-1">{{getSortIcon('celular')}}</span>
+                            </th>
+                            <th (click)="ordenar('proximaConsulta')" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider w-48 cursor-pointer hover:bg-[#423DC2]">
+                                <span class="ml-1">{{getSortIcon('proximaConsulta')}}</span>
+                                Próxima Consulta
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider w-32">
+                                Ações
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         @for (paciente of pacientes; track paciente.id) {
                             <tr class="hover:bg-gray-100 cursor-pointer">
                                 <td class="px-6 py-4 whitespace-nowrap" (click)="selecionarPaciente(paciente)">{{paciente.nome}}</td>
-                                <td class="px-6 py-4 whitespace-nowrap" (click)="selecionarPaciente(paciente)">{{paciente.cpf}}</td>
-                                <td class="px-6 py-4 whitespace-nowrap" (click)="selecionarPaciente(paciente)">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</td>
-                                <td class="px-6 py-4 whitespace-nowrap" (click)="selecionarPaciente(paciente)">{{paciente.celular}}</td>
-                                <td class="px-6 py-4 whitespace-nowrap" (click)="selecionarPaciente(paciente)">{{paciente.proximaConsulta | date:'dd/MM/yyyy'}}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <td class="px-6 py-4 whitespace-nowrap w-40" (click)="selecionarPaciente(paciente)">{{paciente.cpf}}</td>
+                                <td class="px-6 py-4 whitespace-nowrap w-40" (click)="selecionarPaciente(paciente)">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</td>
+                                <td class="px-6 py-4 whitespace-nowrap w-40" (click)="selecionarPaciente(paciente)">{{paciente.celular}}</td>
+                                <td class="px-6 py-4 whitespace-nowrap w-44" (click)="selecionarPaciente(paciente)">{{paciente.proximaConsulta | date:'dd/MM/yyyy'}}</td>
+                                <td class="px-6 py-4 whitespace-nowrap w-32 text-right">
                                     <div class="relative">
                                         <button
                                             (click)="toggleDropdown($event, paciente.id)"
-                                            class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                                        >
+                                            class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" >
                                             Ações
                                             <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -42,34 +54,28 @@
                                         </button>
 
                                         @if (dropdownAbertoPara === paciente.id) {
-                                            <div
-                                                class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50"
-                                            >
-                                                <div class="py-1">
-                                                    <button
+                                            <div class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                                                <div class="py-1 flex flex-col">
+                                                    <a
                                                         (click)="handleAction($event, 'agendar', paciente)"
-                                                        class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                    >
+                                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
                                                         Agendar Consulta
-                                                    </button>
-                                                    <button
+                                                    </a>
+                                                    <a
                                                         (click)="handleAction($event, 'historico', paciente)"
-                                                        class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                    >
+                                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
                                                         Ver Histórico
-                                                    </button>
-                                                    <button
+                                                    </a>
+                                                    <a
                                                         (click)="handleAction($event, 'editar', paciente)"
-                                                        class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                    >
+                                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
                                                         Editar
-                                                    </button>
-                                                    <button
+                                                    </a>
+                                                    <a
                                                         (click)="handleAction($event, 'excluir', paciente)"
-                                                        class="w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-50"
-                                                    >
+                                                        class="block px-4 py-2 text-sm text-red-700 hover:bg-red-50 cursor-pointer" >
                                                         Excluir
-                                                    </button>
+                                                    </a>
                                                 </div>
                                             </div>
                                         }

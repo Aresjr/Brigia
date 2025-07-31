@@ -5,6 +5,12 @@ import { Paciente } from './paciente.interface';
 import { ToastrService } from 'ngx-toastr';
 import { PacienteDetalhesComponent } from './paciente-detalhes/paciente-detalhes.component';
 
+type SortDirection = 'asc' | 'desc' | null;
+interface SortState {
+  column: keyof Paciente | '';
+  direction: SortDirection;
+}
+
 @Component({
   selector: 'app-pacientes',
   imports: [CommonModule, PacienteDetalhesComponent],
@@ -16,6 +22,7 @@ export class PacientesComponent implements OnInit {
   isLoading = true;
   pacienteSelecionado: Paciente | null = null;
   dropdownAbertoPara: number | null = null;
+  sortState: SortState = { column: '', direction: null };
 
   constructor(private pacientesService: PacientesService,
               private toastr: ToastrService) {}
@@ -77,5 +84,40 @@ export class PacientesComponent implements OnInit {
         console.log('Excluir', paciente);
         break;
     }
+  }
+
+  ordenar(coluna: keyof Paciente): void {
+    const direcao: SortDirection =
+      this.sortState.column === coluna
+        ? this.sortState.direction === 'asc'
+          ? 'desc'
+          : this.sortState.direction === 'desc'
+            ? null
+            : 'asc'
+        : 'asc';
+
+    this.sortState = { column: coluna, direction: direcao };
+
+    if (!direcao) {
+      this.carregarPacientes(); // Reset para ordem original
+      return;
+    }
+
+    this.pacientes.sort((a, b) => {
+      const valorA = a[coluna];
+      const valorB = b[coluna];
+
+      if (valorA === valorB) return 0;
+      if (valorA === null) return 1;
+      if (valorB === null) return -1;
+
+      const comparacao = valorA < valorB ? -1 : 1;
+      return direcao === 'asc' ? comparacao : -comparacao;
+    });
+  }
+
+  getSortIcon(coluna: keyof Paciente): string {
+    if (this.sortState.column !== coluna) return '';
+    return this.sortState.direction === 'asc' ? '↑' : this.sortState.direction === 'desc' ? '↓' : '';
   }
 }
