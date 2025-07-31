@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { PacientesService } from './pacientes.service';
 import { Paciente } from './paciente.interface';
 import { PacienteDetalhesComponent } from './paciente-detalhes/paciente-detalhes.component';
-import {LucideAngularModule} from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
+import { FormsModule } from '@angular/forms';
 
 type SortDirection = 'asc' | 'desc' | null;
 interface SortState {
@@ -14,16 +15,22 @@ interface SortState {
 
 @Component({
   selector: 'app-pacientes',
-  imports: [CommonModule, PacienteDetalhesComponent, LucideAngularModule, TopBarComponent],
+  imports: [CommonModule, PacienteDetalhesComponent, LucideAngularModule, TopBarComponent, FormsModule],
   templateUrl: './pacientes.component.html',
   standalone: true
 })
 export class PacientesComponent implements OnInit {
+  protected Math = Math;
   pacientes: Paciente[] = [];
+  pacientesFiltrados: Paciente[] = [];
   isLoading = true;
   pacienteSelecionado: Paciente | null = null;
   dropdownAbertoPara: number | null = null;
   sortState: SortState = { column: '', direction: null };
+  paginaAtual = 1;
+  itensPorPagina = 5;
+  totalPaginas = 1;
+  searchTerm: string = '';
 
   constructor(private pacientesService: PacientesService) {}
 
@@ -36,6 +43,8 @@ export class PacientesComponent implements OnInit {
     this.pacientesService.listarPacientes().subscribe({
       next: (response) => {
         this.pacientes = response.items;
+        this.pacientesFiltrados = [...this.pacientes];
+        this.atualizarPaginacao();
         this.isLoading = false;
       },
       error: (error) => {
@@ -115,9 +124,40 @@ export class PacientesComponent implements OnInit {
     return this.sortState.direction === 'asc' ? 'arrow-up-icon' : 'arrow-down-icon';
   }
 
-  onSearch(p0: PacientesComponent) {
-    console.log('Search action triggered');
-    console.log(p0);
+  onSearch(): void {
+    if (this.searchTerm) {
+      this.pacientesFiltrados = this.pacientes.filter(paciente =>
+        paciente.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        paciente.cpf.includes(this.searchTerm)
+      );
+    } else {
+      this.pacientesFiltrados = [...this.pacientes];
+    }
+    this.paginaAtual = 1;
+    this.atualizarPaginacao();
+  }
+
+  getPacientesPaginados(): Paciente[] {
+    const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
+    const fim = inicio + this.itensPorPagina;
+    return this.pacientesFiltrados.slice(inicio, fim);
+  }
+
+  atualizarPaginacao(): void {
+    this.totalPaginas = Math.ceil(this.pacientesFiltrados.length / this.itensPorPagina);
+    if (this.paginaAtual > this.totalPaginas) {
+      this.paginaAtual = this.totalPaginas || 1;
+    }
+  }
+
+  mudarPagina(pagina: number): void {
+    if (pagina >= 1 && pagina <= this.totalPaginas) {
+      this.paginaAtual = pagina;
+    }
+  }
+
+  getPaginasArray(): number[] {
+    return Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
   }
 
   onAddNovoUsuario() {

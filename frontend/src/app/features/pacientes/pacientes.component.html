@@ -5,9 +5,10 @@
         <lucide-icon name="search" class="w-4 h-4 absolute left-1 top-1/2 transform -translate-y-1/2 text-gray-400"></lucide-icon>
         <input
           type="text"
-          (input)="onSearch(this)"
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearch()"
           placeholder="Filtrar pacientes"
-          class="pl-7 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          class="pl-7 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-grey-900 focus:border-transparent"
           maxlength="20" />
       </div>
 
@@ -56,59 +57,94 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @for (paciente of pacientes; track paciente.id) {
-                        <tr class="hover:bg-gray-100 cursor-pointer">
-                            <td class="px-6 py-4 whitespace-nowrap" (click)="selecionarPaciente(paciente)">{{paciente.nome}}</td>
-                            <td class="px-6 py-4 whitespace-nowrap w-40" (click)="selecionarPaciente(paciente)">{{paciente.cpf}}</td>
-                            <td class="px-6 py-4 whitespace-nowrap w-40" (click)="selecionarPaciente(paciente)">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</td>
-                            <td class="px-6 py-4 whitespace-nowrap w-40" (click)="selecionarPaciente(paciente)">{{paciente.celular}}</td>
-                            <td class="px-6 py-4 whitespace-nowrap w-44" (click)="selecionarPaciente(paciente)">{{paciente.proximaConsulta | date:'dd/MM/yyyy'}}</td>
+                <tbody class="bg-white">
+                    @for (paciente of getPacientesPaginados(); track paciente.id) {
+                        <tr class="border-b hover:bg-gray-50 cursor-pointer" (click)="selecionarPaciente(paciente)">
+                            <td class="px-6 py-4 whitespace-nowrap">{{paciente.nome}}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{paciente.cpf}}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{paciente.celular}}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{paciente.proximaConsulta | date:'dd/MM/yyyy HH:mm'}}</td>
                             <td class="px-6 py-4 whitespace-nowrap w-32 text-right">
-                                <div class="relative">
-                                    <button
-                                        (click)="toggleDropdown($event, paciente.id)"
-                                        class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" >
-                                        Ações
-                                        <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                    </button>
-                                    @if (dropdownAbertoPara === paciente.id) {
-                                        <div class="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
-                                            <div class="py-1 flex flex-col">
-                                                <a
-                                                    (click)="handleAction($event, 'agendar', paciente)"
-                                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
-                                                    Agendar Consulta
-                                                </a>
-                                                <hr />
-                                                <a
-                                                    (click)="handleAction($event, 'historico', paciente)"
-                                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
-                                                    Ver Histórico
-                                                </a>
-                                                <hr />
-                                                <a
-                                                    (click)="handleAction($event, 'editar', paciente)"
-                                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
-                                                    Editar
-                                                </a>
-                                                <hr />
-                                                <a
-                                                    (click)="handleAction($event, 'excluir', paciente)"
-                                                    class="block px-4 py-2 text-sm text-red-700 hover:bg-red-50 cursor-pointer" >
-                                                    Excluir
-                                                </a>
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
+                              <div class="relative">
+                                <button
+                                  (click)="toggleDropdown($event, paciente.id)"
+                                  class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" >
+                                  Ações
+                                  <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                  </svg>
+                                </button>
+                                @if (dropdownAbertoPara === paciente.id) {
+                                  <div class="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                                    <div class="py-1 flex flex-col">
+                                      <a
+                                        (click)="handleAction($event, 'agendar', paciente)"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
+                                        Agendar Consulta
+                                      </a>
+                                      <hr />
+                                      <a
+                                        (click)="handleAction($event, 'historico', paciente)"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
+                                        Ver Histórico
+                                      </a>
+                                      <hr />
+                                      <a
+                                        (click)="handleAction($event, 'editar', paciente)"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
+                                        Editar
+                                      </a>
+                                      <hr />
+                                      <a
+                                        (click)="handleAction($event, 'excluir', paciente)"
+                                        class="block px-4 py-2 text-sm text-red-700 hover:bg-red-50 cursor-pointer" >
+                                        Excluir
+                                      </a>
+                                    </div>
+                                  </div>
+                                }
+                              </div>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
+        </div>
+
+        <div class="flex justify-between items-center mt-4 px-6">
+            <div class="text-sm text-gray-700">
+                Mostrando {{((paginaAtual - 1) * itensPorPagina) + 1}} a {{Math.min(paginaAtual * itensPorPagina, pacientesFiltrados.length)}} de {{pacientesFiltrados.length}} resultados
+            </div>
+            <div class="flex gap-2">
+                <button
+                    (click)="mudarPagina(paginaAtual - 1)"
+                    [disabled]="paginaAtual === 1"
+                    class="px-3 py-1 rounded border"
+                    [class.opacity-50]="paginaAtual === 1"
+                    [class.cursor-not-allowed]="paginaAtual === 1">
+                    <lucide-icon name="chevron-left" class="w-4 h-4"></lucide-icon>
+                </button>
+
+                @for (pagina of getPaginasArray(); track pagina) {
+                    <button
+                        (click)="mudarPagina(pagina)"
+                        class="px-3 py-1 rounded border"
+                        [class.bg-[#524ED2]]="pagina === paginaAtual"
+                        [class.text-white]="pagina === paginaAtual">
+                        {{pagina}}
+                    </button>
+                }
+
+                <button
+                    (click)="mudarPagina(paginaAtual + 1)"
+                    [disabled]="paginaAtual === totalPaginas"
+                    class="px-3 py-1 rounded border"
+                    [class.opacity-50]="paginaAtual === totalPaginas"
+                    [class.cursor-not-allowed]="paginaAtual === totalPaginas">
+                    <lucide-icon name="chevron-right" class="w-4 h-4"></lucide-icon>
+                </button>
+            </div>
         </div>
     }
 

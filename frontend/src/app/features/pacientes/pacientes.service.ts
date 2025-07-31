@@ -10,6 +10,6 @@ export class PacientesService {
   constructor(private backend: BackendService) {}
 
   listarPacientes(): Observable<PacienteResponse> {
-    return this.backend.get<PacienteResponse>(`pacientes`);
+    return this.backend.get<PacienteResponse>(`pacientes?size=999`);
   }
 }
