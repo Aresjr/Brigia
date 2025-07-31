@@ -1,9 +1,9 @@
 package br.com.nemeia.brigia.service;
 
-import br.com.nemeia.brigia.dto.response.PacienteResponse;
-import br.com.nemeia.brigia.dto.response.PagedResponse;
+import br.com.nemeia.brigia.dto.response.PacienteRequest;
 import br.com.nemeia.brigia.exception.PacienteNotFoundException;
 import br.com.nemeia.brigia.mapper.PacienteMapper;
+import br.com.nemeia.brigia.model.Convenio;
 import br.com.nemeia.brigia.model.Paciente;
 import br.com.nemeia.brigia.repository.PacienteRepository;
 import java.time.LocalDate;
@@ -23,32 +23,33 @@ public class PacienteService {
 
   private final PacienteRepository repository;
   private final PacienteMapper mapper;
+  private final ConvenioService convenioService;
 
-  public PagedResponse<PacienteResponse> getPaged(int page, int size) {
+  public Page<Paciente> getPaged(int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-    Page<Paciente> result = repository.findAll(pageable);
-
-    List<PacienteResponse> responses = mapper.toResponseList(result.getContent());
-    log.info("Retornando {} pacientes da página {} com tamanho {}", responses.size(), page, size);
-
-    return new PagedResponse<>(
-        responses, result.getNumber(), result.getTotalPages(), result.getTotalElements());
+    return repository.findAll(pageable);
   }
 
   public long getTotal(Boolean excluido) {
     return repository.countByExcluido(excluido);
   }
 
-  public List<PacienteResponse> getAniversariantes() {
-    return repository.findAllByDataNascimentoIs(LocalDate.now()).stream()
-        .map(mapper::toResponse)
-        .toList();
+  public List<Paciente> getAniversariantes() {
+    return repository.findAllByDataNascimentoIs(LocalDate.now());
   }
 
-  public PacienteResponse getPatientById(Long id) {
+  public Paciente getPatientById(Long id) {
     return repository
         .findById(id)
-        .map(mapper::toResponse)
         .orElseThrow(() -> new PacienteNotFoundException("Paciente não encontrado com ID: " + id));
+  }
+
+  public Paciente createPatient(PacienteRequest request) {
+    Convenio convenio = convenioService.getById(request.convenioId());
+
+    Paciente paciente = mapper.toEntity(request);
+    paciente.setConvenio(convenio);
+
+    return repository.save(paciente);
   }
 }

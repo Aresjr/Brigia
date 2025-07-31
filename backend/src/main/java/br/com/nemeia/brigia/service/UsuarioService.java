@@ -34,18 +34,17 @@ public class UsuarioService {
     return repository.findByEmail(email);
   }
 
-  public List<UsuarioResponse> getAll() {
-    return repository.findAll().stream().map(mapper::toResponse).toList();
+  public List<Usuario> getAll() {
+    return repository.findAll();
   }
 
-  public UsuarioResponse getById(Long id) {
+  public Usuario findById(Long id) {
     return repository
         .findById(id)
-        .map(mapper::toResponse)
         .orElseThrow(() -> new UsuarioNotFoundException("Usuário não encontrado com o ID: " + id));
   }
 
-  public UsuarioResponse create(@Valid UsuarioRequest request) {
+  public Usuario create(@Valid UsuarioRequest request) {
 
     Unidade unidade =
         unidadeRepository
@@ -62,6 +61,6 @@ public class UsuarioService {
     usuario.setSenha(encryptedPassword);
 
     usuario.setUnidade(unidade);
-    return mapper.toResponse(repository.save(usuario));
+    return usuario;
   }
 }

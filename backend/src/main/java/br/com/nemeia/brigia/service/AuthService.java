@@ -26,11 +26,8 @@ public class AuthService {
   private final int tokenExpirationTime = 60 * 60;
 
   private final PasswordEncoder passwordEncoder;
-
   private final JwtService jwtService;
-
   private final LoginMapper mapper;
-
   private final UsuarioService usuarioService;
 
   public LoginResponse login(LoginRequest request, HttpServletResponse httpServletResponse) {

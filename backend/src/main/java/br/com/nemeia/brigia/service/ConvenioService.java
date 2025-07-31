@@ -1,8 +1,7 @@
 package br.com.nemeia.brigia.service;
 
-import br.com.nemeia.brigia.dto.response.ConvenioResponse;
 import br.com.nemeia.brigia.exception.ConvenioNotFoundException;
-import br.com.nemeia.brigia.mapper.ConvenioMapper;
+import br.com.nemeia.brigia.model.Convenio;
 import br.com.nemeia.brigia.repository.ConvenioRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,16 +14,14 @@ import org.springframework.stereotype.Service;
 public class ConvenioService {
 
   private final ConvenioRepository repository;
-  private final ConvenioMapper mapper;
 
-  public List<ConvenioResponse> getAll() {
-    return mapper.toResponseList(repository.findAll());
+  public List<Convenio> getAll() {
+    return repository.findAll();
   }
 
-  public ConvenioResponse getById(Long id) {
+  public Convenio getById(Long id) {
     return repository
         .findById(id)
-        .map(mapper::toResponse)
         .orElseThrow(() -> new ConvenioNotFoundException("Plano não encontrado com ID: " + id));
   }
 }
