@@ -23,6 +23,8 @@ public class AuthService {
   @Value("${env}")
   private String env;
 
+  private final int tokenExpirationTime = 60 * 60;
+
   private final PasswordEncoder passwordEncoder;
 
   private final JwtService jwtService;
@@ -60,7 +62,7 @@ public class AuthService {
     cookie.setHttpOnly(true);
     cookie.setSecure("prod".equals(env));
     cookie.setPath("/");
-    cookie.setMaxAge(3600);
+    cookie.setMaxAge(tokenExpirationTime);
     response.addCookie(cookie);
   }
 
