@@ -1,0 +1,15 @@
+<button
+    (click)="handleClick()"
+    [ngClass]="[
+        isActive ? 'bg-[#524ED2] text-white hover:bg-[#524ED2]/90' : 'hover:bg-gray-200',
+        'inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 w-full justify-start my-1 hover:bg-gray-200'
+    ]"
+    routerLinkActive="bg-[#524ED2] text-white hover:bg-[#524ED2]"
+    [routerLinkActiveOptions]="{ exact: true }" >
+    <lucide-icon [name]="icon" class="w-4 h-4 mr-2"></lucide-icon>
+    {{ label }}
+    <lucide-icon *ngIf="hasSubmenu"
+        [name]="submenuOpen ? 'chevron-down' : 'chevron-right'" 
+        class="w-4 h-4 ml-auto transition-transform" >
+    </lucide-icon>
+</button>
