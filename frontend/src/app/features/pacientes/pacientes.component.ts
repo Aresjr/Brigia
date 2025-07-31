@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { PacientesService } from './pacientes.service';
 import { Paciente } from './paciente.interface';
 import { PacienteDetalhesComponent } from './paciente-detalhes/paciente-detalhes.component';
+import { PacienteFormComponent } from './paciente-form/paciente-form.component';
 import { LucideAngularModule } from 'lucide-angular';
-import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 type SortDirection = 'asc' | 'desc' | null;
 interface SortState {
@@ -15,7 +16,13 @@ interface SortState {
 
 @Component({
   selector: 'app-pacientes',
-  imports: [CommonModule, PacienteDetalhesComponent, LucideAngularModule, TopBarComponent, FormsModule],
+  imports: [
+    CommonModule,
+    PacienteDetalhesComponent,
+    PacienteFormComponent,
+    LucideAngularModule,
+    FormsModule
+  ],
   templateUrl: './pacientes.component.html',
   standalone: true
 })
@@ -31,8 +38,9 @@ export class PacientesComponent implements OnInit {
   itensPorPagina = 5;
   totalPaginas = 1;
   searchTerm: string = '';
+  mostrarFormularioNovo = false;
 
-  constructor(private pacientesService: PacientesService) {}
+  constructor(private pacientesService: PacientesService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.carregarPacientes();
@@ -160,7 +168,30 @@ export class PacientesComponent implements OnInit {
     return Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
   }
 
-  onAddNovoUsuario() {
-    console.log('AddClick');
+  onAddNovoPaciente() {
+    this.mostrarFormularioNovo = true;
+    this.pacienteSelecionado = null;
+  }
+
+  onSalvarNovoPaciente(paciente: Partial<Paciente>) {
+    this.isLoading = true;
+    this.pacientesService.criarPaciente(paciente).subscribe({
+      next: (novoPaciente) => {
+        this.pacientes.push(novoPaciente);
+        this.pacientesFiltrados = [...this.pacientes];
+        this.atualizarPaginacao();
+        this.mostrarFormularioNovo = false;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.toastr.error('Erro ao criar paciente. Por favor, tente novamente.');
+        console.error('Erro ao criar paciente:', error);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  onCancelarNovoPaciente() {
+    this.mostrarFormularioNovo = false;
   }
 }

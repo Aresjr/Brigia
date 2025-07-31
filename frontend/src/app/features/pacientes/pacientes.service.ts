@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PacienteResponse } from './paciente.interface';
-import {BackendService} from '../../core/backend/backend.service';
+import { PacienteResponse, Paciente } from './paciente.interface';
+import { BackendService } from '../../core/backend/backend.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,5 +11,9 @@ export class PacientesService {
 
   listarPacientes(): Observable<PacienteResponse> {
     return this.backend.get<PacienteResponse>(`pacientes?size=999`);
+  }
+
+  criarPaciente(paciente: Partial<Paciente>): Observable<Paciente> {
+    return this.backend.post<Paciente>(`pacientes`, paciente);
   }
 }

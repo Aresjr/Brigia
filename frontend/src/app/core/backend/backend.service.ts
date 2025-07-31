@@ -18,15 +18,23 @@ export class BackendService {
     return this.http.get<T>(`${this.baseUrl}/${path}`, { withCredentials: true, observe: 'response' })
       .pipe(
         map((response) => response.body as T),
-
-        catchError((error) => {
-          if (error.status === 401) {
-            this.toastr.error('Sessão expirada. Por favor, faça login novamente.');
-            this.router.navigate(['/login']);
-          }
-          return throwError(() => error);
-        })
+        catchError((error) => this.handleError(error.status))
       );
   }
 
+  post<T>(path: string, payload: Partial<T>) {
+    return this.http.post<T>(`${this.baseUrl}/${path}`, payload, { withCredentials: true, observe: 'response' })
+      .pipe(
+        map((response) => response.body as T),
+        catchError((error) => this.handleError(error.status))
+      );
+  }
+
+  private handleError(error: { status: number; }) {
+    if (error.status === 401) {
+      this.toastr.error('Sessão expirada, faça login novamente.');
+      this.router.navigate(['/login']);
+    }
+    return throwError(() => error);
+  }
 }
