@@ -76,33 +76,7 @@
                                   </svg>
                                 </button>
                                 @if (dropdownAbertoPara === paciente.id) {
-                                  <div class="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
-                                    <div class="py-1 flex flex-col">
-                                      <a
-                                        (click)="handleAction($event, 'agendar', paciente)"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
-                                        Agendar Consulta
-                                      </a>
-                                      <hr />
-                                      <a
-                                        (click)="handleAction($event, 'historico', paciente)"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
-                                        Ver Histórico
-                                      </a>
-                                      <hr />
-                                      <a
-                                        (click)="handleAction($event, 'editar', paciente)"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
-                                        Editar
-                                      </a>
-                                      <hr />
-                                      <a
-                                        (click)="handleAction($event, 'excluir', paciente)"
-                                        class="block px-4 py-2 text-sm text-red-700 hover:bg-red-50 cursor-pointer" >
-                                        Excluir
-                                      </a>
-                                    </div>
-                                  </div>
+                                  <ng-template [ngTemplateOutlet]="acoesTemplate" [ngTemplateOutletContext]="{ paciente: paciente }"></ng-template>
                                 }
                               </div>
                             </td>
@@ -155,3 +129,33 @@
         </app-paciente-detalhes>
     }
 </div>
+
+<ng-template #acoesTemplate let-paciente="paciente">
+  <div class="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+    <div class="py-1 flex flex-col">
+      <a
+        (click)="handleAction($event, 'agendar', paciente)"
+        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
+        Agendar Consulta
+      </a>
+      <hr />
+      <a
+        (click)="handleAction($event, 'historico', paciente)"
+        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
+        Ver Histórico
+      </a>
+      <hr />
+      <a
+        (click)="handleAction($event, 'editar', paciente)"
+        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
+        Editar
+      </a>
+      <hr />
+      <a
+        (click)="handleAction($event, 'excluir', paciente)"
+        class="block px-4 py-2 text-sm text-red-700 hover:bg-red-50 cursor-pointer" >
+        Excluir
+      </a>
+    </div>
+  </div>
+</ng-template>
