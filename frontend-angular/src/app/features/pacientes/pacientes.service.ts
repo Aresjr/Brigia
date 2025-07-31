@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { PacienteResponse } from './paciente.interface';
+import {BackendService} from '../../core/backend/backend.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PacientesService {
-  constructor(private http: HttpClient) {}
+  constructor(private backend: BackendService) {}
 
   listarPacientes(): Observable<PacienteResponse> {
-    return this.http.get<PacienteResponse>(`${environment.apiUrl}/pacientes`, { withCredentials: true });
+    return this.backend.get<PacienteResponse>(`pacientes`);
   }
 }

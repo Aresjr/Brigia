@@ -16,6 +16,11 @@ export const routes: Routes = [
   {
     path: '',
     component: MainLayoutComponent,
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
+    data: {
+      roles: ['SECRETARIA', 'ADMIN']
+    },
     children: [
       {
         path: '',

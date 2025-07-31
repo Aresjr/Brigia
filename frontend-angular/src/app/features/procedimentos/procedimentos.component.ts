@@ -3,8 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-procedimentos',
   imports: [],
-  templateUrl: './procedimentos.component.html',
-  styleUrl: './procedimentos.component.scss'
+  templateUrl: './procedimentos.component.html'
 })
 export class ProcedimentosComponent {
 

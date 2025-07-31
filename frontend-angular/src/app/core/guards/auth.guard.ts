@@ -17,14 +17,13 @@ export class AuthGuard implements CanActivate {
   }
 
   private checkAuth(route: ActivatedRouteSnapshot): boolean {
-    const expectedRoles = route.data['roles'] as string[];
-
     if (localStorage.getItem('email') === null) {
       this.toastr.error('Você precisa estar logado para acessar essa página.');
       this.router.navigate(['/login']);
       return false;
     }
 
+    const expectedRoles = route.data['roles'] as string[];
     const userRoles = JSON.parse(localStorage.getItem('roles') || '[]');
 
     const hasAccess = expectedRoles.some((role) => userRoles.includes(role));

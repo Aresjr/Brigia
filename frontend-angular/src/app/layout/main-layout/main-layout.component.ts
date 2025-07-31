@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router, RouterOutlet, RouterModule, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
-import { MenuItemComponent } from "../../shared/menu-item/menu-item.component";
+import { MenuItemComponent } from "../menu-item/menu-item.component";
 import { filter, map } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
@@ -22,7 +22,7 @@ export class MainLayoutComponent {
   ) { }
 
   ngOnInit() {
-    this.redirectIfGetParam();
+    //this.redirectIfGetParam();
 
     const title = this.getDeepestChildTitle(this.route);
     this.updateTitle(title);

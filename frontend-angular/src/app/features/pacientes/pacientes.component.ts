@@ -2,14 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PacientesService } from './pacientes.service';
 import { Paciente } from './paciente.interface';
-import { ToastrService } from 'ngx-toastr';
 import { PacienteDetalhesComponent } from './paciente-detalhes/paciente-detalhes.component';
 
 @Component({
   selector: 'app-pacientes',
   imports: [CommonModule, PacienteDetalhesComponent],
   templateUrl: './pacientes.component.html',
-  styleUrl: './pacientes.component.scss',
   standalone: true
 })
 export class PacientesComponent implements OnInit {
@@ -17,8 +15,7 @@ export class PacientesComponent implements OnInit {
   isLoading = true;
   pacienteSelecionado: Paciente | null = null;
 
-  constructor(private pacientesService: PacientesService,
-              private toastr: ToastrService) {}
+  constructor(private pacientesService: PacientesService) {}
 
   ngOnInit(): void {
     this.carregarPacientes();
@@ -31,8 +28,8 @@ export class PacientesComponent implements OnInit {
         this.pacientes = response.items;
         this.isLoading = false;
       },
-      error: () => {
-        this.toastr.error('Erro ao carregar Pacientes');
+      error: (error) => {
+        console.error('Erro ao carregar pacientes:', error);
         this.isLoading = false;
       }
     });

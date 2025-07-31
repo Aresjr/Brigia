@@ -34,7 +34,7 @@
               },
               "src/_redirects"
             ],
-            "styles": ["src/styles.scss", "src/styles/index.css"],
+            "styles": ["src/styles.scss"],
             "scripts": []
           },
           "configurations": {

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';  
+import { CommonModule } from '@angular/common';
 import { Router, RouterLinkActive, NavigationEnd  } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { filter } from 'rxjs/operators';
@@ -7,8 +7,7 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-menu-item',
   imports: [RouterLinkActive, LucideAngularModule, CommonModule],
-  templateUrl: './menu-item.component.html',
-  styleUrl: './menu-item.component.scss'
+  templateUrl: './menu-item.component.html'
 })
 export class MenuItemComponent {
   constructor(private router: Router) {
@@ -27,7 +26,7 @@ export class MenuItemComponent {
   @Input() hasSubmenu?: boolean = false;
   @Input() submenuOpen = false;
   @Output() clicked = new EventEmitter<void>();
-  
+
   handleClick() {
     this.clicked.emit();
     if (this.route) {
