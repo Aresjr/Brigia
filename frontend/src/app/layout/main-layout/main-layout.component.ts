@@ -3,6 +3,7 @@ import { Router, RouterOutlet, RouterModule, NavigationEnd, ActivatedRoute } fro
 import { LucideAngularModule } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
 import { MenuItemComponent } from "../menu-item/menu-item.component";
+import { TopBarComponent } from "../top-bar/top-bar.component";
 import { filter, map } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
@@ -10,7 +11,14 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [RouterOutlet, LucideAngularModule, CommonModule, RouterModule, MenuItemComponent],
+  imports: [
+    RouterOutlet,
+    LucideAngularModule,
+    CommonModule,
+    RouterModule,
+    MenuItemComponent,
+    TopBarComponent
+  ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss'
 })
@@ -22,8 +30,6 @@ export class MainLayoutComponent {
   ) { }
 
   ngOnInit() {
-    //this.redirectIfGetParam();
-
     const title = this.getDeepestChildTitle(this.route);
     this.updateTitle(title);
 
@@ -36,12 +42,11 @@ export class MainLayoutComponent {
         this.updateTitle(title);
       });
 
-    this.nomeUsuario = localStorage.getItem('name') || '';
+    this.loggedUserName = localStorage.getItem('name') || '';
   }
 
-  pageTitle: string = '';
   submenuState: Record<string, boolean> = {};
-  nomeUsuario: string = '';
+  loggedUserName: string = '';
   isUserMenuOpen = false;
 
   toggleSubmenu(menu: string) {
@@ -56,11 +61,6 @@ export class MainLayoutComponent {
     this.isUserMenuOpen = !this.isUserMenuOpen;
   }
 
-  logout() {
-    localStorage.removeItem('token');
-    this.router.navigate(['/login']);
-  }
-
   private getDeepestChildTitle(route: ActivatedRoute): string {
     let child = route.firstChild;
     while (child?.firstChild) {
@@ -70,22 +70,6 @@ export class MainLayoutComponent {
   }
 
   private updateTitle(title: string) {
-      this.pageTitle = title;
-      this.titleService.setTitle(`${environment.clientName} | ${this.pageTitle}`);
-  }
-
-  private redirectIfGetParam() {
-    const params = new URLSearchParams(window.location.search);
-    const redirectRoute = params.get('route') || '';
-    if (redirectRoute != '') {
-      sessionStorage.setItem('redirect', redirectRoute);
-    }
-    const redirect = sessionStorage.getItem('redirect') || '';
-    console.log('Redirecting to:', redirect);
-    if (redirect) {
-      sessionStorage.removeItem('redirect');
-      this.router.navigate([redirect]);
-      return;
-    }
+      this.titleService.setTitle(`${environment.clientName} | ${title}`);
   }
 }

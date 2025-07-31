@@ -4,6 +4,7 @@ import { PacientesService } from './pacientes.service';
 import { Paciente } from './paciente.interface';
 import { PacienteDetalhesComponent } from './paciente-detalhes/paciente-detalhes.component';
 import {LucideAngularModule} from 'lucide-angular';
+import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 
 type SortDirection = 'asc' | 'desc' | null;
 interface SortState {
@@ -13,7 +14,7 @@ interface SortState {
 
 @Component({
   selector: 'app-pacientes',
-  imports: [CommonModule, PacienteDetalhesComponent, LucideAngularModule],
+  imports: [CommonModule, PacienteDetalhesComponent, LucideAngularModule, TopBarComponent],
   templateUrl: './pacientes.component.html',
   standalone: true
 })
@@ -112,5 +113,9 @@ export class PacientesComponent implements OnInit {
       return '';
     }
     return this.sortState.direction === 'asc' ? 'arrow-up-icon' : 'arrow-down-icon';
+  }
+
+  novoPaciente() {
+    console.log('Novo Paciente');
   }
 }

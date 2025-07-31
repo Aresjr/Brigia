@@ -29,17 +29,7 @@ export const routes: Routes = [
         canActivateChild: [AuthGuard],
         data: {
           roles: ['SECRETARIA', 'ADMIN'],
-          title: 'Página Inicial',
-        },
-      },
-      {
-        path: 'agendamentos',
-        component: AgendamentosComponent,
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
-        data: {
-          roles: ['SECRETARIA', 'ADMIN'],
-          title: 'Agendamentos',
+          title: 'Página Inicial'
         },
       },
       {
@@ -50,6 +40,20 @@ export const routes: Routes = [
         data: {
           roles: ['SECRETARIA', 'ADMIN'],
           title: 'Pacientes',
+          showSearch: true,
+          showAddButton: true
+        },
+      },
+      {
+        path: 'agendamentos',
+        component: AgendamentosComponent,
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        data: {
+          roles: ['SECRETARIA', 'ADMIN'],
+          title: 'Agendamentos',
+          showSearch: true,
+          showAddButton: true
         },
       },
       {
