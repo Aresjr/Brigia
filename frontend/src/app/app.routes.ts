@@ -39,9 +39,7 @@ export const routes: Routes = [
         canActivateChild: [AuthGuard],
         data: {
           roles: ['SECRETARIA', 'ADMIN'],
-          title: 'Pacientes',
-          showSearch: true,
-          showAddButton: true
+          title: 'Pacientes'
         },
       },
       {
@@ -51,9 +49,7 @@ export const routes: Routes = [
         canActivateChild: [AuthGuard],
         data: {
           roles: ['SECRETARIA', 'ADMIN'],
-          title: 'Agendamentos',
-          showSearch: true,
-          showAddButton: true
+          title: 'Agendamentos'
         },
       },
       {

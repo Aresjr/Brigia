@@ -38,9 +38,7 @@ export class MainLayoutComponent {
         filter(event => event instanceof NavigationEnd),
         map(() => this.getDeepestChildTitle(this.route))
       )
-      .subscribe((title) => {
-        this.updateTitle(title);
-      });
+      .subscribe((title) => this.updateTitle(title));
 
     this.loggedUserName = localStorage.getItem('name') || '';
   }

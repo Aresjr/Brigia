@@ -114,4 +114,13 @@ export class PacientesComponent implements OnInit {
     }
     return this.sortState.direction === 'asc' ? 'arrow-up-icon' : 'arrow-down-icon';
   }
+
+  onSearch(p0: PacientesComponent) {
+    console.log('Search action triggered');
+    console.log(p0);
+  }
+
+  onAddNovoUsuario() {
+    console.log('AddClick');
+  }
 }
