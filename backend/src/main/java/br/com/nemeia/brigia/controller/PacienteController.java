@@ -21,7 +21,7 @@ public class PacienteController {
   @GetMapping
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
   public PagedResponse<PacienteResponse> getAllPatients(
-      @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "20") int size) {
+      @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
     log.info("GET /pacientes - page: {}, size: {}", page, size);
     return pacienteService.getPaged(page, size);
   }
