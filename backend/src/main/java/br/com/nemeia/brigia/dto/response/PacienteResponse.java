@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 public record PacienteResponse(
     Long id,
+    String nome,
     String email,
     String cpf,
     LocalDate dataNascimento,

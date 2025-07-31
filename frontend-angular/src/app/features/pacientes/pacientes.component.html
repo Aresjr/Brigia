@@ -23,7 +23,7 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         @for (paciente of pacientes; track paciente.id) {
-                            <tr>
+                            <tr class="hover:bg-gray-100 cursor-pointer" (click)="selecionarPaciente(paciente)">
                                 <td class="px-6 py-4 whitespace-nowrap">{{paciente.email || '-'}}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{paciente.cpf}}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</td>
@@ -37,4 +37,10 @@
             </div>
         }
 
+        @if (pacienteSelecionado) {
+            <app-paciente-detalhes
+                [paciente]="pacienteSelecionado"
+                (fechou)="fecharDetalhes()">
+            </app-paciente-detalhes>
+        }
 </div>
