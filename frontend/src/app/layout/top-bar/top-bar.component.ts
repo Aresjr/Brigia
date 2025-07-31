@@ -12,6 +12,7 @@ import { filter, map } from 'rxjs';
 })
 export class TopBarComponent {
   @Output() addButtonClick = new EventEmitter<void>();
+  @Output() search = new EventEmitter<void>();
 
   pageTitle: string = '';
   showSearch: boolean = false;
@@ -49,5 +50,9 @@ export class TopBarComponent {
 
   onAddClick() {
     this.addButtonClick.emit();
+  }
+
+  onSearch() {
+    this.search.emit();
   }
 }

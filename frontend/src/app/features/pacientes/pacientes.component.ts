@@ -114,8 +114,4 @@ export class PacientesComponent implements OnInit {
     }
     return this.sortState.direction === 'asc' ? 'arrow-up-icon' : 'arrow-down-icon';
   }
-
-  novoPaciente() {
-    console.log('Novo Paciente');
-  }
 }

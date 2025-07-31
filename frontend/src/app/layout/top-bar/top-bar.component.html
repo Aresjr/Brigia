@@ -1,12 +1,25 @@
 <div class="py-4 -mx-[32px] px-[32px] bg-gray-50">
   <div class="flex items-center justify-between bg-gray-50">
     <h1 class="text-2xl font-bold">{{ pageTitle }}</h1>
-    @if (showAddButton) {
-      <button (click)="onAddClick()"
-              class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-2">
-        <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
-        Cadastrar
-      </button>
-    }
+    <div class="flex items-center gap-4">
+      @if (showSearch) {
+        <div class="relative">
+          <lucide-icon name="search" class="w-4 h-4 absolute left-1 top-1/2 transform -translate-y-1/2 text-gray-400"></lucide-icon>
+          <input
+            type="text"
+            (input)="onSearch()"
+            placeholder="Buscar..."
+            class="pl-7 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            maxlength="20" />
+        </div>
+      }
+      @if (showAddButton) {
+        <button (click)="onAddClick()"
+                class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-2">
+          <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
+          Cadastrar
+        </button>
+      }
+    </div>
   </div>
 </div>
