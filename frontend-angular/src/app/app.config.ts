@@ -6,7 +6,8 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { LucideAngularModule } from 'lucide-angular';
 import { Home, User, Calendar, LogIn, UserPlus, Stethoscope, ChevronRight, MessageSquare,
-  MessageCircle, CircleUser, ChevronFirst, Users, Search, ClipboardList, Building, ChevronDown
+  MessageCircle, CircleUser, ChevronFirst, Users, Search, ClipboardList, Building, ChevronDown,
+  ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon
  } from 'lucide-angular/src/icons';
 
 export const appConfig: ApplicationConfig = {
@@ -26,7 +27,7 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       LucideAngularModule.pick({ Home, User, Calendar, LogIn, UserPlus, Stethoscope, ChevronRight,
         MessageSquare, MessageCircle, CircleUser, ChevronFirst, Users, Search, ClipboardList,
-        Building, ChevronDown
+        Building, ChevronDown, ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon
        })
     )
   ]

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PacientesService } from './pacientes.service';
 import { Paciente } from './paciente.interface';
-import { ToastrService } from 'ngx-toastr';
 import { PacienteDetalhesComponent } from './paciente-detalhes/paciente-detalhes.component';
+import {LucideAngularModule} from 'lucide-angular';
 
 type SortDirection = 'asc' | 'desc' | null;
 interface SortState {
@@ -13,7 +13,7 @@ interface SortState {
 
 @Component({
   selector: 'app-pacientes',
-  imports: [CommonModule, PacienteDetalhesComponent],
+  imports: [CommonModule, PacienteDetalhesComponent, LucideAngularModule],
   templateUrl: './pacientes.component.html',
   standalone: true
 })
@@ -24,8 +24,7 @@ export class PacientesComponent implements OnInit {
   dropdownAbertoPara: number | null = null;
   sortState: SortState = { column: '', direction: null };
 
-  constructor(private pacientesService: PacientesService,
-              private toastr: ToastrService) {}
+  constructor(private pacientesService: PacientesService) {}
 
   ngOnInit(): void {
     this.carregarPacientes();
@@ -87,21 +86,13 @@ export class PacientesComponent implements OnInit {
   }
 
   ordenar(coluna: keyof Paciente): void {
-    const direcao: SortDirection =
-      this.sortState.column === coluna
-        ? this.sortState.direction === 'asc'
-          ? 'desc'
-          : this.sortState.direction === 'desc'
-            ? null
-            : 'asc'
-        : 'asc';
+    let direcao: SortDirection = 'asc';
+
+    if (this.sortState.column === coluna) {
+      direcao = this.sortState.direction === 'asc' ? 'desc' : 'asc';
+    }
 
     this.sortState = { column: coluna, direction: direcao };
-
-    if (!direcao) {
-      this.carregarPacientes(); // Reset para ordem original
-      return;
-    }
 
     this.pacientes.sort((a, b) => {
       const valorA = a[coluna];
@@ -117,7 +108,9 @@ export class PacientesComponent implements OnInit {
   }
 
   getSortIcon(coluna: keyof Paciente): string {
-    if (this.sortState.column !== coluna) return '';
-    return this.sortState.direction === 'asc' ? '↑' : this.sortState.direction === 'desc' ? '↓' : '';
+    if (this.sortState.column !== coluna) {
+      return '';
+    }
+    return this.sortState.direction === 'asc' ? 'arrow-up-icon' : 'arrow-down-icon';
   }
 }

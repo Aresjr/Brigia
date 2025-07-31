@@ -35,10 +35,13 @@ export class MainLayoutComponent {
       .subscribe((title) => {
         this.updateTitle(title);
       });
+
+    this.nomeUsuario = localStorage.getItem('name') || '';
   }
 
   pageTitle: string = '';
   submenuState: Record<string, boolean> = {};
+  nomeUsuario: string = '';
 
   toggleSubmenu(menu: string) {
     this.submenuState[menu] = !this.submenuState[menu];
