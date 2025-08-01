@@ -5,7 +5,7 @@ import { Paciente } from '../paciente.interface';
 import { NgxMaskDirective } from 'ngx-mask';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
-import { ESTADOS } from '../../../core/constans';
+import { ESTADOS, SEXOS } from '../../../core/constans';
 
 @Component({
   selector: 'app-paciente-form',
@@ -20,6 +20,7 @@ export class PacienteFormComponent implements OnInit {
 
   pacienteForm: FormGroup;
   estados: ({ sigla: string; nome: string })[] = ESTADOS;
+  protected readonly SEXOS = SEXOS;
 
   constructor(private fb: FormBuilder,
               private http: HttpClient,

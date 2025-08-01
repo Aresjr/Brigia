@@ -23,7 +23,7 @@ public class PacienteMapper {
         paciente.getEmail(),
         paciente.getCpf(),
         paciente.getDataNascimento(),
-        getDescricaoSexo(paciente.getSexo()),
+        paciente.getSexo(),
         paciente.getCelular(),
         paciente.getUltimaConsulta(),
         paciente.getProximaConsulta(),
@@ -37,19 +37,6 @@ public class PacienteMapper {
         paciente.getUf(),
         paciente.getConvenio() != null ? paciente.getConvenio().getId() : null,
         paciente.getCriadoEm());
-  }
-
-  private String getDescricaoSexo(Character sexo) {
-    if (sexo == null) {
-      return null;
-    }
-
-    return switch (sexo) {
-        case 'M' -> "Masculino";
-        case 'F' -> "Feminino";
-        case 'O' -> "Outro";
-        default -> "Desconhecido";
-    };
   }
 
   public Paciente toEntity(PacienteRequest request) {

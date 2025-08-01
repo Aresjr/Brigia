@@ -18,7 +18,6 @@ export class PacientesService {
   }
 
   atualizarPaciente(id: number, paciente: Partial<Paciente>): Observable<Paciente> {
-    console.log('Atualizando paciente:', paciente);
     return this.backend.put<Paciente>(`pacientes/${id}`, paciente);
   }
 }

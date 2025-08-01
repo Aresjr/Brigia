@@ -7,6 +7,7 @@ import { PacienteFormComponent } from './paciente-form/paciente-form.component';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { SEXOS } from '../../core/constans';
 
 type SortDirection = 'asc' | 'desc' | null;
 interface SortState {
@@ -133,9 +134,9 @@ export class PacientesComponent implements OnInit {
     if (this.searchTerm) {
       this.pacientesFiltrados = this.pacientes.filter(paciente =>
         paciente.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        paciente.cpf.includes(this.searchTerm) ||
+        paciente.cpf?.includes(this.searchTerm) ||
         paciente.dataNascimento.includes(this.searchTerm) ||
-        paciente.celular.includes(this.searchTerm)
+        paciente.celular?.includes(this.searchTerm)
       );
     } else {
       this.pacientesFiltrados = [...this.pacientes];
@@ -182,9 +183,10 @@ export class PacientesComponent implements OnInit {
           this.mostrarFormularioNovo = false;
           this.pacienteEmEdicao = null;
         },
-        error: (error) => {
-          this.toastr.error('Erro ao atualizar paciente');
-          console.error('Erro ao atualizar paciente:', error);
+        error: (e) => {
+          const errorMessage: string = e.error.messages?.join('; ') || e.error.message || '';
+          this.toastr.error(errorMessage, 'Erro ao atualizar paciente');
+          console.error('Erro ao atualizar paciente:', e.error);
         }
       });
     } else {

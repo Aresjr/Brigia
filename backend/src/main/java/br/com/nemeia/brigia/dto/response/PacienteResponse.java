@@ -9,7 +9,7 @@ public record PacienteResponse(
     String email,
     String cpf,
     LocalDate dataNascimento,
-    String sexo,
+    Character sexo,
     String celular,
     LocalDateTime ultimaConsulta,
     LocalDateTime proximaConsulta,

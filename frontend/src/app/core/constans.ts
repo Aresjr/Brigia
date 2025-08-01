@@ -27,3 +27,9 @@ export const ESTADOS = [
   { sigla: 'SE', nome: 'Sergipe' },
   { sigla: 'TO', nome: 'Tocantins' }
 ];
+
+export const SEXOS = [
+  { sigla: 'M', descricao: 'Masculino' },
+  { sigla: 'F', descricao: 'Feminino' },
+  { sigla: 'O', descricao: 'Outro' }
+];

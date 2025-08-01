@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Paciente } from '../paciente.interface';
+import { SEXOS } from '../../../core/constans';
 
 @Component({
   selector: 'app-paciente-detalhes',
@@ -14,5 +15,9 @@ export class PacienteDetalhesComponent {
 
   fechar(): void {
     this.fechou.emit();
+  }
+
+  descricaoSexo(sigla: string) {
+    return SEXOS.find(sexo => sexo.sigla === sigla)?.descricao || 'Desconhecido';
   }
 }
