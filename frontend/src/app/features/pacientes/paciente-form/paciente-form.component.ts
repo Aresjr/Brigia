@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { Paciente } from '../paciente.interface';
 import { NgxMaskDirective } from 'ngx-mask';
 import { HttpClient } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-paciente-form',
@@ -18,7 +19,9 @@ export class PacienteFormComponent {
   pacienteForm: FormGroup;
   estados: ({ sigla: string; nome: string })[];
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(private fb: FormBuilder,
+              private http: HttpClient,
+              private toastr: ToastrService) {
     this.pacienteForm = this.fb.group({
       nome: ['', Validators.required],
       email: [''],
@@ -93,7 +96,8 @@ export class PacienteFormComponent {
               uf: data.uf
             });
           } else {
-            console.error('CEP não encontrado');
+            this.toastr.warning('CEP não encontrado');
+            console.info('CEP não encontrado', data.erro);
           }
         });
     }
