@@ -1,5 +1,5 @@
 <div class="fixed inset-0 bg-black bg-opacity-50 z-40" (click)="onCancel()"></div>
-<div class="fixed right-0 top-0 h-full w-96 bg-white shadow-lg z-50 overflow-y-auto">
+<div class="fixed right-0 top-0 h-full w-[30rem] bg-white shadow-lg z-50 overflow-y-auto">
   <div class="p-4">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold">Novo Paciente</h2>
@@ -13,89 +13,122 @@
     <form [formGroup]="pacienteForm" (ngSubmit)="onSubmit()">
       <div class="space-y-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700">Nome</label>
-          <input type="text" formControlName="nome" required
-             class="mt-1 block w-full rounded-md border border-gray-300"
+          <label class="block font-medium text-gray-700">Nome</label>
+          <input type="text" formControlName="nome" name="nome" required
+             class="mt-1 p-1 block w-full rounded-md border border-gray-300"
              [ngClass]="{'border-red-500': pacienteForm.get('nome')?.invalid && pacienteForm.get('nome')?.touched}" >
-          <div *ngIf="pacienteForm.get('nome')?.touched && pacienteForm.get('nome')?.hasError('required')"
-             class="text-red-500 text-sm">
-            Nome é obrigatório.
+              @if (pacienteForm.get('nome')?.touched) {
+                <div *ngIf="pacienteForm.get('nome')?.hasError('required')"
+                  class="text-red-500 text-sm">
+                  Nome é obrigatório.
+                </div>
+              }
+        </div>
+
+        <div class="flex space-x-4">
+          <div class="w-52">
+            <label class="block font-medium text-gray-700">CPF</label>
+            <input type="text" formControlName="cpf" name="cpf"
+                   mask="000.000.000-00"
+                   class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+
+          </div>
+          <div class="w-56">
+            <label class="block font-medium text-gray-700">Data Nascimento</label>
+            <input type="date" formControlName="dataNascimento" required
+                   class="mt-1 p-1 block w-full rounded-md border border-gray-300"
+                   [ngClass]="{'border-red-500': pacienteForm.get('dataNascimento')?.invalid && pacienteForm.get('dataNascimento')?.touched}" >
+            @if (pacienteForm.get('dataNascimento')?.touched) {
+              <div *ngIf="pacienteForm.get('dataNascimento')?.hasError('required')"
+                   class="text-red-500 text-sm">
+                Data de Nascimento é obrigatório.
+              </div>
+            }
           </div>
         </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700">CPF</label>
-          <input type="text" formControlName="cpf"
-            class="mt-1 block w-full rounded-md border border-gray-300">
+        <div class="flex space-x-4">
+          <div class="w-52">
+            <div>
+              <label class="block font-medium text-gray-700">Sexo</label>
+              <select formControlName="sexo"
+                      class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                <option value="M">Masculino</option>
+                <option value="F">Feminino</option>
+                <option value="O">Outro</option>
+              </select>
+            </div>
+          </div>
+          <div class="w-56">
+            <div>
+              <label class="block font-medium text-gray-700">Celular</label>
+              <input type="tel" formControlName="celular"
+                     mask="(00) 00000-0000"
+                     class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+            </div>
+          </div>
         </div>
 
+        <div class="flex space-x-4">
+          <div>
+            <div class="w-52">
+              <label class="block font-medium text-gray-700">CEP</label>
+              <input type="text" formControlName="cep"
+                     (blur)="buscarCep()" mask="00000-000"
+                     class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+            </div>
+          </div>
+          <div>
+            <div class="w-56">
+              <label class="block font-medium text-gray-700">UF</label>
+              <select formControlName="uf"
+                      class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                <option *ngFor="let estado of estados" [value]="estado.sigla">{{ estado.nome }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex space-x-4">
+          <div class="w-52">
+            <div>
+              <label class="block font-medium text-gray-700">Cidade</label>
+              <input type="text" formControlName="cidade"
+                     class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+            </div>
+          </div>
+          <div class="w-56">
+            <div>
+              <label class="block font-medium text-gray-700">Bairro</label>
+              <input type="text" formControlName="bairro"
+                     class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+            </div>
+          </div>
+        </div>
+
+        <div class="flex space-x-4">
+          <div class="w-52">
+            <div>
+              <label class="block font-medium text-gray-700">Rua</label>
+              <input type="text" formControlName="rua"
+                     class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+            </div>
+          </div>
+          <div class="w-56">
+            <div>
+              <label class="block font-medium text-gray-700">Complemento</label>
+              <input type="text" formControlName="complemento"
+                     class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+            </div>
+          </div>
+        </div>
+
+        <!-- TODO - adicionar convênio -->
+
         <div>
-          <label class="block text-sm font-medium text-gray-700">Email</label>
+          <label class="block font-medium text-gray-700">Email</label>
           <input type="email" formControlName="email"
-                 class="mt-1 block w-full rounded-md border border-gray-300">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Data de Nascimento</label>
-          <input type="date" formControlName="dataNascimento" required
-                 class="mt-1 block w-full rounded-md border border-gray-300"
-                 [ngClass]="{'border-red-500': pacienteForm.get('dataNascimento')?.invalid && pacienteForm.get('dataNascimento')?.touched}" >
-          <div *ngIf="pacienteForm.get('dataNascimento')?.touched && pacienteForm.get('dataNascimento')?.hasError('required')"
-               class="text-red-500 text-sm">
-            Data de Nascimento é obrigatório.
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Sexo</label>
-          <select formControlName="sexo"
-                  class="mt-1 block w-full rounded-md border border-gray-300">
-            <option value="M">Masculino</option>
-            <option value="F">Feminino</option>
-            <option value="O">Outro</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Celular</label>
-          <input type="tel" formControlName="celular"
-                 class="mt-1 block w-full rounded-md border border-gray-300">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">CEP</label>
-          <input type="text" formControlName="cep"
-                 class="mt-1 block w-full rounded-md border border-gray-300">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Rua</label>
-          <input type="text" formControlName="rua"
-                 class="mt-1 block w-full rounded-md border border-gray-300">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Complemento</label>
-          <input type="text" formControlName="complemento"
-                 class="mt-1 block w-full rounded-md border border-gray-300">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Bairro</label>
-          <input type="text" formControlName="bairro"
-                 class="mt-1 block w-full rounded-md border border-gray-300">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Cidade</label>
-          <input type="text" formControlName="cidade"
-                 class="mt-1 block w-full rounded-md border border-gray-300">
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700">UF</label>
-          <input type="text" formControlName="uf" maxlength="2"
-                 class="mt-1 block w-full rounded-md border border-gray-300">
+                 class="mt-1 p-1 block w-full rounded-md border border-gray-300">
         </div>
 
         <div class="flex justify-end space-x-3 mt-6">
@@ -104,7 +137,7 @@
                   class="px-4 py-2 border rounded-md hover:bg-gray-100">
             Cancelar
           </button>
-          <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+          <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
             Salvar
           </button>
         </div>

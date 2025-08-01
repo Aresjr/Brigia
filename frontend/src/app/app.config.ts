@@ -9,6 +9,7 @@ import { Home, User, Calendar, LogIn, UserPlus, Stethoscope, ChevronRight, Messa
   MessageCircle, CircleUser, ChevronFirst, Users, Search, ClipboardList, Building, ChevronDown,
   ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon, Plus, ChevronLeft
  } from 'lucide-angular/src/icons';
+import { provideNgxMask } from 'ngx-mask';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -29,6 +30,7 @@ export const appConfig: ApplicationConfig = {
         MessageSquare, MessageCircle, CircleUser, ChevronFirst, Users, Search, ClipboardList,
         Building, ChevronDown, ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon, Plus, ChevronLeft
        })
-    )
+    ),
+    provideNgxMask()
   ]
 };

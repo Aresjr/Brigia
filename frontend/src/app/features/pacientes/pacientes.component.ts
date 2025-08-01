@@ -35,7 +35,7 @@ export class PacientesComponent implements OnInit {
   dropdownAbertoPara: number | null = null;
   sortState: SortState = { column: '', direction: null };
   paginaAtual = 1;
-  itensPorPagina = 10;
+  itensPorPagina = 12;
   totalPaginas = 1;
   searchTerm: string = '';
   mostrarFormularioNovo = false;
@@ -136,7 +136,9 @@ export class PacientesComponent implements OnInit {
     if (this.searchTerm) {
       this.pacientesFiltrados = this.pacientes.filter(paciente =>
         paciente.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        paciente.cpf.includes(this.searchTerm)
+        paciente.cpf.includes(this.searchTerm) ||
+        paciente.dataNascimento.includes(this.searchTerm) ||
+        paciente.celular.includes(this.searchTerm)
       );
     } else {
       this.pacientesFiltrados = [...this.pacientes];
