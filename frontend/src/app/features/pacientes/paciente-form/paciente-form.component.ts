@@ -29,16 +29,15 @@ export class PacienteFormComponent {
       bairro: [''],
       cidade: [''],
       uf: ['', [Validators.minLength(2), Validators.maxLength(2)]],
-      corIdentificacao: ['#' + Math.floor(Math.random()*16777215).toString(16)], // Cor aleatória
+      corIdentificacao: [''],
     });
   }
 
   onSubmit() {
-    console.log(this.pacienteForm.valid);
     if (this.pacienteForm.valid) {
       this.save.emit(this.pacienteForm.value);
     } else {
-      console.error('Formulário inválido', this.pacienteForm.errors);
+      console.error('Formulário inválido', this.pacienteForm);
       // Aqui você pode exibir uma mensagem de erro para o usuário
       // ou destacar os campos inválidos no formulário.
     }

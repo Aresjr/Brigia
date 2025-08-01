@@ -182,6 +182,7 @@ export class PacientesComponent implements OnInit {
         this.atualizarPaginacao();
         this.mostrarFormularioNovo = false;
         this.isLoading = false;
+        this.toastr.success('Paciente criado com sucesso!');
       },
       error: (error) => {
         this.toastr.error('Erro ao criar paciente. Por favor, tente novamente.');

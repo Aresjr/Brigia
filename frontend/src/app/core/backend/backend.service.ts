@@ -18,7 +18,7 @@ export class BackendService {
     return this.http.get<T>(`${this.baseUrl}/${path}`, { withCredentials: true, observe: 'response' })
       .pipe(
         map((response) => response.body as T),
-        catchError((error) => this.handleError(error.status))
+        catchError((error) => this.handleError(error))
       );
   }
 
@@ -26,7 +26,7 @@ export class BackendService {
     return this.http.post<T>(`${this.baseUrl}/${path}`, payload, { withCredentials: true, observe: 'response' })
       .pipe(
         map((response) => response.body as T),
-        catchError((error) => this.handleError(error.status))
+        catchError((error) => this.handleError(error))
       );
   }
 
