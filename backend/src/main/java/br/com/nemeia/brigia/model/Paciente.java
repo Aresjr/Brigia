@@ -18,7 +18,7 @@ public class Paciente extends BaseModel {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "nome")
+  @Column(name = "nome", nullable = false)
   private String nome;
 
   @Column(name = "email")
@@ -27,7 +27,7 @@ public class Paciente extends BaseModel {
   @Column(name = "cpf")
   private String cpf;
 
-  @Column(name = "data_nascimento")
+  @Column(name = "data_nascimento", nullable = false)
   private LocalDate dataNascimento;
 
   @Column(name = "sexo")

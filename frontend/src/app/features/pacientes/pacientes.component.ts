@@ -35,7 +35,7 @@ export class PacientesComponent implements OnInit {
   dropdownAbertoPara: number | null = null;
   sortState: SortState = { column: '', direction: null };
   paginaAtual = 1;
-  itensPorPagina = 5;
+  itensPorPagina = 10;
   totalPaginas = 1;
   searchTerm: string = '';
   mostrarFormularioNovo = false;
@@ -56,8 +56,8 @@ export class PacientesComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Erro ao carregar pacientes:', error);
         this.isLoading = false;
+        this.toastr.error('Erro ao carregar pacientes. Por favor, tente novamente.');
       }
     });
   }
@@ -112,7 +112,7 @@ export class PacientesComponent implements OnInit {
 
     this.sortState = { column: coluna, direction: direcao };
 
-    this.pacientes.sort((a, b) => {
+    this.pacientesFiltrados.sort((a, b) => {
       const valorA = a[coluna];
       const valorB = b[coluna];
 
@@ -186,7 +186,6 @@ export class PacientesComponent implements OnInit {
       },
       error: (error) => {
         this.toastr.error('Erro ao criar paciente. Por favor, tente novamente.');
-        console.error('Erro ao criar paciente:', error);
         this.isLoading = false;
       }
     });

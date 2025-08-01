@@ -19,9 +19,9 @@ export class PacienteFormComponent {
     this.pacienteForm = this.fb.group({
       nome: ['', Validators.required],
       email: [''],
-      cpf: ['', Validators.required],
+      cpf: [''],
       dataNascimento: ['', Validators.required],
-      sexo: ['', Validators.required],
+      sexo: [''],
       celular: [''],
       cep: [''],
       rua: [''],
