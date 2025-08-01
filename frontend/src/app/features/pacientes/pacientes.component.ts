@@ -209,8 +209,8 @@ export class PacientesComponent implements OnInit {
     this.pacienteEmEdicao = null;
   }
 
-  editarPaciente(paciente: Paciente) {
-    console.log(paciente);
+  editarPaciente(event: Event, paciente: Paciente) {
+    event.stopPropagation();
     this.pacienteEmEdicao = paciente;
     this.mostrarFormularioNovo = true;
   }

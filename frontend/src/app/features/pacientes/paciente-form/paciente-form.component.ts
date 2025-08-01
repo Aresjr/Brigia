@@ -6,11 +6,12 @@ import { NgxMaskDirective } from 'ngx-mask';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { ESTADOS, SEXOS } from '../../../core/constans';
+import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
 
 @Component({
   selector: 'app-paciente-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective],
   templateUrl: 'paciente-form.component.html'
 })
 export class PacienteFormComponent implements OnInit {
