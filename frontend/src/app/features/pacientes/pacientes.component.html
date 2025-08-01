@@ -129,6 +129,7 @@
 
     @if (mostrarFormularioNovo) {
         <app-paciente-form
+            [paciente]="pacienteEmEdicao"
             (save)="onSalvarNovoPaciente($event)"
             (cancel)="onCancelarNovoPaciente()"
         ></app-paciente-form>
@@ -151,7 +152,7 @@
       </a>
       <hr />
       <a
-        (click)="handleAction($event, 'editar', paciente)"
+        (click)="editarPaciente(paciente)"
         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
         Editar
       </a>

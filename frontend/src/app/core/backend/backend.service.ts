@@ -30,6 +30,14 @@ export class BackendService {
       );
   }
 
+  put<T>(path: string, payload: Partial<T>) {
+    return this.http.put<T>(`${this.baseUrl}/${path}`, payload, { withCredentials: true, observe: 'response' })
+      .pipe(
+        map((response) => response.body as T),
+        catchError((error) => this.handleError(error))
+      );
+  }
+
   private handleError(error: { status: number; }) {
     if (error.status === 401) {
       this.toastr.error('Sessão expirada, faça login novamente.');

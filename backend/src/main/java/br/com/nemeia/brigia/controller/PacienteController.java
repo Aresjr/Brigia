@@ -7,6 +7,8 @@ import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.mapper.PacienteMapper;
 import br.com.nemeia.brigia.service.PacienteService;
 import java.util.List;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,7 +33,7 @@ public class PacienteController {
 
   @PostMapping
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public PacienteResponse createPatient(@RequestBody PacienteRequest pacienteRequest) {
+  public PacienteResponse createPatient(@Valid @RequestBody PacienteRequest pacienteRequest) {
     log.info("POST /pacientes");
     return mapper.toResponse(service.createPatient(pacienteRequest));
   }
@@ -41,6 +43,14 @@ public class PacienteController {
   public PacienteResponse getPatientById(@PathVariable Long id) {
     log.info("GET /pacientes/{} - buscando paciente por ID", id);
     return mapper.toResponse(service.getPatientById(id));
+  }
+
+  @PutMapping("/{id}")
+  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+  public PacienteResponse updatePatient(@Valid @RequestBody PacienteRequest pacienteRequest,
+                                        @PathVariable Long id) {
+    log.info("PUT /pacientes - atualizando paciente ID {}", id);
+    return mapper.toResponse(service.editPatient(id, pacienteRequest));
   }
 
   @GetMapping("/total")

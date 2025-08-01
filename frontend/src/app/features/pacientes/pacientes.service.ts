@@ -16,4 +16,9 @@ export class PacientesService {
   criarPaciente(paciente: Partial<Paciente>): Observable<Paciente> {
     return this.backend.post<Paciente>(`pacientes`, paciente);
   }
+
+  atualizarPaciente(id: number, paciente: Partial<Paciente>): Observable<Paciente> {
+    console.log('Atualizando paciente:', paciente);
+    return this.backend.put<Paciente>(`pacientes/${id}`, paciente);
+  }
 }

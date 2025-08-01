@@ -43,7 +43,13 @@ public class PacienteMapper {
     if (sexo == null) {
       return null;
     }
-    return sexo == 'M' ? "Masculino" : "Feminino";
+
+    return switch (sexo) {
+        case 'M' -> "Masculino";
+        case 'F' -> "Feminino";
+        case 'O' -> "Outro";
+        default -> "Desconhecido";
+    };
   }
 
   public Paciente toEntity(PacienteRequest request) {

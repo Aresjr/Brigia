@@ -46,12 +46,22 @@ public class PacienteService {
 
   public Paciente createPatient(PacienteRequest request) {
     Paciente paciente = mapper.toEntity(request);
+    return savePaciente(paciente, request.convenioId());
+  }
 
-    if(request.convenioId() != null) {
-      Convenio convenio = convenioService.getById(request.convenioId());
+  private Paciente savePaciente(Paciente paciente, Long idConvenio) {
+    if(idConvenio != null) {
+      Convenio convenio = convenioService.getById(idConvenio);
       paciente.setConvenio(convenio);
     }
 
     return repository.save(paciente);
+  }
+
+  public Paciente editPatient(Long id, PacienteRequest request) {
+    getPatientById(id);
+    Paciente paciente = mapper.toEntity(request);
+    paciente.setId(id);
+    return savePaciente(paciente, request.convenioId());
   }
 }

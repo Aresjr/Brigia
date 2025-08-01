@@ -39,6 +39,7 @@ export class PacientesComponent implements OnInit {
   totalPaginas = 1;
   searchTerm: string = '';
   mostrarFormularioNovo = false;
+  pacienteEmEdicao: Paciente | null = null;
 
   constructor(private pacientesService: PacientesService, private toastr: ToastrService) {}
 
@@ -79,7 +80,7 @@ export class PacientesComponent implements OnInit {
     }
   }
 
-  handleAction(event: Event, action: string, paciente: Paciente): void {
+  handleAction(event: Event, action: string, paciente: Paciente) {
     event.stopPropagation();
     this.dropdownAbertoPara = null;
 
@@ -91,10 +92,6 @@ export class PacientesComponent implements OnInit {
       case 'historico':
         // TODO: Implementar visualização de histórico
         console.log('Ver histórico de', paciente);
-        break;
-      case 'editar':
-        // TODO: Implementar edição
-        console.log('Editar', paciente);
         break;
       case 'excluir':
         // TODO: Implementar exclusão
@@ -176,24 +173,43 @@ export class PacientesComponent implements OnInit {
   }
 
   onSalvarNovoPaciente(paciente: Partial<Paciente>) {
-    this.isLoading = true;
-    this.pacientesService.criarPaciente(paciente).subscribe({
-      next: (novoPaciente) => {
-        this.pacientes.push(novoPaciente);
-        this.pacientesFiltrados = [...this.pacientes];
-        this.atualizarPaginacao();
-        this.mostrarFormularioNovo = false;
-        this.isLoading = false;
-        this.toastr.success('Paciente criado com sucesso!');
-      },
-      error: (error) => {
-        this.toastr.error('Erro ao criar paciente. Por favor, tente novamente.');
-        this.isLoading = false;
-      }
-    });
+    if (this.pacienteEmEdicao) {
+      const id = this.pacienteEmEdicao.id;
+      this.pacientesService.atualizarPaciente(id, paciente).subscribe({
+        next: () => {
+          this.toastr.success('Paciente atualizado com sucesso');
+          this.carregarPacientes();
+          this.mostrarFormularioNovo = false;
+          this.pacienteEmEdicao = null;
+        },
+        error: (error) => {
+          this.toastr.error('Erro ao atualizar paciente');
+          console.error('Erro ao atualizar paciente:', error);
+        }
+      });
+    } else {
+      this.pacientesService.criarPaciente(paciente).subscribe({
+        next: () => {
+          this.toastr.success('Paciente cadastrado com sucesso');
+          this.carregarPacientes();
+          this.mostrarFormularioNovo = false;
+        },
+        error: (error) => {
+          this.toastr.error('Erro ao cadastrar paciente');
+          console.error('Erro ao cadastrar paciente:', error);
+        }
+      });
+    }
   }
 
   onCancelarNovoPaciente() {
     this.mostrarFormularioNovo = false;
+    this.pacienteEmEdicao = null;
+  }
+
+  editarPaciente(paciente: Paciente) {
+    console.log(paciente);
+    this.pacienteEmEdicao = paciente;
+    this.mostrarFormularioNovo = true;
   }
 }

@@ -21,19 +21,19 @@ public class Paciente extends BaseModel {
   @Column(name = "nome", nullable = false)
   private String nome;
 
-  @Column(name = "email")
+  @Column(name = "email", unique = true)
   private String email;
 
-  @Column(name = "cpf")
+  @Column(name = "cpf", unique = true)
   private String cpf;
 
   @Column(name = "data_nascimento", nullable = false)
   private LocalDate dataNascimento;
 
-  @Column(name = "sexo")
+  @Column(name = "sexo", length = 1)
   private Character sexo;
 
-  @Column(name = "celular")
+  @Column(name = "celular", unique = true)
   private String celular;
 
   @Column(name = "ultima_consulta")
