@@ -45,10 +45,12 @@ public class PacienteService {
   }
 
   public Paciente createPatient(PacienteRequest request) {
-    Convenio convenio = convenioService.getById(request.convenioId());
-
     Paciente paciente = mapper.toEntity(request);
-    paciente.setConvenio(convenio);
+
+    if(request.convenioId() != null) {
+      Convenio convenio = convenioService.getById(request.convenioId());
+      paciente.setConvenio(convenio);
+    }
 
     return repository.save(paciente);
   }

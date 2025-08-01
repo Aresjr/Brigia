@@ -37,9 +37,10 @@ export class PacienteFormComponent {
     if (this.pacienteForm.valid) {
       this.save.emit(this.pacienteForm.value);
     } else {
-      console.error('Formulário inválido', this.pacienteForm);
-      // Aqui você pode exibir uma mensagem de erro para o usuário
-      // ou destacar os campos inválidos no formulário.
+      Object.keys(this.pacienteForm.controls).forEach(field => {
+        const control = this.pacienteForm.get(field);
+        control?.markAsTouched({ onlySelf: true });
+      });
     }
   }
 
