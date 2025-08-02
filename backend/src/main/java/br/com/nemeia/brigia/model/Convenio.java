@@ -16,7 +16,7 @@ public class Convenio extends BaseModel {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "nome")
+  @Column(name = "nome", unique = true, nullable = false)
   private String nome;
 
   @Column(name = "descricao")
