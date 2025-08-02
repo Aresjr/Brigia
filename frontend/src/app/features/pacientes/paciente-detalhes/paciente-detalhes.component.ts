@@ -17,7 +17,7 @@ export class PacienteDetalhesComponent {
     this.fechou.emit();
   }
 
-  descricaoSexo(sigla: string) {
+  descricaoSexo(sigla: string | null) {
     return SEXOS.find(sexo => sexo.sigla === sigla)?.descricao || 'Desconhecido';
   }
 }

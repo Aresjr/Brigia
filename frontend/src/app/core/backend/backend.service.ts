@@ -15,7 +15,7 @@ export class BackendService {
   baseUrl = environment.apiUrl;
 
   get<T>(path: string): Observable<T> {
-    return this.http.get<T>(`${this.baseUrl}/${path}`, { withCredentials: true, observe: 'response' })
+    return this.http.get<T>(`${this.baseUrl}${path}`, { withCredentials: true, observe: 'response' })
       .pipe(
         map((response) => response.body as T),
         catchError((error) => this.handleError(error))
@@ -23,7 +23,7 @@ export class BackendService {
   }
 
   post<T>(path: string, payload: Partial<T>) {
-    return this.http.post<T>(`${this.baseUrl}/${path}`, payload, { withCredentials: true, observe: 'response' })
+    return this.http.post<T>(`${this.baseUrl}${path}`, payload, { withCredentials: true, observe: 'response' })
       .pipe(
         map((response) => response.body as T),
         catchError((error) => this.handleError(error))
@@ -31,7 +31,15 @@ export class BackendService {
   }
 
   put<T>(path: string, payload: Partial<T>) {
-    return this.http.put<T>(`${this.baseUrl}/${path}`, payload, { withCredentials: true, observe: 'response' })
+    return this.http.put<T>(`${this.baseUrl}${path}`, payload, { withCredentials: true, observe: 'response' })
+      .pipe(
+        map((response) => response.body as T),
+        catchError((error) => this.handleError(error))
+      );
+  }
+
+  delete<T>(path: string): Observable<T> {
+    return this.http.delete<T>(`${this.baseUrl}${path}`, { withCredentials: true, observe: 'response' })
       .pipe(
         map((response) => response.body as T),
         catchError((error) => this.handleError(error))

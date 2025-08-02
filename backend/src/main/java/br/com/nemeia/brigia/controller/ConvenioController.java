@@ -1,9 +1,9 @@
 package br.com.nemeia.brigia.controller;
 
-import br.com.nemeia.brigia.dto.response.ConvenioResponse;
+import br.com.nemeia.brigia.dto.response.*;
 import br.com.nemeia.brigia.mapper.ConvenioMapper;
 import br.com.nemeia.brigia.service.ConvenioService;
-import java.util.List;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,15 +20,22 @@ public class ConvenioController {
 
   @GetMapping
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public List<ConvenioResponse> getAllMedicalPlans() {
-    log.info("GET /convenios");
-    return service.getAll().stream()
-      .map(mapper::toResponse).toList();
+  public PagedResponse<ConvenioResponse> getAllMedicalPlans(
+          @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
+    log.info("GET /pacientes - page: {}, size: {}", page, size);
+    return mapper.toPagedResponse(service.getPaged(page, size));
+  }
+
+  @PostMapping
+  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+  public ConvenioResponse createConvenio(@Valid @RequestBody ConvenioRequest request) {
+    log.info("POST /pacientes");
+    return mapper.toResponse(service.createConvenio(request));
   }
 
   @GetMapping("/{id}")
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public ConvenioResponse getMedicalPlanById(@PathVariable Long id) {
+  public ConvenioResponse getConvenioById(@PathVariable Long id) {
     log.info("GET /convenios/{} - buscando convenio pelo ID", id);
     return mapper.toResponse(service.getById(id));
   }

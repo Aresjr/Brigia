@@ -38,13 +38,13 @@ public class PacienteService {
     return repository.findAllByDataNascimentoIs(LocalDate.now());
   }
 
-  public Paciente getPatientById(Long id) {
+  public Paciente getPacienteById(Long id) {
     return repository
         .findById(id)
         .orElseThrow(() -> new PacienteNotFoundException("Paciente não encontrado com ID: " + id));
   }
 
-  public Paciente createPatient(PacienteRequest request) {
+  public Paciente createPaciente(PacienteRequest request) {
     Paciente paciente = mapper.toEntity(request);
     return savePaciente(paciente, request.convenioId());
   }
@@ -58,8 +58,8 @@ public class PacienteService {
     return repository.save(paciente);
   }
 
-  public Paciente editPatient(Long id, PacienteRequest request) {
-    getPatientById(id);
+  public Paciente editPaciente(Long id, PacienteRequest request) {
+    getPacienteById(id);
     Paciente paciente = mapper.toEntity(request);
     paciente.setId(id);
     return savePaciente(paciente, request.convenioId());

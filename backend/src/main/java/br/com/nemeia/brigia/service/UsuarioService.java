@@ -44,7 +44,7 @@ public class UsuarioService {
         .orElseThrow(() -> new UsuarioNotFoundException("Usuário não encontrado com o ID: " + id));
   }
 
-  public Usuario create(@Valid UsuarioRequest request) {
+  public Usuario create(UsuarioRequest request) {
 
     Unidade unidade =
         unidadeRepository

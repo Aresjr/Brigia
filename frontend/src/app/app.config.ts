@@ -7,7 +7,7 @@ import { provideToastr } from 'ngx-toastr';
 import { LucideAngularModule } from 'lucide-angular';
 import { Home, User, Calendar, LogIn, UserPlus, Stethoscope, ChevronRight, MessageSquare,
   MessageCircle, CircleUser, ChevronFirst, Users, Search, ClipboardList, Building, ChevronDown,
-  ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon, Plus, ChevronLeft
+  ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon, Plus, ChevronLeft, HeartHandshake
  } from 'lucide-angular/src/icons';
 import { provideNgxMask } from 'ngx-mask';
 
@@ -28,7 +28,8 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       LucideAngularModule.pick({ Home, User, Calendar, LogIn, UserPlus, Stethoscope, ChevronRight,
         MessageSquare, MessageCircle, CircleUser, ChevronFirst, Users, Search, ClipboardList,
-        Building, ChevronDown, ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon, Plus, ChevronLeft
+        Building, ChevronDown, ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon, Plus, ChevronLeft,
+        HeartHandshake
        })
     ),
     provideNgxMask()

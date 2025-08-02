@@ -9,6 +9,7 @@ import { ProfissionaisComponent } from './features/profissionais/profissionais.c
 import { AgendamentosComponent } from './features/agendamentos/agendamentos.component';
 import { ProcedimentosComponent } from './features/procedimentos/procedimentos.component';
 import { TabelaPrecosComponent } from './features/tabela-precos/tabela-precos.component';
+import { ConveniosComponent } from './features/convenio/convenios.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -70,6 +71,16 @@ export const routes: Routes = [
         data: {
           roles: ['SECRETARIA', 'ADMIN'],
           title: 'Profissionais',
+        },
+      },
+      {
+        path: 'convenios',
+        component: ConveniosComponent,
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        data: {
+          roles: ['SECRETARIA', 'ADMIN'],
+          title: 'Convênios',
         },
       },
       {

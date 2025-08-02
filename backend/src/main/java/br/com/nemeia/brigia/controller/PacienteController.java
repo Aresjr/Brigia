@@ -25,7 +25,7 @@ public class PacienteController {
 
   @GetMapping
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public PagedResponse<PacienteResponse> getAllPatients(
+  public PagedResponse<PacienteResponse> getAllPacientes(
       @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
     log.info("GET /pacientes - page: {}, size: {}", page, size);
     return mapper.toPagedResponse(service.getPaged(page, size));
@@ -33,30 +33,28 @@ public class PacienteController {
 
   @PostMapping
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public PacienteResponse createPatient(@Valid @RequestBody PacienteRequest pacienteRequest) {
+  public PacienteResponse createPaciente(@Valid @RequestBody PacienteRequest request) {
     log.info("POST /pacientes");
-    return mapper.toResponse(service.createPatient(pacienteRequest));
+    return mapper.toResponse(service.createPaciente(request));
   }
 
   @GetMapping("/{id}")
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public PacienteResponse getPatientById(@PathVariable Long id) {
+  public PacienteResponse getPacienteById(@PathVariable Long id) {
     log.info("GET /pacientes/{} - buscando paciente por ID", id);
-    return mapper.toResponse(service.getPatientById(id));
+    return mapper.toResponse(service.getPacienteById(id));
   }
 
   @PutMapping("/{id}")
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public PacienteResponse updatePatient(@Valid @RequestBody PacienteRequest pacienteRequest,
-                                        @PathVariable Long id) {
+  public PacienteResponse updatePaciente(@Valid @RequestBody PacienteRequest request, @PathVariable Long id) {
     log.info("PUT /pacientes - atualizando paciente ID {}", id);
-    return mapper.toResponse(service.editPatient(id, pacienteRequest));
+    return mapper.toResponse(service.editPaciente(id, request));
   }
 
   @GetMapping("/total")
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public PacientesTotaisResponse countPatients(
-      @RequestParam(defaultValue = "false") Boolean excluido) {
+  public PacientesTotaisResponse countPacientes(@RequestParam(defaultValue = "false") Boolean excluido) {
     log.info("GET /pacientes/total");
     return new PacientesTotaisResponse(service.getTotal(excluido));
   }
