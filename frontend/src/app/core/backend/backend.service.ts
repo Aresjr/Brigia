@@ -46,6 +46,14 @@ export class BackendService {
       );
   }
 
+  patch<T>(path: string, payload: Partial<T> | null): Observable<T> {
+    return this.http.patch<T>(`${this.baseUrl}${path}`, payload, { withCredentials: true, observe: 'response' })
+      .pipe(
+        map((response) => response.body as T),
+        catchError((error) => this.handleError(error))
+      );
+  }
+
   private handleError(error: { status: number; }) {
     if (error.status === 401) {
       this.toastr.error('Sessão expirada, faça login novamente.');

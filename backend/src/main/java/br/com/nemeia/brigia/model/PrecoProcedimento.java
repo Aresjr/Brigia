@@ -15,8 +15,12 @@ import lombok.ToString;
 @Table(name = "preco_procedimento")
 public class PrecoProcedimento extends BaseModel {
 
-  @EmbeddedId private PrecoProcedimentoId id;
+  @EmbeddedId
+  private PrecoProcedimentoId id;
 
   @Column(name = "preco", nullable = false)
   private BigDecimal preco;
+
+  @Column(name = "observacao")
+  private String observacao;
 }

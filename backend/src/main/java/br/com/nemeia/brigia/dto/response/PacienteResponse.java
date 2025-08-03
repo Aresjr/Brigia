@@ -22,4 +22,5 @@ public record PacienteResponse(
     String cidade,
     String uf,
     Long convenioId,
-    LocalDateTime criadoEm) {}
+    LocalDateTime criadoEm,
+    Boolean excluido) {}

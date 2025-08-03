@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "unidade")
-public class Unidade {
+public class Unidade extends BaseModel {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

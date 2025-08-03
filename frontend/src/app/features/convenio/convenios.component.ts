@@ -204,6 +204,22 @@ export class ConveniosComponent implements OnInit {
     }
   }
 
+  restaurarConvenio(event: Event, convenio: Convenio) {
+    event.stopPropagation();
+    this.dropdownAberto = null;
+
+    this.conveniosService.restaurarConvenio(convenio.id).subscribe({
+      next: () => {
+        convenio.excluido = false;
+        this.toastr.success('Convênio restaurado com sucesso!');
+      },
+      error: (error) => {
+        this.toastr.error('Erro ao restaurar o convênio');
+        console.error('Erro ao restaurar convênio:', error);
+      }
+    });
+  }
+
   isDropdownAberto(): boolean {
     return this.dropdownAberto !== null;
   }

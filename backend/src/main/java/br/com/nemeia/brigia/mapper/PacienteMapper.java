@@ -36,7 +36,8 @@ public class PacienteMapper {
         paciente.getCidade(),
         paciente.getUf(),
         paciente.getConvenio() != null ? paciente.getConvenio().getId() : null,
-        paciente.getCriadoEm());
+        paciente.getCriadoEm(),
+        paciente.getExcluido());
   }
 
   public Paciente toEntity(PacienteRequest request) {

@@ -2,13 +2,10 @@ package br.com.nemeia.brigia.mapper;
 
 import br.com.nemeia.brigia.dto.response.ConvenioRequest;
 import br.com.nemeia.brigia.dto.response.ConvenioResponse;
-import br.com.nemeia.brigia.dto.response.PacienteResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.model.Convenio;
 import java.util.List;
 
-import br.com.nemeia.brigia.model.Paciente;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -21,11 +18,8 @@ public class ConvenioMapper {
     }
 
     return new ConvenioResponse(
-        convenio.getId(), convenio.getNome(), convenio.getDescricao(), convenio.getCriadoEm());
-  }
-
-  public List<ConvenioResponse> toResponseList(List<Convenio> patients) {
-    return patients.stream().map(this::toResponse).toList();
+        convenio.getId(), convenio.getNome(), convenio.getDescricao(),
+            convenio.getCriadoEm(), convenio.getExcluido());
   }
 
   public PagedResponse<ConvenioResponse> toPagedResponse(Page<Convenio> paged) {

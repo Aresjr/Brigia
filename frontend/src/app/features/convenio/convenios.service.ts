@@ -24,4 +24,8 @@ export class ConveniosService {
   excluirConvenio(id: number): Observable<void> {
     return this.backend.delete<void>(`/convenios/${id}`);
   }
+
+  restaurarConvenio(id: number): Observable<void> {
+    return this.backend.patch<void>(`/convenios/${id}/restaurar`, null);
+  }
 }
