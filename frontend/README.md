@@ -26,7 +26,7 @@ Once the server is running, open your browser and navigate to `http://localhost:
 ### To deploy:
 ```bash
 ng build --configuration=bemestar
-wrangler deploy
+wrangler deploy --env bemestar
 ```
 
 ## Running unit tests

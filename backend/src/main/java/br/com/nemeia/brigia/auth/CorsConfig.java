@@ -14,7 +14,7 @@ public class CorsConfig {
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
     config.setAllowedOrigins(
-        List.of("http://localhost:8081", "http://*.nemeia.com.br"));
+        List.of("http://localhost:8081", "http://bemestar.nemeia.com.br", "https://bemestar.nemeia.com.br"));
     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
     config.setAllowedHeaders(List.of("*"));
     config.setAllowCredentials(true);
