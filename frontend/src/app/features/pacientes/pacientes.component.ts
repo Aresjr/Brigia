@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PacientesService } from './pacientes.service';
 import { Paciente } from './paciente.interface';
@@ -7,7 +7,6 @@ import { PacienteFormComponent } from './paciente-form/paciente-form.component';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { SEXOS } from '../../core/constans';
 
 type SortDirection = 'asc' | 'desc' | null;
 interface SortState {
@@ -33,7 +32,7 @@ export class PacientesComponent implements OnInit {
   pacientesFiltrados: Paciente[] = [];
   isLoading = true;
   pacienteSelecionado: Paciente | null = null;
-  dropdownAbertoPara: number | null = null;
+  dropdownAberto: number | null = null;
   sortState: SortState = { column: '', direction: null };
   paginaAtual = 1;
   itensPorPagina = 12;
@@ -46,6 +45,13 @@ export class PacientesComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarPacientes();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    if (this.isDropdownAberto()) {
+      this.dropdownAberto = null;
+    }
   }
 
   carregarPacientes(): void {
@@ -74,16 +80,16 @@ export class PacientesComponent implements OnInit {
 
   toggleDropdown(event: Event, pacienteId: number): void {
     event.stopPropagation();
-    if (this.dropdownAbertoPara === pacienteId) {
-      this.dropdownAbertoPara = null;
+    if (this.dropdownAberto === pacienteId) {
+      this.dropdownAberto = null;
     } else {
-      this.dropdownAbertoPara = pacienteId;
+      this.dropdownAberto = pacienteId;
     }
   }
 
   handleAction(event: Event, action: string, paciente: Paciente) {
     event.stopPropagation();
-    this.dropdownAbertoPara = null;
+    this.dropdownAberto = null;
 
     switch (action) {
       case 'agendar':
@@ -213,5 +219,9 @@ export class PacientesComponent implements OnInit {
     event.stopPropagation();
     this.pacienteEmEdicao = paciente;
     this.mostrarFormularioNovo = true;
+  }
+
+  isDropdownAberto(): boolean {
+    return this.dropdownAberto !== null;
   }
 }

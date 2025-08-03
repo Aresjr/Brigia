@@ -1,4 +1,4 @@
-<div class="container mx-auto mt-4 rounded-lg">
+<div class="container mt-4 rounded-lg">
 
     <div class="flex items-center justify-between gap-4 mt-4 mb-4">
       <div class="relative">
@@ -73,7 +73,7 @@
                                   Ações
                                   <lucide-icon name="chevron-down" class="ml-1 h-4 w-4" />
                                 </button>
-                                @if (dropdownAbertoPara === paciente.id) {
+                                @if (dropdownAberto === paciente.id) {
                                   <ng-template [ngTemplateOutlet]="acoesTemplate" [ngTemplateOutletContext]="{ paciente: paciente }"></ng-template>
                                 }
                               </div>
@@ -137,7 +137,7 @@
 </div>
 
 <ng-template #acoesTemplate let-paciente="paciente">
-  <div class="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+  <div class="absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
     <div class="py-1 flex flex-col">
       <a
         (click)="handleAction($event, 'agendar', paciente)"

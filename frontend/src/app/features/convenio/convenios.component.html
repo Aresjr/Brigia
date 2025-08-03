@@ -1,4 +1,4 @@
-<div class="container mx-auto mt-4 rounded-lg">
+<div class="container mt-4 rounded-lg">
     <div class="flex items-center justify-between gap-4 mt-4 mb-4">
         <div class="relative">
             <lucide-icon name="search" class="w-4 h-4 absolute left-1 top-1/2 transform -translate-y-1/2 text-gray-400"></lucide-icon>
@@ -58,7 +58,7 @@
                                         <lucide-icon name="chevron-down" class="ml-1 h-4 w-4" />
                                     </button>
                                     @if (dropdownAbertoPara === convenio.id) {
-                                        <div class="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                                        <div class="absolute right-0 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                                             <div class="py-1 flex flex-col">
                                                 <a
                                                     (click)="editarConvenio($event, convenio)"
