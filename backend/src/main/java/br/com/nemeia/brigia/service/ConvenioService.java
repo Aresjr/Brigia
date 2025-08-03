@@ -1,7 +1,7 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.auth.SecurityUtils;
-import br.com.nemeia.brigia.dto.response.ConvenioRequest;
+import br.com.nemeia.brigia.dto.request.ConvenioRequest;
 import br.com.nemeia.brigia.exception.ConvenioNotFoundException;
 import br.com.nemeia.brigia.mapper.ConvenioMapper;
 import br.com.nemeia.brigia.model.Convenio;

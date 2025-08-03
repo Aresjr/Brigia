@@ -1,6 +1,6 @@
 package br.com.nemeia.brigia.service;
 
-import br.com.nemeia.brigia.dto.response.PacienteRequest;
+import br.com.nemeia.brigia.dto.request.PacienteRequest;
 import br.com.nemeia.brigia.exception.PacienteNotFoundException;
 import br.com.nemeia.brigia.mapper.PacienteMapper;
 import br.com.nemeia.brigia.model.Convenio;

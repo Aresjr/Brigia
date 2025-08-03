@@ -1,6 +1,6 @@
 package br.com.nemeia.brigia.mapper;
 
-import br.com.nemeia.brigia.dto.response.ConvenioRequest;
+import br.com.nemeia.brigia.dto.request.ConvenioRequest;
 import br.com.nemeia.brigia.dto.response.ConvenioResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.model.Convenio;

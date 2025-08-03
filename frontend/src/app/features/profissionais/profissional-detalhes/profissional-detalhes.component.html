@@ -1,0 +1,52 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 z-40" (click)="fechar()"></div>
+<div class="fixed right-0 top-0 h-full w-96 bg-white shadow-lg z-50 overflow-y-auto">
+  <div class="p-4">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold">Detalhes do Profissional</h2>
+      <button (click)="fechar()" class="text-gray-500 hover:text-gray-700">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    @if (profissional) {
+      <div class="space-y-4">
+        <div class="border-b pb-2">
+          <p class="text-sm text-gray-600">Nome</p>
+          <p class="font-medium">{{profissional.nome}}</p>
+        </div>
+
+        <div class="border-b pb-2">
+          <p class="text-sm text-gray-600">CPF</p>
+          <p class="font-medium">{{profissional.cpf | cpf}}</p>
+        </div>
+
+        <div class="border-b pb-2">
+          <p class="text-sm text-gray-600">Data de Nascimento</p>
+          <p class="font-medium">{{profissional.dataNascimento | date:'dd/MM/yyyy'}}</p>
+        </div>
+
+        <div class="border-b pb-2">
+          <p class="text-sm text-gray-600">Sexo</p>
+          <p class="font-medium">{{profissional.sexo | sexo}}</p>
+        </div>
+
+        <div class="border-b pb-2">
+          <p class="text-sm text-gray-600">Celular</p>
+          <p class="font-medium">{{profissional.celular | celular}}</p>
+        </div>
+
+        <div class="border-b pb-2">
+          <p class="text-sm text-gray-600">CRM</p>
+          <p class="font-medium">{{profissional.crm}}</p>
+        </div>
+
+        <div class="border-b pb-2">
+          <p class="text-sm text-gray-600">Email</p>
+          <p class="font-medium">{{profissional.email || '-'}}</p>
+        </div>
+      </div>
+    }
+  </div>
+</div>

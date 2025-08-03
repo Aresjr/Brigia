@@ -2,7 +2,7 @@
 <div class="fixed right-0 top-0 h-full w-[30rem] bg-white shadow-lg z-50 overflow-y-auto">
   <div class="p-4">
     <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-semibold">{{isEditMode ? 'Editar Paciente' : 'Novo Paciente'}}</h2>
+      <h2 class="text-xl font-semibold">{{isEditMode ? 'Editar Profissional' : 'Novo Profissional'}}</h2>
       <button (click)="onCancel()" class="text-gray-500 hover:text-gray-700">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -10,15 +10,15 @@
       </button>
     </div>
 
-    <form [formGroup]="pacienteForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="profissionalForm" (ngSubmit)="onSubmit()">
       <div class="space-y-4">
         <div>
           <label class="block font-medium text-gray-700">Nome</label>
           <input type="text" formControlName="nome" name="nome" required
              class="mt-1 p-1 block w-full rounded-md border border-gray-300"
-             [ngClass]="{'border-red-500': pacienteForm.get('nome')?.invalid && pacienteForm.get('nome')?.touched}" >
-              @if (pacienteForm.get('nome')?.touched) {
-                <div *ngIf="pacienteForm.get('nome')?.hasError('required')"
+             [ngClass]="{'border-red-500': profissionalForm.get('nome')?.invalid && profissionalForm.get('nome')?.touched}" >
+              @if (profissionalForm.get('nome')?.touched) {
+                <div *ngIf="profissionalForm.get('nome')?.hasError('required')"
                   class="text-red-500 text-sm">
                   Nome é obrigatório.
                 </div>
@@ -38,9 +38,9 @@
             <label class="block font-medium text-gray-700">Data Nascimento</label>
             <input type="date" formControlName="dataNascimento" required
                    class="mt-1 p-1 block w-full rounded-md border border-gray-300"
-                   [ngClass]="{'border-red-500': pacienteForm.get('dataNascimento')?.invalid && pacienteForm.get('dataNascimento')?.touched}" >
-            @if (pacienteForm.get('dataNascimento')?.touched) {
-              <div *ngIf="pacienteForm.get('dataNascimento')?.hasError('required')"
+                   [ngClass]="{'border-red-500': profissionalForm.get('dataNascimento')?.invalid && profissionalForm.get('dataNascimento')?.touched}" >
+            @if (profissionalForm.get('dataNascimento')?.touched) {
+              <div *ngIf="profissionalForm.get('dataNascimento')?.hasError('required')"
                    class="text-red-500 text-sm">
                 Data de Nascimento é obrigatório.
               </div>
@@ -70,61 +70,23 @@
         </div>
 
         <div class="flex space-x-4">
-          <div>
-            <div class="w-52">
-              <label class="block font-medium text-gray-700">CEP</label>
-              <input type="text" formControlName="cep"
-                     (blur)="buscarCep()" mask="00000-000"
+          <div class="w-52">
+            <div>
+              <label class="block font-medium text-gray-700">CRM</label>
+              <input type="text" formControlName="crm"
+                     mask="0000000"
                      emptyToNull
                      class="mt-1 p-1 block w-full rounded-md border border-gray-300">
             </div>
           </div>
-          <div>
-            <div class="w-56">
-              <label class="block font-medium text-gray-700">UF</label>
-              <select formControlName="uf"
-                      class="mt-1 p-1 block w-full rounded-md border border-gray-300">
-                <option *ngFor="let estado of estados" [value]="estado.sigla">{{ estado.nome }}</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex space-x-4">
-          <div class="w-52">
-            <div>
-              <label class="block font-medium text-gray-700">Cidade</label>
-              <input type="text" formControlName="cidade" emptyToNull
-                     class="mt-1 p-1 block w-full rounded-md border border-gray-300">
-            </div>
-          </div>
           <div class="w-56">
             <div>
-              <label class="block font-medium text-gray-700">Bairro</label>
-              <input type="text" formControlName="bairro" emptyToNull
-                     class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+              <label class="block font-medium text-gray-700">Especialidades</label>
             </div>
           </div>
         </div>
 
-        <div class="flex space-x-4">
-          <div class="w-52">
-            <div>
-              <label class="block font-medium text-gray-700">Rua</label>
-              <input type="text" formControlName="rua" emptyToNull
-                     class="mt-1 p-1 block w-full rounded-md border border-gray-300">
-            </div>
-          </div>
-          <div class="w-56">
-            <div>
-              <label class="block font-medium text-gray-700">Complemento</label>
-              <input type="text" formControlName="complemento" emptyToNull
-                     class="mt-1 p-1 block w-full rounded-md border border-gray-300">
-            </div>
-          </div>
-        </div>
-
-        <!-- TODO - adicionar convênio -->
+        <!-- TODO - adicionar especialidade e CRM -->
 
         <div>
           <label class="block font-medium text-gray-700">Email</label>

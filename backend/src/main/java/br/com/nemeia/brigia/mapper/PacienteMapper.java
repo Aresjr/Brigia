@@ -1,6 +1,6 @@
 package br.com.nemeia.brigia.mapper;
 
-import br.com.nemeia.brigia.dto.response.PacienteRequest;
+import br.com.nemeia.brigia.dto.request.PacienteRequest;
 import br.com.nemeia.brigia.dto.response.PacienteResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.model.Paciente;

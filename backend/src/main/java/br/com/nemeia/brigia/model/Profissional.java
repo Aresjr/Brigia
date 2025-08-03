@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 @Entity
 @Table(name = "profissional")
 public class Profissional extends BaseModel {
@@ -18,41 +19,29 @@ public class Profissional extends BaseModel {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "email")
+  @Column(name = "nome", nullable = false)
+  private String nome;
+
+  @Column(name = "email", unique = true)
   private String email;
 
-  @Column(name = "cpf")
+  @Column(name = "cpf", unique = true)
   private String cpf;
 
-  @Column(name = "data_nascimento")
+  @Column(name = "data_nascimento", nullable = false)
   private LocalDate dataNascimento;
 
   @Column(name = "sexo")
   private Character sexo;
 
-  @Column(name = "celular")
+  @Column(name = "celular", unique = true)
   private String celular;
 
   @Column(name = "url_imagem")
   private String urlImagem;
 
-  @Column(name = "cep")
-  private String cep;
-
-  @Column(name = "rua")
-  private String rua;
-
-  @Column(name = "complemento")
-  private String complemento;
-
-  @Column(name = "bairro")
-  private String bairro;
-
-  @Column(name = "cidade")
-  private String cidade;
-
-  @Column(name = "uf")
-  private String uf;
+  @Column(name = "crm", length = 7, unique = true)
+  private String crm;
 
   @ManyToMany
   @JoinTable(
@@ -60,4 +49,17 @@ public class Profissional extends BaseModel {
       joinColumns = @JoinColumn(name = "profissional_id"),
       inverseJoinColumns = @JoinColumn(name = "especialidade_id"))
   private Set<Especialidade> especialidades;
+
+  public Profissional(String nome, String email, String cpf, LocalDate dataNascimento,
+                      Character sexo, String celular, String urlImagem, String crm) {
+    this.nome = nome;
+    this.email = email;
+    this.cpf = cpf;
+    this.dataNascimento = dataNascimento;
+    this.sexo = sexo;
+    this.celular = celular;
+    this.urlImagem = urlImagem;
+    this.crm = crm;
+  }
+
 }

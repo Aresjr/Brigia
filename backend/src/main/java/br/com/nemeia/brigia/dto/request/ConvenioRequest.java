@@ -1,4 +1,4 @@
-package br.com.nemeia.brigia.dto.response;
+package br.com.nemeia.brigia.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 

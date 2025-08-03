@@ -64,13 +64,6 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.bemestar.ts"
                 }
-              ],
-              "assets": [
-                {
-                  "glob": "**/*",
-                  "input": "src/assets/bemestar",
-                  "output": "/assets"
-                }
               ]
             }
           },

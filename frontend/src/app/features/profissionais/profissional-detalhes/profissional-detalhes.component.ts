@@ -1,19 +1,18 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Paciente } from '../paciente.interface';
+import { Profissional } from '../profissional.interface';
 import { CpfPipe } from '../../../core/pipes/cpf.pipe';
-import { CepPipe } from '../../../core/pipes/cep.pipe';
 import { CelularPipe } from '../../../core/pipes/celular.pipe';
 import { SexoPipe } from '../../../core/pipes/sexo.pipe';
 
 @Component({
-  selector: 'app-paciente-detalhes',
+  selector: 'app-profissional-detalhes',
   standalone: true,
-  imports: [CommonModule, CpfPipe, CepPipe, CelularPipe, SexoPipe],
-  templateUrl: './paciente-detalhes.component.html',
+  imports: [CommonModule, CpfPipe, CelularPipe, SexoPipe],
+  templateUrl: './profissional-detalhes.component.html',
 })
-export class PacienteDetalhesComponent {
-  @Input() paciente: Paciente | null = null;
+export class ProfissionalDetalhesComponent {
+  @Input() profissional: Profissional | null = null;
   @Output() fechou = new EventEmitter<void>();
 
   fechar(): void {

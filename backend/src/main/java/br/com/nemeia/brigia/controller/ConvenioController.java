@@ -1,5 +1,6 @@
 package br.com.nemeia.brigia.controller;
 
+import br.com.nemeia.brigia.dto.request.ConvenioRequest;
 import br.com.nemeia.brigia.dto.response.*;
 import br.com.nemeia.brigia.mapper.ConvenioMapper;
 import br.com.nemeia.brigia.service.ConvenioService;
