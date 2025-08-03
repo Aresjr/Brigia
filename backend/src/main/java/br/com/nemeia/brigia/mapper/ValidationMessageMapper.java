@@ -20,12 +20,10 @@ public class ValidationMessageMapper {
     String msg = ex.getMessage();
     if (msg != null && msg.contains("duplicate key")) {
       String msgCompleta = msg.split("Key")[1];
-      String campoDuplicado = msgCompleta.split(" already exists")[0].trim();
+      String campoDuplicado = msgCompleta.split(" already exists")[0].trim()
+              .replaceAll("[()]", "");
 
-      String sqlCommando = msg.split("insert into ")[1];
-      String tableName = sqlCommando.split(" ")[0];
-
-      return "Já existe um cadastro de " + tableName + " com o campo " + campoDuplicado;
+      return "Já existe um cadastro com o campo " + campoDuplicado;
     }
     return "Erro ao salvar no banco de dados.";
   }
