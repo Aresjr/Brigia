@@ -2,11 +2,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Paciente } from '../paciente.interface';
 import { SEXOS } from '../../../core/constans';
+import { CpfPipe } from '../../../core/pipes/cpf.pipe';
+import { CepPipe } from '../../../core/pipes/cep.pipe';
+import { CelularPipe } from '../../../core/pipes/celular.pipe';
 
 @Component({
   selector: 'app-paciente-detalhes',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CpfPipe, CepPipe, CelularPipe],
   templateUrl: './pacientes-detalhes.component.html',
 })
 export class PacienteDetalhesComponent {

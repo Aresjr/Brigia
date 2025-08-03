@@ -52,18 +52,16 @@
                             <lucide-icon *ngIf="getSortIcon('proximaConsulta')" [name]="getSortIcon('proximaConsulta')" class="inline ml-1 w-4 h-4"/>
                             Próxima Consulta
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider w-28">
-                            Ações
-                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider w-28"></th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">
                     @for (paciente of getPacientesPaginados(); track paciente.id) {
                         <tr class="border-b hover:bg-gray-50 cursor-pointer" (click)="selecionarPaciente(paciente)">
                             <td class="px-6 py-2 whitespace-nowrap">{{paciente.nome}}</td>
-                            <td class="px-6 py-2 whitespace-nowrap">{{paciente.cpf}}</td>
+                            <td class="px-6 py-2 whitespace-nowrap">{{paciente.cpf | cpf}}</td>
                             <td class="px-6 py-2 whitespace-nowrap">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</td>
-                            <td class="px-6 py-2 whitespace-nowrap">{{paciente.celular}}</td>
+                            <td class="px-6 py-2 whitespace-nowrap">{{paciente.celular | celular}}</td>
                             <td class="px-6 py-2 whitespace-nowrap">{{paciente.proximaConsulta | date:'dd/MM/yyyy HH:mm'}}</td>
                             <td class="px-4 py-1 whitespace-nowrap w-28 text-right">
                               <div>

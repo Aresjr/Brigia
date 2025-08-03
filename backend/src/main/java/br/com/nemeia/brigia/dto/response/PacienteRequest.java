@@ -16,13 +16,14 @@ public record PacienteRequest(
     @Nullable
     @Pattern(regexp = "^[MFO]$", message = "Sexo deve ser 'M', 'F' ou 'O'")
     String sexo,
+    @Pattern(regexp = "^\\d{11}$", message = "Celuar com formato inválido, deve conter 11 dígitos")
     String celular,
     String urlImagem,
     @Nullable
     @Pattern(regexp = "^#[a-zA-Z0-9]{6}$", message = "Cor de Identificação deve seguir o padrão alfanumérico")
     String corIdentificacao,
     @Nullable
-    @Pattern(regexp = "^\\d{5}-\\d{3}$", message = "CEP deve estar no formato XXXXX-XXX")
+    @Pattern(regexp = "^\\d{8}$", message = "CEP com formato inválido, deve conter 8 dígitos")
     String cep,
     String rua,
     String complemento,

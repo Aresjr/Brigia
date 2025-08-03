@@ -33,7 +33,7 @@ public class Paciente extends BaseModel {
   @Column(name = "sexo", length = 1)
   private Character sexo;
 
-  @Column(name = "celular", unique = true)
+  @Column(name = "celular", unique = true, length = 11)
   private String celular;
 
   @Column(name = "ultima_consulta")
@@ -48,7 +48,7 @@ public class Paciente extends BaseModel {
   @Column(name = "cor_identificacao")
   private String corIdentificacao;
 
-  @Column(name = "cep")
+  @Column(name = "cep", length = 8)
   private String cep;
 
   @Column(name = "rua")

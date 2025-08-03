@@ -19,7 +19,7 @@
 
         <div class="border-b pb-2">
           <p class="text-sm text-gray-600">CPF</p>
-          <p class="font-medium">{{paciente.cpf}}</p>
+          <p class="font-medium">{{paciente.cpf | cpf}}</p>
         </div>
 
         <div class="border-b pb-2">
@@ -39,7 +39,7 @@
 
         <div class="border-b pb-2">
           <p class="text-sm text-gray-600">Celular</p>
-          <p class="font-medium">{{paciente.celular}}</p>
+          <p class="font-medium">{{paciente.celular | celular}}</p>
         </div>
 
         <div class="border-b pb-2">
@@ -48,7 +48,7 @@
             {{paciente.rua}}, {{paciente.complemento}}
             <br>{{paciente.bairro}}
             <br>{{paciente.cidade}} - {{paciente.uf}}
-            <br>CEP: {{paciente.cep}}
+            <br>CEP: {{paciente.cep | cep}}
           </p>
         </div>
 

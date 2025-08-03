@@ -7,6 +7,8 @@ import { PacienteFormComponent } from './paciente-form/paciente-form.component';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { CpfPipe } from '../../core/pipes/cpf.pipe';
+import { CelularPipe } from '../../core/pipes/celular.pipe';
 
 type SortDirection = 'asc' | 'desc' | null;
 interface SortState {
@@ -21,7 +23,9 @@ interface SortState {
     PacienteDetalhesComponent,
     PacienteFormComponent,
     LucideAngularModule,
-    FormsModule
+    FormsModule,
+    CpfPipe,
+    CelularPipe
   ],
   templateUrl: './pacientes.component.html',
   standalone: true
