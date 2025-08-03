@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConveniosService } from './convenios.service';
 import { Convenio } from './convenio.interface';
@@ -29,7 +29,7 @@ export class ConveniosComponent implements OnInit {
   convenios: Convenio[] = [];
   conveniosFiltrados: Convenio[] = [];
   isLoading = true;
-  dropdownAbertoPara: number | null = null;
+  dropdownAberto: number | null = null;
   sortState: SortState = { column: '', direction: null };
   paginaAtual = 1;
   itensPorPagina = 12;
@@ -45,6 +45,13 @@ export class ConveniosComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarConvenios();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    if (this.isDropdownAberto()) {
+      this.dropdownAberto = null;
+    }
   }
 
   carregarConvenios(): void {
@@ -65,10 +72,10 @@ export class ConveniosComponent implements OnInit {
 
   toggleDropdown(event: Event, convenioId: number): void {
     event.stopPropagation();
-    if (this.dropdownAbertoPara === convenioId) {
-      this.dropdownAbertoPara = null;
+    if (this.dropdownAberto === convenioId) {
+      this.dropdownAberto = null;
     } else {
-      this.dropdownAbertoPara = convenioId;
+      this.dropdownAberto = convenioId;
     }
   }
 
@@ -195,5 +202,9 @@ export class ConveniosComponent implements OnInit {
         }
       });
     }
+  }
+
+  isDropdownAberto(): boolean {
+    return this.dropdownAberto !== null;
   }
 }

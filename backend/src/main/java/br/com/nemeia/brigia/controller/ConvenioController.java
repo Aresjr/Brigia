@@ -6,6 +6,7 @@ import br.com.nemeia.brigia.service.ConvenioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +39,14 @@ public class ConvenioController {
   public ConvenioResponse updateConvenio(@Valid @RequestBody ConvenioRequest request, @PathVariable Long id) {
     log.info("PUT /convenios - atualizando convênio ID {}", id);
     return mapper.toResponse(service.editConvenio(id, request));
+  }
+
+  @DeleteMapping("/{id}")
+  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+  public ResponseEntity<Void> deleteConvenio(@PathVariable Long id) {
+    log.info("DELETE /convenios - excluindo convênio ID {}", id);
+    service.deleteConvenio(id);
+    return ResponseEntity.noContent().build();
   }
 
   @GetMapping("/{id}")

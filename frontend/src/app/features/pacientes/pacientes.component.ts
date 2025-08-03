@@ -93,16 +93,16 @@ export class PacientesComponent implements OnInit {
 
     switch (action) {
       case 'agendar':
-        // TODO: Implementar agendamento
-        console.log('Agendar consulta para', paciente);
+        //TODO: Implementar agendamento de paciente
+        this.toastr.warning('Agenda de Paciente será implementada em breve.');
         break;
       case 'historico':
-        // TODO: Implementar visualização de histórico
-        console.log('Ver histórico de', paciente);
+        //TODO: Implementar histórico de paciente
+        this.toastr.warning('Histórico de Paciente será implementado em breve.');
         break;
       case 'excluir':
-        // TODO: Implementar exclusão
-        console.log('Excluir', paciente);
+        //TODO: Implementar exclusão de paciente
+        this.toastr.warning('Exclusão de Paciente será implementada em breve.');
         break;
     }
   }
