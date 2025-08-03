@@ -26,7 +26,8 @@ public class PacienteService {
   private final ConvenioService convenioService;
 
   public Page<Paciente> getPaged(int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+    Sort sort = Sort.by(Sort.Direction.ASC, "excluido").and(Sort.by(Sort.Direction.DESC, "id"));
+    Pageable pageable = PageRequest.of(page, size, sort);
     return repository.findAll(pageable);
   }
 

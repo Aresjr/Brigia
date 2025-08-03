@@ -26,7 +26,7 @@ public class ConvenioService {
   private final SecurityUtils securityUtils;
 
   public Page<Convenio> getPaged(int page, int size) {
-    Sort sort = Sort.by(Sort.Direction.DESC, "excluido").and(Sort.by(Sort.Direction.DESC, "id"));
+    Sort sort = Sort.by(Sort.Direction.ASC, "excluido").and(Sort.by(Sort.Direction.DESC, "id")); //TODO - centralizar
     Pageable pageable = PageRequest.of(page, size, sort);
     return repository.findAll(pageable);
   }
@@ -56,6 +56,14 @@ public class ConvenioService {
 
     String user = securityUtils.getLoggedUser();
     convenio.setExcluidoPor(user);
+    repository.save(convenio);
+  }
+
+  public void restoreConvenio(Long id) {
+    Convenio convenio = getById(id);
+    convenio.setExcluido(false);
+    convenio.setExcluidoEm(null);
+    convenio.setExcluidoPor(null);
     repository.save(convenio);
   }
 }

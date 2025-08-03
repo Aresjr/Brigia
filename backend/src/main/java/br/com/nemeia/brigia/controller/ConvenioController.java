@@ -49,6 +49,14 @@ public class ConvenioController {
     return ResponseEntity.noContent().build();
   }
 
+  @PatchMapping("/{id}/restaurar")
+  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+  public ResponseEntity<Void> restoreConvenio(@PathVariable Long id) {
+    log.info("PATCH /convenios/{}/restaurar", id);
+    service.restoreConvenio(id);
+    return ResponseEntity.noContent().build();
+  }
+
   @GetMapping("/{id}")
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
   public ConvenioResponse getConvenioById(@PathVariable Long id) {

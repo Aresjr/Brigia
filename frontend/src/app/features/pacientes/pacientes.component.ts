@@ -202,9 +202,10 @@ export class PacientesComponent implements OnInit {
           this.carregarPacientes();
           this.mostrarFormularioNovo = false;
         },
-        error: (error) => {
-          this.toastr.error('Erro ao cadastrar paciente');
-          console.error('Erro ao cadastrar paciente:', error);
+        error: (e) => {
+          const errorMessage: string = e.error.messages?.join('; ') || e.error.message || '';
+          this.toastr.error(errorMessage, 'Erro ao cadastrar paciente');
+          console.error('Erro ao cadastrar paciente:', e);
         }
       });
     }

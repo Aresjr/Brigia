@@ -39,9 +39,7 @@
                             <lucide-icon *ngIf="getSortIcon('descricao')" [name]="getSortIcon('descricao')" class="inline w-4 h-4"/>
                             Descrição
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider w-28">
-                            Ações
-                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider w-28"></th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">
@@ -55,35 +53,32 @@
                             </td>
                             <td class="px-6 py-2">{{convenio.descricao}}</td>
                             <td class="px-4 py-1 whitespace-nowrap w-28 text-right">
-                                <div class="relative">
+                                <div>
                                     <button
                                         (click)="toggleDropdown($event, convenio.id)"
-                                        class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                                        class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" >
                                         Ações
                                         <lucide-icon name="chevron-down" class="ml-1 h-4 w-4" />
                                     </button>
                                     @if (dropdownAberto === convenio.id) {
-                                        <div class="absolute right-0 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                                        <div class="absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                                             <div class="py-1 flex flex-col">
-                                                @if (!convenio.excluido) {
-                                                    <a
-                                                        (click)="editarConvenio($event, convenio)"
-                                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
-                                                        Editar
-                                                    </a>
-                                                    <hr />
-                                                    <a
-                                                        (click)="excluirConvenio($event, convenio)"
-                                                        class="block px-4 py-2 text-sm text-red-700 hover:bg-red-50 cursor-pointer">
-                                                        Excluir
-                                                    </a>
-                                                } @else {
-                                                    <a
-                                                        (click)="restaurarConvenio($event, convenio)"
-                                                        class="block px-4 py-2 text-sm text-green-700 hover:bg-green-50 cursor-pointer">
-                                                        Restaurar
-                                                    </a>
-                                                }
+                                                <a *ngIf="!convenio.excluido"
+                                                    (click)="editarConvenio($event, convenio)"
+                                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                                                    Editar
+                                                </a>
+                                                <hr />
+                                                <a *ngIf="!convenio.excluido"
+                                                    (click)="excluirConvenio($event, convenio)"
+                                                    class="block px-4 py-2 text-sm text-red-700 hover:bg-red-50 cursor-pointer">
+                                                    Excluir
+                                                </a>
+                                                <a *ngIf="convenio.excluido"
+                                                    (click)="restaurarConvenio($event, convenio)"
+                                                    class="block px-4 py-2 text-sm text-green-700 hover:bg-green-50 cursor-pointer">
+                                                    Restaurar
+                                                </a>
                                             </div>
                                         </div>
                                     }
