@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Convenio } from '../convenio.interface';
+import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
 
 @Component({
   selector: 'app-convenio-form',
@@ -11,7 +12,8 @@ import { Convenio } from '../convenio.interface';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    LucideAngularModule
+    LucideAngularModule,
+    EmptyToNullDirective
   ]
 })
 export class ConvenioFormComponent implements OnInit {
@@ -23,8 +25,8 @@ export class ConvenioFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
-      nome: ['', [Validators.required, Validators.minLength(3)]],
-      descricao: ['']
+      nome: [null, [Validators.required, Validators.minLength(3)]],
+      descricao: [null]
     });
   }
 
@@ -43,4 +45,9 @@ export class ConvenioFormComponent implements OnInit {
   onCancel() {
     this.cancel.emit();
   }
+
+  get isEditMode(): boolean {
+    return !!this.convenio;
+  }
+
 }

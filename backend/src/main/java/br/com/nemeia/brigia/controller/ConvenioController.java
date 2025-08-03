@@ -20,17 +20,24 @@ public class ConvenioController {
 
   @GetMapping
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public PagedResponse<ConvenioResponse> getAllMedicalPlans(
+  public PagedResponse<ConvenioResponse> getAllConvenios(
           @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
-    log.info("GET /pacientes - page: {}, size: {}", page, size);
+    log.info("GET /convenios - page: {}, size: {}", page, size);
     return mapper.toPagedResponse(service.getPaged(page, size));
   }
 
   @PostMapping
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
   public ConvenioResponse createConvenio(@Valid @RequestBody ConvenioRequest request) {
-    log.info("POST /pacientes");
+    log.info("POST /convenios");
     return mapper.toResponse(service.createConvenio(request));
+  }
+
+  @PutMapping("/{id}")
+  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+  public ConvenioResponse updateConvenio(@Valid @RequestBody ConvenioRequest request, @PathVariable Long id) {
+    log.info("PUT /convenios - atualizando convênio ID {}", id);
+    return mapper.toResponse(service.editConvenio(id, request));
   }
 
   @GetMapping("/{id}")

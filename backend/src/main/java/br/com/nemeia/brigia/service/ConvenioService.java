@@ -37,4 +37,11 @@ public class ConvenioService {
     Convenio convenio = mapper.toEntity(request);
     return repository.save(convenio);
   }
+
+  public Convenio editConvenio(Long id, @Valid ConvenioRequest request) {
+    getById(id);
+    Convenio convenio = mapper.toEntity(request);
+    convenio.setId(id);
+    return repository.save(convenio);
+  }
 }
