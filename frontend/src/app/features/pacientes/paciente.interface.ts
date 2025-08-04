@@ -1,4 +1,5 @@
 import { Entidade } from '../shared/entidade.interface';
+import { Convenio } from '../convenio/convenio.interface';
 
 export interface Paciente extends Entidade {
     nome: string;
@@ -17,7 +18,7 @@ export interface Paciente extends Entidade {
     bairro: string | null;
     cidade: string | null;
     uf: string | null;
-    convenioId: number | null;
+    convenio: Convenio | null;
 }
 
 export interface PacienteResponse {

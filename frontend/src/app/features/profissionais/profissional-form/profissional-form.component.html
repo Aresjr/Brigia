@@ -54,6 +54,7 @@
               <label class="block font-medium text-gray-700">Sexo</label>
               <select formControlName="sexo"
                       class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                <option [ngValue]="null">Selecione</option>
                 <option *ngFor="let sexo of SEXOS" [value]="sexo.sigla">{{ sexo.descricao }}</option>
               </select>
             </div>

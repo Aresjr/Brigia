@@ -54,6 +54,7 @@
               <label class="block font-medium text-gray-700">Sexo</label>
               <select formControlName="sexo"
                       class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                <option [ngValue]="null">Selecione</option>
                 <option *ngFor="let sexo of SEXOS" [value]="sexo.sigla">{{ sexo.descricao }}</option>
               </select>
             </div>
@@ -84,6 +85,7 @@
               <label class="block font-medium text-gray-700">UF</label>
               <select formControlName="uf"
                       class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                <option [ngValue]="null">Selecione</option>
                 <option *ngFor="let estado of estados" [value]="estado.sigla">{{ estado.nome }}</option>
               </select>
             </div>
@@ -124,7 +126,16 @@
           </div>
         </div>
 
-        <!-- TODO - adicionar convênio -->
+        <div>
+          <label class="block font-medium text-gray-700">Convênio</label>
+          <select formControlName="convenioId"
+                  class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+            <option [ngValue]="null">Selecione</option>
+            <option *ngFor="let convenio of convenios" [value]="convenio.id">
+              {{ convenio.nome }}
+            </option>
+          </select>
+        </div>
 
         <div>
           <label class="block font-medium text-gray-700">Email</label>

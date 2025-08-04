@@ -23,11 +23,6 @@
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-sm text-gray-600">Email</p>
-          <p class="font-medium">{{paciente.email || '-'}}</p>
-        </div>
-
-        <div class="border-b pb-2">
           <p class="text-sm text-gray-600">Data de Nascimento</p>
           <p class="font-medium">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</p>
         </div>
@@ -52,6 +47,11 @@
           </p>
         </div>
 
+        <div class="border-b pb-2">
+          <p class="text-sm text-gray-600">Convênio</p>
+          <p class="font-medium">{{paciente.convenio?.nome}}</p>
+        </div>
+
         @if (paciente.ultimaConsulta) {
           <div class="border-b pb-2">
             <p class="text-sm text-gray-600">Última Consulta</p>
@@ -65,6 +65,12 @@
             <p class="font-medium">{{paciente.proximaConsulta | date:'dd/MM/yyyy'}}</p>
           </div>
         }
+
+        <div class="border-b pb-2">
+          <p class="text-sm text-gray-600">Email</p>
+          <p class="font-medium">{{paciente.email || '-'}}</p>
+        </div>
+
       </div>
     }
   </div>

@@ -4,13 +4,17 @@ import br.com.nemeia.brigia.dto.request.PacienteRequest;
 import br.com.nemeia.brigia.dto.response.PacienteResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.model.Paciente;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Component
 public class PacienteMapper {
+
+  private final ConvenioMapper convenioMapper;
 
   public PacienteResponse toResponse(Paciente paciente) {
     if (paciente == null) {
@@ -35,7 +39,7 @@ public class PacienteMapper {
         paciente.getBairro(),
         paciente.getCidade(),
         paciente.getUf(),
-        paciente.getConvenio() != null ? paciente.getConvenio().getId() : null,
+        convenioMapper.toResponse(paciente.getConvenio()),
         paciente.getCriadoEm(),
         paciente.getExcluido());
   }

@@ -7,6 +7,8 @@ import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { ESTADOS, SEXOS } from '../../../core/constans';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
+import { ConveniosService } from '../../convenio/convenios.service';
+import { Convenio } from '../../convenio/convenio.interface';
 
 @Component({
   selector: 'app-paciente-form',
@@ -22,10 +24,14 @@ export class PacienteFormComponent implements OnInit {
   pacienteForm: FormGroup;
   estados: ({ sigla: string; nome: string })[] = ESTADOS;
   protected readonly SEXOS = SEXOS;
+  convenios: Convenio[] = [];
 
-  constructor(private fb: FormBuilder,
-              private http: HttpClient,
-              private toastr: ToastrService) {
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private toastr: ToastrService,
+    private conveniosService: ConveniosService
+  ) {
     this.pacienteForm = this.fb.group({
       nome: [null, Validators.required],
       email: [null],
@@ -40,6 +46,7 @@ export class PacienteFormComponent implements OnInit {
       cidade: [null],
       uf: [null, [Validators.minLength(2), Validators.maxLength(2)]],
       corIdentificacao: [null],
+      convenioId: [null]
     });
   }
 
@@ -47,6 +54,16 @@ export class PacienteFormComponent implements OnInit {
     if (this.paciente) {
       this.pacienteForm.patchValue(this.paciente);
     }
+
+    this.carregarConvenios();
+  }
+
+  private carregarConvenios() {
+    this.conveniosService.listarConvenios().subscribe(
+      response => {
+        this.convenios = response.items;
+      }
+    );
   }
 
   get isEditMode(): boolean {
