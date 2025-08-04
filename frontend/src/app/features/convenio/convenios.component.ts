@@ -22,9 +22,6 @@ import { BaseListComponent } from '../shared/base-list.component';
 export class ConveniosComponent extends BaseListComponent<Convenio> implements OnInit {
   protected Math = Math;
   convenios: Convenio[] = [];
-  isLoading = true;
-  mostrarFormularioNovo = false;
-  convenioEmEdicao: Convenio | null = null;
 
   constructor(private conveniosService: ConveniosService, private toastr: ToastrService) {
     super();
@@ -63,19 +60,15 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
     this.atualizarPaginacao();
   }
 
-  onAddNovoConvenio() {
-    this.mostrarFormularioNovo = true;
-  }
-
   onSalvarNovoConvenio(convenio: Partial<Convenio>) {
-    if (this.convenioEmEdicao) {
-      const id = this.convenioEmEdicao.id;
+    if (this.itemEdicao) {
+      const id = this.itemEdicao.id;
       this.conveniosService.atualizarConvenio(id, convenio).subscribe({
         next: () => {
           this.toastr.success('Convênio atualizado com sucesso');
           this.carregarConvenios();
           this.mostrarFormularioNovo = false;
-          this.convenioEmEdicao = null;
+          this.itemEdicao = null;
         },
         error: (e) => {
           const errorMessage: string = e.error.messages?.join('; ') || e.error.message || '';
@@ -95,17 +88,6 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
         }
       });
     }
-  }
-
-  onCancelarNovoConvenio() {
-    this.mostrarFormularioNovo = false;
-    this.convenioEmEdicao = null;
-  }
-
-  editarConvenio(event: Event, convenio: Convenio) {
-    event.stopPropagation();
-    this.convenioEmEdicao = convenio;
-    this.mostrarFormularioNovo = true;
   }
 
   excluirConvenio(event: Event, convenio: Convenio) {

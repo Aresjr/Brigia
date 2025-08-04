@@ -19,6 +19,10 @@ export abstract class BaseListComponent<T extends object> {
   totalPaginas = 1;
   searchTerm: string = '';
   dropdownAberto: number | null = null;
+  itemSelecionado: T | null = null;
+  itemEdicao: T | null = null;
+  mostrarFormularioNovo = false;
+  isLoading = true;
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
@@ -90,4 +94,27 @@ export abstract class BaseListComponent<T extends object> {
     }
   }
 
+  selecionarItem(item: T): void {
+    this.itemSelecionado = item;
+  }
+
+  fecharDetalhes(): void {
+    this.itemSelecionado = null;
+  }
+
+  onAddNovo() {
+    this.mostrarFormularioNovo = true;
+    this.itemSelecionado = null;
+  }
+
+  onCancelarNovo() {
+    this.mostrarFormularioNovo = false;
+    this.itemEdicao = null;
+  }
+
+  editarItem(event: Event, item: T) {
+    event.stopPropagation();
+    this.itemEdicao = item;
+    this.mostrarFormularioNovo = true;
+  }
 }

@@ -11,7 +11,7 @@
                 maxlength="20" />
         </div>
 
-        <button (click)="onAddNovoConvenio()"
+        <button (click)="onAddNovo()"
                 class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-2">
             <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
             Novo
@@ -64,7 +64,7 @@
                                         <div class="absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                                             <div class="py-1 flex flex-col">
                                                 <a *ngIf="!convenio.excluido"
-                                                    (click)="editarConvenio($event, convenio)"
+                                                    (click)="editarItem($event, convenio)"
                                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
                                                     Editar
                                                 </a>
@@ -127,9 +127,9 @@
 
   @if (mostrarFormularioNovo) {
     <app-convenio-form
-      [convenio]="convenioEmEdicao"
+      [convenio]="itemEdicao"
       (save)="onSalvarNovoConvenio($event)"
-      (cancel)="onCancelarNovoConvenio()"
+      (cancel)="onCancelarNovo()"
     ></app-convenio-form>
   }
 

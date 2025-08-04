@@ -28,10 +28,6 @@ import { BaseListComponent } from '../shared/base-list.component';
 export class PacientesComponent extends BaseListComponent<Paciente> implements OnInit {
   protected Math = Math;
   pacientes: Paciente[] = [];
-  isLoading = true;
-  pacienteSelecionado: Paciente | null = null;
-  mostrarFormularioNovo = false;
-  pacienteEmEdicao: Paciente | null = null;
 
   constructor(private pacientesService: PacientesService, private toastr: ToastrService) {
     super();
@@ -55,14 +51,6 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
         this.toastr.error('Erro ao carregar pacientes. Por favor, tente novamente.');
       }
     });
-  }
-
-  selecionarPaciente(paciente: Paciente): void {
-    this.pacienteSelecionado = paciente;
-  }
-
-  fecharDetalhes(): void {
-    this.pacienteSelecionado = null;
   }
 
   handleAction(event: Event, action: string, paciente: Paciente) {
@@ -100,20 +88,15 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
     this.atualizarPaginacao();
   }
 
-  onAddNovoPaciente() {
-    this.mostrarFormularioNovo = true;
-    this.pacienteSelecionado = null;
-  }
-
   onSalvarNovoPaciente(paciente: Partial<Paciente>) {
-    if (this.pacienteEmEdicao) {
-      const id = this.pacienteEmEdicao.id;
+    if (this.itemEdicao) {
+      const id = this.itemEdicao.id;
       this.pacientesService.atualizarPaciente(id, paciente).subscribe({
         next: () => {
           this.toastr.success('Paciente atualizado com sucesso');
           this.carregarPacientes();
           this.mostrarFormularioNovo = false;
-          this.pacienteEmEdicao = null;
+          this.itemEdicao = null;
         },
         error: (e) => {
           const errorMessage: string = e.error.messages?.join('; ') || e.error.message || '';
@@ -137,14 +120,4 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
     }
   }
 
-  onCancelarNovoPaciente() {
-    this.mostrarFormularioNovo = false;
-    this.pacienteEmEdicao = null;
-  }
-
-  editarPaciente(event: Event, paciente: Paciente) {
-    event.stopPropagation();
-    this.pacienteEmEdicao = paciente;
-    this.mostrarFormularioNovo = true;
-  }
 }

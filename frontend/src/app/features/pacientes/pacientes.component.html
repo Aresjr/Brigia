@@ -12,7 +12,7 @@
           maxlength="20" />
       </div>
 
-      <button (click)="onAddNovoPaciente()"
+      <button (click)="onAddNovo()"
               class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-2">
         <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
         Novo
@@ -57,7 +57,7 @@
                 </thead>
                 <tbody class="bg-white">
                     @for (paciente of getItensPaginados(); track paciente.id) {
-                        <tr class="border-b hover:bg-gray-50 cursor-pointer" (click)="selecionarPaciente(paciente)">
+                        <tr class="border-b hover:bg-gray-50 cursor-pointer" (click)="selecionarItem(paciente)">
                             <td class="px-6 py-2 whitespace-nowrap">{{paciente.nome}}</td>
                             <td class="px-6 py-2 whitespace-nowrap">{{paciente.cpf | cpf}}</td>
                             <td class="px-6 py-2 whitespace-nowrap">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</td>
@@ -118,18 +118,18 @@
         </div>
     }
 
-    @if (pacienteSelecionado) {
+    @if (itemSelecionado) {
         <app-paciente-detalhes
-            [paciente]="pacienteSelecionado"
+            [paciente]="itemSelecionado"
             (fechou)="fecharDetalhes()"
         ></app-paciente-detalhes>
     }
 
     @if (mostrarFormularioNovo) {
         <app-paciente-form
-            [paciente]="pacienteEmEdicao"
+            [paciente]="itemEdicao"
             (save)="onSalvarNovoPaciente($event)"
-            (cancel)="onCancelarNovoPaciente()"
+            (cancel)="onCancelarNovo()"
         ></app-paciente-form>
     }
 </div>
@@ -148,7 +148,7 @@
         Ver Histórico
       </a>
       <a
-        (click)="editarPaciente($event, paciente)"
+        (click)="editarItem($event, paciente)"
         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
         Editar
       </a>

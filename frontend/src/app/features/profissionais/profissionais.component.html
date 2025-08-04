@@ -12,7 +12,7 @@
         maxlength="20" />
     </div>
 
-    <button (click)="onAddNovoProfissional()"
+    <button (click)="onAddNovo()"
             class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-2">
       <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
       Novo
@@ -53,7 +53,7 @@
         </thead>
         <tbody class="bg-white">
           @for (profissional of getItensPaginados(); track profissional.id) {
-            <tr class="border-b hover:bg-gray-50 cursor-pointer" (click)="selecionarProfissional(profissional)">
+            <tr class="border-b hover:bg-gray-50 cursor-pointer" (click)="selecionarItem(profissional)">
               <td class="px-6 py-2 whitespace-nowrap">{{profissional.nome}}</td>
               <td class="px-6 py-2 whitespace-nowrap">{{profissional.email}}</td>
               <td class="px-6 py-2 whitespace-nowrap">{{profissional.crm}}</td>
@@ -113,18 +113,18 @@
     </div>
   }
 
-  @if (profissionalSelecionado) {
+  @if (itemSelecionado) {
     <app-profissional-detalhes
-      [profissional]="profissionalSelecionado"
+      [profissional]="itemSelecionado"
       (fechou)="fecharDetalhes()"
     ></app-profissional-detalhes>
   }
 
   @if (mostrarFormularioNovo) {
     <app-profissional-form
-      [profissional]="profissionalEmEdicao"
+      [profissional]="itemEdicao"
       (save)="onSalvarNovoProfissional($event)"
-      (cancel)="onCancelarNovoProfissional()"
+      (cancel)="onCancelarNovo()"
     ></app-profissional-form>
   }
 </div>
@@ -143,7 +143,7 @@
         Ver Histórico
       </a>
       <a
-        (click)="editarProfissional($event, profissional)"
+        (click)="editarItem($event, profissional)"
         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
         Editar
       </a>

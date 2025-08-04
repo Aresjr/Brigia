@@ -26,10 +26,6 @@ import { BaseListComponent } from '../shared/base-list.component';
 export class ProfissionaisComponent extends BaseListComponent<Profissional> implements OnInit {
   protected Math = Math;
   profissionais: Profissional[] = [];
-  isLoading = true;
-  profissionalSelecionado: Profissional | null = null;
-  mostrarFormularioNovo = false;
-  profissionalEmEdicao: Profissional | null = null;
 
   constructor(private profissionaisService: ProfissionaisService, private toastr: ToastrService) {
     super();
@@ -53,14 +49,6 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
         this.toastr.error('Erro ao carregar profissionais. Por favor, tente novamente.');
       }
     });
-  }
-
-  selecionarProfissional(profissional: Profissional): void {
-    this.profissionalSelecionado = profissional;
-  }
-
-  fecharDetalhes(): void {
-    this.profissionalSelecionado = null;
   }
 
   handleAction(event: Event, action: string, profissional: Profissional) {
@@ -98,20 +86,15 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
     this.atualizarPaginacao();
   }
 
-  onAddNovoProfissional() {
-    this.mostrarFormularioNovo = true;
-    this.profissionalSelecionado = null;
-  }
-
   onSalvarNovoProfissional(profissional: Partial<Profissional>) {
-    if (this.profissionalEmEdicao) {
-      const id = this.profissionalEmEdicao.id;
+    if (this.itemEdicao) {
+      const id = this.itemEdicao.id;
       this.profissionaisService.atualizarProfissional(id, profissional).subscribe({
         next: () => {
           this.toastr.success('Profissional atualizado com sucesso');
           this.carregarProfissionais();
           this.mostrarFormularioNovo = false;
-          this.profissionalEmEdicao = null;
+          this.itemEdicao = null;
         },
         error: (e) => {
           const errorMessage: string = e.error.messages?.join('; ') || e.error.message || '';
@@ -135,14 +118,4 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
     }
   }
 
-  onCancelarNovoProfissional() {
-    this.mostrarFormularioNovo = false;
-    this.profissionalEmEdicao = null;
-  }
-
-  editarProfissional(event: Event, profissional: Profissional) {
-    event.stopPropagation();
-    this.profissionalEmEdicao = profissional;
-    this.mostrarFormularioNovo = true;
-  }
 }
