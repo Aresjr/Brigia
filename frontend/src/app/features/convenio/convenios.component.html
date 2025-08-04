@@ -43,7 +43,7 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white">
-                    @for (convenio of getConveniosPaginados(); track convenio.id) {
+                    @for (convenio of getItensPaginados(); track convenio.id) {
                         <tr class="border-b hover:bg-gray-50" [class.bg-red-50]="convenio.excluido">
                             <td class="px-6 py-2 whitespace-nowrap">
                                 {{convenio.nome}}
@@ -68,7 +68,6 @@
                                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
                                                     Editar
                                                 </a>
-                                                <hr />
                                                 <a *ngIf="!convenio.excluido"
                                                     (click)="excluirConvenio($event, convenio)"
                                                     class="block px-4 py-2 text-sm text-red-700 hover:bg-red-50 cursor-pointer">

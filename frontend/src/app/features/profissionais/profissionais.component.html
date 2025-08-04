@@ -23,7 +23,7 @@
     <div class="flex justify-center items-center h-32">
       <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
     </div>
-  } @else if (profissionaisFiltrados.length === 0) {
+  } @else if (items.length === 0) {
     <div class="text-center py-8 w-full bg-white rounded-lg">
       <p class="text-gray-500">Nenhum profissional encontrado.</p>
     </div>
@@ -52,7 +52,7 @@
         </tr>
         </thead>
         <tbody class="bg-white">
-          @for (profissional of getProfissionaisPaginados(); track profissional.id) {
+          @for (profissional of getItensPaginados(); track profissional.id) {
             <tr class="border-b hover:bg-gray-50 cursor-pointer" (click)="selecionarProfissional(profissional)">
               <td class="px-6 py-2 whitespace-nowrap">{{profissional.nome}}</td>
               <td class="px-6 py-2 whitespace-nowrap">{{profissional.email}}</td>
@@ -79,7 +79,7 @@
 
     <div class="flex justify-between items-center mt-4 px-6">
       <div class="text-sm text-gray-700">
-        Mostrando {{((paginaAtual - 1) * itensPorPagina) + 1}} a {{Math.min(paginaAtual * itensPorPagina, profissionaisFiltrados.length)}} de {{profissionaisFiltrados.length}} resultados
+        Mostrando {{((paginaAtual - 1) * itensPorPagina) + 1}} a {{Math.min(paginaAtual * itensPorPagina, items.length)}} de {{items.length}} resultados
       </div>
       <div class="flex gap-2">
         <button
@@ -137,19 +137,16 @@
         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
         Agendar Consulta
       </a>
-      <hr />
       <a
         (click)="handleAction($event, 'historico', profissional)"
         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
         Ver Histórico
       </a>
-      <hr />
       <a
         (click)="editarProfissional($event, profissional)"
         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
         Editar
       </a>
-      <hr />
       <a
         (click)="handleAction($event, 'excluir', profissional)"
         class="block px-4 py-2 text-sm text-red-700 hover:bg-red-50 cursor-pointer" >

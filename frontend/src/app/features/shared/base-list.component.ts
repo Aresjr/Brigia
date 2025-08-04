@@ -1,3 +1,4 @@
+import { Component, HostListener } from '@angular/core';
 
 type SortDirection = 'asc' | 'desc' | null;
 
@@ -6,10 +7,31 @@ interface SortState<T> {
   direction: SortDirection;
 }
 
+@Component({
+  template: '',
+})
 export abstract class BaseListComponent<T extends object> {
 
   items: T[] = [];
   sortState: SortState<T> = { column: '', direction: null };
+  paginaAtual = 1;
+  itensPorPagina = 5;
+  totalPaginas = 1;
+  searchTerm: string = '';
+  dropdownAberto: number | null = null;
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    if (this.isDropdownAberto()) {
+      this.dropdownAberto = null;
+    }
+  }
+
+  getItensPaginados(): T[] {
+    const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
+    const fim = inicio + this.itensPorPagina;
+    return this.items.slice(inicio, fim);
+  }
 
   getSortIcon(coluna: string): string {
     if (this.sortState.column !== coluna) {
@@ -36,6 +58,36 @@ export abstract class BaseListComponent<T extends object> {
       const comparacao = valorA < valorB ? -1 : 1;
       return direcao === 'asc' ? comparacao : -comparacao;
     });
+  }
+
+  atualizarPaginacao(): void {
+    this.totalPaginas = Math.ceil(this.items.length / this.itensPorPagina);
+    if (this.paginaAtual > this.totalPaginas) {
+      this.paginaAtual = this.totalPaginas || 1;
+    }
+  }
+
+  mudarPagina(pagina: number): void {
+    if (pagina >= 1 && pagina <= this.totalPaginas) {
+      this.paginaAtual = pagina;
+    }
+  }
+
+  getPaginasArray(): number[] {
+    return Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
+  }
+
+  isDropdownAberto(): boolean {
+    return this.dropdownAberto !== null;
+  }
+
+  toggleDropdown(event: Event, id: number): void {
+    event.stopPropagation();
+    if (this.dropdownAberto === id) {
+      this.dropdownAberto = null;
+    } else {
+      this.dropdownAberto = id;
+    }
   }
 
 }

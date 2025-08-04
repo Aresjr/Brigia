@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProfissionaisService } from './profissionais.service';
 import { Profissional } from './profissional.interface';
@@ -8,12 +8,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CelularPipe } from '../../core/pipes/celular.pipe';
-
-type SortDirection = 'asc' | 'desc' | null;
-interface SortState {
-  column: keyof Profissional | '';
-  direction: SortDirection;
-}
+import { BaseListComponent } from '../shared/base-list.component';
 
 @Component({
   selector: 'app-profissionais',
@@ -28,32 +23,20 @@ interface SortState {
   templateUrl: './profissionais.component.html',
   standalone: true
 })
-export class ProfissionaisComponent implements OnInit {
+export class ProfissionaisComponent extends BaseListComponent<Profissional> implements OnInit {
   protected Math = Math;
   profissionais: Profissional[] = [];
-  profissionaisFiltrados: Profissional[] = [];
   isLoading = true;
   profissionalSelecionado: Profissional | null = null;
-  dropdownAberto: number | null = null;
-  sortState: SortState = { column: '', direction: null };
-  paginaAtual = 1;
-  itensPorPagina = 12;
-  totalPaginas = 1;
-  searchTerm: string = '';
   mostrarFormularioNovo = false;
   profissionalEmEdicao: Profissional | null = null;
 
-  constructor(private profissionaisService: ProfissionaisService, private toastr: ToastrService) {}
+  constructor(private profissionaisService: ProfissionaisService, private toastr: ToastrService) {
+    super();
+  }
 
   ngOnInit(): void {
     this.carregarProfissionais();
-  }
-
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    if (this.isDropdownAberto()) {
-      this.dropdownAberto = null;
-    }
   }
 
   carregarProfissionais(): void {
@@ -61,7 +44,7 @@ export class ProfissionaisComponent implements OnInit {
     this.profissionaisService.listarProfissionais().subscribe({
       next: (response) => {
         this.profissionais = response.items;
-        this.profissionaisFiltrados = [...this.profissionais];
+        this.items = [...this.profissionais];
         this.atualizarPaginacao();
         this.isLoading = false;
       },
@@ -78,15 +61,6 @@ export class ProfissionaisComponent implements OnInit {
 
   fecharDetalhes(): void {
     this.profissionalSelecionado = null;
-  }
-
-  toggleDropdown(event: Event, profissionalId: number): void {
-    event.stopPropagation();
-    if (this.dropdownAberto === profissionalId) {
-      this.dropdownAberto = null;
-    } else {
-      this.dropdownAberto = profissionalId;
-    }
   }
 
   handleAction(event: Event, action: string, profissional: Profissional) {
@@ -109,69 +83,19 @@ export class ProfissionaisComponent implements OnInit {
     }
   }
 
-  ordenar(coluna: keyof Profissional): void {
-    let direcao: SortDirection = 'asc';
-
-    if (this.sortState.column === coluna) {
-      direcao = this.sortState.direction === 'asc' ? 'desc' : 'asc';
-    }
-
-    this.sortState = { column: coluna, direction: direcao };
-
-    this.profissionaisFiltrados.sort((a, b) => {
-      const valorA = a[coluna] || '';
-      const valorB = b[coluna] || '';
-
-      if (valorA === valorB) return 0;
-
-      const comparacao = valorA < valorB ? -1 : 1;
-      return direcao === 'asc' ? comparacao : -comparacao;
-    });
-  }
-
-  getSortIcon(coluna: keyof Profissional): string {
-    if (this.sortState.column !== coluna) {
-      return '';
-    }
-    return this.sortState.direction === 'asc' ? 'arrow-up-icon' : 'arrow-down-icon';
-  }
-
   onSearch(): void {
     if (this.searchTerm) {
-      this.profissionaisFiltrados = this.profissionais.filter(profissional =>
+      this.items = this.profissionais.filter(profissional =>
         profissional.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        profissional.cpf?.includes(this.searchTerm) ||
-        profissional.dataNascimento.includes(this.searchTerm) ||
-        profissional.celular?.includes(this.searchTerm)
+        profissional.celular?.includes(this.searchTerm) ||
+        profissional.crm?.includes(this.searchTerm) ||
+        profissional.email?.includes(this.searchTerm)
       );
     } else {
-      this.profissionaisFiltrados = [...this.profissionais];
+      this.items = [...this.profissionais];
     }
     this.paginaAtual = 1;
     this.atualizarPaginacao();
-  }
-
-  getProfissionaisPaginados(): Profissional[] {
-    const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
-    const fim = inicio + this.itensPorPagina;
-    return this.profissionaisFiltrados.slice(inicio, fim);
-  }
-
-  atualizarPaginacao(): void {
-    this.totalPaginas = Math.ceil(this.profissionaisFiltrados.length / this.itensPorPagina);
-    if (this.paginaAtual > this.totalPaginas) {
-      this.paginaAtual = this.totalPaginas || 1;
-    }
-  }
-
-  mudarPagina(pagina: number): void {
-    if (pagina >= 1 && pagina <= this.totalPaginas) {
-      this.paginaAtual = pagina;
-    }
-  }
-
-  getPaginasArray(): number[] {
-    return Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
   }
 
   onAddNovoProfissional() {
@@ -220,9 +144,5 @@ export class ProfissionaisComponent implements OnInit {
     event.stopPropagation();
     this.profissionalEmEdicao = profissional;
     this.mostrarFormularioNovo = true;
-  }
-
-  isDropdownAberto(): boolean {
-    return this.dropdownAberto !== null;
   }
 }

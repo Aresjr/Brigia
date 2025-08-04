@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConveniosService } from './convenios.service';
 import { Convenio } from './convenio.interface';
@@ -23,30 +23,15 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
   protected Math = Math;
   convenios: Convenio[] = [];
   isLoading = true;
-  dropdownAberto: number | null = null;
-  paginaAtual = 1;
-  itensPorPagina = 12;
-  totalPaginas = 1;
-  searchTerm: string = '';
   mostrarFormularioNovo = false;
   convenioEmEdicao: Convenio | null = null;
 
-  constructor(
-    private conveniosService: ConveniosService,
-    private toastr: ToastrService
-  ) {
+  constructor(private conveniosService: ConveniosService, private toastr: ToastrService) {
     super();
   }
 
   ngOnInit(): void {
     this.carregarConvenios();
-  }
-
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    if (this.isDropdownAberto()) {
-      this.dropdownAberto = null;
-    }
   }
 
   carregarConvenios(): void {
@@ -65,15 +50,6 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
     });
   }
 
-  toggleDropdown(event: Event, convenioId: number): void {
-    event.stopPropagation();
-    if (this.dropdownAberto === convenioId) {
-      this.dropdownAberto = null;
-    } else {
-      this.dropdownAberto = convenioId;
-    }
-  }
-
   onSearch(): void {
     if (this.searchTerm) {
       this.items = this.convenios.filter(convenio =>
@@ -85,29 +61,6 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
     }
     this.paginaAtual = 1;
     this.atualizarPaginacao();
-  }
-
-  getConveniosPaginados(): Convenio[] {
-    const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
-    const fim = inicio + this.itensPorPagina;
-    return this.items.slice(inicio, fim);
-  }
-
-  atualizarPaginacao(): void {
-    this.totalPaginas = Math.ceil(this.items.length / this.itensPorPagina);
-    if (this.paginaAtual > this.totalPaginas) {
-      this.paginaAtual = this.totalPaginas || 1;
-    }
-  }
-
-  mudarPagina(pagina: number): void {
-    if (pagina >= 1 && pagina <= this.totalPaginas) {
-      this.paginaAtual = pagina;
-    }
-  }
-
-  getPaginasArray(): number[] {
-    return Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
   }
 
   onAddNovoConvenio() {
@@ -186,7 +139,4 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
     });
   }
 
-  isDropdownAberto(): boolean {
-    return this.dropdownAberto !== null;
-  }
 }
