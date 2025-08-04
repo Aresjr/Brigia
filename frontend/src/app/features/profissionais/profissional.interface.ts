@@ -1,5 +1,6 @@
-export interface Profissional {
-    id: number;
+import { Entidade } from '../shared/entidade.interface';
+
+export interface Profissional extends Entidade {
     nome: string;
     email: string | null;
     cpf: string | null;
@@ -8,7 +9,6 @@ export interface Profissional {
     celular: string | null;
     crm: string | null;
     urlImagem: string | null;
-    criadoEm: string | null;
 }
 
 export interface ProfissionalResponse {

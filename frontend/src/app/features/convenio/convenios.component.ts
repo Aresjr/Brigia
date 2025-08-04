@@ -6,12 +6,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ConvenioFormComponent } from './convenio-form/convenio-form.component';
-
-type SortDirection = 'asc' | 'desc' | null;
-interface SortState {
-  column: keyof Convenio | '';
-  direction: SortDirection;
-}
+import { BaseListComponent } from '../shared/base-list.component';
 
 @Component({
   selector: 'app-convenios',
@@ -24,13 +19,11 @@ interface SortState {
     ConvenioFormComponent
   ]
 })
-export class ConveniosComponent implements OnInit {
+export class ConveniosComponent extends BaseListComponent<Convenio> implements OnInit {
   protected Math = Math;
   convenios: Convenio[] = [];
-  conveniosFiltrados: Convenio[] = [];
   isLoading = true;
   dropdownAberto: number | null = null;
-  sortState: SortState = { column: '', direction: null };
   paginaAtual = 1;
   itensPorPagina = 12;
   totalPaginas = 1;
@@ -41,7 +34,9 @@ export class ConveniosComponent implements OnInit {
   constructor(
     private conveniosService: ConveniosService,
     private toastr: ToastrService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.carregarConvenios();
@@ -59,7 +54,7 @@ export class ConveniosComponent implements OnInit {
     this.conveniosService.listarConvenios().subscribe({
       next: (response) => {
         this.convenios = response.items;
-        this.conveniosFiltrados = [...this.convenios];
+        this.items = [...this.convenios];
         this.atualizarPaginacao();
         this.isLoading = false;
       },
@@ -79,41 +74,14 @@ export class ConveniosComponent implements OnInit {
     }
   }
 
-  ordenar(coluna: keyof Convenio): void {
-    let direcao: SortDirection = 'asc';
-
-    if (this.sortState.column === coluna) {
-      direcao = this.sortState.direction === 'asc' ? 'desc' : 'asc';
-    }
-
-    this.sortState = { column: coluna, direction: direcao };
-
-    this.conveniosFiltrados.sort((a, b) => {
-      const valorA = a[coluna] || '';
-      const valorB = b[coluna] || '';
-
-      if (valorA === valorB) return 0;
-
-      const comparacao = valorA < valorB ? -1 : 1;
-      return direcao === 'asc' ? comparacao : -comparacao;
-    });
-  }
-
-  getSortIcon(coluna: keyof Convenio): string {
-    if (this.sortState.column !== coluna) {
-      return '';
-    }
-    return this.sortState.direction === 'asc' ? 'arrow-up-icon' : 'arrow-down-icon';
-  }
-
   onSearch(): void {
     if (this.searchTerm) {
-      this.conveniosFiltrados = this.convenios.filter(convenio =>
+      this.items = this.convenios.filter(convenio =>
         convenio.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
         convenio.descricao?.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     } else {
-      this.conveniosFiltrados = [...this.convenios];
+      this.items = [...this.convenios];
     }
     this.paginaAtual = 1;
     this.atualizarPaginacao();
@@ -122,11 +90,11 @@ export class ConveniosComponent implements OnInit {
   getConveniosPaginados(): Convenio[] {
     const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
     const fim = inicio + this.itensPorPagina;
-    return this.conveniosFiltrados.slice(inicio, fim);
+    return this.items.slice(inicio, fim);
   }
 
   atualizarPaginacao(): void {
-    this.totalPaginas = Math.ceil(this.conveniosFiltrados.length / this.itensPorPagina);
+    this.totalPaginas = Math.ceil(this.items.length / this.itensPorPagina);
     if (this.paginaAtual > this.totalPaginas) {
       this.paginaAtual = this.totalPaginas || 1;
     }

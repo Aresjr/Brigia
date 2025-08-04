@@ -22,7 +22,7 @@
         <div class="flex justify-center items-center h-32">
             <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
         </div>
-    } @else if (conveniosFiltrados.length === 0) {
+    } @else if (items.length === 0) {
         <div class="text-center py-8 w-full bg-white rounded-lg">
             <p class="text-gray-500">Nenhum convênio encontrado.</p>
         </div>
@@ -92,7 +92,7 @@
 
         <div class="flex justify-between items-center mt-4 px-6">
             <div class="text-sm text-gray-700">
-                Mostrando {{((paginaAtual - 1) * itensPorPagina) + 1}} a {{Math.min(paginaAtual * itensPorPagina, conveniosFiltrados.length)}} de {{conveniosFiltrados.length}} resultados
+                Mostrando {{((paginaAtual - 1) * itensPorPagina) + 1}} a {{Math.min(paginaAtual * itensPorPagina, items.length)}} de {{items.length}} resultados
             </div>
             <div class="flex gap-2">
                 <button

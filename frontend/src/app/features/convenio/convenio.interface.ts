@@ -1,8 +1,8 @@
-export interface Convenio {
-    id: number;
+import { Entidade } from '../shared/entidade.interface';
+
+export interface Convenio extends Entidade {
     nome: string;
     descricao: string | null;
-    excluido: boolean;
 }
 
 export interface ConvenioResponse {

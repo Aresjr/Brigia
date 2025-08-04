@@ -1,5 +1,6 @@
-export interface Paciente {
-    id: number;
+import { Entidade } from '../shared/entidade.interface';
+
+export interface Paciente extends Entidade {
     nome: string;
     email: string | null;
     cpf: string | null;
@@ -17,7 +18,6 @@ export interface Paciente {
     cidade: string | null;
     uf: string | null;
     convenioId: number | null;
-    criadoEm: string | null;
 }
 
 export interface PacienteResponse {

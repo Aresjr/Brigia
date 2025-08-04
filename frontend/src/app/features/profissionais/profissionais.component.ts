@@ -7,7 +7,6 @@ import { ProfissionalFormComponent } from './profissional-form/profissional-form
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { CpfPipe } from '../../core/pipes/cpf.pipe';
 import { CelularPipe } from '../../core/pipes/celular.pipe';
 
 type SortDirection = 'asc' | 'desc' | null;
@@ -24,7 +23,6 @@ interface SortState {
     ProfissionalFormComponent,
     LucideAngularModule,
     FormsModule,
-    CpfPipe,
     CelularPipe
   ],
   templateUrl: './profissionais.component.html',
