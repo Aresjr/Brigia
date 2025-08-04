@@ -89,12 +89,10 @@ export class ConveniosComponent implements OnInit {
     this.sortState = { column: coluna, direction: direcao };
 
     this.conveniosFiltrados.sort((a, b) => {
-      const valorA = a[coluna];
-      const valorB = b[coluna];
+      const valorA = a[coluna] || '';
+      const valorB = b[coluna] || '';
 
       if (valorA === valorB) return 0;
-      if (valorA === null) return 1;
-      if (valorB === null) return -1;
 
       const comparacao = valorA < valorB ? -1 : 1;
       return direcao === 'asc' ? comparacao : -comparacao;
