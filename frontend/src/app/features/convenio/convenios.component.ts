@@ -92,6 +92,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
 
   excluirConvenio(event: Event, convenio: Convenio) {
     event.stopPropagation();
+    this.dropdownAberto = null;
     if (confirm(`Deseja realmente excluir o convênio ${convenio.nome}?`)) {
       this.conveniosService.excluirConvenio(convenio.id).subscribe({
         next: () => {

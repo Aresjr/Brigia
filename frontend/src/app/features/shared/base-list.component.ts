@@ -114,6 +114,7 @@ export abstract class BaseListComponent<T extends object> {
 
   editarItem(event: Event, item: T) {
     event.stopPropagation();
+    this.dropdownAberto = null;
     this.itemEdicao = item;
     this.mostrarFormularioNovo = true;
   }
