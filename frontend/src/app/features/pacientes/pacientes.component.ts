@@ -39,7 +39,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
 
   carregarPacientes(): void {
     this.isLoading = true;
-    this.pacientesService.listarPacientes().subscribe({
+    this.pacientesService.listar().subscribe({
       next: (response) => {
         this.pacientes = response.items;
         this.items = [...this.pacientes];
@@ -91,7 +91,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
   onSalvarNovoPaciente(paciente: Partial<Paciente>) {
     if (this.itemEdicao) {
       const id = this.itemEdicao.id;
-      this.pacientesService.atualizarPaciente(id, paciente).subscribe({
+      this.pacientesService.atualizar(id, paciente).subscribe({
         next: () => {
           this.toastr.success('Paciente atualizado com sucesso');
           this.carregarPacientes();
@@ -105,7 +105,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
         }
       });
     } else {
-      this.pacientesService.criarPaciente(paciente).subscribe({
+      this.pacientesService.criar(paciente).subscribe({
         next: () => {
           this.toastr.success('Paciente cadastrado com sucesso');
           this.carregarPacientes();

@@ -9,15 +9,15 @@ import { BackendService } from '../../core/backend/backend.service';
 export class PacientesService {
   constructor(private backend: BackendService) {}
 
-  listarPacientes(): Observable<PacienteResponse> {
+  listar(): Observable<PacienteResponse> {
     return this.backend.get<PacienteResponse>(`/pacientes?size=999`);
   }
 
-  criarPaciente(paciente: Partial<Paciente>): Observable<Paciente> {
+  criar(paciente: Partial<Paciente>): Observable<Paciente> {
     return this.backend.post<Paciente>(`/pacientes`, paciente);
   }
 
-  atualizarPaciente(id: number, paciente: Partial<Paciente>): Observable<Paciente> {
+  atualizar(id: number, paciente: Partial<Paciente>): Observable<Paciente> {
     return this.backend.put<Paciente>(`/pacientes/${id}`, paciente);
   }
 }

@@ -9,15 +9,15 @@ import { BackendService } from '../../core/backend/backend.service';
 export class ProfissionaisService {
   constructor(private backend: BackendService) {}
 
-  listarProfissionais(): Observable<ProfissionalResponse> {
+  listar(): Observable<ProfissionalResponse> {
     return this.backend.get<ProfissionalResponse>(`/profissionais?size=999`);
   }
 
-  criarProfissional(profissional: Partial<Profissional>): Observable<Profissional> {
+  criar(profissional: Partial<Profissional>): Observable<Profissional> {
     return this.backend.post<Profissional>(`/profissionais`, profissional);
   }
 
-  atualizarProfissional(id: number, profissional: Partial<Profissional>): Observable<Profissional> {
+  atualizar(id: number, profissional: Partial<Profissional>): Observable<Profissional> {
     return this.backend.put<Profissional>(`/profissionais/${id}`, profissional);
   }
 }

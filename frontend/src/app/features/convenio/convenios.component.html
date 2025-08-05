@@ -64,17 +64,17 @@
                                         <div class="absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                                             <div class="py-1 flex flex-col">
                                                 <a *ngIf="!convenio.excluido"
-                                                    (click)="editarItem($event, convenio)"
+                                                    (click)="editar($event, convenio)"
                                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
                                                     Editar
                                                 </a>
                                                 <a *ngIf="!convenio.excluido"
-                                                    (click)="excluirConvenio($event, convenio)"
+                                                    (click)="excluir($event, convenio)"
                                                     class="block px-4 py-2 text-sm text-red-700 hover:bg-red-50 cursor-pointer">
                                                     Excluir
                                                 </a>
                                                 <a *ngIf="convenio.excluido"
-                                                    (click)="restaurarConvenio($event, convenio)"
+                                                    (click)="restaurarItem($event, convenio)"
                                                     class="block px-4 py-2 text-sm text-green-700 hover:bg-green-50 cursor-pointer">
                                                     Restaurar
                                                 </a>

@@ -57,7 +57,7 @@
                 </thead>
                 <tbody class="bg-white">
                     @for (paciente of getItensPaginados(); track paciente.id) {
-                        <tr class="border-b hover:bg-gray-50 cursor-pointer" (click)="selecionarItem(paciente)">
+                        <tr class="border-b hover:bg-gray-50 cursor-pointer" (click)="selecionar(paciente)">
                             <td class="px-6 py-2 whitespace-nowrap">{{paciente.nome}}</td>
                             <td class="px-6 py-2 whitespace-nowrap">{{paciente.cpf | cpf}}</td>
                             <td class="px-6 py-2 whitespace-nowrap">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</td>
@@ -148,7 +148,7 @@
         Ver Histórico
       </a>
       <a
-        (click)="editarItem($event, paciente)"
+        (click)="editar($event, paciente)"
         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" >
         Editar
       </a>

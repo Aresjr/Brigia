@@ -1,10 +1,125 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ProcedimentosService } from './procedimentos.service';
+import { Procedimento } from './procedimento.interface';
+import { LucideAngularModule } from 'lucide-angular';
+import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { ProcedimentoFormComponent } from './procedimento-form/procedimento-form.component';
+import { BaseListComponent } from '../shared/base-list.component';
 
 @Component({
   selector: 'app-procedimentos',
-  imports: [],
-  templateUrl: './procedimentos.component.html'
+  templateUrl: './procedimentos.component.html',
+  standalone: true,
+  imports: [
+    CommonModule,
+    LucideAngularModule,
+    FormsModule,
+    ProcedimentoFormComponent
+  ]
 })
-export class ProcedimentosComponent {
+export class ProcedimentosComponent extends BaseListComponent<Procedimento> implements OnInit {
+  protected Math = Math;
+  procedimentos: Procedimento[] = [];
+
+  constructor(private procedimentosService: ProcedimentosService, private toastr: ToastrService) {
+    super();
+  }
+
+  ngOnInit(): void {
+    this.carregarProcedimentos();
+  }
+
+  carregarProcedimentos(): void {
+    this.isLoading = true;
+    this.procedimentosService.listar().subscribe({
+      next: (response) => {
+        this.procedimentos = response.items;
+        this.items = [...this.procedimentos];
+        this.atualizarPaginacao();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        this.toastr.error('Erro ao carregar convênios. Por favor, tente novamente.');
+      }
+    });
+  }
+
+  onSearch(): void {
+    if (this.searchTerm) {
+      this.items = this.procedimentos.filter(procedimento =>
+        procedimento.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        procedimento.descricao?.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    } else {
+      this.items = [...this.procedimentos];
+    }
+    this.paginaAtual = 1;
+    this.atualizarPaginacao();
+  }
+
+  onSalvarNovo(procedimento: Partial<Procedimento>) {
+    if (this.itemEdicao) {
+      const id = this.itemEdicao.id;
+      this.procedimentosService.atualizar(id, procedimento).subscribe({
+        next: () => {
+          this.toastr.success('Convênio atualizado com sucesso');
+          this.carregarProcedimentos();
+          this.mostrarFormularioNovo = false;
+          this.itemEdicao = null;
+        },
+        error: (e) => {
+          const errorMessage: string = e.error.messages?.join('; ') || e.error.message || '';
+          this.toastr.error(errorMessage, 'Erro ao atualizar convênio');
+        }
+      });
+    } else {
+      this.procedimentosService.criar(procedimento).subscribe({
+        next: () => {
+          this.toastr.success('Convênio cadastrado com sucesso');
+          this.carregarProcedimentos();
+          this.mostrarFormularioNovo = false;
+        },
+        error: (error) => {
+          this.toastr.error('Erro ao cadastrar convênio');
+          console.error('Erro ao cadastrar convênio:', error);
+        }
+      });
+    }
+  }
+
+  excluir(event: Event, procedimento: Procedimento) {
+    event.stopPropagation();
+    this.dropdownAberto = null;
+    if (confirm(`Deseja realmente excluir o convênio ${procedimento.nome}?`)) {
+      this.procedimentosService.excluir(procedimento.id).subscribe({
+        next: () => {
+          this.toastr.success('Convênio excluído com sucesso');
+          this.carregarProcedimentos();
+        },
+        error: () => {
+          this.toastr.error('Erro ao excluir convênio');
+        }
+      });
+    }
+  }
+
+  restaurar(event: Event, procedimento: Procedimento) {
+    event.stopPropagation();
+    this.dropdownAberto = null;
+
+    this.procedimentosService.restaurar(procedimento.id).subscribe({
+      next: () => {
+        procedimento.excluido = false;
+        this.toastr.success('Convênio restaurado com sucesso!');
+      },
+      error: (error) => {
+        this.toastr.error('Erro ao restaurar o convênio');
+        console.error('Erro ao restaurar convênio:', error);
+      }
+    });
+  }
 
 }

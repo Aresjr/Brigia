@@ -59,7 +59,7 @@ export class PacienteFormComponent implements OnInit {
   }
 
   private carregarConvenios() {
-    this.conveniosService.listarConvenios().subscribe(
+    this.conveniosService.listar().subscribe(
       response => {
         this.convenios = response.items;
       }

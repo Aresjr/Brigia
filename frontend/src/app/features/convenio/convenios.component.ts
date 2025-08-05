@@ -33,7 +33,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
 
   carregarConvenios(): void {
     this.isLoading = true;
-    this.conveniosService.listarConvenios().subscribe({
+    this.conveniosService.listar().subscribe({
       next: (response) => {
         this.convenios = response.items;
         this.items = [...this.convenios];
@@ -63,7 +63,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
   onSalvarNovoConvenio(convenio: Partial<Convenio>) {
     if (this.itemEdicao) {
       const id = this.itemEdicao.id;
-      this.conveniosService.atualizarConvenio(id, convenio).subscribe({
+      this.conveniosService.atualizar(id, convenio).subscribe({
         next: () => {
           this.toastr.success('Convênio atualizado com sucesso');
           this.carregarConvenios();
@@ -76,7 +76,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
         }
       });
     } else {
-      this.conveniosService.criarConvenio(convenio).subscribe({
+      this.conveniosService.criar(convenio).subscribe({
         next: () => {
           this.toastr.success('Convênio cadastrado com sucesso');
           this.carregarConvenios();
@@ -90,11 +90,11 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
     }
   }
 
-  excluirConvenio(event: Event, convenio: Convenio) {
+  excluir(event: Event, convenio: Convenio) {
     event.stopPropagation();
     this.dropdownAberto = null;
-    if (confirm(`Deseja realmente excluir o convênio ${convenio.nome}?`)) {
-      this.conveniosService.excluirConvenio(convenio.id).subscribe({
+    if (confirm(`Deseja realmente excluir o convênio ${convenio.nome}?`)) { //TODO - alterar para uma biblioteca de confirmação
+      this.conveniosService.excluir(convenio.id).subscribe({
         next: () => {
           this.toastr.success('Convênio excluído com sucesso');
           this.carregarConvenios();
@@ -106,11 +106,11 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
     }
   }
 
-  restaurarConvenio(event: Event, convenio: Convenio) {
+  restaurarItem(event: Event, convenio: Convenio) {
     event.stopPropagation();
     this.dropdownAberto = null;
 
-    this.conveniosService.restaurarConvenio(convenio.id).subscribe({
+    this.conveniosService.restaurar(convenio.id).subscribe({
       next: () => {
         convenio.excluido = false;
         this.toastr.success('Convênio restaurado com sucesso!');

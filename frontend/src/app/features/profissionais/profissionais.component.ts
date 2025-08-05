@@ -37,7 +37,7 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
 
   carregarProfissionais(): void {
     this.isLoading = true;
-    this.profissionaisService.listarProfissionais().subscribe({
+    this.profissionaisService.listar().subscribe({
       next: (response) => {
         this.profissionais = response.items;
         this.items = [...this.profissionais];
@@ -89,7 +89,7 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
   onSalvarNovoProfissional(profissional: Partial<Profissional>) {
     if (this.itemEdicao) {
       const id = this.itemEdicao.id;
-      this.profissionaisService.atualizarProfissional(id, profissional).subscribe({
+      this.profissionaisService.atualizar(id, profissional).subscribe({
         next: () => {
           this.toastr.success('Profissional atualizado com sucesso');
           this.carregarProfissionais();
@@ -103,7 +103,7 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
         }
       });
     } else {
-      this.profissionaisService.criarProfissional(profissional).subscribe({
+      this.profissionaisService.criar(profissional).subscribe({
         next: () => {
           this.toastr.success('Profissional cadastrado com sucesso');
           this.carregarProfissionais();

@@ -94,7 +94,7 @@ export abstract class BaseListComponent<T extends object> {
     }
   }
 
-  selecionarItem(item: T): void {
+  selecionar(item: T): void {
     this.itemSelecionado = item;
   }
 
@@ -112,7 +112,7 @@ export abstract class BaseListComponent<T extends object> {
     this.itemEdicao = null;
   }
 
-  editarItem(event: Event, item: T) {
+  editar(event: Event, item: T) {
     event.stopPropagation();
     this.dropdownAberto = null;
     this.itemEdicao = item;
