@@ -9,23 +9,25 @@ import { Convenio, ConvenioResponse } from './convenio.interface';
 export class ConveniosService {
   constructor(private backend: BackendService) {}
 
+  path = '/convenios';
+
   listar(): Observable<ConvenioResponse> {
-    return this.backend.get<ConvenioResponse>('/convenios?size=999');
+    return this.backend.get<ConvenioResponse>(`${this.path}?size=999`);
   }
 
   criar(convenio: Partial<Convenio>): Observable<Convenio> {
-    return this.backend.post<Convenio>('/convenios', convenio);
+    return this.backend.post<Convenio>(this.path, convenio);
   }
 
   atualizar(id: number, convenio: Partial<Convenio>): Observable<Convenio> {
-    return this.backend.put<Convenio>(`/convenios/${id}`, convenio);
+    return this.backend.put<Convenio>(`${this.path}/${id}`, convenio);
   }
 
   excluir(id: number): Observable<void> {
-    return this.backend.delete<void>(`/convenios/${id}`);
+    return this.backend.delete<void>(`${this.path}/${id}`);
   }
 
   restaurar(id: number): Observable<void> {
-    return this.backend.patch<void>(`/convenios/${id}/restaurar`, null);
+    return this.backend.patch<void>(`${this.path}/${id}/restaurar`, null);
   }
 }

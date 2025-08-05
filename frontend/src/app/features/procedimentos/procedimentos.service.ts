@@ -9,23 +9,25 @@ import { Procedimento, ProcedimentoResponse } from './procedimento.interface';
 export class ProcedimentosService {
   constructor(private backend: BackendService) {}
 
+  path = '/procedimentos';
+
   listar(): Observable<ProcedimentoResponse> {
-    return this.backend.get<ProcedimentoResponse>('/procedimentos?size=999');
+    return this.backend.get<ProcedimentoResponse>(`${this.path}?size=999`);
   }
 
   criar(procedimento: Partial<Procedimento>): Observable<Procedimento> {
-    return this.backend.post<Procedimento>('/procedimentos', procedimento);
+    return this.backend.post<Procedimento>(this.path, procedimento);
   }
 
   atualizar(id: number, procedimento: Partial<Procedimento>): Observable<Procedimento> {
-    return this.backend.put<Procedimento>(`/procedimentos/${id}`, procedimento);
+    return this.backend.put<Procedimento>(`${this.path}/${id}`, procedimento);
   }
 
   excluir(id: number): Observable<void> {
-    return this.backend.delete<void>(`/procedimentos/${id}`);
+    return this.backend.delete<void>(`${this.path}${id}`);
   }
 
   restaurar(id: number): Observable<void> {
-    return this.backend.patch<void>(`/procedimentos/${id}/restaurar`, null);
+    return this.backend.patch<void>(`${this.path}${id}/restaurar`, null);
   }
 }

@@ -9,15 +9,17 @@ import { BackendService } from '../../core/backend/backend.service';
 export class ProfissionaisService {
   constructor(private backend: BackendService) {}
 
+  path = '/profissionais';
+
   listar(): Observable<ProfissionalResponse> {
-    return this.backend.get<ProfissionalResponse>(`/profissionais?size=999`);
+    return this.backend.get<ProfissionalResponse>(`${this.path}?size=999`);
   }
 
   criar(profissional: Partial<Profissional>): Observable<Profissional> {
-    return this.backend.post<Profissional>(`/profissionais`, profissional);
+    return this.backend.post<Profissional>(this.path, profissional);
   }
 
   atualizar(id: number, profissional: Partial<Profissional>): Observable<Profissional> {
-    return this.backend.put<Profissional>(`/profissionais/${id}`, profissional);
+    return this.backend.put<Profissional>(`${this.path}/${id}`, profissional);
   }
 }

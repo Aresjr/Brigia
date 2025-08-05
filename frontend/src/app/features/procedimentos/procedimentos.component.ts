@@ -22,6 +22,7 @@ import { BaseListComponent } from '../shared/base-list.component';
 export class ProcedimentosComponent extends BaseListComponent<Procedimento> implements OnInit {
   protected Math = Math;
   procedimentos: Procedimento[] = [];
+  nomeEntidade = 'procedimento';
 
   constructor(private procedimentosService: ProcedimentosService, private toastr: ToastrService) {
     super();
@@ -42,7 +43,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
       },
       error: () => {
         this.isLoading = false;
-        this.toastr.error('Erro ao carregar convênios. Por favor, tente novamente.');
+        this.toastr.error(`Erro ao carregar a lista de ${this.nomeEntidade}. Por favor, tente novamente.`);
       }
     });
   }
@@ -65,26 +66,26 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
       const id = this.itemEdicao.id;
       this.procedimentosService.atualizar(id, procedimento).subscribe({
         next: () => {
-          this.toastr.success('Convênio atualizado com sucesso');
+          this.toastr.success(`${this.nomeEntidade} atualizado com sucesso`);
           this.carregarProcedimentos();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
         },
         error: (e) => {
           const errorMessage: string = e.error.messages?.join('; ') || e.error.message || '';
-          this.toastr.error(errorMessage, 'Erro ao atualizar convênio');
+          this.toastr.error(errorMessage, `Erro ao atualizar ${this.nomeEntidade}`);
         }
       });
     } else {
       this.procedimentosService.criar(procedimento).subscribe({
         next: () => {
-          this.toastr.success('Convênio cadastrado com sucesso');
+          this.toastr.success(`${this.nomeEntidade} cadastrado com sucesso`);
           this.carregarProcedimentos();
           this.mostrarFormularioNovo = false;
         },
         error: (error) => {
-          this.toastr.error('Erro ao cadastrar convênio');
-          console.error('Erro ao cadastrar convênio:', error);
+          this.toastr.error(`Erro ao cadastrar ${this.nomeEntidade}`);
+          console.error(`Erro ao cadastrar ${this.nomeEntidade}:`, error);
         }
       });
     }
@@ -93,14 +94,14 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
   excluir(event: Event, procedimento: Procedimento) {
     event.stopPropagation();
     this.dropdownAberto = null;
-    if (confirm(`Deseja realmente excluir o convênio ${procedimento.nome}?`)) {
+    if (confirm(`Deseja realmente excluir o ${this.nomeEntidade} ${procedimento.nome}?`)) {
       this.procedimentosService.excluir(procedimento.id).subscribe({
         next: () => {
-          this.toastr.success('Convênio excluído com sucesso');
+          this.toastr.success(`${this.nomeEntidade} excluído com sucesso`);
           this.carregarProcedimentos();
         },
         error: () => {
-          this.toastr.error('Erro ao excluir convênio');
+          this.toastr.error(`Erro ao excluir ${this.nomeEntidade}`);
         }
       });
     }
@@ -113,11 +114,11 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
     this.procedimentosService.restaurar(procedimento.id).subscribe({
       next: () => {
         procedimento.excluido = false;
-        this.toastr.success('Convênio restaurado com sucesso!');
+        this.toastr.success(`${this.nomeEntidade} restaurado com sucesso!`);
       },
       error: (error) => {
-        this.toastr.error('Erro ao restaurar o convênio');
-        console.error('Erro ao restaurar convênio:', error);
+        this.toastr.error(`Erro ao restaurar o ${this.nomeEntidade}`);
+        console.error(`Erro ao restaurar ${this.nomeEntidade}:`, error);
       }
     });
   }
