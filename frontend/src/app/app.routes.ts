@@ -10,6 +10,7 @@ import { AgendamentosComponent } from './features/agendamentos/agendamentos.comp
 import { ProcedimentosComponent } from './features/procedimentos/procedimentos.component';
 import { TabelaPrecosComponent } from './features/tabela-precos/tabela-precos.component';
 import { ConveniosComponent } from './features/convenio/convenios.component';
+import { AgendaDiariaComponent } from './features/agenda-diaria/agenda-diaria.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -92,6 +93,16 @@ export const routes: Routes = [
           roles: ['SECRETARIA', 'ADMIN'],
           title: 'Tabela de Preços',
         },
+      },
+      {
+        path: 'agenda-diaria',
+        component: AgendaDiariaComponent,
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        data: {
+          roles: ['SECRETARIA', 'ADMIN'],
+          title: 'Agenda Diária'
+        }
       },
     ],
   },

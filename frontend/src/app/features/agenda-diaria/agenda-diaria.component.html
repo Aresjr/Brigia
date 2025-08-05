@@ -1,0 +1,72 @@
+<div class="container mx-auto p-4">
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-2xl font-bold mb-6">Agenda Diária</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <!-- Seleção de Profissional -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Profissional</mat-label>
+        <mat-select [(ngModel)]="profissionalSelecionado" (selectionChange)="carregarDisponibilidades()">
+          <mat-option *ngFor="let prof of profissionais" [value]="prof.id">
+            {{prof.nome}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Seleção de Data -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Data</mat-label>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="dataSelecionada" (dateChange)="carregarDisponibilidades()">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <!-- Lista de Disponibilidades -->
+    <div class="mb-4">
+      <button mat-raised-button color="primary" (click)="adicionarDisponibilidade()"
+              [disabled]="!profissionalSelecionado || !dataSelecionada">
+        Adicionar Disponibilidade
+      </button>
+    </div>
+
+    <table mat-table [dataSource]="disponibilidades" class="w-full">
+      <!-- Hora Início -->
+      <ng-container matColumnDef="horaInicio">
+        <th mat-header-cell *matHeaderCellDef>Hora Início</th>
+        <td mat-cell *matCellDef="let item">{{item.horaInicio}}</td>
+      </ng-container>
+
+      <!-- Hora Fim -->
+      <ng-container matColumnDef="horaFim">
+        <th mat-header-cell *matHeaderCellDef>Hora Fim</th>
+        <td mat-cell *matCellDef="let item">{{item.horaFim}}</td>
+      </ng-container>
+
+      <!-- Intervalo -->
+      <ng-container matColumnDef="intervalo">
+        <th mat-header-cell *matHeaderCellDef>Intervalo (min)</th>
+        <td mat-cell *matCellDef="let item">{{item.intervaloMinutos}}</td>
+      </ng-container>
+
+      <!-- Status -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let item">{{item.status}}</td>
+      </ng-container>
+
+      <!-- Ações -->
+      <ng-container matColumnDef="acoes">
+        <th mat-header-cell *matHeaderCellDef>Ações</th>
+        <td mat-cell *matCellDef="let item">
+          <button mat-icon-button color="warn" (click)="excluirDisponibilidade(item.id!)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="['horaInicio', 'horaFim', 'intervalo', 'status', 'acoes']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['horaInicio', 'horaFim', 'intervalo', 'status', 'acoes'];"></tr>
+    </table>
+  </div>
+</div>
