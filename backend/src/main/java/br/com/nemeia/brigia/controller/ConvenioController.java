@@ -23,9 +23,10 @@ public class ConvenioController {
   @GetMapping
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
   public PagedResponse<ConvenioResponse> getAllConvenios(
+          @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
           @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
     log.info("GET /convenios - page: {}, size: {}", page, size);
-    return mapper.toPagedResponse(service.getPaged(page, size));
+    return mapper.toPagedResponse(service.getPaged(page, size, mostrarExcluidos));
   }
 
   @PostMapping

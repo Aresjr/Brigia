@@ -25,10 +25,10 @@ public class ConvenioService {
   private final ConvenioMapper mapper;
   private final SecurityUtils securityUtils;
 
-  public Page<Convenio> getPaged(int page, int size) {
+  public Page<Convenio> getPaged(int page, int size, Boolean mostrarExcluidos) {
     Sort sort = Sort.by(Sort.Direction.ASC, "excluido").and(Sort.by(Sort.Direction.DESC, "id")); //TODO - centralizar
     Pageable pageable = PageRequest.of(page, size, sort);
-    return repository.findAll(pageable);
+    return mostrarExcluidos ? repository.findAll(pageable) : repository.findAllByExcluidoIs(pageable, false);
   }
 
   public Convenio getById(Long id) {
