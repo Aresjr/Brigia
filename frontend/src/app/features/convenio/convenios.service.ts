@@ -11,8 +11,8 @@ export class ConveniosService {
 
   path = '/convenios';
 
-  listar(): Observable<ConvenioResponse> {
-    return this.backend.get<ConvenioResponse>(`${this.path}?size=999`);
+  listar(mostrarExcluidos: boolean = false): Observable<ConvenioResponse> {
+    return this.backend.get<ConvenioResponse>(`${this.path}?mostrarExcluidos=${mostrarExcluidos}&size=999`);
   }
 
   criar(convenio: Partial<Convenio>): Observable<Convenio> {

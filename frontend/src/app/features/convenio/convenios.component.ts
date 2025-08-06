@@ -33,7 +33,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
 
   carregarConvenios(): void {
     this.isLoading = true;
-    this.conveniosService.listar().subscribe({
+    this.conveniosService.listar(true).subscribe({
       next: (response) => {
         this.convenios = response.items;
         this.items = [...this.convenios];

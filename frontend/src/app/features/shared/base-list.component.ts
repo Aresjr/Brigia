@@ -15,7 +15,7 @@ export abstract class BaseListComponent<T extends object> {
   items: T[] = [];
   sortState: SortState<T> = { column: '', direction: null };
   paginaAtual = 1;
-  itensPorPagina = 5;
+  itensPorPagina = 12;
   totalPaginas = 1;
   searchTerm: string = '';
   dropdownAberto: number | null = null;

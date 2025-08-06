@@ -38,7 +38,8 @@ export class LoginComponent implements OnInit {
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
           this.populateLocalStorage(response);
-          this.router.navigate(['/']);
+          const redirect = sessionStorage.getItem('redirect');
+          this.router.navigate([redirect ? redirect : '/']);
         },
         error: (error) => {
           console.error('Login failed:', error);
