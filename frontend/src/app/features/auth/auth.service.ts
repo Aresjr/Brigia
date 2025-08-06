@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { Role } from '../../core/constans';
 
 interface LoginRequest {
   email: string;
@@ -12,7 +13,7 @@ export interface LoginResponse {
   email: string;
   name: string;
   avatarUrl: string;
-  roles: string[];
+  roles: Role[];
   unidade: number;
 }
 

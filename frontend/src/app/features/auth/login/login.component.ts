@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
     localStorage.setItem('email', response.email);
     localStorage.setItem('name', response.name);
     localStorage.setItem('avatarUrl', response.avatarUrl);
-    localStorage.setItem('roles', JSON.stringify(response.roles));
+    localStorage.setItem('roles', response.roles ? JSON.stringify(response.roles) : '[]');
     localStorage.setItem('unidade', response.unidade.toString());
   }
 }

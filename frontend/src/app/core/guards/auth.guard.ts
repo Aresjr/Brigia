@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Role } from '../constans';
 
 @Injectable({
   providedIn: 'root',
@@ -23,8 +24,13 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    const expectedRoles = route.data['roles'] as string[];
-    const userRoles = JSON.parse(localStorage.getItem('roles') || '[]');
+    const expectedRoles = route.data['roles'] as Role[];
+
+    const roles = JSON.parse(localStorage.getItem('roles') || '[]');
+    const userRoles: Role[] = [];
+    roles.forEach((role: string) => {
+      userRoles.push(Role[role as keyof typeof Role] as Role);
+    });
 
     const hasAccess = expectedRoles.some((role) => userRoles.includes(role));
 

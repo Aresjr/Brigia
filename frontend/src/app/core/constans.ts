@@ -1,3 +1,10 @@
+export enum Role {
+  ADMIN,
+  SECRETARIA,
+  MEDICO,
+  FATURAMENTO
+}
+
 export const ESTADOS = [
   { sigla: 'AC', nome: 'Acre' },
   { sigla: 'AL', nome: 'Alagoas' },
