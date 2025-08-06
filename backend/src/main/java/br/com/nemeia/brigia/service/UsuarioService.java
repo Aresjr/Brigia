@@ -1,15 +1,13 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.dto.request.UsuarioRequest;
-import br.com.nemeia.brigia.dto.response.UsuarioResponse;
-import br.com.nemeia.brigia.exception.UnidadeNotFoundException;
-import br.com.nemeia.brigia.exception.UsuarioNotFoundException;
+import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.UsuarioMapper;
 import br.com.nemeia.brigia.model.Unidade;
 import br.com.nemeia.brigia.model.Usuario;
 import br.com.nemeia.brigia.repository.UnidadeRepository;
 import br.com.nemeia.brigia.repository.UsuarioRepository;
-import jakarta.validation.Valid;
+
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +39,7 @@ public class UsuarioService {
   public Usuario findById(Long id) {
     return repository
         .findById(id)
-        .orElseThrow(() -> new UsuarioNotFoundException("Usuário não encontrado com o ID: " + id));
+        .orElseThrow(() -> new NotFoundException("Usuário não encontrado com o ID: " + id));
   }
 
   public Usuario create(UsuarioRequest request) {
@@ -49,10 +47,7 @@ public class UsuarioService {
     Unidade unidade =
         unidadeRepository
             .findById(request.unidade())
-            .orElseThrow(
-                () ->
-                    new UnidadeNotFoundException(
-                        "Unidade não encontrada com o ID: " + request.unidade()));
+            .orElseThrow(() -> new NotFoundException("Unidade não encontrada com o ID: " + request.unidade()));
 
     log.info("Criando usuário: {}", request.email());
     Usuario usuario = mapper.toEntity(request);

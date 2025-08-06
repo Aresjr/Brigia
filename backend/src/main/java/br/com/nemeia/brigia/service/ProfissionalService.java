@@ -1,7 +1,7 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.dto.request.ProfissionalRequest;
-import br.com.nemeia.brigia.exception.ProfissionalNotFoundException;
+import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ProfissionalMapper;
 import br.com.nemeia.brigia.model.Profissional;
 import br.com.nemeia.brigia.repository.ProfissionalRepository;
@@ -37,7 +37,7 @@ public class ProfissionalService {
   public Profissional getProfissionalById(Long id) {
     return repository
         .findById(id)
-        .orElseThrow(() -> new ProfissionalNotFoundException("Profissional não encontrado com ID: " + id));
+        .orElseThrow(() -> new NotFoundException("Profissional não encontrado com ID: " + id));
   }
 
   public Profissional createProfissional(ProfissionalRequest request) {

@@ -2,7 +2,7 @@ package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.auth.SecurityUtils;
 import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
-import br.com.nemeia.brigia.exception.ProcedimentoNotFoundException;
+import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ProcedimentoMapper;
 import br.com.nemeia.brigia.model.Procedimento;
 import br.com.nemeia.brigia.repository.ProcedimentoRepository;
@@ -34,7 +34,7 @@ public class ProcedimentoService {
   public Procedimento getById(Long id) {
     return repository
         .findById(id)
-        .orElseThrow(() -> new ProcedimentoNotFoundException("Procedimento não encontrado com ID: " + id));
+        .orElseThrow(() -> new NotFoundException("Procedimento não encontrado com ID: " + id));
   }
 
   public Procedimento createProcedimento(ProcedimentoRequest request) {

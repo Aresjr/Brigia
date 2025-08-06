@@ -1,7 +1,7 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.dto.request.PacienteRequest;
-import br.com.nemeia.brigia.exception.PacienteNotFoundException;
+import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.PacienteMapper;
 import br.com.nemeia.brigia.model.Convenio;
 import br.com.nemeia.brigia.model.Paciente;
@@ -42,7 +42,7 @@ public class PacienteService {
   public Paciente getPacienteById(Long id) {
     return repository
         .findById(id)
-        .orElseThrow(() -> new PacienteNotFoundException("Paciente não encontrado com ID: " + id));
+        .orElseThrow(() -> new NotFoundException("Paciente não encontrado com ID: " + id));
   }
 
   public Paciente createPaciente(PacienteRequest request) {

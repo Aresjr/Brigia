@@ -2,7 +2,7 @@ package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.auth.SecurityUtils;
 import br.com.nemeia.brigia.dto.request.ConvenioRequest;
-import br.com.nemeia.brigia.exception.ConvenioNotFoundException;
+import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ConvenioMapper;
 import br.com.nemeia.brigia.model.Convenio;
 import br.com.nemeia.brigia.repository.ConvenioRepository;
@@ -34,7 +34,7 @@ public class ConvenioService {
   public Convenio getById(Long id) {
     return repository
         .findById(id)
-        .orElseThrow(() -> new ConvenioNotFoundException("Convênio não encontrado com ID: " + id));
+        .orElseThrow(() -> new NotFoundException("Convênio não encontrado com ID: " + id));
   }
 
   public Convenio createConvenio(ConvenioRequest request) {
