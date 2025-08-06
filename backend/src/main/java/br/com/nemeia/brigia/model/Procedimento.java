@@ -19,9 +19,15 @@ public class Procedimento extends BaseModel {
   @Column(name = "codigo")
   private String codigo;
 
-  @Column(name = "descricao")
-  private String descricao;
+  @Column(name = "nome")
+  private String nome;
 
   @Column(name = "observacoes")
   private String observacoes;
+
+  public Procedimento(String codigo, String nome, String observacoes) {
+    this.codigo = codigo;
+    this.nome = nome;
+    this.observacoes = observacoes;
+  }
 }
