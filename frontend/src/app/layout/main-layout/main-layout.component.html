@@ -9,36 +9,34 @@
         </div>
         <div class="flex-1 relative">
           <lucide-icon name="search" class="w-4 h-4 absolute left-1 top-1/2 transform -translate-y-1/2 text-muted-foreground"></lucide-icon>
-          <input class="flex w-full rounded-md border px-3 py-2 h-8 pl-9 text-sm" placeholder="Pesquisar" />
+          <input [(ngModel)]="searchTerm" (input)="onSearchChange()" class="flex w-full rounded-md border px-3 py-2 h-8 pl-9 text-sm" placeholder="Pesquisar" />
         </div>
       </div>
       <div class="shrink-0 bg-border h-[1px] w-full"></div>
       <div class="flex-1 overflow-y-auto">
-        <ul class="px-3 py-2">
-          <li>
-            <app-menu-item label="Página Inicial" icon="home" route="/"></app-menu-item>
-          </li>
-          <li>
-            <app-menu-item label="Pacientes" icon="users" route="/pacientes"></app-menu-item>
-          </li>
-          <li>
-            <app-menu-item label="Agendamentos" icon="calendar" route="/agendamentos"></app-menu-item>
-          </li>
-          <li>
-            <div>
-              <app-menu-item label="Cadastros" icon="user-plus" [hasSubmenu]="true"
-                [submenuOpen]="isSubmenuOpen('cadastros')" (clicked)="toggleSubmenu('cadastros')">
-              </app-menu-item>
-              <div class="overflow-hidden ease-in-out"
-                [class.max-h-0]="!isSubmenuOpen('cadastros')"
-                [class.max-h-48]="isSubmenuOpen('cadastros')">
-                <ul class="pl-4">
-                  <li><app-menu-item label="Procedimentos" route="/procedimentos" icon="clipboard-list"></app-menu-item></li>
-                  <li><app-menu-item label="Profissionais" route="/profissionais" icon="stethoscope"></app-menu-item></li>
-                  <li><app-menu-item label="Convênios" route="/convenios" icon="heart-handshake"></app-menu-item></li>
-                  <li><app-menu-item label="Tabela de Preços" route="/tabela-precos" icon="building"></app-menu-item></li>
-                </ul>
-              </div>
+        <ul class="px-2">
+          <li *ngFor="let item of this.filteredMenuItems">
+            <app-menu-item
+              [label]="item.label"
+              [icon]="item.icon"
+              [route]="item.route"
+              [hasSubmenu]="item.hasSubmenu"
+              [submenuOpen]="isSubmenuOpen(item.label)"
+              (clicked)="toggleSubmenu(item.label)">
+            </app-menu-item>
+            <div *ngIf="item.children"
+              class="overflow-hidden ease-in-out"
+              [class.max-h-0]="!isSubmenuOpen(item.label)"
+              [class.max-h-48]="isSubmenuOpen(item.label)">
+              <ul class="pl-4">
+                <li *ngFor="let child of item.children">
+                  <app-menu-item
+                    [label]="child.label"
+                    [icon]="child.icon"
+                    [route]="child.route">
+                  </app-menu-item>
+                </li>
+              </ul>
             </div>
           </li>
         </ul>
