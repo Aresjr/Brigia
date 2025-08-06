@@ -14,7 +14,8 @@ export class MenuItemComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        this.isActive = this.route ? this.router.url === this.route : false;
+        const currentRoute = this.router.url.replace('/', '');
+        this.isActive = currentRoute == this.route && !this.hasSubmenu;
       });
   }
 
@@ -29,9 +30,7 @@ export class MenuItemComponent {
 
   handleClick() {
     this.clicked.emit();
-    if (this.route) {
-      this.router.navigate([this.route]);
-    }
+    this.router.navigate([this.route]);
   }
 
 }

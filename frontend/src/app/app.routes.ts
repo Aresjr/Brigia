@@ -31,69 +31,98 @@ export const routes: Routes = [
         canActivateChild: [AuthGuard],
         data: {
           roles: [Role.SECRETARIA, Role.ADMIN, Role.FATURAMENTO],
-          title: 'Página Inicial'
+          title: 'Página Inicial',
+          icon: 'home'
         },
       },
       {
-        path: 'pacientes',
-        component: PacientesComponent,
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
+        path: '',
         data: {
-          roles: [Role.SECRETARIA, Role.ADMIN],
-          title: 'Pacientes'
+          roles: [Role.SECRETARIA, Role.ADMIN, Role.FATURAMENTO],
+          title: 'Cadastros',
+          hasSubmenu: true,
+          icon: 'user-plus'
         },
+        children: [
+          {
+            path: 'pacientes',
+            component: PacientesComponent,
+            canActivate: [AuthGuard],
+            canActivateChild: [AuthGuard],
+            data: {
+              roles: [Role.SECRETARIA, Role.ADMIN],
+              title: 'Pacientes',
+              icon: 'users'
+            },
+          },
+          {
+            path: 'agendamentos',
+            component: AgendamentosComponent,
+            canActivate: [AuthGuard],
+            canActivateChild: [AuthGuard],
+            data: {
+              roles: [Role.SECRETARIA, Role.ADMIN],
+              title: 'Agendamentos',
+              icon: 'calendar'
+            },
+          },
+          {
+            path: 'procedimentos',
+            component: ProcedimentosComponent,
+            canActivate: [AuthGuard],
+            canActivateChild: [AuthGuard],
+            data: {
+              roles: [Role.ADMIN, Role.FATURAMENTO],
+              title: 'Procedimentos',
+              icon: 'clipboard-list'
+            },
+          },
+          {
+            path: 'profissionais',
+            component: ProfissionaisComponent,
+            canActivate: [AuthGuard],
+            canActivateChild: [AuthGuard],
+            data: {
+              roles: [Role.SECRETARIA, Role.ADMIN],
+              title: 'Profissionais',
+              icon: 'stethoscope'
+            },
+          },
+          {
+            path: 'convenios',
+            component: ConveniosComponent,
+            canActivate: [AuthGuard],
+            canActivateChild: [AuthGuard],
+            data: {
+              roles: [Role.SECRETARIA],
+              title: 'Convênios',
+              icon: 'heart-handshake'
+            },
+          },
+        ]
       },
       {
-        path: 'agendamentos',
-        component: AgendamentosComponent,
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
+        path: '',
         data: {
-          roles: [Role.SECRETARIA, Role.ADMIN],
-          title: 'Agendamentos'
+          roles: [Role.SECRETARIA, Role.ADMIN, Role.FATURAMENTO],
+          title: 'Faturamento',
+          hasSubmenu: true,
+          icon: 'receipt'
         },
-      },
-      {
-        path: 'procedimentos',
-        component: ProcedimentosComponent,
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
-        data: {
-          roles: [Role.ADMIN, Role.FATURAMENTO],
-          title: 'Procedimentos',
-        },
-      },
-      {
-        path: 'profissionais',
-        component: ProfissionaisComponent,
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
-        data: {
-          roles: [Role.SECRETARIA, Role.ADMIN],
-          title: 'Profissionais',
-        },
-      },
-      {
-        path: 'convenios',
-        component: ConveniosComponent,
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
-        data: {
-          roles: [Role.SECRETARIA, Role.ADMIN],
-          title: 'Convênios',
-        },
-      },
-      {
-        path: 'tabela-precos',
-        component: TabelaPrecosComponent,
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
-        data: {
-          roles: [Role.ADMIN, Role.FATURAMENTO],
-          title: 'Tabela de Preços',
-        },
-      },
+        children: [
+          {
+            path: 'tabela-precos',
+            component: TabelaPrecosComponent,
+            canActivate: [AuthGuard],
+            canActivateChild: [AuthGuard],
+            data: {
+              roles: [Role.ADMIN, Role.FATURAMENTO],
+              title: 'Tabela de Preços',
+              icon: 'receipt'
+            },
+          },
+        ]
+      }
     ],
   },
 ];

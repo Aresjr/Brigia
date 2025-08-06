@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Data, NavigationEnd, Route, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
 import { MenuItemComponent } from '../menu-item/menu-item.component';
@@ -9,6 +9,7 @@ import { Title } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
 import { FormsModule } from '@angular/forms';
 import { Role } from '../../core/constans';
+import { routes } from '../../app.routes';
 
 interface MenuItem {
   label: string;
@@ -53,6 +54,7 @@ export class MainLayoutComponent {
       .subscribe((title) => this.updateTitle(title));
 
     this.populateRoles();
+    this.populateMenus();
     this.filterMenuItems();
 
     this.loggedUserName = localStorage.getItem('name') || '';
@@ -63,29 +65,7 @@ export class MainLayoutComponent {
   isUserMenuOpen = false;
   searchTerm: string = '';
   userRoles: Role[] = [];
-  menuItems: MenuItem[] = [ //TODO - Reuse routes const
-    { label: 'Página Inicial', icon: 'home', route: '/', roles: [Role.SECRETARIA, Role.ADMIN] },
-    { label: 'Pacientes', icon: 'users', route: '/pacientes', roles: [Role.SECRETARIA, Role.ADMIN] },
-    { label: 'Agendamentos', icon: 'calendar', route: '/agendamentos', roles: [Role.SECRETARIA, Role.ADMIN] },
-    {
-      label: 'Cadastros',
-      icon: 'user-plus',
-      hasSubmenu: true,
-      children: [
-        { label: 'Convênios', icon: 'heart-handshake', route: '/convenios', roles: [Role.SECRETARIA, Role.ADMIN] },
-        { label: 'Profissionais', icon: 'stethoscope', route: '/profissionais', roles: [Role.SECRETARIA, Role.ADMIN] },
-        { label: 'Procedimentos', icon: 'clipboard-list', route: '/procedimentos', roles: [Role.SECRETARIA, Role.ADMIN] },
-      ], roles: [Role.SECRETARIA, Role.ADMIN]
-    },
-    {
-      label: 'Faturamento',
-      icon: 'receipt',
-      hasSubmenu: true,
-      children: [
-        { label: 'Tabela de Preços', icon: 'receipt', route: '/tabela-precos', roles: [Role.SECRETARIA, Role.FATURAMENTO] }
-      ], roles: [Role.SECRETARIA, Role.FATURAMENTO, Role.ADMIN]
-    }
-  ];
+  menuItems: MenuItem[] = [];
   filteredMenuItems?: MenuItem[];
 
   filterMenuItems() {
@@ -119,7 +99,6 @@ export class MainLayoutComponent {
   }
 
   onSearchChange() {
-    console.log('Search term:', this.searchTerm);
     if (!this.searchTerm){
       this.filteredMenuItems = this.menuItems;
       return;
@@ -150,5 +129,42 @@ export class MainLayoutComponent {
     roles.forEach((role: string) => {
       this.userRoles.push(Role[role as keyof typeof Role] as Role);
     });
+  }
+
+  private populateMenus() {
+    routes.forEach(route => {
+      if (route.path == '' && route.children) {
+        route.children.forEach((item) => {
+          if (item.data) {
+            const menu: MenuItem | undefined = this.createMenu(item.path, item.data);
+            if (menu) {
+              if (menu.hasSubmenu) {
+                item.children?.forEach(sub => {
+                  const submenu: MenuItem | undefined = this.createMenu(sub.path, sub.data);
+                  if (submenu) {
+                    menu.children?.push(submenu);
+                  }
+                });
+              }
+              this.menuItems.push(menu);
+            }
+          }
+        });
+      }
+    });
+  }
+
+  private createMenu(path: string | undefined, data: Data | undefined): MenuItem | undefined {
+    if (!data) {
+      return undefined;
+    }
+    return {
+      label: data['title'],
+      icon: data['icon'],
+      route: path,
+      hasSubmenu: data['hasSubmenu'] || false,
+      children: [],
+      roles: data['roles']
+    };
   }
 }
