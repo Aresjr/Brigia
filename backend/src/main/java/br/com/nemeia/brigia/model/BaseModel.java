@@ -18,20 +18,20 @@ public abstract class BaseModel {
   private LocalDateTime criadoEm;
 
   @CreatedBy
-  @Column(length = 36)
-  private String criadoPor;
+  @Column
+  private Long criadoPor;
 
   @LastModifiedDate
   private LocalDateTime atualizadoEm;
 
   @LastModifiedBy
-  @Column(length = 36)
-  private String atualizadoPor;
+  @Column
+  private Long atualizadoPor;
 
   private LocalDateTime excluidoEm;
 
-  @Column(length = 36)
-  private String excluidoPor;
+  @Column
+  private Long excluidoPor;
 
   private Boolean excluido = false;
 

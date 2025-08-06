@@ -119,11 +119,9 @@ export class MainLayoutComponent {
           child.label.toLowerCase().includes(search)
         );
         if (filteredChildren.length > 0) {
-
           if (!this.submenuState[item.label]) {
             this.toggleSubmenu(item.label);
           }
-
           return { ...item, children: filteredChildren };
         }
       }

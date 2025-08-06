@@ -43,14 +43,12 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     try {
       Claims claims = jwtService.extractClaims(token);
 
-      String email = claims.get("email", String.class);
-      if (email != null) {
-        List<String> roles = getRoles(claims);
-        UserAuth userAuth = new UserAuth(email, roles);
-        UsernamePasswordAuthenticationToken auth =
-            new UsernamePasswordAuthenticationToken(email, null, userAuth.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(auth);
-      }
+      Long id = claims.get("id", Double.class).longValue();
+      List<String> roles = getRoles(claims);
+      UserAuth userAuth = new UserAuth(id, roles);
+      UsernamePasswordAuthenticationToken auth =
+          new UsernamePasswordAuthenticationToken(userAuth, null, userAuth.getAuthorities());
+      SecurityContextHolder.getContext().setAuthentication(auth);
     } catch (JwtException e) {
       log.warn("JWT inválido: " + e.getMessage());
     }

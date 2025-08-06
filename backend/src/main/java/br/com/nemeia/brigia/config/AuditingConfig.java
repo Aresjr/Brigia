@@ -13,14 +13,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class AuditingConfig {
 
   @Bean
-  public AuditorAware<String> auditorProvider() {
+  public AuditorAware<Long> auditorProvider() {
     return () -> {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       if (authentication == null || !authentication.isAuthenticated()) {
-        return Optional.of("SYSTEM");
+        return Optional.of(null);
       }
 
-      return Optional.of(authentication.getName());
+      return Optional.of(Long.valueOf(authentication.getName()));
     };
   }
 }

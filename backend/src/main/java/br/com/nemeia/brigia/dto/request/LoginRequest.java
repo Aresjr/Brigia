@@ -1,14 +1,17 @@
 package br.com.nemeia.brigia.dto.request;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public record LoginRequest(String email, String password) {
 
   @Override
   public String toString() {
-    JsonObject body = new JsonObject();
-    body.addProperty("email", email);
-    body.addProperty("password", password);
-    return body.toString();
+    ObjectMapper om = new ObjectMapper();
+    try {
+        return om.writeValueAsString(this);
+    } catch (JsonProcessingException e) {
+        throw new RuntimeException(e);
+    }
   }
 }

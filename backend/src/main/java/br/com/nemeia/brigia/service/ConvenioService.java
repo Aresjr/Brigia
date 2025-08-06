@@ -54,8 +54,8 @@ public class ConvenioService {
     convenio.setExcluido(true);
     convenio.setExcluidoEm(LocalDateTime.now());
 
-    String user = securityUtils.getLoggedUser();
-    convenio.setExcluidoPor(user);
+    Long userId = securityUtils.getLoggedUser();
+    convenio.setExcluidoPor(userId);
     repository.save(convenio);
   }
 

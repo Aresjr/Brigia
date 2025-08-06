@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 public class UserAuth implements UserDetails {
 
-  private String email;
+  private Long id;
   private List<String> roles;
 
   @Override
@@ -27,6 +27,6 @@ public class UserAuth implements UserDetails {
 
   @Override
   public String getUsername() {
-    return email;
+    return id.toString();
   }
 }
