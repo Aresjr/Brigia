@@ -17,7 +17,7 @@ public class Procedimento extends BaseModel {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "codigo")
+  @Column(name = "codigo", unique = true)
   private String codigo;
 
   @Column(name = "nome", nullable = false)
