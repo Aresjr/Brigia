@@ -46,8 +46,8 @@ public class UsuarioService {
 
     Unidade unidade =
         unidadeRepository
-            .findById(request.unidade())
-            .orElseThrow(() -> new NotFoundException("Unidade não encontrada com o ID: " + request.unidade()));
+            .findById(request.unidadeId())
+            .orElseThrow(() -> new NotFoundException("Unidade não encontrada com o ID: " + request.unidadeId()));
 
     log.info("Criando usuário: {}", request.email());
     Usuario usuario = mapper.toEntity(request);

@@ -16,4 +16,4 @@ public record UsuarioRequest(
     @NotBlank(message = "O nome é obrigatório") String nome,
     String avatarUrl,
     @NotEmpty(message = "O nível de acesso é obrigatório") List<RoleUsuario> roles,
-    Long unidade) {}
+    Long unidadeId) {}

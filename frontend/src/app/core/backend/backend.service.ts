@@ -57,7 +57,6 @@ export class BackendService {
   private handleError(path: string, error: { status: number; }) {
     if (error.status === 401) {
       this.toastr.error('Sessão expirada, faça login novamente.');
-      sessionStorage.setItem('redirect', path);
       this.router.navigate(['/login']);
     }
     return throwError(() => error);

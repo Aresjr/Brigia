@@ -19,14 +19,14 @@ public class Procedimento extends BaseModel {
   @Column(name = "codigo")
   private String codigo;
 
-  @Column(name = "nome")
+  @Column(name = "nome", nullable = false)
   private String nome;
 
   @Column(name = "observacoes")
   private String observacoes;
 
   @ManyToOne
-  @JoinColumn(name = "especialidade_id", nullable = false)
+  @JoinColumn(name = "especialidade_id")
   private Especialidade especialidade;
 
   public Procedimento(String codigo, String nome, String observacoes) {

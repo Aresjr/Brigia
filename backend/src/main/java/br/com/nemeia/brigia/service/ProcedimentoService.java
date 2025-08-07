@@ -4,6 +4,7 @@ import br.com.nemeia.brigia.auth.SecurityUtils;
 import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ProcedimentoMapper;
+import br.com.nemeia.brigia.model.Especialidade;
 import br.com.nemeia.brigia.model.Procedimento;
 import br.com.nemeia.brigia.repository.ProcedimentoRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,10 +40,10 @@ public class ProcedimentoService {
   }
 
   public Procedimento createProcedimento(ProcedimentoRequest request) {
-    //TODO - buscar Especialidade antes de salvar
-
+    Especialidade especialidade = especialidadeService.getById(request.especialidadeId());
 
     Procedimento procedimento = mapper.toEntity(request);
+    procedimento.setEspecialidade(especialidade);
     return repository.save(procedimento);
   }
 

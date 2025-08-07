@@ -73,6 +73,7 @@ export class MainLayoutComponent {
       hasSubmenu: true,
       children: [
         { label: 'Convênios', icon: 'heart-handshake', route: '/convenios', roles: [Role.SECRETARIA, Role.ADMIN] },
+        { label: 'Especialidades', icon: 'heart-handshake', route: '/especialidades', roles: [Role.SECRETARIA, Role.ADMIN] },
         { label: 'Procedimentos', icon: 'clipboard-list', route: '/procedimentos', roles: [Role.SECRETARIA, Role.ADMIN] },
         { label: 'Profissionais', icon: 'stethoscope', route: '/profissionais', roles: [Role.SECRETARIA, Role.ADMIN] },
       ], roles: [Role.SECRETARIA, Role.ADMIN]

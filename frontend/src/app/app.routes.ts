@@ -11,6 +11,7 @@ import { ProcedimentosComponent } from './features/procedimentos/procedimentos.c
 import { TabelaPrecosComponent } from './features/tabela-precos/tabela-precos.component';
 import { ConveniosComponent } from './features/convenio/convenios.component';
 import { Role } from './core/constans';
+import { EspecialidadeComponent } from './features/especialidade/especialidade.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -55,6 +56,26 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'convenios',
+        component: ConveniosComponent,
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        data: {
+          roles: [Role.SECRETARIA, Role.ADMIN],
+          title: 'Convênios',
+        },
+      },
+      {
+        path: 'especialidades',
+        component: EspecialidadeComponent,
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        data: {
+          roles: [Role.SECRETARIA, Role.ADMIN],
+          title: 'Especialidades',
+        },
+      },
+      {
         path: 'procedimentos',
         component: ProcedimentosComponent,
         canActivate: [AuthGuard],
@@ -72,16 +93,6 @@ export const routes: Routes = [
         data: {
           roles: [Role.SECRETARIA, Role.ADMIN],
           title: 'Profissionais',
-        },
-      },
-      {
-        path: 'convenios',
-        component: ConveniosComponent,
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
-        data: {
-          roles: [Role.SECRETARIA, Role.ADMIN],
-          title: 'Convênios',
         },
       },
       {
