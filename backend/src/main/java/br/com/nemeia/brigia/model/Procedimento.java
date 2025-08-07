@@ -25,9 +25,14 @@ public class Procedimento extends BaseModel {
   @Column(name = "observacoes")
   private String observacoes;
 
+  @ManyToOne
+  @JoinColumn(name = "especialidade_id", nullable = false)
+  private Especialidade especialidade;
+
   public Procedimento(String codigo, String nome, String observacoes) {
     this.codigo = codigo;
     this.nome = nome;
     this.observacoes = observacoes;
+    this.especialidade = new Especialidade();
   }
 }

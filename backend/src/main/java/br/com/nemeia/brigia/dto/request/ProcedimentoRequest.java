@@ -6,4 +6,6 @@ public record ProcedimentoRequest(
     @NotBlank(message = "Nome é obrigatório")
     String nome,
     String codigo,
-    String observacoes) {}
+    String observacoes,
+    @NotBlank(message = "Especialidade é obrigatória")
+    Long especialidadeId) {}

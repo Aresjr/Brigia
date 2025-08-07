@@ -24,6 +24,7 @@ public class ProcedimentoService {
   private final ProcedimentoRepository repository;
   private final ProcedimentoMapper mapper;
   private final SecurityUtils securityUtils;
+  private final EspecialidadeService especialidadeService;
 
   public Page<Procedimento> getPaged(int page, int size) {
     Sort sort = Sort.by(Sort.Direction.ASC, "excluido").and(Sort.by(Sort.Direction.DESC, "id")); //TODO - centralizar
@@ -38,6 +39,9 @@ public class ProcedimentoService {
   }
 
   public Procedimento createProcedimento(ProcedimentoRequest request) {
+    //TODO - buscar Especialidade antes de salvar
+
+
     Procedimento procedimento = mapper.toEntity(request);
     return repository.save(procedimento);
   }
