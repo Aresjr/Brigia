@@ -1,8 +1,8 @@
 import { Entidade } from '../shared/entidade.interface';
 
 export interface Procedimento extends Entidade {
-    nome: string;
     codigo: string | null;
+    nome: string;
     observacoes: string | null;
 }
 

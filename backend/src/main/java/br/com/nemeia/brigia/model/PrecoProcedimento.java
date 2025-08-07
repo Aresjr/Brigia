@@ -15,8 +15,22 @@ import lombok.ToString;
 @Table(name = "preco_procedimento")
 public class PrecoProcedimento extends BaseModel {
 
-  @EmbeddedId
-  private PrecoProcedimentoId id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
+
+  @ManyToOne
+  @JoinColumn(name = "procedimento_id", nullable = false)
+  private Procedimento procedimento;
+
+  @ManyToOne
+  @JoinColumn(name = "convenio_id", nullable = false)
+  private Convenio convenio;
+
+  @ManyToOne
+  @JoinColumn(name = "unidade_id", nullable = false)
+  private Unidade unidade;
 
   @Column(name = "preco", nullable = false)
   private BigDecimal preco;
