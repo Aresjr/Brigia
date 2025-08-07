@@ -7,6 +7,7 @@ import lombok.*;
 @Setter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 @Entity
 @Table(name = "convenio")
 public class Convenio extends BaseModel {
@@ -21,4 +22,9 @@ public class Convenio extends BaseModel {
 
   @Column(name = "descricao")
   private String descricao;
+
+  public Convenio(String nome, String descricao) {
+    this.nome = nome;
+    this.descricao = descricao;
+  }
 }

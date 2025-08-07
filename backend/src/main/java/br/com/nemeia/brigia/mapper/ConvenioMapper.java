@@ -29,9 +29,6 @@ public class ConvenioMapper {
   }
 
   public Convenio toEntity(ConvenioRequest request) {
-    Convenio convenio = new Convenio();
-    convenio.setNome(request.nome());
-    convenio.setDescricao(request.descricao());
-    return convenio;
+    return new Convenio(request.nome(), request.descricao());
   }
 }

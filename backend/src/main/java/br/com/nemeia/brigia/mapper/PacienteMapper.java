@@ -49,7 +49,7 @@ public class PacienteMapper {
       return null;
     }
 
-    Paciente paciente = new Paciente();
+    Paciente paciente = new Paciente(); //TODO - criar construtor para esse cenário
     paciente.setNome(request.nome());
     paciente.setEmail(request.email());
     paciente.setCpf(request.cpf());
