@@ -71,7 +71,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
           this.itemEdicao = null;
         },
         error: (e) => {
-          const errorMessage: string = e.error.messages?.join('; ') || e.error.message || '';
+          const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
           this.toastr.error(errorMessage, 'Erro ao atualizar convênio');
         }
       });

@@ -29,9 +29,6 @@ public class EspecialidadeMapper {
   }
 
   public Especialidade toEntity(EspecialidadeRequest request) {
-    Especialidade especialidade = new Especialidade();
-    especialidade.setNome(request.nome());
-    especialidade.setDescricao(request.descricao());
-    return especialidade;
+    return new Especialidade(request.nome(), request.descricao());
   }
 }

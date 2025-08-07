@@ -97,7 +97,7 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
           this.itemEdicao = null;
         },
         error: (e) => {
-          const errorMessage: string = e.error.messages?.join('; ') || e.error.message || '';
+          const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
           this.toastr.error(errorMessage, 'Erro ao atualizar profissional');
           console.error('Erro ao atualizar profissional:', e.error);
         }
@@ -110,7 +110,7 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
           this.mostrarFormularioNovo = false;
         },
         error: (e) => {
-          const errorMessage: string = e.error.messages?.join('; ') || e.error.message || '';
+          const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
           this.toastr.error(errorMessage, 'Erro ao cadastrar profissional');
           console.error('Erro ao cadastrar profissional:', e);
         }

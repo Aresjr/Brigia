@@ -2,15 +2,14 @@ package br.com.nemeia.brigia.model;
 
 import jakarta.persistence.*;
 import java.util.Set;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+
+import lombok.*;
 
 @Getter
 @Setter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 @Entity
 @Table(name = "especialidade")
 public class Especialidade extends BaseModel {
@@ -32,4 +31,9 @@ public class Especialidade extends BaseModel {
       joinColumns = @JoinColumn(name = "especialidade_id"),
       inverseJoinColumns = @JoinColumn(name = "profissional_id"))
   private Set<Profissional> profissionais;
+
+  public Especialidade(String nome, String descricao) {
+    this.nome = nome;
+    this.descricao = descricao;
+  }
 }

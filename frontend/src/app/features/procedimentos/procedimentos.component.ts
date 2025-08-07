@@ -74,7 +74,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
           this.itemEdicao = null;
         },
         error: (e) => {
-          const errorMessage: string = e.error.messages?.join('; ') || e.error.message || '';
+          const errorMessage = e.error?.messages?.join('; ') || e.error?.message || '';
           this.toastr.error(errorMessage, `Erro ao atualizar ${this.nomeEntidade}`);
         }
       });

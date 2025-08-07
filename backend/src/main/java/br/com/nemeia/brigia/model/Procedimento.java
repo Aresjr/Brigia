@@ -34,6 +34,5 @@ public class Procedimento extends BaseModel {
     this.codigo = codigo;
     this.nome = nome;
     this.observacoes = observacoes;
-    this.especialidade = new Especialidade();
   }
 }
