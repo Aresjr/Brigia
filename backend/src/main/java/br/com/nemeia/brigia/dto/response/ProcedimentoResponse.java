@@ -6,6 +6,7 @@ public record ProcedimentoResponse(
         Long id,
         String nome,
         String codigo,
+        EspecialidadeResponse especialidade,
         String observacoes,
         LocalDateTime criadoEm,
         Boolean excluido) {}

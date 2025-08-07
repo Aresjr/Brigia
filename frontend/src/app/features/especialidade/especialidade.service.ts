@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BackendService } from '../../core/backend/backend.service';
-import { Especialidades, EspecialidadesResponse } from './especialidade.interface';
+import { Especialidade, EspecialidadesResponse } from './especialidade.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +15,12 @@ export class EspecialidadeService {
     return this.backend.get<EspecialidadesResponse>(`${this.path}?mostrarExcluidos=${mostrarExcluidos}&size=999`);
   }
 
-  criar(especialidade: Partial<Especialidades>): Observable<Especialidades> {
-    return this.backend.post<Especialidades>(this.path, especialidade);
+  criar(especialidade: Partial<Especialidade>): Observable<Especialidade> {
+    return this.backend.post<Especialidade>(this.path, especialidade);
   }
 
-  atualizar(id: number, especialidade: Partial<Especialidades>): Observable<Especialidades> {
-    return this.backend.put<Especialidades>(`${this.path}/${id}`, especialidade);
+  atualizar(id: number, especialidade: Partial<Especialidade>): Observable<Especialidade> {
+    return this.backend.put<Especialidade>(`${this.path}/${id}`, especialidade);
   }
 
   excluir(id: number): Observable<void> {

@@ -1,8 +1,10 @@
 import { Entidade } from '../shared/entidade.interface';
+import { Especialidade } from '../especialidade/especialidade.interface';
 
 export interface Procedimento extends Entidade {
     codigo: string | null;
     nome: string;
+    especialidade: Especialidade;
     observacoes: string | null;
 }
 

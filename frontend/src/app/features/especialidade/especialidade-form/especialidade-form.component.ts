@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
-import { Especialidades } from '../especialidade.interface';
+import { Especialidade } from '../especialidade.interface';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
 
 @Component({
@@ -17,8 +17,8 @@ import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-dir
   ]
 })
 export class EspecialidadeFormComponent implements OnInit {
-  @Input() especialidade: Especialidades | null = null;
-  @Output() save = new EventEmitter<Partial<Especialidades>>();
+  @Input() especialidade: Especialidade | null = null;
+  @Output() save = new EventEmitter<Partial<Especialidade>>();
   @Output() cancel = new EventEmitter<void>();
 
   form: FormGroup;

@@ -4,13 +4,17 @@ import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
 import br.com.nemeia.brigia.dto.response.ProcedimentoResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.model.Procedimento;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@AllArgsConstructor
 @Component
 public class ProcedimentoMapper {
+
+  private final EspecialidadeMapper especialidadeMapper;
 
   public ProcedimentoResponse toResponse(Procedimento procedimento) {
     if (procedimento == null) {
@@ -19,6 +23,7 @@ public class ProcedimentoMapper {
 
     return new ProcedimentoResponse(
         procedimento.getId(), procedimento.getNome(), procedimento.getCodigo(),
+        especialidadeMapper.toResponse(procedimento.getEspecialidade()),
         procedimento.getObservacoes(), procedimento.getCriadoEm(), procedimento.getExcluido());
   }
 

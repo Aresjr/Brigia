@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EspecialidadeService } from './especialidade.service';
-import { Especialidades } from './especialidade.interface';
+import { Especialidade } from './especialidade.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -19,9 +19,9 @@ import { BaseListComponent } from '../shared/base-list.component';
     EspecialidadeFormComponent
   ]
 })
-export class EspecialidadeComponent extends BaseListComponent<Especialidades> implements OnInit {
+export class EspecialidadeComponent extends BaseListComponent<Especialidade> implements OnInit {
   protected Math = Math;
-  especialidades: Especialidades[] = [];
+  especialidades: Especialidade[] = [];
 
   constructor(private especialidadesService: EspecialidadeService, private toastr: ToastrService) {
     super();
@@ -60,7 +60,7 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidades> im
     this.atualizarPaginacao();
   }
 
-  onSalvarNovoEspecialidades(especialidade: Partial<Especialidades>) {
+  onSalvarNovoEspecialidades(especialidade: Partial<Especialidade>) {
     if (this.itemEdicao) {
       const id = this.itemEdicao.id;
       this.especialidadesService.atualizar(id, especialidade).subscribe({
@@ -90,7 +90,7 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidades> im
     }
   }
 
-  excluir(event: Event, especialidade: Especialidades) {
+  excluir(event: Event, especialidade: Especialidade) {
     event.stopPropagation();
     this.dropdownAberto = null;
     if (confirm(`Deseja realmente excluir a especialidade ${especialidade.nome}?`)) { //TODO - alterar para uma biblioteca de confirmação
@@ -106,7 +106,7 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidades> im
     }
   }
 
-  restaurarItem(event: Event, especialidade: Especialidades) {
+  restaurarItem(event: Event, especialidade: Especialidade) {
     event.stopPropagation();
     this.dropdownAberto = null;
 

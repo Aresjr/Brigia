@@ -52,7 +52,9 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
     if (this.searchTerm) {
       this.items = this.procedimentos.filter(procedimento =>
         procedimento.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        procedimento.nome?.toLowerCase().includes(this.searchTerm.toLowerCase())
+        procedimento.codigo?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        procedimento.observacoes?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        procedimento.especialidade.nome?.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     } else {
       this.items = [...this.procedimentos];

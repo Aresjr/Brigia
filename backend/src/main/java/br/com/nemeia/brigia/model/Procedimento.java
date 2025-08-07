@@ -7,6 +7,7 @@ import lombok.*;
 @Setter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 @Entity
 @Table(name = "procedimento")
 public class Procedimento extends BaseModel {
