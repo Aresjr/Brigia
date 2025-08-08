@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CpfPipe } from '../../core/pipes/cpf.pipe';
 import { CelularPipe } from '../../core/pipes/celular.pipe';
 import { BaseListComponent } from '../shared/base-list.component';
+import { PaginationComponent } from '../shared/pagination/pagination.component';
 
 @Component({
   selector: 'app-pacientes',
@@ -20,7 +21,8 @@ import { BaseListComponent } from '../shared/base-list.component';
     LucideAngularModule,
     FormsModule,
     CpfPipe,
-    CelularPipe
+    CelularPipe,
+    PaginationComponent
   ],
   templateUrl: './pacientes.component.html',
   standalone: true
@@ -120,4 +122,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
     }
   }
 
+  pageChange(page: number) {
+    this.mudarPagina(page);
+  }
 }

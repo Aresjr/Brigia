@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { EspecialidadeFormComponent } from './especialidade-form/especialidade-form.component';
 import { BaseListComponent } from '../shared/base-list.component';
+import { PaginationComponent } from '../shared/pagination/pagination.component';
 
 @Component({
   selector: 'app-especialidades',
@@ -16,7 +17,8 @@ import { BaseListComponent } from '../shared/base-list.component';
     CommonModule,
     LucideAngularModule,
     FormsModule,
-    EspecialidadeFormComponent
+    EspecialidadeFormComponent,
+    PaginationComponent
   ]
 })
 export class EspecialidadeComponent extends BaseListComponent<Especialidade> implements OnInit {
@@ -122,4 +124,7 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
     });
   }
 
+  pageChange(page: number) {
+    this.mudarPagina(page);
+  }
 }

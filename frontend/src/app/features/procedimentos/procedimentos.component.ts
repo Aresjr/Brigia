@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ProcedimentoFormComponent } from './procedimento-form/procedimento-form.component';
 import { BaseListComponent } from '../shared/base-list.component';
+import { PaginationComponent } from '../shared/pagination/pagination.component';
 
 @Component({
   selector: 'app-procedimentos',
@@ -16,7 +17,8 @@ import { BaseListComponent } from '../shared/base-list.component';
     CommonModule,
     LucideAngularModule,
     FormsModule,
-    ProcedimentoFormComponent
+    ProcedimentoFormComponent,
+    PaginationComponent
   ]
 })
 export class ProcedimentosComponent extends BaseListComponent<Procedimento> implements OnInit {
@@ -125,4 +127,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
     });
   }
 
+  pageChange(page: number) {
+    this.mudarPagina(page);
+  }
 }

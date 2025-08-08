@@ -15,7 +15,7 @@ export abstract class BaseListComponent<T extends object> {
   items: T[] = [];
   sortState: SortState<T> = { column: '', direction: null };
   paginaAtual = 1;
-  itensPorPagina = 12;
+  itensPorPagina = 14;
   totalPaginas = 1;
   searchTerm: string = '';
   dropdownAberto: number | null = null;
@@ -75,10 +75,6 @@ export abstract class BaseListComponent<T extends object> {
     if (pagina >= 1 && pagina <= this.totalPaginas) {
       this.paginaAtual = pagina;
     }
-  }
-
-  getPaginasArray(): number[] {
-    return Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
   }
 
   isDropdownAberto(): boolean {

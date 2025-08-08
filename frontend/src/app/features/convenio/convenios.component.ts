@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ConvenioFormComponent } from './convenio-form/convenio-form.component';
 import { BaseListComponent } from '../shared/base-list.component';
+import { PaginationComponent } from '../shared/pagination/pagination.component';
 
 @Component({
   selector: 'app-convenios',
@@ -16,7 +17,8 @@ import { BaseListComponent } from '../shared/base-list.component';
     CommonModule,
     LucideAngularModule,
     FormsModule,
-    ConvenioFormComponent
+    ConvenioFormComponent,
+    PaginationComponent
   ]
 })
 export class ConveniosComponent extends BaseListComponent<Convenio> implements OnInit {
@@ -122,4 +124,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
     });
   }
 
+  pageChange(page: number) {
+    this.mudarPagina(page);
+  }
 }

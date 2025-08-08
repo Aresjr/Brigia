@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CelularPipe } from '../../core/pipes/celular.pipe';
 import { BaseListComponent } from '../shared/base-list.component';
+import { PaginationComponent } from '../shared/pagination/pagination.component';
 
 @Component({
   selector: 'app-profissionais',
@@ -18,7 +19,8 @@ import { BaseListComponent } from '../shared/base-list.component';
     ProfissionalFormComponent,
     LucideAngularModule,
     FormsModule,
-    CelularPipe
+    CelularPipe,
+    PaginationComponent
   ],
   templateUrl: './profissionais.component.html',
   standalone: true
@@ -118,4 +120,7 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
     }
   }
 
+  pageChange(page: number) {
+    this.mudarPagina(page);
+  }
 }

@@ -31,7 +31,7 @@
       <table class="min-w-full table-auto">
         <thead class="text-white bg-blue-500">
         <tr>
-          <th (click)="ordenar('nome')" class="w-56 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer hover:bg-blue-600">
+          <th (click)="ordenar('nome')" class="w-96 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer hover:bg-blue-600">
             <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="inline w-4 h-4"/>
             Nome
           </th>
@@ -39,7 +39,7 @@
             <lucide-icon *ngIf="getSortIcon('codigo')" [name]="getSortIcon('codigo')" class="inline w-4 h-4"/>
             Código
           </th>
-          <th (click)="ordenar('especialidade')" class="w-44 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer hover:bg-blue-600">
+          <th (click)="ordenar('especialidade')" class="w-72 px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer hover:bg-blue-600">
             <lucide-icon *ngIf="getSortIcon('especialidade')" [name]="getSortIcon('especialidade')" class="inline w-4 h-4"/>
             Especialidade
           </th>
@@ -53,15 +53,15 @@
         <tbody class="bg-white">
           @for (procedimento of getItensPaginados(); track procedimento.id) {
             <tr class="border-b hover:bg-gray-50" [class.bg-red-50]="procedimento.excluido">
-              <td class="w-56 px-6 py-2 whitespace-nowrap">
+              <td class="w-96 px-6 py-2 whitespace-nowrap">
                 {{procedimento.nome}}
                 @if (procedimento.excluido) {
                   <span class="ml-2 px-2 py-1 text-xs bg-red-100 text-red-800 rounded">Excluído</span>
                 }
               </td>
-              <td class="w-32 px-6 py-2">{{procedimento.codigo}}</td>
-              <td class="w-48 px-6 py-2">{{procedimento.especialidade.nome}}</td>
-              <td class="px-6 py-2">{{procedimento.observacoes}}</td>
+              <td class="w-32 px-6 py-2 text-sm">{{procedimento.codigo}}</td>
+              <td class="w-72 px-6 py-2 text-sm">{{procedimento.especialidade.nome}}</td>
+              <td class="px-6 py-2 text-sm">{{procedimento.observacoes}}</td>
               <td class="px-4 py-1 whitespace-nowrap w-28 text-right">
                 <div>
                   <button
@@ -99,40 +99,7 @@
       </table>
     </div>
 
-    <div class="flex justify-between items-center mt-4 px-6">
-      <div class="text-sm text-gray-700">
-        Mostrando {{((paginaAtual - 1) * itensPorPagina) + 1}} a {{Math.min(paginaAtual * itensPorPagina, items.length)}} de {{items.length}} resultados
-      </div>
-      <div class="flex gap-2">
-        <button
-          (click)="mudarPagina(paginaAtual - 1)"
-          [disabled]="paginaAtual === 1"
-          class="px-3 py-1 rounded border"
-          [class.opacity-50]="paginaAtual === 1"
-          [class.cursor-not-allowed]="paginaAtual === 1">
-          <lucide-icon name="chevron-left" class="w-4 h-4"></lucide-icon>
-        </button>
-
-        @for (pagina of getPaginasArray(); track pagina) {
-          <button
-            (click)="mudarPagina(pagina)"
-            class="px-3 py-1 rounded border"
-            [class.bg-blue-500]="pagina === paginaAtual"
-            [class.text-white]="pagina === paginaAtual">
-            {{pagina}}
-          </button>
-        }
-
-        <button
-          (click)="mudarPagina(paginaAtual + 1)"
-          [disabled]="paginaAtual === totalPaginas"
-          class="px-3 py-1 rounded border"
-          [class.opacity-50]="paginaAtual === totalPaginas"
-          [class.cursor-not-allowed]="paginaAtual === totalPaginas">
-          <lucide-icon name="chevron-right" class="w-4 h-4"></lucide-icon>
-        </button>
-      </div>
-    </div>
+    <app-pagination [items]="items" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
   }
 
   @if (mostrarFormularioNovo) {
