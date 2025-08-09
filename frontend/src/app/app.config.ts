@@ -10,7 +10,6 @@ import { Home, User, Calendar, LogIn, UserPlus, Stethoscope, ChevronRight, Messa
   ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon, Plus, ChevronLeft, HeartHandshake, Receipt
  } from 'lucide-angular/src/icons';
 import { provideNgxMask } from 'ngx-mask';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -33,9 +32,6 @@ export const appConfig: ApplicationConfig = {
         HeartHandshake, Receipt
        })
     ),
-    provideNgxMask(),
-    importProvidersFrom(
-      NgMultiSelectDropDownModule.forRoot()
-    )
+    provideNgxMask()
   ]
 };

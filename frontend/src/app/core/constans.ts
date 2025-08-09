@@ -1,5 +1,3 @@
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
-
 export enum Role {
   ADMIN,
   SECRETARIA,
@@ -42,14 +40,3 @@ export const SEXOS = [
   { sigla: 'F', descricao: 'Feminino' },
   { sigla: 'O', descricao: 'Outro' }
 ];
-
-export const dropdownSettings:IDropdownSettings = {
-  enableCheckAll: false,
-  singleSelection: false,
-  searchPlaceholderText: 'Filtrar',
-  noDataAvailablePlaceholderText: 'Sem resultados',
-  idField: 'id',
-  textField: 'text',
-  itemsShowLimit: 3,
-  allowSearchFilter: true
-};

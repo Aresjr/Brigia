@@ -1,5 +1,5 @@
 <div class="fixed inset-0 bg-black bg-opacity-50 z-40" (click)="fechar()"></div>
-<div class="fixed right-0 top-0 h-full w-96 bg-white shadow-lg z-50 overflow-y-auto">
+<div class="fixed right-0 top-0 h-full w-[30rem] bg-white shadow-lg z-50 overflow-y-auto">
   <div class="p-4">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold">Detalhes do Profissional</h2>
@@ -13,46 +13,46 @@
     @if (profissional) {
       <div class="space-y-4">
         <div class="border-b pb-2">
-          <p class="text-sm text-gray-600">Nome</p>
+          <p class="text-gray-600">Nome</p>
           <p class="font-medium">{{profissional.nome}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-sm text-gray-600">CPF</p>
+          <p class="text-gray-600">CPF</p>
           <p class="font-medium">{{profissional.cpf | cpf}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-sm text-gray-600">Data de Nascimento</p>
+          <p class="text-gray-600">Data de Nascimento</p>
           <p class="font-medium">{{profissional.dataNascimento | date:'dd/MM/yyyy'}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-sm text-gray-600">Sexo</p>
+          <p class="text-gray-600">Sexo</p>
           <p class="font-medium">{{profissional.sexo | sexo}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-sm text-gray-600">Celular</p>
+          <p class="text-gray-600">Celular</p>
           <p class="font-medium">{{profissional.celular | celular}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-sm text-gray-600">CRM</p>
+          <p class="text-gray-600">CRM</p>
           <p class="font-medium">{{profissional.crm}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-sm text-gray-600">Email</p>
+          <p class="text-gray-600">Email</p>
           <p class="font-medium">{{profissional.email || '-'}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-sm text-gray-600">Especialidades</p>
-          <p class="font-medium">
-          @for (especialidade of profissional.especialidades; track especialidade.id) {
-            <span class="ml-2 px-2 py-1 text-sm bg-blue-100 text-blue-800 rounded">{{especialidade.nome}}</span>
-          }
+          <p class="text-gray-600">Especialidades</p>
+          <p class="">
+            @for (especialidade of profissional.especialidades; track especialidade.id) {
+              <div class="m-2 p-2 py-1 bg-blue-50 text-blue-800 rounded w-fit">{{especialidade.nome}}</div>
+            }
           </p>
         </div>
 

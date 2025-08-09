@@ -90,19 +90,19 @@
 
         <div>
           <label class="block font-medium text-gray-700">Especialidades</label>
-
-          <!-- TODO - deixar mais bonitinho -->
-          <ng-multiselect-dropdown *ngIf="dropdownList.length > 0"
-            [placeholder]="'Selecione as especialidades'"
-            [settings]="dropdownSettings"
-            [data]="dropdownList"
-            [(ngModel)]="selectedItems"
-            (onSelect)="onItemSelect($event)"
-             (onDeSelect)="onItemDeselect($event)"
-            [ngModelOptions]="{standalone: true}"
-            class="mt-1 p-1 block w-full rounded-md border border-gray-300"
-          >
-          </ng-multiselect-dropdown>
+          <ng-select [multiple]="true" formControlName="especialidades" required
+                     class="mt-1 p-1 block w-full rounded-md border border-gray-300"
+                     [ngClass]="{'border-red-500': profissionalForm.get('especialidades')?.invalid && profissionalForm.get('especialidades')?.touched}" >
+            @for (especialidade of this.listaEspecialidades; track especialidade.id) {
+              <ng-option [value]="especialidade.id">{{especialidade.nome}}</ng-option>
+            }
+          </ng-select>
+          @if (profissionalForm.get('especialidades')?.touched) {
+            <div *ngIf="profissionalForm.get('especialidades')?.hasError('required')"
+                 class="text-red-500 text-sm">
+              Especialidade é obrigatória.
+            </div>
+          }
         </div>
 
         <div class="flex justify-end space-x-3 mt-6">

@@ -1,20 +1,20 @@
 import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Profissional } from '../profissional.interface';
 import { NgxMaskDirective } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
-import { dropdownSettings, SEXOS } from '../../../core/constans';
+import { SEXOS } from '../../../core/constans';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
 import { EspecialidadeService } from '../../especialidade/especialidade.service';
 import { Especialidade } from '../../especialidade/especialidade.interface';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { toggleNumber } from '../../../core/ultil-methods';
+import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-profissional-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, NgMultiSelectDropDownModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, NgMultiSelectDropDownModule, NgSelectComponent, NgOptionComponent],
   templateUrl: 'profissional-form.component.html'
 })
 export class ProfissionalFormComponent implements OnInit {
@@ -24,10 +24,7 @@ export class ProfissionalFormComponent implements OnInit {
 
   profissionalForm: FormGroup;
   protected readonly SEXOS = SEXOS;
-  especialidades: Especialidade[] = [];
-
-  dropdownList:any[] = [];
-  selectedItems:[] = [];
+  listaEspecialidades: Especialidade[] = [];
 
   constructor(private fb: FormBuilder,
               private toastr: ToastrService,
@@ -47,6 +44,9 @@ export class ProfissionalFormComponent implements OnInit {
   ngOnInit() {
     if (this.profissional) {
       this.profissionalForm.patchValue(this.profissional);
+      let esp: number[] = [];
+      this.profissional.especialidades?.forEach(e => esp.push(e.id));
+      this.profissionalForm.controls['especialidades'].setValue(esp);
     }
     this.carregarEspecialidades();
   }
@@ -73,32 +73,11 @@ export class ProfissionalFormComponent implements OnInit {
   private carregarEspecialidades() {
     this.especialidadeService.listar().subscribe({
       next: (response) => {
-        this.especialidades = response.items;
-        this.popularDropdownEspecialidades();
+        this.listaEspecialidades = response.items;
       },
       error: () => {
         this.toastr.error(`Erro ao carregar a lista de especialidades. Por favor, tente novamente.`);
       }
     });
   }
-
-  private popularDropdownEspecialidades() {
-    this.especialidades.forEach(especialidade => {
-      this.dropdownList.push({ id: especialidade.id, text: especialidade.nome });
-    });
-  }
-
-  onItemSelect(item: any) {
-    const items = this.profissionalForm.controls['especialidades'].value || [];
-    this.profissionalForm.controls['especialidades'].setValue([...items, item.id]);
-    console.log(this.profissionalForm.controls['especialidades'].value);
-  }
-
-  onItemDeselect(item: any) {
-    const items:any[] = this.profissionalForm.controls['especialidades'].value || [];
-    this.profissionalForm.controls['especialidades'].setValue(items.filter(n => n !== item.id));
-    console.log(this.profissionalForm.controls['especialidades'].value);
-  }
-
-  protected readonly dropdownSettings = dropdownSettings;
 }
