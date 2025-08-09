@@ -15,6 +15,7 @@ export class PaginationComponent {
   @Input() totalPaginas = 1;
   @Output() pageChange = new EventEmitter<number>();
   protected readonly Math = Math;
+  protected maxPaginasVisiveis = 5;
 
   mudarPagina(pagina: number): void {
     if (pagina >= 1 && pagina <= this.totalPaginas) {
@@ -24,7 +25,14 @@ export class PaginationComponent {
   }
 
   getPaginasArray(): number[] {
-    return Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
+    const half = Math.floor(this.maxPaginasVisiveis / 2);
+
+    let start = Math.max(1, this.paginaAtual - half);
+    let end = Math.min(this.totalPaginas, start + this.maxPaginasVisiveis - 1);
+
+    start = Math.max(1, end - this.maxPaginasVisiveis + 1);
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }
 
   getRegistroInicial(): number {

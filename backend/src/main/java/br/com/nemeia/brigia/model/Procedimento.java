@@ -20,7 +20,7 @@ public class Procedimento extends BaseModel {
   @Column(name = "codigo", unique = true)
   private String codigo;
 
-  @Column(name = "nome", nullable = false)
+  @Column(name = "nome", nullable = false, unique = true)
   private String nome;
 
   @Column(name = "observacoes")

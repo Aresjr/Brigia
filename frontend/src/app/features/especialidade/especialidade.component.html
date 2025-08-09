@@ -6,7 +6,7 @@
                 type="text"
                 [(ngModel)]="searchTerm"
                 (ngModelChange)="onSearch()"
-                placeholder="Filtrar especialidades"
+                placeholder="Filtrar"
                 class="pl-7 pr-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-grey-900 focus:border-transparent"
                 maxlength="20" />
         </div>
@@ -24,7 +24,7 @@
         </div>
     } @else if (items.length === 0) {
         <div class="text-center py-8 w-full bg-white rounded-lg">
-            <p class="text-gray-500">Nenhum especialidade encontrado.</p>
+            <p class="text-gray-500">Nenhum registro encontrado.</p>
         </div>
     } @else {
         <div class="overflow-x-auto rounded-lg">
