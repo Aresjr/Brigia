@@ -1,7 +1,8 @@
 package br.com.nemeia.brigia.model;
 
 import jakarta.persistence.*;
-import java.util.Set;
+
+import java.util.List;
 
 import lombok.*;
 
@@ -28,7 +29,7 @@ public class Especialidade extends BaseModel {
       name = "profissional_especialidade",
       joinColumns = @JoinColumn(name = "especialidade_id"),
       inverseJoinColumns = @JoinColumn(name = "profissional_id"))
-  private Set<Profissional> profissionais;
+  private List<Profissional> profissionais;
 
   public Especialidade(String nome, String descricao) {
     this.nome = nome;

@@ -47,7 +47,7 @@ public class Profissional extends BaseModel {
       name = "profissional_especialidade",
       joinColumns = @JoinColumn(name = "profissional_id"),
       inverseJoinColumns = @JoinColumn(name = "especialidade_id"))
-  private List<Especialidade> especialidades; //TODO - verificar outros lugares que usam SET, trocar para LIST
+  private List<Especialidade> especialidades;
 
   public Profissional(String nome, String email, String cpf, LocalDate dataNascimento,
                       Character sexo, String celular, String urlImagem, String crm) {
