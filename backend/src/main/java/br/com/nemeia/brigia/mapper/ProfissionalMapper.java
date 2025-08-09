@@ -1,17 +1,21 @@
 package br.com.nemeia.brigia.mapper;
 
 import br.com.nemeia.brigia.dto.request.ProfissionalRequest;
+import br.com.nemeia.brigia.dto.response.EspecialidadeResponse;
 import br.com.nemeia.brigia.dto.response.ProfissionalResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
-import br.com.nemeia.brigia.model.Especialidade;
 import br.com.nemeia.brigia.model.Profissional;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@AllArgsConstructor
 public class ProfissionalMapper {
+
+  private final EspecialidadeMapper especialidadeMapper;
 
   public ProfissionalResponse toResponse(Profissional profissional) {
     if (profissional == null) {
@@ -50,10 +54,10 @@ public class ProfissionalMapper {
             responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
   }
 
-  private List<String> getEspecialidades(Profissional profissional) {
+  private List<EspecialidadeResponse> getEspecialidades(Profissional profissional) {
     if (profissional.getEspecialidades() == null) {
         return List.of();
     }
-    return profissional.getEspecialidades().stream().map(Especialidade::getNome).toList();
+    return profissional.getEspecialidades().stream().map(especialidadeMapper::toResponse).toList();
   }
 }

@@ -6,8 +6,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "agendamento")
 public class Agendamento extends BaseModel {

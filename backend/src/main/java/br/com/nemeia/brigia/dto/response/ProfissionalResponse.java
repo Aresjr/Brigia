@@ -14,6 +14,6 @@ public record ProfissionalResponse(
     String celular,
     String urlImagem,
     String crm,
-    List<String> especialidades,
+    List<EspecialidadeResponse> especialidades,
     LocalDateTime criadoEm,
     Boolean excluido) {}

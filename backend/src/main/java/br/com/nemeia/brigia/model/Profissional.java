@@ -2,13 +2,12 @@ package br.com.nemeia.brigia.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
+
 import lombok.*;
 
 @Getter
 @Setter
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Entity
 @Table(name = "profissional")
@@ -48,7 +47,7 @@ public class Profissional extends BaseModel {
       name = "profissional_especialidade",
       joinColumns = @JoinColumn(name = "profissional_id"),
       inverseJoinColumns = @JoinColumn(name = "especialidade_id"))
-  private Set<Especialidade> especialidades;
+  private List<Especialidade> especialidades; //TODO - verificar outros lugares que usam SET, trocar para LIST
 
   public Profissional(String nome, String email, String cpf, LocalDate dataNascimento,
                       Character sexo, String celular, String urlImagem, String crm) {
