@@ -49,22 +49,22 @@ public class PacienteMapper {
       return null;
     }
 
-    Paciente paciente = new Paciente(); //TODO - criar construtor para esse cenário
-    paciente.setNome(request.nome());
-    paciente.setEmail(request.email());
-    paciente.setCpf(request.cpf());
-    paciente.setDataNascimento(request.dataNascimento());
-    paciente.setSexo(request.sexo() != null ? request.sexo().charAt(0) : null);
-    paciente.setCelular(request.celular());
-    paciente.setUrlImagem(request.urlImagem());
-    paciente.setCorIdentificacao(request.corIdentificacao());
-    paciente.setCep(request.cep());
-    paciente.setRua(request.rua());
-    paciente.setComplemento(request.complemento());
-    paciente.setBairro(request.bairro());
-    paciente.setCidade(request.cidade());
-    paciente.setUf(request.uf());
-    return paciente;
+    return new Paciente(
+      request.nome(),
+      request.email(),
+      request.cpf(),
+      request.dataNascimento(),
+      request.sexo() != null ? request.sexo().charAt(0) : null,
+      request.celular(),
+      request.urlImagem(),
+      request.corIdentificacao(),
+      request.cep(),
+      request.rua(),
+      request.complemento(),
+      request.bairro(),
+      request.cidade(),
+      request.uf()
+    );
   }
 
   public PagedResponse<PacienteResponse> toPagedResponse(Page<Paciente> paged) {

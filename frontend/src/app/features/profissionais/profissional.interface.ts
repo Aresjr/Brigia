@@ -1,4 +1,5 @@
 import { Entidade } from '../shared/entidade.interface';
+import { Especialidade } from '../especialidade/especialidade.interface';
 
 export interface Profissional extends Entidade {
     nome: string;
@@ -9,6 +10,7 @@ export interface Profissional extends Entidade {
     celular: string | null;
     crm: string | null;
     urlImagem: string | null;
+    especialidades?: Especialidade[];
 }
 
 export interface ProfissionalResponse {

@@ -1,5 +1,6 @@
 package br.com.nemeia.brigia.service;
 
+import br.com.nemeia.brigia.Utils;
 import br.com.nemeia.brigia.auth.SecurityUtils;
 import br.com.nemeia.brigia.dto.request.EspecialidadeRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
@@ -11,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,9 +26,8 @@ public class EspecialidadeService {
   private final SecurityUtils securityUtils;
 
   public Page<Especialidade> getPaged(int page, int size, Boolean mostrarExcluidos) {
-    Sort sort = Sort.by(Sort.Direction.ASC, "excluido").and(Sort.by(Sort.Direction.DESC, "id")); //TODO - centralizar
-    Pageable pageable = PageRequest.of(page, size, sort);
-    return mostrarExcluidos ? repository.findAll(pageable) : repository.findAllByExcluidoIs(pageable, false);
+    Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
+    return mostrarExcluidos ? repository.findAll(pageable) : repository.findAllByExcluidoIsOrExcluidoIsNull(pageable, false);
   }
 
   public Especialidade getById(Long id) {

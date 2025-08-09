@@ -3,12 +3,11 @@ package br.com.nemeia.brigia.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 import lombok.*;
 
 @Getter
 @Setter
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "paciente")
 public class Paciente extends BaseModel {
@@ -69,4 +68,23 @@ public class Paciente extends BaseModel {
   @ManyToOne
   @JoinColumn(name = "convenio_id")
   private Convenio convenio;
+
+  public Paciente(String nome, String email, String cpf, LocalDate dataNascimento, Character sexo, String celular,
+                  String urlImagem, String corIdentificacao, String cep, String rua, String complemento, String bairro,
+                  String cidade, String uf) {
+    this.nome = nome;
+    this.email = email;
+    this.cpf = cpf;
+    this.dataNascimento = dataNascimento;
+    this.sexo = sexo;
+    this.celular = celular;
+    this.urlImagem = urlImagem;
+    this.corIdentificacao = corIdentificacao;
+    this.cep = cep;
+    this.rua = rua;
+    this.complemento = complemento;
+    this.bairro = bairro;
+    this.cidade = cidade;
+    this.uf = uf;
+  }
 }

@@ -46,6 +46,17 @@
           <p class="text-sm text-gray-600">Email</p>
           <p class="font-medium">{{profissional.email || '-'}}</p>
         </div>
+
+        <div class="border-b pb-2">
+          <p class="text-sm text-gray-600">Especialidades</p>
+          <p class="font-medium">
+          @for (especialidade of profissional.especialidades; track especialidade.id) {
+            <span class="ml-2 px-2 py-1 text-sm bg-blue-100 text-blue-800 rounded">{{especialidade.nome}}</span>
+          }
+          </p>
+        </div>
+
+
       </div>
     }
   </div>

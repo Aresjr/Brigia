@@ -1,17 +1,20 @@
 import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Profissional } from '../profissional.interface';
 import { NgxMaskDirective } from 'ngx-mask';
-import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
-import { SEXOS } from '../../../core/constans';
+import { dropdownSettings, SEXOS } from '../../../core/constans';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
+import { EspecialidadeService } from '../../especialidade/especialidade.service';
+import { Especialidade } from '../../especialidade/especialidade.interface';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { toggleNumber } from '../../../core/ultil-methods';
 
 @Component({
   selector: 'app-profissional-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, NgMultiSelectDropDownModule],
   templateUrl: 'profissional-form.component.html'
 })
 export class ProfissionalFormComponent implements OnInit {
@@ -21,10 +24,14 @@ export class ProfissionalFormComponent implements OnInit {
 
   profissionalForm: FormGroup;
   protected readonly SEXOS = SEXOS;
+  especialidades: Especialidade[] = [];
+
+  dropdownList:any[] = [];
+  selectedItems:[] = [];
 
   constructor(private fb: FormBuilder,
-              private http: HttpClient,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              private especialidadeService: EspecialidadeService) {
     this.profissionalForm = this.fb.group({
       nome: [null, Validators.required],
       email: [null],
@@ -32,8 +39,8 @@ export class ProfissionalFormComponent implements OnInit {
       dataNascimento: [null, Validators.required],
       sexo: [null],
       celular: [null],
-      crm: [null]
-      //TODO - adicionar Especialidades
+      crm: [null],
+      especialidades: [null, Validators.required]
     });
   }
 
@@ -41,6 +48,7 @@ export class ProfissionalFormComponent implements OnInit {
     if (this.profissional) {
       this.profissionalForm.patchValue(this.profissional);
     }
+    this.carregarEspecialidades();
   }
 
   get isEditMode(): boolean {
@@ -62,23 +70,35 @@ export class ProfissionalFormComponent implements OnInit {
     this.cancel.emit();
   }
 
-  buscarCep() {
-    const cep = this.profissionalForm.get('cep')?.value?.replace(/\D/g, '');
-    if (cep?.length === 8) {
-      this.http.get<any>(`https://viacep.com.br/ws/${cep}/json/`)
-        .subscribe((data) => {
-          if (!data.erro) {
-            this.profissionalForm.patchValue({
-              rua: data.logradouro,
-              bairro: data.bairro,
-              cidade: data.localidade,
-              uf: data.uf
-            });
-          } else {
-            this.toastr.warning('CEP não encontrado');
-            console.info('CEP não encontrado', data.erro);
-          }
-        });
-    }
+  private carregarEspecialidades() {
+    this.especialidadeService.listar().subscribe({
+      next: (response) => {
+        this.especialidades = response.items;
+        this.popularDropdownEspecialidades();
+      },
+      error: () => {
+        this.toastr.error(`Erro ao carregar a lista de especialidades. Por favor, tente novamente.`);
+      }
+    });
   }
+
+  private popularDropdownEspecialidades() {
+    this.especialidades.forEach(especialidade => {
+      this.dropdownList.push({ id: especialidade.id, text: especialidade.nome });
+    });
+  }
+
+  onItemSelect(item: any) {
+    const items = this.profissionalForm.controls['especialidades'].value || [];
+    this.profissionalForm.controls['especialidades'].setValue([...items, item.id]);
+    console.log(this.profissionalForm.controls['especialidades'].value);
+  }
+
+  onItemDeselect(item: any) {
+    const items:any[] = this.profissionalForm.controls['especialidades'].value || [];
+    this.profissionalForm.controls['especialidades'].setValue(items.filter(n => n !== item.id));
+    console.log(this.profissionalForm.controls['especialidades'].value);
+  }
+
+  protected readonly dropdownSettings = dropdownSettings;
 }

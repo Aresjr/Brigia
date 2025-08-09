@@ -1,5 +1,6 @@
 package br.com.nemeia.brigia.service;
 
+import br.com.nemeia.brigia.Utils;
 import br.com.nemeia.brigia.auth.SecurityUtils;
 import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
@@ -12,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,8 +28,7 @@ public class ProcedimentoService {
   private final EspecialidadeService especialidadeService;
 
   public Page<Procedimento> getPaged(int page, int size) {
-    Sort sort = Sort.by(Sort.Direction.ASC, "excluido").and(Sort.by(Sort.Direction.DESC, "id")); //TODO - centralizar
-    Pageable pageable = PageRequest.of(page, size, sort);
+    Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
     return repository.findAll(pageable);
   }
 

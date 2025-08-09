@@ -58,7 +58,7 @@ export class PacienteFormComponent implements OnInit {
     this.carregarConvenios();
   }
 
-  private carregarConvenios() {
+  private carregarConvenios() { //TODO - mostrar toast quando der erro
     this.conveniosService.listar().subscribe(
       response => {
         this.convenios = response.items;

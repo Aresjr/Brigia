@@ -18,21 +18,24 @@ public abstract class BaseModel {
   private LocalDateTime criadoEm;
 
   @CreatedBy
-  @Column
+  @Column(name = "criado_por")
   private Long criadoPor;
 
   @LastModifiedDate
+  @Column(name = "atualizado_em")
   private LocalDateTime atualizadoEm;
 
   @LastModifiedBy
-  @Column
+  @Column(name = "atualizado_por")
   private Long atualizadoPor;
 
+  @Column(name = "excluido_em")
   private LocalDateTime excluidoEm;
 
-  @Column
+  @Column(name = "excluido_por")
   private Long excluidoPor;
 
+  @Column(name = "excluido")
   private Boolean excluido = false;
 
   @PreUpdate

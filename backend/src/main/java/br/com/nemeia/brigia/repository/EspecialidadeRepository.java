@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EspecialidadeRepository extends JpaRepository<Especialidade, Long> {
-    Page<Especialidade> findAllByExcluidoIs(Pageable pageable, Boolean excluido);
+    Page<Especialidade> findAllByExcluidoIsOrExcluidoIsNull(Pageable pageable, Boolean excluido);
 }
