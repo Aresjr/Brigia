@@ -21,11 +21,11 @@ public class PrecoProcedimento extends BaseModel {
   private Procedimento procedimento;
 
   @ManyToOne
-  @JoinColumn(name = "convenio_id", nullable = false)
+  @JoinColumn(name = "convenio_id")
   private Convenio convenio;
 
   @ManyToOne
-  @JoinColumn(name = "unidade_id", nullable = false)
+  @JoinColumn(name = "unidade_id")
   private Unidade unidade;
 
   @ManyToOne
