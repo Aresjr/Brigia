@@ -28,6 +28,10 @@ public class PrecoProcedimento extends BaseModel {
   @JoinColumn(name = "unidade_id", nullable = false)
   private Unidade unidade;
 
+  @ManyToOne
+  @JoinColumn(name = "empresa_id")
+  private Empresa empresa;
+
   @Column(name = "preco", nullable = false)
   private BigDecimal preco;
 

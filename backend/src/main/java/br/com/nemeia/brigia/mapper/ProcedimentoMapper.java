@@ -34,6 +34,6 @@ public class ProcedimentoMapper {
   }
 
   public Procedimento toEntity(ProcedimentoRequest request) {
-    return new Procedimento(request.codigo(), request.nome(), request.observacoes());
+    return new Procedimento(request.codigo(), request.nome(), request.observacoes(), request.valorPadrao());
   }
 }

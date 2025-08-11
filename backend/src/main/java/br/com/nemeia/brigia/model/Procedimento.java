@@ -3,6 +3,8 @@ package br.com.nemeia.brigia.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,13 +26,17 @@ public class Procedimento extends BaseModel {
   @Column(name = "observacoes")
   private String observacoes;
 
+  @Column(name = "valor_padrao")
+  private BigDecimal valorPadrao;
+
   @ManyToOne
   @JoinColumn(name = "especialidade_id")
   private Especialidade especialidade;
 
-  public Procedimento(String codigo, String nome, String observacoes) {
+  public Procedimento(String codigo, String nome, String observacoes, BigDecimal valorPadrao) {
     this.codigo = codigo;
     this.nome = nome;
     this.observacoes = observacoes;
+    this.valorPadrao = valorPadrao;
   }
 }
