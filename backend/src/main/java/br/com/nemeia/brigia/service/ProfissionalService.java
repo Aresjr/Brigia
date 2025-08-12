@@ -7,15 +7,14 @@ import br.com.nemeia.brigia.mapper.ProfissionalMapper;
 import br.com.nemeia.brigia.model.Especialidade;
 import br.com.nemeia.brigia.model.Profissional;
 import br.com.nemeia.brigia.repository.ProfissionalRepository;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,8 +44,8 @@ public class ProfissionalService {
     Profissional profissional = mapper.toEntity(request);
 
     if (!request.especialidades().isEmpty()) {
-      List<Especialidade> especialidades = request.especialidades().stream()
-              .map(especialidadeService::getById).toList();
+      List<Especialidade> especialidades =
+          request.especialidades().stream().map(especialidadeService::getById).toList();
       profissional.setEspecialidades(especialidades);
     }
 
@@ -62,8 +61,8 @@ public class ProfissionalService {
     Profissional profissional = mapper.toEntity(request);
 
     if (!request.especialidades().isEmpty()) {
-      List<Especialidade> especialidades = request.especialidades().stream()
-              .map(especialidadeService::getById).toList();
+      List<Especialidade> especialidades =
+          request.especialidades().stream().map(especialidadeService::getById).toList();
       profissional.setEspecialidades(especialidades);
     }
 

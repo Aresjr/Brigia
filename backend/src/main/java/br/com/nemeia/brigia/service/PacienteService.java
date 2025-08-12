@@ -51,7 +51,7 @@ public class PacienteService {
   }
 
   private Paciente savePaciente(Paciente paciente, Long idConvenio) {
-    if(idConvenio != null) {
+    if (idConvenio != null) {
       Convenio convenio = convenioService.getById(idConvenio);
       paciente.setConvenio(convenio);
     }

@@ -3,7 +3,6 @@ package br.com.nemeia.brigia.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-
 import lombok.*;
 
 @Getter
@@ -49,8 +48,15 @@ public class Profissional extends BaseModel {
       inverseJoinColumns = @JoinColumn(name = "especialidade_id"))
   private List<Especialidade> especialidades;
 
-  public Profissional(String nome, String email, String cpf, LocalDate dataNascimento,
-                      Character sexo, String celular, String urlImagem, String crm) {
+  public Profissional(
+      String nome,
+      String email,
+      String cpf,
+      LocalDate dataNascimento,
+      Character sexo,
+      String celular,
+      String urlImagem,
+      String crm) {
     this.nome = nome;
     this.email = email;
     this.cpf = cpf;
@@ -60,5 +66,4 @@ public class Profissional extends BaseModel {
     this.urlImagem = urlImagem;
     this.crm = crm;
   }
-
 }

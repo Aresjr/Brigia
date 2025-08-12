@@ -7,14 +7,13 @@ import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ConvenioMapper;
 import br.com.nemeia.brigia.model.Convenio;
 import br.com.nemeia.brigia.repository.ConvenioRepository;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +26,9 @@ public class ConvenioService {
 
   public Page<Convenio> getPaged(int page, int size, Boolean mostrarExcluidos) {
     Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
-    return mostrarExcluidos ? repository.findAll(pageable) : repository.findAllByExcluidoIsOrExcluidoIsNull(pageable, false);
+    return mostrarExcluidos
+        ? repository.findAll(pageable)
+        : repository.findAllByExcluidoIsOrExcluidoIsNull(pageable, false);
   }
 
   public Convenio getById(Long id) {

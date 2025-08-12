@@ -1,9 +1,9 @@
 package br.com.nemeia.brigia.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.math.BigDecimal;
+import java.util.List;
+import lombok.*;
 
 @Getter
 @Setter
@@ -32,6 +32,13 @@ public class Procedimento extends BaseModel {
   @ManyToOne
   @JoinColumn(name = "especialidade_id")
   private Especialidade especialidade;
+
+  @OneToMany
+  @JoinTable(
+      name = "preco_procedimento",
+      joinColumns = @JoinColumn(name = "procedimento_id"),
+      inverseJoinColumns = @JoinColumn(name = "id"))
+  private List<PrecoProcedimento> precos;
 
   public Procedimento(String codigo, String nome, String observacoes, BigDecimal valorPadrao) {
     this.codigo = codigo;

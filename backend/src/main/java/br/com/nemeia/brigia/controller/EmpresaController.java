@@ -1,0 +1,71 @@
+package br.com.nemeia.brigia.controller;
+
+import br.com.nemeia.brigia.dto.request.EmpresaRequest;
+import br.com.nemeia.brigia.dto.response.EmpresaResponse;
+import br.com.nemeia.brigia.dto.response.PagedResponse;
+import br.com.nemeia.brigia.mapper.EmpresaMapper;
+import br.com.nemeia.brigia.service.EmpresaService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/empresas")
+@RequiredArgsConstructor
+@Slf4j
+public class EmpresaController {
+
+  private final EmpresaService service;
+  private final EmpresaMapper mapper;
+
+  @GetMapping
+  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+  public PagedResponse<EmpresaResponse> getAllEmpresas(
+      @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "20") int size) {
+    log.info("GET /empresas - page: {}, size: {}", page, size);
+    return mapper.toPagedResponse(service.getPaged(page, size, mostrarExcluidos));
+  }
+
+  @PostMapping
+  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+  public EmpresaResponse createEmpresa(@Valid @RequestBody EmpresaRequest request) {
+    log.info("POST /empresas");
+    return mapper.toResponse(service.createEmpresa(request));
+  }
+
+  @PutMapping("/{id}")
+  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+  public EmpresaResponse updateEmpresa(
+      @Valid @RequestBody EmpresaRequest request, @PathVariable Long id) {
+    log.info("PUT /empresas - atualizando convênio ID {}", id);
+    return mapper.toResponse(service.editEmpresa(id, request));
+  }
+
+  @DeleteMapping("/{id}")
+  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+  public ResponseEntity<Void> deleteEmpresa(@PathVariable Long id) {
+    log.info("DELETE /empresas - excluindo convênio ID {}", id);
+    service.deleteEmpresa(id);
+    return ResponseEntity.noContent().build();
+  }
+
+  @PatchMapping("/{id}/restaurar")
+  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+  public ResponseEntity<Void> restoreEmpresa(@PathVariable Long id) {
+    log.info("PATCH /empresas/{}/restaurar", id);
+    service.restoreEmpresa(id);
+    return ResponseEntity.noContent().build();
+  }
+
+  @GetMapping("/{id}")
+  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+  public EmpresaResponse getEmpresaById(@PathVariable Long id) {
+    log.info("GET /empresas/{} - buscando empresa pelo ID", id);
+    return mapper.toResponse(service.getById(id));
+  }
+}

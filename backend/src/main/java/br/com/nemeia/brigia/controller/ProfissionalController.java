@@ -1,17 +1,16 @@
 package br.com.nemeia.brigia.controller;
 
 import br.com.nemeia.brigia.dto.request.ProfissionalRequest;
-import br.com.nemeia.brigia.dto.response.ProfissionalResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
+import br.com.nemeia.brigia.dto.response.ProfissionalResponse;
 import br.com.nemeia.brigia.mapper.ProfissionalMapper;
 import br.com.nemeia.brigia.service.ProfissionalService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/profissionais")
@@ -46,7 +45,8 @@ public class ProfissionalController {
 
   @PutMapping("/{id}")
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public ProfissionalResponse updateProfissional(@Valid @RequestBody ProfissionalRequest request, @PathVariable Long id) {
+  public ProfissionalResponse updateProfissional(
+      @Valid @RequestBody ProfissionalRequest request, @PathVariable Long id) {
     log.info("PUT /profissionais - atualizando profissional ID {}", id);
     return mapper.toResponse(service.editProfissional(id, request));
   }

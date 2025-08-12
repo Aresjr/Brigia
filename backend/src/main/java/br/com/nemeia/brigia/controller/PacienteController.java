@@ -6,9 +6,8 @@ import br.com.nemeia.brigia.dto.response.PacientesTotaisResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.mapper.PacienteMapper;
 import br.com.nemeia.brigia.service.PacienteService;
-import java.util.List;
-
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -47,14 +46,16 @@ public class PacienteController {
 
   @PutMapping("/{id}")
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public PacienteResponse updatePaciente(@Valid @RequestBody PacienteRequest request, @PathVariable Long id) {
+  public PacienteResponse updatePaciente(
+      @Valid @RequestBody PacienteRequest request, @PathVariable Long id) {
     log.info("PUT /pacientes - atualizando paciente ID {}", id);
     return mapper.toResponse(service.editPaciente(id, request));
   }
 
   @GetMapping("/total")
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public PacientesTotaisResponse countPacientes(@RequestParam(defaultValue = "false") Boolean excluido) {
+  public PacientesTotaisResponse countPacientes(
+      @RequestParam(defaultValue = "false") Boolean excluido) {
     log.info("GET /pacientes/total");
     return new PacientesTotaisResponse(service.getTotal(excluido));
   }

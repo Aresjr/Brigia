@@ -2,7 +2,6 @@ package br.com.nemeia.brigia.handler;
 
 import br.com.nemeia.brigia.dto.response.ErrorResponse;
 import br.com.nemeia.brigia.exception.InvalidCredentialsException;
-import br.com.nemeia.brigia.exception.LoginUnavailableException;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -20,13 +19,6 @@ public class GenericExceptionHandler extends BaseExceptionHandler {
       InvalidCredentialsException ex, HttpServletRequest request) {
     log.error("Erro ao autenticar: {}", ex.getMessage());
     return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED, request);
-  }
-
-  @ExceptionHandler(LoginUnavailableException.class)
-  public ResponseEntity<ErrorResponse> handleLoginUnavailableException(
-      LoginUnavailableException ex, HttpServletRequest request) {
-    log.error("Erro ao autenticar: {}", ex.getMessage());
-    return buildErrorResponse(ex.getMessage(), HttpStatus.SERVICE_UNAVAILABLE, request);
   }
 
   @ExceptionHandler(NotFoundException.class)

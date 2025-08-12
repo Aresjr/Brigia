@@ -4,10 +4,9 @@ import br.com.nemeia.brigia.dto.request.EspecialidadeRequest;
 import br.com.nemeia.brigia.dto.response.EspecialidadeResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.model.Especialidade;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class EspecialidadeMapper {
@@ -18,14 +17,18 @@ public class EspecialidadeMapper {
     }
 
     return new EspecialidadeResponse(
-        especialidade.getId(), especialidade.getNome(), especialidade.getDescricao(),
-            especialidade.getCriadoEm(), especialidade.getExcluido());
+        especialidade.getId(),
+        especialidade.getNome(),
+        especialidade.getDescricao(),
+        especialidade.getCriadoEm(),
+        especialidade.getExcluido());
   }
 
   public PagedResponse<EspecialidadeResponse> toPagedResponse(Page<Especialidade> paged) {
-    List<EspecialidadeResponse> responses = paged.getContent().stream().map(this::toResponse).toList();
+    List<EspecialidadeResponse> responses =
+        paged.getContent().stream().map(this::toResponse).toList();
     return new PagedResponse<>(
-            responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
+        responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
   }
 
   public Especialidade toEntity(EspecialidadeRequest request) {

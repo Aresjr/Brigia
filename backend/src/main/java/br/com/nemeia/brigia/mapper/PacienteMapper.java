@@ -4,11 +4,10 @@ import br.com.nemeia.brigia.dto.request.PacienteRequest;
 import br.com.nemeia.brigia.dto.response.PacienteResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.model.Paciente;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -50,26 +49,25 @@ public class PacienteMapper {
     }
 
     return new Paciente(
-      request.nome(),
-      request.email(),
-      request.cpf(),
-      request.dataNascimento(),
-      request.sexo() != null ? request.sexo().charAt(0) : null,
-      request.celular(),
-      request.urlImagem(),
-      request.corIdentificacao(),
-      request.cep(),
-      request.rua(),
-      request.complemento(),
-      request.bairro(),
-      request.cidade(),
-      request.uf()
-    );
+        request.nome(),
+        request.email(),
+        request.cpf(),
+        request.dataNascimento(),
+        request.sexo() != null ? request.sexo().charAt(0) : null,
+        request.celular(),
+        request.urlImagem(),
+        request.corIdentificacao(),
+        request.cep(),
+        request.rua(),
+        request.complemento(),
+        request.bairro(),
+        request.cidade(),
+        request.uf());
   }
 
   public PagedResponse<PacienteResponse> toPagedResponse(Page<Paciente> paged) {
     List<PacienteResponse> responses = paged.getContent().stream().map(this::toResponse).toList();
     return new PagedResponse<>(
-            responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
+        responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
   }
 }

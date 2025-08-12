@@ -8,14 +8,13 @@ import br.com.nemeia.brigia.mapper.ProcedimentoMapper;
 import br.com.nemeia.brigia.model.Especialidade;
 import br.com.nemeia.brigia.model.Procedimento;
 import br.com.nemeia.brigia.repository.ProcedimentoRepository;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor

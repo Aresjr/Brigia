@@ -7,7 +7,6 @@ import br.com.nemeia.brigia.model.Unidade;
 import br.com.nemeia.brigia.model.Usuario;
 import br.com.nemeia.brigia.repository.UnidadeRepository;
 import br.com.nemeia.brigia.repository.UsuarioRepository;
-
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +46,10 @@ public class UsuarioService {
     Unidade unidade =
         unidadeRepository
             .findById(request.unidadeId())
-            .orElseThrow(() -> new NotFoundException("Unidade não encontrada com o ID: " + request.unidadeId()));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        "Unidade não encontrada com o ID: " + request.unidadeId()));
 
     log.info("Criando usuário: {}", request.email());
     Usuario usuario = mapper.toEntity(request);

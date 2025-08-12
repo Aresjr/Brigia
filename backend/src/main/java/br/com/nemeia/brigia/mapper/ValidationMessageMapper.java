@@ -20,8 +20,7 @@ public class ValidationMessageMapper {
     String msg = ex.getMessage();
     if (msg != null && msg.contains("duplicate key")) {
       String msgCompleta = msg.split("Key")[1];
-      String campoDuplicado = msgCompleta.split(" already exists")[0].trim()
-              .replaceAll("[()]", "");
+      String campoDuplicado = msgCompleta.split(" already exists")[0].trim().replaceAll("[()]", "");
 
       return "Já existe um cadastro com o campo " + campoDuplicado;
     }

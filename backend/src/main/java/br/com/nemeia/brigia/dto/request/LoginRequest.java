@@ -9,9 +9,9 @@ public record LoginRequest(String email, String password) {
   public String toString() {
     ObjectMapper om = new ObjectMapper();
     try {
-        return om.writeValueAsString(this);
+      return om.writeValueAsString(this);
     } catch (JsonProcessingException e) {
-        throw new RuntimeException(e);
+      throw new RuntimeException(e);
     }
   }
 }

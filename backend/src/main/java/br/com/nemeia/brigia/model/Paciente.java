@@ -3,7 +3,6 @@ package br.com.nemeia.brigia.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 import lombok.*;
 
 @Getter
@@ -70,9 +69,21 @@ public class Paciente extends BaseModel {
   @JoinColumn(name = "convenio_id")
   private Convenio convenio;
 
-  public Paciente(String nome, String email, String cpf, LocalDate dataNascimento, Character sexo, String celular,
-                  String urlImagem, String corIdentificacao, String cep, String rua, String complemento, String bairro,
-                  String cidade, String uf) {
+  public Paciente(
+      String nome,
+      String email,
+      String cpf,
+      LocalDate dataNascimento,
+      Character sexo,
+      String celular,
+      String urlImagem,
+      String corIdentificacao,
+      String cep,
+      String rua,
+      String complemento,
+      String bairro,
+      String cidade,
+      String uf) {
     this.nome = nome;
     this.email = email;
     this.cpf = cpf;

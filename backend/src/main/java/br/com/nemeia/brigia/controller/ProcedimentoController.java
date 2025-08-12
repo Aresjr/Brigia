@@ -1,8 +1,8 @@
 package br.com.nemeia.brigia.controller;
 
 import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
-import br.com.nemeia.brigia.dto.response.ProcedimentoResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
+import br.com.nemeia.brigia.dto.response.ProcedimentoResponse;
 import br.com.nemeia.brigia.mapper.ProcedimentoMapper;
 import br.com.nemeia.brigia.service.ProcedimentoService;
 import jakarta.validation.Valid;
@@ -24,7 +24,7 @@ public class ProcedimentoController {
   @GetMapping
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
   public PagedResponse<ProcedimentoResponse> getAllProcedimentos(
-          @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
+      @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
     log.info("GET /procedimentos - page: {}, size: {}", page, size);
     return mapper.toPagedResponse(service.getPaged(page, size));
   }
@@ -38,7 +38,8 @@ public class ProcedimentoController {
 
   @PutMapping("/{id}")
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public ProcedimentoResponse updateProcedimento(@Valid @RequestBody ProcedimentoRequest request, @PathVariable Long id) {
+  public ProcedimentoResponse updateProcedimento(
+      @Valid @RequestBody ProcedimentoRequest request, @PathVariable Long id) {
     log.info("PUT /procedimentos - atualizando procedimento ID {}", id);
     return mapper.toResponse(service.editProcedimento(id, request));
   }

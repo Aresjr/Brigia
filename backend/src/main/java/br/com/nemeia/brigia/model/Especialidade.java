@@ -1,9 +1,7 @@
 package br.com.nemeia.brigia.model;
 
 import jakarta.persistence.*;
-
 import java.util.List;
-
 import lombok.*;
 
 @Getter

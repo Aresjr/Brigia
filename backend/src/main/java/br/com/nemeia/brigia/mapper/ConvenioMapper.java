@@ -5,7 +5,6 @@ import br.com.nemeia.brigia.dto.response.ConvenioResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.model.Convenio;
 import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -18,14 +17,17 @@ public class ConvenioMapper {
     }
 
     return new ConvenioResponse(
-        convenio.getId(), convenio.getNome(), convenio.getDescricao(),
-            convenio.getCriadoEm(), convenio.getExcluido());
+        convenio.getId(),
+        convenio.getNome(),
+        convenio.getDescricao(),
+        convenio.getCriadoEm(),
+        convenio.getExcluido());
   }
 
   public PagedResponse<ConvenioResponse> toPagedResponse(Page<Convenio> paged) {
     List<ConvenioResponse> responses = paged.getContent().stream().map(this::toResponse).toList();
     return new PagedResponse<>(
-            responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
+        responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
   }
 
   public Convenio toEntity(ConvenioRequest request) {
