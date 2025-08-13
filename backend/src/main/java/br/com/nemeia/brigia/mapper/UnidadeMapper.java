@@ -12,8 +12,6 @@ public class UnidadeMapper {
       return null;
     }
 
-    return new UnidadeResponse(
-        unidade.getId(),
-        unidade.getNome());
+    return new UnidadeResponse(unidade.getId(), unidade.getNome());
   }
 }

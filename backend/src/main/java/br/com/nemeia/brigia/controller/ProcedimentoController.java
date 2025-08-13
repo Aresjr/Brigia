@@ -5,7 +5,6 @@ import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.dto.response.ProcedimentoResponse;
 import br.com.nemeia.brigia.dto.response.TabelaPrecoResponse;
 import br.com.nemeia.brigia.mapper.ProcedimentoMapper;
-import br.com.nemeia.brigia.model.Procedimento;
 import br.com.nemeia.brigia.service.ProcedimentoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -73,6 +72,6 @@ public class ProcedimentoController {
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
   public TabelaPrecoResponse getTabelaPrecoProcedimentoById(@PathVariable Long id) {
     log.info("GET /procedimentos/{} - buscando procedimento pelo ID", id);
-      return mapper.toTabelaPreco(service.getById(id));
+    return mapper.toTabelaPreco(service.getById(id));
   }
 }

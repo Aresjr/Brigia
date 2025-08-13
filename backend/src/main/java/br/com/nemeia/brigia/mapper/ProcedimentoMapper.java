@@ -6,7 +6,6 @@ import br.com.nemeia.brigia.dto.response.PrecoProcedimentoResponse;
 import br.com.nemeia.brigia.dto.response.ProcedimentoResponse;
 import br.com.nemeia.brigia.dto.response.TabelaPrecoResponse;
 import br.com.nemeia.brigia.model.Procedimento;
-
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -49,22 +48,35 @@ public class ProcedimentoMapper {
         request.codigo(), request.nome(), request.observacoes(), request.valorPadrao());
   }
 
-    public TabelaPrecoResponse toTabelaPreco(Procedimento procedimento) {
-        List<PrecoProcedimentoResponse> tabelaConvenio = new ArrayList<>();
-        List<PrecoProcedimentoResponse> tabelaEmpresa = new ArrayList<>();
+  public TabelaPrecoResponse toTabelaPreco(Procedimento procedimento) {
+    List<PrecoProcedimentoResponse> tabelaConvenio = new ArrayList<>();
+    List<PrecoProcedimentoResponse> tabelaEmpresa = new ArrayList<>();
 
-        procedimento.getPrecos().forEach(precoProcedimento -> {
-            if (precoProcedimento.getConvenio() != null) {
-                PrecoProcedimentoResponse ppr = new PrecoProcedimentoResponse(
-                        precoProcedimento.getPreco(), precoProcedimento.getRepasse(), convenioMapper.toResponse(precoProcedimento.getConvenio()), null, unidadeMapper.toResponse(precoProcedimento.getUnidade()));
+    procedimento
+        .getPrecos()
+        .forEach(
+            precoProcedimento -> {
+              if (precoProcedimento.getConvenio() != null) {
+                PrecoProcedimentoResponse ppr =
+                    new PrecoProcedimentoResponse(
+                        precoProcedimento.getPreco(),
+                        precoProcedimento.getRepasse(),
+                        convenioMapper.toResponse(precoProcedimento.getConvenio()),
+                        null,
+                        unidadeMapper.toResponse(precoProcedimento.getUnidade()));
                 tabelaConvenio.add(ppr);
-            } else if (precoProcedimento.getEmpresa() != null) {
-                PrecoProcedimentoResponse ppr = new PrecoProcedimentoResponse(
-                        precoProcedimento.getPreco(), precoProcedimento.getRepasse(), null, empresaMapper.toResponse(precoProcedimento.getEmpresa()), unidadeMapper.toResponse(precoProcedimento.getUnidade()));
+              } else if (precoProcedimento.getEmpresa() != null) {
+                PrecoProcedimentoResponse ppr =
+                    new PrecoProcedimentoResponse(
+                        precoProcedimento.getPreco(),
+                        precoProcedimento.getRepasse(),
+                        null,
+                        empresaMapper.toResponse(precoProcedimento.getEmpresa()),
+                        unidadeMapper.toResponse(precoProcedimento.getUnidade()));
                 tabelaConvenio.add(ppr);
-            }
-        });
+              }
+            });
 
-        return new TabelaPrecoResponse(toResponse(procedimento), tabelaConvenio, tabelaEmpresa);
-    }
+    return new TabelaPrecoResponse(toResponse(procedimento), tabelaConvenio, tabelaEmpresa);
+  }
 }
