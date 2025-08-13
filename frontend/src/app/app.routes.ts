@@ -12,6 +12,7 @@ import { TabelaPrecosComponent } from './features/tabela-precos/tabela-precos.co
 import { ConveniosComponent } from './features/convenio/convenios.component';
 import { Role } from './core/constans';
 import { EspecialidadeComponent } from './features/especialidade/especialidade.component';
+import { EmpresasComponent } from './features/empresa/empresas.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -93,6 +94,16 @@ export const routes: Routes = [
         data: {
           roles: [Role.SECRETARIA, Role.ADMIN],
           title: 'Profissionais',
+        },
+      },
+      {
+        path: 'empresas',
+        component: EmpresasComponent,
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        data: {
+          roles: [Role.SECRETARIA, Role.ADMIN],
+          title: 'Empresas',
         },
       },
       {

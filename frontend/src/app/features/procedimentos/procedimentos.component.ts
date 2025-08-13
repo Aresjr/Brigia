@@ -72,7 +72,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
       const id = this.itemEdicao.id;
       this.procedimentosService.atualizar(id, procedimento).subscribe({
         next: () => {
-          this.toastr.success(`${this.nomeEntidade} atualizado com sucesso`);
+          this.toastr.success(`Registro atualizado com sucesso`);
           this.carregarProcedimentos();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;

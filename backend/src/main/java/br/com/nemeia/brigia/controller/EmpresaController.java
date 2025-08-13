@@ -42,14 +42,14 @@ public class EmpresaController {
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
   public EmpresaResponse updateEmpresa(
       @Valid @RequestBody EmpresaRequest request, @PathVariable Long id) {
-    log.info("PUT /empresas - atualizando convênio ID {}", id);
+    log.info("PUT /empresas - atualizando empresa ID {}", id);
     return mapper.toResponse(service.editEmpresa(id, request));
   }
 
   @DeleteMapping("/{id}")
   @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
   public ResponseEntity<Void> deleteEmpresa(@PathVariable Long id) {
-    log.info("DELETE /empresas - excluindo convênio ID {}", id);
+    log.info("DELETE /empresas - excluindo empresa ID {}", id);
     service.deleteEmpresa(id);
     return ResponseEntity.noContent().build();
   }

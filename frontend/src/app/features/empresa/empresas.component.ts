@@ -67,7 +67,7 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
       const id = this.itemEdicao.id;
       this.empresasService.atualizar(id, empresa).subscribe({
         next: () => {
-          this.toastr.success('Convênio atualizado com sucesso');
+          this.toastr.success('Registro atualizado com sucesso');
           this.carregarEmpresas();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
@@ -80,7 +80,7 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
     } else {
       this.empresasService.criar(empresa).subscribe({
         next: () => {
-          this.toastr.success('Convênio cadastrado com sucesso');
+          this.toastr.success('Empresa cadastrado com sucesso');
           this.carregarEmpresas();
           this.mostrarFormularioNovo = false;
         },
@@ -98,7 +98,7 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
     if (confirm(`Deseja realmente excluir o empresa ${empresa.nome}?`)) { //TODO - alterar para uma biblioteca de confirmação
       this.empresasService.excluir(empresa.id).subscribe({
         next: () => {
-          this.toastr.success('Convênio excluído com sucesso');
+          this.toastr.success('Empresa excluído com sucesso');
           this.carregarEmpresas();
         },
         error: () => {
@@ -115,7 +115,7 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
     this.empresasService.restaurar(empresa.id).subscribe({
       next: () => {
         empresa.excluido = false;
-        this.toastr.success('Convênio restaurado com sucesso!');
+        this.toastr.success('Empresa restaurado com sucesso!');
       },
       error: (error) => {
         this.toastr.error('Erro ao restaurar o empresa');

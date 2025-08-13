@@ -67,7 +67,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
       const id = this.itemEdicao.id;
       this.conveniosService.atualizar(id, convenio).subscribe({
         next: () => {
-          this.toastr.success('Convênio atualizado com sucesso');
+          this.toastr.success('Registro atualizado com sucesso');
           this.carregarConvenios();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
