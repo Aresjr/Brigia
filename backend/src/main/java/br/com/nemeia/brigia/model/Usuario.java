@@ -25,7 +25,7 @@ public class Usuario {
   @Column(name = "nome", nullable = false)
   private String nome;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "unidade_id", nullable = false)
   private Unidade unidade;
 

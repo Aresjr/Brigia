@@ -16,19 +16,19 @@ public class PrecoProcedimento extends BaseModel {
   @Column(name = "id")
   private Long id;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "procedimento_id", nullable = false)
   private Procedimento procedimento;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "convenio_id")
   private Convenio convenio;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "unidade_id")
   private Unidade unidade;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "empresa_id")
   private Empresa empresa;
 

@@ -1,0 +1,23 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 z-40" (click)="fechar()"></div>
+<div class="fixed right-0 top-0 h-full w-[30rem] bg-white shadow-lg z-50 overflow-y-auto">
+  <div class="p-4">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold">Detalhes do Procedimento</h2>
+      <button (click)="fechar()" class="text-gray-500 hover:text-gray-700">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    @if (procedimento) {
+      <div class="space-y-4">
+        <div class="border-b pb-2">
+          <p class="text-sm text-gray-600">Nome</p>
+          <p class="font-medium">{{procedimento.nome}}</p>
+        </div>
+
+      </div>
+    }
+  </div>
+</div>

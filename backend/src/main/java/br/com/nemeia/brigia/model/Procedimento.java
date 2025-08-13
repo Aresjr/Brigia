@@ -29,11 +29,11 @@ public class Procedimento extends BaseModel {
   @Column(name = "valor_padrao")
   private BigDecimal valorPadrao;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "especialidade_id")
   private Especialidade especialidade;
 
-  @OneToMany
+  @OneToMany(fetch = FetchType.LAZY)
   @JoinTable(
       name = "preco_procedimento",
       joinColumns = @JoinColumn(name = "procedimento_id"),

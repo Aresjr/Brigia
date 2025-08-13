@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ProcedimentoFormComponent } from './procedimento-form/procedimento-form.component';
 import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
+import { ProcedimentoDetalhesComponent } from './procedimento-detalhes/procedimento-detalhes.component';
 
 @Component({
   selector: 'app-procedimentos',
@@ -18,7 +19,8 @@ import { PaginationComponent } from '../shared/pagination/pagination.component';
     LucideAngularModule,
     FormsModule,
     ProcedimentoFormComponent,
-    PaginationComponent
+    PaginationComponent,
+    ProcedimentoDetalhesComponent
   ]
 })
 export class ProcedimentosComponent extends BaseListComponent<Procedimento> implements OnInit {

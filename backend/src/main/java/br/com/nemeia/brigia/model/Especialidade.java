@@ -22,7 +22,7 @@ public class Especialidade extends BaseModel {
   @Column(name = "descricao")
   private String descricao;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
       name = "profissional_especialidade",
       joinColumns = @JoinColumn(name = "especialidade_id"),

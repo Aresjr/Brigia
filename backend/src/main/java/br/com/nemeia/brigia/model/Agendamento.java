@@ -18,15 +18,15 @@ public class Agendamento extends BaseModel {
   @Column(name = "data")
   private LocalDateTime data;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "paciente_id")
   private Paciente paciente;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "profissional_id")
   private Profissional profissional;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "procedimento_id")
   private Procedimento procedimento;
 

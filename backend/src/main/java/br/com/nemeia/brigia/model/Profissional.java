@@ -41,7 +41,7 @@ public class Profissional extends BaseModel {
   @Column(name = "crm", length = 7, unique = true)
   private String crm;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
       name = "profissional_especialidade",
       joinColumns = @JoinColumn(name = "profissional_id"),

@@ -1,5 +1,6 @@
+@use "ngx-toastr/toastr";
+@use "@ng-select/ng-select/themes/default.theme.css";
+
 @tailwind base;
-@import "ngx-toastr/toastr";
 @tailwind components;
 @tailwind utilities;
-@import "@ng-select/ng-select/themes/default.theme.css";

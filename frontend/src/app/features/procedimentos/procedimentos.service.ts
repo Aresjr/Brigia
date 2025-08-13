@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BackendService } from '../../core/backend/backend.service';
-import { Procedimento, ProcedimentoResponse } from './procedimento.interface';
+import { Procedimento, ProcedimentoResponse, TabelaPrecoResponse } from './procedimento.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -24,10 +24,14 @@ export class ProcedimentosService {
   }
 
   excluir(id: number): Observable<void> {
-    return this.backend.delete<void>(`${this.path}${id}`);
+    return this.backend.delete<void>(`${this.path}/${id}`);
   }
 
   restaurar(id: number): Observable<void> {
-    return this.backend.patch<void>(`${this.path}${id}/restaurar`, null);
+    return this.backend.patch<void>(`${this.path}/${id}/restaurar`, null);
+  }
+
+  listarTabelaPreco(id: number): Observable<TabelaPrecoResponse> {
+    return this.backend.get<TabelaPrecoResponse>(`${this.path}/${id}/tabela-preco`);
   }
 }

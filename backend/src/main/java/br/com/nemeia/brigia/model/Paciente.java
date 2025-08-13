@@ -65,7 +65,7 @@ public class Paciente extends BaseModel {
   @Column(name = "uf")
   private String uf;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "convenio_id")
   private Convenio convenio;
 
