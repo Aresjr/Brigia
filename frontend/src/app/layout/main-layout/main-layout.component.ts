@@ -31,8 +31,7 @@ interface MenuItem {
     TopBarComponent,
     FormsModule
   ],
-  templateUrl: './main-layout.component.html',
-  styleUrl: './main-layout.component.scss'
+  templateUrl: './main-layout.component.html'
 })
 export class MainLayoutComponent {
   constructor(
