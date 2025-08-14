@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Procedimento } from '../procedimento.interface';
+import { Procedimento, TabelaPrecoResponse } from '../procedimento.interface';
 import { ProcedimentosService } from '../procedimentos.service';
 import { ToastrService } from 'ngx-toastr';
 
@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 export class ProcedimentoDetalhesComponent implements OnInit {
   @Input() procedimento: Procedimento | null = null;
   @Output() fechou = new EventEmitter<void>();
+  tabelaPreco: TabelaPrecoResponse | undefined = undefined;
 
   constructor(private procedimentosService: ProcedimentosService,
               private toastr: ToastrService) {}
@@ -21,7 +22,7 @@ export class ProcedimentoDetalhesComponent implements OnInit {
     if (this.procedimento) {
       this.procedimentosService.listarTabelaPreco(this.procedimento.id).subscribe({
         next: (response) => {
-          console.log(response);
+          this.tabelaPreco = response;
         },
         error: (error) => {
           this.toastr.error('Erro ao carregar a tabela de preço do procedimento.');

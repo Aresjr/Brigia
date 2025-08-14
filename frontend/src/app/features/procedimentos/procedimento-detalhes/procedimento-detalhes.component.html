@@ -16,7 +16,32 @@
           <p class="text-sm text-gray-600">Nome</p>
           <p class="font-medium">{{procedimento.nome}}</p>
         </div>
-
+        <div class="border-b pb-2">
+          <p class="text-sm text-gray-600">Código</p>
+          <p class="font-medium">{{procedimento.codigo}}</p>
+        </div>
+        <div class="border-b pb-2">
+          <p class="text-sm text-gray-600">Especialidade</p>
+          <p class="font-medium">{{procedimento.especialidade.nome}}</p>
+        </div>
+        @if (tabelaPreco) {
+          @if (tabelaPreco.tabelaConvenio.length > 0) {
+            <div class="border-b pb-2">
+              <p class="text-sm text-gray-600">Preço Convênios</p>
+              @for (precoConvenio of tabelaPreco.tabelaConvenio; track precoConvenio.convenio.id) {
+                <div class="m-2 p-2 py-1 bg-blue-50 text-blue-800 rounded w-fit">{{precoConvenio.convenio.nome}} - R${{precoConvenio.preco}}</div>
+              }
+            </div>
+          }
+          @if (tabelaPreco.tabelaEmpresa.length > 0) {
+            <div class="border-b pb-2">
+              <p class="text-sm text-gray-600">Preço para Empresas</p>
+              @for (precoEmpresa of tabelaPreco.tabelaEmpresa; track precoEmpresa.empresa.id) {
+                <div class="m-2 p-2 py-1 bg-blue-50 text-blue-800 rounded w-fit">{{precoEmpresa.empresa.nome}} - R${{precoEmpresa.preco}}</div>
+              }
+            </div>
+          }
+        }
       </div>
     }
   </div>
