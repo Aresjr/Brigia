@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ConvenioFormComponent } from './convenio-form/convenio-form.component';
 import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-convenios',
@@ -18,12 +19,14 @@ import { PaginationComponent } from '../shared/pagination/pagination.component';
     LucideAngularModule,
     FormsModule,
     ConvenioFormComponent,
-    PaginationComponent
+    PaginationComponent,
+    ConfirmDialogComponent
   ]
 })
 export class ConveniosComponent extends BaseListComponent<Convenio> implements OnInit {
   protected Math = Math;
   convenios: Convenio[] = [];
+  override nomeEntidade = 'Convênio';
 
   constructor(private conveniosService: ConveniosService, private toastr: ToastrService) {
     super();
@@ -74,38 +77,34 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
         },
         error: (e) => {
           const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
-          this.toastr.error(errorMessage, 'Erro ao atualizar convênio');
+          this.toastr.error(errorMessage, `Erro ao atualizar ${this.nomeEntidade}`);
         }
       });
     } else {
       this.conveniosService.criar(convenio).subscribe({
         next: () => {
-          this.toastr.success('Convênio cadastrado com sucesso');
+          this.toastr.success(`${this.nomeEntidade} cadastrado com sucesso`);
           this.carregarConvenios();
           this.mostrarFormularioNovo = false;
         },
         error: (error) => {
-          this.toastr.error('Erro ao cadastrar convênio');
-          console.error('Erro ao cadastrar convênio:', error);
+          this.toastr.error(`Erro ao cadastrar ${this.nomeEntidade}`);
+          console.error(`Erro ao cadastrar ${this.nomeEntidade}:`, error);
         }
       });
     }
   }
 
-  excluir(event: Event, convenio: Convenio) {
-    event.stopPropagation();
-    this.dropdownAberto = null;
-    if (confirm(`Deseja realmente excluir o convênio ${convenio.nome}?`)) { //TODO - alterar para uma biblioteca de confirmação
-      this.conveniosService.excluir(convenio.id).subscribe({
-        next: () => {
-          this.toastr.success('Convênio excluído com sucesso');
-          this.carregarConvenios();
-        },
-        error: () => {
-          this.toastr.error('Erro ao excluir convênio');
-        }
-      });
-    }
+  excluir() {
+    this.conveniosService.excluir(this.idExclusao).subscribe({
+      next: () => {
+        this.toastr.success(`${this.nomeEntidade} excluído com sucesso`);
+        this.carregarConvenios();
+      },
+      error: () => {
+        this.toastr.error(`Erro ao excluir ${this.nomeEntidade}`);
+      }
+    });
   }
 
   restaurarItem(event: Event, convenio: Convenio) {
@@ -115,16 +114,13 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
     this.conveniosService.restaurar(convenio.id).subscribe({
       next: () => {
         convenio.excluido = false;
-        this.toastr.success('Convênio restaurado com sucesso!');
+        this.toastr.success(`${this.nomeEntidade} restaurado com sucesso!`);
       },
       error: (error) => {
-        this.toastr.error('Erro ao restaurar o convênio');
-        console.error('Erro ao restaurar convênio:', error);
+        this.toastr.error(`Erro ao restaurar o ${this.nomeEntidade}`);
+        console.error(`Erro ao restaurar ${this.nomeEntidade}:`, error);
       }
     });
   }
 
-  pageChange(page: number) {
-    this.mudarPagina(page);
-  }
 }

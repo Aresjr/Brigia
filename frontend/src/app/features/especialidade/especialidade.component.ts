@@ -8,6 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import { EspecialidadeFormComponent } from './especialidade-form/especialidade-form.component';
 import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
+import { Procedimento } from '../procedimentos/procedimento.interface';
 
 @Component({
   selector: 'app-especialidades',
@@ -18,12 +20,14 @@ import { PaginationComponent } from '../shared/pagination/pagination.component';
     LucideAngularModule,
     FormsModule,
     EspecialidadeFormComponent,
-    PaginationComponent
+    PaginationComponent,
+    ConfirmDialogComponent
   ]
 })
 export class EspecialidadeComponent extends BaseListComponent<Especialidade> implements OnInit {
   protected Math = Math;
   especialidades: Especialidade[] = [];
+  override nomeEntidade = 'Especialidade';
 
   constructor(private especialidadesService: EspecialidadeService, private toastr: ToastrService) {
     super();
@@ -67,45 +71,41 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
       const id = this.itemEdicao.id;
       this.especialidadesService.atualizar(id, especialidade).subscribe({
         next: () => {
-          this.toastr.success('Especialidade atualizada com sucesso');
+          this.toastr.success(`${this.nomeEntidade} atualizada com sucesso`);
           this.carregarEspecialidades();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
         },
         error: (e) => {
           const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
-          this.toastr.error(errorMessage, 'Erro ao atualizar especialidade');
+          this.toastr.error(errorMessage, `Erro ao atualizar ${this.nomeEntidade}`);
         }
       });
     } else {
       this.especialidadesService.criar(especialidade).subscribe({
         next: () => {
-          this.toastr.success('Especialidade cadastrada com sucesso');
+          this.toastr.success(`${this.nomeEntidade} cadastrada com sucesso`);
           this.carregarEspecialidades();
           this.mostrarFormularioNovo = false;
         },
         error: (error) => {
-          this.toastr.error('Erro ao cadastrar especialidade');
-          console.error('Erro ao cadastrar especialidade:', error);
+          this.toastr.error(`Erro ao cadastrar ${this.nomeEntidade}`);
+          console.error(`Erro ao cadastrar ${this.nomeEntidade}:`, error);
         }
       });
     }
   }
 
-  excluir(event: Event, especialidade: Especialidade) {
-    event.stopPropagation();
-    this.dropdownAberto = null;
-    if (confirm(`Deseja realmente excluir a especialidade ${especialidade.nome}?`)) { //TODO - alterar para uma biblioteca de confirmação
-      this.especialidadesService.excluir(especialidade.id).subscribe({
-        next: () => {
-          this.toastr.success('Especialidade excluída com sucesso');
-          this.carregarEspecialidades();
-        },
-        error: () => {
-          this.toastr.error('Erro ao excluir especialidade');
-        }
-      });
-    }
+  excluir() {
+    this.especialidadesService.excluir(this.idExclusao).subscribe({
+      next: () => {
+        this.toastr.success(`${this.nomeEntidade} excluída com sucesso`);
+        this.carregarEspecialidades();
+      },
+      error: () => {
+        this.toastr.error(`Erro ao excluir ${this.nomeEntidade}`);
+      }
+    });
   }
 
   restaurarItem(event: Event, especialidade: Especialidade) {
@@ -115,16 +115,12 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
     this.especialidadesService.restaurar(especialidade.id).subscribe({
       next: () => {
         especialidade.excluido = false;
-        this.toastr.success('Especialidade restaurada com sucesso!');
+        this.toastr.success(`${this.nomeEntidade} restaurada com sucesso!`);
       },
       error: (error) => {
-        this.toastr.error('Erro ao restaurar a especialidade');
-        console.error('Erro ao restaurar especialidade:', error);
+        this.toastr.error(`Erro ao restaurar a ${this.nomeEntidade}`);
+        console.error(`Erro ao restaurar ${this.nomeEntidade}:`, error);
       }
     });
-  }
-
-  pageChange(page: number) {
-    this.mudarPagina(page);
   }
 }

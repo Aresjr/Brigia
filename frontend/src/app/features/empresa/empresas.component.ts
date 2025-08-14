@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { EmpresaFormComponent } from './empresa-form/empresa-form.component';
 import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-empresas',
@@ -18,7 +19,8 @@ import { PaginationComponent } from '../shared/pagination/pagination.component';
     LucideAngularModule,
     FormsModule,
     EmpresaFormComponent,
-    PaginationComponent
+    PaginationComponent,
+    ConfirmDialogComponent
   ]
 })
 export class EmpresasComponent extends BaseListComponent<Empresa> implements OnInit {
@@ -92,20 +94,16 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
     }
   }
 
-  excluir(event: Event, empresa: Empresa) {
-    event.stopPropagation();
-    this.dropdownAberto = null;
-    if (confirm(`Deseja realmente excluir o empresa ${empresa.nome}?`)) { //TODO - alterar para uma biblioteca de confirmação
-      this.empresasService.excluir(empresa.id).subscribe({
-        next: () => {
-          this.toastr.success('Empresa excluído com sucesso');
-          this.carregarEmpresas();
-        },
-        error: () => {
-          this.toastr.error('Erro ao excluir empresa');
-        }
-      });
-    }
+  excluir() {
+    this.empresasService.excluir(this.idExclusao).subscribe({
+      next: () => {
+        this.toastr.success('Empresa excluída com sucesso');
+        this.carregarEmpresas();
+      },
+      error: () => {
+        this.toastr.error('Erro ao excluir empresa');
+      }
+    });
   }
 
   restaurarItem(event: Event, empresa: Empresa) {
@@ -122,9 +120,5 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
         console.error('Erro ao restaurar empresa:', error);
       }
     });
-  }
-
-  pageChange(page: number) {
-    this.mudarPagina(page);
   }
 }

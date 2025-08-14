@@ -1,4 +1,6 @@
 import { Component, HostListener } from '@angular/core';
+import { Especialidade } from '../especialidade/especialidade.interface';
+import { Entidade } from './entidade.interface';
 
 type SortDirection = 'asc' | 'desc' | null;
 
@@ -23,6 +25,9 @@ export abstract class BaseListComponent<T extends object> {
   itemEdicao: T | null = null;
   mostrarFormularioNovo = false;
   isLoading = true;
+  nomeEntidade = '';
+  exibeConfirmExclusao = false;
+  idExclusao: number = 0;
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
@@ -77,6 +82,10 @@ export abstract class BaseListComponent<T extends object> {
     }
   }
 
+  pageChange(page: number) {
+    this.mudarPagina(page);
+  }
+
   isDropdownAberto(): boolean {
     return this.dropdownAberto !== null;
   }
@@ -98,6 +107,10 @@ export abstract class BaseListComponent<T extends object> {
     this.itemSelecionado = null;
   }
 
+  fecharConfirmExclusao(): void {
+    this.exibeConfirmExclusao = false;
+  }
+
   onAddNovo() {
     this.mostrarFormularioNovo = true;
     this.itemSelecionado = null;
@@ -114,4 +127,12 @@ export abstract class BaseListComponent<T extends object> {
     this.itemEdicao = item;
     this.mostrarFormularioNovo = true;
   }
+
+  perguntaExcluir(event: Event, entidade: Entidade) {
+    event.stopPropagation();
+    this.dropdownAberto = null;
+    this.idExclusao = entidade.id;
+    this.exibeConfirmExclusao = true;
+  }
+
 }

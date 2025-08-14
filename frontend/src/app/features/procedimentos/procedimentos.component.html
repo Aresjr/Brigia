@@ -67,7 +67,7 @@
                   <button
                     (click)="toggleDropdown($event, procedimento.id)"
                     class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" >
-                    Ações
+                    <lucide-icon name="menu" class="ml-1 h-4 w-4" />
                     <lucide-icon name="chevron-down" class="ml-1 h-4 w-4" />
                   </button>
                   @if (dropdownAberto === procedimento.id) {
@@ -79,7 +79,7 @@
                           Editar
                         </a>
                         <a *ngIf="!procedimento.excluido"
-                           (click)="excluir($event, procedimento)"
+                           (click)="perguntaExcluir($event, procedimento)"
                            class="block px-4 py-2 text-sm text-red-700 hover:bg-red-50 cursor-pointer">
                           Excluir
                         </a>
@@ -116,5 +116,13 @@
       (cancel)="onCancelarNovo()"
     ></app-procedimento-form>
   }
+
+  <app-confirm-dialog
+    *ngIf="exibeConfirmExclusao"
+    title="Excluir {{this.nomeEntidade}}"
+    message="Deseja realmente excluir este registro?"
+    (confirm)="excluir()"
+    (cancel)="fecharConfirmExclusao()"
+  ></app-confirm-dialog>
 
 </div>

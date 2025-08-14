@@ -121,8 +121,4 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
       });
     }
   }
-
-  pageChange(page: number) {
-    this.mudarPagina(page);
-  }
 }

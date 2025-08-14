@@ -9,6 +9,7 @@ import { ProcedimentoFormComponent } from './procedimento-form/procedimento-form
 import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { ProcedimentoDetalhesComponent } from './procedimento-detalhes/procedimento-detalhes.component';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-procedimentos',
@@ -20,13 +21,14 @@ import { ProcedimentoDetalhesComponent } from './procedimento-detalhes/procedime
     FormsModule,
     ProcedimentoFormComponent,
     PaginationComponent,
-    ProcedimentoDetalhesComponent
+    ProcedimentoDetalhesComponent,
+    ConfirmDialogComponent
   ]
 })
 export class ProcedimentosComponent extends BaseListComponent<Procedimento> implements OnInit {
   protected Math = Math;
   procedimentos: Procedimento[] = [];
-  nomeEntidade = 'procedimento';
+  override nomeEntidade = 'Procedimento';
 
   constructor(private procedimentosService: ProcedimentosService, private toastr: ToastrService) {
     super();
@@ -97,20 +99,18 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
     }
   }
 
-  excluir(event: Event, procedimento: Procedimento) {
-    event.stopPropagation();
-    this.dropdownAberto = null;
-    if (confirm(`Deseja realmente excluir o ${this.nomeEntidade} ${procedimento.nome}?`)) {
-      this.procedimentosService.excluir(procedimento.id).subscribe({
-        next: () => {
-          this.toastr.success(`${this.nomeEntidade} excluído com sucesso`);
-          this.carregarProcedimentos();
-        },
-        error: () => {
-          this.toastr.error(`Erro ao excluir ${this.nomeEntidade}`);
-        }
-      });
-    }
+  excluir() {
+    this.procedimentosService.excluir(this.idExclusao).subscribe({
+      next: () => {
+        this.toastr.success(`${this.nomeEntidade} excluído com sucesso`);
+        this.carregarProcedimentos();
+        this.exibeConfirmExclusao = false;
+      },
+      error: () => {
+        this.toastr.error(`Erro ao excluir ${this.nomeEntidade}`);
+        this.exibeConfirmExclusao = false;
+      }
+    });
   }
 
   restaurar(event: Event, procedimento: Procedimento) {
@@ -127,9 +127,5 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
         console.error(`Erro ao restaurar ${this.nomeEntidade}:`, error);
       }
     });
-  }
-
-  pageChange(page: number) {
-    this.mudarPagina(page);
   }
 }

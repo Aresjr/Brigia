@@ -9,11 +9,12 @@ import { CommonModule } from '@angular/common';
 import { AuthService, LoginResponse } from '../auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule],
   templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit {

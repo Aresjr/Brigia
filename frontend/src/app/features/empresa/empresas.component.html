@@ -69,7 +69,7 @@
                                                     Editar
                                                 </a>
                                                 <a *ngIf="!empresa.excluido"
-                                                    (click)="excluir($event, empresa)"
+                                                    (click)="perguntaExcluir($event, empresa)"
                                                     class="block px-4 py-2 text-sm text-red-700 hover:bg-red-50 cursor-pointer">
                                                     Excluir
                                                 </a>
@@ -99,5 +99,13 @@
       (cancel)="onCancelarNovo()"
     ></app-empresa-form>
   }
+
+  <app-confirm-dialog
+    *ngIf="exibeConfirmExclusao"
+    title="Excluir {{this.nomeEntidade}}"
+    message="Deseja realmente excluir este registro?"
+    (confirm)="excluir()"
+    (cancel)="fecharConfirmExclusao()"
+  ></app-confirm-dialog>
 
 </div>

@@ -119,8 +119,4 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
       });
     }
   }
-
-  pageChange(page: number) {
-    this.mudarPagina(page);
-  }
 }
