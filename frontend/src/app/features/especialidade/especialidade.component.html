@@ -44,7 +44,7 @@
                 </thead>
                 <tbody class="bg-white">
                     @for (especialidade of getItensPaginados(); track especialidade.id) {
-                        <tr class="border-b hover:bg-gray-50" [class.bg-red-50]="especialidade.excluido">
+                        <tr class="border-b hover:bg-gray-100" [class.bg-red-50]="especialidade.excluido">
                             <td class="px-6 py-2 whitespace-nowrap">
                                 {{especialidade.nome}}
                                 @if (especialidade.excluido) {

@@ -52,7 +52,7 @@
         </thead>
         <tbody class="bg-white">
           @for (procedimento of getItensPaginados(); track procedimento.id) {
-            <tr class="border-b hover:bg-gray-50" [class.bg-red-50]="procedimento.excluido" (click)="selecionar(procedimento)">
+            <tr class="border-b hover:bg-gray-100" [class.bg-red-50]="procedimento.excluido" (click)="selecionar(procedimento)">
               <td class="w-96 px-6 py-2 whitespace-nowrap">
                 {{procedimento.nome}}
                 @if (procedimento.excluido) {

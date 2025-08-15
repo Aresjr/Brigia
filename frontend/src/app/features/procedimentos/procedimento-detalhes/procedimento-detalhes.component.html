@@ -1,47 +1,101 @@
-<div class="fixed inset-0 bg-black bg-opacity-50 z-40" (click)="fechar()"></div>
-<div class="fixed right-0 top-0 h-full w-[30rem] bg-white shadow-lg z-50 overflow-y-auto">
-  <div class="p-4">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-semibold">Detalhes do Procedimento</h2>
-      <button (click)="fechar()" class="text-gray-500 hover:text-gray-700">
-        <svg class="w-6 h-6" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+<!-- Overlay -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" (click)="fechar()"></div>
+
+<!-- Painel lateral -->
+<div
+  class="fixed right-0 top-0 h-full w-full sm:w-[30rem] bg-white shadow-2xl z-50 overflow-y-auto transform transition-transform duration-300 ease-out"
+>
+  <div class="p-6 space-y-6">
+
+    <!-- Cabeçalho -->
+    <div class="flex justify-between items-center border-b pb-4">
+      <h2 class="text-2xl font-semibold text-gray-800">Detalhes do Procedimento</h2>
+      <button
+        (click)="fechar()"
+        class="text-gray-400 hover:text-gray-600 transition-colors"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
         </svg>
       </button>
     </div>
 
+    <!-- Conteúdo -->
     @if (procedimento) {
-      <div class="space-y-4">
-        <div class="border-b pb-2">
-          <p class="text-sm text-gray-600">Nome</p>
-          <p class="font-medium">{{procedimento.nome}}</p>
+      <div class="grid grid-cols-1 gap-6">
+
+        <!-- Campo -->
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">
+            Nome
+          </p>
+          <p class="mt-1 text-base font-medium text-gray-900">
+            {{ procedimento.nome }}
+          </p>
         </div>
-        <div class="border-b pb-2">
-          <p class="text-sm text-gray-600">Código</p>
-          <p class="font-medium">{{procedimento.codigo}}</p>
+
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">
+            Código
+          </p>
+          <p class="mt-1 text-base font-medium text-gray-900">
+            {{ procedimento.codigo }}
+          </p>
         </div>
-        <div class="border-b pb-2">
-          <p class="text-sm text-gray-600">Especialidade</p>
-          <p class="font-medium">{{procedimento.especialidade.nome}}</p>
+
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">
+            Especialidade
+          </p>
+          <p class="mt-1 text-base font-medium text-gray-900">
+            {{ procedimento.especialidade.nome }}
+          </p>
         </div>
-        @if (tabelaPreco) {
-          @if (tabelaPreco.tabelaConvenio.length > 0) {
-            <div class="border-b pb-2">
-              <p class="text-sm text-gray-600">Preço Convênios</p>
+
+        <!-- Preço Convênios -->
+        @if (tabelaPreco && tabelaPreco.tabelaConvenio.length > 0) {
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">
+              Preço Convênios
+            </p>
+            <div class="flex flex-wrap gap-2 mt-2 w-full bg-blue-50">
               @for (precoConvenio of tabelaPreco.tabelaConvenio; track precoConvenio.convenio.id) {
-                <div class="m-2 p-2 py-1 bg-blue-50 text-blue-800 rounded w-fit">{{precoConvenio.convenio.nome}} - R${{precoConvenio.preco}}</div>
+                <div class="px-3 py-1 rounded-full text-blue-800 text-sm font-medium" >
+                  {{ precoConvenio.convenio.nome }} — R${{ precoConvenio.preco }}
+                </div>
               }
             </div>
-          }
-          @if (tabelaPreco.tabelaEmpresa.length > 0) {
-            <div class="border-b pb-2">
-              <p class="text-sm text-gray-600">Preço para Empresas</p>
-              @for (precoEmpresa of tabelaPreco.tabelaEmpresa; track precoEmpresa.empresa.id) {
-                <div class="m-2 p-2 py-1 bg-blue-50 text-blue-800 rounded w-fit">{{precoEmpresa.empresa.nome}} - R${{precoEmpresa.preco}}</div>
-              }
-            </div>
-          }
+          </div>
         }
+
+        <!-- Preço Empresas -->
+        @if (tabelaPreco && tabelaPreco.tabelaEmpresa.length > 0) {
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">
+              Preço Empresas
+            </p>
+            <div class="flex flex-wrap gap-2 mt-2">
+              @for (precoEmpresa of tabelaPreco.tabelaEmpresa; track precoEmpresa.empresa.id) {
+                <span
+                  class="px-3 py-1 rounded-full bg-green-50 text-green-800 text-sm font-medium"
+                >
+                  {{ precoEmpresa.empresa.nome }} — R${{ precoEmpresa.preco }}
+                </span>
+              }
+            </div>
+          </div>
+        }
+
       </div>
     }
   </div>
