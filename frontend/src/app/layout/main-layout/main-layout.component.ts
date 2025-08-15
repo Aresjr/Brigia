@@ -3,7 +3,6 @@ import { ActivatedRoute, NavigationEnd, Router, RouterModule, RouterOutlet } fro
 import { LucideAngularModule } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
 import { MenuItemComponent } from '../menu-item/menu-item.component';
-import { TopBarComponent } from '../top-bar/top-bar.component';
 import { filter, map } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
@@ -28,7 +27,6 @@ interface MenuItem {
     CommonModule,
     RouterModule,
     MenuItemComponent,
-    TopBarComponent,
     FormsModule
   ],
   templateUrl: './main-layout.component.html'

@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CelularPipe } from '../../core/pipes/celular.pipe';
 import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
+import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 
 @Component({
   selector: 'app-profissionais',
@@ -20,14 +21,13 @@ import { PaginationComponent } from '../shared/pagination/pagination.component';
     LucideAngularModule,
     FormsModule,
     CelularPipe,
-    PaginationComponent
+    PaginationComponent,
+    TopBarComponent
   ],
   templateUrl: './profissionais.component.html',
   standalone: true
 })
 export class ProfissionaisComponent extends BaseListComponent<Profissional> implements OnInit {
-  protected Math = Math;
-  profissionais: Profissional[] = [];
 
   constructor(private profissionaisService: ProfissionaisService, private toastr: ToastrService) {
     super();
@@ -41,8 +41,8 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
     this.isLoading = true;
     this.profissionaisService.listar().subscribe({
       next: (response) => {
-        this.profissionais = response.items;
-        this.items = [...this.profissionais];
+        this.itensInternos = response.items;
+        this.itensExibicao = [...this.itensInternos];
         this.atualizarPaginacao();
         this.isLoading = false;
       },
@@ -73,19 +73,11 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
     }
   }
 
-  onSearch(): void {
-    if (this.searchTerm) {
-      this.items = this.profissionais.filter(profissional =>
-        profissional.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        profissional.celular?.includes(this.searchTerm) ||
-        profissional.crm?.includes(this.searchTerm) ||
-        profissional.email?.includes(this.searchTerm)
-      );
-    } else {
-      this.items = [...this.profissionais];
-    }
-    this.paginaAtual = 1;
-    this.atualizarPaginacao();
+  override filter(profissional: Profissional, searchTerm: string): boolean | undefined {
+    return profissional.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      profissional.celular?.includes(searchTerm) ||
+      profissional.crm?.includes(searchTerm) ||
+      profissional.email?.includes(searchTerm);
   }
 
   onSalvarNovoProfissional(profissional: Partial<Profissional>) {

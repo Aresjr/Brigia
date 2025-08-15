@@ -9,6 +9,7 @@ import { ConvenioFormComponent } from './convenio-form/convenio-form.component';
 import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
+import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 
 @Component({
   selector: 'app-convenios',
@@ -20,12 +21,11 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
     FormsModule,
     ConvenioFormComponent,
     PaginationComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    TopBarComponent
   ]
 })
 export class ConveniosComponent extends BaseListComponent<Convenio> implements OnInit {
-  protected Math = Math;
-  convenios: Convenio[] = [];
   override nomeEntidade = 'Convênio';
 
   constructor(private conveniosService: ConveniosService, private toastr: ToastrService) {
@@ -40,8 +40,8 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
     this.isLoading = true;
     this.conveniosService.listar(true).subscribe({
       next: (response) => {
-        this.convenios = response.items;
-        this.items = [...this.convenios];
+        this.itensInternos = response.items;
+        this.itensExibicao = [...this.itensInternos];
         this.atualizarPaginacao();
         this.isLoading = false;
       },
@@ -52,17 +52,9 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
     });
   }
 
-  onSearch(): void {
-    if (this.searchTerm) {
-      this.items = this.convenios.filter(convenio =>
-        convenio.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        convenio.descricao?.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    } else {
-      this.items = [...this.convenios];
-    }
-    this.paginaAtual = 1;
-    this.atualizarPaginacao();
+  override filter(convenio: Convenio, searchTerm: string): boolean | undefined {
+    return convenio.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      convenio.descricao?.toLowerCase().includes(searchTerm.toLowerCase());
   }
 
   onSalvarNovoConvenio(convenio: Partial<Convenio>) {
@@ -122,5 +114,4 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
       }
     });
   }
-
 }

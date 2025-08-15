@@ -1,38 +1,28 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter, map } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-top-bar',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, FormsModule],
   templateUrl: './top-bar.component.html'
 })
 export class TopBarComponent {
-  @Output() addButtonClick = new EventEmitter<void>();
+  @Input() title: string = '';
+  @Output() search = new EventEmitter<void>();
+  @Output() addNovo = new EventEmitter<void>();
 
-  pageTitle: string = '';
+  searchTerm: string = '';
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
-
-  ngOnInit() {
-    this.pageTitle = this.getTitleFromRoute(this.route);
-
-    this.router.events
-      .pipe(
-        filter(event => event instanceof NavigationEnd),
-        map(() => this.getTitleFromRoute(this.route))
-      )
-      .subscribe((title) => this.pageTitle = title);
+  onSearch($event: any): void {
+    this.search.emit($event);
   }
 
-  private getTitleFromRoute(route: ActivatedRoute): string {
-    let child = route.firstChild;
-    while (child?.firstChild) {
-      child = child.firstChild;
-    }
-    return child?.snapshot.data['title'];
+  onAddNovo(): void {
+    this.addNovo.emit();
   }
+
+  constructor() { }
 }

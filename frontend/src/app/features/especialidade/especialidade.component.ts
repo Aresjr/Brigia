@@ -9,7 +9,7 @@ import { EspecialidadeFormComponent } from './especialidade-form/especialidade-f
 import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
-import { Procedimento } from '../procedimentos/procedimento.interface';
+import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 
 @Component({
   selector: 'app-especialidades',
@@ -21,12 +21,11 @@ import { Procedimento } from '../procedimentos/procedimento.interface';
     FormsModule,
     EspecialidadeFormComponent,
     PaginationComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    TopBarComponent
   ]
 })
 export class EspecialidadeComponent extends BaseListComponent<Especialidade> implements OnInit {
-  protected Math = Math;
-  especialidades: Especialidade[] = [];
   override nomeEntidade = 'Especialidade';
 
   constructor(private especialidadesService: EspecialidadeService, private toastr: ToastrService) {
@@ -41,8 +40,8 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
     this.isLoading = true;
     this.especialidadesService.listar(true).subscribe({
       next: (response) => {
-        this.especialidades = response.items;
-        this.items = [...this.especialidades];
+        this.itensInternos = response.items;
+        this.itensExibicao = [...this.itensInternos];
         this.atualizarPaginacao();
         this.isLoading = false;
       },
@@ -53,17 +52,9 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
     });
   }
 
-  onSearch(): void {
-    if (this.searchTerm) {
-      this.items = this.especialidades.filter(especialidade =>
-        especialidade.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        especialidade.descricao?.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    } else {
-      this.items = [...this.especialidades];
-    }
-    this.paginaAtual = 1;
-    this.atualizarPaginacao();
+  override filter(especialidade: Especialidade, searchTerm: string): boolean | undefined {
+    return especialidade.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      especialidade.descricao?.toLowerCase().includes(searchTerm.toLowerCase());
   }
 
   onSalvarNovoEspecialidades(especialidade: Partial<Especialidade>) {

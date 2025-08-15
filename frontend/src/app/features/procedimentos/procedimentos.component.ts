@@ -10,6 +10,7 @@ import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { ProcedimentoDetalhesComponent } from './procedimento-detalhes/procedimento-detalhes.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
+import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 
 @Component({
   selector: 'app-procedimentos',
@@ -22,12 +23,11 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
     ProcedimentoFormComponent,
     PaginationComponent,
     ProcedimentoDetalhesComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    TopBarComponent
   ]
 })
 export class ProcedimentosComponent extends BaseListComponent<Procedimento> implements OnInit {
-  protected Math = Math;
-  procedimentos: Procedimento[] = [];
   override nomeEntidade = 'Procedimento';
 
   constructor(private procedimentosService: ProcedimentosService, private toastr: ToastrService) {
@@ -42,8 +42,8 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
     this.isLoading = true;
     this.procedimentosService.listar().subscribe({
       next: (response) => {
-        this.procedimentos = response.items;
-        this.items = [...this.procedimentos];
+        this.itensInternos = response.items;
+        this.itensExibicao = [...this.itensInternos];
         this.atualizarPaginacao();
         this.isLoading = false;
       },
@@ -54,19 +54,11 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
     });
   }
 
-  onSearch(): void {
-    if (this.searchTerm) {
-      this.items = this.procedimentos.filter(procedimento =>
-        procedimento.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        procedimento.codigo?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        procedimento.observacoes?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        procedimento.especialidade.nome?.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    } else {
-      this.items = [...this.procedimentos];
-    }
-    this.paginaAtual = 1;
-    this.atualizarPaginacao();
+  override filter(procedimento: Procedimento, searchTerm: string): boolean | undefined {
+    return procedimento.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      procedimento.codigo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      procedimento.observacoes?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      procedimento.especialidade.nome?.toLowerCase().includes(searchTerm.toLowerCase());
   }
 
   onSalvarNovo(procedimento: Partial<Procedimento>) {

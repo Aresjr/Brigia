@@ -9,6 +9,7 @@ import { EmpresaFormComponent } from './empresa-form/empresa-form.component';
 import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
+import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 
 @Component({
   selector: 'app-empresas',
@@ -20,12 +21,11 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
     FormsModule,
     EmpresaFormComponent,
     PaginationComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    TopBarComponent
   ]
 })
 export class EmpresasComponent extends BaseListComponent<Empresa> implements OnInit {
-  protected Math = Math;
-  empresas: Empresa[] = [];
 
   constructor(private empresasService: EmpresasService, private toastr: ToastrService) {
     super();
@@ -39,8 +39,8 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
     this.isLoading = true;
     this.empresasService.listar(true).subscribe({
       next: (response) => {
-        this.empresas = response.items;
-        this.items = [...this.empresas];
+        this.itensInternos = response.items;
+        this.itensExibicao = [...this.itensInternos];
         this.atualizarPaginacao();
         this.isLoading = false;
       },
@@ -51,17 +51,9 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
     });
   }
 
-  onSearch(): void {
-    if (this.searchTerm) {
-      this.items = this.empresas.filter(empresa =>
-        empresa.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        empresa.descricao?.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    } else {
-      this.items = [...this.empresas];
-    }
-    this.paginaAtual = 1;
-    this.atualizarPaginacao();
+  override filter(empresa: Empresa, searchTerm: string): boolean | undefined {
+    return empresa.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      empresa.descricao?.toLowerCase().includes(searchTerm.toLowerCase());
   }
 
   onSalvarNovoEmpresa(empresa: Partial<Empresa>) {

@@ -1,5 +1,4 @@
 import { Component, HostListener } from '@angular/core';
-import { Especialidade } from '../especialidade/especialidade.interface';
 import { Entidade } from './entidade.interface';
 
 type SortDirection = 'asc' | 'desc' | null;
@@ -14,12 +13,12 @@ interface SortState<T> {
 })
 export abstract class BaseListComponent<T extends object> {
 
-  items: T[] = [];
+  itensExibicao: T[] = [];
+  itensInternos: T[] = [];
   sortState: SortState<T> = { column: '', direction: null };
   paginaAtual = 1;
   itensPorPagina = 14;
   totalPaginas = 1;
-  searchTerm: string = '';
   dropdownAberto: number | null = null;
   itemSelecionado: T | null = null;
   itemEdicao: T | null = null;
@@ -39,7 +38,7 @@ export abstract class BaseListComponent<T extends object> {
   getItensPaginados(): T[] {
     const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
     const fim = inicio + this.itensPorPagina;
-    return this.items.slice(inicio, fim);
+    return this.itensExibicao.slice(inicio, fim);
   }
 
   getSortIcon(coluna: string): string {
@@ -58,7 +57,7 @@ export abstract class BaseListComponent<T extends object> {
 
     this.sortState = { column: coluna, direction: direcao };
 
-    this.items.sort((a, b) => {
+    this.itensExibicao.sort((a, b) => {
       const valorA = a[coluna] || '';
       const valorB = b[coluna] || '';
 
@@ -70,7 +69,7 @@ export abstract class BaseListComponent<T extends object> {
   }
 
   atualizarPaginacao(): void {
-    this.totalPaginas = Math.ceil(this.items.length / this.itensPorPagina);
+    this.totalPaginas = Math.ceil(this.itensExibicao.length / this.itensPorPagina);
     if (this.paginaAtual > this.totalPaginas) {
       this.paginaAtual = this.totalPaginas || 1;
     }
@@ -133,6 +132,21 @@ export abstract class BaseListComponent<T extends object> {
     this.dropdownAberto = null;
     this.idExclusao = entidade.id;
     this.exibeConfirmExclusao = true;
+  }
+
+  onSearch($event: any): void {
+    const searchTerm = $event.toLowerCase();
+    if (searchTerm) {
+      this.itensExibicao = this.itensInternos.filter(item => this.filter(item, searchTerm));
+    } else {
+      this.itensExibicao = [...this.itensInternos];
+    }
+    this.paginaAtual = 1;
+    this.atualizarPaginacao();
+  }
+
+  filter(entidade: T, searchTerm: string): boolean | undefined {
+    return false;
   }
 
 }

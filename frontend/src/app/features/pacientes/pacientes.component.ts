@@ -11,6 +11,7 @@ import { CpfPipe } from '../../core/pipes/cpf.pipe';
 import { CelularPipe } from '../../core/pipes/celular.pipe';
 import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
+import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 
 @Component({
   selector: 'app-pacientes',
@@ -22,14 +23,13 @@ import { PaginationComponent } from '../shared/pagination/pagination.component';
     FormsModule,
     CpfPipe,
     CelularPipe,
-    PaginationComponent
+    PaginationComponent,
+    TopBarComponent
   ],
   templateUrl: './pacientes.component.html',
   standalone: true
 })
 export class PacientesComponent extends BaseListComponent<Paciente> implements OnInit {
-  protected Math = Math;
-  pacientes: Paciente[] = [];
 
   constructor(private pacientesService: PacientesService, private toastr: ToastrService) {
     super();
@@ -43,8 +43,8 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
     this.isLoading = true;
     this.pacientesService.listar().subscribe({
       next: (response) => {
-        this.pacientes = response.items;
-        this.items = [...this.pacientes];
+        this.itensInternos = response.items;
+        this.itensExibicao = [...this.itensInternos];
         this.atualizarPaginacao();
         this.isLoading = false;
       },
@@ -75,19 +75,11 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
     }
   }
 
-  onSearch(): void {
-    if (this.searchTerm) {
-      this.items = this.pacientes.filter(paciente =>
-        paciente.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        paciente.cpf?.includes(this.searchTerm) ||
-        paciente.dataNascimento.includes(this.searchTerm) ||
-        paciente.celular?.includes(this.searchTerm)
-      );
-    } else {
-      this.items = [...this.pacientes];
-    }
-    this.paginaAtual = 1;
-    this.atualizarPaginacao();
+  override filter(paciente: Paciente, searchTerm: string): boolean | undefined {
+    return paciente.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      paciente.cpf?.includes(searchTerm) ||
+      paciente.dataNascimento.includes(searchTerm) ||
+      paciente.celular?.includes(searchTerm);
   }
 
   onSalvarNovoPaciente(paciente: Partial<Paciente>) {

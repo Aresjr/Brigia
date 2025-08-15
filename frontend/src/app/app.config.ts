@@ -8,7 +8,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { Home, User, Calendar, LogIn, UserPlus, Stethoscope, ChevronRight, MessageSquare,
   MessageCircle, CircleUser, ChevronFirst, Users, Search, ClipboardList, Building, ChevronDown,
   ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon, Plus, ChevronLeft, HeartHandshake, Receipt, Mail, Lock, Building2,
-  Microscope, Menu
+  Microscope, Menu, EllipsisVertical
  } from 'lucide-angular/src/icons';
 import { provideNgxMask } from 'ngx-mask';
 
@@ -30,7 +30,7 @@ export const appConfig: ApplicationConfig = {
       LucideAngularModule.pick({ Home, User, Calendar, LogIn, UserPlus, Stethoscope, ChevronRight,
         MessageSquare, MessageCircle, CircleUser, ChevronFirst, Users, Search, ClipboardList,
         Building, ChevronDown, ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon, Plus, ChevronLeft,
-        HeartHandshake, Receipt, Mail, Lock, Building2, Microscope, Menu
+        HeartHandshake, Receipt, Mail, Lock, Building2, Microscope, Menu, EllipsisVertical
        })
     ),
     provideNgxMask()
