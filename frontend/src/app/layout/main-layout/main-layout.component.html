@@ -9,7 +9,7 @@
         </div>
         <div class="flex-1 relative">
           <lucide-icon name="search" class="w-4 h-4 absolute left-1 top-1/2 transform -translate-y-1/2 text-muted-foreground"></lucide-icon>
-          <input [(ngModel)]="searchTerm" (input)="onSearchChange()" class="flex w-full rounded-md border px-3 py-2 h-8 pl-9 text-sm" placeholder="Pesquisar" />
+          <input [(ngModel)]="searchTerm" (input)="onSearchChange()" class="flex w-full rounded-md border px-3 py-1 h-8 pl-9 text-sm" placeholder="Filtrar" />
         </div>
       </div>
       <div class="shrink-0 bg-border h-[1px] w-full"></div>
@@ -24,10 +24,8 @@
               [submenuOpen]="isSubmenuOpen(item.label)"
               (clicked)="toggleSubmenu(item.label)">
             </app-menu-item>
-            <div *ngIf="item.children"
-              class="overflow-hidden ease-in-out"
-              [class.max-h-0]="!isSubmenuOpen(item.label)"
-              [class.max-h-48]="isSubmenuOpen(item.label)">
+            <div *ngIf="item.children && isSubmenuOpen(item.label)"
+              class="overflow-hidden ease-in-out">
               <ul class="pl-4">
                 <li *ngFor="let child of item.children">
                   <app-menu-item
