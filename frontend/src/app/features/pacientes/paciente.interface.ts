@@ -2,7 +2,6 @@ import { Entidade } from '../shared/entidade.interface';
 import { Convenio } from '../convenio/convenio.interface';
 
 export interface Paciente extends Entidade {
-    nome: string;
     email: string | null;
     cpf: string | null;
     dataNascimento: string;

@@ -1,7 +1,6 @@
 import { Entidade } from '../shared/entidade.interface';
 
 export interface Especialidade extends Entidade {
-    nome: string;
     descricao: string | null;
 }
 

@@ -2,7 +2,6 @@ import { Entidade } from '../shared/entidade.interface';
 import { Especialidade } from '../especialidade/especialidade.interface';
 
 export interface Profissional extends Entidade {
-    nome: string;
     email: string | null;
     cpf: string | null;
     dataNascimento: string;

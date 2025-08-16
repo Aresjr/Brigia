@@ -58,12 +58,12 @@ export abstract class BaseListComponent<T extends object> {
     this.sortState = { column: coluna, direction: direcao };
 
     this.itensExibicao.sort((a, b) => {
-      const valorA = a[coluna] || '';
-      const valorB = b[coluna] || '';
+      const valorA: NonNullable<T[keyof T]> | '' = a[coluna] || '';
+      const valorB: NonNullable<T[keyof T]> | '' = b[coluna] || '';
 
       if (valorA === valorB) return 0;
 
-      const comparacao = valorA < valorB ? -1 : 1;
+      const comparacao = this.toComparableString(valorA) < this.toComparableString(valorB) ? -1 : 1;
       return direcao === 'asc' ? comparacao : -comparacao;
     });
   }
@@ -149,4 +149,10 @@ export abstract class BaseListComponent<T extends object> {
     return false;
   }
 
+  private toComparableString(valor: NonNullable<T[keyof T]> | ''): string {
+    if (typeof valor === 'string') {
+      return valor;
+    }
+    return (valor.valueOf() as Entidade).nome;
+  }
 }
