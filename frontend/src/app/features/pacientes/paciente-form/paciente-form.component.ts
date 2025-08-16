@@ -9,11 +9,12 @@ import { ESTADOS, SEXOS } from '../../../core/constans';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
 import { ConveniosService } from '../../convenio/convenios.service';
 import { Convenio } from '../../convenio/convenio.interface';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-paciente-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, LucideAngularModule],
   templateUrl: 'paciente-form.component.html'
 })
 export class PacienteFormComponent implements OnInit {

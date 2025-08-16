@@ -1,101 +1,87 @@
-<!-- Overlay -->
 <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" (click)="fechar()"></div>
-
-<!-- Painel lateral -->
-<div
-  class="fixed right-0 top-0 h-full w-full sm:w-[30rem] bg-white shadow-2xl z-50 overflow-y-auto transform transition-transform duration-300 ease-out"
->
+<div class="fixed right-0 top-0 h-full w-full sm:w-[32rem] bg-white shadow-2xl z-50 overflow-y-auto transform transition-transform duration-300 ease-out" >
   <div class="p-6 space-y-6">
-
-    <!-- Cabeçalho -->
     <div class="flex justify-between items-center border-b pb-4">
       <h2 class="text-2xl font-semibold text-gray-800">Detalhes do Procedimento</h2>
       <button
         (click)="fechar()"
-        class="text-gray-400 hover:text-gray-600 transition-colors"
-      >
-        <svg
-          class="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
+        class="text-gray-400 hover:text-gray-600 transition-colors" >
+        <lucide-icon name="x" class="right-0 inline w-6 h-6"/>
       </button>
     </div>
 
-    <!-- Conteúdo -->
     @if (procedimento) {
       <div class="grid grid-cols-1 gap-6">
-
-        <!-- Campo -->
         <div>
-          <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">
+          <p class="text-sm font-semibold uppercase tracking-wide text-gray-500">
             Nome
           </p>
           <p class="mt-1 text-base font-medium text-gray-900">
             {{ procedimento.nome }}
           </p>
         </div>
-
         <div>
-          <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">
+          <p class="text-sm font-semibold uppercase tracking-wide text-gray-500">
             Código
           </p>
           <p class="mt-1 text-base font-medium text-gray-900">
             {{ procedimento.codigo }}
           </p>
         </div>
-
         <div>
-          <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">
+          <p class="text-sm font-semibold uppercase tracking-wide text-gray-500">
             Especialidade
           </p>
           <p class="mt-1 text-base font-medium text-gray-900">
             {{ procedimento.especialidade.nome }}
           </p>
         </div>
-
-        <!-- Preço Convênios -->
-        @if (tabelaPreco && tabelaPreco.tabelaConvenio.length > 0) {
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">
-              Preço Convênios
-            </p>
-            <div class="flex flex-wrap gap-2 mt-2 w-full bg-blue-50">
+        <div>
+          <div class="flex items-center justify-between text-sm font-semibold uppercase tracking-wide text-gray-500 hover:bg-gray-50" (click)="toggleTabelaConvenio()">
+            <div>Preço Convênios</div>
+            <div>
+              <lucide-icon [name]="mostraTabelaConvenio ? 'chevron-down' : 'chevron-right'" class="right-0 inline w-4 h-4"/>
+            </div>
+          </div>
+          @if (mostraTabelaConvenio && tabelaPreco && tabelaPreco.tabelaConvenio.length > 0) {
+          <table class="min-w-full table-auto">
+            <tbody class="bg-white">
               @for (precoConvenio of tabelaPreco.tabelaConvenio; track precoConvenio.convenio.id) {
-                <div class="px-3 py-1 rounded-full text-blue-800 text-sm font-medium" >
-                  {{ precoConvenio.convenio.nome }} — R${{ precoConvenio.preco }}
-                </div>
+                <tr class="border-b font-medium text-blue-800 hover:bg-gray-100 hover:text-gray-900 bg-blue-50">
+                  <td class="mt-1 text-base px-2 py-2">{{ precoConvenio.convenio.nome }}</td>
+                  <td class="mt-1 text-base px-2 py-2 right-0 w-20">R$ {{ precoConvenio.preco }}</td>
+                </tr>
               }
+            </tbody>
+          </table>
+          }
+          @if (tabelaPreco && tabelaPreco.tabelaConvenio.length == 0) {
+            <span>Não há preços cadastrados para convênios para este procedimento.</span>
+          }
+        </div>
+        <div>
+          <div class="flex items-center justify-between text-sm font-semibold uppercase tracking-wide text-gray-500 hover:bg-gray-50" (click)="toggleTabelaEmpresas()">
+            <div>Preço Empresas</div>
+            <div>
+              <lucide-icon [name]="mostraTabelaEmpresa ? 'chevron-down' : 'chevron-right'" class="right-0 inline w-4 h-4"/>
             </div>
           </div>
-        }
-
-        <!-- Preço Empresas -->
-        @if (tabelaPreco && tabelaPreco.tabelaEmpresa.length > 0) {
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">
-              Preço Empresas
-            </p>
-            <div class="flex flex-wrap gap-2 mt-2">
+          @if (mostraTabelaEmpresa && tabelaPreco && tabelaPreco.tabelaEmpresa.length > 0) {
+          <table class="min-w-full table-auto">
+            <tbody class="bg-white">
               @for (precoEmpresa of tabelaPreco.tabelaEmpresa; track precoEmpresa.empresa.id) {
-                <span
-                  class="px-3 py-1 rounded-full bg-green-50 text-green-800 text-sm font-medium"
-                >
-                  {{ precoEmpresa.empresa.nome }} — R${{ precoEmpresa.preco }}
-                </span>
+                <tr class="border-b font-medium text-blue-800 hover:bg-gray-100 hover:text-gray-900 bg-blue-50">
+                  <td class="mt-1 text-base p-4">{{ precoEmpresa.empresa.nome }}</td>
+                  <td class="mt-1 text-base p-4 right-0 w-20">R$ {{ precoEmpresa.preco }}</td>
+                </tr>
               }
-            </div>
-          </div>
-        }
-
+            </tbody>
+          </table>
+          }
+          @if (tabelaPreco && tabelaPreco.tabelaEmpresa.length == 0) {
+            <span class="text-sm italic p-4">Não há preços cadastrados para empresas para este procedimento.</span>
+          }
+        </div>
       </div>
     }
   </div>

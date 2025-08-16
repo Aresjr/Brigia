@@ -4,11 +4,12 @@ import { Profissional } from '../profissional.interface';
 import { CpfPipe } from '../../../core/pipes/cpf.pipe';
 import { CelularPipe } from '../../../core/pipes/celular.pipe';
 import { SexoPipe } from '../../../core/pipes/sexo.pipe';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-profissional-detalhes',
   standalone: true,
-  imports: [CommonModule, CpfPipe, CelularPipe, SexoPipe],
+  imports: [CommonModule, CpfPipe, CelularPipe, SexoPipe, LucideAngularModule],
   templateUrl: './profissional-detalhes.component.html',
 })
 export class ProfissionalDetalhesComponent {

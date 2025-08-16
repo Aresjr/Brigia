@@ -10,11 +10,12 @@ import { EspecialidadeService } from '../../especialidade/especialidade.service'
 import { Especialidade } from '../../especialidade/especialidade.interface';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-profissional-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, NgMultiSelectDropDownModule, NgSelectComponent, NgOptionComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, NgMultiSelectDropDownModule, NgSelectComponent, NgOptionComponent, LucideAngularModule],
   templateUrl: 'profissional-form.component.html'
 })
 export class ProfissionalFormComponent implements OnInit {
