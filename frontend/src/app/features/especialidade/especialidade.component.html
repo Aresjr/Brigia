@@ -23,7 +23,7 @@
                             <lucide-icon *ngIf="getSortIcon('descricao')" [name]="getSortIcon('descricao')" class="inline w-4 h-4"/>
                             Descrição
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider w-28"></th>
+                        <th class="w-1"></th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">
@@ -41,8 +41,7 @@
                                     <button
                                         (click)="toggleDropdown($event, especialidade.id)"
                                         class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" >
-                                        Ações
-                                        <lucide-icon name="chevron-down" class="ml-1 h-4 w-4" />
+                                      <lucide-icon name="ellipsis-vertical" class="h-4 w-4" />
                                     </button>
                                     @if (dropdownAberto === especialidade.id) {
                                         <div class="absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
