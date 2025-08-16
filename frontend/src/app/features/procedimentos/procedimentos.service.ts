@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BackendService } from '../../core/backend/backend.service';
-import { Procedimento, ProcedimentoResponse, TabelaPrecoResponse } from './procedimento.interface';
+import {
+  PrecoProcedimentoConvenio,
+  Procedimento,
+  ProcedimentoResponse,
+  TabelaPrecoResponse
+} from './procedimento.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +38,9 @@ export class ProcedimentosService {
 
   listarTabelaPreco(id: number): Observable<TabelaPrecoResponse> {
     return this.backend.get<TabelaPrecoResponse>(`${this.path}/${id}/tabela-preco`);
+  }
+
+  atualizarPreco(precoConvenio: PrecoProcedimentoConvenio): Observable<void> {
+    return this.backend.patch<PrecoProcedimentoConvenio>(`${this.path}/${precoConvenio.id}/atualizar-preco`, precoConvenio);
   }
 }

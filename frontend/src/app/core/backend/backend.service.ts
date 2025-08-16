@@ -46,10 +46,10 @@ export class BackendService {
       );
   }
 
-  patch<T>(path: string, payload: Partial<T> | null): Observable<T> {
+  patch<T>(path: string, payload: Partial<T> | null): Observable<void> {
     return this.http.patch<T>(`${this.baseUrl}${path}`, payload, { withCredentials: true, observe: 'response' })
       .pipe(
-        map((response) => response.body as T),
+        map((response) => undefined),
         catchError((error) => this.handleError(path, error))
       );
   }

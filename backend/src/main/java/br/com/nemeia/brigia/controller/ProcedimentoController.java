@@ -1,5 +1,6 @@
 package br.com.nemeia.brigia.controller;
 
+import br.com.nemeia.brigia.dto.request.AtualizacaoPrecoRequest;
 import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.dto.response.ProcedimentoResponse;
@@ -73,5 +74,14 @@ public class ProcedimentoController {
   public TabelaPrecoResponse getTabelaPrecoProcedimentoById(@PathVariable Long id) {
     log.info("GET /procedimentos/{} - buscando procedimento pelo ID", id);
     return mapper.toTabelaPreco(service.getById(id));
+  }
+
+  @PatchMapping("/{id}/atualizar-preco")
+  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+  public ResponseEntity<Void> atualizarPrecoProcedimento(
+      @PathVariable Long id, @RequestBody AtualizacaoPrecoRequest request) {
+    log.info("PATCH /procedimentos/{}/atualizar-preco", id);
+    service.atualizaPrecoProcedimento(request);
+    return ResponseEntity.noContent().build();
   }
 }

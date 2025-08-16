@@ -2,10 +2,12 @@ package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.Utils;
 import br.com.nemeia.brigia.auth.SecurityUtils;
+import br.com.nemeia.brigia.dto.request.AtualizacaoPrecoRequest;
 import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ProcedimentoMapper;
 import br.com.nemeia.brigia.model.Especialidade;
+import br.com.nemeia.brigia.model.PrecoProcedimento;
 import br.com.nemeia.brigia.model.Procedimento;
 import br.com.nemeia.brigia.repository.ProcedimentoRepository;
 import java.time.LocalDateTime;
@@ -25,6 +27,7 @@ public class ProcedimentoService {
   private final ProcedimentoMapper mapper;
   private final SecurityUtils securityUtils;
   private final EspecialidadeService especialidadeService;
+  private final PrecoProcedimentoService precoProcedimentoService;
 
   public Page<Procedimento> getPaged(int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
@@ -68,5 +71,9 @@ public class ProcedimentoService {
     procedimento.setExcluidoEm(null);
     procedimento.setExcluidoPor(null);
     repository.save(procedimento);
+  }
+
+  public PrecoProcedimento atualizaPrecoProcedimento(AtualizacaoPrecoRequest request) {
+    return precoProcedimentoService.atualizaPreco(request.id(), request.preco());
   }
 }

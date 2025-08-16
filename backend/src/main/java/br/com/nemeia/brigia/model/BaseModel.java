@@ -18,6 +18,8 @@ public abstract class BaseModel {
 
   @CreatedBy
   @Column(name = "criado_por")
+  //  @ManyToOne(fetch = FetchType.LAZY) //TODO - mudar o campo para usuário
+  //  @JoinColumn(name = "criado_por")
   private Long criadoPor;
 
   @LastModifiedDate

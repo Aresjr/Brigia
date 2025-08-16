@@ -37,6 +37,14 @@
           </p>
         </div>
         <div>
+          <p class="text-sm font-semibold uppercase tracking-wide text-gray-500">
+            Preço Padrão (Particular)
+          </p>
+          <p class="mt-1 text-base font-medium text-gray-900">
+            R$ {{ procedimento.valorPadrao }}
+          </p>
+        </div>
+        <div>
           <div class="flex items-center justify-between text-sm font-semibold uppercase tracking-wide text-gray-500 hover:bg-gray-50" (click)="toggleTabelaConvenio()">
             <div>Preço Convênios</div>
             <div>
@@ -46,17 +54,21 @@
           @if (mostraTabelaConvenio && tabelaPreco && tabelaPreco.tabelaConvenio.length > 0) {
           <table class="min-w-full table-auto">
             <tbody class="bg-white">
-              @for (precoConvenio of tabelaPreco.tabelaConvenio; track precoConvenio.convenio.id) {
+              @for (precoConvenio of tabelaPreco.tabelaConvenio; track precoConvenio.id) {
                 <tr class="border-b font-medium text-blue-800 hover:bg-gray-100 hover:text-gray-900 bg-blue-50">
                   <td class="mt-1 text-base px-2 py-2">{{ precoConvenio.convenio.nome }}</td>
-                  <td class="mt-1 text-base px-2 py-2 right-0 w-20">R$ {{ precoConvenio.preco }}</td>
+                  <td class="mt-1 text-base px-2 py-2 right-0 w-24">
+                    R$ <input type="number" id="{{precoConvenio.id}}" class="border rounded w-14 text-right bg-blue-50"
+                    [(ngModel)]="precoConvenio.preco"
+                    (change)="atualizarPreco(precoConvenio)" />
+                  </td>
                 </tr>
               }
             </tbody>
           </table>
           }
           @if (tabelaPreco && tabelaPreco.tabelaConvenio.length == 0) {
-            <span>Não há preços cadastrados para convênios para este procedimento.</span>
+            <span class="text-sm italic p-4">Não há preços cadastrados para convênios para este procedimento.</span>
           }
         </div>
         <div>

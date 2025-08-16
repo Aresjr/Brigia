@@ -28,6 +28,6 @@ export class EspecialidadeService {
   }
 
   restaurar(id: number): Observable<void> {
-    return this.backend.patch<void>(`${this.path}/${id}/restaurar`, null);
+    return this.backend.patch(`${this.path}/${id}/restaurar`, null);
   }
 }

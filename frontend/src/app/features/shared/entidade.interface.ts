@@ -3,5 +3,4 @@ export interface Entidade {
     nome: string;
     criadoEm: string | null;
     excluido: boolean;
-    toString(): string;
 }

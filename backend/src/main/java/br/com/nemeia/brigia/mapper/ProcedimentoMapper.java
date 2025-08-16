@@ -30,6 +30,7 @@ public class ProcedimentoMapper {
         procedimento.getId(),
         procedimento.getNome(),
         procedimento.getCodigo(),
+        procedimento.getValorPadrao(),
         especialidadeMapper.toResponse(procedimento.getEspecialidade()),
         procedimento.getObservacoes(),
         procedimento.getCriadoEm(),
@@ -59,20 +60,30 @@ public class ProcedimentoMapper {
               if (precoProcedimento.getConvenio() != null) {
                 PrecoProcedimentoResponse ppr =
                     new PrecoProcedimentoResponse(
+                        precoProcedimento.getId(),
                         precoProcedimento.getPreco(),
                         precoProcedimento.getRepasse(),
                         convenioMapper.toResponse(precoProcedimento.getConvenio()),
                         null,
-                        unidadeMapper.toResponse(precoProcedimento.getUnidade()));
+                        unidadeMapper.toResponse(precoProcedimento.getUnidade()),
+                        precoProcedimento.getCriadoEm(),
+                        "", // TODO - colocar nome do usuário
+                        precoProcedimento.getAtualizadoEm(),
+                        "");
                 tabelaConvenio.add(ppr);
               } else if (precoProcedimento.getEmpresa() != null) {
                 PrecoProcedimentoResponse ppr =
                     new PrecoProcedimentoResponse(
+                        precoProcedimento.getId(),
                         precoProcedimento.getPreco(),
                         precoProcedimento.getRepasse(),
                         null,
                         empresaMapper.toResponse(precoProcedimento.getEmpresa()),
-                        unidadeMapper.toResponse(precoProcedimento.getUnidade()));
+                        unidadeMapper.toResponse(precoProcedimento.getUnidade()),
+                        precoProcedimento.getCriadoEm(),
+                        "",
+                        precoProcedimento.getAtualizadoEm(),
+                        "");
                 tabelaConvenio.add(ppr);
               }
             });

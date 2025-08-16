@@ -19,6 +19,7 @@ export interface ProcedimentoResponse {
 }
 
 export interface PrecoProcedimentoConvenio {
+    id: number;
     preco: number;
     repasse: number;
     convenio: Convenio;

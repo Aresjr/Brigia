@@ -1,14 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Procedimento, TabelaPrecoResponse } from '../procedimento.interface';
+import { PrecoProcedimentoConvenio, Procedimento, TabelaPrecoResponse } from '../procedimento.interface';
 import { ProcedimentosService } from '../procedimentos.service';
 import { ToastrService } from 'ngx-toastr';
 import { LucideAngularModule } from 'lucide-angular';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-procedimento-detalhes',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, FormsModule],
   templateUrl: './procedimento-detalhes.component.html',
 })
 export class ProcedimentoDetalhesComponent implements OnInit {
@@ -46,7 +47,14 @@ export class ProcedimentoDetalhesComponent implements OnInit {
     this.mostraTabelaEmpresa = !this.mostraTabelaEmpresa;
   }
 
-  getTabelaEmpresasIcon() {
-    return this.mostraTabelaEmpresa ? 'arrow-up-icon' : 'arrow-down-icon';
+  atualizarPreco(precoConvenio: PrecoProcedimentoConvenio) {
+    this.procedimentosService.atualizarPreco(precoConvenio).subscribe({
+      next: (response) => {
+        this.toastr.success('Preço atualizado');
+      },
+      error: (error) => {
+        this.toastr.error('Erro ao atualizar preco', error);
+      }
+    });
   }
 }
