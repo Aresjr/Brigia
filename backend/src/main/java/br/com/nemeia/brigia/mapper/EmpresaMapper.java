@@ -5,23 +5,26 @@ import br.com.nemeia.brigia.dto.response.EmpresaResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.model.Empresa;
 import java.util.List;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+@NoArgsConstructor
 @Component
 public class EmpresaMapper {
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
   public EmpresaResponse toResponse(Empresa empresa) {
     if (empresa == null) {
       return null;
     }
 
-    return new EmpresaResponse(
-        empresa.getId(),
-        empresa.getNome(),
-        empresa.getDescricao(),
-        empresa.getCriadoEm(),
-        empresa.getExcluido());
+    return objectMapper.convertValue(empresa, EmpresaResponse.class);
   }
 
   public PagedResponse<EmpresaResponse> toPagedResponse(Page<Empresa> paged) {
@@ -31,6 +34,6 @@ public class EmpresaMapper {
   }
 
   public Empresa toEntity(EmpresaRequest request) {
-    return new Empresa(request.nome(), request.descricao());
+    return objectMapper.convertValue(request, Empresa.class);
   }
 }
