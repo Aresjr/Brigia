@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.nemeia</groupId>
 	<artifactId>brigia</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<name>Brigia</name>
 	<description>Brigia - EMR</description>
 	<url/>
