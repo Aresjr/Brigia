@@ -18,6 +18,18 @@ insert into empresa_plano (nome, cor_fundo) select 'LINHA AZUL ESCURO / CANCELAD
 insert into empresa_plano (nome, cor_fundo) select 'LINHA LARANJA PARCEIROS', 'bg-orange-100';
 
 ALTER TABLE empresa ADD COLUMN IF NOT EXISTS codigo_bc character varying(255);
+ALTER TABLE empresa ADD COLUMN IF NOT EXISTS observacao character varying(255);
+ALTER TABLE empresa ADD COLUMN IF NOT EXISTS valor_mes numeric(38,2);
+ALTER TABLE empresa ADD COLUMN IF NOT EXISTS valor_minimo_mensal numeric(38,2);
+ALTER TABLE empresa ADD COLUMN IF NOT EXISTS convenio_id bigint;
+ALTER TABLE empresa ADD COLUMN IF NOT EXISTS func bigint;
+ALTER TABLE empresa ADD COLUMN IF NOT EXISTS unidade_id bigint;
+ALTER TABLE empresa ADD COLUMN IF NOT EXISTS empresa_plano_id bigint;
+ALTER TABLE empresa DROP CONSTRAINT IF EXISTS fkkj5d0s3rdlepy12halgkqrpkr;
+ALTER TABLE empresa ADD CONSTRAINT fkkj5d0s3rdlepy12halgkqrpkr FOREIGN KEY (empresa_plano_id)
+    REFERENCES public.empresa_plano (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
 
 INSERT INTO empresa (codigo_bc, nome, observacao, valor_minimo_mensal, minimo_por_funcionario, valor_mes, funcionarios, empresa_plano_id, unidade_id) select 1,'A. ERCHMANN AFIAÇOES','12 x 50 ou 20,00 acima 4',50.00,20.00,140.00,7,(select id from empresa_plano where nome = 'LINHA BRANCA SÃO MENSALISTAS'),(select id from unidade where nome = 'Garuva');
 INSERT INTO empresa (codigo_bc, nome, observacao, valor_minimo_mensal, minimo_por_funcionario, valor_mes, funcionarios, empresa_plano_id, unidade_id) select 3,'ASSOCIAÇÃO EMPRESARIAL DE GARUVA','Cobrar 35 a mais de cada exame, exames social, asos 35',0,0,0,0,(select id from empresa_plano where nome = 'LINHA AZUL PARCEIROS PAGA 35,00 POR ASO'),(select id from unidade where nome = 'Garuva');
