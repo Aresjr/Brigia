@@ -9,6 +9,9 @@ CREATE TABLE IF NOT EXISTS public.empresa_plano
     CONSTRAINT uk1bpp72pl2iw3avffhsi11pcsc UNIQUE (nome)
 );
 
+delete from empresa;
+delete from empresa_plano;
+
 insert into empresa_plano (nome, cor_fundo) select 'LINHA BRANCA SÃO MENSALISTAS', 'bg-white';
 insert into empresa_plano (nome, cor_fundo) select 'LINHA AZUL PARCEIROS PAGA 35,00 POR ASO', 'bg-blue-100';
 insert into empresa_plano (nome, cor_fundo) select 'LINHA VERDE MENSALISTA COM ENVIO E-SOCIAL (TABELA DIFERENCIADA DE MENS.)', 'bg-green-100';
@@ -23,7 +26,7 @@ ALTER TABLE empresa ADD COLUMN IF NOT EXISTS valor_mes numeric(38,2);
 ALTER TABLE empresa ADD COLUMN IF NOT EXISTS valor_minimo_mensal numeric(38,2);
 ALTER TABLE empresa ADD COLUMN IF NOT EXISTS convenio_id bigint;
 ALTER TABLE empresa ADD COLUMN IF NOT EXISTS func bigint;
-ALTER TABLE empresa ADD COLUMN IF NOT EXISTS minimo_por_funcionario numeric(38,2),;
+ALTER TABLE empresa ADD COLUMN IF NOT EXISTS minimo_por_funcionario numeric(38,2);
 ALTER TABLE empresa ADD COLUMN IF NOT EXISTS unidade_id bigint;
 ALTER TABLE empresa ADD COLUMN IF NOT EXISTS empresa_plano_id bigint;
 ALTER TABLE empresa DROP CONSTRAINT IF EXISTS fkkj5d0s3rdlepy12halgkqrpkr;
