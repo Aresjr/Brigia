@@ -8,6 +8,8 @@ insert into empresa_plano (nome, cor_fundo) select 'LINHA CINZA CONTABILIDADE/ C
 insert into empresa_plano (nome, cor_fundo) select 'LINHA AZUL ESCURO / CANCELADOS (NÃO PODE FATURAR)', 'bg-blue-800';
 insert into empresa_plano (nome, cor_fundo) select 'LINHA LARANJA PARCEIROS', 'bg-orange-100';
 
+ALTER TABLE empresa ADD COLUMN IF NOT EXISTS codigo_bc character varying(255);
+
 INSERT INTO empresa (codigo_bc, nome, observacao, valor_minimo_mensal, minimo_por_funcionario, valor_mes, funcionarios, empresa_plano_id, unidade_id) select 1,'A. ERCHMANN AFIAÇOES','12 x 50 ou 20,00 acima 4',50.00,20.00,140.00,7,(select id from empresa_plano where nome = 'LINHA BRANCA SÃO MENSALISTAS'),(select id from unidade where nome = 'Garuva');
 INSERT INTO empresa (codigo_bc, nome, observacao, valor_minimo_mensal, minimo_por_funcionario, valor_mes, funcionarios, empresa_plano_id, unidade_id) select 3,'ASSOCIAÇÃO EMPRESARIAL DE GARUVA','Cobrar 35 a mais de cada exame, exames social, asos 35',0,0,0,0,(select id from empresa_plano where nome = 'LINHA AZUL PARCEIROS PAGA 35,00 POR ASO'),(select id from unidade where nome = 'Garuva');
 INSERT INTO empresa (codigo_bc, nome, observacao, valor_minimo_mensal, minimo_por_funcionario, valor_mes, funcionarios, empresa_plano_id, unidade_id) select 7,'ANDERSON ANTONIO STOLF','12 x 100 ou 25,00 acima 4',100.00,25.00,100.00,3,(select id from empresa_plano where nome = 'LINHA BRANCA SÃO MENSALISTAS'),(select id from unidade where nome = 'Garuva');
