@@ -23,6 +23,7 @@ ALTER TABLE empresa ADD COLUMN IF NOT EXISTS valor_mes numeric(38,2);
 ALTER TABLE empresa ADD COLUMN IF NOT EXISTS valor_minimo_mensal numeric(38,2);
 ALTER TABLE empresa ADD COLUMN IF NOT EXISTS convenio_id bigint;
 ALTER TABLE empresa ADD COLUMN IF NOT EXISTS func bigint;
+ALTER TABLE empresa ADD COLUMN IF NOT EXISTS minimo_por_funcionario numeric(38,2),;
 ALTER TABLE empresa ADD COLUMN IF NOT EXISTS unidade_id bigint;
 ALTER TABLE empresa ADD COLUMN IF NOT EXISTS empresa_plano_id bigint;
 ALTER TABLE empresa DROP CONSTRAINT IF EXISTS fkkj5d0s3rdlepy12halgkqrpkr;
