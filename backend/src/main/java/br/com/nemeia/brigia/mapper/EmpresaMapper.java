@@ -7,17 +7,15 @@ import br.com.nemeia.brigia.model.Empresa;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-@NoArgsConstructor
+@AllArgsConstructor
 @Component
 public class EmpresaMapper {
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
   public EmpresaResponse toResponse(Empresa empresa) {
     if (empresa == null) {

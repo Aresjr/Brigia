@@ -44,6 +44,6 @@ public class Empresa extends BaseModel {
     private Unidade unidade;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "empresa_legenda_id")
-    private EmpresaLegenda legenda;
+    @JoinColumn(name = "empresa_plano_id")
+    private EmpresaPlano plano;
 }

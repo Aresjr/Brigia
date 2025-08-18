@@ -9,7 +9,7 @@ public record PrecoProcedimentoResponse(
     BigDecimal preco,
     BigDecimal repasse,
     @JsonInclude(JsonInclude.Include.NON_NULL) ConvenioResponse convenio,
-    @JsonInclude(JsonInclude.Include.NON_NULL) EmpresaResponse empresa,
+    @JsonInclude(JsonInclude.Include.NON_NULL) EmpresaPlanoResponse empresaPlano,
     @JsonInclude(JsonInclude.Include.NON_NULL) UnidadeResponse unidade,
     LocalDateTime criadoEm,
     String criadoPor,
