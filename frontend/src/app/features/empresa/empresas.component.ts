@@ -40,6 +40,7 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
     this.empresasService.listar(true).subscribe({
       next: (response) => {
         this.itensInternos = response.items;
+        console.log(this.itensInternos);
         this.itensExibicao = [...this.itensInternos];
         this.atualizarPaginacao();
         this.isLoading = false;
@@ -53,7 +54,7 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
 
   override filter(empresa: Empresa, searchTerm: string): boolean | undefined {
     return empresa.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      empresa.descricao?.toLowerCase().includes(searchTerm.toLowerCase());
+      empresa.observacao?.toLowerCase().includes(searchTerm.toLowerCase());
   }
 
   onSalvarNovoEmpresa(empresa: Partial<Empresa>) {
@@ -61,7 +62,7 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
       const id = this.itemEdicao.id;
       this.empresasService.atualizar(id, empresa).subscribe({
         next: () => {
-          this.toastr.success('Registro atualizado com sucesso');
+          this.toastr.success('Registro atualizado');
           this.carregarEmpresas();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
@@ -74,7 +75,7 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
     } else {
       this.empresasService.criar(empresa).subscribe({
         next: () => {
-          this.toastr.success('Empresa cadastrado com sucesso');
+          this.toastr.success('Empresa cadastrado');
           this.carregarEmpresas();
           this.mostrarFormularioNovo = false;
         },
@@ -86,10 +87,11 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
     }
   }
 
-  excluir() {
+  override excluir() {
+    super.excluir();
     this.empresasService.excluir(this.idExclusao).subscribe({
       next: () => {
-        this.toastr.success('Empresa excluída com sucesso');
+        this.toastr.success('Empresa excluída');
         this.carregarEmpresas();
       },
       error: () => {
@@ -105,7 +107,7 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
     this.empresasService.restaurar(empresa.id).subscribe({
       next: () => {
         empresa.excluido = false;
-        this.toastr.success('Empresa restaurado com sucesso!');
+        this.toastr.success('Empresa restaurada');
       },
       error: (error) => {
         this.toastr.error('Erro ao restaurar o empresa');

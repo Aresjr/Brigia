@@ -17,7 +17,7 @@ export abstract class BaseListComponent<T extends object> {
   itensInternos: T[] = [];
   sortState: SortState<T> = { column: '', direction: null };
   paginaAtual = 1;
-  itensPorPagina = 14;
+  itensPorPagina = 16;
   totalPaginas = 1;
   dropdownAberto: number | null = null;
   itemSelecionado: T | null = null;
@@ -61,7 +61,9 @@ export abstract class BaseListComponent<T extends object> {
       const valorA: NonNullable<T[keyof T]> | '' = a[coluna] || '';
       const valorB: NonNullable<T[keyof T]> | '' = b[coluna] || '';
 
-      if (valorA === valorB) return 0;
+      if (valorA === valorB) {
+        return 0;
+      }
 
       const comparacao = this.toComparableString(valorA) < this.toComparableString(valorB) ? -1 : 1;
       return direcao === 'asc' ? comparacao : -comparacao;
@@ -149,8 +151,12 @@ export abstract class BaseListComponent<T extends object> {
     return false;
   }
 
-  private toComparableString(valor: NonNullable<T[keyof T]> | ''): string {
-    if (typeof valor === 'string') {
+  excluir() {
+    this.exibeConfirmExclusao = false;
+  }
+
+  private toComparableString(valor: NonNullable<T[keyof T]> | '' | number): string | number {
+    if (typeof valor == 'string' || typeof valor == 'number') {
       return valor;
     }
     return (valor.valueOf() as Entidade).nome;

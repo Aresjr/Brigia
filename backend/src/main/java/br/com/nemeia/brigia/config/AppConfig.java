@@ -14,7 +14,7 @@ public class AppConfig {
     public ObjectMapper objectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         Hibernate6Module hibernateModule = new Hibernate6Module();
-        hibernateModule.disable(Hibernate6Module.Feature.FORCE_LAZY_LOADING);
+        hibernateModule.enable(Hibernate6Module.Feature.FORCE_LAZY_LOADING);
         mapper.registerModule(hibernateModule);
         mapper.registerModule(new JavaTimeModule());
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

@@ -87,7 +87,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
       const id = this.itemEdicao.id;
       this.pacientesService.atualizar(id, paciente).subscribe({
         next: () => {
-          this.toastr.success('Registro atualizado com sucesso');
+          this.toastr.success('Registro atualizado');
           this.carregarPacientes();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
@@ -101,7 +101,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
     } else {
       this.pacientesService.criar(paciente).subscribe({
         next: () => {
-          this.toastr.success('Registro cadastrado com sucesso');
+          this.toastr.success('Registro cadastrado');
           this.carregarPacientes();
           this.mostrarFormularioNovo = false;
         },

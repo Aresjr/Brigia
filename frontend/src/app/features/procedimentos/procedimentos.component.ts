@@ -66,7 +66,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
       const id = this.itemEdicao.id;
       this.procedimentosService.atualizar(id, procedimento).subscribe({
         next: () => {
-          this.toastr.success(`Registro atualizado com sucesso`);
+          this.toastr.success(`Registro atualizado`);
           this.carregarProcedimentos();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
@@ -79,7 +79,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
     } else {
       this.procedimentosService.criar(procedimento).subscribe({
         next: () => {
-          this.toastr.success(`${this.nomeEntidade} cadastrado com sucesso`);
+          this.toastr.success(`${this.nomeEntidade} cadastrado`);
           this.carregarProcedimentos();
           this.mostrarFormularioNovo = false;
         },
@@ -91,16 +91,15 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
     }
   }
 
-  excluir() {
+  override excluir() {
+    super.excluir();
     this.procedimentosService.excluir(this.idExclusao).subscribe({
       next: () => {
-        this.toastr.success(`${this.nomeEntidade} excluído com sucesso`);
+        this.toastr.success(`${this.nomeEntidade} excluído`);
         this.carregarProcedimentos();
-        this.exibeConfirmExclusao = false;
       },
       error: () => {
         this.toastr.error(`Erro ao excluir ${this.nomeEntidade}`);
-        this.exibeConfirmExclusao = false;
       }
     });
   }
@@ -112,7 +111,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
     this.procedimentosService.restaurar(procedimento.id).subscribe({
       next: () => {
         procedimento.excluido = false;
-        this.toastr.success(`${this.nomeEntidade} restaurado com sucesso!`);
+        this.toastr.success(`${this.nomeEntidade} restaurado`);
       },
       error: (error) => {
         this.toastr.error(`Erro ao restaurar o ${this.nomeEntidade}`);

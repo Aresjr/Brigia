@@ -85,7 +85,7 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
       const id = this.itemEdicao.id;
       this.profissionaisService.atualizar(id, profissional).subscribe({
         next: () => {
-          this.toastr.success('Registro atualizado com sucesso');
+          this.toastr.success('Registro atualizado');
           this.carregarProfissionais();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
@@ -99,7 +99,7 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
     } else {
       this.profissionaisService.criar(profissional).subscribe({
         next: () => {
-          this.toastr.success('Profissional cadastrado com sucesso');
+          this.toastr.success('Profissional cadastrado');
           this.carregarProfissionais();
           this.mostrarFormularioNovo = false;
         },

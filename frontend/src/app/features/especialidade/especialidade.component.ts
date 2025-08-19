@@ -62,7 +62,7 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
       const id = this.itemEdicao.id;
       this.especialidadesService.atualizar(id, especialidade).subscribe({
         next: () => {
-          this.toastr.success(`${this.nomeEntidade} atualizada com sucesso`);
+          this.toastr.success(`${this.nomeEntidade} atualizada`);
           this.carregarEspecialidades();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
@@ -75,7 +75,7 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
     } else {
       this.especialidadesService.criar(especialidade).subscribe({
         next: () => {
-          this.toastr.success(`${this.nomeEntidade} cadastrada com sucesso`);
+          this.toastr.success(`${this.nomeEntidade} cadastrada`);
           this.carregarEspecialidades();
           this.mostrarFormularioNovo = false;
         },
@@ -87,10 +87,11 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
     }
   }
 
-  excluir() {
+  override excluir() {
+    super.excluir();
     this.especialidadesService.excluir(this.idExclusao).subscribe({
       next: () => {
-        this.toastr.success(`${this.nomeEntidade} excluída com sucesso`);
+        this.toastr.success(`${this.nomeEntidade} excluída`);
         this.carregarEspecialidades();
       },
       error: () => {

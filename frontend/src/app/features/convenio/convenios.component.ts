@@ -62,7 +62,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
       const id = this.itemEdicao.id;
       this.conveniosService.atualizar(id, convenio).subscribe({
         next: () => {
-          this.toastr.success('Registro atualizado com sucesso');
+          this.toastr.success('Registro atualizado');
           this.carregarConvenios();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
@@ -75,7 +75,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
     } else {
       this.conveniosService.criar(convenio).subscribe({
         next: () => {
-          this.toastr.success(`${this.nomeEntidade} cadastrado com sucesso`);
+          this.toastr.success(`${this.nomeEntidade} cadastrado`);
           this.carregarConvenios();
           this.mostrarFormularioNovo = false;
         },
@@ -87,10 +87,11 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
     }
   }
 
-  excluir() {
+  override excluir() {
+    super.excluir();
     this.conveniosService.excluir(this.idExclusao).subscribe({
       next: () => {
-        this.toastr.success(`${this.nomeEntidade} excluído com sucesso`);
+        this.toastr.success(`${this.nomeEntidade} excluído`);
         this.carregarConvenios();
       },
       error: () => {
@@ -106,7 +107,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
     this.conveniosService.restaurar(convenio.id).subscribe({
       next: () => {
         convenio.excluido = false;
-        this.toastr.success(`${this.nomeEntidade} restaurado com sucesso!`);
+        this.toastr.success(`${this.nomeEntidade} restaurado`);
       },
       error: (error) => {
         this.toastr.error(`Erro ao restaurar o ${this.nomeEntidade}`);
