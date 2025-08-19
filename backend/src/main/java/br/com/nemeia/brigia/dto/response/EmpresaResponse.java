@@ -10,4 +10,6 @@ public record EmpresaResponse(Long id, String nome,
                               BigDecimal minimoPorFuncionario,
                               BigDecimal valorMes,
                               Long func,
+                              UnidadeResponse unidade,
+                              EmpresaPlanoResponse plano,
                               LocalDateTime criadoEm, Boolean excluido) {}
