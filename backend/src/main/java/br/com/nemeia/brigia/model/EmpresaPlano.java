@@ -20,6 +20,9 @@ public class EmpresaPlano {
   @Column(name = "nome", unique = true, nullable = false)
   private String nome;
 
+  @Column(name = "descricao", unique = true, nullable = false)
+  private String descricao;
+
   @Column(name = "cor_fundo")
   private String corFundo = "bg-white";
 }
