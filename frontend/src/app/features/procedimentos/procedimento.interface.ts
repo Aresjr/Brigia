@@ -36,5 +36,4 @@ export interface PrecoProcedimentoEmpresa {
 export interface TabelaPrecoResponse {
     procedimento: ProcedimentoResponse;
     tabelaConvenio: PrecoProcedimentoConvenio[];
-    tabelaEmpresa: PrecoProcedimentoEmpresa[];
 }

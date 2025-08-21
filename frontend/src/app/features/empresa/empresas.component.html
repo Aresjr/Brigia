@@ -57,11 +57,7 @@
                             <td class="px-4 text-xs">{{empresa.observacao}}</td>
                             <td class="px-4 whitespace-nowrap w-36 text-right" >
                                 <div>
-                                    <button
-                                        (click)="toggleDropdown($event, empresa.id)"
-                                        class="inline-flex items-center py-1 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" >
-                                      <lucide-icon name="ellipsis-vertical" class="h-4 w-4" />
-                                    </button>
+                                    <lucide-icon name="ellipsis-vertical" class="h-5 hover:bg-white hover:cursor-pointer" (click)="toggleDropdown($event, empresa.id)" />
                                     @if (dropdownAberto === empresa.id) {
                                         <div class="absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                                             <div class="py-1 flex flex-col">

@@ -29,20 +29,16 @@
                 <tbody class="bg-white">
                     @for (especialidade of getItensPaginados(); track especialidade.id) {
                         <tr class="border-b hover:bg-gray-100" [class.bg-red-50]="especialidade.excluido">
-                            <td class="px-4 whitespace-nowrap">
+                            <td class="px-4 py-2 whitespace-nowrap">
                                 {{especialidade.nome}}
                                 @if (especialidade.excluido) {
                                     <span class="ml-2 px-2 py-1 text-xs bg-red-100 text-red-800 rounded">Excluído</span>
                                 }
                             </td>
-                            <td class="px-4">{{especialidade.descricao}}</td>
-                            <td class="px-4 whitespace-nowrap w-28 text-right">
+                            <td class="px-4 py-2">{{especialidade.descricao}}</td>
+                            <td class="px-4 py-2 whitespace-nowrap w-28 text-right">
                                 <div>
-                                    <button
-                                        (click)="toggleDropdown($event, especialidade.id)"
-                                        class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" >
-                                      <lucide-icon name="ellipsis-vertical" class="h-4 w-4" />
-                                    </button>
+                                  <lucide-icon name="ellipsis-vertical" class="h-5 hover:bg-white hover:cursor-pointer" (click)="toggleDropdown($event, especialidade.id)" />
                                     @if (dropdownAberto === especialidade.id) {
                                         <div class="absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                                             <div class="py-1 flex flex-col">

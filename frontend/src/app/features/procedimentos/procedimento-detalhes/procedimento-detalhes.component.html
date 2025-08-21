@@ -37,30 +37,30 @@
           </p>
         </div>
 
-        <div class="p-2  border border-primary">
-          <div class="p-2 flex items-center justify-between hover:bg-blue-50">
+        <div class=" border border-primary border-r">
+          <div class="p-3 flex items-center justify-between hover:bg-blue-50">
             <p class="text-sm font-semibold uppercase tracking-wide text-gray-500">
               Preço Padrão (Particular)
             </p>
             <div class="inline right-0 font-medium text-gray-900">
-              R$ {{ procedimento.valorPadrao }}
+              R$ {{ procedimento.valorPadrao || '-' }}
             </div>
           </div>
-          <div class="hover:bg-blue-50 p-2">
-            <div class="flex items-center justify-between text-sm font-semibold uppercase tracking-wide text-gray-500" (click)="toggleTabelaConvenio()">
+          <div>
+            <div class="p-3 flex items-center justify-between hover:bg-blue-50 text-sm hover:cursor-pointer font-semibold uppercase tracking-wide text-gray-500" (click)="toggleTabelaConvenio()">
               <div>Preço Convênios</div>
               <div>
                 <lucide-icon [name]="mostraTabelaConvenio ? 'chevron-down' : 'chevron-right'" class="right-0 inline w-4 h-4"/>
               </div>
             </div>
             @if (mostraTabelaConvenio && tabelaPreco && tabelaPreco.tabelaConvenio.length > 0) {
-            <table class="min-w-full bg-blue-50">
+            <table class="min-w-full ">
               <tbody>
                 @for (precoConvenio of tabelaPreco.tabelaConvenio; track precoConvenio.id) {
                   <tr class="font-medium text-blue-800 hover:text-gray-900">
-                    <td class="mt-1 text-base p-2">{{ precoConvenio.convenio.nome }}</td>
-                    <td class="mt-1 text-base p-2 right-0 w-24">
-                      R$ <input type="number" id="{{precoConvenio.id}}" class="w-14 text-right bg-blue-50"
+                    <td class="text-base px-3 py-1">{{ precoConvenio.convenio.nome }}</td>
+                    <td class="text-base px-3 py-1 right-0 w-28">
+                      R$ <input type="number" id="{{precoConvenio.id}}" class="w-16 inline text-right"
                       [(ngModel)]="precoConvenio.preco"
                       (change)="atualizarPreco(precoConvenio)" />
                     </td>
@@ -71,29 +71,6 @@
             }
             @if (tabelaPreco && tabelaPreco.tabelaConvenio.length == 0) {
               <span class="text-sm italic p-4">Não há preços cadastrados para convênios para este procedimento.</span>
-            }
-          </div>
-          <div class="hover:bg-blue-50 p-2">
-            <div class="flex items-center justify-between text-sm font-semibold uppercase tracking-wide text-gray-500 hover:bg-blue-50" (click)="toggleTabelaEmpresas()">
-              <div>Preço Empresas</div>
-              <div>
-                <lucide-icon [name]="mostraTabelaEmpresa ? 'chevron-down' : 'chevron-right'" class="right-0 inline w-4 h-4"/>
-              </div>
-            </div>
-            @if (mostraTabelaEmpresa && tabelaPreco && tabelaPreco.tabelaEmpresa.length > 0) {
-            <table class="min-w-full table-auto text-sm">
-              <tbody class="bg-white">
-                @for (precoEmpresa of tabelaPreco.tabelaEmpresa; track precoEmpresa.empresa.id) {
-                  <tr class="border-b font-medium text-blue-800 hover:text-gray-900 bg-blue-50">
-                    <td class="mt-1 text-base p-4">{{ precoEmpresa.empresa.nome }}</td>
-                    <td class="mt-1 text-base p-4 right-0 w-20">R$ {{ precoEmpresa.preco }}</td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-            }
-            @if (tabelaPreco && tabelaPreco.tabelaEmpresa.length == 0) {
-              <span class="text-sm italic p-4">Não há preços cadastrados para empresas para este procedimento.</span>
             }
           </div>
         </div>

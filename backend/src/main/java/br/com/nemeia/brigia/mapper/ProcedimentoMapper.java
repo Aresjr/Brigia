@@ -50,7 +50,6 @@ public class ProcedimentoMapper {
 
   public TabelaPrecoResponse toTabelaPreco(Procedimento procedimento) {
     List<PrecoProcedimentoResponse> tabelaConvenio = new ArrayList<>();
-    List<PrecoProcedimentoResponse> tabelaEmpresa = new ArrayList<>();
 
     procedimento
         .getPrecos()
@@ -63,17 +62,10 @@ public class ProcedimentoMapper {
                         null,
                         unidadeMapper.toResponse(precoProcedimento.getUnidade()));
                 tabelaConvenio.add(ppr);
-              } else if (precoProcedimento.getEmpresaPlano() != null) {
-                  var ppr = toResponse(
-                          precoProcedimento,
-                          null,
-                          empresaPlanoMapper.toResponse(precoProcedimento.getEmpresaPlano()),
-                          unidadeMapper.toResponse(precoProcedimento.getUnidade()));
-                    tabelaEmpresa.add(ppr);
               }
             });
 
-    return new TabelaPrecoResponse(toResponse(procedimento), tabelaConvenio, tabelaEmpresa);
+    return new TabelaPrecoResponse(toResponse(procedimento), tabelaConvenio);
   }
 
 private PrecoProcedimentoResponse toResponse(PrecoProcedimento precoProcedimento, ConvenioResponse convenio,
