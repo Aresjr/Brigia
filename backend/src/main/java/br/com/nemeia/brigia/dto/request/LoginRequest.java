@@ -5,13 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public record LoginRequest(String email, String password) {
 
-  @Override
-  public String toString() {
-    ObjectMapper om = new ObjectMapper();
-    try {
-      return om.writeValueAsString(this);
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
+    @Override
+    public String toString() {
+        ObjectMapper om = new ObjectMapper();
+        try {
+            return om.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
-  }
 }

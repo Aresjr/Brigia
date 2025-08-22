@@ -18,43 +18,45 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class ProfissionalController {
 
-  private final ProfissionalService service;
-  private final ProfissionalMapper mapper;
+    private final ProfissionalService service;
+    private final ProfissionalMapper mapper;
 
-  @GetMapping
-  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public PagedResponse<ProfissionalResponse> getAllProfissionais(
-      @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
-    log.info("GET /profissionais - page: {}, size: {}", page, size);
-    return mapper.toPagedResponse(service.getPaged(page, size));
-  }
+    @GetMapping
+    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    public PagedResponse<ProfissionalResponse> getAllProfissionais(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        log.info("GET /profissionais - page: {}, size: {}", page, size);
+        return mapper.toPagedResponse(service.getPaged(page, size));
+    }
 
-  @PostMapping
-  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public ProfissionalResponse createProfissional(@Valid @RequestBody ProfissionalRequest request) {
-    log.info("POST /profissionais");
-    return mapper.toResponse(service.createProfissional(request));
-  }
+    @PostMapping
+    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    public ProfissionalResponse createProfissional(
+            @Valid @RequestBody ProfissionalRequest request) {
+        log.info("POST /profissionais");
+        return mapper.toResponse(service.createProfissional(request));
+    }
 
-  @GetMapping("/{id}")
-  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public ProfissionalResponse getProfissionalById(@PathVariable Long id) {
-    log.info("GET /profissionais/{} - buscando profissional por ID", id);
-    return mapper.toResponse(service.getProfissionalById(id));
-  }
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    public ProfissionalResponse getProfissionalById(@PathVariable Long id) {
+        log.info("GET /profissionais/{} - buscando profissional por ID", id);
+        return mapper.toResponse(service.getProfissionalById(id));
+    }
 
-  @PutMapping("/{id}")
-  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public ProfissionalResponse updateProfissional(
-      @Valid @RequestBody ProfissionalRequest request, @PathVariable Long id) {
-    log.info("PUT /profissionais - atualizando profissional ID {}", id);
-    return mapper.toResponse(service.editProfissional(id, request));
-  }
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    public ProfissionalResponse updateProfissional(
+            @Valid @RequestBody ProfissionalRequest request, @PathVariable Long id) {
+        log.info("PUT /profissionais - atualizando profissional ID {}", id);
+        return mapper.toResponse(service.editProfissional(id, request));
+    }
 
-  @GetMapping("/aniversariantes")
-  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public List<ProfissionalResponse> aniversariantes() {
-    log.info("GET /profissionais/aniversariantes");
-    return service.getAniversariantes().stream().map(mapper::toResponse).toList();
-  }
+    @GetMapping("/aniversariantes")
+    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    public List<ProfissionalResponse> aniversariantes() {
+        log.info("GET /profissionais/aniversariantes");
+        return service.getAniversariantes().stream().map(mapper::toResponse).toList();
+    }
 }

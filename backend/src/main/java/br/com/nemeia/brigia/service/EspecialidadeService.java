@@ -20,50 +20,51 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class EspecialidadeService {
 
-  private final EspecialidadeRepository repository;
-  private final EspecialidadeMapper mapper;
-  private final SecurityUtils securityUtils;
+    private final EspecialidadeRepository repository;
+    private final EspecialidadeMapper mapper;
+    private final SecurityUtils securityUtils;
 
-  public Page<Especialidade> getPaged(int page, int size, Boolean mostrarExcluidos) {
-    Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
-    return mostrarExcluidos
-        ? repository.findAll(pageable)
-        : repository.findAllByExcluidoIsOrExcluidoIsNull(pageable, false);
-  }
+    public Page<Especialidade> getPaged(int page, int size, Boolean mostrarExcluidos) {
+        Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
+        return mostrarExcluidos
+                ? repository.findAll(pageable)
+                : repository.findAllByExcluidoIsOrExcluidoIsNull(pageable, false);
+    }
 
-  public Especialidade getById(Long id) {
-    return repository
-        .findById(id)
-        .orElseThrow(() -> new NotFoundException("Especialidade não encontrada com ID: " + id));
-  }
+    public Especialidade getById(Long id) {
+        return repository
+                .findById(id)
+                .orElseThrow(
+                        () -> new NotFoundException("Especialidade não encontrada com ID: " + id));
+    }
 
-  public Especialidade createEspecialidade(EspecialidadeRequest request) {
-    Especialidade especialidade = mapper.toEntity(request);
-    return repository.save(especialidade);
-  }
+    public Especialidade createEspecialidade(EspecialidadeRequest request) {
+        Especialidade especialidade = mapper.toEntity(request);
+        return repository.save(especialidade);
+    }
 
-  public Especialidade editEspecialidade(Long id, EspecialidadeRequest request) {
-    getById(id);
-    Especialidade especialidade = mapper.toEntity(request);
-    especialidade.setId(id);
-    return repository.save(especialidade);
-  }
+    public Especialidade editEspecialidade(Long id, EspecialidadeRequest request) {
+        getById(id);
+        Especialidade especialidade = mapper.toEntity(request);
+        especialidade.setId(id);
+        return repository.save(especialidade);
+    }
 
-  public void deleteEspecialidade(Long id) {
-    Especialidade especialidade = getById(id);
-    especialidade.setExcluido(true);
-    especialidade.setExcluidoEm(LocalDateTime.now());
+    public void deleteEspecialidade(Long id) {
+        Especialidade especialidade = getById(id);
+        especialidade.setExcluido(true);
+        especialidade.setExcluidoEm(LocalDateTime.now());
 
-    Long userId = securityUtils.getLoggedUser();
-    especialidade.setExcluidoPor(userId);
-    repository.save(especialidade);
-  }
+        Long userId = securityUtils.getLoggedUser();
+        especialidade.setExcluidoPor(userId);
+        repository.save(especialidade);
+    }
 
-  public void restoreEspecialidade(Long id) {
-    Especialidade especialidade = getById(id);
-    especialidade.setExcluido(false);
-    especialidade.setExcluidoEm(null);
-    especialidade.setExcluidoPor(null);
-    repository.save(especialidade);
-  }
+    public void restoreEspecialidade(Long id) {
+        Especialidade especialidade = getById(id);
+        especialidade.setExcluido(false);
+        especialidade.setExcluidoEm(null);
+        especialidade.setExcluidoPor(null);
+        repository.save(especialidade);
+    }
 }

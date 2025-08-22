@@ -12,17 +12,17 @@ import lombok.Setter;
 @Table(name = "empresa_plano")
 public class EmpresaPlano {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  @Column(name = "nome", unique = true, nullable = false)
-  private String nome;
+    @Column(name = "nome", unique = true, nullable = false)
+    private String nome;
 
-  @Column(name = "descricao", unique = true, nullable = false)
-  private String descricao;
+    @Column(name = "descricao", unique = true, nullable = false)
+    private String descricao;
 
-  @Column(name = "cor_fundo")
-  private String corFundo = "bg-white";
+    @Column(name = "cor_fundo")
+    private String corFundo = "bg-white";
 }

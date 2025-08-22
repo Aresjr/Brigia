@@ -23,57 +23,58 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ProcedimentoService {
 
-  private final ProcedimentoRepository repository;
-  private final ProcedimentoMapper mapper;
-  private final SecurityUtils securityUtils;
-  private final EspecialidadeService especialidadeService;
-  private final PrecoProcedimentoService precoProcedimentoService;
+    private final ProcedimentoRepository repository;
+    private final ProcedimentoMapper mapper;
+    private final SecurityUtils securityUtils;
+    private final EspecialidadeService especialidadeService;
+    private final PrecoProcedimentoService precoProcedimentoService;
 
-  public Page<Procedimento> getPaged(int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
-    return repository.findAll(pageable);
-  }
+    public Page<Procedimento> getPaged(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
+        return repository.findAll(pageable);
+    }
 
-  public Procedimento getById(Long id) {
-    return repository
-        .findById(id)
-        .orElseThrow(() -> new NotFoundException("Procedimento não encontrado com ID: " + id));
-  }
+    public Procedimento getById(Long id) {
+        return repository
+                .findById(id)
+                .orElseThrow(
+                        () -> new NotFoundException("Procedimento não encontrado com ID: " + id));
+    }
 
-  public Procedimento createProcedimento(ProcedimentoRequest request) {
-    Especialidade especialidade = especialidadeService.getById(request.especialidadeId());
+    public Procedimento createProcedimento(ProcedimentoRequest request) {
+        Especialidade especialidade = especialidadeService.getById(request.especialidadeId());
 
-    Procedimento procedimento = mapper.toEntity(request);
-    procedimento.setEspecialidade(especialidade);
-    return repository.save(procedimento);
-  }
+        Procedimento procedimento = mapper.toEntity(request);
+        procedimento.setEspecialidade(especialidade);
+        return repository.save(procedimento);
+    }
 
-  public Procedimento editProcedimento(Long id, ProcedimentoRequest request) {
-    getById(id);
-    Procedimento procedimento = mapper.toEntity(request);
-    procedimento.setId(id);
-    return repository.save(procedimento);
-  }
+    public Procedimento editProcedimento(Long id, ProcedimentoRequest request) {
+        getById(id);
+        Procedimento procedimento = mapper.toEntity(request);
+        procedimento.setId(id);
+        return repository.save(procedimento);
+    }
 
-  public void deleteProcedimento(Long id) {
-    Procedimento procedimento = getById(id);
-    procedimento.setExcluido(true);
-    procedimento.setExcluidoEm(LocalDateTime.now());
+    public void deleteProcedimento(Long id) {
+        Procedimento procedimento = getById(id);
+        procedimento.setExcluido(true);
+        procedimento.setExcluidoEm(LocalDateTime.now());
 
-    Long userId = securityUtils.getLoggedUser();
-    procedimento.setExcluidoPor(userId);
-    repository.save(procedimento);
-  }
+        Long userId = securityUtils.getLoggedUser();
+        procedimento.setExcluidoPor(userId);
+        repository.save(procedimento);
+    }
 
-  public void restoreProcedimento(Long id) {
-    Procedimento procedimento = getById(id);
-    procedimento.setExcluido(false);
-    procedimento.setExcluidoEm(null);
-    procedimento.setExcluidoPor(null);
-    repository.save(procedimento);
-  }
+    public void restoreProcedimento(Long id) {
+        Procedimento procedimento = getById(id);
+        procedimento.setExcluido(false);
+        procedimento.setExcluidoEm(null);
+        procedimento.setExcluidoPor(null);
+        repository.save(procedimento);
+    }
 
-  public PrecoProcedimento atualizaPrecoProcedimento(AtualizacaoPrecoRequest request) {
-    return precoProcedimentoService.atualizaPreco(request.id(), request.preco());
-  }
+    public PrecoProcedimento atualizaPrecoProcedimento(AtualizacaoPrecoRequest request) {
+        return precoProcedimentoService.atualizaPreco(request.id(), request.preco());
+    }
 }

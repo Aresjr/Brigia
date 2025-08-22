@@ -18,54 +18,54 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class EmpresaController {
 
-  private final EmpresaService service;
-  private final EmpresaMapper mapper;
+    private final EmpresaService service;
+    private final EmpresaMapper mapper;
 
-  @GetMapping
-  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public PagedResponse<EmpresaResponse> getAllEmpresas(
-      @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "20") int size) {
-    log.info("GET /empresas - page: {}, size: {}", page, size);
-    return mapper.toPagedResponse(service.getPaged(page, size, mostrarExcluidos));
-  }
+    @GetMapping
+    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    public PagedResponse<EmpresaResponse> getAllEmpresas(
+            @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        log.info("GET /empresas - page: {}, size: {}", page, size);
+        return mapper.toPagedResponse(service.getPaged(page, size, mostrarExcluidos));
+    }
 
-  @PostMapping
-  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public EmpresaResponse createEmpresa(@Valid @RequestBody EmpresaRequest request) {
-    log.info("POST /empresas");
-    return mapper.toResponse(service.createEmpresa(request));
-  }
+    @PostMapping
+    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    public EmpresaResponse createEmpresa(@Valid @RequestBody EmpresaRequest request) {
+        log.info("POST /empresas");
+        return mapper.toResponse(service.createEmpresa(request));
+    }
 
-  @PutMapping("/{id}")
-  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public EmpresaResponse updateEmpresa(
-      @Valid @RequestBody EmpresaRequest request, @PathVariable Long id) {
-    log.info("PUT /empresas - atualizando empresa ID {}", id);
-    return mapper.toResponse(service.editEmpresa(id, request));
-  }
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    public EmpresaResponse updateEmpresa(
+            @Valid @RequestBody EmpresaRequest request, @PathVariable Long id) {
+        log.info("PUT /empresas - atualizando empresa ID {}", id);
+        return mapper.toResponse(service.editEmpresa(id, request));
+    }
 
-  @DeleteMapping("/{id}")
-  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public ResponseEntity<Void> deleteEmpresa(@PathVariable Long id) {
-    log.info("DELETE /empresas - excluindo empresa ID {}", id);
-    service.deleteEmpresa(id);
-    return ResponseEntity.noContent().build();
-  }
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    public ResponseEntity<Void> deleteEmpresa(@PathVariable Long id) {
+        log.info("DELETE /empresas - excluindo empresa ID {}", id);
+        service.deleteEmpresa(id);
+        return ResponseEntity.noContent().build();
+    }
 
-  @PatchMapping("/{id}/restaurar")
-  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public ResponseEntity<Void> restoreEmpresa(@PathVariable Long id) {
-    log.info("PATCH /empresas/{}/restaurar", id);
-    service.restoreEmpresa(id);
-    return ResponseEntity.noContent().build();
-  }
+    @PatchMapping("/{id}/restaurar")
+    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    public ResponseEntity<Void> restoreEmpresa(@PathVariable Long id) {
+        log.info("PATCH /empresas/{}/restaurar", id);
+        service.restoreEmpresa(id);
+        return ResponseEntity.noContent().build();
+    }
 
-  @GetMapping("/{id}")
-  @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-  public EmpresaResponse getEmpresaById(@PathVariable Long id) {
-    log.info("GET /empresas/{} - buscando empresa pelo ID", id);
-    return mapper.toResponse(service.getById(id));
-  }
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    public EmpresaResponse getEmpresaById(@PathVariable Long id) {
+        log.info("GET /empresas/{} - buscando empresa pelo ID", id);
+        return mapper.toResponse(service.getById(id));
+    }
 }

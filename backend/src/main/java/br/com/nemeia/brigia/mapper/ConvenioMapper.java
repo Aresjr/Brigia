@@ -11,26 +11,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConvenioMapper {
 
-  public ConvenioResponse toResponse(Convenio convenio) {
-    if (convenio == null) {
-      return null;
+    public ConvenioResponse toResponse(Convenio convenio) {
+        if (convenio == null) {
+            return null;
+        }
+
+        return new ConvenioResponse(
+                convenio.getId(),
+                convenio.getNome(),
+                convenio.getDescricao(),
+                convenio.getCriadoEm(),
+                convenio.getExcluido());
     }
 
-    return new ConvenioResponse(
-        convenio.getId(),
-        convenio.getNome(),
-        convenio.getDescricao(),
-        convenio.getCriadoEm(),
-        convenio.getExcluido());
-  }
+    public PagedResponse<ConvenioResponse> toPagedResponse(Page<Convenio> paged) {
+        List<ConvenioResponse> responses =
+                paged.getContent().stream().map(this::toResponse).toList();
+        return new PagedResponse<>(
+                responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
+    }
 
-  public PagedResponse<ConvenioResponse> toPagedResponse(Page<Convenio> paged) {
-    List<ConvenioResponse> responses = paged.getContent().stream().map(this::toResponse).toList();
-    return new PagedResponse<>(
-        responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
-  }
-
-  public Convenio toEntity(ConvenioRequest request) {
-    return new Convenio(request.nome(), request.descricao());
-  }
+    public Convenio toEntity(ConvenioRequest request) {
+        return new Convenio(request.nome(), request.descricao());
+    }
 }

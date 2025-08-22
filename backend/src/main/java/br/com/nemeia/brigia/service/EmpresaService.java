@@ -20,50 +20,50 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class EmpresaService {
 
-  private final EmpresaRepository repository;
-  private final EmpresaMapper mapper;
-  private final SecurityUtils securityUtils;
+    private final EmpresaRepository repository;
+    private final EmpresaMapper mapper;
+    private final SecurityUtils securityUtils;
 
-  public Page<Empresa> getPaged(int page, int size, Boolean mostrarExcluidos) {
-    Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
-    return mostrarExcluidos
-        ? repository.findAll(pageable)
-        : repository.findAllByExcluidoIsOrExcluidoIsNull(pageable, false);
-  }
+    public Page<Empresa> getPaged(int page, int size, Boolean mostrarExcluidos) {
+        Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
+        return mostrarExcluidos
+                ? repository.findAll(pageable)
+                : repository.findAllByExcluidoIsOrExcluidoIsNull(pageable, false);
+    }
 
-  public Empresa getById(Long id) {
-    return repository
-        .findById(id)
-        .orElseThrow(() -> new NotFoundException("Empresa não encontrado com ID: " + id));
-  }
+    public Empresa getById(Long id) {
+        return repository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Empresa não encontrado com ID: " + id));
+    }
 
-  public Empresa createEmpresa(EmpresaRequest request) {
-    Empresa empresa = mapper.toEntity(request);
-    return repository.save(empresa);
-  }
+    public Empresa createEmpresa(EmpresaRequest request) {
+        Empresa empresa = mapper.toEntity(request);
+        return repository.save(empresa);
+    }
 
-  public Empresa editEmpresa(Long id, EmpresaRequest request) {
-    getById(id);
-    Empresa empresa = mapper.toEntity(request);
-    empresa.setId(id);
-    return repository.save(empresa);
-  }
+    public Empresa editEmpresa(Long id, EmpresaRequest request) {
+        getById(id);
+        Empresa empresa = mapper.toEntity(request);
+        empresa.setId(id);
+        return repository.save(empresa);
+    }
 
-  public void deleteEmpresa(Long id) {
-    Empresa empresa = getById(id);
-    empresa.setExcluido(true);
-    empresa.setExcluidoEm(LocalDateTime.now());
+    public void deleteEmpresa(Long id) {
+        Empresa empresa = getById(id);
+        empresa.setExcluido(true);
+        empresa.setExcluidoEm(LocalDateTime.now());
 
-    Long userId = securityUtils.getLoggedUser();
-    empresa.setExcluidoPor(userId);
-    repository.save(empresa);
-  }
+        Long userId = securityUtils.getLoggedUser();
+        empresa.setExcluidoPor(userId);
+        repository.save(empresa);
+    }
 
-  public void restoreEmpresa(Long id) {
-    Empresa empresa = getById(id);
-    empresa.setExcluido(false);
-    empresa.setExcluidoEm(null);
-    empresa.setExcluidoPor(null);
-    repository.save(empresa);
-  }
+    public void restoreEmpresa(Long id) {
+        Empresa empresa = getById(id);
+        empresa.setExcluido(false);
+        empresa.setExcluidoEm(null);
+        empresa.setExcluidoPor(null);
+        repository.save(empresa);
+    }
 }

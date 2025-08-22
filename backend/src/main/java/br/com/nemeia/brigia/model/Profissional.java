@@ -12,58 +12,58 @@ import lombok.*;
 @Table(name = "profissional")
 public class Profissional extends BaseModel {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  @Column(name = "nome", nullable = false)
-  private String nome;
+    @Column(name = "nome", nullable = false)
+    private String nome;
 
-  @Column(name = "email", unique = true)
-  private String email;
+    @Column(name = "email", unique = true)
+    private String email;
 
-  @Column(name = "cpf", unique = true)
-  private String cpf;
+    @Column(name = "cpf", unique = true)
+    private String cpf;
 
-  @Column(name = "data_nascimento", nullable = false)
-  private LocalDate dataNascimento;
+    @Column(name = "data_nascimento", nullable = false)
+    private LocalDate dataNascimento;
 
-  @Column(name = "sexo")
-  private Character sexo;
+    @Column(name = "sexo")
+    private Character sexo;
 
-  @Column(name = "celular", unique = true)
-  private String celular;
+    @Column(name = "celular", unique = true)
+    private String celular;
 
-  @Column(name = "url_imagem")
-  private String urlImagem;
+    @Column(name = "url_imagem")
+    private String urlImagem;
 
-  @Column(name = "crm", length = 7, unique = true)
-  private String crm;
+    @Column(name = "crm", length = 7, unique = true)
+    private String crm;
 
-  @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(
-      name = "profissional_especialidade",
-      joinColumns = @JoinColumn(name = "profissional_id"),
-      inverseJoinColumns = @JoinColumn(name = "especialidade_id"))
-  private List<Especialidade> especialidades;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "profissional_especialidade",
+            joinColumns = @JoinColumn(name = "profissional_id"),
+            inverseJoinColumns = @JoinColumn(name = "especialidade_id"))
+    private List<Especialidade> especialidades;
 
-  public Profissional(
-      String nome,
-      String email,
-      String cpf,
-      LocalDate dataNascimento,
-      Character sexo,
-      String celular,
-      String urlImagem,
-      String crm) {
-    this.nome = nome;
-    this.email = email;
-    this.cpf = cpf;
-    this.dataNascimento = dataNascimento;
-    this.sexo = sexo;
-    this.celular = celular;
-    this.urlImagem = urlImagem;
-    this.crm = crm;
-  }
+    public Profissional(
+            String nome,
+            String email,
+            String cpf,
+            LocalDate dataNascimento,
+            Character sexo,
+            String celular,
+            String urlImagem,
+            String crm) {
+        this.nome = nome;
+        this.email = email;
+        this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
+        this.sexo = sexo;
+        this.celular = celular;
+        this.urlImagem = urlImagem;
+        this.crm = crm;
+    }
 }

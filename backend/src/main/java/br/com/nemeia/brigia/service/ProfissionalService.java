@@ -21,52 +21,53 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ProfissionalService {
 
-  private final ProfissionalRepository repository;
-  private final ProfissionalMapper mapper;
-  private final EspecialidadeService especialidadeService;
+    private final ProfissionalRepository repository;
+    private final ProfissionalMapper mapper;
+    private final EspecialidadeService especialidadeService;
 
-  public Page<Profissional> getPaged(int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
-    return repository.findAll(pageable);
-  }
-
-  public List<Profissional> getAniversariantes() {
-    return repository.findAllByDataNascimentoIs(LocalDate.now());
-  }
-
-  public Profissional getProfissionalById(Long id) {
-    return repository
-        .findById(id)
-        .orElseThrow(() -> new NotFoundException("Profissional não encontrado com ID: " + id));
-  }
-
-  public Profissional createProfissional(ProfissionalRequest request) {
-    Profissional profissional = mapper.toEntity(request);
-
-    if (!request.especialidades().isEmpty()) {
-      List<Especialidade> especialidades =
-          request.especialidades().stream().map(especialidadeService::getById).toList();
-      profissional.setEspecialidades(especialidades);
+    public Page<Profissional> getPaged(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
+        return repository.findAll(pageable);
     }
 
-    return saveProfissional(profissional);
-  }
-
-  private Profissional saveProfissional(Profissional profissional) {
-    return repository.save(profissional);
-  }
-
-  public Profissional editProfissional(Long id, ProfissionalRequest request) {
-    getProfissionalById(id);
-    Profissional profissional = mapper.toEntity(request);
-
-    if (!request.especialidades().isEmpty()) {
-      List<Especialidade> especialidades =
-          request.especialidades().stream().map(especialidadeService::getById).toList();
-      profissional.setEspecialidades(especialidades);
+    public List<Profissional> getAniversariantes() {
+        return repository.findAllByDataNascimentoIs(LocalDate.now());
     }
 
-    profissional.setId(id);
-    return saveProfissional(profissional);
-  }
+    public Profissional getProfissionalById(Long id) {
+        return repository
+                .findById(id)
+                .orElseThrow(
+                        () -> new NotFoundException("Profissional não encontrado com ID: " + id));
+    }
+
+    public Profissional createProfissional(ProfissionalRequest request) {
+        Profissional profissional = mapper.toEntity(request);
+
+        if (!request.especialidades().isEmpty()) {
+            List<Especialidade> especialidades =
+                    request.especialidades().stream().map(especialidadeService::getById).toList();
+            profissional.setEspecialidades(especialidades);
+        }
+
+        return saveProfissional(profissional);
+    }
+
+    private Profissional saveProfissional(Profissional profissional) {
+        return repository.save(profissional);
+    }
+
+    public Profissional editProfissional(Long id, ProfissionalRequest request) {
+        getProfissionalById(id);
+        Profissional profissional = mapper.toEntity(request);
+
+        if (!request.especialidades().isEmpty()) {
+            List<Especialidade> especialidades =
+                    request.especialidades().stream().map(especialidadeService::getById).toList();
+            profissional.setEspecialidades(especialidades);
+        }
+
+        profissional.setId(id);
+        return saveProfissional(profissional);
+    }
 }

@@ -7,11 +7,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class UnidadeMapper {
 
-  public UnidadeResponse toResponse(Unidade unidade) {
-    if (unidade == null) {
-      return null;
-    }
+    public UnidadeResponse toResponse(Unidade unidade) {
+        if (unidade == null) {
+            return null;
+        }
 
-    return new UnidadeResponse(unidade.getId(), unidade.getNome());
-  }
+        return new UnidadeResponse(unidade.getId(), unidade.getNome());
+    }
 }

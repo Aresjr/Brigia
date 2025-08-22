@@ -19,45 +19,46 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UsuarioService {
 
-  private final UsuarioRepository repository;
+    private final UsuarioRepository repository;
 
-  private final UsuarioMapper mapper;
+    private final UsuarioMapper mapper;
 
-  private final UnidadeRepository unidadeRepository;
+    private final UnidadeRepository unidadeRepository;
 
-  private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-  public Optional<Usuario> getByEmail(String email) {
-    return repository.findByEmail(email);
-  }
+    public Optional<Usuario> getByEmail(String email) {
+        return repository.findByEmail(email);
+    }
 
-  public List<Usuario> getAll() {
-    return repository.findAll();
-  }
+    public List<Usuario> getAll() {
+        return repository.findAll();
+    }
 
-  public Usuario findById(Long id) {
-    return repository
-        .findById(id)
-        .orElseThrow(() -> new NotFoundException("Usuário não encontrado com o ID: " + id));
-  }
+    public Usuario findById(Long id) {
+        return repository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado com o ID: " + id));
+    }
 
-  public Usuario create(UsuarioRequest request) {
+    public Usuario create(UsuarioRequest request) {
 
-    Unidade unidade =
-        unidadeRepository
-            .findById(request.unidadeId())
-            .orElseThrow(
-                () ->
-                    new NotFoundException(
-                        "Unidade não encontrada com o ID: " + request.unidadeId()));
+        Unidade unidade =
+                unidadeRepository
+                        .findById(request.unidadeId())
+                        .orElseThrow(
+                                () ->
+                                        new NotFoundException(
+                                                "Unidade não encontrada com o ID: "
+                                                        + request.unidadeId()));
 
-    log.info("Criando usuário: {}", request.email());
-    Usuario usuario = mapper.toEntity(request);
+        log.info("Criando usuário: {}", request.email());
+        Usuario usuario = mapper.toEntity(request);
 
-    String encryptedPassword = passwordEncoder.encode(request.senha());
-    usuario.setSenha(encryptedPassword);
+        String encryptedPassword = passwordEncoder.encode(request.senha());
+        usuario.setSenha(encryptedPassword);
 
-    usuario.setUnidade(unidade);
-    return usuario;
-  }
+        usuario.setUnidade(unidade);
+        return usuario;
+    }
 }

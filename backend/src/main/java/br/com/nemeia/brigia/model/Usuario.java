@@ -11,29 +11,29 @@ import org.hibernate.type.SqlTypes;
 @Table(name = "usuario")
 public class Usuario {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  @Column(name = "email", unique = true, nullable = false)
-  private String email;
+    @Column(name = "email", unique = true, nullable = false)
+    private String email;
 
-  @Column(name = "senha", nullable = false)
-  private String senha;
+    @Column(name = "senha", nullable = false)
+    private String senha;
 
-  @Column(name = "nome", nullable = false)
-  private String nome;
+    @Column(name = "nome", nullable = false)
+    private String nome;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "unidade_id", nullable = false)
-  private Unidade unidade;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "unidade_id", nullable = false)
+    private Unidade unidade;
 
-  @Column(name = "avatar_url")
-  private String avatarUrl;
+    @Column(name = "avatar_url")
+    private String avatarUrl;
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "roles", nullable = false)
-  @JdbcTypeCode(SqlTypes.ARRAY)
-  private List<RoleUsuario> roles;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "roles", nullable = false)
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    private List<RoleUsuario> roles;
 }

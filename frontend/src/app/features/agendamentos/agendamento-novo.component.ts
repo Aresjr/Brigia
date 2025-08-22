@@ -56,7 +56,7 @@ export class AgendamentoNovoComponent implements OnInit {
   }
 
   carregarConvenios(): void {
-    this.conveniosService.listar(true).subscribe({
+    this.conveniosService.listar().subscribe({
       next: (response) => {
         this.convenios = response.items;
       }

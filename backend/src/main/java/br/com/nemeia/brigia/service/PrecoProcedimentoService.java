@@ -13,18 +13,20 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class PrecoProcedimentoService {
 
-  private final PrecoProcedimentoRepository repository;
+    private final PrecoProcedimentoRepository repository;
 
-  public PrecoProcedimento getById(Long id) {
-    return repository
-        .findById(id)
-        .orElseThrow(
-            () -> new NotFoundException("Preço Procedimento não encontrada com ID: " + id));
-  }
+    public PrecoProcedimento getById(Long id) {
+        return repository
+                .findById(id)
+                .orElseThrow(
+                        () ->
+                                new NotFoundException(
+                                        "Preço Procedimento não encontrada com ID: " + id));
+    }
 
-  public PrecoProcedimento atualizaPreco(Long id, BigDecimal preco) {
-    PrecoProcedimento precoProcedimento = getById(id);
-    precoProcedimento.setPreco(preco);
-    return repository.save(precoProcedimento);
-  }
+    public PrecoProcedimento atualizaPreco(Long id, BigDecimal preco) {
+        PrecoProcedimento precoProcedimento = getById(id);
+        precoProcedimento.setPreco(preco);
+        return repository.save(precoProcedimento);
+    }
 }

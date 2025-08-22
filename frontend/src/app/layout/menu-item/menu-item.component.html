@@ -2,7 +2,8 @@
     (click)="handleClick()"
     [ngClass]="[
         isActive ? 'bg-blue-500 text-white hover:bg-blue-400' : 'hover:bg-gray-200',
-        'inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 w-full justify-start hover:bg-gray-200'
+        isSubmenuOpen ? 'pl-8' : '',
+        'w-full inline-flex items-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 justify-start hover:bg-gray-200'
     ]"
     routerLinkActive="bg-blue-500 text-white hover:bg-blue-500"
     [routerLinkActiveOptions]="{ exact: true }" >

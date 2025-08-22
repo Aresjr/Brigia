@@ -25,6 +25,7 @@ export class MenuItemComponent {
   @Input() icon?: string;
   @Input() hasSubmenu?: boolean = false;
   @Input() submenuOpen = false;
+  @Input() isSubmenuOpen: boolean = false;
   @Output() clicked = new EventEmitter<void>();
 
   handleClick() {

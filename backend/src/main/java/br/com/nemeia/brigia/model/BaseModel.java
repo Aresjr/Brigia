@@ -14,35 +14,33 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseModel {
 
-  @CreatedDate private LocalDateTime criadoEm;
+    @CreatedDate private LocalDateTime criadoEm;
 
-  @CreatedBy
-  @Column(name = "criado_por")
-  //  @ManyToOne(fetch = FetchType.LAZY) //TODO - mudar o campo para usuário
-  //  @JoinColumn(name = "criado_por")
-  private Long criadoPor;
+    @CreatedBy
+    @Column(name = "criado_por")
+    private Long criadoPor;
 
-  @LastModifiedDate
-  @Column(name = "atualizado_em")
-  private LocalDateTime atualizadoEm;
+    @LastModifiedDate
+    @Column(name = "atualizado_em")
+    private LocalDateTime atualizadoEm;
 
-  @LastModifiedBy
-  @Column(name = "atualizado_por")
-  private Long atualizadoPor;
+    @LastModifiedBy
+    @Column(name = "atualizado_por")
+    private Long atualizadoPor;
 
-  @Column(name = "excluido_em")
-  private LocalDateTime excluidoEm;
+    @Column(name = "excluido_em")
+    private LocalDateTime excluidoEm;
 
-  @Column(name = "excluido_por")
-  private Long excluidoPor;
+    @Column(name = "excluido_por")
+    private Long excluidoPor;
 
-  @Column(name = "excluido")
-  private Boolean excluido = false;
+    @Column(name = "excluido")
+    private Boolean excluido = false;
 
-  @PreUpdate
-  protected void onUpdate() {
-    if (atualizadoEm == null) {
-      atualizadoEm = LocalDateTime.now();
+    @PreUpdate
+    protected void onUpdate() {
+        if (atualizadoEm == null) {
+            atualizadoEm = LocalDateTime.now();
+        }
     }
-  }
 }

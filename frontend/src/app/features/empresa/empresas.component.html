@@ -15,27 +15,27 @@
             <table class="table-fixed w-full border-collapse text-sm">
                 <thead class="text-white bg-blue-500">
                     <tr>
-                        <th (click)="ordenar('nome')" class="px-5 py-1 text-left font-medium uppercase cursor-pointer hover:bg-blue-600 w-44" title="Nome da Empresa">
+                        <th (click)="ordenar('nome')" class="px-6 py-1 text-left font-medium text-xs uppercase cursor-pointer hover:bg-blue-600 w-44" title="Nome da Empresa">
                             <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="absolute -ml-2 w-4 h-4"/>
                             Nome
                         </th>
-                        <th (click)="ordenar('codigoBc')" class="px-4 py-1 text-left font-medium text-xs uppercase cursor-pointer hover:bg-blue-600 w-6" title="Código BC">
+                        <th (click)="ordenar('codigoBc')" class="px-6 py-1 text-left font-medium text-xs uppercase cursor-pointer hover:bg-blue-600 w-6" title="Código BC">
                           <lucide-icon *ngIf="getSortIcon('codigoBc')" [name]="getSortIcon('codigoBc')" class="absolute -ml-2 w-4 h-4"/>
                           Cód. BC
                         </th>
-                        <th (click)="ordenar('valorMinimoMensal')" class="px-4 py-1 text-left font-medium text-xs uppercase cursor-pointer hover:bg-blue-600 w-6" title="Valor Mínimo Mensal">
+                        <th (click)="ordenar('valorMinimoMensal')" class="px-6 py-1 text-left font-medium text-xs uppercase cursor-pointer hover:bg-blue-600 w-6" title="Valor Mínimo Mensal">
                           <lucide-icon *ngIf="getSortIcon('valorMinimoMensal')" [name]="getSortIcon('valorMinimoMensal')" class="absolute -ml-2 w-4 h-4"/>
                           Mín. Mensal
                         </th>
-                        <th (click)="ordenar('minimoPorFuncionario')" class="px-4 py-1 text-left font-medium text-xs uppercase overflow-hidden cursor-pointer hover:bg-blue-600 w-8" title="Valor Mínimo por Funcionário">
-                          <lucide-icon *ngIf="getSortIcon('minimoPorFuncionario')" [name]="getSortIcon('minimoPorFuncionario')" class="absolute -ml-2 w-4 h-4"/>
+                        <th (click)="ordenar('minimoPorFuncionario')" class="px-6 py-1 text-left font-medium text-xs uppercase overflow-hidden cursor-pointer hover:bg-blue-600 w-8" title="Valor Mínimo por Funcionário">
+                          <lucide-icon *ngIf="getSortIcon('minimoPorFuncionario')" [name]="getSortIcon('minimoPorFuncionario')" class="absolute -ml-2 mt-1 w-4 h-4"/>
                           Mín. Por Funcionário
                         </th>
-                        <th (click)="ordenar('valorMes')" class="px-4 py-1 text-left font-medium text-xs uppercase cursor-pointer hover:bg-blue-600 w-2" title="Valor Mínimo por Mês">
+                        <th (click)="ordenar('valorMes')" class="px-6 py-1 text-left font-medium text-xs uppercase cursor-pointer hover:bg-blue-600 w-2" title="Valor Mínimo por Mês">
                           <lucide-icon *ngIf="getSortIcon('valorMes')" [name]="getSortIcon('valorMes')" class="absolute -ml-2 w-4 h-4"/>
                           Valor Mês
                         </th>
-                        <th (click)="ordenar('observacao')" class="px-4 py-1 text-left font-medium uppercase cursor-pointer hover:bg-blue-600 w-36" title="Descrição / Observações">
+                        <th (click)="ordenar('observacao')" class="px-6 py-1 text-left font-medium text-xs uppercase cursor-pointer hover:bg-blue-600 w-36" title="Descrição / Observações">
                             <lucide-icon *ngIf="getSortIcon('observacao')" [name]="getSortIcon('observacao')" class="absolute -ml-2 w-4 h-4"/>
                             Observações
                         </th>
@@ -47,15 +47,15 @@
                 <tbody class="bg-white">
                     @for (empresa of getItensPaginados(); track empresa.id) {
                         <tr class="border-b hover:bg-gray-100" [class.bg-red-50]="empresa.excluido" [ngClass]="empresa.plano?.corFundo" >
-                            <td class="px-4 py-2 whitespace-nowrap w-44">
+                            <td class="px-6 py-2 whitespace-nowrap w-44">
                                 {{empresa.nome}} <span *ngIf="empresa.excluido" class="ml-2 px-2 py-1 text-xs bg-red-100 text-red-800 rounded">Excluído</span>
                             </td>
-                            <td class="px-4 py-2 w-6">{{empresa.codigoBc}}</td>
-                            <td class="px-4 py-2 w-6">{{empresa.valorMinimoMensal}}</td>
-                            <td class="px-4 py-2 w-12">{{empresa.minimoPorFuncionario}}</td>
-                            <td class="px-4 py-2 w-2">{{empresa.valorMes}}</td>
-                            <td class="px-4 text-xs">{{empresa.observacao}}</td>
-                            <td class="px-4 whitespace-nowrap w-36 text-right" >
+                            <td class="px-6 py-2 w-6">{{empresa.codigoBc}}</td>
+                            <td class="px-6 py-2 w-6">{{empresa.valorMinimoMensal}}</td>
+                            <td class="px-6 py-2 w-12">{{empresa.minimoPorFuncionario}}</td>
+                            <td class="px-6 py-2 w-2">{{empresa.valorMes}}</td>
+                            <td class="px-6 text-xs">{{empresa.observacao}}</td>
+                            <td class="px-6 whitespace-nowrap w-36 text-right" >
                                 <div>
                                     <lucide-icon name="ellipsis-vertical" class="h-5 hover:bg-white hover:cursor-pointer" (click)="toggleDropdown($event, empresa.id)" />
                                     @if (dropdownAberto === empresa.id) {

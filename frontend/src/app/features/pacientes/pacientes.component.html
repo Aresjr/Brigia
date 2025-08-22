@@ -41,12 +41,12 @@
                 <tbody class="bg-white">
                     @for (paciente of getItensPaginados(); track paciente.id) {
                         <tr class="border-b hover:bg-gray-50 cursor-pointer" (click)="selecionar(paciente)">
-                            <td class="px-4 py-2 whitespace-nowrap">{{paciente.nome}}</td>
-                            <td class="px-4 py-2 whitespace-nowrap">{{paciente.cpf | cpf}}</td>
-                            <td class="px-4 py-2 whitespace-nowrap">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</td>
-                            <td class="px-4 py-2 whitespace-nowrap">{{paciente.celular | celular}}</td>
-                            <td class="px-4 py-2 whitespace-nowrap">{{paciente.proximaConsulta | date:'dd/MM/yyyy HH:mm'}}</td>
-                            <td class="px-4 py-2 whitespace-nowrap w-28 text-right">
+                            <td class="px-6 py-2 whitespace-nowrap">{{paciente.nome}}</td>
+                            <td class="px-6 py-2 whitespace-nowrap">{{paciente.cpf | cpf}}</td>
+                            <td class="px-6 py-2 whitespace-nowrap">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</td>
+                            <td class="px-6 py-2 whitespace-nowrap">{{paciente.celular | celular}}</td>
+                            <td class="px-6 py-2 whitespace-nowrap">{{paciente.proximaConsulta | date:'dd/MM/yyyy HH:mm'}}</td>
+                            <td class="px-6 py-2 whitespace-nowrap w-28 text-right">
                             <div>
                               <lucide-icon name="ellipsis-vertical" class="h-5 hover:bg-white hover:cursor-pointer" (click)="toggleDropdown($event, paciente.id)" />
                               @if (dropdownAberto === paciente.id) {
@@ -80,7 +80,7 @@
 </div>
 
 <ng-template #acoesTemplate let-paciente="paciente">
-  <div class="absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+  <div class="absolute -ml-28 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
     <div class="py-1 flex flex-col">
       <a
         (click)="handleAction($event, 'agendar', paciente)"

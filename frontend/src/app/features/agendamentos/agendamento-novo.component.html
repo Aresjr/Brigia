@@ -17,7 +17,7 @@
 
         <div class="w-[24rem]">
           <label class="block font-medium text-gray-700">Convênio</label>
-          <ng-select formControlName="convenioId" required readonly class="mt-1 block w-full rounded-md"
+          <ng-select formControlName="convenioId" required class="mt-1 block w-full rounded-md"
                [ngClass]="{'border border-red-500': agendamentoForm.get('convenioId')?.invalid}" >
             @for (convenio of this.convenios; track convenio.id) {
               <ng-option [value]="convenio.id">{{convenio.nome}}</ng-option>

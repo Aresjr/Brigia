@@ -6,5 +6,5 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProfissionalRepository extends JpaRepository<Profissional, Long> {
-  List<Profissional> findAllByDataNascimentoIs(LocalDate now);
+    List<Profissional> findAllByDataNascimentoIs(LocalDate now);
 }

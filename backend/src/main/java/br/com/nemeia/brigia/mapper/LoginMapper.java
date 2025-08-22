@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoginMapper {
 
-  public LoginResponse toLoginResponse(Usuario usuario) {
-    return new LoginResponse(
-        usuario.getNome(),
-        usuario.getEmail(),
-        usuario.getAvatarUrl(),
-        usuario.getRoles(),
-        usuario.getUnidade() != null ? usuario.getUnidade().getId() : null);
-  }
+    public LoginResponse toLoginResponse(Usuario usuario) {
+        return new LoginResponse(
+                usuario.getNome(),
+                usuario.getEmail(),
+                usuario.getAvatarUrl(),
+                usuario.getRoles(),
+                usuario.getUnidade() != null ? usuario.getUnidade().getId() : null);
+    }
 }

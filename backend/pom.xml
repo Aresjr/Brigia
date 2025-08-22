@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.3</version>
+		<version>3.5.4</version>
 		<relativePath/>
 	</parent>
 	<groupId>br.com.nemeia</groupId>
 	<artifactId>brigia</artifactId>
 	<version>0.0.2</version>
 	<name>Brigia</name>
-	<description>Brigia - EMR</description>
+	<description>Brigia - Software Clínico</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -140,7 +140,10 @@
 				<version>2.46.1</version>
 				<configuration>
 					<java>
-						<googleJavaFormat/>
+                        <googleJavaFormat>
+                            <version>1.17.0</version>
+                            <style>AOSP</style>
+                        </googleJavaFormat>
 					</java>
 				</configuration>
 			</plugin>

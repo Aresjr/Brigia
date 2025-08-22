@@ -11,27 +11,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class EspecialidadeMapper {
 
-  public EspecialidadeResponse toResponse(Especialidade especialidade) {
-    if (especialidade == null) {
-      return null;
+    public EspecialidadeResponse toResponse(Especialidade especialidade) {
+        if (especialidade == null) {
+            return null;
+        }
+
+        return new EspecialidadeResponse(
+                especialidade.getId(),
+                especialidade.getNome(),
+                especialidade.getDescricao(),
+                especialidade.getCriadoEm(),
+                especialidade.getExcluido());
     }
 
-    return new EspecialidadeResponse(
-        especialidade.getId(),
-        especialidade.getNome(),
-        especialidade.getDescricao(),
-        especialidade.getCriadoEm(),
-        especialidade.getExcluido());
-  }
+    public PagedResponse<EspecialidadeResponse> toPagedResponse(Page<Especialidade> paged) {
+        List<EspecialidadeResponse> responses =
+                paged.getContent().stream().map(this::toResponse).toList();
+        return new PagedResponse<>(
+                responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
+    }
 
-  public PagedResponse<EspecialidadeResponse> toPagedResponse(Page<Especialidade> paged) {
-    List<EspecialidadeResponse> responses =
-        paged.getContent().stream().map(this::toResponse).toList();
-    return new PagedResponse<>(
-        responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
-  }
-
-  public Especialidade toEntity(EspecialidadeRequest request) {
-    return new Especialidade(request.nome(), request.descricao());
-  }
+    public Especialidade toEntity(EspecialidadeRequest request) {
+        return new Especialidade(request.nome(), request.descricao());
+    }
 }

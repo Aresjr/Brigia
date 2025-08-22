@@ -13,61 +13,62 @@ import org.springframework.stereotype.Component;
 @Component
 public class PacienteMapper {
 
-  private final ConvenioMapper convenioMapper;
+    private final ConvenioMapper convenioMapper;
 
-  public PacienteResponse toResponse(Paciente paciente) {
-    if (paciente == null) {
-      return null;
+    public PacienteResponse toResponse(Paciente paciente) {
+        if (paciente == null) {
+            return null;
+        }
+
+        return new PacienteResponse(
+                paciente.getId(),
+                paciente.getNome(),
+                paciente.getEmail(),
+                paciente.getCpf(),
+                paciente.getDataNascimento(),
+                paciente.getSexo(),
+                paciente.getCelular(),
+                paciente.getUltimaConsulta(),
+                paciente.getProximaConsulta(),
+                paciente.getUrlImagem(),
+                paciente.getCorIdentificacao(),
+                paciente.getCep(),
+                paciente.getRua(),
+                paciente.getComplemento(),
+                paciente.getBairro(),
+                paciente.getCidade(),
+                paciente.getUf(),
+                convenioMapper.toResponse(paciente.getConvenio()),
+                paciente.getCriadoEm(),
+                paciente.getExcluido());
     }
 
-    return new PacienteResponse(
-        paciente.getId(),
-        paciente.getNome(),
-        paciente.getEmail(),
-        paciente.getCpf(),
-        paciente.getDataNascimento(),
-        paciente.getSexo(),
-        paciente.getCelular(),
-        paciente.getUltimaConsulta(),
-        paciente.getProximaConsulta(),
-        paciente.getUrlImagem(),
-        paciente.getCorIdentificacao(),
-        paciente.getCep(),
-        paciente.getRua(),
-        paciente.getComplemento(),
-        paciente.getBairro(),
-        paciente.getCidade(),
-        paciente.getUf(),
-        convenioMapper.toResponse(paciente.getConvenio()),
-        paciente.getCriadoEm(),
-        paciente.getExcluido());
-  }
+    public Paciente toEntity(PacienteRequest request) {
+        if (request == null) {
+            return null;
+        }
 
-  public Paciente toEntity(PacienteRequest request) {
-    if (request == null) {
-      return null;
+        return new Paciente(
+                request.nome(),
+                request.email(),
+                request.cpf(),
+                request.dataNascimento(),
+                request.sexo() != null ? request.sexo().charAt(0) : null,
+                request.celular(),
+                request.urlImagem(),
+                request.corIdentificacao(),
+                request.cep(),
+                request.rua(),
+                request.complemento(),
+                request.bairro(),
+                request.cidade(),
+                request.uf());
     }
 
-    return new Paciente(
-        request.nome(),
-        request.email(),
-        request.cpf(),
-        request.dataNascimento(),
-        request.sexo() != null ? request.sexo().charAt(0) : null,
-        request.celular(),
-        request.urlImagem(),
-        request.corIdentificacao(),
-        request.cep(),
-        request.rua(),
-        request.complemento(),
-        request.bairro(),
-        request.cidade(),
-        request.uf());
-  }
-
-  public PagedResponse<PacienteResponse> toPagedResponse(Page<Paciente> paged) {
-    List<PacienteResponse> responses = paged.getContent().stream().map(this::toResponse).toList();
-    return new PagedResponse<>(
-        responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
-  }
+    public PagedResponse<PacienteResponse> toPagedResponse(Page<Paciente> paged) {
+        List<PacienteResponse> responses =
+                paged.getContent().stream().map(this::toResponse).toList();
+        return new PagedResponse<>(
+                responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
+    }
 }

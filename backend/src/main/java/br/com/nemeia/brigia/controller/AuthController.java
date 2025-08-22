@@ -15,18 +15,18 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-  private final AuthService authService;
+    private final AuthService authService;
 
-  @PostMapping("/login")
-  public ResponseEntity<LoginResponse> login(
-      @RequestBody LoginRequest request, HttpServletResponse httpServletResponse) {
-    LoginResponse loginResponse = authService.login(request, httpServletResponse);
-    return ResponseEntity.ok(loginResponse);
-  }
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(
+            @RequestBody LoginRequest request, HttpServletResponse httpServletResponse) {
+        LoginResponse loginResponse = authService.login(request, httpServletResponse);
+        return ResponseEntity.ok(loginResponse);
+    }
 
-  @PostMapping("/logout")
-  public ResponseEntity<Void> logout(HttpServletResponse response) {
-    authService.logout(response);
-    return ResponseEntity.noContent().build();
-  }
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        authService.logout(response);
+        return ResponseEntity.noContent().build();
+    }
 }

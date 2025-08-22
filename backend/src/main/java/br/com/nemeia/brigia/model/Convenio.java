@@ -10,19 +10,19 @@ import lombok.*;
 @Table(name = "convenio")
 public class Convenio extends BaseModel {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  @Column(name = "nome", unique = true, nullable = false)
-  private String nome;
+    @Column(name = "nome", unique = true, nullable = false)
+    private String nome;
 
-  @Column(name = "descricao")
-  private String descricao;
+    @Column(name = "descricao")
+    private String descricao;
 
-  public Convenio(String nome, String descricao) {
-    this.nome = nome;
-    this.descricao = descricao;
-  }
+    public Convenio(String nome, String descricao) {
+        this.nome = nome;
+        this.descricao = descricao;
+    }
 }

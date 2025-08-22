@@ -5,13 +5,13 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record PrecoProcedimentoResponse(
-    Long id,
-    BigDecimal preco,
-    BigDecimal repasse,
-    @JsonInclude(JsonInclude.Include.NON_NULL) ConvenioResponse convenio,
-    @JsonInclude(JsonInclude.Include.NON_NULL) EmpresaPlanoResponse empresaPlano,
-    @JsonInclude(JsonInclude.Include.NON_NULL) UnidadeResponse unidade,
-    LocalDateTime criadoEm,
-    String criadoPor,
-    LocalDateTime atualizadoEm,
-    String atualizadoPor) {}
+        Long id,
+        BigDecimal preco,
+        BigDecimal repasse,
+        @JsonInclude(JsonInclude.Include.NON_NULL) ConvenioResponse convenio,
+        @JsonInclude(JsonInclude.Include.NON_NULL) EmpresaPlanoResponse empresaPlano,
+        @JsonInclude(JsonInclude.Include.NON_NULL) UnidadeResponse unidade,
+        LocalDateTime criadoEm,
+        String criadoPor,
+        LocalDateTime atualizadoEm,
+        String atualizadoPor) {}

@@ -12,21 +12,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 public class UserAuth implements UserDetails {
 
-  private Long id;
-  private List<String> roles;
+    private Long id;
+    private List<String> roles;
 
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return roles.stream().map(SimpleGrantedAuthority::new).toList();
-  }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream().map(SimpleGrantedAuthority::new).toList();
+    }
 
-  @Override
-  public String getPassword() {
-    return null;
-  }
+    @Override
+    public String getPassword() {
+        return null;
+    }
 
-  @Override
-  public String getUsername() {
-    return id.toString();
-  }
+    @Override
+    public String getUsername() {
+        return id.toString();
+    }
 }

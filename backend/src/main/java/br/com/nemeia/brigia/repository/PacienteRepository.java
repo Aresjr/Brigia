@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
 
-  Long countByExcluido(Boolean excluido);
+    Long countByExcluido(Boolean excluido);
 
-  List<Paciente> findAllByDataNascimentoIs(LocalDate date);
+    List<Paciente> findAllByDataNascimentoIs(LocalDate date);
 }

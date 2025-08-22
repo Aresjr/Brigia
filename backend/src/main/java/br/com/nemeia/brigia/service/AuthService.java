@@ -19,54 +19,57 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class AuthService {
 
-  @Value("${env}")
-  private String env;
+    @Value("${env}")
+    private String env;
 
-  private final int tokenExpirationTime = 60 * 60;
+    private final int tokenExpirationTime = 60 * 60;
 
-  private final PasswordEncoder passwordEncoder;
-  private final JwtService jwtService;
-  private final LoginMapper mapper;
-  private final UsuarioService usuarioService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final LoginMapper mapper;
+    private final UsuarioService usuarioService;
 
-  public LoginResponse login(LoginRequest request, HttpServletResponse httpServletResponse) {
-    try {
-      Usuario usuario =
-          usuarioService.getByEmail(request.email()).orElseThrow(InvalidCredentialsException::new);
+    public LoginResponse login(LoginRequest request, HttpServletResponse httpServletResponse) {
+        try {
+            Usuario usuario =
+                    usuarioService
+                            .getByEmail(request.email())
+                            .orElseThrow(InvalidCredentialsException::new);
 
-      if (!passwordEncoder.matches(request.password(), usuario.getSenha())) {
-        log.error("Senha inválida para o usuário: {}", request.email());
-        throw new InvalidCredentialsException();
-      }
+            if (!passwordEncoder.matches(request.password(), usuario.getSenha())) {
+                log.error("Senha inválida para o usuário: {}", request.email());
+                throw new InvalidCredentialsException();
+            }
 
-      String token = jwtService.generateToken(usuario);
-      addAccessTokenToResponse(httpServletResponse, token);
+            String token = jwtService.generateToken(usuario);
+            addAccessTokenToResponse(httpServletResponse, token);
 
-      return mapper.toLoginResponse(usuario);
-    } catch (InvalidCredentialsException e) {
-      log.error("Credenciais inválidas: ", e);
-      throw e;
-    } catch (Exception e) {
-      log.error("Erro ao realizar login: ", e);
-      throw new RuntimeException("Serviço de login indisponível, tente novamente mais tarde.");
+            return mapper.toLoginResponse(usuario);
+        } catch (InvalidCredentialsException e) {
+            log.error("Credenciais inválidas: ", e);
+            throw e;
+        } catch (Exception e) {
+            log.error("Erro ao realizar login: ", e);
+            throw new RuntimeException(
+                    "Serviço de login indisponível, tente novamente mais tarde.");
+        }
     }
-  }
 
-  public void addAccessTokenToResponse(HttpServletResponse response, String accessToken) {
-    Cookie cookie = new Cookie("access-token", accessToken);
-    cookie.setHttpOnly(true);
-    cookie.setSecure("prod".equals(env));
-    cookie.setPath("/");
-    cookie.setMaxAge(tokenExpirationTime);
-    response.addCookie(cookie);
-  }
+    public void addAccessTokenToResponse(HttpServletResponse response, String accessToken) {
+        Cookie cookie = new Cookie("access-token", accessToken);
+        cookie.setHttpOnly(true);
+        cookie.setSecure("prod".equals(env));
+        cookie.setPath("/");
+        cookie.setMaxAge(tokenExpirationTime);
+        response.addCookie(cookie);
+    }
 
-  public void logout(HttpServletResponse response) {
-    Cookie cookie = new Cookie("access-token", null);
-    cookie.setHttpOnly(true);
-    cookie.setSecure(true);
-    cookie.setPath("/");
-    cookie.setMaxAge(0);
-    response.addCookie(cookie);
-  }
+    public void logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("access-token", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+    }
 }
