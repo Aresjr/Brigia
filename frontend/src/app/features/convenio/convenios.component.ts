@@ -47,7 +47,6 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
       },
       error: () => {
         this.isLoading = false;
-        this.toastr.error('Erro ao carregar convênios. Por favor, tente novamente.');
       }
     });
   }
@@ -66,10 +65,6 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
           this.carregarConvenios();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
-        },
-        error: (e) => {
-          const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
-          this.toastr.error(errorMessage, `Erro ao atualizar ${this.nomeEntidade}`);
         }
       });
     } else {
@@ -78,10 +73,6 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
           this.toastr.success(`${this.nomeEntidade} cadastrado`);
           this.carregarConvenios();
           this.mostrarFormularioNovo = false;
-        },
-        error: (error) => {
-          this.toastr.error(`Erro ao cadastrar ${this.nomeEntidade}`);
-          console.error(`Erro ao cadastrar ${this.nomeEntidade}:`, error);
         }
       });
     }
@@ -93,9 +84,6 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
       next: () => {
         this.toastr.success(`${this.nomeEntidade} excluído`);
         this.carregarConvenios();
-      },
-      error: () => {
-        this.toastr.error(`Erro ao excluir ${this.nomeEntidade}`);
       }
     });
   }
@@ -108,10 +96,6 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
       next: () => {
         convenio.excluido = false;
         this.toastr.success(`${this.nomeEntidade} restaurado`);
-      },
-      error: (error) => {
-        this.toastr.error(`Erro ao restaurar o ${this.nomeEntidade}`);
-        console.error(`Erro ao restaurar ${this.nomeEntidade}:`, error);
       }
     });
   }

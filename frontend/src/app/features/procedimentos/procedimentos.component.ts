@@ -49,7 +49,6 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
       },
       error: () => {
         this.isLoading = false;
-        this.toastr.error(`Erro ao carregar a lista de ${this.nomeEntidade}. Por favor, tente novamente.`);
       }
     });
   }
@@ -70,10 +69,6 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
           this.carregarProcedimentos();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
-        },
-        error: (e) => {
-          const errorMessage = e.error?.messages?.join('; ') || e.error?.message || '';
-          this.toastr.error(errorMessage, `Erro ao atualizar ${this.nomeEntidade}`);
         }
       });
     } else {
@@ -82,10 +77,6 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
           this.toastr.success(`${this.nomeEntidade} cadastrado`);
           this.carregarProcedimentos();
           this.mostrarFormularioNovo = false;
-        },
-        error: (error) => {
-          this.toastr.error(`Erro ao cadastrar ${this.nomeEntidade}`);
-          console.error(`Erro ao cadastrar ${this.nomeEntidade}:`, error);
         }
       });
     }
@@ -97,9 +88,6 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
       next: () => {
         this.toastr.success(`${this.nomeEntidade} excluído`);
         this.carregarProcedimentos();
-      },
-      error: () => {
-        this.toastr.error(`Erro ao excluir ${this.nomeEntidade}`);
       }
     });
   }
@@ -112,10 +100,6 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
       next: () => {
         procedimento.excluido = false;
         this.toastr.success(`${this.nomeEntidade} restaurado`);
-      },
-      error: (error) => {
-        this.toastr.error(`Erro ao restaurar o ${this.nomeEntidade}`);
-        console.error(`Erro ao restaurar ${this.nomeEntidade}:`, error);
       }
     });
   }

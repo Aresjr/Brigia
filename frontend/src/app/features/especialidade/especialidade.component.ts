@@ -44,10 +44,6 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
         this.itensExibicao = [...this.itensInternos];
         this.atualizarPaginacao();
         this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-        this.toastr.error('Erro ao carregar especialidades. Por favor, tente novamente.');
       }
     });
   }
@@ -66,10 +62,6 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
           this.carregarEspecialidades();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
-        },
-        error: (e) => {
-          const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
-          this.toastr.error(errorMessage, `Erro ao atualizar ${this.nomeEntidade}`);
         }
       });
     } else {
@@ -78,10 +70,6 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
           this.toastr.success(`${this.nomeEntidade} cadastrada`);
           this.carregarEspecialidades();
           this.mostrarFormularioNovo = false;
-        },
-        error: (error) => {
-          this.toastr.error(`Erro ao cadastrar ${this.nomeEntidade}`);
-          console.error(`Erro ao cadastrar ${this.nomeEntidade}:`, error);
         }
       });
     }
@@ -93,9 +81,6 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
       next: () => {
         this.toastr.success(`${this.nomeEntidade} excluída`);
         this.carregarEspecialidades();
-      },
-      error: () => {
-        this.toastr.error(`Erro ao excluir ${this.nomeEntidade}`);
       }
     });
   }
@@ -108,10 +93,6 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
       next: () => {
         especialidade.excluido = false;
         this.toastr.success(`${this.nomeEntidade} restaurada com sucesso!`);
-      },
-      error: (error) => {
-        this.toastr.error(`Erro ao restaurar a ${this.nomeEntidade}`);
-        console.error(`Erro ao restaurar ${this.nomeEntidade}:`, error);
       }
     });
   }

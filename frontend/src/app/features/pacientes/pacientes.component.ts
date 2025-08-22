@@ -90,11 +90,6 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
           this.carregarPacientes();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
-        },
-        error: (e) => {
-          const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
-          this.toastr.error(errorMessage, 'Erro ao atualizar paciente');
-          console.error('Erro ao atualizar paciente:', e.error);
         }
       });
     } else {
@@ -103,11 +98,6 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
           this.toastr.success('Registro cadastrado');
           this.carregarPacientes();
           this.mostrarFormularioNovo = false;
-        },
-        error: (e) => {
-          const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
-          this.toastr.error(errorMessage, 'Erro ao cadastrar paciente');
-          console.error('Erro ao cadastrar paciente:', e);
         }
       });
     }

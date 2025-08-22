@@ -18,7 +18,7 @@ export class BaseService<Y, T> {
       this.cache$ = this.backend.get<T>(`${this.path}?mostrarExcluidos=${mostrarExcluidos}&size=999`).pipe(
         shareReplay(1),
         catchError((error) => {
-          this.toastr.error('Erro ao carregar registros. Por favor, tente novamente.');
+          this.toastr.error('Erro ao carregar os registros. Por favor, tente novamente.');
           return throwError(() => error);
         })
       );
@@ -28,22 +28,44 @@ export class BaseService<Y, T> {
 
   criar(registro: Partial<Y>): Observable<Y> {
     this.limparCache();
-    return this.backend.post<Y>(this.path, registro);
+    return this.backend.post<Y>(this.path, registro).pipe(
+      catchError((e) => {
+        const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
+        this.toastr.error(errorMessage, 'Erro ao cadastrar o registro.');
+        return throwError(() => e);
+      })
+    );
   }
 
   atualizar(id: number, procedimento: Partial<Y>): Observable<Y> {
     this.limparCache();
-    return this.backend.put<Y>(`${this.path}/${id}`, procedimento);
+    return this.backend.put<Y>(`${this.path}/${id}`, procedimento).pipe(
+      catchError((e) => {
+        const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
+        this.toastr.error(errorMessage, 'Erro ao atualizar o registro.');
+        return throwError(() => e);
+      })
+    );
   }
 
   excluir(id: number): Observable<void> {
     this.limparCache();
-    return this.backend.delete<void>(`${this.path}/${id}`);
+    return this.backend.delete<void>(`${this.path}/${id}`).pipe(
+      catchError((error) => {
+        this.toastr.error('Erro ao excluir o registro. Por favor, tente novamente.');
+        return throwError(() => error);
+      })
+    );
   }
 
   restaurar(id: number): Observable<void> {
     this.limparCache();
-    return this.backend.patch<void>(`${this.path}/${id}/restaurar`, null);
+    return this.backend.patch<void>(`${this.path}/${id}/restaurar`, null).pipe(
+      catchError((error) => {
+        this.toastr.error('Erro ao restaurar o registro. Por favor, tente novamente.');
+        return throwError(() => error);
+      })
+    );
   }
 
   limparCache() {

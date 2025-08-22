@@ -40,14 +40,12 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
     this.empresasService.listar(true).subscribe({
       next: (response) => {
         this.itensInternos = response.items;
-        console.log(this.itensInternos);
         this.itensExibicao = [...this.itensInternos];
         this.atualizarPaginacao();
         this.isLoading = false;
       },
       error: () => {
         this.isLoading = false;
-        this.toastr.error('Erro ao carregar empresas. Por favor, tente novamente.');
       }
     });
   }
@@ -66,22 +64,14 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
           this.carregarEmpresas();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
-        },
-        error: (e) => {
-          const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
-          this.toastr.error(errorMessage, 'Erro ao atualizar empresa');
         }
       });
     } else {
       this.empresasService.criar(empresa).subscribe({
         next: () => {
-          this.toastr.success('Empresa cadastrado');
+          this.toastr.success('Empresa cadastrada');
           this.carregarEmpresas();
           this.mostrarFormularioNovo = false;
-        },
-        error: (error) => {
-          this.toastr.error('Erro ao cadastrar empresa');
-          console.error('Erro ao cadastrar empresa:', error);
         }
       });
     }
@@ -93,9 +83,6 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
       next: () => {
         this.toastr.success('Empresa excluída');
         this.carregarEmpresas();
-      },
-      error: () => {
-        this.toastr.error('Erro ao excluir empresa');
       }
     });
   }
@@ -108,10 +95,6 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
       next: () => {
         empresa.excluido = false;
         this.toastr.success('Empresa restaurada');
-      },
-      error: (error) => {
-        this.toastr.error('Erro ao restaurar o empresa');
-        console.error('Erro ao restaurar empresa:', error);
       }
     });
   }

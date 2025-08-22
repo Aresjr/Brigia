@@ -118,7 +118,6 @@ export class MainLayoutComponent {
   }
 
   onSearchChange() {
-    console.log('Search term:', this.searchTerm);
     if (!this.searchTerm){
       this.filteredMenuItems = this.menuItems;
       return;

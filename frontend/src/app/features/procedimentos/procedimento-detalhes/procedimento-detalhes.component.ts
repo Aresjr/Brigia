@@ -17,7 +17,6 @@ export class ProcedimentoDetalhesComponent implements OnInit {
   @Output() fechou = new EventEmitter<void>();
   tabelaPreco: TabelaPrecoResponse | undefined = undefined;
   mostraTabelaConvenio: boolean = false;
-  mostraTabelaEmpresa: boolean = false;
 
   constructor(private procedimentosService: ProcedimentosService,
               private toastr: ToastrService) {}
@@ -27,9 +26,6 @@ export class ProcedimentoDetalhesComponent implements OnInit {
       this.procedimentosService.listarTabelaPreco(this.procedimento.id).subscribe({
         next: (response) => {
           this.tabelaPreco = response;
-        },
-        error: (error) => {
-          this.toastr.error('Erro ao carregar a tabela de preço do procedimento.');
         }
       });
     }
@@ -43,17 +39,10 @@ export class ProcedimentoDetalhesComponent implements OnInit {
     this.mostraTabelaConvenio = !this.mostraTabelaConvenio;
   }
 
-  toggleTabelaEmpresas() {
-    this.mostraTabelaEmpresa = !this.mostraTabelaEmpresa;
-  }
-
   atualizarPreco(precoConvenio: PrecoProcedimentoConvenio) {
     this.procedimentosService.atualizarPreco(precoConvenio).subscribe({
       next: (response) => {
         this.toastr.success('Preço atualizado');
-      },
-      error: (error) => {
-        this.toastr.error('Erro ao atualizar preco', error);
       }
     });
   }

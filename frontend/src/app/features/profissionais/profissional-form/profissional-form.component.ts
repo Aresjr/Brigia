@@ -75,9 +75,6 @@ export class ProfissionalFormComponent implements OnInit {
     this.especialidadeService.listar().subscribe({
       next: (response) => {
         this.listaEspecialidades = response.items;
-      },
-      error: () => {
-        this.toastr.error(`Erro ao carregar a lista de especialidades. Por favor, tente novamente.`);
       }
     });
   }

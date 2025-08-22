@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Paciente } from '../pacientes/paciente.interface';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PacienteService } from '../pacientes/paciente.service';
@@ -15,7 +15,7 @@ import { Convenio } from '../convenio/convenio.interface';
     ReactiveFormsModule
   ]
 })
-export class AgendamentoNovoComponent {
+export class AgendamentoNovoComponent implements OnInit {
   @Output() confirm = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
 
@@ -26,6 +26,16 @@ export class AgendamentoNovoComponent {
 
   constructor(private fb: FormBuilder, private pacientesService: PacienteService,
               private conveniosService: ConveniosService) {
+    this.agendamentoForm = this.fb.group({
+      pacienteId: [null, Validators.required],
+      convenioId: [null, Validators.required],
+      data: ['', Validators.required],
+      hora: ['', Validators.required],
+      observacoes: ['']
+    });
+  }
+
+  ngOnInit(): void {
     this.carregarPacientes();
     this.carregarConvenios();
     this.agendamentoForm = this.fb.group({
@@ -54,10 +64,6 @@ export class AgendamentoNovoComponent {
   }
 
   onConfirm() {
-
-    console.log(this.agendamentoForm.get('pacienteId')?.invalid);
-    console.log(this.agendamentoForm.get('pacienteId')?.touched);
-
     this.confirm.emit();
   }
 

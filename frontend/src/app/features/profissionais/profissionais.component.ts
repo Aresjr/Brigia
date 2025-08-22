@@ -48,7 +48,6 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
       },
       error: (error) => {
         this.isLoading = false;
-        this.toastr.error('Erro ao carregar profissionais. Por favor, tente novamente.');
       }
     });
   }
@@ -89,11 +88,6 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
           this.carregarProfissionais();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
-        },
-        error: (e) => {
-          const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
-          this.toastr.error(errorMessage, 'Erro ao atualizar profissional');
-          console.error('Erro ao atualizar profissional:', e.error);
         }
       });
     } else {
@@ -102,11 +96,6 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
           this.toastr.success('Profissional cadastrado');
           this.carregarProfissionais();
           this.mostrarFormularioNovo = false;
-        },
-        error: (e) => {
-          const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
-          this.toastr.error(errorMessage, 'Erro ao cadastrar profissional');
-          console.error('Erro ao cadastrar profissional:', e);
         }
       });
     }
