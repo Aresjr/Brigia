@@ -33,4 +33,8 @@ public class Agendamento extends BaseModel {
   @Enumerated(EnumType.ORDINAL)
   @Column(name = "status", length = 15, nullable = false)
   private StatusAgendamento status;
+
+  @Enumerated(EnumType.ORDINAL)
+  @Column(name = "forma_pagamento", length = 15)
+  private FormaPagamento formaPagamento;
 }
