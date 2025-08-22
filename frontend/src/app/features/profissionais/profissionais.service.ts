@@ -1,25 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { ProfissionalResponse, Profissional } from './profissional.interface';
-import { BackendService } from '../../core/backend/backend.service';
+import { BaseService } from '../procedimentos/base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProfissionaisService {
-  constructor(private backend: BackendService) {}
+export class ProfissionaisService extends BaseService<Profissional, ProfissionalResponse> {
 
-  path = '/profissionais';
-
-  listar(): Observable<ProfissionalResponse> {
-    return this.backend.get<ProfissionalResponse>(`${this.path}?size=999`);
-  }
-
-  criar(profissional: Partial<Profissional>): Observable<Profissional> {
-    return this.backend.post<Profissional>(this.path, profissional);
-  }
-
-  atualizar(id: number, profissional: Partial<Profissional>): Observable<Profissional> {
-    return this.backend.put<Profissional>(`${this.path}/${id}`, profissional);
-  }
+  override path = '/profissionais';
 }
