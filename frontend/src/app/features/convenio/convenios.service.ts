@@ -1,18 +1,24 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { BackendService } from '../../core/backend/backend.service';
 import { Convenio, ConvenioResponse } from './convenio.interface';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConveniosService {
-  constructor(private backend: BackendService) {}
+  constructor(private backend: BackendService, private toastr: ToastrService) { }
 
   path = '/convenios';
 
   listar(mostrarExcluidos: boolean = false): Observable<ConvenioResponse> {
-    return this.backend.get<ConvenioResponse>(`${this.path}?mostrarExcluidos=${mostrarExcluidos}&size=999`);
+    return this.backend.get<ConvenioResponse>(`${this.path}?mostrarExcluidos=${mostrarExcluidos}&size=999`).pipe(
+      catchError((error) => {
+        this.toastr.error('Erro ao carregar convênios. Por favor, tente novamente.');
+        return throwError(() => error);
+      })
+    );
   }
 
   criar(convenio: Partial<Convenio>): Observable<Convenio> {

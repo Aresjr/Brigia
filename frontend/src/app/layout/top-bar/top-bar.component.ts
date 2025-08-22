@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class TopBarComponent {
   @Input() title: string = '';
+  @Input() showSearchBar: boolean = true;
   @Output() search = new EventEmitter<void>();
   @Output() addNovo = new EventEmitter<void>();
 
@@ -24,5 +25,5 @@ export class TopBarComponent {
     this.addNovo.emit();
   }
 
-  constructor() { }
+  constructor() {}
 }

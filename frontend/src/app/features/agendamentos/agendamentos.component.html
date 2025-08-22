@@ -1,1 +1,10 @@
-<div class="bg-white p-6 m-6 border">Tela de agendamentos será implementada logo!</div>
+<div class="mt-4 rounded-lg">
+  <app-top-bar (addNovo)="onAddNovo()" [showSearchBar]=false title="Agendamentos"></app-top-bar>
+</div>
+
+@if (exibeNovoAgendamento) {
+  <app-agendamento-novo
+    (confirm)="agendar()"
+    (cancel)="fecharNovoAgendamento()">
+  </app-agendamento-novo>
+}

@@ -13,6 +13,7 @@ module.exports = {
     "bg-orange-100",
     "bg-yellow-100",
     "bg-red-100",
+    "border-red-500",
     "bg-white"
   ],
   theme: {

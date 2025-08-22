@@ -1,0 +1,45 @@
+<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+  <div
+    class="bg-white rounded-lg shadow-lg p-6 w-[48rem]"
+    (click)="$event.stopPropagation()" >
+
+    <h2 class="text-lg font-semibold mb-4">Novo Agendamento</h2>
+
+    <form [formGroup]="agendamentoForm" class="inline">
+      <div class="flex">
+        <div class="mr-4 w-[24rem]" >
+          <label class="block font-medium text-gray-700">Paciente</label>
+          <ng-select formControlName="pacienteId" required class="mt-1 block w-full rounded-md" placeholder="Selecione o paciente"
+             [ngClass]="{'border border-red-500': agendamentoForm.get('pacienteId')?.invalid}"
+              (change)="selectPaciente($event)" [items]="this.pacientes" bindValue="id" bindLabel="nome" >
+          </ng-select>
+        </div>
+
+        <div class="w-[24rem]">
+          <label class="block font-medium text-gray-700">Convênio</label>
+          <ng-select formControlName="convenioId" required readonly class="mt-1 block w-full rounded-md"
+               [ngClass]="{'border border-red-500': agendamentoForm.get('convenioId')?.invalid}" >
+            @for (convenio of this.convenios; track convenio.id) {
+              <ng-option [value]="convenio.id">{{convenio.nome}}</ng-option>
+            }
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3 mt-4">
+        <button
+          class="px-4 py-1 rounded-lg border border-gray-300 hover:bg-gray-100"
+          (click)="onCancel()" >
+          Cancelar
+        </button>
+        <button type="submit"
+          class="px-4 py-1 rounded-lg bg-green-500 text-white hover:bg-green-600"
+          (click)="onConfirm()" >
+          Agendar
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>

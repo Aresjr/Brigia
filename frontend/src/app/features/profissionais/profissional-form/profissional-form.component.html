@@ -50,11 +50,11 @@
           <div class="w-52">
             <div>
               <label class="block font-medium text-gray-700">Sexo</label>
-              <select formControlName="sexo"
-                      class="mt-1 p-1 block w-full rounded-md border border-gray-300">
-                <option [ngValue]="null">Selecione</option>
-                <option *ngFor="let sexo of SEXOS" [value]="sexo.sigla">{{ sexo.descricao }}</option>
-              </select>
+              <ng-select formControlName="sexo" class="mt-1 block w-full rounded-md" placeholder="Selecione o sexo">
+                @for (sexo of SEXOS; track sexo.sigla) {
+                  <ng-option [value]="sexo.sigla">{{sexo.descricao}}</ng-option>
+                }
+              </ng-select>
             </div>
           </div>
           <div class="w-56">
@@ -89,7 +89,7 @@
         <div>
           <label class="block font-medium text-gray-700">Especialidades</label>
           <ng-select [multiple]="true" formControlName="especialidades" required
-                     class="mt-1 p-1 block w-full rounded-md border border-gray-300"
+                     class="mt-1 block w-full rounded-md border border-gray-300"
                      [ngClass]="{'border-red-500': profissionalForm.get('especialidades')?.invalid && profissionalForm.get('especialidades')?.touched}" >
             @for (especialidade of this.listaEspecialidades; track especialidade.id) {
               <ng-option [value]="especialidade.id">{{especialidade.nome}}</ng-option>

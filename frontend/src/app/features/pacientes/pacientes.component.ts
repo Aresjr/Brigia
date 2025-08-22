@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PacientesService } from './pacientes.service';
+import { PacienteService } from './paciente.service';
 import { Paciente } from './paciente.interface';
 import { PacienteDetalhesComponent } from './paciente-detalhes/paciente-detalhes.component';
 import { PacienteFormComponent } from './paciente-form/paciente-form.component';
@@ -31,7 +31,7 @@ import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 })
 export class PacientesComponent extends BaseListComponent<Paciente> implements OnInit {
 
-  constructor(private pacientesService: PacientesService, private toastr: ToastrService) {
+  constructor(private pacientesService: PacienteService, private toastr: ToastrService) {
     super();
   }
 
@@ -50,7 +50,6 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
       },
       error: (error) => {
         this.isLoading = false;
-        this.toastr.error('Erro ao carregar pacientes. Por favor, tente novamente.');
       }
     });
   }

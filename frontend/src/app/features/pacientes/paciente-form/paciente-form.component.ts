@@ -10,11 +10,12 @@ import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-dir
 import { ConveniosService } from '../../convenio/convenios.service';
 import { Convenio } from '../../convenio/convenio.interface';
 import { LucideAngularModule } from 'lucide-angular';
+import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-paciente-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, LucideAngularModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, LucideAngularModule, NgOptionComponent, NgSelectComponent],
   templateUrl: 'paciente-form.component.html'
 })
 export class PacienteFormComponent implements OnInit {
@@ -54,12 +55,13 @@ export class PacienteFormComponent implements OnInit {
   ngOnInit() {
     if (this.paciente) {
       this.pacienteForm.patchValue(this.paciente);
+      this.pacienteForm.get('convenioId')?.setValue(this.paciente.convenio?.id);
     }
 
     this.carregarConvenios();
   }
 
-  private carregarConvenios() { //TODO - mostrar toast quando der erro
+  private carregarConvenios() {
     this.conveniosService.listar().subscribe(
       response => {
         this.convenios = response.items;
