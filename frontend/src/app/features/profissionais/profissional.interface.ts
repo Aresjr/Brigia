@@ -1,4 +1,4 @@
-import { Entidade } from '../shared/entidade.interface';
+import { Entidade, EntidadeResponse } from '../shared/entidade.interface';
 import { Especialidade } from '../especialidade/especialidade.interface';
 
 export interface Profissional extends Entidade {
@@ -12,9 +12,6 @@ export interface Profissional extends Entidade {
     especialidades?: Especialidade[];
 }
 
-export interface ProfissionalResponse {
+export interface ProfissionalResponse extends EntidadeResponse {
     items: Profissional[];
-    currentPage: number;
-    totalPages: number;
-    totalRecords: number;
 }

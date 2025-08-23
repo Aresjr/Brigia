@@ -48,14 +48,19 @@ export class PacienteFormComponent implements OnInit {
       cidade: [null],
       uf: [null, [Validators.minLength(2), Validators.maxLength(2)]],
       corIdentificacao: [null],
-      convenioId: [null]
+      convenioId: [null],
+      empresaId: [null]
     });
   }
 
   ngOnInit() {
     if (this.paciente) {
       this.pacienteForm.patchValue(this.paciente);
-      this.pacienteForm.get('convenioId')?.setValue(this.paciente.convenio?.id);
+      if (this.paciente.convenio) {
+        this.pacienteForm.patchValue({
+          convenioId: this.paciente.convenio.id
+        });
+      }
     }
 
     this.carregarConvenios();

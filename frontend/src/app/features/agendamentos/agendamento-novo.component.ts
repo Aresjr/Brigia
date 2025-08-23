@@ -5,6 +5,10 @@ import { PacienteService } from '../pacientes/paciente.service';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { ConveniosService } from '../convenio/convenios.service';
 import { Convenio } from '../convenio/convenio.interface';
+import { Profissional } from '../profissionais/profissional.interface';
+import { Especialidade } from '../especialidade/especialidade.interface';
+import { EspecialidadeService } from '../especialidade/especialidade.service';
+import { ProfissionaisService } from '../profissionais/profissionais.service';
 
 @Component({
   selector: 'app-agendamento-novo',
@@ -22,10 +26,13 @@ export class AgendamentoNovoComponent implements OnInit {
   agendamentoForm: FormGroup;
   pacientes: Paciente[] = [];
   convenios: Convenio[] = [];
+  especialidades: Especialidade[] = [];
+  profissionais: Profissional[] = [];
   pacienteSelecionado?: Paciente;
 
   constructor(private fb: FormBuilder, private pacientesService: PacienteService,
-              private conveniosService: ConveniosService) {
+              private conveniosService: ConveniosService, private especialidadeService: EspecialidadeService,
+              private profissionaisService: ProfissionaisService) {
     this.agendamentoForm = this.fb.group({
       pacienteId: [null, Validators.required],
       convenioId: [null, Validators.required],
@@ -38,6 +45,8 @@ export class AgendamentoNovoComponent implements OnInit {
   ngOnInit(): void {
     this.carregarPacientes();
     this.carregarConvenios();
+    this.carregarEspecialidades();
+    this.carregarProfissionais();
     this.agendamentoForm = this.fb.group({
       pacienteId: [null, Validators.required],
       convenioId: [null, Validators.required],
@@ -63,6 +72,22 @@ export class AgendamentoNovoComponent implements OnInit {
     });
   }
 
+  carregarEspecialidades(): void {
+    this.especialidadeService.listar().subscribe({
+      next: (response) => {
+        this.especialidades = response.items;
+      }
+    });
+  }
+
+  carregarProfissionais(): void {
+    this.profissionaisService.listar().subscribe({
+      next: (response) => {
+        this.profissionais = response.items;
+      }
+    });
+  }
+
   onConfirm() {
     this.confirm.emit();
   }
@@ -73,5 +98,10 @@ export class AgendamentoNovoComponent implements OnInit {
 
   selectPaciente($event: Paciente) {
     this.pacienteSelecionado = $event;
+    if (this.pacienteSelecionado.convenio) {
+      this.agendamentoForm.patchValue({
+        convenioId: this.pacienteSelecionado.convenio.id
+      });
+    }
   }
 }

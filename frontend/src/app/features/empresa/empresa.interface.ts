@@ -1,4 +1,4 @@
-import { Entidade } from '../shared/entidade.interface';
+import { Entidade, EntidadeResponse } from '../shared/entidade.interface';
 
 export interface Empresa extends Entidade {
     observacao: string | null;
@@ -14,9 +14,6 @@ export interface EmpresaPlano extends Entidade {
     corFundo: string | null;
 }
 
-export interface EmpresaResponse {
+export interface EmpresaResponse extends EntidadeResponse {
     items: Empresa[];
-    currentPage: number;
-    totalPages: number;
-    totalRecords: number;
 }

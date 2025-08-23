@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Profissional } from '../profissional.interface';
 import { NgxMaskDirective } from 'ngx-mask';
-import { ToastrService } from 'ngx-toastr';
 import { SEXOS } from '../../../core/constans';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
 import { EspecialidadeService } from '../../especialidade/especialidade.service';
@@ -28,7 +27,6 @@ export class ProfissionalFormComponent implements OnInit {
   listaEspecialidades: Especialidade[] = [];
 
   constructor(private fb: FormBuilder,
-              private toastr: ToastrService,
               private especialidadeService: EspecialidadeService) {
     this.profissionalForm = this.fb.group({
       nome: [null, Validators.required],

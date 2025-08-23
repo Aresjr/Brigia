@@ -69,34 +69,7 @@ public class Paciente extends BaseModel {
     @JoinColumn(name = "convenio_id")
     private Convenio convenio;
 
-    public Paciente(
-            String nome,
-            String email,
-            String cpf,
-            LocalDate dataNascimento,
-            Character sexo,
-            String celular,
-            String urlImagem,
-            String corIdentificacao,
-            String cep,
-            String rua,
-            String complemento,
-            String bairro,
-            String cidade,
-            String uf) {
-        this.nome = nome;
-        this.email = email;
-        this.cpf = cpf;
-        this.dataNascimento = dataNascimento;
-        this.sexo = sexo;
-        this.celular = celular;
-        this.urlImagem = urlImagem;
-        this.corIdentificacao = corIdentificacao;
-        this.cep = cep;
-        this.rua = rua;
-        this.complemento = complemento;
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.uf = uf;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empresa_id")
+    private Empresa empresa;
 }

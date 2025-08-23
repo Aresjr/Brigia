@@ -1,4 +1,4 @@
-import { Entidade } from '../shared/entidade.interface';
+import { Entidade, EntidadeResponse } from '../shared/entidade.interface';
 import { Convenio } from '../convenio/convenio.interface';
 
 export interface Paciente extends Entidade {
@@ -20,9 +20,6 @@ export interface Paciente extends Entidade {
     convenio: Convenio | null;
 }
 
-export interface PacienteResponse {
+export interface PacienteResponse extends EntidadeResponse {
     items: Paciente[];
-    currentPage: number;
-    totalPages: number;
-    totalRecords: number;
 }

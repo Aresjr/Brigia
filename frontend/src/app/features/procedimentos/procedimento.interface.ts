@@ -1,4 +1,4 @@
-import { Entidade } from '../shared/entidade.interface';
+import { Entidade, EntidadeResponse } from '../shared/entidade.interface';
 import { Especialidade } from '../especialidade/especialidade.interface';
 import { Convenio } from '../convenio/convenio.interface';
 import { Empresa } from '../empresa/empresa.interface';
@@ -11,11 +11,8 @@ export interface Procedimento extends Entidade {
     observacoes: string | null;
 }
 
-export interface ProcedimentoResponse {
+export interface ProcedimentoResponse extends EntidadeResponse {
     items: Procedimento[];
-    currentPage: number;
-    totalPages: number;
-    totalRecords: number;
 }
 
 export interface PrecoProcedimentoConvenio {

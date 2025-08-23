@@ -1,21 +1,22 @@
-import { catchError, Observable, shareReplay, throwError } from 'rxjs';
+import { catchError, map, Observable, shareReplay, throwError } from 'rxjs';
 import { BackendService } from '../../core/backend/backend.service';
 import { ToastrService } from 'ngx-toastr';
 import { Injectable } from '@angular/core';
+import { Entidade, EntidadeResponse } from '../shared/entidade.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BaseService<Y, T> {
+export class BaseService<T extends Entidade, Y extends EntidadeResponse> {
 
   constructor(protected backend: BackendService, protected toastr: ToastrService) {}
 
   path = '/';
-  cache$: Observable<T> | null = null;
+  cache$: Observable<Y> | null = null;
 
-  listar(mostrarExcluidos: boolean = false): Observable<T> {
+  listar(mostrarExcluidos: boolean = false): Observable<Y> {
     if (!this.cache$) {
-      this.cache$ = this.backend.get<T>(`${this.path}?mostrarExcluidos=${mostrarExcluidos}&size=999`).pipe(
+      this.cache$ = this.backend.get<Y>(`${this.path}?mostrarExcluidos=true&size=999`).pipe(
         shareReplay(1),
         catchError((error) => {
           this.toastr.error('Erro ao carregar os registros. Por favor, tente novamente.');
@@ -23,12 +24,26 @@ export class BaseService<Y, T> {
         })
       );
     }
+
+    if (!mostrarExcluidos) {
+      return this.listarNaoExcluidos();
+    }
+
     return this.cache$;
   }
 
-  criar(registro: Partial<Y>): Observable<Y> {
+  listarNaoExcluidos(): Observable<Y> {
+    return this.cache$!.pipe(
+      map(response => ({
+        ...response,
+        items: response.items.filter(item => !item.excluido)
+      }))
+    );
+  }
+
+  criar(registro: Partial<T>): Observable<T> {
     this.limparCache();
-    return this.backend.post<Y>(this.path, registro).pipe(
+    return this.backend.post<T>(this.path, registro).pipe(
       catchError((e) => {
         const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
         this.toastr.error(errorMessage, 'Erro ao cadastrar o registro.');
@@ -37,9 +52,9 @@ export class BaseService<Y, T> {
     );
   }
 
-  atualizar(id: number, procedimento: Partial<Y>): Observable<Y> {
+  atualizar(id: number, procedimento: Partial<T>): Observable<T> {
     this.limparCache();
-    return this.backend.put<Y>(`${this.path}/${id}`, procedimento).pipe(
+    return this.backend.put<T>(`${this.path}/${id}`, procedimento).pipe(
       catchError((e) => {
         const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
         this.toastr.error(errorMessage, 'Erro ao atualizar o registro.');

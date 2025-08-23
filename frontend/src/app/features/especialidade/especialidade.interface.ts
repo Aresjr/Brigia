@@ -1,12 +1,9 @@
-import { Entidade } from '../shared/entidade.interface';
+import { Entidade, EntidadeResponse } from '../shared/entidade.interface';
 
 export interface Especialidade extends Entidade {
     descricao: string | null;
 }
 
-export interface EspecialidadesResponse {
+export interface EspecialidadesResponse extends EntidadeResponse {
     items: Especialidade[];
-    currentPage: number;
-    totalPages: number;
-    totalRecords: number;
 }
