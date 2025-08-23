@@ -46,11 +46,10 @@
               <td class="w-32 px-6 py-2 text-sm">{{procedimento.codigo}}</td>
               <td class="w-72 px-6 py-2 text-sm">{{procedimento.especialidade.nome}}</td>
               <td class="px-6 py-2 text-sm">{{procedimento.observacoes}}</td>
-              <td class="px-4 whitespace-nowrap w-28 text-right">
-                <div>
-                  <lucide-icon name="ellipsis-vertical" class="h-5 hover:bg-white hover:cursor-pointer" (click)="toggleDropdown($event, procedimento.id)" />
+              <td class="p-1 whitespace-nowrap text-right hover:bg-gray-300 hover:cursor-pointer" (click)="toggleDropdown($event, procedimento.id)">
+                  <lucide-icon name="ellipsis-vertical" class="h-5"  />
                   @if (dropdownAberto === procedimento.id) {
-                    <div class="absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                    <div class="absolute -ml-12 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                       <div class="py-1 flex flex-col">
                         <a *ngIf="!procedimento.excluido"
                            (click)="editar($event, procedimento)"
@@ -70,7 +69,6 @@
                       </div>
                     </div>
                   }
-                </div>
               </td>
             </tr>
           }

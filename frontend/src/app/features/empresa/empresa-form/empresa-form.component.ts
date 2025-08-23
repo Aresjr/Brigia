@@ -26,7 +26,7 @@ export class EmpresaFormComponent implements OnInit {
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
-      descricao: [null]
+      observacao: [null]
     });
   }
 

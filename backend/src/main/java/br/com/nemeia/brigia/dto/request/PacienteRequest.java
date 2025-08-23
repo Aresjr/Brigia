@@ -9,7 +9,8 @@ public record PacienteRequest(
         String email,
         @Nullable String cpf,
         @NotNull LocalDate dataNascimento,
-        @Nullable @Pattern(regexp = "^[MFO]$", message = "Sexo deve ser 'M', 'F' ou 'O'")
+        @Nullable @Size(min = 1, max = 1)
+        @Pattern(regexp = "^[MFO]$", message = "Sexo deve ser 'M', 'F' ou 'O'")
                 String sexo,
         @Pattern(
                         regexp = "^\\d{11}$",
@@ -36,4 +37,5 @@ public record PacienteRequest(
                         max = 2,
                         message = "Estado deve ser representado por sigla de 2 letras")
                 String uf,
-        Long convenioId) {}
+        Long convenioId,
+        Long empresaId) {}

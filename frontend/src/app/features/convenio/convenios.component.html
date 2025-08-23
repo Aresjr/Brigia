@@ -36,11 +36,10 @@
                                 }
                             </td>
                             <td class="px-6 py-2">{{convenio.descricao}}</td>
-                            <td class="px-4 py-2 whitespace-nowrap w-28 text-right">
-                                <div>
-                                  <lucide-icon name="ellipsis-vertical" class="h-5 hover:bg-white hover:cursor-pointer" (click)="toggleDropdown($event, convenio.id)" />
+                            <td class="p-1 whitespace-nowrap text-right hover:bg-gray-300 hover:cursor-pointer" (click)="toggleDropdown($event, convenio.id)">
+                                  <lucide-icon name="ellipsis-vertical" class="h-5"/>
                                     @if (dropdownAberto === convenio.id) {
-                                        <div class="absolute -ml-12 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                                        <div class="absolute -ml-12 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                                             <div class="py-1 flex flex-col">
                                                 <a *ngIf="!convenio.excluido"
                                                     (click)="editar($event, convenio)"
@@ -60,7 +59,6 @@
                                             </div>
                                         </div>
                                     }
-                                </div>
                             </td>
                         </tr>
                     }

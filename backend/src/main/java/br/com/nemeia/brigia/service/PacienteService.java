@@ -4,6 +4,7 @@ import br.com.nemeia.brigia.dto.request.PacienteRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.PacienteMapper;
 import br.com.nemeia.brigia.model.Convenio;
+import br.com.nemeia.brigia.model.Empresa;
 import br.com.nemeia.brigia.model.Paciente;
 import br.com.nemeia.brigia.repository.PacienteRepository;
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ public class PacienteService {
     private final PacienteRepository repository;
     private final PacienteMapper mapper;
     private final ConvenioService convenioService;
+    private final EmpresaService empresaService;
 
     public Page<Paciente> getPaged(int page, int size) {
         Sort sort = Sort.by(Sort.Direction.ASC, "excluido").and(Sort.by(Sort.Direction.DESC, "id"));
@@ -47,15 +49,18 @@ public class PacienteService {
 
     public Paciente createPaciente(PacienteRequest request) {
         Paciente paciente = mapper.toEntity(request);
-        return savePaciente(paciente, request.convenioId());
+        return savePaciente(paciente, request.convenioId(), request.empresaId());
     }
 
-    private Paciente savePaciente(Paciente paciente, Long idConvenio) {
+    private Paciente savePaciente(Paciente paciente, Long idConvenio, Long idEmpresa) {
         if (idConvenio != null) {
             Convenio convenio = convenioService.getById(idConvenio);
             paciente.setConvenio(convenio);
         }
-
+        if (idEmpresa != null) {
+            Empresa empresa = empresaService.getById(idEmpresa);
+            paciente.setEmpresa(empresa);
+        }
         return repository.save(paciente);
     }
 
@@ -63,6 +68,6 @@ public class PacienteService {
         getPacienteById(id);
         Paciente paciente = mapper.toEntity(request);
         paciente.setId(id);
-        return savePaciente(paciente, request.convenioId());
+        return savePaciente(paciente, request.convenioId(), request.empresaId());
     }
 }

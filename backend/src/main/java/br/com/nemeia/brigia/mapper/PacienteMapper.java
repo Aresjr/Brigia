@@ -5,6 +5,8 @@ import br.com.nemeia.brigia.dto.response.PacienteResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.model.Paciente;
 import java.util.List;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -13,13 +15,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class PacienteMapper {
 
+    private final ObjectMapper objectMapper;
     private final ConvenioMapper convenioMapper;
+    private final EmpresaMapper empresaMapper;
 
     public PacienteResponse toResponse(Paciente paciente) {
         if (paciente == null) {
             return null;
         }
 
+        //maybe migrate to a MapStruct
         return new PacienteResponse(
                 paciente.getId(),
                 paciente.getNome(),
@@ -39,6 +44,7 @@ public class PacienteMapper {
                 paciente.getCidade(),
                 paciente.getUf(),
                 convenioMapper.toResponse(paciente.getConvenio()),
+                empresaMapper.toResponse(paciente.getEmpresa()),
                 paciente.getCriadoEm(),
                 paciente.getExcluido());
     }
@@ -48,21 +54,7 @@ public class PacienteMapper {
             return null;
         }
 
-        return new Paciente(
-                request.nome(),
-                request.email(),
-                request.cpf(),
-                request.dataNascimento(),
-                request.sexo() != null ? request.sexo().charAt(0) : null,
-                request.celular(),
-                request.urlImagem(),
-                request.corIdentificacao(),
-                request.cep(),
-                request.rua(),
-                request.complemento(),
-                request.bairro(),
-                request.cidade(),
-                request.uf());
+        return objectMapper.convertValue(request, Paciente.class);
     }
 
     public PagedResponse<PacienteResponse> toPagedResponse(Page<Paciente> paged) {

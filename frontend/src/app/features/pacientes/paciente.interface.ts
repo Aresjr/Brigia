@@ -1,5 +1,6 @@
 import { Entidade, EntidadeResponse } from '../shared/entidade.interface';
 import { Convenio } from '../convenio/convenio.interface';
+import { Empresa } from '../empresa/empresa.interface';
 
 export interface Paciente extends Entidade {
     email: string | null;
@@ -18,6 +19,7 @@ export interface Paciente extends Entidade {
     cidade: string | null;
     uf: string | null;
     convenio: Convenio | null;
+    empresa: Empresa | null;
 }
 
 export interface PacienteResponse extends EntidadeResponse {

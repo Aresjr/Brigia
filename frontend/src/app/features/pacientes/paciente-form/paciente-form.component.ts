@@ -11,6 +11,8 @@ import { ConveniosService } from '../../convenio/convenios.service';
 import { Convenio } from '../../convenio/convenio.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { EmpresasService } from '../../empresa/empresas.service';
+import { Empresa } from '../../empresa/empresa.interface';
 
 @Component({
   selector: 'app-paciente-form',
@@ -27,49 +29,55 @@ export class PacienteFormComponent implements OnInit {
   estados: ({ sigla: string; nome: string })[] = ESTADOS;
   protected readonly SEXOS = SEXOS;
   convenios: Convenio[] = [];
+  empresas: Empresa[] = [];
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private toastr: ToastrService,
-    private conveniosService: ConveniosService
+    private conveniosService: ConveniosService,
+    private empresasService: EmpresasService
   ) {
     this.pacienteForm = this.fb.group({
       nome: [null, Validators.required],
-      email: [null],
-      cpf: [null],
+      email: [null], cpf: [null],
       dataNascimento: [null, Validators.required],
-      sexo: [null],
-      celular: [null],
-      cep: [null],
-      rua: [null],
-      complemento: [null],
-      bairro: [null],
+      sexo: [null], celular: [null], cep: [null],
+      rua: [null], complemento: [null], bairro: [null],
       cidade: [null],
       uf: [null, [Validators.minLength(2), Validators.maxLength(2)]],
-      corIdentificacao: [null],
-      convenioId: [null],
-      empresaId: [null]
+      corIdentificacao: [null], convenioId: [null], empresaId: [null]
     });
   }
 
   ngOnInit() {
-    if (this.paciente) {
-      this.pacienteForm.patchValue(this.paciente);
-      if (this.paciente.convenio) {
-        this.pacienteForm.patchValue({
-          convenioId: this.paciente.convenio.id
-        });
-      }
-    }
-
     this.carregarConvenios();
+    this.carregarEmpresas();
+
+    if (this.paciente) {
+      console.log(this.paciente);
+      this.pacienteForm.patchValue(this.paciente);
+    }
   }
 
   private carregarConvenios() {
     this.conveniosService.listar().subscribe(
       response => {
         this.convenios = response.items;
+        this.pacienteForm.patchValue({
+          convenioId: this.paciente?.convenio?.id,
+        });
+      }
+    );
+  }
+
+  private carregarEmpresas() {
+    this.empresasService.listar().subscribe(
+      response => {
+        this.empresas = response.items;
+        this.pacienteForm.patchValue({
+          empresaId: this.paciente?.empresa?.id,
+        });
       }
     );
   }
