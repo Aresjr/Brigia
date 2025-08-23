@@ -1,24 +1,34 @@
 <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
   <div
-    class="bg-white rounded-lg shadow-lg p-6 w-[48rem]"
+    class="bg-white rounded-lg shadow-lg p-6 w-[60rem]"
     (click)="$event.stopPropagation()" >
 
     <h2 class="text-lg font-semibold mb-4">Novo Agendamento</h2>
 
-    <form [formGroup]="agendamentoForm" class="inline">
+    <form [formGroup]="form" class="inline">
       <div class="flex">
-        <div class="mr-4 w-[24rem]" >
+        <div class="w-[8rem] mr-4" >
+          <label class="block font-medium text-gray-700">Data</label>
+          <input type="date" formControlName="data" required
+                 class="mt-1 p-1 block w-full rounded-md border border-gray-300"
+                 [ngClass]="{'border-red-500': form.get('data')?.invalid && form.get('data')?.touched}" >
+        </div>
+        <div class="w-[4rem] mr-4">
+          <label class="block font-medium text-gray-700">Horário</label>
+          <input type="text" formControlName="hora" maxlength="5"
+                 mask="00:00" emptyToNull class="mt-1 p-[5px] block w-full rounded-md border border-gray-300"
+                 [ngClass]="{'border-red-500': form.get('hora')?.invalid && form.get('hora')?.touched}">
+        </div>
+        <div class="w-[26rem] mr-4" >
           <label class="block font-medium text-gray-700">Paciente</label>
           <ng-select formControlName="pacienteId" required class="mt-1 block w-full rounded-md" placeholder="Selecione o paciente"
-             [ngClass]="{'border border-red-500': agendamentoForm.get('pacienteId')?.invalid}"
-              (change)="selectPaciente($event)" [items]="this.pacientes" bindValue="id" bindLabel="nome" >
+                     [ngClass]="{'border border-red-500': form.get('pacienteId')?.invalid && form.get('pacienteId')?.touched}"
+                     (change)="selectPaciente($event)" [items]="this.pacientes" bindValue="id" bindLabel="nome" >
           </ng-select>
         </div>
-
-        <div class="w-[24rem]">
+        <div class="w-[16rem]">
           <label class="block font-medium text-gray-700">Convênio</label>
-          <ng-select formControlName="convenioId" required class="mt-1 block w-full rounded-md"
-               [ngClass]="{'border border-red-500': agendamentoForm.get('convenioId')?.invalid}" >
+          <ng-select formControlName="convenioId" required class="mt-1 block w-full rounded-md" >
             @for (convenio of this.convenios; track convenio.id) {
               <ng-option [value]="convenio.id">{{convenio.nome}}</ng-option>
             }
@@ -26,7 +36,31 @@
         </div>
       </div>
 
-      <div class="flex justify-end gap-3 mt-4">
+      <div class="flex mt-2">
+        <div class="mr-4 w-[24rem]" >
+          <label class="block font-medium text-gray-700">Empresa</label>
+          <ng-select formControlName="empresaId" class="mt-1 block w-full rounded-md" id="empresaId" name="empresaId" >
+            @for (empresa of this.empresas; track empresa.id) {
+              <ng-option [value]="empresa.id">{{empresa.nome}}</ng-option>
+            }
+          </ng-select>
+        </div>
+
+      </div>
+
+      <div class="flex mt-2">
+        <div class="mr-4 w-[24rem]" >
+          <label class="block font-medium text-gray-700">Especialidade</label>
+          <ng-select formControlName="especialidadeId" required class="mt-1 block w-full rounded-md" id="especialidadeId" name="especialidadeId" >
+            @for (especialidade of this.especialidades; track especialidade.id) {
+              <ng-option [value]="especialidade.id">{{especialidade.nome}}</ng-option>
+            }
+          </ng-select>
+        </div>
+
+      </div>
+
+      <div class="flex justify-end gap-3 mt-6">
         <button
           class="px-4 py-1 rounded-lg border border-gray-300 hover:bg-gray-100"
           (click)="onCancel()" >
@@ -38,7 +72,6 @@
           Agendar
         </button>
       </div>
-
     </form>
 
   </div>

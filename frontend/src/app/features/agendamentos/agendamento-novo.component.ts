@@ -9,6 +9,11 @@ import { Profissional } from '../profissionais/profissional.interface';
 import { Especialidade } from '../especialidade/especialidade.interface';
 import { EspecialidadeService } from '../especialidade/especialidade.service';
 import { ProfissionaisService } from '../profissionais/profissionais.service';
+import { NgClass } from '@angular/common';
+import { EmptyToNullDirective } from '../../core/directives/empty-to-null-directive';
+import { NgxMaskDirective } from 'ngx-mask';
+import { Empresa } from '../empresa/empresa.interface';
+import { EmpresasService } from '../empresa/empresas.service';
 
 @Component({
   selector: 'app-agendamento-novo',
@@ -16,26 +21,33 @@ import { ProfissionaisService } from '../profissionais/profissionais.service';
   imports: [
     NgOptionComponent,
     NgSelectComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgClass,
+    EmptyToNullDirective,
+    NgxMaskDirective
   ]
 })
 export class AgendamentoNovoComponent implements OnInit {
   @Output() confirm = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
 
-  agendamentoForm: FormGroup;
+  form: FormGroup;
   pacientes: Paciente[] = [];
   convenios: Convenio[] = [];
   especialidades: Especialidade[] = [];
   profissionais: Profissional[] = [];
+  empresas: Empresa[] = [];
   pacienteSelecionado?: Paciente;
 
   constructor(private fb: FormBuilder, private pacientesService: PacienteService,
               private conveniosService: ConveniosService, private especialidadeService: EspecialidadeService,
-              private profissionaisService: ProfissionaisService) {
-    this.agendamentoForm = this.fb.group({
+              private profissionaisService: ProfissionaisService, private empresasService: EmpresasService) {
+    this.form = this.fb.group({
       pacienteId: [null, Validators.required],
       convenioId: [null, Validators.required],
+      empresaId: [null, Validators.required],
+      especialidadeId: [null, Validators.required],
+      profissionalId: [null, Validators.required],
       data: ['', Validators.required],
       hora: ['', Validators.required],
       observacoes: ['']
@@ -43,17 +55,20 @@ export class AgendamentoNovoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const hoje = new Date().toISOString().split('T')[0];
+    this.form = this.fb.group({
+      pacienteId: [null, Validators.required],
+      convenioId: [null, Validators.required],
+      data: [hoje, Validators.required],
+      hora: ['', Validators.required],
+      observacoes: ['']
+    });
+
     this.carregarPacientes();
     this.carregarConvenios();
     this.carregarEspecialidades();
     this.carregarProfissionais();
-    this.agendamentoForm = this.fb.group({
-      pacienteId: [null, Validators.required],
-      convenioId: [null, Validators.required],
-      data: ['', Validators.required],
-      hora: ['', Validators.required],
-      observacoes: ['']
-    });
+    this.carregarEmpresas();
   }
 
   carregarPacientes(): void {
@@ -88,6 +103,14 @@ export class AgendamentoNovoComponent implements OnInit {
     });
   }
 
+  carregarEmpresas(): void {
+    this.empresasService.listar().subscribe({
+      next: (response) => {
+        this.empresas = response.items;
+      }
+    });
+  }
+
   onConfirm() {
     this.confirm.emit();
   }
@@ -99,9 +122,10 @@ export class AgendamentoNovoComponent implements OnInit {
   selectPaciente($event: Paciente) {
     this.pacienteSelecionado = $event;
     if (this.pacienteSelecionado.convenio) {
-      this.agendamentoForm.patchValue({
-        convenioId: this.pacienteSelecionado.convenio.id
-      });
+      // this.form.patchValue({
+      //   convenioId: this.pacienteSelecionado.convenio.id,
+      //   empresaId: this.pacienteSelecionado.empresa?.id
+      // });
     }
   }
 }
