@@ -18,9 +18,9 @@ export class BaseService<T extends Entidade, Y extends EntidadeResponse> {
     if (!this.cache$) {
       this.cache$ = this.backend.get<Y>(`${this.path}?mostrarExcluidos=true&size=999`).pipe(
         shareReplay(1),
-        catchError((error) => {
+        catchError((e) => {
           this.toastr.error('Erro ao carregar os registros. Por favor, tente novamente.');
-          return throwError(() => error);
+          return throwError(() => e);
         })
       );
     }
@@ -66,9 +66,10 @@ export class BaseService<T extends Entidade, Y extends EntidadeResponse> {
   excluir(id: number): Observable<void> {
     this.limparCache();
     return this.backend.delete<void>(`${this.path}/${id}`).pipe(
-      catchError((error) => {
-        this.toastr.error('Erro ao excluir o registro. Por favor, tente novamente.');
-        return throwError(() => error);
+      catchError((e) => {
+        const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
+        this.toastr.error(errorMessage, 'Erro ao excluir o registro. Por favor, tente novamente.');
+        return throwError(() => e);
       })
     );
   }
@@ -76,9 +77,10 @@ export class BaseService<T extends Entidade, Y extends EntidadeResponse> {
   restaurar(id: number): Observable<void> {
     this.limparCache();
     return this.backend.patch<void>(`${this.path}/${id}/restaurar`, null).pipe(
-      catchError((error) => {
-        this.toastr.error('Erro ao restaurar o registro. Por favor, tente novamente.');
-        return throwError(() => error);
+      catchError((e) => {
+        const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
+        this.toastr.error(errorMessage, 'Erro ao restaurar o registro. Por favor, tente novamente.');
+        return throwError(() => e);
       })
     );
   }

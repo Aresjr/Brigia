@@ -95,7 +95,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
     } else {
       this.pacientesService.criar(paciente).subscribe({
         next: () => {
-          this.toastr.success('Registro cadastrado');
+          this.toastr.success('Paciente cadastrado');
           this.carregarPacientes();
           this.mostrarFormularioNovo = false;
         }
