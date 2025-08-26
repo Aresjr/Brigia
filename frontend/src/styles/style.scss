@@ -1,3 +1,11 @@
 .ng-select .ng-select-container  {
   border:1px;
 }
+
+.cal-week-view .cal-time-events .cal-event {
+  max-width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  margin: 1px;
+  padding: 0 5px;
+  line-height: 25px;
+}

@@ -1,58 +1,97 @@
-<!--<div class="flex items-center justify-between bg-white">-->
+<div class="bg-white p-4 rounded-md">
+  <div class="flex items-center justify-between gap-4 mb-4">
+    <div class="flex items-center">
+      <button
+        class="px-4 py-1 bg-white border border-gray-400 rounded-md hover:bg-gray-100 mr-2 text-sm"
+        mwlCalendarToday
+        [(viewDate)]="currentDate" >
+        Hoje
+      </button>
+      <button
+        class="p-1 bg-white border border-gray-400 rounded-full hover:bg-gray-100 mr-2"
+        mwlCalendarPreviousView
+        [view]="view"
+        [(viewDate)]="currentDate"
+        (viewDateChange)="closeOpenMonthViewDay()" >
+        <lucide-icon name="chevron-left" class="w-5 h-5"></lucide-icon>
+      </button>
+      <button
+        class="p-1 bg-white border border-gray-400 rounded-full hover:bg-gray-100"
+        mwlCalendarNextView
+        [view]="view"
+        [(viewDate)]="currentDate"
+        (viewDateChange)="closeOpenMonthViewDay()" >
+        <lucide-icon name="chevron-right" class="w-5 h-5"></lucide-icon>
+      </button>
+    </div>
 
-<!--  &lt;!&ndash; Botões de navegação &ndash;&gt;-->
-<!--  <div class="flex items-center gap-1">-->
-<!--    <button class="px-3 py-1 rounded-full hover:bg-gray-200 border border-gray-300 hover:bg-gray-100 bg-white">-->
-<!--      Hoje-->
-<!--    </button>-->
-<!--    <button class="px-2 py-1 rounded-full hover:bg-gray-200">-->
-<!--      ←-->
-<!--    </button>-->
-<!--    <button class="px-2 py-1 rounded-full hover:bg-gray-200">-->
-<!--      →-->
-<!--    </button>-->
-<!--  </div>-->
+    <div class="text-2xl">{{ currentDate | calendarDate:(view + 'ViewTitle'):'pt-BR' }}</div>
 
-<!--  &lt;!&ndash; Data centralizada &ndash;&gt;-->
-<!--  <div class="text-lg font-medium text-gray-700">-->
-<!--&lt;!&ndash;    {{ getCurrentDate() | date:'dd / MM / yyyy' }}&ndash;&gt;-->
-<!--  </div>-->
+    <div class="text-white">
+      <button
+        class="px-4 py-1 rounded-l-md hover:bg-blue-600 active:bg-blue-700"
+        (click)="setView(CalendarView.Month)"
+        [class.active]="view === CalendarView.Month"
+        [ngClass]="view === CalendarView.Month ? 'bg-blue-700' : 'bg-blue-500'" >
+        Mês
+      </button>
+      <button
+        class="px-4 py-1 hover:bg-blue-600 active:bg-blue-700"
+        (click)="setView(CalendarView.Week)"
+        [class.active]="view === CalendarView.Week"
+        [ngClass]="view === CalendarView.Week ? 'bg-blue-700' : 'bg-blue-500'" >
+        Semana
+      </button>
+      <button
+        class="px-4 py-1 rounded-r-md hover:bg-blue-600 active:bg-blue-700"
+        (click)="setView(CalendarView.Day)"
+        [class.active]="view === CalendarView.Day"
+        [ngClass]="view === CalendarView.Day ? 'bg-blue-700' : 'bg-blue-500'" >
+        Dia
+      </button>
+    </div>
+  </div>
 
-<!--  &lt;!&ndash; Botões de visão &ndash;&gt;-->
-<!--  <div class="flex items-center gap-2">-->
-<!--    <button class="px-3 py-1 text-sm rounded hover:bg-gray-200">-->
-<!--      Dia-->
-<!--    </button>-->
-<!--    <button class="px-3 py-1 text-sm rounded hover:bg-gray-200">-->
-<!--      Semana-->
-<!--    </button>-->
-<!--    <button class="px-3 py-1 text-sm rounded hover:bg-gray-200">-->
-<!--      Mês-->
-<!--    </button>-->
-<!--  </div>-->
-
-<!--</div>-->
-
-<div class="text-center mb-2">
-  <button (click)="setView(CalendarView.Month)">Mês</button>
-  <button (click)="setView(CalendarView.Week)">Semana</button>
-  <button (click)="setView(CalendarView.Day)">Dia</button>
+  <div [ngSwitch]="view">
+    <mwl-calendar-month-view
+      *ngSwitchCase="CalendarView.Month"
+      [viewDate]="currentDate"
+      [events]="events"
+      [refresh]="refresh"
+      [activeDayIsOpen]="activeDayIsOpen"
+      (dayClicked)="dayClicked($event.day)"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)"
+      [locale]="'pt-BR'"
+    >
+    </mwl-calendar-month-view>
+    <mwl-calendar-week-view
+      *ngSwitchCase="CalendarView.Week"
+      [viewDate]="currentDate"
+      [events]="events"
+      [refresh]="refresh"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)"
+      (hourSegmentClicked)="handleHour($event)"
+      [hourSegments]="hourSegments"
+      [dayStartHour]="0"
+      [dayEndHour]="24"
+      [locale]="'pt-BR'"
+    >
+    </mwl-calendar-week-view>
+    <mwl-calendar-day-view
+      *ngSwitchCase="CalendarView.Day"
+      [viewDate]="currentDate"
+      [events]="events"
+      [refresh]="refresh"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)"
+      (hourSegmentClicked)="handleHour($event)"
+      [hourSegments]="hourSegments"
+      [dayStartHour]="0"
+      [dayEndHour]="24"
+      [locale]="'pt-BR'"
+    >
+    </mwl-calendar-day-view>
+  </div>
 </div>
-
-<mwl-calendar-month-view
-  [viewDate]="viewDate"
-  [events]="events"
-  (dayClicked)="dayClicked($event)"
-></mwl-calendar-month-view>
-
-<mwl-calendar-week-view
-  *ngIf="view === CalendarView.Week"
-  [viewDate]="viewDate"
-  [events]="events"
-></mwl-calendar-week-view>
-
-<mwl-calendar-day-view
-  *ngIf="view === CalendarView.Day"
-  [viewDate]="viewDate"
-  [events]="events"
-></mwl-calendar-day-view>
