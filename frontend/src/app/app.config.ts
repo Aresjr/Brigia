@@ -11,6 +11,8 @@ import { Home, User, Calendar, LogIn, UserPlus, Stethoscope, ChevronRight, Messa
   Microscope, Menu, EllipsisVertical, X
  } from 'lucide-angular/src/icons';
 import { provideNgxMask } from 'ngx-mask';
+import { CalendarUtils, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/moment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -33,6 +35,8 @@ export const appConfig: ApplicationConfig = {
         HeartHandshake, Receipt, Mail, Lock, Building2, Microscope, Menu, EllipsisVertical, X
        })
     ),
-    provideNgxMask()
+    provideNgxMask(),
+    CalendarUtils,
+    { provide: DateAdapter, useFactory: adapterFactory }
   ]
 };

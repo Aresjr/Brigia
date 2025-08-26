@@ -1,36 +1,58 @@
-<div class="flex items-center justify-between bg-white">
+<!--<div class="flex items-center justify-between bg-white">-->
 
-  <!-- Botões de navegação -->
-  <div class="flex items-center gap-1">
-    <button (click)="setToday()" class="px-3 py-1 rounded-full hover:bg-gray-200 border border-gray-300 hover:bg-gray-100 bg-white">
-      Hoje
-    </button>
-    <button (click)="movePrev()" class="px-2 py-1 rounded-full hover:bg-gray-200">
-      ←
-    </button>
-    <button (click)="moveNext()" class="px-2 py-1 rounded-full hover:bg-gray-200">
-      →
-    </button>
-  </div>
+<!--  &lt;!&ndash; Botões de navegação &ndash;&gt;-->
+<!--  <div class="flex items-center gap-1">-->
+<!--    <button class="px-3 py-1 rounded-full hover:bg-gray-200 border border-gray-300 hover:bg-gray-100 bg-white">-->
+<!--      Hoje-->
+<!--    </button>-->
+<!--    <button class="px-2 py-1 rounded-full hover:bg-gray-200">-->
+<!--      ←-->
+<!--    </button>-->
+<!--    <button class="px-2 py-1 rounded-full hover:bg-gray-200">-->
+<!--      →-->
+<!--    </button>-->
+<!--  </div>-->
 
-  <!-- Data centralizada -->
-  <div class="text-lg font-medium text-gray-700">
-    {{ getCurrentDate() | date:'dd / MM / yyyy' }}
-  </div>
+<!--  &lt;!&ndash; Data centralizada &ndash;&gt;-->
+<!--  <div class="text-lg font-medium text-gray-700">-->
+<!--&lt;!&ndash;    {{ getCurrentDate() | date:'dd / MM / yyyy' }}&ndash;&gt;-->
+<!--  </div>-->
 
-  <!-- Botões de visão -->
-  <div class="flex items-center gap-2">
-    <button (click)="changeView('day')" class="px-3 py-1 text-sm rounded hover:bg-gray-200">
-      Dia
-    </button>
-    <button (click)="changeView('week')" class="px-3 py-1 text-sm rounded hover:bg-gray-200">
-      Semana
-    </button>
-    <button (click)="changeView('month')" class="px-3 py-1 text-sm rounded hover:bg-gray-200">
-      Mês
-    </button>
-  </div>
+<!--  &lt;!&ndash; Botões de visão &ndash;&gt;-->
+<!--  <div class="flex items-center gap-2">-->
+<!--    <button class="px-3 py-1 text-sm rounded hover:bg-gray-200">-->
+<!--      Dia-->
+<!--    </button>-->
+<!--    <button class="px-3 py-1 text-sm rounded hover:bg-gray-200">-->
+<!--      Semana-->
+<!--    </button>-->
+<!--    <button class="px-3 py-1 text-sm rounded hover:bg-gray-200">-->
+<!--      Mês-->
+<!--    </button>-->
+<!--  </div>-->
 
+<!--</div>-->
+
+<div class="text-center mb-2">
+  <button (click)="setView(CalendarView.Month)">Mês</button>
+  <button (click)="setView(CalendarView.Week)">Semana</button>
+  <button (click)="setView(CalendarView.Day)">Dia</button>
 </div>
 
-<div #calendar class="h-[48rem] border-md"></div>
+<mwl-calendar-month-view
+  [viewDate]="viewDate"
+  [events]="events"
+  (dayClicked)="dayClicked($event)"
+></mwl-calendar-month-view>
+
+<mwl-calendar-week-view
+  *ngIf="view === CalendarView.Week"
+  [viewDate]="viewDate"
+  [events]="events"
+></mwl-calendar-week-view>
+
+<mwl-calendar-day-view
+  *ngIf="view === CalendarView.Day"
+  [viewDate]="viewDate"
+  [events]="events"
+></mwl-calendar-day-view>

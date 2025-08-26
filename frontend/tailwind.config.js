@@ -17,7 +17,15 @@ module.exports = {
     "bg-white"
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        custom: [
+          "'Twemoji Country Flags'",
+          '"Noto Sans CJK KR"',
+          'sans-serif',
+        ],
+      },
+    },
   },
   plugins: [],
 }

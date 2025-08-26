@@ -1,72 +1,38 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import Calendar from '@toast-ui/calendar';
-import { DatePipe } from '@angular/common';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { CalendarModule, CalendarEvent, CalendarView } from 'angular-calendar';
+import { MonthViewDay } from 'calendar-utils';
+import { startOfDay } from 'date-fns';
 
 @Component({
   selector: 'app-calendario',
-  templateUrl: './calendario.component.html',
+  standalone: true,
   imports: [
-    DatePipe
-  ]
+    CommonModule,
+    CalendarModule,
+  ],
+  templateUrl: './calendario.component.html'
 })
-export class CalendarioComponent implements OnInit {
-  @ViewChild('calendar', { static: true }) calendarEl!: ElementRef;
-  calendar!: typeof Calendar;
-  currentDate = new Date();
+export class CalendarioComponent {
+  view: CalendarView = CalendarView.Month; // inicia no mês
+  CalendarView = CalendarView;
 
-  ngOnInit() {
-    this.calendar = new Calendar(this.calendarEl.nativeElement, {
-      defaultView: 'day',
-      taskView: false,
-      scheduleView: false,
-      useDetailPopup: true,
-      useFormPopup: true,
-      calendars: [
-        { id: '1', name: 'Consultas', backgroundColor: '#03a9f4' },
-        { id: '2', name: 'Retornos', backgroundColor: '#f44336' }
-      ],
-      timezone: { zones: [{ timezoneName: 'America/Sao_Paulo' }] }
-    });
+  viewDate: Date = new Date(); // dia atual
 
-    this.calendar.createEvents([
-      {
-        id: '1',
-        calendarId: '1',
-        title: 'Consulta - João',
-        start: '2025-08-25T09:00:00',
-        end: '2025-08-25T10:00:00',
-        category: 'time'
-      },
-      {
-        id: '2',
-        calendarId: '2',
-        title: 'Retorno - Maria',
-        start: '2025-08-25T11:00:00',
-        end: '2025-08-25T11:30:00',
-        category: 'time'
-      }
-    ]);
+  events: CalendarEvent[] = [
+    {
+      start: startOfDay(new Date()),
+      title: 'Evento de hoje',
+      allDay: true,
+    },
+  ];
+
+  setView(view: CalendarView) {
+    this.view = view;
   }
 
-  setToday() {
-    this.calendar.today();
-  }
-
-  movePrev() {
-    this.calendar.prev();
-  }
-
-  moveNext() {
-    this.calendar.next();
-    console.log(this.calendar);
-    console.log(this.calendar.getDate());
-  }
-
-  changeView(view: 'day' | 'week' | 'month') {
-    this.calendar.changeView(view);
-  }
-
-  getCurrentDate() {
-    return this.calendar.getDate();
+  dayClicked({ day }: { day: MonthViewDay<any> }): void {
+    this.viewDate = day.date;
+    this.view = CalendarView.Day;
   }
 }
