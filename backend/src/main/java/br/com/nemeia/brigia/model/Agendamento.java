@@ -28,6 +28,10 @@ public class Agendamento extends BaseModel {
     private LocalTime hora;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "unidade_id")
+    private Unidade unidade;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "especialidade_id")
     private Especialidade especialidade;
 
@@ -52,4 +56,7 @@ public class Agendamento extends BaseModel {
 
     @Column(name = "desconto")
     private BigDecimal desconto;
+
+    @Column(name = "duracao")
+    private Integer duracao;
 }

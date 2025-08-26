@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Paciente } from '../pacientes/paciente.interface';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { PacienteService } from '../pacientes/paciente.service';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { ConveniosService } from '../convenio/convenios.service';
@@ -9,7 +9,7 @@ import { Profissional } from '../profissionais/profissional.interface';
 import { Especialidade } from '../especialidade/especialidade.interface';
 import { EspecialidadeService } from '../especialidade/especialidade.service';
 import { ProfissionaisService } from '../profissionais/profissionais.service';
-import { NgClass, NgIf } from '@angular/common';
+import { DatePipe, NgClass, NgIf } from '@angular/common';
 import { EmptyToNullDirective } from '../../core/directives/empty-to-null-directive';
 import { NgxMaskDirective } from 'ngx-mask';
 import { Empresa } from '../empresa/empresa.interface';
@@ -19,55 +19,55 @@ import { ToastrService } from 'ngx-toastr';
 import { LucideAngularModule } from 'lucide-angular';
 import { Procedimento } from '../procedimentos/procedimento.interface';
 import { ProcedimentosService } from '../procedimentos/procedimentos.service';
+import { FormComponent } from '../shared/form.component';
+import { AgendamentoRequest } from './agendamento.interface';
+import { IForm } from '../shared/form.interface';
 
 @Component({
   selector: 'app-agendamento-novo',
   templateUrl: './agendamento-novo.component.html',
   imports: [
-    NgOptionComponent,
-    NgSelectComponent,
-    ReactiveFormsModule,
-    NgClass,
-    EmptyToNullDirective,
-    NgxMaskDirective,
-    PacienteFormComponent,
-    NgNotFoundTemplateDirective,
-    LucideAngularModule,
-    NgIf
+    NgOptionComponent, NgSelectComponent,
+    ReactiveFormsModule, NgClass,
+    EmptyToNullDirective, NgxMaskDirective,
+    PacienteFormComponent, NgNotFoundTemplateDirective,
+    LucideAngularModule, DatePipe, NgIf
   ]
 })
-export class AgendamentoNovoComponent implements OnInit {
-  @Output() confirm = new EventEmitter<void>();
+export class AgendamentoNovoComponent extends FormComponent implements OnInit {
+  @Output() confirm = new EventEmitter<Partial<AgendamentoRequest>>();
   @Output() cancel = new EventEmitter<void>();
 
-  form: FormGroup;
   pacientes: Paciente[] = [];
   convenios: Convenio[] = [];
   especialidades: Especialidade[] = [];
   profissionais: Profissional[] = [];
   empresas: Empresa[] = [];
   procedimentos: Procedimento[] = [];
-  pacienteSelecionado?: Paciente;
+  pacienteSelecionado?: Paciente | null;
   empresaSelecionada?: Empresa | null;
   especialidadeSelecionada?: Especialidade | null;
   mostrarFormularioNovoPaciente: boolean = false;
 
-  constructor(private fb: FormBuilder, private pacientesService: PacienteService, private toastr: ToastrService,
+  constructor(protected override fb: FormBuilder, private pacientesService: PacienteService, private toastr: ToastrService,
               private conveniosService: ConveniosService, private especialidadeService: EspecialidadeService,
               private profissionaisService: ProfissionaisService, private empresasService: EmpresasService,
               private procedimentosService: ProcedimentosService) {
+    super(fb);
+
     const hoje = new Date().toISOString().split('T')[0];
-    this.form = this.fb.group({
-      pacienteId: [null, Validators.required],
-      convenioId: [null, Validators.required],
-      empresaId: [null, Validators.required],
-      especialidadeId: [null, Validators.required],
-      profissionalId: [null, Validators.required],
-      procedimentoId: [null, Validators.required],
-      data: [hoje, Validators.required],
-      hora: ['', Validators.required],
-      observacoes: ['']
-    });
+    const form: IForm<AgendamentoRequest> = {
+      pacienteId: [null, {nonNullable: true}],
+      data: [hoje, {nonNullable: true}],
+      hora: [null, {nonNullable: true}],
+      profissionalId: [null, {nonNullable: true}],
+      especialidadeId: [null, {nonNullable: true}],
+      procedimentoId: [null],
+      convenioId: [null],
+      empresaId: [null],
+      observacoes: [null]
+    };
+    this.form = this.fb.group(form);
   }
 
   ngOnInit(): void {
@@ -128,58 +128,51 @@ export class AgendamentoNovoComponent implements OnInit {
   }
 
   onConfirm() {
-    this.confirm.emit();
+    if (this.form.valid) {
+      this.confirm.emit(this.form.value);
+    } else {
+      Object.keys(this.form.controls).forEach(field => {
+        const control = this.form.get(field);
+        control?.markAsTouched({ onlySelf: true });
+      });
+    }
   }
 
   onCancel() {
     this.cancel.emit();
   }
 
-  selectPaciente(paciente: Paciente) {
-    this.pacienteSelecionado = paciente;
+  selectPaciente(id: number | null) {
+    this.pacienteSelecionado = id ? [...this.pacientes.filter(e => e.id === id)].at(0) : null;
+
     this.form.patchValue({
-      pacienteId: this.pacienteSelecionado.id,
-      convenioId: this.pacienteSelecionado.convenio?.id,
-      empresaId: this.pacienteSelecionado.empresa?.id
+      pacienteId: this.pacienteSelecionado ? this.pacienteSelecionado.id : null,
+      convenioId: this.pacienteSelecionado?.convenio ? this.pacienteSelecionado.convenio.id : null,
+      empresaId: this.pacienteSelecionado?.empresa ? this.pacienteSelecionado.empresa.id : null
     });
-    this.selectEmpresa(this.pacienteSelecionado?.empresa?.id);
+    this.selectEmpresa(this.pacienteSelecionado?.empresa);
   }
 
-  selectEmpresa(id: number | undefined) {
-    if (id) {
-      this.empresaSelecionada = [...this.empresas.filter(e => e.id === id)].at(0);
-    } else {
-      this.empresaSelecionada = null;
-    }
+  selectEmpresa(empresa: Empresa | null | undefined) {
+    this.empresaSelecionada = empresa;
   }
 
-  onSalvarNovoPaciente(paciente: Partial<Paciente>) {
+  salvarNovoPaciente(paciente: Partial<Paciente>) {
     this.pacientesService.criar(paciente).subscribe({
       next: (paciente) => {
         this.toastr.success('Paciente cadastrado');
         this.carregarPacientes();
         this.mostrarFormularioNovoPaciente = false;
-        this.selectPaciente(paciente);
+        this.selectPaciente(paciente.id);
       }
     });
   }
 
-  profissionaisFiltrados(): Profissional[] {
-    if (this.especialidadeSelecionada != null) {
-      return [...this.profissionais.filter(e => e.especialidades?.includes(<Especialidade>this.especialidadeSelecionada))];
-    }
-    return [...this.profissionais];
-  }
-
-  onCancelarNovo() {
+  cancelarNovoPaciente() {
     this.mostrarFormularioNovoPaciente = false;
   }
 
-  selectEspecialidade(id: any) {
-    if (id) {
-      this.especialidadeSelecionada = [...this.especialidades.filter(e => e.id === id)].at(0);
-    } else {
-      this.empresaSelecionada = null;
-    }
+  selectEspecialidade(especialidade: Especialidade) {
+    this.especialidadeSelecionada = especialidade;
   }
 }

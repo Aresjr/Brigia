@@ -117,7 +117,7 @@ export abstract class BaseListComponent<T extends object> {
     this.itemSelecionado = null;
   }
 
-  onCancelarNovo() {
+  cancelarNovo() {
     this.mostrarFormularioNovo = false;
     this.itemEdicao = null;
   }

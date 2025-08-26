@@ -45,8 +45,7 @@ export class BaseService<T extends Entidade, Y extends EntidadeResponse> {
     this.limparCache();
     return this.backend.post<T>(this.path, registro).pipe(
       catchError((e) => {
-        const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
-        this.toastr.error(errorMessage, 'Erro ao cadastrar o registro.');
+        this.toastr.error('Erro ao cadastrar o registro.');
         return throwError(() => e);
       })
     );

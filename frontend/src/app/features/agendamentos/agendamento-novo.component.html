@@ -1,30 +1,39 @@
-<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-51">
-  <div class="bg-white rounded-lg shadow-lg p-6 w-[58rem]"
+<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-51 text-sm">
+  <div class="bg-white rounded-md shadow-lg p-6 w-[58rem]"
     (click)="$event.stopPropagation()" >
 
-    <h2 class="text-lg font-semibold mb-4">Novo Agendamento  </h2>
+    <div class="flex justify-between items-center">
+      <h2 class="text-lg font-semibold">Novo Agendamento</h2>
 
-    <form [formGroup]="form" class="inline">
+      <button class="text-gray-500 hover:text-gray-700" (click)="onCancel()">
+        <lucide-icon name="x" class="right-0 inline w-6 h-6"/>
+      </button>
+    </div>
+
+    <form [formGroup]="form" class="mt-6">
 
       <!-- LINHA 1 - DATA / HORÁRIO / PACIENTE / CONVÊNIO -->
       <div class="flex">
         <div class="w-[8rem] mr-4" >
-          <label class="block font-medium text-gray-700">Data</label>
-          <input type="date" formControlName="data" required
-                 class="mt-1 p-1 block w-full rounded-md border border-gray-300"
-                 [ngClass]="{'border-red-500': form.get('data')?.invalid && form.get('data')?.touched}" >
+          <label class="block font-medium text-gray-700" for="data">Data</label>
+          <input type="date" formControlName="data" required id="data"
+                 class="mt-1 p-1.5 block w-full rounded-md border border-gray-300"
+                 [ngClass]="validationClasses('data')" >
         </div>
         <div class="w-[4rem] mr-4">
-          <label class="block font-medium text-gray-700">Horário</label>
-          <input type="text" formControlName="hora" maxlength="5"
-                 mask="00:00" emptyToNull class="mt-1 p-[5px] block w-full rounded-md border border-gray-300"
-                 [ngClass]="{'border-red-500': form.get('hora')?.invalid && form.get('hora')?.touched}">
+          <label class="block font-medium text-gray-700" for="hora">Horário</label>
+          <input type="text" formControlName="hora" maxlength="5" id="hora" required
+                 mask="00:00" emptyToNull class="mt-1 p-[7px] block w-full rounded-md border border-gray-300"
+                 [ngClass]="validationClasses('hora')">
         </div>
-        <div class="w-[24rem] mr-4" >
-          <label class="block font-medium text-gray-700">Paciente</label>
-          <ng-select formControlName="pacienteId" required class="mt-1 block w-full rounded-md" placeholder="Selecione o paciente"
-                     [ngClass]="{'border border-red-500': form.get('pacienteId')?.invalid && form.get('pacienteId')?.touched}"
-                     (change)="selectPaciente($event)" [items]="this.pacientes" bindValue="id" bindLabel="nome" >
+        <div class="w-[25rem] mr-4" >
+          <label class="block font-medium text-gray-700" for="pacienteId">Paciente</label>
+          <ng-select formControlName="pacienteId" class="mt-1 block w-full rounded-md"
+                     [ngClass]="validationClasses('pacienteId')" labelForId="pacienteId" placeholder="Selecione o paciente"
+                     (change)="selectPaciente($event)" (clear)="selectPaciente(null)" required >
+            @for(paciente of this.pacientes; track paciente.id) {
+              <ng-option [value]="paciente.id" class="b-0">{{ paciente.nome }} - {{ paciente.dataNascimento | date:'dd/MM/yyyy' }}</ng-option>
+            }
             <ng-template ng-notfound-tmp>
               <div class="p-2 flex items-center justify-between gap-4">
                 <div class="p-2 text-sm">
@@ -38,51 +47,45 @@
             </ng-template>
           </ng-select>
         </div>
-        <div class="w-[16rem]">
-          <label class="block font-medium text-gray-700">Convênio</label>
-          <ng-select formControlName="convenioId" required class="mt-1 block w-full rounded-md" >
-            @for (convenio of this.convenios; track convenio.id) {
-              <ng-option [value]="convenio.id">{{convenio.nome}}</ng-option>
-            }
-          </ng-select>
+        <div class="w-[15rem]">
+          <label class="block font-medium text-gray-700" for="convenioId">Convênio</label>
+          <ng-select formControlName="convenioId" class="mt-1 block w-full rounded-md"
+                     [ngClass]="validationClasses('convenioId')"
+                     [items]="this.convenios" bindValue="id" bindLabel="nome" labelForId="convenioId"  />
         </div>
       </div>
 
       <!-- LINHA 2 - EMPRESA / PLANO EMPRESA -->
       <div class="flex mt-2">
         <div class="mr-4 w-[30rem]" >
-          <label class="block font-medium text-gray-700">Empresa</label>
-          <ng-select formControlName="empresaId" class="mt-1 block w-full rounded-md" (change)="selectEmpresa($event)" (clear)="selectEmpresa(undefined)" >
-            @for (empresa of this.empresas; track empresa.id) {
-              <ng-option [value]="empresa.id">{{empresa.nome}}</ng-option>
-            }
-          </ng-select>
+          <label class="block font-medium text-gray-700" for="empresaId">Empresa</label>
+          <ng-select formControlName="empresaId" class="mt-1 block w-full rounded-md" [ngClass]="validationClasses('empresaId')"
+                     [items]="this.empresas" bindValue="id" bindLabel="nome" labelForId="empresaId"
+                     (change)="selectEmpresa($event)" (clear)="selectEmpresa(null)" />
+          <div class="py-2 px-4 text-xs italic rounded-b-md" *ngIf="empresaSelecionada"
+               [ngClass]="empresaSelecionada.plano?.corFundo">
+            {{ empresaSelecionada.plano?.nome }}
+          </div>
         </div>
 
         <div class="w-[24rem]" >
-          <label class="block font-medium text-gray-700" *ngIf="empresaSelecionada?.plano != null" >Plano Empresa</label>
-          <div class="py-2 px-4 mt-1 text-sm italic rounded-md" [ngClass]="empresaSelecionada?.plano?.corFundo">{{ empresaSelecionada?.plano?.nome }}</div>
+          <label class="block font-medium text-gray-700" for="especialidadeId">Especialidade</label>
+          <ng-select formControlName="especialidadeId" required class="mt-1 block w-full rounded-md"
+                     labelForId="especialidadeId" [ngClass]="validationClasses('especialidadeId')"
+                     [items]="this.especialidades" bindValue="id" bindLabel="nome" (change)="selectEspecialidade($event)" />
         </div>
       </div>
 
       <!-- LINHA 3 - ESPECIALIDADE / PROCEDIMENTO -->
       <div class="flex mt-2">
         <div class="mr-4 w-[26rem]" >
-          <label class="block font-medium text-gray-700">Especialidade</label>
-          <ng-select formControlName="especialidadeId" required class="mt-1 block w-full rounded-md" (change)="selectEspecialidade($event)">
-            @for (especialidade of this.especialidades; track especialidade.id) {
-              <ng-option [value]="especialidade.id">{{especialidade.nome}}</ng-option>
-            }
-          </ng-select>
         </div>
 
         <div class="w-[28rem]" >
-          <label class="block font-medium text-gray-700">Procedimento</label>
-          <ng-select formControlName="procedimentoId" class="mt-1 block w-full rounded-md"> <!-- FILTRAR POR ESPECIALIDADE -->
-            @for (procedimento of this.procedimentos; track procedimento.id) {
-              <ng-option [value]="procedimento.id">{{procedimento.nome}}</ng-option>
-            }
-          </ng-select>
+          <label class="block font-medium text-gray-700" for="procedimentoId">Procedimento</label>
+          <ng-select formControlName="procedimentoId" class="mt-1 block w-full rounded-md"
+                     [ngClass]="validationClasses('procedimentoId')"
+                     [items]="this.procedimentos" bindValue="id" bindLabel="nome" labelForId="procedimentoId" />
         </div>
 
       </div>
@@ -90,29 +93,26 @@
       <!-- LINHA 4 - PROFISSIONAL -->
       <div class="flex mt-2">
         <div class="mr-4 w-[26rem]" >
-          <label class="block font-medium text-gray-700">Profissional</label>
-          <ng-select formControlName="profissionalId" required class="mt-1 block w-full rounded-md">
-            @for (profissional of this.profissionaisFiltrados(); track profissional.id) {
-              <ng-option [value]="profissional.id">{{profissional.nome}}</ng-option>
-            }
-          </ng-select>
+          <label class="block font-medium text-gray-700" for="profissionalId">Profissional</label>
+          <ng-select formControlName="profissionalId" required class="mt-1 block w-full rounded-md"
+                     [ngClass]="validationClasses('profissionalId')"
+                     [items]="this.profissionais" bindValue="id" bindLabel="nome" labelForId="profissionalId" />
         </div>
 
         <div class="w-[28rem]" >
           <label class="block font-medium text-gray-700">Outros campos</label>
-
         </div>
 
       </div>
 
       <div class="flex justify-end gap-3 mt-6">
         <button
-          class="px-4 py-1 rounded-lg border border-gray-300 hover:bg-gray-100"
+          class="px-4 py-1 rounded-md border border-gray-300 hover:bg-gray-100"
           (click)="onCancel()" >
           Cancelar
         </button>
         <button type="submit"
-          class="px-4 py-1 rounded-lg bg-green-500 text-white hover:bg-green-600"
+          class="px-4 py-1 rounded-md bg-green-500 text-white hover:bg-green-600"
           (click)="onConfirm()" >
           Agendar
         </button>
@@ -125,7 +125,7 @@
 
 @if (mostrarFormularioNovoPaciente) {
   <app-paciente-form
-    (save)="onSalvarNovoPaciente($event)"
-    (cancel)="onCancelarNovo()"
+    (save)="salvarNovoPaciente($event)"
+    (cancel)="cancelarNovoPaciente()"
   ></app-paciente-form>
 }

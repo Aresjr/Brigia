@@ -1,5 +1,7 @@
 @use "ngx-toastr/toastr";
 @use "@ng-select/ng-select/themes/default.theme.css";
+@use "@toast-ui/calendar/dist/toastui-calendar.min.css";
+@use "./styles/style";
 
 @tailwind base;
 @tailwind components;

@@ -81,7 +81,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
       paciente.celular?.includes(searchTerm);
   }
 
-  onSalvarNovoPaciente(paciente: Partial<Paciente>) {
+  salvarNovoPaciente(paciente: Partial<Paciente>) {
     if (this.itemEdicao) {
       const id = this.itemEdicao.id;
       this.pacientesService.atualizar(id, paciente).subscribe({

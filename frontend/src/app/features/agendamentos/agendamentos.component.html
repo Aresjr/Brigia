@@ -1,10 +1,12 @@
-<div class="mt-4 rounded-lg">
+<div class="mt-4 rounded-md">
   <app-top-bar (addNovo)="onAddNovo()" [showSearchBar]=false title="Agendamentos"></app-top-bar>
 </div>
 
+<app-calendario></app-calendario>
+
 @if (exibeNovoAgendamento) {
   <app-agendamento-novo
-    (confirm)="agendar()"
+    (confirm)="agendar($event)"
     (cancel)="fecharNovoAgendamento()">
   </app-agendamento-novo>
 }
