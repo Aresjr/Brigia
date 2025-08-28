@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class UserAuth implements UserDetails {
 
     private Long id;
+    private Long unidadeId;
     private List<String> roles;
 
     @Override

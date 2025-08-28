@@ -22,19 +22,6 @@ import localePt from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
 
 registerLocaleData(localePt);
-registerLocaleData(localePt, 'pt');
-
-moment.locale('pt');
-moment.updateLocale('pt', {
-  longDateFormat: {
-    LT: 'HH:mm', // usado para horários curtos
-    LTS: 'HH:mm:ss',
-    L: '',
-    LL: '',
-    LLL: '',
-    LLLL: ''
-  }
-});
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);

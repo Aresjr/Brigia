@@ -16,12 +16,12 @@ import { Empresa } from '../empresa/empresa.interface';
 import { EmpresasService } from '../empresa/empresas.service';
 import { PacienteFormComponent } from '../pacientes/paciente-form/paciente-form.component';
 import { ToastrService } from 'ngx-toastr';
-import { LucideAngularModule } from 'lucide-angular';
 import { Procedimento } from '../procedimentos/procedimento.interface';
 import { ProcedimentosService } from '../procedimentos/procedimentos.service';
 import { FormComponent } from '../shared/form.component';
 import { AgendamentoRequest } from './agendamento.interface';
 import { IForm } from '../shared/form.interface';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-agendamento-novo',
@@ -31,7 +31,7 @@ import { IForm } from '../shared/form.interface';
     ReactiveFormsModule, NgClass,
     EmptyToNullDirective, NgxMaskDirective,
     PacienteFormComponent, NgNotFoundTemplateDirective,
-    LucideAngularModule, DatePipe, NgIf
+    DatePipe, NgIf, LucideAngularModule
   ]
 })
 export class AgendamentoNovoComponent extends FormComponent implements OnInit {

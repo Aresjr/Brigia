@@ -25,7 +25,7 @@ export class AgendaDiariaComponent implements OnInit {
       {
         start: startDate,
         end: endDate,
-        title: 'João da Silva - Ortopedista | Dr César',
+        title: 'João da Silva | 11:00-13:00<br/>Dr César | ORTOPEDIA',
         color: { primary: '#1e90ff', secondary: '#D1E8FF'}
       }
     );
@@ -36,7 +36,7 @@ export class AgendaDiariaComponent implements OnInit {
       {
         start: startDate,
         end: endDate,
-        title: 'João da Silva - Ortopedista | Dr César',
+        title: 'João da Silva | 12:00-12:45<br/>Dr César | ORTOPEDIA',
         color: { primary: '#1e90ff', secondary: '#D1E8FF'}
       }
     );
@@ -47,7 +47,117 @@ export class AgendaDiariaComponent implements OnInit {
       {
         start: startDate,
         end: endDate,
-        title: 'João da Silva - Ortopedista | Dr César',
+        title: 'João da Silva | 12:00-12:45<br/>Dr César | ORTOPEDIA',
+        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
+      }
+    );
+
+    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 14);
+    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 15);
+    this.events.push(
+      {
+        start: startDate,
+        end: endDate,
+        title: 'João da Silva | 14:00-15:00<br/>Dr César | ORTOPEDIA',
+        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
+      }
+    );
+
+    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12);
+    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 30);
+    this.events.push(
+      {
+        start: startDate,
+        end: endDate,
+        title: 'João da Silva | 12:00-12:45<br/>Dr César | ORTOPEDIA',
+        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
+      }
+    );
+
+    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12);
+    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 45);
+    this.events.push(
+      {
+        start: startDate,
+        end: endDate,
+        title: 'João da Silva | 12:00-12:45<br/>Dr César | ORTOPEDIA',
+        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
+      }
+    );
+
+    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 14);
+    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 15);
+    this.events.push(
+      {
+        start: startDate,
+        end: endDate,
+        title: 'João da Silva | 14:00-15:00<br/>Dr César | ORTOPEDIA',
+        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
+      }
+    );
+
+    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12);
+    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 30);
+    this.events.push(
+      {
+        start: startDate,
+        end: endDate,
+        title: 'João da Silva | 12:00-12:45<br/>Dr César | ORTOPEDIA',
+        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
+      }
+    );
+
+    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12);
+    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 45);
+    this.events.push(
+      {
+        start: startDate,
+        end: endDate,
+        title: 'João da Silva | 12:00-12:45<br/>Dr César | ORTOPEDIA',
+        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
+      }
+    );
+
+    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 14);
+    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 15);
+    this.events.push(
+      {
+        start: startDate,
+        end: endDate,
+        title: 'João da Silva | 14:00-15:00<br/>Dr César | ORTOPEDIA',
+        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
+      }
+    );
+
+    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12);
+    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 30);
+    this.events.push(
+      {
+        start: startDate,
+        end: endDate,
+        title: 'João da Silva | 12:00-12:45<br/>Dr César | ORTOPEDIA',
+        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
+      }
+    );
+
+    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12);
+    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 45);
+    this.events.push(
+      {
+        start: startDate,
+        end: endDate,
+        title: 'João da Silva | 12:00-12:45<br/>Dr César | ORTOPEDIA',
+        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
+      }
+    );
+
+    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 14);
+    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 15);
+    this.events.push(
+      {
+        start: startDate,
+        end: endDate,
+        title: 'João da Silva | 14:00-15:00<br/>Dr César | ORTOPEDIA',
         color: { primary: '#1e90ff', secondary: '#D1E8FF'}
       }
     );

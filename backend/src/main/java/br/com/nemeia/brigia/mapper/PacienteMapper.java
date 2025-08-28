@@ -24,7 +24,6 @@ public class PacienteMapper {
             return null;
         }
 
-        //maybe migrate to a MapStruct
         return new PacienteResponse(
                 paciente.getId(),
                 paciente.getNome(),
@@ -53,7 +52,6 @@ public class PacienteMapper {
         if (request == null) {
             return null;
         }
-
         return objectMapper.convertValue(request, Paciente.class);
     }
 

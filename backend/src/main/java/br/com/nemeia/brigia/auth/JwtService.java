@@ -23,6 +23,7 @@ public class JwtService {
                 .setSubject(usuario.getEmail())
                 .claim("id", usuario.getId())
                 .claim("roles", usuario.getRoles())
+                .claim("unidadeId", usuario.getUnidade().getId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)

@@ -84,6 +84,8 @@ export class CalendarioComponent implements OnInit, AfterViewInit {
 
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
+    this.cdr.detectChanges();
+    this.formatTimeLabels();
   }
 
   formatTimeLabels() {
@@ -91,13 +93,21 @@ export class CalendarioComponent implements OnInit, AfterViewInit {
 
     timeLabels.forEach((label: HTMLElement) => {
       let textContent = label.textContent || '';
-      const hourMatch = textContent.match(/(\d+)/);
+      const timeMatch = textContent.match(/(\d+)\s*(am|pm)/i);
 
-      console.log(hourMatch);
+      if (timeMatch && timeMatch[1] && timeMatch[2]) {
+        let hour = parseInt(timeMatch[1], 10);
+        const ampm = timeMatch[2].toLowerCase();
 
-      if (hourMatch && hourMatch[1]) {
-        let hour = hourMatch[1];
-        let newContent = `${hour}:00`;
+        if (ampm === 'pm' && hour !== 12) {
+          hour += 12;
+        } else if (ampm === 'am' && hour === 12) {
+          hour = 0; // 12 AM (meia-noite) é 00h
+        }
+
+        const formattedHour = hour.toString().padStart(2, '0');
+
+        const newContent = `${formattedHour}:00`;
         this.renderer.setProperty(label, 'textContent', newContent);
       }
     });

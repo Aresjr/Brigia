@@ -55,7 +55,7 @@ public class EspecialidadeService {
         especialidade.setExcluido(true);
         especialidade.setExcluidoEm(LocalDateTime.now());
 
-        Long userId = securityUtils.getLoggedUser();
+        Long userId = securityUtils.getLoggedUserId();
         especialidade.setExcluidoPor(userId);
         repository.save(especialidade);
     }

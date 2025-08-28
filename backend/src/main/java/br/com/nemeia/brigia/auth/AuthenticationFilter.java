@@ -45,7 +45,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
             Long id = claims.get("id", Double.class).longValue();
             List<String> roles = getRoles(claims);
-            UserAuth userAuth = new UserAuth(id, roles);
+            Long unidadeId = claims.get("unidadeId", Double.class).longValue();
+            UserAuth userAuth = new UserAuth(id, unidadeId, roles);
             UsernamePasswordAuthenticationToken auth =
                     new UsernamePasswordAuthenticationToken(
                             userAuth, null, userAuth.getAuthorities());

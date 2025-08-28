@@ -15,4 +15,8 @@ public class Unidade extends BaseModel {
 
     @Column(name = "nome", nullable = false)
     private String nome;
+
+    public Unidade(Long unidadeId) {
+        this.id = unidadeId;
+    }
 }

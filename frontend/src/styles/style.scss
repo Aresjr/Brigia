@@ -12,11 +12,12 @@
 
 /* evento dentro do calendário */
 .cal-week-view .cal-time-events .cal-event {
-  max-width: calc(90% - 2px);
+  @apply text-sm font-bold;
+  max-width: calc(100% - 2px);
   height: calc(100% - 2px);
   margin: 1px;
-  padding: 0 5px;
-  line-height: 25px;
+  padding: 5px 7px;
+  line-height: 15px;
 }
 
 /* bloco de horário (6 AM, 7AM) */
@@ -24,4 +25,15 @@
   font-weight: normal;
   padding-top: 2px;
   width: 70px;
+  cursor: pointer;
+}
+
+.cal-week-view .cal-hour:not(:last-child) .cal-hour-segment, .cal-week-view .cal-hour:last-child :not(:last-child) .cal-hour-segment {
+  cursor: pointer;
+}
+
+.cal-open-day-events {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }

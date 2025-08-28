@@ -72,8 +72,8 @@
       (eventClicked)="verAgendamento($event.event)"
       (hourSegmentClicked)="handleHour($event)"
       [hourSegments]="hourSegments"
-      [dayStartHour]="6"
-      [dayEndHour]="20"
+      [dayStartHour]="0"
+      [dayEndHour]="24"
       locale='pt'
     >
     </mwl-calendar-week-view>
@@ -85,9 +85,8 @@
       (eventClicked)="verAgendamento($event.event)"
       (hourSegmentClicked)="handleHour($event)"
       [hourSegments]="hourSegments"
-      [dayStartHour]="6"
-      [dayEndHour]="20"
-      locale='pt'
+      [dayStartHour]="0"
+      [dayEndHour]="24"
     >
     </mwl-calendar-day-view>
   </div>

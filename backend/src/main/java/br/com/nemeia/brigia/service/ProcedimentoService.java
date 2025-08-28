@@ -61,7 +61,7 @@ public class ProcedimentoService {
         procedimento.setExcluido(true);
         procedimento.setExcluidoEm(LocalDateTime.now());
 
-        Long userId = securityUtils.getLoggedUser();
+        Long userId = securityUtils.getLoggedUserId();
         procedimento.setExcluidoPor(userId);
         repository.save(procedimento);
     }

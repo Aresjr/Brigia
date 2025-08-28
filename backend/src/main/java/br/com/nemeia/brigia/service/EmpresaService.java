@@ -54,7 +54,7 @@ public class EmpresaService {
         empresa.setExcluido(true);
         empresa.setExcluidoEm(LocalDateTime.now());
 
-        Long userId = securityUtils.getLoggedUser();
+        Long userId = securityUtils.getLoggedUserId();
         empresa.setExcluidoPor(userId);
         repository.save(empresa);
     }
