@@ -1,8 +1,10 @@
 <div class="mt-4 rounded-md">
-  <app-top-bar (addNovo)="onAddNovo()" [showSearchBar]=false title="Agendamentos"></app-top-bar>
+  <app-top-bar (addNovo)="onAddNovo()" [showSearchBar]=false title="Agenda Diária"></app-top-bar>
 </div>
 
-<app-calendario></app-calendario>
+<app-calendario
+  [events]="events"
+></app-calendario>
 
 @if (exibeNovoAgendamento) {
   <app-agendamento-novo

@@ -1,11 +1,27 @@
+.btn-cancelar {
+  @apply px-4 py-1 border border-gray-400 rounded-md hover:bg-gray-100
+}
+
+.btn-salvar {
+  @apply px-4 py-1 rounded-md bg-green-500 text-white hover:bg-green-600
+}
+
 .ng-select .ng-select-container  {
   border:1px;
 }
 
+/* evento dentro do calendário */
 .cal-week-view .cal-time-events .cal-event {
-  max-width: calc(100% - 2px);
+  max-width: calc(90% - 2px);
   height: calc(100% - 2px);
   margin: 1px;
   padding: 0 5px;
   line-height: 25px;
+}
+
+/* bloco de horário (6 AM, 7AM) */
+.cal-week-view .cal-time {
+  font-weight: normal;
+  padding-top: 2px;
+  width: 70px;
 }

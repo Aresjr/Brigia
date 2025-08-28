@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZoneChangeDetection, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection, importProvidersFrom, LOCALE_ID } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
@@ -22,8 +22,10 @@ import localePt from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
 
 registerLocaleData(localePt);
-moment.locale('pt-br');
-moment.updateLocale('pt-br', {
+registerLocaleData(localePt, 'pt');
+
+moment.locale('pt');
+moment.updateLocale('pt', {
   longDateFormat: {
     LT: 'HH:mm', // usado para horários curtos
     LTS: 'HH:mm:ss',
@@ -45,13 +47,14 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimations(),
     provideToastr({
-      timeOut: 7000,
+      timeOut: 6000,
       positionClass: 'toast-top-right',
       preventDuplicates: true,
       progressBar: true,
       closeButton: true,
       tapToDismiss: true
     }),
+    { provide: LOCALE_ID, useValue: 'pt' },
     importProvidersFrom(
       LucideAngularModule.pick({ Home, User, Calendar, LogIn, UserPlus, Stethoscope, ChevronRight,
         MessageSquare, MessageCircle, CircleUser, ChevronFirst, Users, Search, ClipboardList,

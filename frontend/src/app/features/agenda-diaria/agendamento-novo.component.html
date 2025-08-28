@@ -1,4 +1,4 @@
-<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-51 text-sm">
+<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm">
   <div class="bg-white rounded-md shadow-lg p-6 w-[58rem]"
     (click)="$event.stopPropagation()" >
 
@@ -39,7 +39,7 @@
                 <div class="p-2 text-sm">
                   Paciente não encontrado.
                 </div>
-                <button (click)="mostrarFormularioNovoPaciente=true" class="ml-2 px-4 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 flex items-center gap-2">
+                <button (click)="mostrarFormularioNovoPaciente=true" class="btn-salvar flex items-center gap-2">
                   <lucide-icon name="plus" class="w-3 h-3"></lucide-icon>
                   Cadastrar
                 </button>
@@ -79,6 +79,10 @@
       <!-- LINHA 3 - ESPECIALIDADE / PROCEDIMENTO -->
       <div class="flex mt-2">
         <div class="mr-4 w-[26rem]" >
+          <label class="block font-medium text-gray-700" for="profissionalId">Profissional</label>
+          <ng-select formControlName="profissionalId" required class="mt-1 block w-full rounded-md"
+                     [ngClass]="validationClasses('profissionalId')"
+                     [items]="this.profissionais" bindValue="id" bindLabel="nome" labelForId="profissionalId" />
         </div>
 
         <div class="w-[28rem]" >
@@ -93,27 +97,19 @@
       <!-- LINHA 4 - PROFISSIONAL -->
       <div class="flex mt-2">
         <div class="mr-4 w-[26rem]" >
-          <label class="block font-medium text-gray-700" for="profissionalId">Profissional</label>
-          <ng-select formControlName="profissionalId" required class="mt-1 block w-full rounded-md"
-                     [ngClass]="validationClasses('profissionalId')"
-                     [items]="this.profissionais" bindValue="id" bindLabel="nome" labelForId="profissionalId" />
         </div>
 
         <div class="w-[28rem]" >
-          <label class="block font-medium text-gray-700">Outros campos</label>
+
         </div>
 
       </div>
 
       <div class="flex justify-end gap-3 mt-6">
-        <button
-          class="px-4 py-1 rounded-md border border-gray-300 hover:bg-gray-100"
-          (click)="onCancel()" >
+        <button class="btn-cancelar" (click)="onCancel()" >
           Cancelar
         </button>
-        <button type="submit"
-          class="px-4 py-1 rounded-md bg-green-500 text-white hover:bg-green-600"
-          (click)="onConfirm()" >
+        <button type="submit" class="btn-salvar" (click)="onConfirm()" >
           Agendar
         </button>
       </div>

@@ -63,7 +63,7 @@ export class MainLayoutComponent {
   menuItems: MenuItem[] = [ //TODO - Reuse routes const
     { label: 'Página Inicial', icon: 'home', route: '/', roles: [Role.SECRETARIA, Role.ADMIN] },
     { label: 'Pacientes', icon: 'users', route: '/pacientes', roles: [Role.SECRETARIA, Role.ADMIN] },
-    { label: 'Agendamentos', icon: 'calendar', route: '/agendamentos', roles: [Role.SECRETARIA, Role.ADMIN] },
+    { label: 'Agenda Diária', icon: 'calendar', route: '/agenda-diaria', roles: [Role.SECRETARIA, Role.ADMIN] },
     {
       label: 'Cadastros',
       icon: 'user-plus',

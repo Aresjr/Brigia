@@ -1,11 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  Renderer2
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   CalendarModule,
   CalendarEvent,
-  CalendarView,
-  CalendarEventAction,
-  CalendarEventTimesChangedEvent
+  CalendarView
 } from 'angular-calendar';
 import { Subject } from 'rxjs';
 import { FormsModule } from '@angular/forms';
@@ -23,90 +29,20 @@ import { LucideAngularModule } from 'lucide-angular';
   templateUrl: './calendario.component.html',
   styleUrl: 'calendario.component.css'
 })
-export class CalendarioComponent implements OnInit {
+export class CalendarioComponent implements OnInit, AfterViewInit {
+  @Input() events: CalendarEvent[] = [];
 
   view: CalendarView = CalendarView.Week;
-
   CalendarView = CalendarView;
-
   currentDate: Date = new Date();
   hourSegments: number = 2;
-
-  actions: CalendarEventAction[] = [
-    {
-      label: '<i class="fas fa-fw fa-trash-alt w-4 h-4 block"><lucide-icon name="pencil" class="block w-4 h-4"></lucide-icon></i>',
-      a11yLabel: 'Editar',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
-      },
-    },
-    {
-      label: '<i class="fas fa-fw fa-trash-alt"></i>',
-      a11yLabel: 'Delete',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter((iEvent) => iEvent !== event);
-        this.handleEvent('Deleted', event);
-      },
-    },
-  ];
-
   refresh = new Subject<void>();
-
-  events: CalendarEvent[] = [];
-
   activeDayIsOpen: boolean = true;
 
+  constructor(private elementRef: ElementRef, private renderer: Renderer2, private cdr: ChangeDetectorRef) {}
+
   ngOnInit(): void {
-    let startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 11);
-    let endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 13);
-    this.events.push(
-      {
-        start: startDate,
-        end: endDate,
-        title: 'João da Silva - Ortopedista | Dr César',
-        color: { primary: '#1e90ff', secondary: '#D1E8FF'},
-        actions: this.actions,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true,
-        },
-        draggable: true,
-      }
-    );
 
-    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12);
-    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 30);
-    this.events.push(
-      {
-        start: startDate,
-        end: endDate,
-        title: 'João da Silva - Ortopedista | Dr César',
-        color: { primary: '#1e90ff', secondary: '#D1E8FF'},
-        actions: this.actions,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true,
-        },
-        draggable: true,
-      }
-    );
-
-    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12);
-    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 45);
-    this.events.push(
-      {
-        start: startDate,
-        end: endDate,
-        title: 'João da Silva - Ortopedista | Dr César',
-        color: { primary: '#1e90ff', secondary: '#D1E8FF'},
-        actions: this.actions,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true,
-        },
-        draggable: true,
-      }
-    );
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
@@ -123,33 +59,8 @@ export class CalendarioComponent implements OnInit {
     }
   }
 
-  eventTimesChanged({event, newStart, newEnd}: CalendarEventTimesChangedEvent): void {
-    this.events = this.events.map((iEvent) => {
-      if (iEvent === event) {
-        return {
-          ...event,
-          start: newStart,
-          end: newEnd,
-        };
-      }
-      return iEvent;
-    });
-    this.handleEvent('Dropped or resized', event);
-  }
-
-  handleEvent(action: string, event: CalendarEvent): void {
-
+  verAgendamento(event: CalendarEvent): void {
     console.log(event);
-    console.log(action);
-
-  }
-
-  setView(view: CalendarView) {
-    this.view = view;
-  }
-
-  closeOpenMonthViewDay() {
-    this.activeDayIsOpen = false;
   }
 
   handleHour($event: { date: Date; sourceEvent: MouseEvent }) {
@@ -161,7 +72,38 @@ export class CalendarioComponent implements OnInit {
     return date1.getMonth() == date2.getMonth();
   }
 
-  private isSameDay(date1: Date, date2: Date) {
+  isSameDay(date1: Date, date2: Date) {
     return date1.getDate() == date2.getDate();
+  }
+
+  setView(view: CalendarView) {
+    this.view = view;
+    this.cdr.detectChanges();
+    this.formatTimeLabels();
+  }
+
+  closeOpenMonthViewDay() {
+    this.activeDayIsOpen = false;
+  }
+
+  formatTimeLabels() {
+    const timeLabels = this.elementRef.nativeElement.querySelectorAll('.cal-time');
+
+    timeLabels.forEach((label: HTMLElement) => {
+      let textContent = label.textContent || '';
+      const hourMatch = textContent.match(/(\d+)/);
+
+      console.log(hourMatch);
+
+      if (hourMatch && hourMatch[1]) {
+        let hour = hourMatch[1];
+        let newContent = `${hour}:00`;
+        this.renderer.setProperty(label, 'textContent', newContent);
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.formatTimeLabels();
   }
 }
