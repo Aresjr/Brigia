@@ -102,7 +102,7 @@ export class CalendarioComponent implements OnInit, AfterViewInit {
         if (ampm === 'pm' && hour !== 12) {
           hour += 12;
         } else if (ampm === 'am' && hour === 12) {
-          hour = 0; // 12 AM (meia-noite) é 00h
+          hour = 0;
         }
 
         const formattedHour = hour.toString().padStart(2, '0');

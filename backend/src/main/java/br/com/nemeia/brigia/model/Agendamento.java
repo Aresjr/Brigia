@@ -21,8 +21,8 @@ public class Agendamento extends BaseModel {
     @JoinColumn(name = "paciente_id", nullable = false)
     private Paciente paciente;
 
-    @Column(name = "dia", nullable = false)
-    private LocalDate dia;
+    @Column(name = "data", nullable = false)
+    private LocalDate data;
 
     @Column(name = "hora", nullable = false)
     private LocalTime hora;

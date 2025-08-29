@@ -1,10 +1,16 @@
-import { Entidade, EntidadeResponse } from '../shared/entidade.interface';
+import { Entidade, EntidadeRequest, EntidadeResponse } from '../shared/entidade.interface';
 import { Especialidade } from '../especialidade/especialidade.interface';
 import { Convenio } from '../convenio/convenio.interface';
-import { Empresa } from '../empresa/empresa.interface';
 import { Unidade } from '../unidade/unidade.interface';
 
 export interface Procedimento extends Entidade {
+    codigo: string | null;
+    especialidade: Especialidade;
+    valorPadrao: number;
+    observacoes: string | null;
+}
+
+export interface ProcedimentoRequest extends EntidadeRequest {
     codigo: string | null;
     especialidade: Especialidade;
     valorPadrao: number;
@@ -20,13 +26,6 @@ export interface PrecoProcedimentoConvenio {
     preco: number;
     repasse: number;
     convenio: Convenio;
-    unidade: Unidade | null;
-}
-
-export interface PrecoProcedimentoEmpresa {
-    preco: number;
-    repasse: number;
-    empresa: Empresa;
     unidade: Unidade | null;
 }
 

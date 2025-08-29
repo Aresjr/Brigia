@@ -40,3 +40,11 @@ export const SEXOS = [
   { sigla: 'F', descricao: 'Feminino' },
   { sigla: 'O', descricao: 'Outro' }
 ];
+
+export const FORMAS_PAGAMENTO = [
+  { valor: 0, descricao: 'Dinheiro' },
+  { valor: 1, descricao: 'Cartão de Crédito' },
+  { valor: 2, descricao: 'Cartão de Débito' },
+  { valor: 3, descricao: 'Pix' },
+  { valor: 4, descricao: 'Boleto' },
+];

@@ -1,7 +1,8 @@
 @use "ngx-toastr/toastr";
 @use "@ng-select/ng-select/themes/default.theme.css";
 @use "angular-calendar/css/angular-calendar.css";
-@use "./styles/style";
+@use "./styles/calendario";
+@use "./styles/brigia";
 
 @tailwind base;
 @tailwind components;

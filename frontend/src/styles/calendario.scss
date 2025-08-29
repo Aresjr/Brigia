@@ -1,15 +1,3 @@
-.btn-cancelar {
-  @apply px-4 py-1 border border-gray-400 rounded-md hover:bg-gray-100
-}
-
-.btn-salvar {
-  @apply px-4 py-1 rounded-md bg-green-500 text-white hover:bg-green-600
-}
-
-.ng-select .ng-select-container  {
-  border:1px;
-}
-
 /* evento dentro do calendário */
 .cal-week-view .cal-time-events .cal-event {
   @apply text-sm font-bold;
@@ -21,11 +9,28 @@
 }
 
 /* bloco de horário (6 AM, 7AM) */
+.cal-month-view, .cal-week-view {
+  @apply border border-gray-300 rounded-md;
+}
+
 .cal-week-view .cal-time {
   font-weight: normal;
   padding-top: 2px;
   width: 70px;
   cursor: pointer;
+}
+
+/* bloco dos dias da semana */
+.cal-day-headers, .cal-header {
+  @apply bg-blue-100 border;
+}
+
+.cal-day-headers:first-child {
+  @apply bg-white;
+}
+
+.cal-weekend {
+  @apply bg-red-50;
 }
 
 .cal-week-view .cal-hour:not(:last-child) .cal-hour-segment, .cal-week-view .cal-hour:last-child :not(:last-child) .cal-hour-segment {
@@ -36,4 +41,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.cal-week-view .cal-day-headers span {
+  @apply font-bold;
 }

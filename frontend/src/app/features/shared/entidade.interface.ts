@@ -11,3 +11,7 @@ export interface EntidadeResponse {
   totalPages: number;
   totalRecords: number;
 }
+
+export interface EntidadeRequest {
+
+}

@@ -13,10 +13,10 @@ export abstract class FormComponent {
   protected form: FormGroup;
 
   validationClasses(field: string): string[] {
-    return this.isValid(field) ? ['border', 'border-red-500'] : ['border', 'border-gray-300'];
+    return this.isInvalid(field) ? ['border', 'border-red-500'] : [];
   }
 
-  isValid(field: string): boolean | undefined {
+  isInvalid(field: string): boolean | undefined {
     return this.form?.get(field)?.invalid && this.form.get(field)?.touched;
   }
 }

@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
-import { Convenio } from '../convenio.interface';
+import { Convenio, ConvenioRequest } from '../convenio.interface';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
 
 @Component({
@@ -18,7 +18,7 @@ import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-dir
 })
 export class ConvenioFormComponent implements OnInit {
   @Input() convenio: Convenio | null = null;
-  @Output() save = new EventEmitter<Partial<Convenio>>();
+  @Output() save = new EventEmitter<Partial<ConvenioRequest>>();
   @Output() cancel = new EventEmitter<void>();
 
   form: FormGroup;

@@ -25,7 +25,7 @@
       </button>
     </div>
 
-    <div class="text-2xl">{{ currentDate | calendarDate:(view + 'ViewTitle'):'pt' }}</div>
+    <div class="text-2xl">{{ currentDate | date:'EEEE, dd \'de\' MMMM \'de\' YYYY':'UTC':'pt' }}</div>
 
     <div class="text-white">
       <button
@@ -72,7 +72,7 @@
       (eventClicked)="verAgendamento($event.event)"
       (hourSegmentClicked)="handleHour($event)"
       [hourSegments]="hourSegments"
-      [dayStartHour]="0"
+      [dayStartHour]="6"
       [dayEndHour]="24"
       locale='pt'
     >
@@ -85,8 +85,9 @@
       (eventClicked)="verAgendamento($event.event)"
       (hourSegmentClicked)="handleHour($event)"
       [hourSegments]="hourSegments"
-      [dayStartHour]="0"
+      [dayStartHour]="6"
       [dayEndHour]="24"
+      locale='pt'
     >
     </mwl-calendar-day-view>
   </div>

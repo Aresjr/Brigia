@@ -1,5 +1,5 @@
-<div class="fixed inset-0 bg-black bg-opacity-50 z-40" (click)="onCancel()"></div>
-<div class="fixed right-0 top-0 h-full w-[30rem] bg-white shadow-lg z-50 overflow-y-auto">
+<div class="bg-modal" (click)="onCancel()"></div>
+<div class="painel-direito">
   <div class="p-4">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold">{{isEditMode ? 'Editar Profissional' : 'Novo Profissional'}}</h2>
@@ -8,15 +8,15 @@
       </button>
     </div>
 
-    <form [formGroup]="profissionalForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="space-y-4">
         <div>
-          <label class="block font-medium text-gray-700">Nome</label>
+          <label class="label-campo">Nome</label>
           <input type="text" formControlName="nome" name="nome" required
-             class="mt-1 p-1 block w-full rounded-md border border-gray-300"
-             [ngClass]="{'border-red-500': profissionalForm.get('nome')?.invalid && profissionalForm.get('nome')?.touched}" >
-              @if (profissionalForm.get('nome')?.touched) {
-                <div *ngIf="profissionalForm.get('nome')?.hasError('required')"
+             class="campo"
+             [ngClass]="{'border-red-500': form.get('nome')?.invalid && form.get('nome')?.touched}" >
+              @if (form.get('nome')?.touched) {
+                <div *ngIf="form.get('nome')?.hasError('required')"
                   class="text-red-500 text-sm">
                   Nome é obrigatório.
                 </div>
@@ -25,20 +25,20 @@
 
         <div class="flex space-x-4">
           <div class="w-52">
-            <label class="block font-medium text-gray-700">CPF</label>
+            <label class="label-campo">CPF</label>
             <input type="text" formControlName="cpf" name="cpf"
                    mask="000.000.000-00"
                    emptyToNull
-                   class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                   class="campo">
 
           </div>
           <div class="w-56">
-            <label class="block font-medium text-gray-700">Data Nascimento</label>
+            <label class="label-campo">Data Nascimento</label>
             <input type="date" formControlName="dataNascimento" required
-                   class="mt-1 p-1 block w-full rounded-md border border-gray-300"
-                   [ngClass]="{'border-red-500': profissionalForm.get('dataNascimento')?.invalid && profissionalForm.get('dataNascimento')?.touched}" >
-            @if (profissionalForm.get('dataNascimento')?.touched) {
-              <div *ngIf="profissionalForm.get('dataNascimento')?.hasError('required')"
+                   class="campo"
+                   [ngClass]="{'border-red-500': form.get('dataNascimento')?.invalid && form.get('dataNascimento')?.touched}" >
+            @if (form.get('dataNascimento')?.touched) {
+              <div *ngIf="form.get('dataNascimento')?.hasError('required')"
                    class="text-red-500 text-sm">
                 Data de Nascimento é obrigatória.
               </div>
@@ -49,8 +49,8 @@
         <div class="flex space-x-4">
           <div class="w-52">
             <div>
-              <label class="block font-medium text-gray-700">Sexo</label>
-              <ng-select formControlName="sexo" class="mt-1 block w-full rounded-md" placeholder="Selecione o sexo">
+              <label class="label-campo">Sexo</label>
+              <ng-select formControlName="sexo" class="campo-select" placeholder="Selecione o sexo">
                 @for (sexo of SEXOS; track sexo.sigla) {
                   <ng-option [value]="sexo.sigla">{{sexo.descricao}}</ng-option>
                 }
@@ -59,11 +59,11 @@
           </div>
           <div class="w-56">
             <div>
-              <label class="block font-medium text-gray-700">Celular</label>
+              <label class="label-campo">Celular</label>
               <input type="tel" formControlName="celular"
                      mask="(00) 00000-0000"
                      emptyToNull
-                     class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                     class="campo">
             </div>
           </div>
         </div>
@@ -71,32 +71,32 @@
         <div class="flex space-x-4">
           <div class="w-52">
             <div>
-              <label class="block font-medium text-gray-700">CRM</label>
+              <label class="label-campo">CRM</label>
               <input type="text" formControlName="crm"
                      mask="0000000"
                      emptyToNull
-                     class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                     class="campo">
             </div>
           </div>
         </div>
 
         <div>
-          <label class="block font-medium text-gray-700">Email</label>
+          <label class="label-campo">Email</label>
           <input type="email" formControlName="email"
-                 class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                 class="campo">
         </div>
 
         <div>
-          <label class="block font-medium text-gray-700">Especialidades</label>
+          <label class="label-campo">Especialidades</label>
           <ng-select [multiple]="true" formControlName="especialidades" required
-                     class="mt-1 block w-full rounded-md border-gray-300"
-                     [ngClass]="{'border-red-500': profissionalForm.get('especialidades')?.invalid && profissionalForm.get('especialidades')?.touched}" >
+                     class="campo-select"
+                     [ngClass]="{'border-red-500': form.get('especialidades')?.invalid && form.get('especialidades')?.touched}" >
             @for (especialidade of this.listaEspecialidades; track especialidade.id) {
               <ng-option [value]="especialidade.id">{{especialidade.nome}}</ng-option>
             }
           </ng-select>
-          @if (profissionalForm.get('especialidades')?.touched) {
-            <div *ngIf="profissionalForm.get('especialidades')?.hasError('required')"
+          @if (form.get('especialidades')?.touched) {
+            <div *ngIf="form.get('especialidades')?.hasError('required')"
                  class="text-red-500 text-sm">
               Especialidade é obrigatória.
             </div>

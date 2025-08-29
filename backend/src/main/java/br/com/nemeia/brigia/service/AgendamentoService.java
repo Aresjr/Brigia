@@ -5,21 +5,30 @@ import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
 import br.com.nemeia.brigia.mapper.AgendamentoMapper;
 import br.com.nemeia.brigia.model.*;
 import br.com.nemeia.brigia.repository.AgendamentoRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepository> {
 
-    private final SecurityUtils securityUtils;
     private final AgendamentoMapper mapper;
     private final PacienteService pacienteService;
     private final ProfissionalService profissionalService;
     private final EspecialidadeService especialidadeService;
     private final ProcedimentoService procedimentoService;
+
+    public AgendamentoService(AgendamentoRepository repository, SecurityUtils securityUtils,
+                              AgendamentoMapper mapper, PacienteService pacienteService,
+                              ProfissionalService profissionalService, EspecialidadeService especialidadeService,
+                              ProcedimentoService procedimentoService) {
+        super(repository, securityUtils);
+        this.mapper = mapper;
+        this.pacienteService = pacienteService;
+        this.profissionalService = profissionalService;
+        this.especialidadeService = especialidadeService;
+        this.procedimentoService = procedimentoService;
+    }
 
     public Agendamento createAgendamento(AgendamentoRequest request) {
         Agendamento agendamento = mapper.toEntity(request);

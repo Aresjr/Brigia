@@ -1,5 +1,5 @@
-<div class="fixed inset-0 bg-black bg-opacity-50 z-50" (click)="onCancel()"></div>
-<div class="fixed right-0 top-0 h-full w-[32rem] bg-white shadow-lg z-50 overflow-y-auto">
+<div class="bg-modal z-50" (click)="onCancel()"></div>
+<div class="painel-direito">
   <div class="p-4">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold">{{isEditMode ? 'Editar Paciente' : 'Novo Paciente'}}</h2>
@@ -11,9 +11,11 @@
     <form [formGroup]="pacienteForm" (ngSubmit)="onSubmit()">
       <div class="space-y-4">
         <div>
-          <label class="block font-medium text-gray-700">Nome</label>
+          <label class="label-campo">
+            Nome <span aria-hidden="true" class="text-red-500">*</span>
+          </label>
           <input type="text" formControlName="nome" name="nome" required
-             class="mt-1 p-1 block w-full rounded-md border border-gray-300"
+             class="campo"
              [ngClass]="{'border-red-500': pacienteForm.get('nome')?.invalid && pacienteForm.get('nome')?.touched}" >
               @if (pacienteForm.get('nome')?.touched) {
                 <div *ngIf="pacienteForm.get('nome')?.hasError('required')"
@@ -25,17 +27,19 @@
 
         <div class="flex space-x-4">
           <div class="w-60">
-            <label class="block font-medium text-gray-700">CPF</label>
+            <label class="label-campo">CPF</label>
             <input type="text" formControlName="cpf" name="cpf"
                    mask="000.000.000-00"
                    emptyToNull
-                   class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                   class="campo">
 
           </div>
           <div class="w-56">
-            <label class="block font-medium text-gray-700">Data Nascimento</label>
+            <label class="label-campo">
+              Data Nascimento <span aria-hidden="true" class="text-red-500">*</span>
+            </label>
             <input type="date" formControlName="dataNascimento" required
-                   class="mt-1 p-1 block w-full rounded-md border border-gray-300"
+                   class="campo"
                    [ngClass]="{'border-red-500': pacienteForm.get('dataNascimento')?.invalid && pacienteForm.get('dataNascimento')?.touched}" >
             @if (pacienteForm.get('dataNascimento')?.touched) {
               <div *ngIf="pacienteForm.get('dataNascimento')?.hasError('required')"
@@ -49,8 +53,8 @@
         <div class="flex space-x-4">
           <div class="w-60">
             <div>
-              <label class="block font-medium text-gray-700">Sexo</label>
-              <ng-select formControlName="sexo" class="mt-1 block w-full rounded-md">
+              <label class="label-campo">Sexo</label>
+              <ng-select formControlName="sexo" class="campo-select">
                 @for (sexo of SEXOS; track sexo.sigla) {
                   <ng-option [value]="sexo.sigla">{{sexo.descricao}}</ng-option>
                 }
@@ -58,28 +62,28 @@
             </div>
           </div>
           <div class="w-56">
-            <label class="block font-medium text-gray-700">Celular</label>
+            <label class="label-campo">Celular</label>
             <input type="tel" formControlName="celular"
                    mask="(00) 00000-0000"
                    emptyToNull
-                   class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                   class="campo">
           </div>
         </div>
 
         <div class="flex space-x-4">
           <div>
             <div class="w-60">
-              <label class="block font-medium text-gray-700">CEP</label>
+              <label class="label-campo">CEP</label>
               <input type="text" formControlName="cep"
                      (blur)="buscarCep()" mask="00000-000"
                      emptyToNull
-                     class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                     class="campo">
             </div>
           </div>
           <div>
             <div class="w-56">
-              <label class="block font-medium text-gray-700">UF</label>
-              <ng-select formControlName="uf" class="mt-1 block w-full rounded-md">
+              <label class="label-campo">UF</label>
+              <ng-select formControlName="uf" class="campo-select">
                 @for (estado of estados; track estado.sigla) {
                   <ng-option [value]="estado.sigla">{{estado.nome}}</ng-option>
                 }
@@ -90,34 +94,34 @@
 
         <div class="flex space-x-4">
           <div class="w-60">
-            <label class="block font-medium text-gray-700">Cidade</label>
+            <label class="label-campo">Cidade</label>
             <input type="text" formControlName="cidade" emptyToNull
-                   class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                   class="campo">
           </div>
           <div class="w-56">
-            <label class="block font-medium text-gray-700">Bairro</label>
+            <label class="label-campo">Bairro</label>
             <input type="text" formControlName="bairro" emptyToNull
-                   class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                   class="campo">
           </div>
         </div>
 
         <div class="flex space-x-4">
           <div class="w-60">
-            <label class="block font-medium text-gray-700">Rua</label>
+            <label class="label-campo">Rua</label>
             <input type="text" formControlName="rua" emptyToNull
-                   class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                   class="campo">
           </div>
           <div class="w-56">
-            <label class="block font-medium text-gray-700">Complemento</label>
+            <label class="label-campo">Complemento</label>
             <input type="text" formControlName="complemento" emptyToNull
-                   class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                   class="campo">
           </div>
         </div>
 
         <div class="flex space-x-4">
           <div class="w-60">
-            <label class="block font-medium text-gray-700">Empresa</label>
-            <ng-select formControlName="empresaId" class="mt-1 block w-full rounded-md">
+            <label class="label-campo">Empresa</label>
+            <ng-select formControlName="empresaId" class="campo-select">
               @for (empresa of this.empresas; track empresa.id) {
                 <ng-option [value]="empresa.id">{{empresa.nome}}</ng-option>
               }
@@ -125,8 +129,8 @@
 
           </div>
           <div class="w-56">
-            <label class="block font-medium text-gray-700">Convênio</label>
-            <ng-select formControlName="convenioId" class="mt-1 block w-full rounded-md">
+            <label class="label-campo">Convênio</label>
+            <ng-select formControlName="convenioId" class="campo-select">
               @for (convenio of this.convenios; track convenio.id) {
                 <ng-option [value]="convenio.id">{{convenio.nome}}</ng-option>
               }
@@ -135,9 +139,9 @@
         </div>
 
         <div>
-          <label class="block font-medium text-gray-700">Email</label>
+          <label class="label-campo">Email</label>
           <input type="email" formControlName="email"
-                 class="mt-1 p-1 block w-full rounded-md border border-gray-300">
+                 class="campo">
         </div>
 
         <div class="flex justify-end space-x-3 mt-6">

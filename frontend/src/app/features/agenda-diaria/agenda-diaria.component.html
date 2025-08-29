@@ -3,12 +3,12 @@
 </div>
 
 <app-calendario
-  [events]="events"
+  [events]="eventos"
 ></app-calendario>
 
 @if (exibeNovoAgendamento) {
   <app-agendamento-novo
-    (confirm)="agendar($event)"
+    (save)="agendar($event)"
     (cancel)="fecharNovoAgendamento()">
   </app-agendamento-novo>
 }

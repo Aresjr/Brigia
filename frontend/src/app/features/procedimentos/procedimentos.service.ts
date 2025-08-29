@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   PrecoProcedimentoConvenio,
-  Procedimento,
+  Procedimento, ProcedimentoRequest,
   ProcedimentoResponse,
   TabelaPrecoResponse
 } from './procedimento.interface';
@@ -11,7 +11,7 @@ import { BaseService } from './base.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ProcedimentosService extends BaseService<Procedimento, ProcedimentoResponse> {
+export class ProcedimentosService extends BaseService<Procedimento, ProcedimentoRequest, ProcedimentoResponse> {
 
   override path = '/procedimentos';
 

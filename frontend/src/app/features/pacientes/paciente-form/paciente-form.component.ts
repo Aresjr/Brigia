@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Paciente } from '../paciente.interface';
+import { Paciente, PacienteRequest } from '../paciente.interface';
 import { NgxMaskDirective } from 'ngx-mask';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
@@ -22,7 +22,7 @@ import { Empresa } from '../../empresa/empresa.interface';
 })
 export class PacienteFormComponent implements OnInit {
   @Input() paciente?: Paciente | null;
-  @Output() save = new EventEmitter<Partial<Paciente>>();
+  @Output() save = new EventEmitter<Partial<PacienteRequest>>();
   @Output() cancel = new EventEmitter<void>();
 
   pacienteForm: FormGroup;
@@ -55,7 +55,6 @@ export class PacienteFormComponent implements OnInit {
     this.carregarEmpresas();
 
     if (this.paciente) {
-      console.log(this.paciente);
       this.pacienteForm.patchValue(this.paciente);
     }
   }

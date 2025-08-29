@@ -2,12 +2,12 @@ import { catchError, map, Observable, shareReplay, throwError } from 'rxjs';
 import { BackendService } from '../../core/backend/backend.service';
 import { ToastrService } from 'ngx-toastr';
 import { Injectable } from '@angular/core';
-import { Entidade, EntidadeResponse } from '../shared/entidade.interface';
+import { Entidade, EntidadeRequest, EntidadeResponse } from '../shared/entidade.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BaseService<T extends Entidade, Y extends EntidadeResponse> {
+export class BaseService<T extends Entidade, Z extends EntidadeRequest, Y extends EntidadeResponse> {
 
   constructor(protected backend: BackendService, protected toastr: ToastrService) {}
 
@@ -41,11 +41,12 @@ export class BaseService<T extends Entidade, Y extends EntidadeResponse> {
     );
   }
 
-  criar(registro: Partial<T>): Observable<T> {
+  criar(registro: Partial<Z>): Observable<T> {
     this.limparCache();
-    return this.backend.post<T>(this.path, registro).pipe(
+    return this.backend.post<Z, T>(this.path, registro).pipe(
       catchError((e) => {
-        this.toastr.error('Erro ao cadastrar o registro.');
+        const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
+        this.toastr.error(errorMessage, 'Erro ao cadastrar o registro.');
         return throwError(() => e);
       })
     );

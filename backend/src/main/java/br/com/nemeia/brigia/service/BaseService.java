@@ -6,6 +6,7 @@ import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.model.BaseModel;
 import br.com.nemeia.brigia.repository.BaseRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +16,11 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public abstract class BaseService<T extends BaseModel, R extends BaseRepository<T>> {
 
-    protected R repository;
-    protected SecurityUtils securityUtils;
+    @Autowired
+    final protected R repository;
+
+    @Autowired
+    final protected SecurityUtils securityUtils;
 
     public T getById(Long id) {
         return repository.findById(id)

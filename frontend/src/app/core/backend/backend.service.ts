@@ -22,10 +22,10 @@ export class BackendService {
       );
   }
 
-  post<T>(path: string, payload: Partial<T>) {
-    return this.http.post<T>(`${this.baseUrl}${path}`, payload, { withCredentials: true, observe: 'response' })
+  post<T, Y>(path: string, payload: Partial<T>) {
+    return this.http.post<Y>(`${this.baseUrl}${path}`, payload, { withCredentials: true, observe: 'response' })
       .pipe(
-        map((response) => response.body as T),
+        map((response) => response.body as Y),
         catchError((error) => this.handleError(path, error))
       );
   }

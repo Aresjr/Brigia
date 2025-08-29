@@ -1,5 +1,7 @@
 package br.com.nemeia.brigia.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -8,6 +10,7 @@ public record PacienteResponse(
         String nome,
         String email,
         String cpf,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         LocalDate dataNascimento,
         Character sexo,
         String celular,

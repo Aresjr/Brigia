@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Convenio, ConvenioResponse } from './convenio.interface';
+import { Convenio, ConvenioRequest, ConvenioResponse } from './convenio.interface';
 import { BaseService } from '../procedimentos/base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ConveniosService extends BaseService<Convenio, ConvenioResponse> {
+export class ConveniosService extends BaseService<Convenio, ConvenioRequest, ConvenioResponse> {
 
   override path = '/convenios';
 }

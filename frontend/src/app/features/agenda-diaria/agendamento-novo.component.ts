@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Paciente } from '../pacientes/paciente.interface';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PacienteService } from '../pacientes/paciente.service';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { ConveniosService } from '../convenio/convenios.service';
@@ -22,6 +22,8 @@ import { FormComponent } from '../shared/form.component';
 import { AgendamentoRequest } from './agendamento.interface';
 import { IForm } from '../shared/form.interface';
 import { LucideAngularModule } from 'lucide-angular';
+import { autoResize, limitLength } from '../../core/util-methods';
+import { FORMAS_PAGAMENTO } from '../../core/constans';
 
 @Component({
   selector: 'app-agendamento-novo',
@@ -35,7 +37,7 @@ import { LucideAngularModule } from 'lucide-angular';
   ]
 })
 export class AgendamentoNovoComponent extends FormComponent implements OnInit {
-  @Output() confirm = new EventEmitter<Partial<AgendamentoRequest>>();
+  @Output() save = new EventEmitter<Partial<AgendamentoRequest>>();
   @Output() cancel = new EventEmitter<void>();
 
   pacientes: Paciente[] = [];
@@ -48,6 +50,11 @@ export class AgendamentoNovoComponent extends FormComponent implements OnInit {
   empresaSelecionada?: Empresa | null;
   especialidadeSelecionada?: Especialidade | null;
   mostrarFormularioNovoPaciente: boolean = false;
+  showTooltip: boolean = false;
+  formasPagamento = FORMAS_PAGAMENTO;
+
+  protected readonly autoResize = autoResize;
+  protected readonly limitLength = limitLength;
 
   constructor(protected override fb: FormBuilder, private pacientesService: PacienteService, private toastr: ToastrService,
               private conveniosService: ConveniosService, private especialidadeService: EspecialidadeService,
@@ -60,11 +67,15 @@ export class AgendamentoNovoComponent extends FormComponent implements OnInit {
       pacienteId: [null, {nonNullable: true}],
       data: [hoje, {nonNullable: true}],
       hora: [null, {nonNullable: true}],
+      duracao: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(3)]],
       profissionalId: [null, {nonNullable: true}],
       especialidadeId: [null, {nonNullable: true}],
       procedimentoId: [null],
       convenioId: [null],
       empresaId: [null],
+      formaPagamento: [null],
+      valor: [null],
+      desconto: [null],
       observacoes: [null]
     };
     this.form = this.fb.group(form);
@@ -127,17 +138,6 @@ export class AgendamentoNovoComponent extends FormComponent implements OnInit {
     });
   }
 
-  onConfirm() {
-    if (this.form.valid) {
-      this.confirm.emit(this.form.value);
-    } else {
-      Object.keys(this.form.controls).forEach(field => {
-        const control = this.form.get(field);
-        control?.markAsTouched({ onlySelf: true });
-      });
-    }
-  }
-
   onCancel() {
     this.cancel.emit();
   }
@@ -174,5 +174,26 @@ export class AgendamentoNovoComponent extends FormComponent implements OnInit {
 
   selectEspecialidade(especialidade: Especialidade) {
     this.especialidadeSelecionada = especialidade;
+  }
+
+  salvar() {
+    console.log('salvar');
+    if (this.form.valid) {
+      let valor = this.form.value.valor; // "125,50"
+      if (valor) {
+        valor = parseFloat(valor.replace(',', '.')); // 125.50
+      }
+
+      const payload = {
+        ...this.form.value,
+        valor
+      };
+      this.save.emit(payload);
+    } else {
+      Object.keys(this.form.controls).forEach(field => {
+        const control = this.form.get(field);
+        control?.markAsTouched({ onlySelf: true });
+      });
+    }
   }
 }

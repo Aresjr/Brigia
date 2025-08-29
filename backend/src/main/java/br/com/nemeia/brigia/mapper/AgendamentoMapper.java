@@ -30,7 +30,7 @@ public class AgendamentoMapper {
         return new AgendamentoResponse(
                 agendamento.getId(),
                 pacienteMapper.toResponse(agendamento.getPaciente()),
-                agendamento.getDia(),
+                agendamento.getData(),
                 agendamento.getHora(),
                 unidadeMapper.toResponse(agendamento.getUnidade()),
                 especialidadeMapper.toResponse(agendamento.getEspecialidade()),

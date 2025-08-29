@@ -10,8 +10,8 @@ import java.time.LocalTime;
 public record AgendamentoRequest(
         @NotNull(message = "Paciente é obrigatório")
         Long pacienteId,
-        @NotNull(message = "Dia é obrigatório")
-        LocalDate dia,
+        @NotNull(message = "Data é obrigatória")
+        LocalDate data,
         @NotNull(message = "Hora é obrigatória")
         LocalTime hora,
         @NotNull(message = "Especialidade é obrigatória")

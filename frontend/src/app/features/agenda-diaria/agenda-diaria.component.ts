@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { AgendamentoNovoComponent } from './agendamento-novo.component';
-import { AgendamentoRequest } from './agendamento.interface';
+import { Agendamento, AgendamentoRequest, EventoFactory } from './agendamento.interface';
 import { CalendarioComponent } from '../shared/calendario/calendario.component';
 import { CalendarEvent } from 'angular-calendar';
+import { ActivatedRoute } from '@angular/router';
+import { AgendamentosService } from './agendamentos.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-agenda-diaria',
@@ -15,152 +18,31 @@ import { CalendarEvent } from 'angular-calendar';
   templateUrl: './agenda-diaria.component.html'
 })
 export class AgendaDiariaComponent implements OnInit {
-  events: CalendarEvent[] = [];
+  eventos: CalendarEvent<Agendamento>[] = [];
   exibeNovoAgendamento: boolean = false;
 
+  constructor(private route: ActivatedRoute, private toastr: ToastrService,
+              private agendamentoService: AgendamentosService) {
+    this.route.queryParams.subscribe(params => {
+      if (params['pacienteId']) {
+        console.log('pacienteId', params['pacienteId']);
+      }
+    });
+  }
+
   ngOnInit(): void {
-    let startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 11);
-    let endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 13);
-    this.events.push(
-      {
-        start: startDate,
-        end: endDate,
-        title: 'João da Silva | 11:00-13:00<br/>Dr César | ORTOPEDIA',
-        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
-      }
-    );
+    this.carregarAgendamentos();
+  }
 
-    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12);
-    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 30);
-    this.events.push(
-      {
-        start: startDate,
-        end: endDate,
-        title: 'João da Silva | 12:00-12:45<br/>Dr César | ORTOPEDIA',
-        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
+  carregarAgendamentos() {
+    this.agendamentoService.listar().subscribe({
+      next: value => {
+        const agendamentos = value.items;
+        console.log(agendamentos);
+        this.eventos = agendamentos.map(a => EventoFactory.fromApi(a));
+        console.log(this.eventos);
       }
-    );
-
-    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12);
-    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 45);
-    this.events.push(
-      {
-        start: startDate,
-        end: endDate,
-        title: 'João da Silva | 12:00-12:45<br/>Dr César | ORTOPEDIA',
-        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
-      }
-    );
-
-    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 14);
-    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 15);
-    this.events.push(
-      {
-        start: startDate,
-        end: endDate,
-        title: 'João da Silva | 14:00-15:00<br/>Dr César | ORTOPEDIA',
-        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
-      }
-    );
-
-    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12);
-    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 30);
-    this.events.push(
-      {
-        start: startDate,
-        end: endDate,
-        title: 'João da Silva | 12:00-12:45<br/>Dr César | ORTOPEDIA',
-        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
-      }
-    );
-
-    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12);
-    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 45);
-    this.events.push(
-      {
-        start: startDate,
-        end: endDate,
-        title: 'João da Silva | 12:00-12:45<br/>Dr César | ORTOPEDIA',
-        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
-      }
-    );
-
-    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 14);
-    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 15);
-    this.events.push(
-      {
-        start: startDate,
-        end: endDate,
-        title: 'João da Silva | 14:00-15:00<br/>Dr César | ORTOPEDIA',
-        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
-      }
-    );
-
-    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12);
-    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 30);
-    this.events.push(
-      {
-        start: startDate,
-        end: endDate,
-        title: 'João da Silva | 12:00-12:45<br/>Dr César | ORTOPEDIA',
-        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
-      }
-    );
-
-    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12);
-    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 45);
-    this.events.push(
-      {
-        start: startDate,
-        end: endDate,
-        title: 'João da Silva | 12:00-12:45<br/>Dr César | ORTOPEDIA',
-        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
-      }
-    );
-
-    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 14);
-    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 15);
-    this.events.push(
-      {
-        start: startDate,
-        end: endDate,
-        title: 'João da Silva | 14:00-15:00<br/>Dr César | ORTOPEDIA',
-        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
-      }
-    );
-
-    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12);
-    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 30);
-    this.events.push(
-      {
-        start: startDate,
-        end: endDate,
-        title: 'João da Silva | 12:00-12:45<br/>Dr César | ORTOPEDIA',
-        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
-      }
-    );
-
-    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12);
-    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 45);
-    this.events.push(
-      {
-        start: startDate,
-        end: endDate,
-        title: 'João da Silva | 12:00-12:45<br/>Dr César | ORTOPEDIA',
-        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
-      }
-    );
-
-    startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 14);
-    endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 15);
-    this.events.push(
-      {
-        start: startDate,
-        end: endDate,
-        title: 'João da Silva | 14:00-15:00<br/>Dr César | ORTOPEDIA',
-        color: { primary: '#1e90ff', secondary: '#D1E8FF'}
-      }
-    );
+    });
   }
 
   onAddNovo() {
@@ -172,6 +54,12 @@ export class AgendaDiariaComponent implements OnInit {
   }
 
   agendar(agendamento: Partial<AgendamentoRequest>) {
-    console.log(agendamento);
+    this.agendamentoService.criar(agendamento).subscribe({
+      next: () => {
+        this.toastr.success(`Agendamento realizado`);
+        this.carregarAgendamentos();
+        this.fecharNovoAgendamento();
+      }
+    });
   }
 }

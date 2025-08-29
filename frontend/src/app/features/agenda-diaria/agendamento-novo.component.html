@@ -10,97 +10,146 @@
       </button>
     </div>
 
-    <form [formGroup]="form" class="mt-6">
+    <form [formGroup]="form" (ngSubmit)="salvar()" class="mt-6">
 
-      <!-- LINHA 1 - DATA / HORÁRIO / PACIENTE / CONVÊNIO -->
       <div class="flex">
-        <div class="w-[8rem] mr-4" >
-          <label class="block font-medium text-gray-700" for="data">Data</label>
-          <input type="date" formControlName="data" required id="data"
-                 class="mt-1 p-1.5 block w-full rounded-md border border-gray-300"
-                 [ngClass]="validationClasses('data')" >
+        <div class="w-[7rem] mr-4" >
+          <label class="label-campo" for="data">
+            Data <span aria-hidden="true" class="text-red-500">*</span>
+            <input type="date" formControlName="data" required id="data"
+                   class="campo" [ngClass]="validationClasses('data')" >
+            <div *ngIf="isInvalid('data')" class="text-red-500 text-sm">
+              Data é obrigatória
+            </div>
+          </label>
         </div>
-        <div class="w-[4rem] mr-4">
-          <label class="block font-medium text-gray-700" for="hora">Horário</label>
-          <input type="text" formControlName="hora" maxlength="5" id="hora" required
-                 mask="00:00" emptyToNull class="mt-1 p-[7px] block w-full rounded-md border border-gray-300"
-                 [ngClass]="validationClasses('hora')">
+        <div class="w-[4rem] mr-4 group">
+          <label class="label-campo" for="hora">
+            <div class="tooltip">Horário inicial do agendamento</div>
+            Horário <span aria-hidden="true" class="text-red-500">*</span>
+            <input type="text" formControlName="hora" maxlength="5" id="hora" required
+                   mask="00:00" emptyToNull class="campo p-[7px]" [dropSpecialCharacters]="false"
+                   [ngClass]="validationClasses('hora')">
+          </label>
         </div>
-        <div class="w-[25rem] mr-4" >
-          <label class="block font-medium text-gray-700" for="pacienteId">Paciente</label>
-          <ng-select formControlName="pacienteId" class="mt-1 block w-full rounded-md"
-                     [ngClass]="validationClasses('pacienteId')" labelForId="pacienteId" placeholder="Selecione o paciente"
-                     (change)="selectPaciente($event)" (clear)="selectPaciente(null)" required >
-            @for(paciente of this.pacientes; track paciente.id) {
-              <ng-option [value]="paciente.id" class="b-0">{{ paciente.nome }} - {{ paciente.dataNascimento | date:'dd/MM/yyyy' }}</ng-option>
-            }
-            <ng-template ng-notfound-tmp>
-              <div class="p-2 flex items-center justify-between gap-4">
-                <div class="p-2 text-sm">
-                  Paciente não encontrado.
-                </div>
-                <button (click)="mostrarFormularioNovoPaciente=true" class="btn-salvar flex items-center gap-2">
-                  <lucide-icon name="plus" class="w-3 h-3"></lucide-icon>
-                  Cadastrar
-                </button>
-              </div>
-            </ng-template>
-          </ng-select>
+        <div class="w-[4rem] mr-4 group" aria-placeholder="Duração em minutos" (mouseenter)="showTooltip = true" (mouseleave)="showTooltip = false" >
+          <label class="label-campo" for="duracao">
+            <div class="tooltip">Duração em minutos</div>
+            Duração <span aria-hidden="true" class="text-red-500">*</span>
+            <input type="number" formControlName="duracao" min="10" max="480" id="duracao" required
+                   (input)="limitLength($event)" emptyToNull maxlength="3"
+                   class="campo p-[7px]" [ngClass]="validationClasses('duracao')">
+          </label>
         </div>
-        <div class="w-[15rem]">
-          <label class="block font-medium text-gray-700" for="convenioId">Convênio</label>
-          <ng-select formControlName="convenioId" class="mt-1 block w-full rounded-md"
+        <div class="w-[24rem] mr-4" >
+          <label class="label-campo" for="pacienteId">
+            Paciente <span aria-hidden="true" class="text-red-500">*</span>
+              <ng-select formControlName="pacienteId" class="campo-select"
+                         [ngClass]="validationClasses('pacienteId')" labelForId="pacienteId" placeholder="Selecione o paciente"
+                         (change)="selectPaciente($event)" (clear)="selectPaciente(null)" required >
+                @for(paciente of this.pacientes; track paciente.id) {
+                  <ng-option [value]="paciente.id" class="b-0">{{ paciente.nome }} - {{ paciente.dataNascimento | date:'dd/MM/yyyy' }}</ng-option>
+                }
+                <ng-template ng-notfound-tmp>
+                  <div class="p-2 flex items-center justify-between gap-4">
+                    <div class="p-2 text-sm">
+                      Paciente não encontrado.
+                    </div>
+                    <button (click)="mostrarFormularioNovoPaciente=true" class="btn-salvar flex items-center gap-2">
+                      <lucide-icon name="plus" class="w-3 h-3"></lucide-icon>
+                      Cadastrar
+                    </button>
+                  </div>
+                </ng-template>
+              </ng-select>
+          </label>
+        </div>
+        <div class="w-[12rem]">
+          <label class="label-campo" for="convenioId">Convênio</label>
+          <ng-select formControlName="convenioId" class="campo-select"
                      [ngClass]="validationClasses('convenioId')"
                      [items]="this.convenios" bindValue="id" bindLabel="nome" labelForId="convenioId"  />
         </div>
       </div>
 
-      <!-- LINHA 2 - EMPRESA / PLANO EMPRESA -->
       <div class="flex mt-2">
-        <div class="mr-4 w-[30rem]" >
-          <label class="block font-medium text-gray-700" for="empresaId">Empresa</label>
-          <ng-select formControlName="empresaId" class="mt-1 block w-full rounded-md" [ngClass]="validationClasses('empresaId')"
-                     [items]="this.empresas" bindValue="id" bindLabel="nome" labelForId="empresaId"
-                     (change)="selectEmpresa($event)" (clear)="selectEmpresa(null)" />
-          <div class="py-2 px-4 text-xs italic rounded-b-md" *ngIf="empresaSelecionada"
-               [ngClass]="empresaSelecionada.plano?.corFundo">
-            {{ empresaSelecionada.plano?.nome }}
-          </div>
+        <div class="mr-4 w-[29rem]" >
+          <label class="label-campo" for="empresaId">
+            Empresa
+            <ng-select formControlName="empresaId" class="campo-select" [ngClass]="validationClasses('empresaId')"
+                       [items]="this.empresas" bindValue="id" bindLabel="nome" labelForId="empresaId"
+                       (change)="selectEmpresa($event)" (clear)="selectEmpresa(null)" />
+            <div class="py-2 px-4 text-xs italic rounded-b-md" *ngIf="empresaSelecionada"
+                 [ngClass]="empresaSelecionada.plano?.corFundo">
+              {{ empresaSelecionada.plano?.nome }}
+            </div>
+          </label>
         </div>
 
-        <div class="w-[24rem]" >
-          <label class="block font-medium text-gray-700" for="especialidadeId">Especialidade</label>
-          <ng-select formControlName="especialidadeId" required class="mt-1 block w-full rounded-md"
-                     labelForId="especialidadeId" [ngClass]="validationClasses('especialidadeId')"
-                     [items]="this.especialidades" bindValue="id" bindLabel="nome" (change)="selectEspecialidade($event)" />
+        <div class="w-[25rem]" >
+          <label class="label-campo" for="profissionalId">
+            Profissional <span aria-hidden="true" class="text-red-500">*</span>
+            <ng-select formControlName="profissionalId" required class="campo-select"
+                       [ngClass]="validationClasses('profissionalId')"
+                       [items]="this.profissionais" bindValue="id" bindLabel="nome" labelForId="profissionalId" />
+          </label>
         </div>
       </div>
 
-      <!-- LINHA 3 - ESPECIALIDADE / PROCEDIMENTO -->
       <div class="flex mt-2">
-        <div class="mr-4 w-[26rem]" >
-          <label class="block font-medium text-gray-700" for="profissionalId">Profissional</label>
-          <ng-select formControlName="profissionalId" required class="mt-1 block w-full rounded-md"
-                     [ngClass]="validationClasses('profissionalId')"
-                     [items]="this.profissionais" bindValue="id" bindLabel="nome" labelForId="profissionalId" />
+        <div class="w-[24rem] mr-4" >
+          <label class="label-campo" for="especialidadeId">
+            Especialidade <span aria-hidden="true" class="text-red-500">*</span>
+            <ng-select formControlName="especialidadeId" required class="campo-select"
+                       labelForId="especialidadeId" [ngClass]="validationClasses('especialidadeId')"
+                       [items]="this.especialidades" bindValue="id" bindLabel="nome" (change)="selectEspecialidade($event)" />
+          </label>
         </div>
 
-        <div class="w-[28rem]" >
-          <label class="block font-medium text-gray-700" for="procedimentoId">Procedimento</label>
-          <ng-select formControlName="procedimentoId" class="mt-1 block w-full rounded-md"
+        <div class="w-[30rem]" >
+          <label class="label-campo" for="procedimentoId">Procedimento</label>
+          <ng-select formControlName="procedimentoId" class="campo-select"
                      [ngClass]="validationClasses('procedimentoId')"
                      [items]="this.procedimentos" bindValue="id" bindLabel="nome" labelForId="procedimentoId" />
         </div>
-
       </div>
 
-      <!-- LINHA 4 - PROFISSIONAL -->
       <div class="flex mt-2">
-        <div class="mr-4 w-[26rem]" >
+        <div class="w-[10rem] mr-4" >
+          <label class="label-campo" for="formaPagamento">
+            Forma de Pagamento <span aria-hidden="true" class="text-red-500">*</span>
+            <ng-select formControlName="formaPagamento" class="campo-select"
+                       [ngClass]="validationClasses('profissionalId')" bindValue="valor" bindLabel="descricao"
+                       [items]="this.formasPagamento" labelForId="formaPagamento" />
+          </label>
         </div>
-
-        <div class="w-[28rem]" >
-
+        <div class="w-[6rem] mr-4" >
+          <label class="label-campo" for="valor">
+            Valor <span aria-hidden="true" class="text-red-500">*</span>
+            <div class="absolute p-2.5 shrink-0 text-base text-gray-400 select-none sm:text-sm/6">R$</div>
+            <input type="text" formControlName="valor" min="1" max="99999" id="valor" required
+                   (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
+                   mask="separator.2" thousandSeparator="" decimalMarker="," [dropSpecialCharacters]="false"
+                   class="campo pl-7 py-[7px]" [ngClass]="validationClasses('valor')">
+          </label>
+        </div>
+        <div class="w-[5rem] mr-4" >
+          <label class="label-campo" for="desconto">
+            Desconto
+            <div class="absolute p-2.5 shrink-0 text-base text-gray-400 select-none sm:text-sm/6">R$</div>
+            <input type="text" formControlName="desconto" min="1" max="99999" id="desconto"
+                   (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
+                   mask="separator.2" thousandSeparator="" decimalMarker=","
+                   class="campo pl-7 py-[7px]" [ngClass]="validationClasses('desconto')">
+          </label>
+        </div>
+        <div class="w-[31rem]" >
+          <label class="label-campo" for="observacoes">
+            Observações
+            <textarea id="observacoes" formControlName="observacoes" rows="1" emptyToNull class="campo"
+                      (input)="autoResize($event)">
+            </textarea>
+          </label>
         </div>
 
       </div>
@@ -109,7 +158,7 @@
         <button class="btn-cancelar" (click)="onCancel()" >
           Cancelar
         </button>
-        <button type="submit" class="btn-salvar" (click)="onConfirm()" >
+        <button type="submit" class="btn-salvar" >
           Agendar
         </button>
       </div>
