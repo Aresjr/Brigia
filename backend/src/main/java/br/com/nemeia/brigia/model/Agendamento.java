@@ -35,7 +35,11 @@ public class Agendamento extends BaseModel {
     private Unidade unidade;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "empresa_id", nullable = false)
+    @JoinColumn(name = "convenio_id")
+    private Convenio convenio;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empresa_id")
     private Empresa empresa;
 
     @ManyToOne(fetch = FetchType.LAZY)

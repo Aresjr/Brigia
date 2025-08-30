@@ -20,6 +20,7 @@ public record AgendamentoRequest(
         Long profissionalId,
         Long procedimentoId,
         Long empresaId,
+        Long convenioId,
         FormaPagamento formaPagamento,
         BigDecimal valor,
         BigDecimal desconto,

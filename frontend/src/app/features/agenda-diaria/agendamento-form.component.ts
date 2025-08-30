@@ -53,18 +53,20 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
   procedimentos: Procedimento[] = [];
   pacienteSelecionado?: Paciente | null;
   empresaSelecionada?: Empresa | null;
+  procedimentoSelecionado?: Procedimento | null;
   especialidadeSelecionada?: Especialidade | null;
   mostrarFormularioNovoPaciente: boolean = false;
   showTooltip: boolean = false;
   formasPagamento = FORMAS_PAGAMENTO;
+  mostratSalvar: boolean = true;
 
   protected readonly autoResize = autoResize;
   protected readonly limitLength = limitLength;
 
-  constructor(protected override fb: FormBuilder, private pacientesService: PacienteService, private toastr: ToastrService,
-              private conveniosService: ConveniosService, private especialidadeService: EspecialidadeService,
-              private profissionaisService: ProfissionaisService, private empresasService: EmpresasService,
-              private procedimentosService: ProcedimentosService) {
+  constructor(protected override fb: FormBuilder, private toastr: ToastrService,
+              private pacientesService: PacienteService, private conveniosService: ConveniosService,
+              private especialidadeService: EspecialidadeService, private profissionaisService: ProfissionaisService,
+              private empresasService: EmpresasService, private procedimentosService: ProcedimentosService) {
     super(fb);
 
     this.hoje = new Date().toISOString().split('T')[0];
@@ -88,6 +90,7 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.agendamento) {
+      this.mostratSalvar = false;
       this.titulo = 'Detalhes Agendamento';
     }
 
@@ -108,7 +111,6 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
 
   carregaDadosAgendamento() {
     if (this.agendamento) {
-      console.log(this.agendamento);
       this.form.patchValue(this.agendamento);
       this.form.patchValue({
         pacienteId: this.agendamento.paciente.id,
@@ -157,12 +159,14 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
       tap(procedimentos => this.procedimentos = procedimentos));
   }
 
-  onCancel() {
+  fechar() {
     this.cancel.emit();
   }
 
   onEdit() {
     this.form.enable();
+    this.form.get('pacienteId')?.disable();
+    this.mostratSalvar = true;
   }
 
   selectPaciente(id: number | null) {
@@ -178,6 +182,11 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
 
   selectEmpresa(empresa: Empresa | null | undefined) {
     this.empresaSelecionada = empresa;
+  }
+
+  selectProcedimento(procedimento: Procedimento | null | undefined) {
+    this.procedimentoSelecionado = procedimento;
+    this.atualizaPreco();
   }
 
   salvarNovoPaciente(paciente: Partial<Paciente>) {
@@ -200,7 +209,13 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
   }
 
   atualizaPreco() {
-    this.form.value.valor = 1;
+    if (this.procedimentoSelecionado) { //TODO - chamar obterPrecoProcedimentoConvenio para obter o preço do convênio
+      this.procedimentosService.listarTabelaPreco(this.procedimentoSelecionado.id).subscribe({
+        next: (response) => {
+          console.log('Tabela de Preço', response);
+        }
+      });
+    }
   }
 
   formValido(): boolean {
@@ -208,22 +223,20 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
       return false;
     }
     if (!isDataNoFuturo(this.form.value.data, this.form.value.hora)) {
-      this.toastr.warning('O agendamento deve ser em um horário futuro.');
+      this.toastr.warning('O agendamento deve ser em um horário futuro');
       return false;
     }
+    if (this.form.value.desconto > this.form.value.valor) {
+      this.toastr.warning('O desconto não pode ser maior do que o valor');
+      return false;
+    }
+
     return true;
   }
 
   salvar() {
     if (this.formValido()) {
-      let valor = this.form.value.valor;
-      valor = parseFloat(valor.replace(',', '.'));
-
-      const payload = {
-        ...this.form.value,
-        valor
-      };
-      this.save.emit(payload);
+      this.save.emit(this.form.value);
     } else {
       Object.keys(this.form.controls).forEach(field => {
         const control = this.form.get(field);

@@ -17,6 +17,7 @@ export abstract class FormComponent {
   }
 
   isInvalid(field: string): boolean | undefined {
-    return this.form?.get(field)?.invalid && this.form.get(field)?.touched;
+    const control = this.form.get(field);
+    return !!(control && control.invalid && (control.touched || control.dirty));
   }
 }

@@ -20,7 +20,7 @@ import { ToastrService } from 'ngx-toastr';
 export class AgendaDiariaComponent implements OnInit {
   agendamentoDetalhes: Agendamento | null = null;
   eventos: CalendarEvent<Agendamento>[] = [];
-  exibeNovoAgendamento: boolean = false;
+  exibeForm: boolean = false;
 
   constructor(private route: ActivatedRoute, private toastr: ToastrService,
               private agendamentoService: AgendamentosService) {
@@ -46,24 +46,33 @@ export class AgendaDiariaComponent implements OnInit {
 
   onAddNovo() {
     this.agendamentoDetalhes = null;
-    this.exibeNovoAgendamento = true;
+    this.exibeForm = true;
   }
 
-  fecharNovoAgendamento() {
-    this.exibeNovoAgendamento = false;
+  fecharForm() {
+    this.agendamentoDetalhes = null;
+    this.exibeForm = false;
   }
 
   salvar(agendamento: Partial<AgendamentoRequest>) {
+
+    console.log('salvar', 'agenda-diaria');
+
     if (this.agendamentoDetalhes) {
-      this.agendamentoService.atualizar(this.agendamentoDetalhes.id, agendamento)
-      console.log('Editar Procedimento ID', this.agendamentoDetalhes.id);
-      console.log(agendamento);
+      this.agendamentoService.atualizar(this.agendamentoDetalhes.id, agendamento).subscribe({
+        next: () => {
+          this.toastr.success('Agendamento atualizado');
+          this.carregarAgendamentos();
+          this.exibeForm = false;
+          this.agendamentoDetalhes = null;
+        }
+      });
     } else {
       this.agendamentoService.criar(agendamento).subscribe({
         next: () => {
           this.toastr.success(`Agendamento realizado`);
           this.carregarAgendamentos();
-          this.fecharNovoAgendamento();
+          this.fecharForm();
         }
       });
     }
@@ -71,6 +80,6 @@ export class AgendaDiariaComponent implements OnInit {
 
   detalhesAgendamento(agendamento: Agendamento) {
     this.agendamentoDetalhes = agendamento;
-    this.exibeNovoAgendamento = true;
+    this.exibeForm = true;
   }
 }

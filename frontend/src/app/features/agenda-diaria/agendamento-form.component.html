@@ -1,4 +1,4 @@
-<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm" (click)="onCancel()">
+<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm" (click)="fechar()">
   <div class="bg-white rounded-md shadow-lg p-6 w-[58rem]"
     (click)="$event.stopPropagation()" >
 
@@ -6,18 +6,14 @@
       <h2 class="text-lg font-semibold">{{ titulo }}</h2>
 
       <div>
-        <button class="text-gray-500 hover:text-gray-700" (click)="onEdit()" *ngIf="agendamento" title="Editar">
+        <button type="button" class="text-gray-500 hover:text-gray-700" (click)="onEdit()" *ngIf="agendamento" title="Editar">
           <lucide-icon name="pencil" class="right-0 inline w-5 h-5"/>
         </button>
-        <button class="text-gray-500 hover:text-gray-700" (click)="onCancel()" title="Cancelar">
+        <button type="button" class="text-gray-500 hover:text-gray-700" (click)="fechar()" title="Cancelar">
           <lucide-icon name="x" class="right-0 inline w-6 h-6 ml-1"/>
         </button>
       </div>
     </div>
-
-<!--    <div *ngIf="agendamento" class="flex justify-between items-center">-->
-<!--      <h3 class="">{{ titulo }}</h3>-->
-<!--    </div>-->
 
     <form [formGroup]="form" (ngSubmit)="salvar()" class="mt-6">
       <div class="flex">
@@ -38,6 +34,9 @@
             <input type="text" formControlName="hora" maxlength="5" id="hora" required
                    mask="00:00" emptyToNull class="campo p-[7px]" [dropSpecialCharacters]="false"
                    [ngClass]="validationClasses('hora')">
+            <div *ngIf="isInvalid('hora')" class="text-red-500 text-sm">
+              Obrigatório
+            </div>
           </label>
         </div>
         <div class="w-[4rem] mr-4 group" aria-placeholder="Duração em minutos" (mouseenter)="showTooltip = true" (mouseleave)="showTooltip = false" >
@@ -47,6 +46,9 @@
             <input type="number" formControlName="duracao" min="10" max="480" id="duracao" required
                    (input)="limitLength($event)" emptyToNull maxlength="3"
                    class="campo p-[7px]" [ngClass]="validationClasses('duracao')">
+            <div *ngIf="isInvalid('duracao')" class="text-red-500 text-sm">
+              Obrigatório
+            </div>
           </label>
         </div>
         <div class="w-[24rem] mr-4" >
@@ -70,6 +72,9 @@
                   </div>
                 </ng-template>
               </ng-select>
+            <div *ngIf="isInvalid('pacienteId')" class="text-red-500 text-sm">
+              Obrigatório
+            </div>
           </label>
         </div>
         <div class="w-[12rem]">
@@ -100,6 +105,9 @@
             <ng-select formControlName="profissionalId" required class="campo-select"
                        [ngClass]="validationClasses('profissionalId')"
                        [items]="this.profissionais" bindValue="id" bindLabel="nome" labelForId="profissionalId" />
+            <div *ngIf="isInvalid('profissionalId')" class="text-red-500 text-sm">
+              Obrigatório
+            </div>
           </label>
         </div>
       </div>
@@ -111,6 +119,9 @@
             <ng-select formControlName="especialidadeId" required class="campo-select"
                        labelForId="especialidadeId" [ngClass]="validationClasses('especialidadeId')"
                        [items]="this.especialidades" bindValue="id" bindLabel="nome" (change)="selectEspecialidade($event)" />
+            <div *ngIf="isInvalid('especialidadeId')" class="text-red-500 text-sm">
+              Obrigatório
+            </div>
           </label>
         </div>
 
@@ -118,6 +129,7 @@
           <label class="label-campo" for="procedimentoId">Procedimento</label>
           <ng-select formControlName="procedimentoId" class="campo-select"
                      [ngClass]="validationClasses('procedimentoId')"
+                     (change)="selectProcedimento($event)" (clear)="selectProcedimento(null)"
                      [items]="this.procedimentos" bindValue="id" bindLabel="nome" labelForId="procedimentoId" />
         </div>
       </div>
@@ -126,9 +138,12 @@
         <div class="w-[11rem] mr-4" >
           <label class="label-campo" for="formaPagamento">
             Forma de Pagamento <span aria-hidden="true" class="text-red-500">*</span>
-            <ng-select formControlName="formaPagamento" class="campo-select"
+            <ng-select formControlName="formaPagamento" class="campo-select" required
                        [ngClass]="validationClasses('profissionalId')" bindValue="valor" bindLabel="descricao"
                        [items]="this.formasPagamento" labelForId="formaPagamento" />
+            <div *ngIf="isInvalid('formaPagamento')" class="text-red-500 text-sm">
+              Obrigatório
+            </div>
           </label>
         </div>
         <div class="w-[6rem] mr-4" >
@@ -137,8 +152,11 @@
             <div class="placeholder-esquerdo">R$</div>
             <input type="text" formControlName="valor" min="1" max="99999" id="valor" required
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
-                   mask="separator.2" thousandSeparator="" decimalMarker="," [dropSpecialCharacters]="false"
+                   mask="separator.2" thousandSeparator="" decimalMarker=","
                    class="campo pl-7 py-[7px]" [ngClass]="validationClasses('valor')">
+            <div *ngIf="isInvalid('valor')" class="text-red-500 text-sm">
+              Obrigatório
+            </div>
           </label>
         </div>
         <div class="w-[5rem] mr-4" >
@@ -163,10 +181,10 @@
       </div>
 
       <div class="flex justify-end gap-3 mt-6">
-        <button class="btn-cancelar" (click)="onCancel()" >
-          Cancelar
+        <button type="button" class="btn-cancelar" (click)="fechar()" >
+          Fechar
         </button>
-        <button type="submit" class="btn-salvar" >
+        <button type="submit" class="btn-salvar" *ngIf="mostratSalvar" >
           Salvar
         </button>
       </div>

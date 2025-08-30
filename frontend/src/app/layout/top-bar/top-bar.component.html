@@ -9,7 +9,7 @@
              id="filtro" placeholder="Filtrar" maxlength="20"
              class="pl-7 pr-4 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-grey-900 focus:border-transparent" />
     </div>
-    <button *ngIf="addNovo" (click)="onAddNovo()" class="px-4 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 flex items-center gap-2">
+    <button type="button" *ngIf="addNovo" (click)="onAddNovo()" class="px-4 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 flex items-center gap-2">
       <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
       Novo
     </button>

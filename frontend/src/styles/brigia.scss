@@ -57,6 +57,12 @@
   @apply absolute p-2.5 shrink-0 text-base text-gray-500 select-none sm:text-sm/6;
 }
 
+.toast-center-screen {
+  @apply toast-top-right;
+  margin-right: 2rem;
+  margin-top: 2rem;
+}
+
 .ng-select .ng-select-container  {
   border:1px;
 }

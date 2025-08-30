@@ -18,11 +18,13 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     private final EspecialidadeService especialidadeService;
     private final ProcedimentoService procedimentoService;
     private final EmpresaService empresaService;
+    private final ConvenioService convenioService;
 
     public AgendamentoService(AgendamentoRepository repository, SecurityUtils securityUtils,
                               AgendamentoMapper mapper, PacienteService pacienteService,
                               ProfissionalService profissionalService, EspecialidadeService especialidadeService,
-                              ProcedimentoService procedimentoService, EmpresaService empresaService) {
+                              ProcedimentoService procedimentoService, EmpresaService empresaService,
+                              ConvenioService convenioService) {
         super(repository, securityUtils);
         this.mapper = mapper;
         this.pacienteService = pacienteService;
@@ -30,11 +32,31 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         this.especialidadeService = especialidadeService;
         this.procedimentoService = procedimentoService;
         this.empresaService = empresaService;
+        this.convenioService = convenioService;
     }
 
     public Agendamento createAgendamento(AgendamentoRequest request) {
         Agendamento agendamento = mapper.toEntity(request);
+        setEntidades(request, agendamento);
 
+        agendamento.setStatus(StatusAgendamento.AGENDADO);
+        agendamento.setUnidade(new Unidade(securityUtils.getLoggedUserUnidadeId()));
+
+        return repository.save(agendamento);
+    }
+
+    public Agendamento editAgendamento(Long id, AgendamentoRequest request) {
+        Agendamento original = getById(id);
+        Agendamento agendamentoUpdate = mapper.toEntity(request);
+        setEntidades(request, agendamentoUpdate);
+
+        agendamentoUpdate.setId(id);
+        agendamentoUpdate.setStatus(original.getStatus());
+        agendamentoUpdate.setUnidade(original.getUnidade());
+        return repository.save(agendamentoUpdate);
+    }
+
+    private void setEntidades(AgendamentoRequest request, Agendamento agendamento) {
         if (request.pacienteId() != null) {
             agendamento.setPaciente(pacienteService.getPacienteById(request.pacienteId()));
         }
@@ -50,18 +72,9 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         if (request.empresaId() != null) {
             agendamento.setEmpresa(empresaService.getById(request.empresaId()));
         }
-
-        agendamento.setStatus(StatusAgendamento.AGENDADO);
-        agendamento.setUnidade(new Unidade(securityUtils.getLoggedUserUnidadeId()));
-
-        return repository.save(agendamento);
-    }
-
-    public Agendamento editAgendamento(Long id, AgendamentoRequest request) {
-        getById(id);
-        Agendamento agendamento = mapper.toEntity(request);
-        agendamento.setId(id);
-        return repository.save(agendamento);
+        if (request.convenioId() != null) {
+            agendamento.setConvenio(convenioService.getById(request.convenioId()));
+        }
     }
 
     @Override

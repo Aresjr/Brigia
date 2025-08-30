@@ -15,12 +15,15 @@ export class ProcedimentosService extends BaseService<Procedimento, Procedimento
   override path = '/procedimentos';
 
   listarTabelaPreco(id: number): Observable<TabelaPrecoResponse> {
-    this.limparCache();
     return this.backend.get<TabelaPrecoResponse>(`${this.path}/${id}/tabela-preco`);
   }
 
   atualizarPreco(precoConvenio: PrecoProcedimentoConvenio): Observable<void> {
     this.limparCache();
     return this.backend.patch<PrecoProcedimentoConvenio>(`${this.path}/${precoConvenio.id}/atualizar-preco`, precoConvenio);
+  }
+
+  obterPrecoProcedimentoConvenio(idProcedimento: number, idConvenio: number): Observable<PrecoProcedimentoConvenio> {
+    return this.backend.get<PrecoProcedimentoConvenio>(`${this.path}/${idProcedimento}/tabela-preco/${idConvenio}`);
   }
 }
