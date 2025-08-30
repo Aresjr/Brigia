@@ -7,7 +7,3 @@ export interface Especialidade extends Entidade {
 export interface EspecialidadeRequest extends EntidadeRequest {
     descricao: string | null;
 }
-
-export interface EspecialidadesResponse extends EntidadeResponse {
-    items: Especialidade[];
-}

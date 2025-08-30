@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Paciente } from '../pacientes/paciente.interface';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PacienteService } from '../pacientes/paciente.service';
@@ -19,15 +19,16 @@ import { ToastrService } from 'ngx-toastr';
 import { Procedimento } from '../procedimentos/procedimento.interface';
 import { ProcedimentosService } from '../procedimentos/procedimentos.service';
 import { FormComponent } from '../shared/form.component';
-import { AgendamentoRequest } from './agendamento.interface';
+import { Agendamento, AgendamentoRequest } from './agendamento.interface';
 import { IForm } from '../shared/form.interface';
 import { LucideAngularModule } from 'lucide-angular';
-import { autoResize, limitLength } from '../../core/util-methods';
+import { autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
 import { FORMAS_PAGAMENTO } from '../../core/constans';
+import { forkJoin, map, Observable, tap } from 'rxjs';
 
 @Component({
-  selector: 'app-agendamento-novo',
-  templateUrl: './agendamento-novo.component.html',
+  selector: 'app-agendamento-form',
+  templateUrl: './agendamento-form.component.html',
   imports: [
     NgOptionComponent, NgSelectComponent,
     ReactiveFormsModule, NgClass,
@@ -36,10 +37,14 @@ import { FORMAS_PAGAMENTO } from '../../core/constans';
     DatePipe, NgIf, LucideAngularModule
   ]
 })
-export class AgendamentoNovoComponent extends FormComponent implements OnInit {
+export class AgendamentoFormComponent extends FormComponent implements OnInit {
+  @Input() agendamento: Agendamento | null = null;
+  @Input() horaAgendamento: string | null = null;
   @Output() save = new EventEmitter<Partial<AgendamentoRequest>>();
   @Output() cancel = new EventEmitter<void>();
 
+  titulo: string = 'Novo Agendamento';
+  hoje: string;
   pacientes: Paciente[] = [];
   convenios: Convenio[] = [];
   especialidades: Especialidade[] = [];
@@ -62,10 +67,10 @@ export class AgendamentoNovoComponent extends FormComponent implements OnInit {
               private procedimentosService: ProcedimentosService) {
     super(fb);
 
-    const hoje = new Date().toISOString().split('T')[0];
+    this.hoje = new Date().toISOString().split('T')[0];
     const form: IForm<AgendamentoRequest> = {
       pacienteId: [null, {nonNullable: true}],
-      data: [hoje, {nonNullable: true}],
+      data: [this.hoje, {nonNullable: true}],
       hora: [null, {nonNullable: true}],
       duracao: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(3)]],
       profissionalId: [null, {nonNullable: true}],
@@ -82,64 +87,82 @@ export class AgendamentoNovoComponent extends FormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.carregarPacientes();
-    this.carregarConvenios();
-    this.carregarEspecialidades();
-    this.carregarProfissionais();
-    this.carregarEmpresas();
-    this.carregarProcedimentos();
-  }
+    if (this.agendamento) {
+      this.titulo = 'Detalhes Agendamento';
+    }
 
-  carregarPacientes(): void {
-    this.pacientesService.listar().subscribe({
-      next: (response) => {
-        this.pacientes = response.items;
+    forkJoin([
+      this.carregarPacientes(),
+      this.carregarConvenios(),
+      this.carregarEspecialidades(),
+      this.carregarProfissionais(),
+      this.carregarEmpresas(),
+      this.carregarProcedimentos()
+    ]).subscribe(() => {
+      if (this.agendamento) {
+        this.carregaDadosAgendamento();
+        this.form.disable();
       }
     });
   }
 
-  carregarConvenios(): void {
-    this.conveniosService.listar().subscribe({
-      next: (response) => {
-        this.convenios = response.items;
-      }
-    });
+  carregaDadosAgendamento() {
+    if (this.agendamento) {
+      console.log(this.agendamento);
+      this.form.patchValue(this.agendamento);
+      this.form.patchValue({
+        pacienteId: this.agendamento.paciente.id,
+        profissionalId: this.agendamento.profissional.id,
+        especialidadeId: this.agendamento.especialidade.id,
+        procedimentoId: this.agendamento.procedimento.id,
+        convenioId: this.agendamento.convenio?.id,
+        empresaId: this.agendamento.empresa?.id,
+      });
+    }
   }
 
-  carregarEspecialidades(): void {
-    this.especialidadeService.listar().subscribe({
-      next: (response) => {
-        this.especialidades = response.items;
-      }
-    });
+  carregarPacientes(): Observable<Paciente[]> {
+    return this.pacientesService.listar().pipe(
+      map(response => response.items),
+      tap(pacientes => this.pacientes = pacientes));
   }
 
-  carregarProfissionais(): void {
-    this.profissionaisService.listar().subscribe({
-      next: (response) => {
-        this.profissionais = response.items;
-      }
-    });
+  carregarConvenios(): Observable<Convenio[]> {
+    return this.conveniosService.listar().pipe(
+      map(response => response.items),
+      tap(convenios => this.convenios = convenios));
   }
 
-  carregarEmpresas(): void {
-    this.empresasService.listar().subscribe({
-      next: (response) => {
-        this.empresas = response.items;
-      }
-    });
+  carregarEspecialidades(): Observable<Especialidade[]> {
+    return this.especialidadeService.listar().pipe(
+      map(response => response.items),
+      tap(especialidades => this.especialidades = especialidades));
   }
 
-  carregarProcedimentos(): void {
-    this.procedimentosService.listar().subscribe({
-      next: (response) => {
-        this.procedimentos = response.items;
-      }
-    });
+  carregarProfissionais(): Observable<Profissional[]> {
+    return this.profissionaisService.listar().pipe(
+      map(response => response.items),
+      tap(profissionais => this.profissionais = profissionais));
+  }
+
+  carregarEmpresas(): Observable<Empresa[]> {
+    return this.empresasService.listar().pipe(
+      map(response => response.items),
+      tap(empresas => this.empresas = empresas));
+  }
+
+  carregarProcedimentos(): Observable<Procedimento[]> {
+    return this.procedimentosService.listar().pipe(
+      map(response => response.items),
+      tap(procedimentos => this.procedimentos = procedimentos));
   }
 
   onCancel() {
     this.cancel.emit();
+  }
+
+  onEdit() {
+    this.form.enable();
   }
 
   selectPaciente(id: number | null) {
@@ -176,13 +199,25 @@ export class AgendamentoNovoComponent extends FormComponent implements OnInit {
     this.especialidadeSelecionada = especialidade;
   }
 
+  atualizaPreco() {
+    this.form.value.valor = 1;
+  }
+
+  formValido(): boolean {
+    if (!this.form.valid) {
+      return false;
+    }
+    if (!isDataNoFuturo(this.form.value.data, this.form.value.hora)) {
+      this.toastr.warning('O agendamento deve ser em um horário futuro.');
+      return false;
+    }
+    return true;
+  }
+
   salvar() {
-    console.log('salvar');
-    if (this.form.valid) {
-      let valor = this.form.value.valor; // "125,50"
-      if (valor) {
-        valor = parseFloat(valor.replace(',', '.')); // 125.50
-      }
+    if (this.formValido()) {
+      let valor = this.form.value.valor;
+      valor = parseFloat(valor.replace(',', '.'));
 
       const payload = {
         ...this.form.value,

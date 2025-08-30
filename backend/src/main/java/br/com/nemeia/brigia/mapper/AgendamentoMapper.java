@@ -21,6 +21,7 @@ public class AgendamentoMapper {
     private final EspecialidadeMapper especialidadeMapper;
     private final ProfissionalMapper profissionalMapper;
     private final ProcedimentoMapper procedimentoMapper;
+    private final EmpresaMapper empresaMapper;
 
     public AgendamentoResponse toResponse(Agendamento agendamento) {
         if (agendamento == null) {
@@ -34,12 +35,14 @@ public class AgendamentoMapper {
                 agendamento.getHora(),
                 unidadeMapper.toResponse(agendamento.getUnidade()),
                 especialidadeMapper.toResponse(agendamento.getEspecialidade()),
+                empresaMapper.toResponse(agendamento.getEmpresa()),
                 profissionalMapper.toResponse(agendamento.getProfissional()),
                 procedimentoMapper.toResponse(agendamento.getProcedimento()),
                 agendamento.getStatus(),
                 agendamento.getFormaPagamento(),
                 agendamento.getValor(),
                 agendamento.getDesconto(),
+                agendamento.getObservacoes(),
                 agendamento.getDuracao(),
                 agendamento.getCriadoEm(),
                 agendamento.getExcluido());

@@ -1,25 +1,33 @@
-<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm">
+<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm" (click)="onCancel()">
   <div class="bg-white rounded-md shadow-lg p-6 w-[58rem]"
     (click)="$event.stopPropagation()" >
 
     <div class="flex justify-between items-center">
-      <h2 class="text-lg font-semibold">Novo Agendamento</h2>
+      <h2 class="text-lg font-semibold">{{ titulo }}</h2>
 
-      <button class="text-gray-500 hover:text-gray-700" (click)="onCancel()">
-        <lucide-icon name="x" class="right-0 inline w-6 h-6"/>
-      </button>
+      <div>
+        <button class="text-gray-500 hover:text-gray-700" (click)="onEdit()" *ngIf="agendamento" title="Editar">
+          <lucide-icon name="pencil" class="right-0 inline w-5 h-5"/>
+        </button>
+        <button class="text-gray-500 hover:text-gray-700" (click)="onCancel()" title="Cancelar">
+          <lucide-icon name="x" class="right-0 inline w-6 h-6 ml-1"/>
+        </button>
+      </div>
     </div>
 
-    <form [formGroup]="form" (ngSubmit)="salvar()" class="mt-6">
+<!--    <div *ngIf="agendamento" class="flex justify-between items-center">-->
+<!--      <h3 class="">{{ titulo }}</h3>-->
+<!--    </div>-->
 
+    <form [formGroup]="form" (ngSubmit)="salvar()" class="mt-6">
       <div class="flex">
         <div class="w-[7rem] mr-4" >
           <label class="label-campo" for="data">
             Data <span aria-hidden="true" class="text-red-500">*</span>
-            <input type="date" formControlName="data" required id="data"
+            <input type="date" formControlName="data" required id="data" [min]="hoje"
                    class="campo" [ngClass]="validationClasses('data')" >
             <div *ngIf="isInvalid('data')" class="text-red-500 text-sm">
-              Data é obrigatória
+              Obrigatório
             </div>
           </label>
         </div>
@@ -73,7 +81,7 @@
       </div>
 
       <div class="flex mt-2">
-        <div class="mr-4 w-[29rem]" >
+        <div class="mr-4 w-[24rem]" >
           <label class="label-campo" for="empresaId">
             Empresa
             <ng-select formControlName="empresaId" class="campo-select" [ngClass]="validationClasses('empresaId')"
@@ -86,7 +94,7 @@
           </label>
         </div>
 
-        <div class="w-[25rem]" >
+        <div class="w-[30rem]" >
           <label class="label-campo" for="profissionalId">
             Profissional <span aria-hidden="true" class="text-red-500">*</span>
             <ng-select formControlName="profissionalId" required class="campo-select"
@@ -115,7 +123,7 @@
       </div>
 
       <div class="flex mt-2">
-        <div class="w-[10rem] mr-4" >
+        <div class="w-[11rem] mr-4" >
           <label class="label-campo" for="formaPagamento">
             Forma de Pagamento <span aria-hidden="true" class="text-red-500">*</span>
             <ng-select formControlName="formaPagamento" class="campo-select"
@@ -126,7 +134,7 @@
         <div class="w-[6rem] mr-4" >
           <label class="label-campo" for="valor">
             Valor <span aria-hidden="true" class="text-red-500">*</span>
-            <div class="absolute p-2.5 shrink-0 text-base text-gray-400 select-none sm:text-sm/6">R$</div>
+            <div class="placeholder-esquerdo">R$</div>
             <input type="text" formControlName="valor" min="1" max="99999" id="valor" required
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker="," [dropSpecialCharacters]="false"
@@ -136,17 +144,17 @@
         <div class="w-[5rem] mr-4" >
           <label class="label-campo" for="desconto">
             Desconto
-            <div class="absolute p-2.5 shrink-0 text-base text-gray-400 select-none sm:text-sm/6">R$</div>
+            <div class="placeholder-esquerdo">R$</div>
             <input type="text" formControlName="desconto" min="1" max="99999" id="desconto"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker=","
                    class="campo pl-7 py-[7px]" [ngClass]="validationClasses('desconto')">
           </label>
         </div>
-        <div class="w-[31rem]" >
+        <div class="w-[30rem]" >
           <label class="label-campo" for="observacoes">
             Observações
-            <textarea id="observacoes" formControlName="observacoes" rows="1" emptyToNull class="campo"
+            <textarea id="observacoes" formControlName="observacoes" rows="2" emptyToNull class="campo"
                       (input)="autoResize($event)">
             </textarea>
           </label>
@@ -159,13 +167,12 @@
           Cancelar
         </button>
         <button type="submit" class="btn-salvar" >
-          Agendar
+          Salvar
         </button>
       </div>
     </form>
 
   </div>
-
 </div>
 
 @if (mostrarFormularioNovoPaciente) {

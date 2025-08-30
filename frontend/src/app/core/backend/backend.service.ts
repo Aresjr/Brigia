@@ -14,34 +14,34 @@ export class BackendService {
 
   baseUrl = environment.apiUrl;
 
-  get<T>(path: string): Observable<T> {
-    return this.http.get<T>(`${this.baseUrl}${path}`, { withCredentials: true, observe: 'response' })
+  get<Response>(path: string): Observable<Response> {
+    return this.http.get<Response>(`${this.baseUrl}${path}`, { withCredentials: true, observe: 'response' })
       .pipe(
-        map((response) => response.body as T),
+        map((response) => response.body as Response),
         catchError((error) => this.handleError(path, error))
       );
   }
 
-  post<T, Y>(path: string, payload: Partial<T>) {
-    return this.http.post<Y>(`${this.baseUrl}${path}`, payload, { withCredentials: true, observe: 'response' })
+  post<Request, Response>(path: string, payload: Partial<Request>) {
+    return this.http.post<Request>(`${this.baseUrl}${path}`, payload, { withCredentials: true, observe: 'response' })
       .pipe(
-        map((response) => response.body as Y),
+        map((response) => response.body as Response),
         catchError((error) => this.handleError(path, error))
       );
   }
 
-  put<T>(path: string, payload: Partial<T>) {
-    return this.http.put<T>(`${this.baseUrl}${path}`, payload, { withCredentials: true, observe: 'response' })
+  put<Request, Response>(path: string, payload: Partial<Request>) {
+    return this.http.put<Request>(`${this.baseUrl}${path}`, payload, { withCredentials: true, observe: 'response' })
       .pipe(
-        map((response) => response.body as T),
+        map((response) => response.body as Response),
         catchError((error) => this.handleError(path, error))
       );
   }
 
-  delete<T>(path: string): Observable<T> {
-    return this.http.delete<T>(`${this.baseUrl}${path}`, { withCredentials: true, observe: 'response' })
+  delete(path: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}${path}`, { withCredentials: true, observe: 'response' })
       .pipe(
-        map((response) => response.body as T),
+        map(() => undefined),
         catchError((error) => this.handleError(path, error))
       );
   }

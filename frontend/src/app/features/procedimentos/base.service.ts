@@ -2,21 +2,21 @@ import { catchError, map, Observable, shareReplay, throwError } from 'rxjs';
 import { BackendService } from '../../core/backend/backend.service';
 import { ToastrService } from 'ngx-toastr';
 import { Injectable } from '@angular/core';
-import { Entidade, EntidadeRequest, EntidadeResponse } from '../shared/entidade.interface';
+import { Entidade, EntidadeRequest, PagedResponse } from '../shared/entidade.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BaseService<T extends Entidade, Z extends EntidadeRequest, Y extends EntidadeResponse> {
+export class BaseService<Entid extends Entidade, Request extends EntidadeRequest> {
 
   constructor(protected backend: BackendService, protected toastr: ToastrService) {}
 
   path = '/';
-  cache$: Observable<Y> | null = null;
+  cache$: Observable<PagedResponse<Entid>> | null = null;
 
-  listar(mostrarExcluidos: boolean = false): Observable<Y> {
+  listar(mostrarExcluidos: boolean = false): Observable<PagedResponse<Entid>> {
     if (!this.cache$) {
-      this.cache$ = this.backend.get<Y>(`${this.path}?mostrarExcluidos=true&size=999`).pipe(
+      this.cache$ = this.backend.get<PagedResponse<Entid>>(`${this.path}?mostrarExcluidos=true&size=999`).pipe(
         shareReplay(1),
         catchError((e) => {
           this.toastr.error('Erro ao carregar os registros. Por favor, tente novamente.');
@@ -32,7 +32,7 @@ export class BaseService<T extends Entidade, Z extends EntidadeRequest, Y extend
     return this.cache$;
   }
 
-  listarNaoExcluidos(): Observable<Y> {
+  listarNaoExcluidos(): Observable<PagedResponse<Entid>> {
     return this.cache$!.pipe(
       map(response => ({
         ...response,
@@ -41,9 +41,9 @@ export class BaseService<T extends Entidade, Z extends EntidadeRequest, Y extend
     );
   }
 
-  criar(registro: Partial<Z>): Observable<T> {
+  criar(registro: Partial<Request>): Observable<Entid> {
     this.limparCache();
-    return this.backend.post<Z, T>(this.path, registro).pipe(
+    return this.backend.post<Request, Entid>(this.path, registro).pipe(
       catchError((e) => {
         const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
         this.toastr.error(errorMessage, 'Erro ao cadastrar o registro.');
@@ -52,9 +52,9 @@ export class BaseService<T extends Entidade, Z extends EntidadeRequest, Y extend
     );
   }
 
-  atualizar(id: number, procedimento: Partial<T>): Observable<T> {
+  atualizar(id: number, registro: Partial<Request>): Observable<Entid> {
     this.limparCache();
-    return this.backend.put<T>(`${this.path}/${id}`, procedimento).pipe(
+    return this.backend.put<Request, Entid>(`${this.path}/${id}`, registro).pipe(
       catchError((e) => {
         const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
         this.toastr.error(errorMessage, 'Erro ao atualizar o registro.');
@@ -65,7 +65,7 @@ export class BaseService<T extends Entidade, Z extends EntidadeRequest, Y extend
 
   excluir(id: number): Observable<void> {
     this.limparCache();
-    return this.backend.delete<void>(`${this.path}/${id}`).pipe(
+    return this.backend.delete(`${this.path}/${id}`).pipe(
       catchError((e) => {
         const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
         this.toastr.error(errorMessage, 'Erro ao excluir o registro. Por favor, tente novamente.');

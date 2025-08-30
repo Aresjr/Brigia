@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
-import { AgendamentoNovoComponent } from './agendamento-novo.component';
+import { AgendamentoFormComponent } from './agendamento-form.component';
 import { Agendamento, AgendamentoRequest, EventoFactory } from './agendamento.interface';
 import { CalendarioComponent } from '../shared/calendario/calendario.component';
 import { CalendarEvent } from 'angular-calendar';
@@ -12,12 +12,13 @@ import { ToastrService } from 'ngx-toastr';
   selector: 'app-agenda-diaria',
   imports: [
     TopBarComponent,
-    AgendamentoNovoComponent,
+    AgendamentoFormComponent,
     CalendarioComponent
   ],
   templateUrl: './agenda-diaria.component.html'
 })
 export class AgendaDiariaComponent implements OnInit {
+  agendamentoDetalhes: Agendamento | null = null;
   eventos: CalendarEvent<Agendamento>[] = [];
   exibeNovoAgendamento: boolean = false;
 
@@ -38,14 +39,13 @@ export class AgendaDiariaComponent implements OnInit {
     this.agendamentoService.listar().subscribe({
       next: value => {
         const agendamentos = value.items;
-        console.log(agendamentos);
         this.eventos = agendamentos.map(a => EventoFactory.fromApi(a));
-        console.log(this.eventos);
       }
     });
   }
 
   onAddNovo() {
+    this.agendamentoDetalhes = null;
     this.exibeNovoAgendamento = true;
   }
 
@@ -53,13 +53,24 @@ export class AgendaDiariaComponent implements OnInit {
     this.exibeNovoAgendamento = false;
   }
 
-  agendar(agendamento: Partial<AgendamentoRequest>) {
-    this.agendamentoService.criar(agendamento).subscribe({
-      next: () => {
-        this.toastr.success(`Agendamento realizado`);
-        this.carregarAgendamentos();
-        this.fecharNovoAgendamento();
-      }
-    });
+  salvar(agendamento: Partial<AgendamentoRequest>) {
+    if (this.agendamentoDetalhes) {
+      this.agendamentoService.atualizar(this.agendamentoDetalhes.id, agendamento)
+      console.log('Editar Procedimento ID', this.agendamentoDetalhes.id);
+      console.log(agendamento);
+    } else {
+      this.agendamentoService.criar(agendamento).subscribe({
+        next: () => {
+          this.toastr.success(`Agendamento realizado`);
+          this.carregarAgendamentos();
+          this.fecharNovoAgendamento();
+        }
+      });
+    }
+  }
+
+  detalhesAgendamento(agendamento: Agendamento) {
+    this.agendamentoDetalhes = agendamento;
+    this.exibeNovoAgendamento = true;
   }
 }

@@ -2,9 +2,9 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ElementRef,
+  ElementRef, EventEmitter,
   Input,
-  OnInit,
+  Output,
   Renderer2
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -16,6 +16,7 @@ import {
 import { Subject } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
+import { Agendamento } from '../../agenda-diaria/agendamento.interface';
 
 @Component({
   selector: 'app-calendario',
@@ -29,8 +30,9 @@ import { LucideAngularModule } from 'lucide-angular';
   templateUrl: './calendario.component.html',
   styleUrl: 'calendario.component.css'
 })
-export class CalendarioComponent implements OnInit, AfterViewInit {
-  @Input() events: CalendarEvent[] = [];
+export class CalendarioComponent implements AfterViewInit {
+  @Input() events: CalendarEvent<Agendamento>[] = [];
+  @Output() detalhesAgendamento = new EventEmitter<Agendamento>();
 
   view: CalendarView = CalendarView.Week;
   CalendarView = CalendarView;
@@ -41,11 +43,7 @@ export class CalendarioComponent implements OnInit, AfterViewInit {
 
   constructor(private elementRef: ElementRef, private renderer: Renderer2, private cdr: ChangeDetectorRef) {}
 
-  ngOnInit(): void {
-
-  }
-
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent<Agendamento>[] }): void {
     console.log('dayClicked');
     console.log(date);
     console.log(events);
@@ -59,8 +57,8 @@ export class CalendarioComponent implements OnInit, AfterViewInit {
     }
   }
 
-  verAgendamento(event: CalendarEvent): void {
-    console.log(event);
+  verAgendamento(evento: CalendarEvent<Agendamento>): void {
+    this.detalhesAgendamento.emit(evento.meta);
   }
 
   handleHour($event: { date: Date; sourceEvent: MouseEvent }) {

@@ -1,5 +1,6 @@
 package br.com.nemeia.brigia.auth;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.core.Authentication;
@@ -19,5 +20,11 @@ public class SecurityUtils {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserAuth userAuth = (UserAuth) authentication.getPrincipal();
         return userAuth.getUnidadeId();
+    }
+
+    public List<String> getLoggedUserRoles() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserAuth userAuth = (UserAuth) authentication.getPrincipal();
+        return userAuth.getRoles();
     }
 }

@@ -4,11 +4,13 @@
 
 <app-calendario
   [events]="eventos"
+  (detalhesAgendamento)="detalhesAgendamento($event)"
 ></app-calendario>
 
 @if (exibeNovoAgendamento) {
-  <app-agendamento-novo
-    (save)="agendar($event)"
+  <app-agendamento-form
+    [agendamento]="agendamentoDetalhes"
+    (save)="salvar($event)"
     (cancel)="fecharNovoAgendamento()">
-  </app-agendamento-novo>
+  </app-agendamento-form>
 }

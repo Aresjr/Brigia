@@ -32,3 +32,11 @@ export function formatHora(date: Date): string {
     hour12: false
   });
 }
+
+export function isDataNoFuturo(data: string, hora: string): boolean {
+  const [ano, mes, diaNum] = data.split('-').map(Number);
+  const [h, m] = hora.split(':').map(Number);
+  const agendamento = new Date(ano, mes - 1, diaNum, h, m, 0, 0);
+  const agora = new Date();
+  return agendamento.getTime() > agora.getTime();
+}

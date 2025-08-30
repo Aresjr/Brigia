@@ -17,42 +17,42 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     private final ProfissionalService profissionalService;
     private final EspecialidadeService especialidadeService;
     private final ProcedimentoService procedimentoService;
+    private final EmpresaService empresaService;
 
     public AgendamentoService(AgendamentoRepository repository, SecurityUtils securityUtils,
                               AgendamentoMapper mapper, PacienteService pacienteService,
                               ProfissionalService profissionalService, EspecialidadeService especialidadeService,
-                              ProcedimentoService procedimentoService) {
+                              ProcedimentoService procedimentoService, EmpresaService empresaService) {
         super(repository, securityUtils);
         this.mapper = mapper;
         this.pacienteService = pacienteService;
         this.profissionalService = profissionalService;
         this.especialidadeService = especialidadeService;
         this.procedimentoService = procedimentoService;
+        this.empresaService = empresaService;
     }
 
     public Agendamento createAgendamento(AgendamentoRequest request) {
         Agendamento agendamento = mapper.toEntity(request);
 
         if (request.pacienteId() != null) {
-            Paciente paciente = pacienteService.getPacienteById(request.pacienteId());
-            agendamento.setPaciente(paciente);
+            agendamento.setPaciente(pacienteService.getPacienteById(request.pacienteId()));
         }
         if (request.profissionalId() != null) {
-            Profissional profissional = profissionalService.getProfissionalById(request.profissionalId());
-            agendamento.setProfissional(profissional);
+            agendamento.setProfissional(profissionalService.getProfissionalById(request.profissionalId()));
         }
         if (request.especialidadeId() != null) {
-            Especialidade especialidade = especialidadeService.getById(request.especialidadeId());
-            agendamento.setEspecialidade(especialidade);
+            agendamento.setEspecialidade(especialidadeService.getById(request.especialidadeId()));
         }
         if (request.procedimentoId() != null) {
-            Procedimento procedimento = procedimentoService.getById(request.procedimentoId());
-            agendamento.setProcedimento(procedimento);
+            agendamento.setProcedimento(procedimentoService.getById(request.procedimentoId()));
+        }
+        if (request.empresaId() != null) {
+            agendamento.setEmpresa(empresaService.getById(request.empresaId()));
         }
 
         agendamento.setStatus(StatusAgendamento.AGENDADO);
-        Long unidadeId = securityUtils.getLoggedUserUnidadeId();
-        agendamento.setUnidade(new Unidade(unidadeId));
+        agendamento.setUnidade(new Unidade(securityUtils.getLoggedUserUnidadeId()));
 
         return repository.save(agendamento);
     }

@@ -13,5 +13,8 @@ export interface EntidadeResponse {
 }
 
 export interface EntidadeRequest {
+}
 
+export interface PagedResponse<T> {
+  items: T[];
 }

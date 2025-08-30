@@ -16,7 +16,10 @@ public record AgendamentoResponse(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
         LocalTime hora,
         UnidadeResponse unidade, EspecialidadeResponse especialidade,
+        EmpresaResponse empresa,
         ProfissionalResponse profissional, ProcedimentoResponse procedimento,
-        StatusAgendamento status, FormaPagamento formaPagamento,
+        StatusAgendamento status,
+        FormaPagamento formaPagamento,
         BigDecimal valor, BigDecimal desconto,
+        String observacoes,
         Integer duracao, LocalDateTime criadoEm, Boolean excluido) {}

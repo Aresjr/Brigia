@@ -19,8 +19,10 @@ public record AgendamentoRequest(
         @NotNull(message = "Profissional é obrigatório")
         Long profissionalId,
         Long procedimentoId,
+        Long empresaId,
         FormaPagamento formaPagamento,
         BigDecimal valor,
         BigDecimal desconto,
         @NotNull(message = "Duração é obrigatória")
-        Integer duracao) {}
+        Integer duracao,
+        String observacoes) {}

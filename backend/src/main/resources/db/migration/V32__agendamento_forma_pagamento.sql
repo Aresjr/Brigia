@@ -1,0 +1,1 @@
+ALTER TABLE agendamento DROP CONSTRAINT IF EXISTS agendamento_forma_pagamento_check;

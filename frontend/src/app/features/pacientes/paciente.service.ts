@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from '../procedimentos/base.service';
-import { Paciente, PacienteRequest, PacienteResponse } from './paciente.interface';
+import { Paciente, PacienteRequest } from './paciente.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PacienteService extends BaseService<Paciente, PacienteRequest, PacienteResponse> {
+export class PacienteService extends BaseService<Paciente, PacienteRequest> {
 
   override path = '/pacientes';
 }
