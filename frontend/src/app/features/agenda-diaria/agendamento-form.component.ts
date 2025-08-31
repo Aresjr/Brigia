@@ -25,6 +25,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
 import { FORMAS_PAGAMENTO } from '../../core/constans';
 import { forkJoin, map, Observable, tap } from 'rxjs';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-agendamento-form',
@@ -34,12 +35,12 @@ import { forkJoin, map, Observable, tap } from 'rxjs';
     ReactiveFormsModule, NgClass,
     EmptyToNullDirective, NgxMaskDirective,
     PacienteFormComponent, NgNotFoundTemplateDirective,
-    DatePipe, NgIf, LucideAngularModule
+    DatePipe, NgIf, LucideAngularModule, ConfirmDialogComponent
   ]
 })
 export class AgendamentoFormComponent extends FormComponent implements OnInit {
   @Input() agendamento: Agendamento | null = null;
-  @Input() horaAgendamento: string | null = null;
+  @Input() dataAgendamento: Date | null = null;
   @Output() save = new EventEmitter<Partial<AgendamentoRequest>>();
   @Output() cancel = new EventEmitter<void>();
 
@@ -59,6 +60,7 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
   showTooltip: boolean = false;
   formasPagamento = FORMAS_PAGAMENTO;
   mostratSalvar: boolean = true;
+  exibeConfirmCancelamento: boolean = false;
 
   protected readonly autoResize = autoResize;
   protected readonly limitLength = limitLength;
@@ -72,7 +74,7 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
     this.hoje = new Date().toISOString().split('T')[0];
     const form: IForm<AgendamentoRequest> = {
       pacienteId: [null, {nonNullable: true}],
-      data: [this.hoje, {nonNullable: true}],
+      data: [null, {nonNullable: true}],
       hora: [null, {nonNullable: true}],
       duracao: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(3)]],
       profissionalId: [null, {nonNullable: true}],
@@ -89,10 +91,26 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let data = this.hoje;
+    let hora = null;
+    if (this.dataAgendamento) {
+      data = this.dataAgendamento.toISOString().split('T')[0];
+      const horas = String(this.dataAgendamento.getHours()).padStart(2, '0');
+      const minutos = String(this.dataAgendamento.getMinutes()).padStart(2, '0');
+      hora = `${horas}:${minutos}`;
+    }
+
+    this.form.patchValue({
+      data: data,
+      hora: hora
+    });
+
     if (this.agendamento) {
       this.mostratSalvar = false;
       this.titulo = 'Detalhes Agendamento';
     }
+
+    console.log('this.dataAgendamento', this.dataAgendamento);
 
     forkJoin([
       this.carregarPacientes(),
@@ -159,7 +177,11 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
       tap(procedimentos => this.procedimentos = procedimentos));
   }
 
-  fechar() {
+  fechar(confirmou: boolean = false) {
+    if (!confirmou && this.form.dirty) {
+      this.exibeConfirmCancelamento = true;
+      return;
+    }
     this.cancel.emit();
   }
 

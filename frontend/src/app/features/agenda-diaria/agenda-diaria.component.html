@@ -1,15 +1,18 @@
 <div class="mt-4 rounded-md">
-  <app-top-bar (addNovo)="onAddNovo()" [showSearchBar]=false title="Agenda Diária"></app-top-bar>
+  <app-top-bar (search)="onSearch($event)" (addNovo)="onAddNovo()" title="Agenda Diária"></app-top-bar>
 </div>
 
 <app-calendario
   [events]="eventos"
   (detalhesAgendamento)="detalhesAgendamento($event)"
+  (diaClicado)="diaClicado($event)"
+  (horarioClicado)="horarioClicado($event)"
 ></app-calendario>
 
 @if (exibeForm) {
   <app-agendamento-form
     [agendamento]="agendamentoDetalhes"
+    [dataAgendamento]="dataAgendamento"
     (save)="salvar($event)"
     (cancel)="fecharForm()">
   </app-agendamento-form>

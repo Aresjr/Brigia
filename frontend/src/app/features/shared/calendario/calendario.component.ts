@@ -33,6 +33,8 @@ import { Agendamento } from '../../agenda-diaria/agendamento.interface';
 export class CalendarioComponent implements AfterViewInit {
   @Input() events: CalendarEvent<Agendamento>[] = [];
   @Output() detalhesAgendamento = new EventEmitter<Agendamento>();
+  @Output() diaClicado = new EventEmitter<Date>();
+  @Output() horarioClicado = new EventEmitter<Date>();
 
   view: CalendarView = CalendarView.Week;
   CalendarView = CalendarView;
@@ -44,9 +46,6 @@ export class CalendarioComponent implements AfterViewInit {
   constructor(private elementRef: ElementRef, private renderer: Renderer2, private cdr: ChangeDetectorRef) {}
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent<Agendamento>[] }): void {
-    console.log('dayClicked');
-    console.log(date);
-    console.log(events);
     if (this.isSameMonth(date, this.currentDate)) {
       if ((this.isSameDay(this.currentDate, date) && this.activeDayIsOpen) || events.length === 0) {
         this.activeDayIsOpen = false;
@@ -55,6 +54,7 @@ export class CalendarioComponent implements AfterViewInit {
       }
       this.currentDate = date;
     }
+    this.diaClicado.emit(date);
   }
 
   verAgendamento(evento: CalendarEvent<Agendamento>): void {
@@ -62,8 +62,7 @@ export class CalendarioComponent implements AfterViewInit {
   }
 
   handleHour($event: { date: Date; sourceEvent: MouseEvent }) {
-    console.log('Clicou em um horário');
-    console.log($event);
+    this.horarioClicado.emit($event.date);
   }
 
   isSameMonth(date1: Date, date2: Date): boolean {

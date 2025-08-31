@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
-import {catchError, map, Observable, throwError} from 'rxjs';
+import { catchError, EMPTY, map, Observable, throwError } from 'rxjs';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 
@@ -56,8 +56,9 @@ export class BackendService {
 
   private handleError(path: string, error: { status: number; }) {
     if (error.status === 401) {
-      this.toastr.error('Sessão expirada, faça login novamente.');
+      this.toastr.error('Sessão expirada, faça login novamente');
       this.router.navigate(['/login']);
+      return EMPTY;
     }
     return throwError(() => error);
   }

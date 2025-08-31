@@ -19,6 +19,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AgendaDiariaComponent implements OnInit {
   agendamentoDetalhes: Agendamento | null = null;
+  dataAgendamento: Date | null = null;
   eventos: CalendarEvent<Agendamento>[] = [];
   exibeForm: boolean = false;
 
@@ -45,6 +46,7 @@ export class AgendaDiariaComponent implements OnInit {
   }
 
   onAddNovo() {
+    this.dataAgendamento = null;
     this.agendamentoDetalhes = null;
     this.exibeForm = true;
   }
@@ -55,9 +57,6 @@ export class AgendaDiariaComponent implements OnInit {
   }
 
   salvar(agendamento: Partial<AgendamentoRequest>) {
-
-    console.log('salvar', 'agenda-diaria');
-
     if (this.agendamentoDetalhes) {
       this.agendamentoService.atualizar(this.agendamentoDetalhes.id, agendamento).subscribe({
         next: () => {
@@ -81,5 +80,21 @@ export class AgendaDiariaComponent implements OnInit {
   detalhesAgendamento(agendamento: Agendamento) {
     this.agendamentoDetalhes = agendamento;
     this.exibeForm = true;
+  }
+
+  diaClicado(data: Date) {
+    console.log('diaClicado', data);
+  }
+
+  horarioClicado(data: Date) {
+    console.log('horarioClicado', data);
+    this.dataAgendamento = data;
+    console.log('this.dataAgendamento', this.dataAgendamento);
+    this.exibeForm = true;
+  }
+
+  onSearch($event: any): void {
+    const searchTerm = $event.toLowerCase();
+    console.log(searchTerm);
   }
 }

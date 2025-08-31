@@ -3,9 +3,11 @@ package br.com.nemeia.brigia.controller;
 import br.com.nemeia.brigia.dto.request.AtualizacaoPrecoRequest;
 import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
+import br.com.nemeia.brigia.dto.response.PrecoProcedimentoResponse;
 import br.com.nemeia.brigia.dto.response.ProcedimentoResponse;
 import br.com.nemeia.brigia.dto.response.TabelaPrecoResponse;
 import br.com.nemeia.brigia.mapper.ProcedimentoMapper;
+import br.com.nemeia.brigia.service.ConvenioService;
 import br.com.nemeia.brigia.service.ProcedimentoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class ProcedimentoController {
 
     private final ProcedimentoService service;
     private final ProcedimentoMapper mapper;
+    private final ConvenioService convenioService;
 
     @GetMapping
     @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
@@ -74,8 +77,16 @@ public class ProcedimentoController {
     @GetMapping("/{id}/tabela-preco")
     @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
     public TabelaPrecoResponse getTabelaPrecoProcedimentoById(@PathVariable Long id) {
-        log.info("GET /procedimentos/{} - buscando procedimento pelo ID", id);
+        log.info("GET /procedimentos/{}/tabela-preco - buscando tabela de preço do procedimento ID", id);
         return mapper.toTabelaPreco(service.getById(id));
+    }
+
+    @GetMapping("/{id}/tabela-preco/{convenioId}")
+    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    public PrecoProcedimentoResponse getPrecoProcedimentoConvenio(@PathVariable Long id,
+                                                                  @PathVariable Long convenioId) {
+        log.info("GET /procedimentos/{}/tabela-preco/{} - buscando tabela de preço do procedimento ID e convenio ID", id, convenioId);
+        return mapper.toPrecoProcedimento(service.getById(id), convenioService.getById(id));
     }
 
     @PatchMapping("/{id}/atualizar-preco")

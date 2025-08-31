@@ -1,9 +1,13 @@
-.btn-cancelar {
-  @apply px-4 py-1 border border-gray-400 rounded-md hover:bg-gray-100;
+.btn-neutro {
+  @apply px-4 py-1 border border-gray-400 rounded-md hover:bg-gray-200;
 }
 
 .btn-salvar {
   @apply px-4 py-1 rounded-md bg-green-500 text-white hover:bg-green-600;
+}
+
+.btn-excluir {
+  @apply px-4 py-1 rounded-md bg-red-500 text-white hover:bg-red-600;
 }
 
 .campo {
