@@ -22,7 +22,8 @@ import { ProfissionaisService } from '../profissionais/profissionais.service';
 export class AgendaDiariaComponent implements OnInit {
   agendamentoDetalhes: Agendamento | null = null;
   dataAgendamento: Date | null = null;
-  eventos: CalendarEvent<Agendamento>[] = [];
+  eventosExibicao: CalendarEvent<Agendamento>[] = [];
+  eventosInternos: CalendarEvent<Agendamento>[] = [];
   profissionais: Profissional[] = [];
   exibeForm: boolean = false;
 
@@ -45,7 +46,8 @@ export class AgendaDiariaComponent implements OnInit {
     this.agendamentoService.listar().subscribe({
       next: value => {
         const agendamentos = value.items;
-        this.eventos = agendamentos.map(a => EventoFactory.fromApi(a));
+        this.eventosExibicao = agendamentos.map(a => EventoFactory.fromApi(a));
+        this.eventosInternos = this.eventosExibicao;
       }
     });
   }
@@ -112,6 +114,10 @@ export class AgendaDiariaComponent implements OnInit {
   }
 
   filtrarProfissional(profissional: Profissional) {
-    console.log('filtrarProfissional', profissional);
+    if (profissional) {
+      this.eventosExibicao = this.eventosInternos.filter(item => item.meta?.profissional.id == profissional.id);
+    } else {
+      this.eventosExibicao = [...this.eventosInternos];
+    }
   }
 }

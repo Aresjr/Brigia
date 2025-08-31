@@ -3,7 +3,7 @@
     <h1 class="text-2xl font-bold">{{ title }}</h1>
   </div>
   <div class="flex">
-    <ng-select *ngIf="showDropdown" class="w-56 mr-4" [items]="this.registrosDropdown" bindValue="id" bindLabel="nome"
+    <ng-select *ngIf="showDropdown" class="w-64 mr-4" [items]="this.registrosDropdown" bindValue="id" bindLabel="nome"
                placeholder="{{ placeholderDropdown }}" (change)="onSelectItem($event)" (clear)="onSelectItem(null)"  />
 
     <div *ngIf="showSearchBar" class="mr-3">
