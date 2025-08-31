@@ -110,8 +110,6 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
       this.titulo = 'Detalhes Agendamento';
     }
 
-    console.log('this.dataAgendamento', this.dataAgendamento);
-
     forkJoin([
       this.carregarPacientes(),
       this.carregarConvenios(),

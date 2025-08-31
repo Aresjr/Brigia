@@ -1,5 +1,8 @@
 <div class="mt-4 rounded-md">
-  <app-top-bar (search)="onSearch($event)" (addNovo)="onAddNovo()" title="Agenda Diária"></app-top-bar>
+  <app-top-bar title="Agenda Diária" [showSearchBar]=false (search)="onSearch($event)" (addNovo)="onAddNovo()"
+         placeholderDropdown="Selecione o Profissional"
+       [showDropdown]=true [registrosDropdown]="profissionais" (selectRegistro)="filtrarProfissional($event)"
+  ></app-top-bar>
 </div>
 
 <app-calendario

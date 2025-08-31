@@ -7,6 +7,8 @@ import { CalendarEvent } from 'angular-calendar';
 import { ActivatedRoute } from '@angular/router';
 import { AgendamentosService } from './agendamentos.service';
 import { ToastrService } from 'ngx-toastr';
+import { Profissional } from '../profissionais/profissional.interface';
+import { ProfissionaisService } from '../profissionais/profissionais.service';
 
 @Component({
   selector: 'app-agenda-diaria',
@@ -21,10 +23,12 @@ export class AgendaDiariaComponent implements OnInit {
   agendamentoDetalhes: Agendamento | null = null;
   dataAgendamento: Date | null = null;
   eventos: CalendarEvent<Agendamento>[] = [];
+  profissionais: Profissional[] = [];
   exibeForm: boolean = false;
 
   constructor(private route: ActivatedRoute, private toastr: ToastrService,
-              private agendamentoService: AgendamentosService) {
+              private agendamentoService: AgendamentosService,
+              private profissionaisService: ProfissionaisService) {
     this.route.queryParams.subscribe(params => {
       if (params['pacienteId']) {
         console.log('pacienteId', params['pacienteId']);
@@ -34,6 +38,7 @@ export class AgendaDiariaComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarAgendamentos();
+    this.carregarProfissionais();
   }
 
   carregarAgendamentos() {
@@ -41,6 +46,14 @@ export class AgendaDiariaComponent implements OnInit {
       next: value => {
         const agendamentos = value.items;
         this.eventos = agendamentos.map(a => EventoFactory.fromApi(a));
+      }
+    });
+  }
+
+  carregarProfissionais() {
+    this.profissionaisService.listar().subscribe({
+      next: value => {
+        this.profissionais = value.items;
       }
     });
   }
@@ -87,14 +100,18 @@ export class AgendaDiariaComponent implements OnInit {
   }
 
   horarioClicado(data: Date) {
-    console.log('horarioClicado', data);
-    this.dataAgendamento = data;
-    console.log('this.dataAgendamento', this.dataAgendamento);
-    this.exibeForm = true;
+    if (data.getTime() > new Date().getTime()) {
+      this.dataAgendamento = data;
+      this.exibeForm = true;
+    }
   }
 
   onSearch($event: any): void {
-    const searchTerm = $event.toLowerCase();
+    const searchTerm = $event.toLowerCase(); //TODO - implementar
     console.log(searchTerm);
+  }
+
+  filtrarProfissional(profissional: Profissional) {
+    console.log('filtrarProfissional', profissional);
   }
 }
