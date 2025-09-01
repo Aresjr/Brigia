@@ -19,11 +19,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        custom: [
-          "'Twemoji Country Flags'",
-          '"Noto Sans CJK KR"',
-          'sans-serif',
-        ],
+        montserrat: ['Montserrat', 'sans-serif'],
       },
     },
   },

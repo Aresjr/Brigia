@@ -3,14 +3,14 @@
     <h1 class="text-2xl font-bold">{{ title }}</h1>
   </div>
   <div class="flex">
-    <ng-select *ngIf="showDropdown" class="w-64 mr-4 rounded-full" [items]="this.registrosDropdown" bindValue="id" bindLabel="nome"
+    <ng-select *ngIf="showDropdown" class="w-64 mr-4 campo-select" [items]="this.registrosDropdown" bindValue="id" bindLabel="nome"
                placeholder="{{ placeholderDropdown }}" (change)="onSelectItem($event)" (clear)="onSelectItem(null)"  />
 
     <div *ngIf="showSearchBar" class="mr-3">
       <lucide-icon name="search" class="w-4 h-4 absolute mt-3 ml-1 transform -translate-y-1/2 "></lucide-icon>
       <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearch($event)"
              id="filtro" placeholder="Filtrar" maxlength="20"
-             class="pl-7 pr-4 py-1 rounded-full focus:outline-none focus:ring-2 focus:ring-grey-900 focus:border-transparent" />
+             class="pl-7 pr-4 py-1 border border-gray-400 rounded-full focus:outline-none focus:ring-2 focus:ring-grey-900 focus:border-transparent" />
     </div>
     <button type="button" *ngIf="addNovo" (click)="onAddNovo()" class="btn-salvar flex items-center gap-2">
       <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
