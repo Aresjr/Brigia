@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.4</version>
+		<version>3.5.5</version>
 		<relativePath/>
 	</parent>
 	<groupId>br.com.nemeia</groupId>
 	<artifactId>brigia</artifactId>
-	<version>0.0.2</version>
-	<name>Brigia</name>
-	<description>Brigia - Software Clínico</description>
+	<version>0.0.4</version>
+	<name>Brigida</name>
+	<description>Brigida - Software Clínico</description>
 	<url/>
 	<licenses>
 		<license/>
