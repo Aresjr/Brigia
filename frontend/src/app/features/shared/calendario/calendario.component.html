@@ -27,27 +27,27 @@
 
     <div class="text-2xl">{{ currentDate | date:'EEEE, dd \'de\' MMMM \'de\' YYYY':'UTC':'pt' }}</div>
 
-    <div class="text-white">
+    <div>
       <button
-        class="px-4 py-1 rounded-l-md hover:bg-blue-600 active:bg-blue-700"
-        (click)="setView(CalendarView.Month)"
-        [class.active]="view === CalendarView.Month"
-        [ngClass]="view === CalendarView.Month ? 'bg-blue-700' : 'bg-blue-500'" >
-        Mês
+        class="px-4 py-1 font-bold border-b-4 hover:text-gray-500"
+        (click)="setView(CalendarView.Day)"
+        [class.active]="view === CalendarView.Day"
+        [ngClass]="view === CalendarView.Day ? 'text-blue-500 border-blue-500' : 'text-gray-400 border-white'" >
+        Dia
       </button>
       <button
-        class="px-4 py-1 hover:bg-blue-600 active:bg-blue-700"
+        class="px-4 py-1 font-bold border-b-4 hover:text-gray-500"
         (click)="setView(CalendarView.Week)"
         [class.active]="view === CalendarView.Week"
-        [ngClass]="view === CalendarView.Week ? 'bg-blue-700' : 'bg-blue-500'" >
+        [ngClass]="view === CalendarView.Week ? 'text-blue-500 border-blue-500' : 'text-gray-400 border-white'" >
         Semana
       </button>
       <button
-        class="px-4 py-1 rounded-r-md hover:bg-blue-600 active:bg-blue-700"
-        (click)="setView(CalendarView.Day)"
-        [class.active]="view === CalendarView.Day"
-        [ngClass]="view === CalendarView.Day ? 'bg-blue-700' : 'bg-blue-500'" >
-        Dia
+        class="px-4 py-1 font-bold border-b-4 hover:text-gray-500"
+        (click)="setView(CalendarView.Month)"
+        [class.active]="view === CalendarView.Month"
+        [ngClass]="view === CalendarView.Month ? 'text-blue-500 border-blue-500' : 'text-gray-400 border-white'" >
+        Mês
       </button>
     </div>
   </div>

@@ -105,6 +105,8 @@ export class AgendaDiariaComponent implements OnInit {
     if (data.getTime() > new Date().getTime()) {
       this.dataAgendamento = data;
       this.exibeForm = true;
+    } else {
+      this.toastr.warning('Para abrir um agendamento, selecione um horário futuro.');
     }
   }
 

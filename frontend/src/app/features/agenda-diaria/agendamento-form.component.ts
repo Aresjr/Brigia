@@ -229,6 +229,7 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
   }
 
   atualizaPreco() {
+    console.log('atualizaPreco');
     if (this.procedimentoSelecionado) { //TODO - chamar obterPrecoProcedimentoConvenio para obter o preço do convênio
       this.procedimentosService.listarTabelaPreco(this.procedimentoSelecionado.id).subscribe({
         next: (response) => {

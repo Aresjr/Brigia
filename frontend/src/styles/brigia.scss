@@ -1,17 +1,19 @@
 .btn-neutro {
-  @apply px-4 py-1 rounded-md border text-black border-gray-400 hover:bg-gray-200 active:bg-gray-400;
+  @apply px-4 py-1 rounded-full border text-black border-gray-400 hover:bg-gray-200 active:bg-gray-400 text-base;
 }
 
 .btn-salvar {
-  @apply px-4 py-1 rounded-md bg-green-500 text-white hover:bg-green-600 active:bg-green-700;
+  all: unset;
+  @apply px-4 py-1 rounded-full bg-green-500 text-white hover:bg-green-600 active:bg-green-700
+  text-base font-normal tracking-normal border-0 box-border leading-6;
 }
 
 .btn-azul {
-  @apply px-4 py-1 rounded-md bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700;
+  @apply px-4 py-1 rounded-full bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700 text-base;
 }
 
 .btn-excluir {
-  @apply px-4 py-1 rounded-md bg-red-500 text-white hover:bg-red-600;
+  @apply px-4 py-1 rounded-full bg-red-500 text-white hover:bg-red-600 text-base;
 }
 
 .campo {
