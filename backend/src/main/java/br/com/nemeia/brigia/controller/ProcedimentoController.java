@@ -77,15 +77,20 @@ public class ProcedimentoController {
     @GetMapping("/{id}/tabela-preco")
     @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
     public TabelaPrecoResponse getTabelaPrecoProcedimentoById(@PathVariable Long id) {
-        log.info("GET /procedimentos/{}/tabela-preco - buscando tabela de preço do procedimento ID", id);
+        log.info(
+                "GET /procedimentos/{}/tabela-preco - buscando tabela de preço do procedimento ID",
+                id);
         return mapper.toTabelaPreco(service.getById(id));
     }
 
     @GetMapping("/{id}/tabela-preco/{convenioId}")
     @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
-    public PrecoProcedimentoResponse getPrecoProcedimentoConvenio(@PathVariable Long id,
-                                                                  @PathVariable Long convenioId) {
-        log.info("GET /procedimentos/{}/tabela-preco/{} - buscando tabela de preço do procedimento ID e convenio ID", id, convenioId);
+    public PrecoProcedimentoResponse getPrecoProcedimentoConvenio(
+            @PathVariable Long id, @PathVariable Long convenioId) {
+        log.info(
+                "GET /procedimentos/{}/tabela-preco/{} - buscando tabela de preço do procedimento ID e convenio ID",
+                id,
+                convenioId);
         return mapper.toPrecoProcedimento(service.getById(id), convenioService.getById(id));
     }
 

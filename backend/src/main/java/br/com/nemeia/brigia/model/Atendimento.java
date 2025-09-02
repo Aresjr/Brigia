@@ -1,11 +1,10 @@
 package br.com.nemeia.brigia.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

@@ -5,26 +5,27 @@ import br.com.nemeia.brigia.auth.SecurityUtils;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.model.BaseModel;
 import br.com.nemeia.brigia.repository.BaseRepository;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDateTime;
-
 @RequiredArgsConstructor
 public abstract class BaseService<T extends BaseModel, R extends BaseRepository<T>> {
 
-    @Autowired
-    final protected R repository;
+    @Autowired protected final R repository;
 
-    @Autowired
-    final protected SecurityUtils securityUtils;
+    @Autowired protected final SecurityUtils securityUtils;
 
     public T getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new NotFoundException(getNomeEntidade() + " não encontrado com ID:" + id));
+        return repository
+                .findById(id)
+                .orElseThrow(
+                        () ->
+                                new NotFoundException(
+                                        getNomeEntidade() + " não encontrado com ID:" + id));
     }
 
     public Page<T> getPaged(int page, int size, Boolean mostrarExcluidos) {

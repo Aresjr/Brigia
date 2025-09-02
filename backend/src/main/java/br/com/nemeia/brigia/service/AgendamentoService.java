@@ -20,11 +20,16 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     private final EmpresaService empresaService;
     private final ConvenioService convenioService;
 
-    public AgendamentoService(AgendamentoRepository repository, SecurityUtils securityUtils,
-                              AgendamentoMapper mapper, PacienteService pacienteService,
-                              ProfissionalService profissionalService, EspecialidadeService especialidadeService,
-                              ProcedimentoService procedimentoService, EmpresaService empresaService,
-                              ConvenioService convenioService) {
+    public AgendamentoService(
+            AgendamentoRepository repository,
+            SecurityUtils securityUtils,
+            AgendamentoMapper mapper,
+            PacienteService pacienteService,
+            ProfissionalService profissionalService,
+            EspecialidadeService especialidadeService,
+            ProcedimentoService procedimentoService,
+            EmpresaService empresaService,
+            ConvenioService convenioService) {
         super(repository, securityUtils);
         this.mapper = mapper;
         this.pacienteService = pacienteService;
@@ -61,7 +66,8 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             agendamento.setPaciente(pacienteService.getPacienteById(request.pacienteId()));
         }
         if (request.profissionalId() != null) {
-            agendamento.setProfissional(profissionalService.getProfissionalById(request.profissionalId()));
+            agendamento.setProfissional(
+                    profissionalService.getProfissionalById(request.profissionalId()));
         }
         if (request.especialidadeId() != null) {
             agendamento.setEspecialidade(especialidadeService.getById(request.especialidadeId()));

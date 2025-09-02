@@ -4,9 +4,8 @@ import br.com.nemeia.brigia.dto.request.PacienteRequest;
 import br.com.nemeia.brigia.dto.response.PacienteResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.model.Paciente;
-import java.util.List;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;

@@ -41,6 +41,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
 export class AgendamentoFormComponent extends FormComponent implements OnInit {
   @Input() agendamento: Agendamento | null = null;
   @Input() dataAgendamento: Date | null = null;
+  @Input() pacienteId!: number | null;
   @Output() save = new EventEmitter<Partial<AgendamentoRequest>>();
   @Output() cancel = new EventEmitter<void>();
 
@@ -121,6 +122,9 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
       if (this.agendamento) {
         this.carregaDadosAgendamento();
         this.form.disable();
+      }
+      if (this.pacienteId) {
+        this.selectPaciente(this.pacienteId);
       }
     });
   }

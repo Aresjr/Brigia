@@ -9,8 +9,9 @@ public record PacienteRequest(
         String email,
         @Nullable String cpf,
         @NotNull LocalDate dataNascimento,
-        @Nullable @Size(min = 1, max = 1)
-        @Pattern(regexp = "^[MFO]$", message = "Sexo deve ser 'M', 'F' ou 'O'")
+        @Nullable
+                @Size(min = 1, max = 1)
+                @Pattern(regexp = "^[MFO]$", message = "Sexo deve ser 'M', 'F' ou 'O'")
                 String sexo,
         @Pattern(
                         regexp = "^\\d{11}$",

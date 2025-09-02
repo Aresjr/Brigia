@@ -16,6 +16,7 @@
   <app-agendamento-form
     [agendamento]="agendamentoDetalhes"
     [dataAgendamento]="dataAgendamento"
+    [pacienteId]="pacienteId"
     (save)="salvar($event)"
     (cancel)="fecharForm()">
   </app-agendamento-form>

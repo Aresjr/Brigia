@@ -16,7 +16,7 @@ export class BaseService<Entid extends Entidade, Request extends EntidadeRequest
 
   listar(mostrarExcluidos: boolean = false): Observable<PagedResponse<Entid>> {
     if (!this.cache$) {
-      this.cache$ = this.backend.get<PagedResponse<Entid>>(`${this.path}?mostrarExcluidos=true&size=999`).pipe(
+      this.cache$ = this.backend.get<PagedResponse<Entid>>(`${this.path}?mostrarExcluidos=true&size=9999`).pipe(
         shareReplay(1),
         catchError((e) => {
           this.toastr.error('Erro ao carregar os registros. Por favor, tente novamente.');

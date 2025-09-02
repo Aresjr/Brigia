@@ -4,7 +4,7 @@ import { AgendamentoFormComponent } from './agendamento-form.component';
 import { Agendamento, AgendamentoRequest, EventoFactory } from './agendamento.interface';
 import { CalendarioComponent } from '../shared/calendario/calendario.component';
 import { CalendarEvent } from 'angular-calendar';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { AgendamentosService } from './agendamentos.service';
 import { ToastrService } from 'ngx-toastr';
 import { Profissional } from '../profissionais/profissional.interface';
@@ -26,20 +26,22 @@ export class AgendaDiariaComponent implements OnInit {
   eventosInternos: CalendarEvent<Agendamento>[] = [];
   profissionais: Profissional[] = [];
   exibeForm: boolean = false;
+  pacienteId: number | null = null;
 
-  constructor(private route: ActivatedRoute, private toastr: ToastrService,
+  constructor(private router: Router, private toastr: ToastrService,
               private agendamentoService: AgendamentosService,
               private profissionaisService: ProfissionaisService) {
-    this.route.queryParams.subscribe(params => {
-      if (params['pacienteId']) {
-        console.log('pacienteId', params['pacienteId']);
-      }
-    });
+    const navigation = this.router.getCurrentNavigation();
+    const pacienteId = navigation?.extras.state?.['pacienteId'];
+    this.pacienteId = pacienteId ? pacienteId : null;
   }
 
   ngOnInit(): void {
     this.carregarAgendamentos();
     this.carregarProfissionais();
+    if (this.pacienteId) {
+      this.onAddNovo();
+    }
   }
 
   carregarAgendamentos() {

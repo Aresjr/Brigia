@@ -5,11 +5,10 @@ import br.com.nemeia.brigia.dto.response.AgendamentoResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.model.Agendamento;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @AllArgsConstructor
@@ -63,5 +62,4 @@ public class AgendamentoMapper {
         }
         return objectMapper.convertValue(request, Agendamento.class);
     }
-
 }
