@@ -34,7 +34,7 @@ public class ProfissionalService {
         return repository.findAllByDataNascimentoIs(LocalDate.now());
     }
 
-    public Profissional getProfissionalById(Long id) {
+    public Profissional getById(Long id) {
         return repository
                 .findById(id)
                 .orElseThrow(
@@ -58,7 +58,7 @@ public class ProfissionalService {
     }
 
     public Profissional editProfissional(Long id, ProfissionalRequest request) {
-        getProfissionalById(id);
+        getById(id);
         Profissional profissional = mapper.toEntity(request);
 
         if (!request.especialidades().isEmpty()) {

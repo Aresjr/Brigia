@@ -13,6 +13,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { EmpresasService } from '../../empresa/empresas.service';
 import { Empresa } from '../../empresa/empresa.interface';
+import { FormComponent } from '../../shared/form.component';
 
 @Component({
   selector: 'app-paciente-form',
@@ -20,25 +21,25 @@ import { Empresa } from '../../empresa/empresa.interface';
   imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, LucideAngularModule, NgOptionComponent, NgSelectComponent],
   templateUrl: 'paciente-form.component.html'
 })
-export class PacienteFormComponent implements OnInit {
+export class PacienteFormComponent extends FormComponent implements OnInit {
   @Input() paciente?: Paciente | null;
   @Output() save = new EventEmitter<Partial<PacienteRequest>>();
   @Output() cancel = new EventEmitter<void>();
 
-  pacienteForm: FormGroup;
   estados: ({ sigla: string; nome: string })[] = ESTADOS;
   protected readonly SEXOS = SEXOS;
   convenios: Convenio[] = [];
   empresas: Empresa[] = [];
 
   constructor(
-    private fb: FormBuilder,
+    protected override fb: FormBuilder,
     private http: HttpClient,
     private toastr: ToastrService,
     private conveniosService: ConveniosService,
     private empresasService: EmpresasService
   ) {
-    this.pacienteForm = this.fb.group({
+    super(fb);
+    this.form = this.fb.group({
       nome: [null, Validators.required],
       email: [null], cpf: [null],
       dataNascimento: [null, Validators.required],
@@ -55,7 +56,7 @@ export class PacienteFormComponent implements OnInit {
     this.carregarEmpresas();
 
     if (this.paciente) {
-      this.pacienteForm.patchValue(this.paciente);
+      this.form.patchValue(this.paciente);
     }
   }
 
@@ -63,7 +64,7 @@ export class PacienteFormComponent implements OnInit {
     this.conveniosService.listar().subscribe(
       response => {
         this.convenios = response.items;
-        this.pacienteForm.patchValue({
+        this.form.patchValue({
           convenioId: this.paciente?.convenio?.id,
         });
       }
@@ -74,7 +75,7 @@ export class PacienteFormComponent implements OnInit {
     this.empresasService.listar().subscribe(
       response => {
         this.empresas = response.items;
-        this.pacienteForm.patchValue({
+        this.form.patchValue({
           empresaId: this.paciente?.empresa?.id,
         });
       }
@@ -86,11 +87,11 @@ export class PacienteFormComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.pacienteForm.valid) {
-      this.save.emit(this.pacienteForm.value);
+    if (this.form.valid) {
+      this.save.emit(this.form.value);
     } else {
-      Object.keys(this.pacienteForm.controls).forEach(field => {
-        const control = this.pacienteForm.get(field);
+      Object.keys(this.form.controls).forEach(field => {
+        const control = this.form.get(field);
         control?.markAsTouched({ onlySelf: true });
       });
     }
@@ -101,12 +102,12 @@ export class PacienteFormComponent implements OnInit {
   }
 
   buscarCep() {
-    const cep = this.pacienteForm.get('cep')?.value?.replace(/\D/g, '');
+    const cep = this.form.get('cep')?.value?.replace(/\D/g, '');
     if (cep?.length === 8) {
       this.http.get<any>(`https://viacep.com.br/ws/${cep}/json/`)
         .subscribe((data) => {
           if (!data.erro) {
-            this.pacienteForm.patchValue({
+            this.form.patchValue({
               rua: data.logradouro,
               bairro: data.bairro,
               cidade: data.localidade,

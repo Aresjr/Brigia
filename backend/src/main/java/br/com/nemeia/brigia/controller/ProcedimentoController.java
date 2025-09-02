@@ -91,7 +91,7 @@ public class ProcedimentoController {
                 "GET /procedimentos/{}/tabela-preco/{} - buscando tabela de preço do procedimento ID e convenio ID",
                 id,
                 convenioId);
-        return mapper.toPrecoProcedimento(service.getById(id), convenioService.getById(id));
+        return mapper.toPrecoProcedimento(service.getById(id), convenioService.getById(convenioId));
     }
 
     @PatchMapping("/{id}/atualizar-preco")

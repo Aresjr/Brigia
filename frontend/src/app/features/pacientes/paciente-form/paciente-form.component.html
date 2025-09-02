@@ -8,7 +8,7 @@
       </button>
     </div>
 
-    <form [formGroup]="pacienteForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="space-y-4">
         <div>
           <label class="label-campo">
@@ -16,11 +16,10 @@
           </label>
           <input type="text" formControlName="nome" name="nome" required
              class="campo"
-             [ngClass]="{'border-red-500': pacienteForm.get('nome')?.invalid && pacienteForm.get('nome')?.touched}" >
-              @if (pacienteForm.get('nome')?.touched) {
-                <div *ngIf="pacienteForm.get('nome')?.hasError('required')"
-                  class="text-red-500 text-sm">
-                  Nome é obrigatório.
+             [ngClass]="{'border-red-500': form.get('nome')?.invalid && form.get('nome')?.touched}" >
+              @if (form.get('nome')?.touched) {
+                <div *ngIf="isInvalid('nome')" class="text-red-500 text-sm">
+                  Obrigatório
                 </div>
               }
         </div>
@@ -40,11 +39,10 @@
             </label>
             <input type="date" formControlName="dataNascimento" required
                    class="campo"
-                   [ngClass]="{'border-red-500': pacienteForm.get('dataNascimento')?.invalid && pacienteForm.get('dataNascimento')?.touched}" >
-            @if (pacienteForm.get('dataNascimento')?.touched) {
-              <div *ngIf="pacienteForm.get('dataNascimento')?.hasError('required')"
-                   class="text-red-500 text-sm">
-                Data de Nascimento é obrigatória.
+                   [ngClass]="{'border-red-500': form.get('dataNascimento')?.invalid && form.get('dataNascimento')?.touched}" >
+            @if (form.get('dataNascimento')?.touched) {
+              <div *ngIf="isInvalid('dataNascimento')" class="text-red-500 text-sm">
+                Obrigatório
               </div>
             }
           </div>

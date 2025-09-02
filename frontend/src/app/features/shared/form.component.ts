@@ -12,8 +12,15 @@ export abstract class FormComponent {
 
   protected form: FormGroup;
 
-  validationClasses(field: string): string[] {
-    return this.isInvalid(field) ? ['border', 'border-red-500'] : [];
+  styleClassesField(field: string, isReadOnly: boolean = false): string[] {
+    const classes = [];
+    if (this.isInvalid(field)) {
+      classes.push('border', 'border-red-500');
+    }
+    if (isReadOnly) {
+      classes.push('opacity-50', 'cursor-not-allowed');
+    }
+    return classes;
   }
 
   isInvalid(field: string): boolean | undefined {

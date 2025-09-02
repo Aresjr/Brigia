@@ -6,7 +6,7 @@ import { Unidade } from '../unidade/unidade.interface';
 export interface Procedimento extends Entidade {
     codigo: string | null;
     especialidade: Especialidade;
-    valorPadrao: number;
+    valorPadrao?: number;
     observacoes: string | null;
 }
 

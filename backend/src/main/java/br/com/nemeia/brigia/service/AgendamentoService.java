@@ -67,7 +67,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         }
         if (request.profissionalId() != null) {
             agendamento.setProfissional(
-                    profissionalService.getProfissionalById(request.profissionalId()));
+                    profissionalService.getById(request.profissionalId()));
         }
         if (request.especialidadeId() != null) {
             agendamento.setEspecialidade(especialidadeService.getById(request.especialidadeId()));

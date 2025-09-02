@@ -55,11 +55,11 @@ public class Agendamento extends BaseModel {
     private Procedimento procedimento;
 
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "status", length = 15, nullable = false)
+    @Column(name = "status", length = 2, nullable = false)
     private StatusAgendamento status;
 
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "forma_pagamento", length = 15)
+    @Column(name = "forma_pagamento", length = 2)
     private FormaPagamento formaPagamento;
 
     @Column(name = "valor", nullable = false)
@@ -70,6 +70,13 @@ public class Agendamento extends BaseModel {
 
     @Column(name = "observacoes")
     private String observacoes;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "tipo_agendamento", length = 2)
+    private TipoAgendamento tipoAgendamento;
+
+    @Column(name = "preco_alterado", nullable = false)
+    private Boolean precoAlterado = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "atendimento_id")

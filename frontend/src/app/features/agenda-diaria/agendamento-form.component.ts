@@ -39,7 +39,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
   ]
 })
 export class AgendamentoFormComponent extends FormComponent implements OnInit {
-  @Input() agendamento: Agendamento | null = null;
+  @Input() agendamentoDetalhes: Agendamento | null = null;
   @Input() dataAgendamento: Date | null = null;
   @Input() pacienteId!: number | null;
   @Output() save = new EventEmitter<Partial<AgendamentoRequest>>();
@@ -57,11 +57,14 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
   empresaSelecionada?: Empresa | null;
   procedimentoSelecionado?: Procedimento | null;
   especialidadeSelecionada?: Especialidade | null;
+  convenioSelecionado?: Convenio | null;
   mostrarFormularioNovoPaciente: boolean = false;
   showTooltip: boolean = false;
   formasPagamento = FORMAS_PAGAMENTO;
-  mostratSalvar: boolean = true;
+  podeSalvar: boolean = true;
   exibeConfirmCancelamento: boolean = false;
+  valorEditavel: boolean = false;
+  valorAntesEdicao: number | null = null;
 
   protected readonly autoResize = autoResize;
   protected readonly limitLength = limitLength;
@@ -71,7 +74,6 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
               private especialidadeService: EspecialidadeService, private profissionaisService: ProfissionaisService,
               private empresasService: EmpresasService, private procedimentosService: ProcedimentosService) {
     super(fb);
-
     this.hoje = new Date().toISOString().split('T')[0];
     const form: IForm<AgendamentoRequest> = {
       pacienteId: [null, {nonNullable: true}],
@@ -86,7 +88,8 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
       formaPagamento: [null],
       valor: [null],
       desconto: [null],
-      observacoes: [null]
+      observacoes: [null],
+      precoAlterado: [false],
     };
     this.form = this.fb.group(form);
   }
@@ -106,8 +109,8 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
       hora: hora
     });
 
-    if (this.agendamento) {
-      this.mostratSalvar = false;
+    if (this.agendamentoDetalhes) {
+      this.podeSalvar = false;
       this.titulo = 'Detalhes Agendamento';
     }
 
@@ -119,26 +122,25 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
       this.carregarEmpresas(),
       this.carregarProcedimentos()
     ]).subscribe(() => {
-      if (this.agendamento) {
+      if (this.agendamentoDetalhes) {
         this.carregaDadosAgendamento();
         this.form.disable();
-      }
-      if (this.pacienteId) {
+      } else if (this.pacienteId) {
         this.selectPaciente(this.pacienteId);
       }
     });
   }
 
   carregaDadosAgendamento() {
-    if (this.agendamento) {
-      this.form.patchValue(this.agendamento);
+    if (this.agendamentoDetalhes) {
+      this.form.patchValue(this.agendamentoDetalhes);
       this.form.patchValue({
-        pacienteId: this.agendamento.paciente.id,
-        profissionalId: this.agendamento.profissional.id,
-        especialidadeId: this.agendamento.especialidade.id,
-        procedimentoId: this.agendamento.procedimento.id,
-        convenioId: this.agendamento.convenio?.id,
-        empresaId: this.agendamento.empresa?.id,
+        pacienteId: this.agendamentoDetalhes.paciente.id,
+        profissionalId: this.agendamentoDetalhes.profissional.id,
+        especialidadeId: this.agendamentoDetalhes.especialidade.id,
+        procedimentoId: this.agendamentoDetalhes.procedimento.id,
+        convenioId: this.agendamentoDetalhes.convenio?.id,
+        empresaId: this.agendamentoDetalhes.empresa?.id,
       });
     }
   }
@@ -190,7 +192,7 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
   onEdit() {
     this.form.enable();
     this.form.get('pacienteId')?.disable();
-    this.mostratSalvar = true;
+    this.podeSalvar = true;
   }
 
   selectPaciente(id: number | null) {
@@ -201,14 +203,14 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
       convenioId: this.pacienteSelecionado?.convenio ? this.pacienteSelecionado.convenio.id : null,
       empresaId: this.pacienteSelecionado?.empresa ? this.pacienteSelecionado.empresa.id : null
     });
-    this.selectEmpresa(this.pacienteSelecionado?.empresa);
+    this.selectEmpresa(this.pacienteSelecionado ? this.pacienteSelecionado?.empresa : null);
   }
 
-  selectEmpresa(empresa: Empresa | null | undefined) {
+  selectEmpresa(empresa: Empresa | null) {
     this.empresaSelecionada = empresa;
   }
 
-  selectProcedimento(procedimento: Procedimento | null | undefined) {
+  selectProcedimento(procedimento: Procedimento | null) {
     this.procedimentoSelecionado = procedimento;
     this.atualizaPreco();
   }
@@ -228,19 +230,53 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
     this.mostrarFormularioNovoPaciente = false;
   }
 
-  selectEspecialidade(especialidade: Especialidade) {
+  selectEspecialidade(especialidade: Especialidade | null) {
     this.especialidadeSelecionada = especialidade;
   }
 
+  selectConvenio(convenio: Convenio | null) {
+    this.convenioSelecionado = convenio;
+    this.atualizaPreco();
+  }
+
+  editaValor() {
+    this.valorAntesEdicao = this.form.value.valor;
+    this.valorEditavel = true;
+    this.form.patchValue({
+      precoAlterado: true
+    });
+  }
+
+  cancelarEdicaoValor() {
+    this.valorEditavel = false;
+    this.form.patchValue({
+      valor: this.valorAntesEdicao,
+      precoAlterado: false
+    });
+    this.valorAntesEdicao = null;
+  }
+
   atualizaPreco() {
-    console.log('atualizaPreco');
-    if (this.procedimentoSelecionado) { //TODO - chamar obterPrecoProcedimentoConvenio para obter o preço do convênio
-      this.procedimentosService.listarTabelaPreco(this.procedimentoSelecionado.id).subscribe({
+    if (this.procedimentoSelecionado && this.convenioSelecionado) {
+      this.procedimentosService.obterPrecoProcedimentoConvenio(this.procedimentoSelecionado.id, this.convenioSelecionado.id).subscribe({
         next: (response) => {
-          console.log('Tabela de Preço', response);
+          this.form.patchValue({
+            valor: response.preco
+          })
+        },
+        error: () => {
+          if (this.procedimentoSelecionado) {
+            this.form.patchValue({
+              valor: this.procedimentoSelecionado.valorPadrao
+            });
+          }
         }
       });
     }
+    const valor = this.procedimentoSelecionado != null && this.procedimentoSelecionado?.valorPadrao != null ? this.procedimentoSelecionado.valorPadrao : null;
+    this.form.patchValue({
+      valor: valor
+    });
   }
 
   formValido(): boolean {
@@ -261,6 +297,7 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
 
   salvar() {
     if (this.formValido()) {
+      this.form.get('pacienteId')?.enable();
       this.save.emit(this.form.value);
     } else {
       Object.keys(this.form.controls).forEach(field => {

@@ -16,9 +16,8 @@
              class="campo"
              [ngClass]="{'border-red-500': form.get('nome')?.invalid && form.get('nome')?.touched}" >
               @if (form.get('nome')?.touched) {
-                <div *ngIf="form.get('nome')?.hasError('required')"
-                  class="text-red-500 text-sm">
-                  Nome é obrigatório.
+                <div *ngIf="isInvalid('nome')" class="text-red-500 text-sm">
+                  Obrigatório
                 </div>
               }
         </div>
@@ -38,9 +37,8 @@
                    class="campo"
                    [ngClass]="{'border-red-500': form.get('dataNascimento')?.invalid && form.get('dataNascimento')?.touched}" >
             @if (form.get('dataNascimento')?.touched) {
-              <div *ngIf="form.get('dataNascimento')?.hasError('required')"
-                   class="text-red-500 text-sm">
-                Data de Nascimento é obrigatória.
+              <div *ngIf="isInvalid('dataNascimento')" class="text-red-500 text-sm">
+                Obrigatório
               </div>
             }
           </div>
@@ -96,9 +94,8 @@
             }
           </ng-select>
           @if (form.get('especialidades')?.touched) {
-            <div *ngIf="form.get('especialidades')?.hasError('required')"
-                 class="text-red-500 text-sm">
-              Especialidade é obrigatória.
+            <div *ngIf="isInvalid('especialidades')" class="text-red-500 text-sm">
+              Obrigatório
             </div>
           }
         </div>

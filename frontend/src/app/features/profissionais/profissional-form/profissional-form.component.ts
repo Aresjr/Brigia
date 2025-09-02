@@ -10,6 +10,7 @@ import { Especialidade } from '../../especialidade/especialidade.interface';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { LucideAngularModule } from 'lucide-angular';
+import { FormComponent } from '../../shared/form.component';
 
 @Component({
   selector: 'app-profissional-form',
@@ -17,17 +18,17 @@ import { LucideAngularModule } from 'lucide-angular';
   imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, NgMultiSelectDropDownModule, NgSelectComponent, NgOptionComponent, LucideAngularModule],
   templateUrl: 'profissional-form.component.html'
 })
-export class ProfissionalFormComponent implements OnInit {
+export class ProfissionalFormComponent extends FormComponent implements OnInit {
   @Input() profissional?: Profissional | null;
   @Output() save = new EventEmitter<Partial<ProfissionalRequest>>();
   @Output() cancel = new EventEmitter<void>();
 
-  form: FormGroup;
   protected readonly SEXOS = SEXOS;
   listaEspecialidades: Especialidade[] = [];
 
-  constructor(private fb: FormBuilder,
+  constructor(protected override fb: FormBuilder,
               private especialidadeService: EspecialidadeService) {
+    super(fb);
     this.form = this.fb.group({
       nome: [null, Validators.required],
       email: [null],

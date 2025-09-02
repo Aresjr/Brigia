@@ -19,4 +19,5 @@ public record AgendamentoRequest(
         BigDecimal valor,
         BigDecimal desconto,
         @NotNull(message = "Duração é obrigatória") Integer duracao,
-        String observacoes) {}
+        String observacoes,
+        Boolean precoAlterado) {}

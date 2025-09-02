@@ -42,7 +42,7 @@ public class ProfissionalController {
     @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
     public ProfissionalResponse getProfissionalById(@PathVariable Long id) {
         log.info("GET /profissionais/{} - buscando profissional por ID", id);
-        return mapper.toResponse(service.getProfissionalById(id));
+        return mapper.toResponse(service.getById(id));
     }
 
     @PutMapping("/{id}")

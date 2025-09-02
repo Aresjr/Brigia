@@ -38,6 +38,7 @@ export interface AgendamentoRequest extends EntidadeRequest {
     valor: string | null;
     desconto: number | null;
     observacoes: string | null;
+    precoAlterado: boolean;
 }
 
 export class EventoFactory {
