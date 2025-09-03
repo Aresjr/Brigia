@@ -1,6 +1,7 @@
 package br.com.nemeia.brigia.dto.request;
 
 import br.com.nemeia.brigia.model.FormaPagamento;
+import br.com.nemeia.brigia.model.TipoAgendamento;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ public record AgendamentoRequest(
         @NotNull(message = "Hora é obrigatória") LocalTime hora,
         @NotNull(message = "Especialidade é obrigatória") Long especialidadeId,
         @NotNull(message = "Profissional é obrigatório") Long profissionalId,
+        TipoAgendamento tipoAgendamento,
         Long procedimentoId,
         Long empresaId,
         Long convenioId,

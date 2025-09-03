@@ -2,6 +2,7 @@ package br.com.nemeia.brigia.dto.response;
 
 import br.com.nemeia.brigia.model.FormaPagamento;
 import br.com.nemeia.brigia.model.StatusAgendamento;
+import br.com.nemeia.brigia.model.TipoAgendamento;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ public record AgendamentoResponse(
         ProfissionalResponse profissional,
         ProcedimentoResponse procedimento,
         StatusAgendamento status,
+        TipoAgendamento tipoAgendamento,
         FormaPagamento formaPagamento,
         BigDecimal valor,
         BigDecimal desconto,

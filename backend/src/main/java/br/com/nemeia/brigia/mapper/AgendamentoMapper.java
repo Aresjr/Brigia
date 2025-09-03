@@ -40,6 +40,7 @@ public class AgendamentoMapper {
                 profissionalMapper.toResponse(agendamento.getProfissional()),
                 procedimentoMapper.toResponse(agendamento.getProcedimento()),
                 agendamento.getStatus(),
+                agendamento.getTipoAgendamento(),
                 agendamento.getFormaPagamento(),
                 agendamento.getValor(),
                 agendamento.getDesconto(),

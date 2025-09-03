@@ -19,6 +19,7 @@ export interface Agendamento extends Entidade {
     procedimento: Procedimento;
     convenio?: Convenio;
     empresa?: Empresa;
+    tipoAgendamento: number | null;
     formaPagamento: number;
     status: number;
     observacoes?: string;
