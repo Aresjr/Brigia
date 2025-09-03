@@ -110,6 +110,7 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
       data: data,
       hora: hora
     });
+    this.form.markAsPristine();
 
     if (this.agendamentoDetalhes) {
       this.podeSalvar = false;
@@ -144,6 +145,7 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
         convenioId: this.agendamentoDetalhes.convenio?.id,
         empresaId: this.agendamentoDetalhes.empresa?.id,
       });
+      this.form.markAsPristine();
     }
   }
 
@@ -254,7 +256,7 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
     this.form.patchValue({
       precoAlterado: true
     });
-    this.form.get('precoAlterado')?.markAsPristine();
+    this.form.markAsPristine();
   }
 
   cancelarEdicaoValor() {

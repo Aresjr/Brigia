@@ -18,6 +18,41 @@
         </div>
 
         <div>
+          <label class="label-campo">Código BC</label>
+          <input type="text" formControlName="codigoBc"
+                 class="campo">
+        </div>
+
+        <div class="flex gap-3">
+          <div class="w-full">
+            <label class="label-campo">Valor Mín. Mensal</label>
+            <div class="placeholder-esquerdo">R$</div>
+            <input type="text" formControlName="valorMinimoMensal"
+                   class="campo pl-7 py-[7px]" mask="separator.2"
+                   thousandSeparator="" decimalMarker=","
+                   placeholder="00,00" emptyToNull>
+          </div>
+
+          <div class="w-full">
+            <label class="label-campo">Mín. por Funcionário</label>
+            <div class="placeholder-esquerdo">R$</div>
+            <input type="text" formControlName="minimoPorFuncionario"
+                   class="campo pl-7" mask="separator.2"
+                   thousandSeparator="" decimalMarker=","
+                   placeholder="00,00" emptyToNull>
+          </div>
+
+          <div class="w-full">
+            <label class="label-campo">Valor Mês</label>
+            <div class="placeholder-esquerdo">R$</div>
+            <input type="text" formControlName="valorMes"
+                   class="campo pl-7" mask="separator.2"
+                   thousandSeparator="" decimalMarker=","
+                   placeholder="00,00" emptyToNull>
+          </div>
+        </div>
+
+        <div>
           <label class="label-campo">Observações</label>
           <textarea id="descricao"
             formControlName="observacao" rows="5" emptyToNull

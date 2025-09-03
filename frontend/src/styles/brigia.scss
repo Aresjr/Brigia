@@ -2,6 +2,17 @@ html {
   font-family: 'Montserrat', sans-serif;
 }
 
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 37%, #f3f4f6 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+}
+
 .btn-neutro {
   @apply px-4 py-1 rounded-full text-black hover:bg-gray-200 active:bg-gray-300 text-base shadow-md cursor-pointer;
 }

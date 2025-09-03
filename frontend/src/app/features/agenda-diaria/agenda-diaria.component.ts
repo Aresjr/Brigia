@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { AgendamentoFormComponent } from './agendamento-form.component';
-import { Agendamento, AgendamentoRequest, EventoFactory } from './agendamento.interface';
+import { Agendamento, AgendamentoRequest } from './agendamento.interface';
 import { CalendarioComponent } from '../shared/calendario/calendario.component';
 import { CalendarEvent } from 'angular-calendar';
 import { Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { AgendamentosService } from './agendamentos.service';
 import { ToastrService } from 'ngx-toastr';
 import { Profissional } from '../profissionais/profissional.interface';
 import { ProfissionaisService } from '../profissionais/profissionais.service';
+import { EventoFactory } from '../../core/evento-factory';
 
 @Component({
   selector: 'app-agenda-diaria',

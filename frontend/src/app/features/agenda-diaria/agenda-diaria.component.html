@@ -1,16 +1,16 @@
-<div class="mt-4 rounded-md">
+<div class="mt-4">
+
   <app-top-bar title="Agenda Diária" [showSearchBar]=false (search)="onSearch($event)" (addNovo)="onAddNovo()"
          placeholderDropdown="Selecione o Profissional"
-       [showDropdown]=true [registrosDropdown]="profissionais" (selectRegistro)="filtrarProfissional($event)"
-  ></app-top-bar>
-</div>
+       [showDropdown]=true [registrosDropdown]="profissionais" (selectRegistro)="filtrarProfissional($event)" >
+  </app-top-bar>
 
 <app-calendario
   [events]="eventosExibicao"
   (detalhesAgendamento)="detalhesAgendamento($event)"
   (diaClicado)="diaClicado($event)"
-  (horarioClicado)="horarioClicado($event)"
-></app-calendario>
+  (horarioClicado)="horarioClicado($event)">
+</app-calendario>
 
 @if (exibeForm) {
   <app-agendamento-form
@@ -21,3 +21,5 @@
     (cancel)="fecharForm()">
   </app-agendamento-form>
 }
+
+</div>

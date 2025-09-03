@@ -1,11 +1,18 @@
+.cal-week-view .cal-time-events {
+  overflow: visible !important;
+}
+
 /* evento dentro do calendário */
 .cal-week-view .cal-time-events .cal-event {
-  @apply text-sm font-bold;
-  max-width: calc(100% - 2px);
-  height: calc(100% - 2px);
-  margin: 1px;
-  padding: 2px 5px;
-  line-height: 15px;
+  @apply text-sm border-0 m-1 p-1 leading-none text-white relative;
+  max-width: calc(100% - 7px);
+  height: calc(100% - 5px);
+}
+
+.cal-week-view .cal-time-events .cal-event:hover {
+  @apply font-bold absolute z-[9999];
+  min-height: 42px;
+  min-width: 400px;
 }
 
 /* bloco de horário (6 AM, 7AM) */

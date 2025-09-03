@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { LucideAngularModule } from 'lucide-angular';
 import { Empresa, EmpresaRequest } from '../empresa.interface';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-empresa-form',
@@ -13,7 +14,8 @@ import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-dir
     CommonModule,
     ReactiveFormsModule,
     LucideAngularModule,
-    EmptyToNullDirective
+    EmptyToNullDirective,
+    NgxMaskDirective
   ]
 })
 export class EmpresaFormComponent implements OnInit {
@@ -26,6 +28,10 @@ export class EmpresaFormComponent implements OnInit {
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
+      codigoBc: [null],
+      valorMinimoMensal: [null],
+      minimoPorFuncionario: [null],
+      valorMes: [null],
       observacao: [null]
     });
   }
