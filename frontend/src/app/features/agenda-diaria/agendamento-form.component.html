@@ -170,7 +170,7 @@
             <input type="text" formControlName="valor" min="1" max="99999" id="valor"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker="," required
-                   class="campo pl-7 py-[7px]" [ngClass]="styleClassesField('valor', !this.valorEditavel) " [readOnly]="!this.valorEditavel">
+                   class="campo pl-6 py-[7px]" [ngClass]="styleClassesField('valor', !this.valorEditavel) " [readOnly]="!this.valorEditavel">
             <div *ngIf="isInvalid('valor')" class="text-red-500 text-sm">
               Obrigatório
             </div>
@@ -183,7 +183,7 @@
             <input type="text" formControlName="desconto" min="1" max="99999" id="desconto"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker=","
-                   class="campo pl-7 py-[7px]" [ngClass]="styleClassesField('desconto')">
+                   class="campo pl-6 py-[7px]" [ngClass]="styleClassesField('desconto')">
           </label>
         </div>
         <div class="w-[30rem]" >

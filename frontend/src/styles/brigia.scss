@@ -72,14 +72,12 @@ html {
 }
 
 .tooltip {
-  @apply absolute -mt-8 -ml-8
-  opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none
-  bg-gray-800 text-white text-sm px-2 py-1 rounded-md
-  whitespace-nowrap;
+  @apply absolute -mt-8 -ml-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200
+  pointer-events-none bg-gray-800 text-white text-sm px-2 py-1 rounded-md whitespace-nowrap;
 }
 
 .placeholder-esquerdo {
-  @apply absolute p-2.5 shrink-0 text-base text-gray-500 select-none sm:text-sm/6;
+  @apply absolute px-2 py-3 shrink-0 text-base text-gray-500 select-none sm:text-sm;
 }
 
 .toast-center-screen {
