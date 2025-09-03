@@ -88,14 +88,14 @@
 
       <div class="flex mt-2">
         <div class="mr-4 w-[24rem]" >
-          <label class="label-campo" for="empresaId">
-            Empresa
-            <ng-select formControlName="empresaId" class="campo-select" [ngClass]="styleClassesField('empresaId')"
-                       [items]="this.empresas" bindValue="id" bindLabel="nome" labelForId="empresaId"
-                       (change)="selectEmpresa($event)" (clear)="selectEmpresa(null)" />
-            <div class="py-2 px-4 text-xs italic rounded-b-md" *ngIf="empresaSelecionada"
-                 [ngClass]="empresaSelecionada.plano?.corFundo">
-              {{ empresaSelecionada.plano?.nome }}
+          <label class="label-campo" for="especialidadeId">
+            Especialidade <span aria-hidden="true" class="text-red-500">*</span>
+            <ng-select formControlName="especialidadeId" required class="campo-select"
+                       labelForId="especialidadeId" [ngClass]="styleClassesField('especialidadeId')"
+                       [items]="this.especialidades" bindValue="id" bindLabel="nome"
+                       (change)="selectEspecialidade($event)" (clear)="selectEspecialidade(null)" />
+            <div *ngIf="isInvalid('especialidadeId')" class="text-red-500 text-sm">
+              Obrigatório
             </div>
           </label>
         </div>
@@ -115,14 +115,14 @@
 
       <div class="flex mt-2">
         <div class="w-[24rem] mr-4" >
-          <label class="label-campo" for="especialidadeId">
-            Especialidade <span aria-hidden="true" class="text-red-500">*</span>
-            <ng-select formControlName="especialidadeId" required class="campo-select"
-                       labelForId="especialidadeId" [ngClass]="styleClassesField('especialidadeId')"
-                       [items]="this.especialidades" bindValue="id" bindLabel="nome"
-                       (change)="selectEspecialidade($event)" (clear)="selectEspecialidade(null)" />
-            <div *ngIf="isInvalid('especialidadeId')" class="text-red-500 text-sm">
-              Obrigatório
+          <label class="label-campo" for="empresaId">
+            Empresa
+            <ng-select formControlName="empresaId" class="campo-select" [ngClass]="styleClassesField('empresaId')"
+                       [items]="this.empresas" bindValue="id" bindLabel="nome" labelForId="empresaId"
+                       (change)="selectEmpresa($event)" (clear)="selectEmpresa(null)" />
+            <div class="py-2 px-4 text-xs italic rounded-b-md" *ngIf="empresaSelecionada"
+                 [ngClass]="empresaSelecionada.plano?.corFundo">
+              {{ empresaSelecionada.plano?.nome }}
             </div>
           </label>
         </div>

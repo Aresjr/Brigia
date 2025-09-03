@@ -23,7 +23,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
     data: {
-      roles: [Role.SECRETARIA, Role.ADMIN, Role.FATURAMENTO]
+      roles: [Role.SECRETARIA, Role.ADMIN, Role.FATURAMENTO, Role.MEDICO]
     },
     children: [
       {
@@ -32,7 +32,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         data: {
-          roles: [Role.SECRETARIA, Role.ADMIN, Role.FATURAMENTO],
+          roles: [Role.SECRETARIA, Role.ADMIN, Role.FATURAMENTO, Role.MEDICO],
           title: 'Página Inicial'
         },
       },
@@ -42,7 +42,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         data: {
-          roles: [Role.SECRETARIA, Role.ADMIN],
+          roles: [Role.SECRETARIA, Role.ADMIN, Role.FATURAMENTO, Role.MEDICO],
           title: 'Pacientes'
         },
       },
@@ -52,7 +52,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         data: {
-          roles: [Role.SECRETARIA, Role.ADMIN],
+          roles: [Role.SECRETARIA, Role.ADMIN, Role.MEDICO],
           title: 'Agenda Diária'
         },
       },
@@ -62,7 +62,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         data: {
-          roles: [Role.SECRETARIA, Role.ADMIN],
+          roles: [Role.SECRETARIA, Role.ADMIN, Role.FATURAMENTO],
           title: 'Convênios',
         },
       },
@@ -72,7 +72,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         data: {
-          roles: [Role.SECRETARIA, Role.ADMIN],
+          roles: [Role.SECRETARIA, Role.ADMIN, Role.FATURAMENTO],
           title: 'Especialidades',
         },
       },
@@ -92,7 +92,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         data: {
-          roles: [Role.SECRETARIA, Role.ADMIN],
+          roles: [Role.SECRETARIA, Role.ADMIN, Role.FATURAMENTO],
           title: 'Profissionais',
         },
       },
@@ -102,7 +102,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         data: {
-          roles: [Role.SECRETARIA, Role.ADMIN],
+          roles: [Role.SECRETARIA, Role.ADMIN, Role.FATURAMENTO],
           title: 'Empresas',
         },
       },

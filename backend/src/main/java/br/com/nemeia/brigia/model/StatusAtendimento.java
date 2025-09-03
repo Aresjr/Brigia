@@ -10,7 +10,7 @@ public enum StatusAtendimento {
     AGENDADO(0, "Em andamento"),
     CONFIRMADO(1, "Concluído"),
     CANCELADO(2, "Faturado"),
-    REALIZADO(3, "Não compareceu");
+    NAO_COMPARECEU(3, "Não compareceu");
 
     private final Integer codigo;
     private final String descricao;

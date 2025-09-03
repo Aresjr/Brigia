@@ -245,6 +245,7 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
     this.form.patchValue({
       precoAlterado: true
     });
+    this.form.get('precoAlterado')?.markAsPristine();
   }
 
   cancelarEdicaoValor() {
