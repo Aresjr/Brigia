@@ -1,4 +1,4 @@
-import { Entidade, EntidadeRequest, EntidadeResponse } from '../shared/entidade.interface';
+import { Entidade, EntidadeRequest } from '../shared/entidade.interface';
 import { Paciente } from '../pacientes/paciente.interface';
 import { Profissional } from '../profissionais/profissional.interface';
 import { Especialidade } from '../especialidade/especialidade.interface';
@@ -34,6 +34,7 @@ export interface AgendamentoRequest extends EntidadeRequest {
     convenioId: number | null;
     empresaId: number | null;
     duracao: number | null;
+    tipoAgendamento: number | null;
     formaPagamento: number | null;
     valor: string | null;
     desconto: number | null;

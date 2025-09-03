@@ -23,7 +23,7 @@ import { Agendamento, AgendamentoRequest } from './agendamento.interface';
 import { IForm } from '../shared/form.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
-import { FORMAS_PAGAMENTO } from '../../core/constans';
+import { FORMAS_PAGAMENTO, TIPO_AGENDAMENTO } from '../../core/constans';
 import { forkJoin, map, Observable, tap } from 'rxjs';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
@@ -51,16 +51,17 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
   convenios: Convenio[] = [];
   especialidades: Especialidade[] = [];
   profissionais: Profissional[] = [];
+  profissionaisFiltrados: Profissional[] = [];
   empresas: Empresa[] = [];
   procedimentos: Procedimento[] = [];
   pacienteSelecionado?: Paciente | null;
   empresaSelecionada?: Empresa | null;
   procedimentoSelecionado?: Procedimento | null;
-  especialidadeSelecionada?: Especialidade | null;
   convenioSelecionado?: Convenio | null;
   mostrarFormularioNovoPaciente: boolean = false;
   showTooltip: boolean = false;
   formasPagamento = FORMAS_PAGAMENTO;
+  tipoAgendamento = TIPO_AGENDAMENTO;
   podeSalvar: boolean = true;
   exibeConfirmCancelamento: boolean = false;
   valorEditavel: boolean = false;
@@ -80,6 +81,7 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
       data: [null, {nonNullable: true}],
       hora: [null, {nonNullable: true}],
       duracao: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(3)]],
+      tipoAgendamento: [null, {nonNullable: true}],
       profissionalId: [null, {nonNullable: true}],
       especialidadeId: [null, {nonNullable: true}],
       procedimentoId: [null],
@@ -166,7 +168,8 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
   carregarProfissionais(): Observable<Profissional[]> {
     return this.profissionaisService.listar().pipe(
       map(response => response.items),
-      tap(profissionais => this.profissionais = profissionais));
+      tap(profissionais => { this.profissionais = profissionais;
+        this.profissionaisFiltrados = profissionais;}));
   }
 
   carregarEmpresas(): Observable<Empresa[]> {
@@ -231,7 +234,13 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
   }
 
   selectEspecialidade(especialidade: Especialidade | null) {
-    this.especialidadeSelecionada = especialidade;
+    if (especialidade) {
+      this.profissionaisFiltrados = this.profissionais.filter(p =>
+        p.especialidades?.some(e => e.id === especialidade.id)
+      );
+    } else {
+      this.profissionaisFiltrados = this.profissionais;
+    }
   }
 
   selectConvenio(convenio: Convenio | null) {

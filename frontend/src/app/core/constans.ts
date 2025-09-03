@@ -48,3 +48,12 @@ export const FORMAS_PAGAMENTO = [
   { valor: 3, descricao: 'Pix' },
   { valor: 4, descricao: 'Boleto' },
 ];
+
+export const TIPO_AGENDAMENTO = [
+  { valor: 0, descricao: 'Consulta' },
+  { valor: 1, descricao: 'Exame' },
+  { valor: 2, descricao: 'ASO' },
+  { valor: 3, descricao: 'Procedimento' },
+  { valor: 4, descricao: 'Sessão' },
+  { valor: 5, descricao: 'Retorno' }
+];

@@ -72,7 +72,7 @@ public class Agendamento extends BaseModel {
     private String observacoes;
 
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "tipo_agendamento", length = 2)
+    @Column(name = "tipo_agendamento", length = 2, nullable = false)
     private TipoAgendamento tipoAgendamento;
 
     @Column(name = "preco_alterado", nullable = false)

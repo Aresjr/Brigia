@@ -51,15 +51,15 @@
             </div>
           </label>
         </div>
-        <div class="w-[23rem] mr-4" >
+        <div class="w-[24rem] mr-4" >
           <label class="label-campo" for="pacienteId">
             Paciente <span aria-hidden="true" class="text-red-500">*</span>
               <ng-select formControlName="pacienteId" class="campo-select"
                          [ngClass]="styleClassesField('pacienteId')" labelForId="pacienteId" placeholder="Selecione o paciente"
                          (change)="selectPaciente($event)" (clear)="selectPaciente(null)" required >
-                @for(paciente of this.pacientes; track paciente.id) {
-                  <ng-option [value]="paciente.id" class="b-0">{{ paciente.nome }} - {{ paciente.dataNascimento | date:'dd/MM/yyyy' }}</ng-option>
-                }
+                  @for(paciente of this.pacientes; track paciente.id) {
+                    <ng-option [value]="paciente.id" class="b-0">{{ paciente.nome }} - {{ paciente.dataNascimento | date:'dd/MM/yyyy' }}</ng-option>
+                  }
                 <ng-template ng-notfound-tmp>
                   <div class="p-2 flex items-center justify-between gap-4">
                     <div class="p-2 text-sm">
@@ -77,17 +77,30 @@
             </div>
           </label>
         </div>
-        <div class="w-[12rem]">
+
+        <div class="w-[11rem]" >
+          <label class="label-campo" for="tipoAgendamento">
+            Tipo <span aria-hidden="true" class="text-red-500">*</span>
+            <ng-select formControlName="tipoAgendamento" class="campo-select" required
+                       [ngClass]="styleClassesField('tipoAgendamento')" bindValue="valor" bindLabel="descricao"
+                       [items]="this.tipoAgendamento" labelForId="tipoAgendamento" />
+            <div *ngIf="isInvalid('tipoAgendamento')" class="text-red-500 text-sm">
+              Obrigatório
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="flex mt-2">
+        <div class="w-[12rem] mr-4">
           <label class="label-campo" for="convenioId">Convênio</label>
           <ng-select formControlName="convenioId" class="campo-select"
                      [ngClass]="styleClassesField('convenioId')"
                      [items]="this.convenios" bindValue="id" bindLabel="nome" labelForId="convenioId"
                      (change)="selectConvenio($event)" (clear)="selectConvenio(null)" />
         </div>
-      </div>
 
-      <div class="flex mt-2">
-        <div class="mr-4 w-[24rem]" >
+        <div class="mr-4 w-[20rem]" >
           <label class="label-campo" for="especialidadeId">
             Especialidade <span aria-hidden="true" class="text-red-500">*</span>
             <ng-select formControlName="especialidadeId" required class="campo-select"
@@ -100,12 +113,12 @@
           </label>
         </div>
 
-        <div class="w-[30rem]" >
+        <div class="w-[21rem]" >
           <label class="label-campo" for="profissionalId">
             Profissional <span aria-hidden="true" class="text-red-500">*</span>
             <ng-select formControlName="profissionalId" required class="campo-select"
                        [ngClass]="styleClassesField('profissionalId')"
-                       [items]="this.profissionais" bindValue="id" bindLabel="nome" labelForId="profissionalId" />
+                       [items]="this.profissionaisFiltrados" bindValue="id" bindLabel="nome" labelForId="profissionalId" />
             <div *ngIf="isInvalid('profissionalId')" class="text-red-500 text-sm">
               Obrigatório
             </div>
