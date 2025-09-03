@@ -1,10 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
-import { Empresa, EmpresaRequest } from '../empresa.interface';
+import { Empresa, EmpresaRequest, EmpresaPlano } from '../empresa.interface';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
 import { NgxMaskDirective } from 'ngx-mask';
+import { EmpresasService } from '../empresas.service';
+import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { FormComponent } from '../../shared/form.component';
 
 @Component({
   selector: 'app-empresa-form',
@@ -15,31 +18,46 @@ import { NgxMaskDirective } from 'ngx-mask';
     ReactiveFormsModule,
     LucideAngularModule,
     EmptyToNullDirective,
-    NgxMaskDirective
+    NgxMaskDirective,
+    NgSelectComponent,
+    NgOptionComponent
   ]
 })
-export class EmpresaFormComponent implements OnInit {
+export class EmpresaFormComponent extends FormComponent implements OnInit {
   @Input() empresa: Empresa | null = null;
   @Output() save = new EventEmitter<Partial<EmpresaRequest>>();
   @Output() cancel = new EventEmitter<void>();
 
-  form: FormGroup;
+  planos: EmpresaPlano[] = [];
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    protected override fb: FormBuilder,
+    private empresasService: EmpresasService
+  ) {
+    super(fb);
     this.form = this.fb.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
       codigoBc: [null],
       valorMinimoMensal: [null],
       minimoPorFuncionario: [null],
       valorMes: [null],
+      planoId: [null],
       observacao: [null]
     });
   }
 
   ngOnInit() {
+    this.carregarPlanos();
+
     if (this.empresa) {
       this.form.patchValue(this.empresa);
     }
+  }
+
+  private carregarPlanos() {
+    this.empresasService.getPlanos().subscribe(planos => {
+      this.planos = planos.items;
+    });
   }
 
   onSubmit() {
@@ -55,5 +73,4 @@ export class EmpresaFormComponent implements OnInit {
   get isEditMode(): boolean {
     return !!this.empresa;
   }
-
 }

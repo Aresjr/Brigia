@@ -1,4 +1,4 @@
-import { Entidade, EntidadeRequest, EntidadeResponse } from '../shared/entidade.interface';
+import { Entidade, EntidadeRequest } from '../shared/entidade.interface';
 
 export interface Empresa extends Entidade {
     observacao: string | null;
@@ -20,10 +20,9 @@ export interface EmpresaRequest extends EntidadeRequest {
     plano: EmpresaPlano | null;
 }
 
-export interface EmpresaPlano extends Entidade {
-    corFundo: string | null;
-}
-
-export interface EmpresaResponse extends EntidadeResponse {
-    items: Empresa[];
+export interface EmpresaPlano {
+    id: number;
+    nome: string;
+    corFundo: string;
+    descricao: string;
 }

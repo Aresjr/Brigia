@@ -47,6 +47,23 @@
         </div>
 
         <div>
+          <label class="label-campo">
+            Plano
+            <ng-select formControlName="planoId" class="campo-select" required
+                       [ngClass]="styleClassesField('planoId')"
+                       labelForId="planoId" >
+              @for (plano of planos; track plano.id) {
+                <ng-option [value]="plano.id">
+                  <div [class]="plano.corFundo" class="p-2 -m-1">
+                    {{plano.nome}}
+                  </div>
+                </ng-option>
+              }
+            </ng-select>
+          </label>
+        </div>
+
+        <div>
           <label class="label-campo">Observações</label>
           <textarea id="descricao"
             formControlName="observacao" rows="5" emptyToNull

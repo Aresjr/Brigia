@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Empresa, EmpresaRequest } from './empresa.interface';
+import { Empresa, EmpresaRequest, EmpresaPlano } from './empresa.interface';
 import { BaseService } from '../procedimentos/base.service';
+import { Observable } from 'rxjs';
+import { PagedResponse } from '../shared/entidade.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -8,4 +10,8 @@ import { BaseService } from '../procedimentos/base.service';
 export class EmpresasService extends BaseService<Empresa, EmpresaRequest> {
 
   override path = '/empresas';
+
+  getPlanos(): Observable<PagedResponse<EmpresaPlano>> {
+    return this.backend.get<PagedResponse<EmpresaPlano>>(`${this.path}/planos`);
+  }
 }

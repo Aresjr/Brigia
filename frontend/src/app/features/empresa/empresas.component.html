@@ -16,8 +16,12 @@
               <thead class="text-white bg-blue-500">
                     <tr>
                         <th (click)="ordenar('nome')" class="cabecalho-listagem w-36" title="Nome da Empresa">
-                            <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
-                            Nome
+                          <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
+                          Nome
+                        </th>
+                        <th (click)="ordenar('plano')" class="cabecalho-listagem w-6" title="Plano da Empresa">
+                          <lucide-icon *ngIf="getSortIcon('plano')" [name]="getSortIcon('plano')" class="icone-ordenacao"/>
+                          Plano
                         </th>
                         <th (click)="ordenar('codigoBc')" class="cabecalho-listagem w-6" title="Código BC">
                           <lucide-icon *ngIf="getSortIcon('codigoBc')" [name]="getSortIcon('codigoBc')" class="icone-ordenacao"/>
@@ -44,10 +48,11 @@
                 </thead>
                 <tbody class="bg-white">
                     @for (empresa of getItensPaginados(); track empresa.id) {
-                        <tr class="border-b hover:bg-gray-100" [class.bg-red-50]="empresa.excluido" [ngClass]="empresa.plano?.corFundo" >
-                            <td class="px-6 py-2 whitespace-nowrap w-36">
+                        <tr class="border-b hover:bg-gray-100" [class.bg-red-50]="empresa.excluido">
+                            <td class="px-6 py-2 whitespace-nowrap w-32">
                                 {{empresa.nome}} <span *ngIf="empresa.excluido" class="excluido">Excluído</span>
                             </td>
+                            <td class="px-6 py-2 w-6"><span class="tag" [ngClass]="empresa.plano?.corFundo">{{empresa.plano?.nome}}</span></td>
                             <td class="px-6 py-2 w-6">{{empresa.codigoBc}}</td>
                             <td class="px-6 py-2 w-6">{{empresa.valorMinimoMensal}}</td>
                             <td class="px-6 py-2 w-12">{{empresa.minimoPorFuncionario}}</td>
