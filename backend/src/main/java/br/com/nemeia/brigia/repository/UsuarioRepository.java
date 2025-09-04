@@ -2,9 +2,7 @@ package br.com.nemeia.brigia.repository;
 
 import br.com.nemeia.brigia.model.Usuario;
 import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-
+public interface UsuarioRepository extends BaseRepository<Usuario> {
     Optional<Usuario> findByEmail(String email);
 }

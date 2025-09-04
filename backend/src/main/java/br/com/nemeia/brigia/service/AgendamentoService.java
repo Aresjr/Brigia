@@ -63,7 +63,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
 
     private void setEntidades(AgendamentoRequest request, Agendamento agendamento) {
         if (request.pacienteId() != null) {
-            agendamento.setPaciente(pacienteService.getPacienteById(request.pacienteId()));
+            agendamento.setPaciente(pacienteService.getById(request.pacienteId()));
         }
         if (request.profissionalId() != null) {
             agendamento.setProfissional(profissionalService.getById(request.profissionalId()));

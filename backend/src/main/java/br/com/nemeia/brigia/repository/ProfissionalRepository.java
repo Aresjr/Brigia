@@ -3,8 +3,10 @@ package br.com.nemeia.brigia.repository;
 import br.com.nemeia.brigia.model.Profissional;
 import java.time.LocalDate;
 import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 
-public interface ProfissionalRepository extends JpaRepository<Profissional, Long> {
+public interface ProfissionalRepository extends BaseRepository<Profissional> {
     List<Profissional> findAllByDataNascimentoIs(LocalDate now);
+
+    Optional<Profissional> findOneByUsuarioIdIs(Long usuarioId);
 }

@@ -41,7 +41,7 @@ public class PacienteService {
         return repository.findAllByDataNascimentoIs(LocalDate.now());
     }
 
-    public Paciente getPacienteById(Long id) {
+    public Paciente getById(Long id) {
         return repository
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("Paciente não encontrado com ID: " + id));
@@ -65,7 +65,7 @@ public class PacienteService {
     }
 
     public Paciente editPaciente(Long id, PacienteRequest request) {
-        getPacienteById(id);
+        getById(id);
         Paciente paciente = mapper.toEntity(request);
         paciente.setId(id);
         return savePaciente(paciente, request.convenioId(), request.empresaId());

@@ -42,7 +42,7 @@ public class PacienteController {
     @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
     public PacienteResponse getPacienteById(@PathVariable Long id) {
         log.info("GET /pacientes/{} - buscando paciente por ID", id);
-        return mapper.toResponse(service.getPacienteById(id));
+        return mapper.toResponse(service.getById(id));
     }
 
     @PutMapping("/{id}")

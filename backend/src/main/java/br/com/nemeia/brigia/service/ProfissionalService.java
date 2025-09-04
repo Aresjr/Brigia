@@ -41,6 +41,16 @@ public class ProfissionalService {
                         () -> new NotFoundException("Profissional não encontrado com ID: " + id));
     }
 
+    public Profissional getByUsuarioId(Long usuarioId) {
+        return repository
+                .findOneByUsuarioIdIs(usuarioId)
+                .orElseThrow(
+                        () ->
+                                new NotFoundException(
+                                        "Profissional não encontrado com o usuário ID: "
+                                                + usuarioId));
+    }
+
     public Profissional createProfissional(ProfissionalRequest request) {
         Profissional profissional = mapper.toEntity(request);
 
