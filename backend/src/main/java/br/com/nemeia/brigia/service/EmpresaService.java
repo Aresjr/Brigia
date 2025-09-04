@@ -6,6 +6,7 @@ import br.com.nemeia.brigia.dto.request.EmpresaRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.EmpresaMapper;
 import br.com.nemeia.brigia.model.Empresa;
+import br.com.nemeia.brigia.model.EmpresaPlano;
 import br.com.nemeia.brigia.repository.EmpresaRepository;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class EmpresaService {
     private final EmpresaRepository repository;
     private final EmpresaMapper mapper;
     private final SecurityUtils securityUtils;
+    private final EmpresaPlanoService empresaPlanoService;
 
     public Page<Empresa> getPaged(int page, int size, Boolean mostrarExcluidos) {
         Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
@@ -45,6 +47,12 @@ public class EmpresaService {
     public Empresa editEmpresa(Long id, EmpresaRequest request) {
         getById(id);
         Empresa empresa = mapper.toEntity(request);
+
+        if (request.planoId() != null) {
+            EmpresaPlano empresaPlano = empresaPlanoService.getById(request.planoId());
+            empresa.setPlano(empresaPlano);
+        }
+
         empresa.setId(id);
         return repository.save(empresa);
     }

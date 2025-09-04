@@ -17,7 +17,7 @@ export abstract class BaseListComponent<T extends object> {
   itensInternos: T[] = [];
   sortState: SortState<T> = { column: '', direction: null };
   paginaAtual = 1;
-  itensPorPagina = 16;
+  itensPorPagina = 10;
   totalPaginas = 1;
   dropdownAberto: number | null = null;
   itemSelecionado: T | null = null;

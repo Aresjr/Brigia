@@ -8,6 +8,7 @@ import { NgxMaskDirective } from 'ngx-mask';
 import { EmpresasService } from '../empresas.service';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { FormComponent } from '../../shared/form.component';
+import { forkJoin, map, Observable, tap } from 'rxjs';
 
 @Component({
   selector: 'app-empresa-form',
@@ -47,22 +48,34 @@ export class EmpresaFormComponent extends FormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.carregarPlanos();
-
     if (this.empresa) {
       this.form.patchValue(this.empresa);
     }
+
+    forkJoin([
+      this.carregarPlanos()
+    ]).subscribe(() => {
+      this.form.patchValue({
+        planoId: this.empresa?.plano?.id
+      });
+    })
   }
 
-  private carregarPlanos() {
-    this.empresasService.getPlanos().subscribe(planos => {
-      this.planos = planos.items;
-    });
+  private carregarPlanos(): Observable<EmpresaPlano[]> {
+    return this.empresasService.getPlanos().pipe(
+        map(response => response.items),
+        tap(planos => this.planos = planos));
   }
 
   onSubmit() {
+    console.log('this.form', this.form);
     if (this.form.valid) {
       this.save.emit(this.form.value);
+    } else {
+      Object.keys(this.form.controls).forEach(field => {
+        const control = this.form.get(field);
+        control?.markAsTouched({ onlySelf: true });
+      });
     }
   }
 

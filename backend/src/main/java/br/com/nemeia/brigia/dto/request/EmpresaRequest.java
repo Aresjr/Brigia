@@ -10,4 +10,5 @@ public record EmpresaRequest(
         BigDecimal valorMinimoMensal,
         BigDecimal minimoPorFuncionario,
         BigDecimal valorMes,
+        Long planoId,
         Long func) {}

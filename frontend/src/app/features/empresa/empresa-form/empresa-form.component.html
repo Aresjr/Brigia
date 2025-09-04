@@ -49,7 +49,7 @@
         <div>
           <label class="label-campo">
             Plano
-            <ng-select formControlName="planoId" class="campo-select" required
+            <ng-select formControlName="planoId" class="campo-select"
                        [ngClass]="styleClassesField('planoId')"
                        labelForId="planoId" >
               @for (plano of planos; track plano.id) {

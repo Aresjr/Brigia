@@ -11,7 +11,7 @@ import { LucideAngularModule } from 'lucide-angular';
 export class PaginationComponent {
   @Input() items: any[] = [];
   @Input() paginaAtual = 1;
-  @Input() itensPorPagina = 16;
+  @Input() itensPorPagina = 10;
   @Input() totalPaginas = 1;
   @Output() pageChange = new EventEmitter<number>();
   protected readonly Math = Math;

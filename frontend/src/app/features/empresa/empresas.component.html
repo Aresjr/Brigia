@@ -11,81 +11,84 @@
             <p class="text-gray-500">Nenhum registro encontrado.</p>
         </div>
     } @else {
-          <div class="borda-tabela">
-            <table class="tabela-listagem">
-              <thead class="text-white bg-blue-500">
-                    <tr>
-                        <th (click)="ordenar('nome')" class="cabecalho-listagem w-36" title="Nome da Empresa">
-                          <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
-                          Nome
-                        </th>
-                        <th (click)="ordenar('plano')" class="cabecalho-listagem w-6" title="Plano da Empresa">
-                          <lucide-icon *ngIf="getSortIcon('plano')" [name]="getSortIcon('plano')" class="icone-ordenacao"/>
-                          Plano
-                        </th>
-                        <th (click)="ordenar('codigoBc')" class="cabecalho-listagem w-6" title="Código BC">
-                          <lucide-icon *ngIf="getSortIcon('codigoBc')" [name]="getSortIcon('codigoBc')" class="icone-ordenacao"/>
-                          Cód. BC
-                        </th>
-                        <th (click)="ordenar('valorMinimoMensal')" class="cabecalho-listagem w-6" title="Valor Mínimo Mensal">
-                          <lucide-icon *ngIf="getSortIcon('valorMinimoMensal')" [name]="getSortIcon('valorMinimoMensal')" class="icone-ordenacao"/>
-                          Mín. Mensal
-                        </th>
-                        <th (click)="ordenar('minimoPorFuncionario')" class="cabecalho-listagem w-6" title="Valor Mínimo por Funcionário">
-                          <lucide-icon *ngIf="getSortIcon('minimoPorFuncionario')" [name]="getSortIcon('minimoPorFuncionario')" class="icone-ordenacao mt-1"/>
-                          Mín. Por Funcionário
-                        </th>
-                        <th (click)="ordenar('valorMes')" class="cabecalho-listagem w-2" title="Valor Mínimo por Mês">
-                          <lucide-icon *ngIf="getSortIcon('valorMes')" [name]="getSortIcon('valorMes')" class="icone-ordenacao"/>
-                          Valor Mês
-                        </th>
-                        <th (click)="ordenar('observacao')" class="cabecalho-listagem min-w-32" title="Descrição / Observações">
-                            <lucide-icon *ngIf="getSortIcon('observacao')" [name]="getSortIcon('observacao')" class="icone-ordenacao"/>
-                            Observações
-                        </th>
-                        <th class="w-1"></th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white">
-                    @for (empresa of getItensPaginados(); track empresa.id) {
-                        <tr class="border-b hover:bg-gray-100" [class.bg-red-50]="empresa.excluido">
-                            <td class="px-6 py-2 whitespace-nowrap w-32">
-                                {{empresa.nome}} <span *ngIf="empresa.excluido" class="excluido">Excluído</span>
-                            </td>
-                            <td class="px-6 py-2 w-6"><span class="tag" [ngClass]="empresa.plano?.corFundo">{{empresa.plano?.nome}}</span></td>
-                            <td class="px-6 py-2 w-6">{{empresa.codigoBc}}</td>
-                            <td class="px-6 py-2 w-6">{{empresa.valorMinimoMensal}}</td>
-                            <td class="px-6 py-2 w-12">{{empresa.minimoPorFuncionario}}</td>
-                            <td class="px-6 py-2 w-2">{{empresa.valorMes}}</td>
-                            <td class="px-6 text-xs w-32 min-w-32">{{empresa.observacao}}</td>
-                            <td class="p-1 whitespace-nowrap text-right hover:bg-gray-300 hover:cursor-pointer" (click)="toggleDropdown($event, empresa.id)">
-                                    <lucide-icon name="ellipsis-vertical" class="h-5"/>
-                                    @if (dropdownAberto === empresa.id) {
-                                        <div class="absolute -ml-12 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
-                                            <div class="py-1 flex flex-col">
-                                                <a *ngIf="!empresa.excluido"
-                                                    (click)="editar($event, empresa)"
-                                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
-                                                    Editar
-                                                </a>
-                                                <a *ngIf="!empresa.excluido"
-                                                    (click)="perguntaExcluir($event, empresa)"
-                                                    class="block px-4 py-2 text-sm text-red-700 hover:bg-red-50 cursor-pointer">
-                                                    Excluir
-                                                </a>
-                                                <a *ngIf="empresa.excluido"
-                                                    (click)="restaurarItem($event, empresa)"
-                                                    class="block px-4 py-2 text-sm text-green-700 hover:bg-green-50 cursor-pointer">
-                                                    Restaurar
-                                                </a>
-                                            </div>
-                                        </div>
-                                    }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+
+        <div class="grid grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_minmax(10px,10px)] gap-4 px-4 py-2 text-sm font-bold rounded-md text-gray-500">
+          <div (click)="ordenar('nome')" class="cursor-pointer">
+            <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
+            Nome
+          </div>
+          <div (click)="ordenar('plano')" class="cursor-pointer">
+            <lucide-icon *ngIf="getSortIcon('plano')" [name]="getSortIcon('plano')" class="icone-ordenacao"/>
+            Plano
+          </div>
+          <div (click)="ordenar('codigoBc')" class="cursor-pointer">
+            <lucide-icon *ngIf="getSortIcon('codigoBc')" [name]="getSortIcon('codigoBc')" class="icone-ordenacao"/>
+            Cód. BC
+          </div>
+          <div (click)="ordenar('valorMinimoMensal')" class="cursor-pointer">
+            <lucide-icon *ngIf="getSortIcon('valorMinimoMensal')" [name]="getSortIcon('valorMinimoMensal')" class="icone-ordenacao"/>
+            Mín. Mensal
+          </div>
+          <div (click)="ordenar('minimoPorFuncionario')" class="cursor-pointer">
+            <lucide-icon *ngIf="getSortIcon('minimoPorFuncionario')" [name]="getSortIcon('minimoPorFuncionario')" class="icone-ordenacao"/>
+            Mín. Func.
+          </div>
+          <div (click)="ordenar('valorMes')" class="cursor-pointer">
+            <lucide-icon *ngIf="getSortIcon('valorMes')" [name]="getSortIcon('valorMes')" class="icone-ordenacao"/>
+            Valor Mês
+          </div>
+          <div>Observações</div>
+          <div>
+            <lucide-icon name="ellipsis-vertical" class="h-4"/>
+          </div>
+        </div>
+
+        <!-- Lista de cards -->
+        <div class="flex flex-col gap-1 mt-2">
+          <div *ngFor="let empresa of getItensPaginados()"
+               class="bg-white rounded-lg flex items-center gap-4 border-l-8 border-blue-400
+                " >
+<!-- transition-transform duration-200 ease-in-out hover:scale-102 origin-center -->
+
+            <!-- Conteúdo do card -->
+            <div class="grid grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_minmax(10px,20px)] gap-4 w-full px-2 py-2">
+              <div>{{ empresa.nome }}</div>
+              <div [ngClass]="empresa.plano?.corFundo" class="text-xs rounded-lg p-1.5 inline-block w-fit h-fit" >
+                {{ empresa.plano?.nome }}
+              </div>
+              <div>{{ empresa.codigoBc }}</div>
+              <div>{{ empresa.valorMinimoMensal }}</div>
+              <div>{{ empresa.minimoPorFuncionario }}</div>
+              <div>{{ empresa.valorMes | currency:'BRL':'symbol':'1.2-2' }}</div>
+              <div>{{ empresa.observacao }}</div>
+
+              <div class="p-1 whitespace-nowrap text-right" (click)="toggleDropdown($event, empresa.id)">
+                <lucide-icon name="ellipsis-vertical" class="h-5 w-5 rounded-full hover:bg-gray-300 hover:cursor-pointer"/>
+                @if (dropdownAberto === empresa.id) {
+                  <div class="absolute -ml-12 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                    <div class="py-1 flex flex-col">
+                      <a *ngIf="!empresa.excluido"
+                         (click)="editar($event, empresa)"
+                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                        Editar
+                      </a>
+                      <a *ngIf="!empresa.excluido"
+                         (click)="perguntaExcluir($event, empresa)"
+                         class="block px-4 py-2 text-sm text-red-700 hover:bg-red-50 cursor-pointer">
+                        Excluir
+                      </a>
+                      <a *ngIf="empresa.excluido"
+                         (click)="restaurarItem($event, empresa)"
+                         class="block px-4 py-2 text-sm text-green-700 hover:bg-green-50 cursor-pointer">
+                        Restaurar
+                      </a>
+                    </div>
+                  </div>
+                }
+              </div>
+
+            </div>
+          </div>
         </div>
 
         <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
