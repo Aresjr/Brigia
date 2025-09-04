@@ -13,6 +13,7 @@ import { ConveniosComponent } from './features/convenio/convenios.component';
 import { Role } from './core/constans';
 import { EspecialidadeComponent } from './features/especialidade/especialidade.component';
 import { EmpresasComponent } from './features/empresa/empresas.component';
+import { AtendimentosComponent } from './features/atendimento/atendimentos.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -54,6 +55,16 @@ export const routes: Routes = [
         data: {
           roles: [Role.SECRETARIA, Role.ADMIN, Role.MEDICO],
           title: 'Agenda Diária'
+        },
+      },
+      {
+        path: 'atendimentos',
+        component: AtendimentosComponent,
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        data: {
+          roles: [Role.SECRETARIA, Role.ADMIN, Role.MEDICO],
+          title: 'Atendimentos'
         },
       },
       {

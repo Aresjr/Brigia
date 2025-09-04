@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Paciente } from '../pacientes/paciente.interface';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PacienteService } from '../pacientes/paciente.service';
@@ -38,12 +38,10 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
     DatePipe, NgIf, LucideAngularModule, ConfirmDialogComponent
   ]
 })
-export class AgendamentoFormComponent extends FormComponent implements OnInit {
+export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> implements OnInit {
   @Input() agendamentoDetalhes: Agendamento | null = null;
   @Input() dataAgendamento: Date | null = null;
   @Input() pacienteId!: number | null;
-  @Output() save = new EventEmitter<Partial<AgendamentoRequest>>();
-  @Output() cancel = new EventEmitter<void>();
 
   titulo: string = 'Novo Agendamento';
   hoje: string;
@@ -307,7 +305,7 @@ export class AgendamentoFormComponent extends FormComponent implements OnInit {
     return true;
   }
 
-  salvar() {
+  override onSubmit() {
     if (this.formValido()) {
       this.form.get('pacienteId')?.enable();
       this.save.emit(this.form.value);

@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Paciente, PacienteRequest } from '../paciente.interface';
 import { NgxMaskDirective } from 'ngx-mask';
 import { HttpClient } from '@angular/common/http';
@@ -21,10 +21,8 @@ import { FormComponent } from '../../shared/form.component';
   imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, LucideAngularModule, NgOptionComponent, NgSelectComponent],
   templateUrl: 'paciente-form.component.html'
 })
-export class PacienteFormComponent extends FormComponent implements OnInit {
+export class PacienteFormComponent extends FormComponent<PacienteRequest> implements OnInit {
   @Input() paciente?: Paciente | null;
-  @Output() save = new EventEmitter<Partial<PacienteRequest>>();
-  @Output() cancel = new EventEmitter<void>();
 
   estados: ({ sigla: string; nome: string })[] = ESTADOS;
   protected readonly SEXOS = SEXOS;
@@ -84,21 +82,6 @@ export class PacienteFormComponent extends FormComponent implements OnInit {
 
   get isEditMode(): boolean {
     return !!this.paciente;
-  }
-
-  onSubmit() {
-    if (this.form.valid) {
-      this.save.emit(this.form.value);
-    } else {
-      Object.keys(this.form.controls).forEach(field => {
-        const control = this.form.get(field);
-        control?.markAsTouched({ onlySelf: true });
-      });
-    }
-  }
-
-  onCancel() {
-    this.cancel.emit();
   }
 
   buscarCep() {

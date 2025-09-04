@@ -60,10 +60,11 @@ export class MainLayoutComponent {
   isUserMenuOpen = false;
   searchTerm: string = '';
   userRoles: Role[] = [];
-  menuItems: MenuItem[] = [ //TODO - Reuse routes const
+  menuItems: MenuItem[] = [
     { label: 'Página Inicial', icon: 'home', route: '/', roles: [Role.SECRETARIA, Role.ADMIN] },
     { label: 'Pacientes', icon: 'users', route: '/pacientes', roles: [Role.SECRETARIA, Role.ADMIN] },
     { label: 'Agenda Diária', icon: 'calendar', route: '/agenda-diaria', roles: [Role.SECRETARIA, Role.ADMIN] },
+    { label: 'Atendimentos', icon: 'stethoscope', route: '/atendimentos', roles: [Role.SECRETARIA, Role.ADMIN] },
     {
       label: 'Cadastros',
       icon: 'user-plus',
@@ -73,7 +74,7 @@ export class MainLayoutComponent {
         { label: 'Empresas Parceiras', icon: 'building-2', route: '/empresas', roles: [Role.SECRETARIA, Role.ADMIN] },
         { label: 'Especialidades', icon: 'microscope', route: '/especialidades', roles: [Role.SECRETARIA, Role.ADMIN] },
         { label: 'Procedimentos', icon: 'clipboard-list', route: '/procedimentos', roles: [Role.SECRETARIA, Role.ADMIN] },
-        { label: 'Profissionais', icon: 'stethoscope', route: '/profissionais', roles: [Role.SECRETARIA, Role.ADMIN] },
+        { label: 'Profissionais', icon: 'briefcase-medical', route: '/profissionais', roles: [Role.SECRETARIA, Role.ADMIN] },
       ], roles: [Role.SECRETARIA, Role.ADMIN]
     },
     {

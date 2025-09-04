@@ -1,0 +1,102 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AtendimentosService } from './atendimentos.service';
+import { Atendimento } from './atendimento.interface';
+import { LucideAngularModule } from 'lucide-angular';
+import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { AtendimentoFormComponent } from './atendimento-form/atendimento-form.component';
+import { BaseListComponent } from '../shared/base-list.component';
+import { PaginationComponent } from '../shared/pagination/pagination.component';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
+import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
+
+@Component({
+  selector: 'app-atendimentos',
+  templateUrl: './atendimentos.component.html',
+  standalone: true,
+  imports: [
+    CommonModule,
+    LucideAngularModule,
+    FormsModule,
+    AtendimentoFormComponent,
+    PaginationComponent,
+    ConfirmDialogComponent,
+    TopBarComponent
+  ]
+})
+export class AtendimentosComponent extends BaseListComponent<Atendimento> implements OnInit {
+  override nomeEntidade = 'Atendimento';
+
+  constructor(private atendimentosService: AtendimentosService, private toastr: ToastrService) {
+    super();
+  }
+
+  ngOnInit(): void {
+    this.carregarAtendimentos();
+  }
+
+  carregarAtendimentos(): void {
+    this.isLoading = true;
+    this.atendimentosService.listar(true).subscribe({
+      next: (response) => {
+        this.itensInternos = response.items;
+        this.itensExibicao = [...this.itensInternos];
+        this.atualizarPaginacao();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      }
+    });
+  }
+
+  override filter(atendimento: Atendimento, searchTerm: string): boolean | undefined {
+    return atendimento.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      atendimento.descricao?.toLowerCase().includes(searchTerm.toLowerCase());
+  }
+
+  onSalvarNovoAtendimento(atendimento: Partial<Atendimento>) {
+    if (this.itemEdicao) {
+      const id = this.itemEdicao.id;
+      this.atendimentosService.atualizar(id, atendimento).subscribe({
+        next: () => {
+          this.toastr.success('Registro atualizado');
+          this.carregarAtendimentos();
+          this.mostrarFormularioNovo = false;
+          this.itemEdicao = null;
+        }
+      });
+    } else {
+      this.atendimentosService.criar(atendimento).subscribe({
+        next: () => {
+          this.toastr.success(`${this.nomeEntidade} cadastrado`);
+          this.carregarAtendimentos();
+          this.mostrarFormularioNovo = false;
+        }
+      });
+    }
+  }
+
+  override excluir() {
+    super.excluir();
+    this.atendimentosService.excluir(this.idExclusao).subscribe({
+      next: () => {
+        this.toastr.success(`${this.nomeEntidade} excluído`);
+        this.carregarAtendimentos();
+      }
+    });
+  }
+
+  restaurarItem(event: Event, atendimento: Atendimento) {
+    event.stopPropagation();
+    this.dropdownAberto = null;
+
+    this.atendimentosService.restaurar(atendimento.id).subscribe({
+      next: () => {
+        atendimento.excluido = false;
+        this.toastr.success(`${this.nomeEntidade} restaurado`);
+      }
+    });
+  }
+}

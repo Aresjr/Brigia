@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Profissional, ProfissionalRequest } from '../profissional.interface';
 import { NgxMaskDirective } from 'ngx-mask';
 import { SEXOS } from '../../../core/constans';
@@ -17,10 +17,8 @@ import { FormComponent } from '../../shared/form.component';
   imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, NgSelectComponent, NgOptionComponent, LucideAngularModule],
   templateUrl: 'profissional-form.component.html'
 })
-export class ProfissionalFormComponent extends FormComponent implements OnInit {
+export class ProfissionalFormComponent extends FormComponent<ProfissionalRequest> implements OnInit {
   @Input() profissional?: Profissional | null;
-  @Output() save = new EventEmitter<Partial<ProfissionalRequest>>();
-  @Output() cancel = new EventEmitter<void>();
 
   protected readonly SEXOS = SEXOS;
   listaEspecialidades: Especialidade[] = [];
@@ -52,21 +50,6 @@ export class ProfissionalFormComponent extends FormComponent implements OnInit {
 
   get isEditMode(): boolean {
     return !!this.profissional;
-  }
-
-  onSubmit() {
-    if (this.form.valid) {
-      this.save.emit(this.form.value);
-    } else {
-      Object.keys(this.form.controls).forEach(field => {
-        const control = this.form.get(field);
-        control?.markAsTouched({ onlySelf: true });
-      });
-    }
-  }
-
-  onCancel() {
-    this.cancel.emit();
   }
 
   private carregarEspecialidades() {

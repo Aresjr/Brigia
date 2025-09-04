@@ -39,6 +39,11 @@ export class ProcedimentoFormComponent implements OnInit {
   onSubmit() {
     if (this.form.valid) {
       this.save.emit(this.form.value);
+    } else {
+      Object.keys(this.form.controls).forEach(field => {
+        const control = this.form.get(field);
+        control?.markAsTouched({ onlySelf: true });
+      });
     }
   }
 
