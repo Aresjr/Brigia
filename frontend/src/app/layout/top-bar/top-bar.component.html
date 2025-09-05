@@ -5,7 +5,7 @@
   <div class="flex">
 
     <select *ngIf="showDropdown" class="select select-neutral select-sm w-72 mr-4 shadow-md" (change)="onSelectItem($event)" >
-      <option value="0" selected>TODOS - {{ placeholderDropdown }}</option>
+      <option value="0" selected>Todos - {{ placeholderDropdown }}</option>
       @for(registro of this.registrosDropdown; track registro.id) {
         <option value="{{ registro.id }}">{{ registro.nome }}</option>
       }
