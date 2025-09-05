@@ -118,9 +118,9 @@ export class AgendaDiariaComponent implements OnInit {
     console.log(searchTerm);
   }
 
-  filtrarProfissional(profissional: Profissional) {
-    if (profissional) {
-      this.eventosExibicao = this.eventosInternos.filter(item => item.meta?.profissional.id == profissional.id);
+  filtrarProfissional(profissionalId: number) {
+    if (profissionalId && profissionalId != 0) {
+      this.eventosExibicao = this.eventosInternos.filter(item => item.meta?.profissional.id == profissionalId);
     } else {
       this.eventosExibicao = [...this.eventosInternos];
     }

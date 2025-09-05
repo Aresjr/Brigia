@@ -29,7 +29,7 @@
         </div>
         <div class="w-[4rem] mr-4 group">
           <label class="label-campo" for="hora">
-            <div class="tooltip">Horário inicial do agendamento</div>
+            <div class="tooltip-campo">Horário inicial do agendamento</div>
             Horário <span aria-hidden="true" class="text-red-500">*</span>
             <input type="text" formControlName="hora" maxlength="5" id="hora" required
                    mask="00:00" emptyToNull class="campo p-[7px]" [dropSpecialCharacters]="false"
@@ -41,7 +41,7 @@
         </div>
         <div class="w-[5rem] mr-4 group" aria-placeholder="Duração em minutos" (mouseenter)="showTooltip = true" (mouseleave)="showTooltip = false" >
           <label class="label-campo" for="duracao">
-            <div class="tooltip">Duração em minutos</div>
+            <div class="tooltip-campo">Duração em minutos</div>
             Duração <span aria-hidden="true" class="text-red-500">*</span>
             <input type="number" formControlName="duracao" min="10" max="480" id="duracao" required
                    (input)="limitLength($event)" emptyToNull maxlength="3"
@@ -198,10 +198,10 @@
       </div>
 
       <div class="flex justify-end gap-3 mt-6">
-        <button type="button" class="btn-neutro" (click)="fechar()" >
+        <button type="button" class="btn btn-neutral btn-sm" (click)="fechar()" >
           Fechar
         </button>
-        <button type="submit" class="btn-salvar" *ngIf="podeSalvar" >
+        <button type="submit" class="btn btn-success btn-sm" *ngIf="podeSalvar" >
           Salvar
         </button>
       </div>

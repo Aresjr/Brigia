@@ -7,6 +7,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@plugin "daisyui" {
-  themes: light --default, dark --prefersdark;
+
+html {
+  font-family: 'Montserrat', sans-serif;
+}
+
+input, select, textarea {
+  @apply bg-base-100
+}
+
+@layer base {
+  input::placeholder,
+  textarea::placeholder {
+    @apply placeholder-base-content/50;
+  }
 }

@@ -2,12 +2,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgSelectComponent } from '@ng-select/ng-select';
+import { Entidade } from '../../features/shared/entidade.interface';
 
 @Component({
   selector: 'app-top-bar',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, FormsModule, NgSelectComponent, ReactiveFormsModule],
+  imports: [CommonModule, LucideAngularModule, FormsModule, ReactiveFormsModule],
   templateUrl: './top-bar.component.html'
 })
 export class TopBarComponent {
@@ -15,7 +15,7 @@ export class TopBarComponent {
   @Input() showSearchBar: boolean = true;
   @Input() showDropdown: boolean = false;
   @Input() placeholderDropdown: string = '';
-  @Input() registrosDropdown: any[] = [];
+  @Input() registrosDropdown: Entidade[] = [];
   @Output() search = new EventEmitter<void>();
   @Output() addNovo = new EventEmitter<void>();
   @Output() selectRegistro = new EventEmitter<any>();
@@ -33,6 +33,8 @@ export class TopBarComponent {
   }
 
   onSelectItem($event: any) {
-    this.selectRegistro.emit($event);
+    console.log('onSelectItem', $event);
+    console.log('onSelectItem', $event.target.value);
+    this.selectRegistro.emit($event.target.value);
   }
 }

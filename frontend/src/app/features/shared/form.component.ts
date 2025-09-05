@@ -38,7 +38,6 @@ export abstract class FormComponent<Request extends EntidadeRequest> {
     if (isReadOnly) {
       classes.push('opacity-50', 'cursor-not-allowed');
     }
-    console.log('styleClassesField', classes);
     return classes;
   }
 

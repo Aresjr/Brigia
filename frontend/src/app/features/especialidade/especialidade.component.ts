@@ -44,6 +44,9 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
         this.itensExibicao = [...this.itensInternos];
         this.atualizarPaginacao();
         this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
       }
     });
   }

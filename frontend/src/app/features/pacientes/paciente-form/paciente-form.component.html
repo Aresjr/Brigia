@@ -25,7 +25,7 @@
         </div>
 
         <div class="flex space-x-4">
-          <div class="w-60">
+          <div class="w-72">
             <label class="label-campo">CPF</label>
             <input type="text" formControlName="cpf" name="cpf"
                    mask="000.000.000-00"
@@ -33,7 +33,7 @@
                    class="campo">
 
           </div>
-          <div class="w-56">
+          <div class="w-60">
             <label class="label-campo">
               Data Nascimento <span aria-hidden="true" class="text-red-500">*</span>
             </label>
@@ -49,7 +49,7 @@
         </div>
 
         <div class="flex space-x-4">
-          <div class="w-60">
+          <div class="w-72">
             <div>
               <label class="label-campo">Sexo</label>
               <ng-select formControlName="sexo" class="campo-select">
@@ -59,7 +59,7 @@
               </ng-select>
             </div>
           </div>
-          <div class="w-56">
+          <div class="w-60">
             <label class="label-campo">Celular</label>
             <input type="tel" formControlName="celular"
                    mask="(00) 00000-0000"
@@ -70,7 +70,7 @@
 
         <div class="flex space-x-4">
           <div>
-            <div class="w-60">
+            <div class="w-72">
               <label class="label-campo">CEP</label>
               <input type="text" formControlName="cep"
                      (blur)="buscarCep()" mask="00000-000"
@@ -79,7 +79,7 @@
             </div>
           </div>
           <div>
-            <div class="w-56">
+            <div class="w-60">
               <label class="label-campo">UF</label>
               <ng-select formControlName="uf" class="campo-select">
                 @for (estado of estados; track estado.sigla) {
@@ -91,12 +91,12 @@
         </div>
 
         <div class="flex space-x-4">
-          <div class="w-60">
+          <div class="w-72">
             <label class="label-campo">Cidade</label>
             <input type="text" formControlName="cidade" emptyToNull
                    class="campo">
           </div>
-          <div class="w-56">
+          <div class="w-60">
             <label class="label-campo">Bairro</label>
             <input type="text" formControlName="bairro" emptyToNull
                    class="campo">
@@ -104,12 +104,12 @@
         </div>
 
         <div class="flex space-x-4">
-          <div class="w-60">
+          <div class="w-72">
             <label class="label-campo">Rua</label>
             <input type="text" formControlName="rua" emptyToNull
                    class="campo">
           </div>
-          <div class="w-56">
+          <div class="w-60">
             <label class="label-campo">Complemento</label>
             <input type="text" formControlName="complemento" emptyToNull
                    class="campo">
@@ -117,7 +117,7 @@
         </div>
 
         <div class="flex space-x-4">
-          <div class="w-60">
+          <div class="w-72">
             <label class="label-campo">Empresa</label>
             <ng-select formControlName="empresaId" class="campo-select">
               @for (empresa of this.empresas; track empresa.id) {
@@ -126,7 +126,7 @@
             </ng-select>
 
           </div>
-          <div class="w-56">
+          <div class="w-60">
             <label class="label-campo">Convênio</label>
             <ng-select formControlName="convenioId" class="campo-select">
               @for (convenio of this.convenios; track convenio.id) {
@@ -143,10 +143,10 @@
         </div>
 
         <div class="flex justify-end space-x-3 mt-6">
-          <button type="button" (click)="onCancel()" class="btn-neutro" >
+          <button type="button" (click)="onCancel()" class="btn btn-neutral btn-sm" >
             Cancelar
           </button>
-          <button type="submit" class="btn-salvar">
+          <button type="submit" class="btn btn-success btn-sm">
             Salvar
           </button>
         </div>

@@ -1,10 +1,10 @@
-<div class="mt-4">
+<div class="mt-4 min-h-screen">
 
   <app-top-bar (search)="onSearch($event)" (addNovo)="onAddNovo()" title="Empresas Parceiras"></app-top-bar>
 
     @if (isLoading) {
         <div class="flex justify-center items-center h-32">
-            <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary"></div>
+            <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-400"></div>
         </div>
     } @else if (itensExibicao.length === 0) {
         <div class="text-center py-8 w-full bg-white rounded-md">
@@ -12,7 +12,7 @@
         </div>
     } @else {
 
-        <div class="grid grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_minmax(10px,10px)] gap-4 px-4 py-2 text-sm font-bold rounded-md text-gray-500">
+        <div class="grid grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_minmax(10px,10px)] gap-4 px-4 py-2 text-sm font-bold rounded-md text-gray-500 ">
           <div (click)="ordenar('nome')" class="cursor-pointer">
             <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
             Nome
@@ -44,7 +44,7 @@
         </div>
 
         <!-- Lista de cards -->
-        <div class="flex flex-col gap-1 mt-2">
+        <div class="flex flex-col gap-1 mt-2 min-h-[40rem]">
           <div *ngFor="let empresa of getItensPaginados()"
                class="bg-white rounded-lg flex items-center gap-4 border-l-8 border-blue-400
                 " >

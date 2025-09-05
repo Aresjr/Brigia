@@ -36,7 +36,8 @@ export class PaginationComponent {
   }
 
   getRegistroInicial(): number {
-    return ((this.paginaAtual - 1) * this.itensPorPagina) + 1;
+    if (this.items.length === 0) return 0;
+    return Math.min(((this.paginaAtual - 1) * this.itensPorPagina) + 1, this.items.length);
   }
 
   getRegistroFinal(): number {
