@@ -19,7 +19,7 @@
 }
 
 .cabecalho-listagem {
-  @apply px-6 py-2 text-left text-xs font-medium uppercase tracking-wider cursor-pointer hover:bg-blue-600;
+  @apply px-6 py-2 text-left text-xs font-medium uppercase tracking-wider cursor-pointer hover:bg-primary/50;
 }
 
 .icone-ordenacao {
@@ -27,7 +27,7 @@
 }
 
 .excluido {
-  @apply ml-2 px-2 py-1 text-xs bg-red-100 text-error rounded;
+  @apply ml-2 px-2 py-1 text-xs bg-error/50 text-error rounded;
 }
 
 .tag {

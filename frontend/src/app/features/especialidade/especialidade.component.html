@@ -28,7 +28,7 @@
                 </thead>
                 <tbody class="bg-base-100">
                     @for (especialidade of getItensPaginados(); track especialidade.id) {
-                        <tr class="border-b hover:bg-base-200" [class.bg-error]="especialidade.excluido">
+                        <tr class="border-b hover:bg-base-200" [class.bg-error]="especialidade.excluido" [class.bg-opacity-50]="especialidade.excluido">
                             <td class="px-6 py-2 whitespace-nowrap">
                                 {{especialidade.nome}}
                                 @if (especialidade.excluido) {
@@ -53,7 +53,7 @@
                                                 </a>
                                                 <a *ngIf="especialidade.excluido"
                                                     (click)="restaurarItem($event, especialidade)"
-                                                    class="block px-4 py-2 text-sm text-success hover:bg-green-50 cursor-pointer">
+                                                    class="btn btn-success btn-sm">
                                                     Restaurar
                                                 </a>
                                             </div>

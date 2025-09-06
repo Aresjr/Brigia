@@ -15,19 +15,19 @@
       <table class="tabela-listagem">
         <thead class="text-base-100 bg-primary">
         <tr>
-          <th (click)="ordenar('nome')" class="px-6 py-2 text-left text-xs font-medium uppercase tracking-wider w-auto cursor-pointer hover:bg-blue-600">
+          <th (click)="ordenar('nome')" class="px-6 py-2 text-left text-xs font-medium uppercase tracking-wider w-auto cursor-pointer hover:bg-primary/50">
             <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
             Nome
           </th>
-          <th (click)="ordenar('email')" class="px-6 py-2 text-left text-xs font-medium uppercase tracking-wider w-64 cursor-pointer hover:bg-blue-600">
+          <th (click)="ordenar('email')" class="px-6 py-2 text-left text-xs font-medium uppercase tracking-wider w-64 cursor-pointer hover:bg-primary/50">
             <lucide-icon *ngIf="getSortIcon('email')" [name]="getSortIcon('email')" class="icone-ordenacao"/>
             Email
           </th>
-          <th (click)="ordenar('crm')" class="px-6 py-2 text-left text-xs font-medium uppercase tracking-wider w-40 cursor-pointer hover:bg-blue-600">
+          <th (click)="ordenar('crm')" class="px-6 py-2 text-left text-xs font-medium uppercase tracking-wider w-40 cursor-pointer hover:bg-primary/50">
             <lucide-icon *ngIf="getSortIcon('crm')" [name]="getSortIcon('crm')" class="icone-ordenacao"/>
             CRM
           </th>
-          <th (click)="ordenar('celular')" class="px-6 py-2 text-left text-xs font-medium uppercase tracking-wider w-40 cursor-pointer hover:bg-blue-600">
+          <th (click)="ordenar('celular')" class="px-6 py-2 text-left text-xs font-medium uppercase tracking-wider w-40 cursor-pointer hover:bg-primary/50">
             <lucide-icon *ngIf="getSortIcon('celular')" [name]="getSortIcon('celular')" class="icone-ordenacao"/>
             Celular
           </th>

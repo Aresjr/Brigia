@@ -36,7 +36,7 @@
         </thead>
         <tbody class="bg-base-100">
           @for (procedimento of getItensPaginados(); track procedimento.id) {
-            <tr class="border-b hover:bg-base-200 hover:cursor-pointer" [class.bg-error]="procedimento.excluido" (click)="selecionar(procedimento)">
+            <tr class="border-b hover:bg-base-200 hover:cursor-pointer" [class.bg-error]="procedimento.excluido" [class.bg-opacity-50]="procedimento.excluido" (click)="selecionar(procedimento)">
               <td class="w-96 px-6 py-2 whitespace-nowrap">
                 {{procedimento.nome}}
                 @if (procedimento.excluido) {
@@ -63,7 +63,7 @@
                         </a>
                         <a *ngIf="procedimento.excluido"
                            (click)="restaurar($event, procedimento)"
-                           class="block px-4 py-2 text-sm text-success hover:bg-green-50 cursor-pointer">
+                           class="btn btn-success btn-sm">
                           Restaurar
                         </a>
                       </div>
