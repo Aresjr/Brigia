@@ -2,10 +2,8 @@
 <div class="painel-direito" >
   <div class="p-6 space-y-6">
     <div class="flex justify-between items-center pb-4">
-      <h2 class="text-2xl font-semibold text-gray-800">Detalhes do Procedimento</h2>
-      <button
-        (click)="fechar()"
-        class="text-gray-400 hover:text-gray-600 transition-colors" >
+      <h2 class="text-2xl font-semibold ">Detalhes do Procedimento</h2>
+      <button type="button" (click)="fechar()" class="btn btn-sm btn-ghost text-neutral-content hover:bg-base-200" aria-label="Fechar">
         <lucide-icon name="x" class="right-0 inline w-6 h-6"/>
       </button>
     </div>
@@ -13,41 +11,41 @@
     @if (procedimento) {
       <div class="grid grid-cols-1 gap-6">
         <div>
-          <p class="text-sm font-semibold uppercase tracking-wide text-gray-500">
+          <p class="text-sm font-semibold uppercase tracking-wide text-neutral">
             Nome
           </p>
-          <p class="mt-1 text-base font-medium text-gray-900">
+          <p class="mt-1 text-base font-medium">
             {{ procedimento.nome }}
           </p>
         </div>
         <div>
-          <p class="text-sm font-semibold uppercase tracking-wide text-gray-500">
+          <p class="text-sm font-semibold uppercase tracking-wide text-neutral">
             Código
           </p>
-          <p class="mt-1 text-base font-medium text-gray-900">
+          <p class="mt-1 text-base font-medium">
             {{ procedimento.codigo }}
           </p>
         </div>
         <div>
-          <p class="text-sm font-semibold uppercase tracking-wide text-gray-500">
+          <p class="text-sm font-semibold uppercase tracking-wide text-neutral">
             Especialidade
           </p>
-          <p class="mt-1 text-base font-medium text-gray-900">
+          <p class="mt-1 text-base font-medium">
             {{ procedimento.especialidade.nome }}
           </p>
         </div>
 
         <div class=" border border-primary border-r">
           <div class="p-3 flex items-center justify-between hover:bg-blue-50">
-            <p class="text-sm font-semibold uppercase tracking-wide text-gray-500">
+            <p class="text-sm font-semibold uppercase tracking-wide text-neutral">
               Preço Padrão (Particular)
             </p>
-            <div class="inline right-0 font-medium text-gray-900">
+            <div class="inline right-0 font-medium">
               R$ {{ procedimento.valorPadrao || '-' }}
             </div>
           </div>
           <div>
-            <div class="p-3 flex items-center justify-between hover:bg-blue-50 text-sm hover:cursor-pointer font-semibold uppercase tracking-wide text-gray-500" (click)="toggleTabelaConvenio()">
+            <div class="p-3 flex items-center justify-between hover:bg-blue-50 text-sm hover:cursor-pointer font-semibold uppercase tracking-wide text-neutral" (click)="toggleTabelaConvenio()">
               <div>Preço Convênios</div>
               <div>
                 <lucide-icon [name]="mostraTabelaConvenio ? 'chevron-down' : 'chevron-right'" class="right-0 inline w-4 h-4"/>
@@ -57,7 +55,7 @@
             <table class="min-w-full ">
               <tbody>
                 @for (precoConvenio of tabelaPreco.tabelaConvenio; track precoConvenio.id) {
-                  <tr class="font-medium text-blue-800 hover:text-gray-900">
+                  <tr class="font-medium text-blue-800 ">
                     <td class="text-base px-3 py-1">{{ precoConvenio.convenio.nome }}</td>
                     <td class="text-base px-3 py-1 right-0 w-28">
                       R$ <input type="number" id="{{precoConvenio.id}}" class="w-16 inline text-right"

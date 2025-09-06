@@ -1,6 +1,6 @@
 <div class="flex min-h-screen bg-background">
   <aside class="h-screen sticky top-0 w-56">
-    <nav class="h-full flex flex-col bg-gray-50 w-56">
+    <nav class="h-full flex flex-col bg-base-100 w-56">
       <div class="p-4 pb-2">
         <div class="flex items-center mb-4">
           <div class="flex items-center">
@@ -52,10 +52,10 @@
           </span>
           <span class="ml-2">{{loggedUserName}}</span>
         </button>
-        <div *ngIf="isUserMenuOpen" class="absolute w-40 bottom-full mb-1 bg-white rounded-md shadow-lg border border-gray-200">
+        <div *ngIf="isUserMenuOpen" class="absolute w-40 bottom-full mb-1 bg-base-100 rounded-md shadow-lg border border-base-300">
           <ul class="py-1">
             <li>
-              <a href="/logout" class="block px-4 py-2 text-sm text-red-700 hover:bg-red-50 cursor-pointer">
+              <a href="/logout" class="block px-4 py-2 text-sm text-red-700 hover:bg-error/50 cursor-pointer">
                 Sair
               </a>
             </li>
@@ -64,7 +64,7 @@
       </div>
     </nav>
   </aside>
-  <div class="flex-1 px-8 pb-4 bg-base-300"> <!-- TODO - check if it is better white or gray -->
+  <div class="flex-1 px-8 pb-4 bg-base-300">
     <div class="space-y-4 relative">
       <div class="space-y-8">
         <router-outlet></router-outlet>

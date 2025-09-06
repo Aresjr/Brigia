@@ -8,7 +8,7 @@ export class RequiredMarkerDirective {
     const label = this.el.nativeElement.closest('label');
     if (label) {
       const span = this.renderer.createElement('span');
-      this.renderer.addClass(span, 'text-red-500');
+      this.renderer.addClass(span, 'text-error');
       this.renderer.addClass(span, 'ml-1');
       const text = this.renderer.createText('*');
       this.renderer.appendChild(span, text);

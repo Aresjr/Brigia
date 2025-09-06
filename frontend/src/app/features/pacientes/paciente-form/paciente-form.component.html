@@ -3,7 +3,7 @@
   <div class="p-4">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold">{{isEditMode ? 'Editar Paciente' : 'Novo Paciente'}}</h2>
-      <button type="button" (click)="onCancel()" class="text-gray-500 hover:text-gray-700">
+      <button type="button" (click)="onCancel()" class="btn btn-sm btn-ghost text-neutral-content hover:bg-base-200" aria-label="Fechar">
         <lucide-icon name="x" class="right-0 inline w-6 h-6"/>
       </button>
     </div>
@@ -12,13 +12,13 @@
       <div class="space-y-4">
         <div>
           <label class="label-campo">
-            Nome <span aria-hidden="true" class="text-red-500">*</span>
+            Nome <span aria-hidden="true" class="text-error">*</span>
           </label>
           <input type="text" formControlName="nome" name="nome" required
              class="campo"
-             [ngClass]="{'border-red-500': form.get('nome')?.invalid && form.get('nome')?.touched}" >
+             [ngClass]="{'border-error': form.get('nome')?.invalid && form.get('nome')?.touched}" >
               @if (form.get('nome')?.touched) {
-                <div *ngIf="isInvalid('nome')" class="text-red-500 text-sm">
+                <div *ngIf="isInvalid('nome')" class="text-error text-sm">
                   Obrigatório
                 </div>
               }
@@ -35,13 +35,13 @@
           </div>
           <div class="w-60">
             <label class="label-campo">
-              Data Nascimento <span aria-hidden="true" class="text-red-500">*</span>
+              Data Nascimento <span aria-hidden="true" class="text-error">*</span>
             </label>
             <input type="date" formControlName="dataNascimento" required
                    class="campo"
-                   [ngClass]="{'border-red-500': form.get('dataNascimento')?.invalid && form.get('dataNascimento')?.touched}" >
+                   [ngClass]="{'border-error': form.get('dataNascimento')?.invalid && form.get('dataNascimento')?.touched}" >
             @if (form.get('dataNascimento')?.touched) {
-              <div *ngIf="isInvalid('dataNascimento')" class="text-red-500 text-sm">
+              <div *ngIf="isInvalid('dataNascimento')" class="text-error text-sm">
                 Obrigatório
               </div>
             }

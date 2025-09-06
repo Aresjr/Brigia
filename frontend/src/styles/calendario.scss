@@ -4,7 +4,7 @@
 
 /* evento dentro do calendário */
 .cal-week-view .cal-time-events .cal-event {
-  @apply text-sm border-0 m-1 p-1 leading-none text-white relative;
+  @apply text-sm border-0 m-1 p-1 leading-none text-base-100 relative;
   max-width: calc(100% - 7px);
   height: calc(100% - 5px);
 }
@@ -17,7 +17,7 @@
 
 /* bloco de horário (6 AM, 7AM) */
 .cal-month-view, .cal-week-view {
-  @apply border border-gray-300 rounded-md;
+  @apply border border-base-200 rounded-md;
 }
 
 .cal-week-view .cal-time {
@@ -33,11 +33,11 @@
 }
 
 .cal-day-headers:first-child {
-  @apply bg-white;
+  @apply bg-base-100;
 }
 
 .cal-weekend {
-  @apply bg-red-50;
+  @apply bg-error/50;
 }
 
 .cal-week-view .cal-hour:not(:last-child) .cal-hour-segment, .cal-week-view .cal-hour:last-child :not(:last-child) .cal-hour-segment {

@@ -1,15 +1,15 @@
 <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm" (click)="fechar()">
-  <div class="bg-white rounded-lg shadow-lg p-6 w-[58rem]"
+  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[58rem]"
     (click)="$event.stopPropagation()" >
 
     <div class="flex justify-between items-center">
       <h2 class="text-lg font-semibold">{{ titulo }}</h2>
 
       <div>
-        <button type="button" class="text-gray-500 hover:text-gray-700" (click)="onEdit()" *ngIf="agendamentoDetalhes && !this.podeSalvar" title="Editar">
+        <button type="button" class="btn btn-sm btn-ghost text-neutral-content hover:bg-base-200" aria-label="Fechar" (click)="onEdit()" *ngIf="agendamentoDetalhes && !this.podeSalvar" title="Editar">
           <lucide-icon name="pencil" class="right-0 inline w-5 h-5"/>
         </button>
-        <button type="button" class="text-gray-500 hover:text-gray-700" (click)="fechar()" title="Cancelar">
+        <button type="button" class="btn btn-sm btn-ghost text-neutral-content hover:bg-base-200" aria-label="Fechar" (click)="fechar()" title="Cancelar">
           <lucide-icon name="x" class="right-0 inline w-6 h-6 ml-1"/>
         </button>
       </div>
@@ -19,10 +19,10 @@
       <div class="flex">
         <div class="w-[7rem] mr-4" >
           <label class="label-campo" for="data">
-            Data <span aria-hidden="true" class="text-red-500">*</span>
+            Data <span aria-hidden="true" class="text-error">*</span>
             <input type="date" formControlName="data" required id="data" [min]="hoje"
                    class="campo" [ngClass]="styleClassesField('data')" >
-            <div *ngIf="isInvalid('data')" class="text-red-500 text-sm">
+            <div *ngIf="isInvalid('data')" class="text-error text-sm">
               Obrigatório
             </div>
           </label>
@@ -30,11 +30,11 @@
         <div class="w-[4rem] mr-4 group">
           <label class="label-campo" for="hora">
             <div class="tooltip-campo">Horário inicial do agendamento</div>
-            Horário <span aria-hidden="true" class="text-red-500">*</span>
+            Horário <span aria-hidden="true" class="text-error">*</span>
             <input type="text" formControlName="hora" maxlength="5" id="hora" required
                    mask="00:00" emptyToNull class="campo p-[7px]" [dropSpecialCharacters]="false"
                    [ngClass]="styleClassesField('hora')">
-            <div *ngIf="isInvalid('hora')" class="text-red-500 text-sm">
+            <div *ngIf="isInvalid('hora')" class="text-error text-sm">
               Obrigatório
             </div>
           </label>
@@ -42,18 +42,18 @@
         <div class="w-[5rem] mr-4 group" aria-placeholder="Duração em minutos" (mouseenter)="showTooltip = true" (mouseleave)="showTooltip = false" >
           <label class="label-campo" for="duracao">
             <div class="tooltip-campo">Duração em minutos</div>
-            Duração <span aria-hidden="true" class="text-red-500">*</span>
+            Duração <span aria-hidden="true" class="text-error">*</span>
             <input type="number" formControlName="duracao" min="10" max="480" id="duracao" required
                    (input)="limitLength($event)" emptyToNull maxlength="3"
                    class="campo p-[7px]" [ngClass]="styleClassesField('duracao')">
-            <div *ngIf="isInvalid('duracao')" class="text-red-500 text-sm">
+            <div *ngIf="isInvalid('duracao')" class="text-error text-sm">
               Obrigatório
             </div>
           </label>
         </div>
         <div class="w-[24rem] mr-4" >
           <label class="label-campo" for="pacienteId">
-            Paciente <span aria-hidden="true" class="text-red-500">*</span>
+            Paciente <span aria-hidden="true" class="text-error">*</span>
               <ng-select formControlName="pacienteId" class="campo-select"
                          [ngClass]="styleClassesField('pacienteId')" labelForId="pacienteId" placeholder="Selecione o paciente"
                          (change)="selectPaciente($event)" (clear)="selectPaciente(null)" required >
@@ -72,7 +72,7 @@
                   </div>
                 </ng-template>
               </ng-select>
-            <div *ngIf="isInvalid('pacienteId')" class="text-red-500 text-sm">
+            <div *ngIf="isInvalid('pacienteId')" class="text-error text-sm">
               Obrigatório
             </div>
           </label>
@@ -80,11 +80,11 @@
 
         <div class="w-[11rem]" >
           <label class="label-campo" for="tipoAgendamento">
-            Tipo <span aria-hidden="true" class="text-red-500">*</span>
+            Tipo <span aria-hidden="true" class="text-error">*</span>
             <ng-select formControlName="tipoAgendamento" class="campo-select" required
                        [ngClass]="styleClassesField('tipoAgendamento')" bindValue="valor" bindLabel="descricao"
                        [items]="this.tipoAgendamento" labelForId="tipoAgendamento" />
-            <div *ngIf="isInvalid('tipoAgendamento')" class="text-red-500 text-sm">
+            <div *ngIf="isInvalid('tipoAgendamento')" class="text-error text-sm">
               Obrigatório
             </div>
           </label>
@@ -102,12 +102,12 @@
 
         <div class="mr-4 w-[20rem]" >
           <label class="label-campo" for="especialidadeId">
-            Especialidade <span aria-hidden="true" class="text-red-500">*</span>
+            Especialidade <span aria-hidden="true" class="text-error">*</span>
             <ng-select formControlName="especialidadeId" required class="campo-select"
                        labelForId="especialidadeId" [ngClass]="styleClassesField('especialidadeId')"
                        [items]="this.especialidades" bindValue="id" bindLabel="nome"
                        (change)="selectEspecialidade($event)" (clear)="selectEspecialidade(null)" />
-            <div *ngIf="isInvalid('especialidadeId')" class="text-red-500 text-sm">
+            <div *ngIf="isInvalid('especialidadeId')" class="text-error text-sm">
               Obrigatório
             </div>
           </label>
@@ -115,11 +115,11 @@
 
         <div class="w-[21rem]" >
           <label class="label-campo" for="profissionalId">
-            Profissional <span aria-hidden="true" class="text-red-500">*</span>
+            Profissional <span aria-hidden="true" class="text-error">*</span>
             <ng-select formControlName="profissionalId" required class="campo-select"
                        [ngClass]="styleClassesField('profissionalId')"
                        [items]="this.profissionaisFiltrados" bindValue="id" bindLabel="nome" labelForId="profissionalId" />
-            <div *ngIf="isInvalid('profissionalId')" class="text-red-500 text-sm">
+            <div *ngIf="isInvalid('profissionalId')" class="text-error text-sm">
               Obrigatório
             </div>
           </label>
@@ -152,18 +152,18 @@
       <div class="flex mt-2">
         <div class="w-[11rem] mr-4" >
           <label class="label-campo" for="formaPagamento">
-            Forma de Pagamento <span aria-hidden="true" class="text-red-500">*</span>
+            Forma de Pagamento <span aria-hidden="true" class="text-error">*</span>
             <ng-select formControlName="formaPagamento" class="campo-select" required
                        [ngClass]="styleClassesField('formaPagamento')" bindValue="valor" bindLabel="descricao"
                        [items]="this.formasPagamento" labelForId="formaPagamento" />
-            <div *ngIf="isInvalid('formaPagamento')" class="text-red-500 text-sm">
+            <div *ngIf="isInvalid('formaPagamento')" class="text-error text-sm">
               Obrigatório
             </div>
           </label>
         </div>
         <div class="w-[6rem] mr-4" >
           <label class="label-campo" for="valor">
-            Valor <span aria-hidden="true" class="text-red-500">*</span>
+            Valor <span aria-hidden="true" class="text-error">*</span>
               <lucide-icon name="pencil" class="inline ml-4 w-4 h-4 cursor-pointer" *ngIf="this.podeSalvar && !valorEditavel" (click)="editaValor()" title="Editar Valor" />
               <lucide-icon name="x" class="inline ml-4 w-4 h-4 cursor-pointer" *ngIf="this.podeSalvar && valorEditavel" (click)="cancelarEdicaoValor()" title="Cancelar Edição de Valor" />
             <div class="placeholder-esquerdo">R$</div>
@@ -171,7 +171,7 @@
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker="," required
                    class="campo pl-6 py-[7px]" [ngClass]="styleClassesField('valor', !this.valorEditavel) " [readOnly]="!this.valorEditavel">
-            <div *ngIf="isInvalid('valor')" class="text-red-500 text-sm">
+            <div *ngIf="isInvalid('valor')" class="text-error text-sm">
               Obrigatório
             </div>
           </label>

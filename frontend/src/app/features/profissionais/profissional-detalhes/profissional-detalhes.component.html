@@ -3,7 +3,7 @@
   <div class="p-4">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold">Detalhes do Profissional</h2>
-      <button type="button" (click)="fechar()" class="text-gray-500 hover:text-gray-700">
+      <button type="button" (click)="fechar()" class="btn btn-sm btn-ghost text-neutral-content hover:bg-base-200" aria-label="Fechar">
         <lucide-icon name="x" class="right-0 inline w-6 h-6"/>
       </button>
     </div>
@@ -11,42 +11,42 @@
     @if (profissional) {
       <div class="space-y-4">
         <div class="border-b pb-2">
-          <p class="text-gray-600">Nome</p>
+          <p class="text-base-300">Nome</p>
           <p class="font-medium">{{profissional.nome}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-gray-600">CPF</p>
+          <p class="text-base-300">CPF</p>
           <p class="font-medium">{{profissional.cpf | cpf}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-gray-600">Data de Nascimento</p>
+          <p class="text-base-300">Data de Nascimento</p>
           <p class="font-medium">{{profissional.dataNascimento | date:'dd/MM/yyyy'}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-gray-600">Sexo</p>
+          <p class="text-base-300">Sexo</p>
           <p class="font-medium">{{profissional.sexo | sexo}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-gray-600">Celular</p>
+          <p class="text-base-300">Celular</p>
           <p class="font-medium">{{profissional.celular | celular}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-gray-600">CRM</p>
+          <p class="text-base-300">CRM</p>
           <p class="font-medium">{{profissional.crm}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-gray-600">Email</p>
+          <p class="text-base-300">Email</p>
           <p class="font-medium">{{profissional.email || '-'}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-gray-600">Especialidades</p>
+          <p class="text-base-300">Especialidades</p>
           <p class="">
             @for (especialidade of profissional.especialidades; track especialidade.id) {
               <div class="m-2 p-2 py-1 bg-blue-50 text-blue-800 rounded w-fit">{{especialidade.nome}}</div>

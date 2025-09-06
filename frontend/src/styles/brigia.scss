@@ -1,21 +1,13 @@
-.btn-azul {
-  @apply px-4 py-1 rounded-full bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700 text-base cursor-pointer;
-}
-
-.btn-excluir {
-  @apply px-4 py-1 rounded-full bg-red-500 text-white hover:bg-red-600 text-base cursor-pointer;
-}
-
 .campo {
-  @apply mt-1 p-1.5 block w-full rounded-md border border-gray-400 font-normal hover:border-black;
+  @apply mt-1 p-1.5 block w-full rounded-md border border-base-200 font-normal hover:border-base-300;
 }
 
 .campo-select {
-  @apply mt-1 block w-full rounded-md border border-gray-400 font-normal hover:border-black;
+  @apply mt-1 block w-full rounded-md border border-base-200 font-normal hover:border-base-300;
 }
 
 .label-campo {
-  @apply block font-medium text-gray-700;
+  @apply block font-medium text-neutral;
 }
 
 .borda-tabela {
@@ -35,7 +27,7 @@
 }
 
 .excluido {
-  @apply ml-2 px-2 py-1 text-xs bg-red-100 text-red-800 rounded;
+  @apply ml-2 px-2 py-1 text-xs bg-red-100 text-error rounded;
 }
 
 .tag {
@@ -47,16 +39,16 @@
 }
 
 .painel-direito {
-  @apply fixed right-0 top-0 h-full w-[36rem] bg-white shadow-lg z-50 overflow-y-auto transform transition-all duration-500 ease-linear;
+  @apply fixed right-0 top-0 h-full w-[36rem] bg-base-100 shadow-lg z-50 overflow-y-auto transform transition-all duration-500 ease-linear;
 }
 
 .tooltip-campo {
   @apply absolute -mt-8 -ml-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200
-  pointer-events-none bg-gray-800 text-white text-sm px-2 py-1 rounded-md whitespace-nowrap;
+  pointer-events-none bg-neutral text-base-100 text-sm px-2 py-1 rounded-md whitespace-nowrap;
 }
 
 .placeholder-esquerdo {
-  @apply absolute px-2 py-3 shrink-0 text-base text-gray-500 select-none sm:text-sm;
+  @apply absolute px-2 py-3 shrink-0 text-base text-neutral select-none sm:text-sm;
 }
 
 .toast-center-screen {

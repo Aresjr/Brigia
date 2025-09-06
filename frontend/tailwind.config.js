@@ -13,7 +13,7 @@ module.exports = {
     "bg-orange-100",
     "bg-yellow-100",
     "bg-red-100",
-    "border-red-500",
+    "border-error",
     "bg-white"
   ],
   theme: {
@@ -33,12 +33,13 @@ module.exports = {
     themes: [
       "dark",
       {
-        clinic: {
+        brigida: {
           "primary": "#2563eb",     // Azul principal (confiança)
           "secondary": "#10b981",   // Verde suave (saúde)
-          "accent": "#f59e0b",      // Amarelo para destaques
+          "accent": "#60a5fa",      // Azul claro para destaques
           "neutral": "#f3f4f6",     // Cinza escuro para textos fortes
           "neutral-content": "#1f2937", // cinza escuro para contraste
+          "base-content": "#1f2937", // texto principal (preto/cinza escuro)
           "base-100": "#ffffff",    // Fundo claro
           "base-200": "#f3f4f6",    // Fundo alternativo
           "base-300": "#e5e7eb",    // Bordas e divisores

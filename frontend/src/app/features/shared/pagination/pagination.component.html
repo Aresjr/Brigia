@@ -1,5 +1,5 @@
     <div class="flex justify-between items-center mt-4 px-6">
-      <div class="text-sm text-gray-700">
+      <div class="text-sm text-neutral">
         Mostrando {{this.getRegistroInicial()}} a {{this.getRegistroFinal()}} de {{items.length}} resultados
       </div>
       <div class="flex gap-2">
@@ -16,8 +16,8 @@
           <button
             (click)="mudarPagina(pagina)"
             class="px-3 py-1 rounded border"
-            [class.bg-blue-500]="pagina === paginaAtual"
-            [class.text-white]="pagina === paginaAtual">
+            [class.bg-primary]="pagina === paginaAtual"
+            [class.text-base-100]="pagina === paginaAtual">
             {{pagina}}
           </button>
         }
