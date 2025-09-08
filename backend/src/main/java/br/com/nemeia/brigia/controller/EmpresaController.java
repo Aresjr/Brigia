@@ -27,7 +27,7 @@ public class EmpresaController {
     private final EmpresaPlanoMapper empresaPlanoMapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public PagedResponse<EmpresaResponse> getAllEmpresas(
             @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
             @RequestParam(defaultValue = "0") int page,
@@ -37,14 +37,14 @@ public class EmpresaController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public EmpresaResponse createEmpresa(@Valid @RequestBody EmpresaRequest request) {
         log.info("POST /empresas");
         return mapper.toResponse(service.createEmpresa(request));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public EmpresaResponse updateEmpresa(
             @Valid @RequestBody EmpresaRequest request, @PathVariable Long id) {
         log.info("PUT /empresas - atualizando empresa ID {}", id);
@@ -52,7 +52,7 @@ public class EmpresaController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteEmpresa(@PathVariable Long id) {
         log.info("DELETE /empresas - excluindo empresa ID {}", id);
         service.deleteEmpresa(id);
@@ -60,7 +60,7 @@ public class EmpresaController {
     }
 
     @PatchMapping("/{id}/restaurar")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public ResponseEntity<Void> restoreEmpresa(@PathVariable Long id) {
         log.info("PATCH /empresas/{}/restaurar", id);
         service.restoreEmpresa(id);
@@ -68,14 +68,14 @@ public class EmpresaController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public EmpresaResponse getEmpresaById(@PathVariable Long id) {
         log.info("GET /empresas/{} - buscando empresa pelo ID", id);
         return mapper.toResponse(service.getById(id));
     }
 
     @GetMapping("/planos")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public PagedResponse<EmpresaPlanoResponse> getPlanos(
             @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
             @RequestParam(defaultValue = "0") int page,

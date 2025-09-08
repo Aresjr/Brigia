@@ -61,29 +61,29 @@ export class MainLayoutComponent {
   searchTerm: string = '';
   userRoles: Role[] = [];
   menuItems: MenuItem[] = [
-    { label: 'Página Inicial', icon: 'home', route: '/', roles: [Role.SECRETARIA, Role.ADMIN] },
-    { label: 'Pacientes', icon: 'users', route: '/pacientes', roles: [Role.SECRETARIA, Role.ADMIN] },
-    { label: 'Agenda Diária', icon: 'calendar', route: '/agenda-diaria', roles: [Role.SECRETARIA, Role.ADMIN] },
-    { label: 'Atendimentos', icon: 'stethoscope', route: '/atendimentos', roles: [Role.SECRETARIA, Role.ADMIN] },
+    { label: 'Página Inicial', icon: 'home', route: '/', roles: [Role.RECEPCIONISTA, Role.ADMIN] },
+    { label: 'Pacientes', icon: 'users', route: '/pacientes', roles: [Role.RECEPCIONISTA, Role.ADMIN] },
+    { label: 'Agenda Diária', icon: 'calendar', route: '/agenda-diaria', roles: [Role.RECEPCIONISTA, Role.ADMIN] },
+    { label: 'Atendimentos', icon: 'stethoscope', route: '/atendimentos', roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.FATURAMENTO, Role.MEDICO] },
     {
       label: 'Cadastros',
       icon: 'user-plus',
       hasSubmenu: true,
       children: [
-        { label: 'Convênios', icon: 'heart-handshake', route: '/convenios', roles: [Role.SECRETARIA, Role.ADMIN] },
-        { label: 'Empresas Parceiras', icon: 'building-2', route: '/empresas', roles: [Role.SECRETARIA, Role.ADMIN] },
-        { label: 'Especialidades', icon: 'microscope', route: '/especialidades', roles: [Role.SECRETARIA, Role.ADMIN] },
-        { label: 'Procedimentos', icon: 'clipboard-list', route: '/procedimentos', roles: [Role.SECRETARIA, Role.ADMIN] },
-        { label: 'Profissionais', icon: 'briefcase-medical', route: '/profissionais', roles: [Role.SECRETARIA, Role.ADMIN] },
-      ], roles: [Role.SECRETARIA, Role.ADMIN]
+        { label: 'Convênios', icon: 'heart-handshake', route: '/convenios', roles: [Role.RECEPCIONISTA, Role.ADMIN] },
+        { label: 'Empresas Parceiras', icon: 'building-2', route: '/empresas', roles: [Role.RECEPCIONISTA, Role.ADMIN] },
+        { label: 'Especialidades', icon: 'microscope', route: '/especialidades', roles: [Role.RECEPCIONISTA, Role.ADMIN] },
+        { label: 'Procedimentos', icon: 'clipboard-list', route: '/procedimentos', roles: [Role.RECEPCIONISTA, Role.ADMIN] },
+        { label: 'Profissionais', icon: 'briefcase-medical', route: '/profissionais', roles: [Role.RECEPCIONISTA, Role.ADMIN] },
+      ], roles: [Role.RECEPCIONISTA, Role.ADMIN]
     },
     {
       label: 'Faturamento',
       icon: 'receipt',
       hasSubmenu: true,
       children: [
-        { label: 'Tabela de Preços', icon: 'receipt', route: '/tabela-precos', roles: [Role.SECRETARIA, Role.FATURAMENTO] }
-      ], roles: [Role.SECRETARIA, Role.FATURAMENTO, Role.ADMIN]
+        { label: 'Tabela de Preços', icon: 'receipt', route: '/tabela-precos', roles: [Role.RECEPCIONISTA, Role.FATURAMENTO] }
+      ], roles: [Role.FATURAMENTO, Role.ADMIN]
     }
   ];
   filteredMenuItems?: MenuItem[];

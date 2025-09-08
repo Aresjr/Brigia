@@ -1,6 +1,7 @@
 export enum Role {
   ADMIN,
-  SECRETARIA,
+  PACIENTE,
+  RECEPCIONISTA,
   MEDICO,
   FATURAMENTO
 }

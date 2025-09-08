@@ -22,7 +22,7 @@ public class EspecialidadeController {
     private final EspecialidadeMapper mapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public PagedResponse<EspecialidadeResponse> getAllEspecialidades(
             @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
             @RequestParam(defaultValue = "0") int page,
@@ -32,7 +32,7 @@ public class EspecialidadeController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public EspecialidadeResponse createEspecialidade(
             @Valid @RequestBody EspecialidadeRequest request) {
         log.info("POST /especialidades");
@@ -40,7 +40,7 @@ public class EspecialidadeController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public EspecialidadeResponse updateEspecialidade(
             @Valid @RequestBody EspecialidadeRequest request, @PathVariable Long id) {
         log.info("PUT /especialidades - atualizando especialidade ID {}", id);
@@ -48,7 +48,7 @@ public class EspecialidadeController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteEspecialidade(@PathVariable Long id) {
         log.info("DELETE /especialidades - excluindo especialidade ID {}", id);
         service.deleteEspecialidade(id);
@@ -56,7 +56,7 @@ public class EspecialidadeController {
     }
 
     @PatchMapping("/{id}/restaurar")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public ResponseEntity<Void> restoreEspecialidade(@PathVariable Long id) {
         log.info("PATCH /especialidades/{}/restaurar", id);
         service.restoreEspecialidade(id);
@@ -64,7 +64,7 @@ public class EspecialidadeController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public EspecialidadeResponse getEspecialidadeById(@PathVariable Long id) {
         log.info("GET /especialidades/{} - buscando especialidade pelo ID", id);
         return mapper.toResponse(service.getById(id));

@@ -22,7 +22,7 @@ public class AgendamentoController {
     private final AgendamentoMapper mapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public PagedResponse<AgendamentoResponse> getAllAgendamentos(
             @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
             @RequestParam(defaultValue = "0") int page,
@@ -32,14 +32,14 @@ public class AgendamentoController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public AgendamentoResponse createAgendamento(@Valid @RequestBody AgendamentoRequest request) {
         log.info("POST /agendamentos");
         return mapper.toResponse(service.createAgendamento(request));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public AgendamentoResponse updateAgendamento(
             @Valid @RequestBody AgendamentoRequest request, @PathVariable Long id) {
         log.info("PUT /agendamentos - atualizando convênio ID {}", id);
@@ -47,7 +47,7 @@ public class AgendamentoController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteAgendamento(@PathVariable Long id) {
         log.info("DELETE /agendamentos - excluindo convênio ID {}", id);
         service.delete(id);
@@ -55,7 +55,7 @@ public class AgendamentoController {
     }
 
     @PatchMapping("/{id}/restaurar")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public ResponseEntity<Void> restoreAgendamento(@PathVariable Long id) {
         log.info("PATCH /agendamentos/{}/restaurar", id);
         service.restore(id);
@@ -63,7 +63,7 @@ public class AgendamentoController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public AgendamentoResponse getAgendamentoById(@PathVariable Long id) {
         log.info("GET /agendamentos/{} - buscando agendamento pelo ID", id);
         return mapper.toResponse(service.getById(id));

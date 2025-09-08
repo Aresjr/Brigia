@@ -23,7 +23,7 @@ public class PacienteController {
     private final PacienteMapper mapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public PagedResponse<PacienteResponse> getAllPacientes(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
@@ -32,21 +32,21 @@ public class PacienteController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public PacienteResponse createPaciente(@Valid @RequestBody PacienteRequest request) {
         log.info("POST /pacientes");
         return mapper.toResponse(service.createPaciente(request));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public PacienteResponse getPacienteById(@PathVariable Long id) {
         log.info("GET /pacientes/{} - buscando paciente por ID", id);
         return mapper.toResponse(service.getById(id));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public PacienteResponse updatePaciente(
             @Valid @RequestBody PacienteRequest request, @PathVariable Long id) {
         log.info("PUT /pacientes - atualizando paciente ID {}", id);
@@ -54,7 +54,7 @@ public class PacienteController {
     }
 
     @GetMapping("/total")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public PacientesTotaisResponse countPacientes(
             @RequestParam(defaultValue = "false") Boolean excluido) {
         log.info("GET /pacientes/total");
@@ -62,7 +62,7 @@ public class PacienteController {
     }
 
     @GetMapping("/aniversariantes")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public List<PacienteResponse> aniversariantes() {
         log.info("GET /pacientes/aniversariantes");
         return service.getAniversariantes().stream().map(mapper::toResponse).toList();

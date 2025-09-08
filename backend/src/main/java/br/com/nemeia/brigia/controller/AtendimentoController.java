@@ -21,7 +21,7 @@ public class AtendimentoController {
     private final AtendimentoMapper mapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public PagedResponse<AtendimentoResponse> getAllAtendimentos(
             @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
             @RequestParam(defaultValue = "0") int page,
@@ -31,14 +31,14 @@ public class AtendimentoController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public AtendimentoResponse createAtendimento(@Valid @RequestBody AtendimentoRequest request) {
         log.info("POST /atendimentos");
         return mapper.toResponse(service.createAtendimento(request));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public AtendimentoResponse updateAtendimento(
             @Valid @RequestBody AtendimentoRequest request, @PathVariable Long id) {
         log.info("PUT /atendimentos - atualizando atendimento ID {}", id);

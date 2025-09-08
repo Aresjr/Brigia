@@ -4,6 +4,6 @@ public enum RoleUsuario {
     ADMIN,
     MEDICO,
     PACIENTE,
-    SECRETARIA,
+    RECEPCIONISTA,
     FATURAMENTO
 }

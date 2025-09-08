@@ -21,7 +21,7 @@ public class ConvenioController {
     private final ConvenioMapper mapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public PagedResponse<ConvenioResponse> getAllConvenios(
             @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
             @RequestParam(defaultValue = "0") int page,
@@ -31,14 +31,14 @@ public class ConvenioController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public ConvenioResponse createConvenio(@Valid @RequestBody ConvenioRequest request) {
         log.info("POST /convenios");
         return mapper.toResponse(service.createConvenio(request));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public ConvenioResponse updateConvenio(
             @Valid @RequestBody ConvenioRequest request, @PathVariable Long id) {
         log.info("PUT /convenios - atualizando convênio ID {}", id);
@@ -46,7 +46,7 @@ public class ConvenioController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteConvenio(@PathVariable Long id) {
         log.info("DELETE /convenios - excluindo convênio ID {}", id);
         service.deleteConvenio(id);
@@ -54,7 +54,7 @@ public class ConvenioController {
     }
 
     @PatchMapping("/{id}/restaurar")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public ResponseEntity<Void> restoreConvenio(@PathVariable Long id) {
         log.info("PATCH /convenios/{}/restaurar", id);
         service.restoreConvenio(id);
@@ -62,7 +62,7 @@ public class ConvenioController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCAO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public ConvenioResponse getConvenioById(@PathVariable Long id) {
         log.info("GET /convenios/{} - buscando convenio pelo ID", id);
         return mapper.toResponse(service.getById(id));

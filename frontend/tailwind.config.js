@@ -37,12 +37,12 @@ module.exports = {
           "primary": "#2563eb",     // Azul principal (confiança)
           "secondary": "#10b981",   // Verde suave (saúde)
           "accent": "#60a5fa",      // Azul claro para destaques
-          "neutral": "#9ca3af",          // cinza médio
-          "neutral-content": "#ffffff",  // texto branco em cima do cinza médio
+          "neutral": "#6b7280",          // slate-500 (mid-dark neutral)
+          "neutral-content": "#ffffff",  // white text on it
           "base-content": "#1f2937", // texto principal (preto/cinza escuro)
           "base-100": "#ffffff",    // Fundo claro
-          "base-200": "#f3f4f6",    // Fundo alternativo
-          "base-300": "#d1d5db",    // Bordas e divisores
+          "base-200": "#d1d5db",    // Mais escuro que antes (#f3f4f6)
+          "base-300": "#9ca3af",    // Mais contraste, próximo do slate-300
           "info": "#38bdf8",        // Azul claro para info
           "success": "#22c55e",     // Verde sucesso
           "success-content": "#ffffff",
