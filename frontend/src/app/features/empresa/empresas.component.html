@@ -4,7 +4,7 @@
 
     @if (isLoading) {
         <div class="flex justify-center items-center h-32">
-            <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-400"></div>
+            <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
         </div>
     } @else if (itensExibicao.length === 0) {
         <div class="text-center py-8 w-full bg-base-100 rounded-md">
@@ -45,7 +45,7 @@
 
         <div class="flex flex-col gap-1 mt-2 min-h-[40rem]">
           <div *ngFor="let empresa of getItensPaginados()"
-               class="bg-base-100 hover:bg-base-200 rounded-lg flex items-center gap-4 border-l-8 border-blue-400" >
+               class="bg-base-100 hover:bg-base-200 rounded-lg flex items-center gap-4 border-l-8 border-primary" >
 
             <div class="grid grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_minmax(10px,20px)] gap-4 w-full px-2 py-2">
               <div>{{ empresa.nome }}</div>

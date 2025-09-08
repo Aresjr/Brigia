@@ -3,7 +3,7 @@
   <div class="p-4">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold">Detalhes do Profissional</h2>
-      <button type="button" (click)="fechar()" class="btn btn-sm btn-ghost text-neutral-content hover:bg-base-200" aria-label="Fechar">
+      <button type="button" (click)="fechar()" class="btn btn-sm btn-ghost hover:bg-base-200" aria-label="Fechar">
         <lucide-icon name="x" class="right-0 inline w-6 h-6"/>
       </button>
     </div>
@@ -49,7 +49,7 @@
           <p class="text-base-300">Especialidades</p>
           <p class="">
             @for (especialidade of profissional.especialidades; track especialidade.id) {
-              <div class="m-2 p-2 py-1 bg-blue-50 text-blue-800 rounded w-fit">{{especialidade.nome}}</div>
+              <div class="m-2 p-2 py-1 bg-primary/40 text-primary rounded w-fit">{{especialidade.nome}}</div>
             }
           </p>
         </div>

@@ -2,13 +2,13 @@
   <div class="flex items-center justify-between gap-4 mb-4">
     <div class="flex items-center">
       <button
-        class="btn btn-neutral btn-sm"
+        class="btn btn-ghost btn-sm"
         mwlCalendarToday
         [(viewDate)]="currentDate" >
         Hoje
       </button>
       <button
-        class="p-1.5 rounded-full hover:bg-base-200 mr-2"
+        class="btn btn-ghost btn-sm rounded-full"
         mwlCalendarPreviousView
         [view]="view"
         [(viewDate)]="currentDate"
@@ -16,7 +16,7 @@
         <lucide-icon name="chevron-left" class="w-6 h-6"></lucide-icon>
       </button>
       <button
-        class="p-1.5 rounded-full hover:bg-base-200 mr-2"
+        class="btn btn-ghost btn-sm rounded-full"
         mwlCalendarNextView
         [view]="view"
         [(viewDate)]="currentDate"
@@ -25,28 +25,28 @@
       </button>
     </div>
 
-    <div class="text-2xl">{{ currentDate | date:'EEEE, dd \'de\' MMMM \'de\' YYYY':'UTC':'pt' }}</div>
+    <div class="text-2xl">{{ currentDate | date:'EEE, dd \'de\' MMMM \'de\' YYYY':'UTC':'pt' }}</div>
 
     <div>
       <button
-        class="px-4 py-1 font-bold border-b-4 hover:text-neutral"
+        class="px-4 py-1 font-bold border-b-4 hover:text-primary/60"
         (click)="setView(CalendarView.Day)"
         [class.active]="view === CalendarView.Day"
-        [ngClass]="view === CalendarView.Day ? 'text-primary border-primary' : 'text-base-200 border-base-100'" >
+        [ngClass]="view === CalendarView.Day ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'" >
         Dia
       </button>
       <button
-        class="px-4 py-1 font-bold border-b-4 hover:text-neutral"
+        class="px-4 py-1 font-bold border-b-4 hover:text-primary/60"
         (click)="setView(CalendarView.Week)"
         [class.active]="view === CalendarView.Week"
-        [ngClass]="view === CalendarView.Week ? 'text-primary border-primary' : 'text-base-200 border-base-100'" >
+        [ngClass]="view === CalendarView.Week ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'" >
         Semana
       </button>
       <button
-        class="px-4 py-1 font-bold border-b-4 hover:text-neutral"
+        class="px-4 py-1 font-bold border-b-4 hover:text-primary/60"
         (click)="setView(CalendarView.Month)"
         [class.active]="view === CalendarView.Month"
-        [ngClass]="view === CalendarView.Month ? 'text-primary border-primary' : 'text-base-200 border-base-100'" >
+        [ngClass]="view === CalendarView.Month ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'" >
         Mês
       </button>
     </div>

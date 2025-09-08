@@ -1,7 +1,7 @@
 <button
     (click)="handleClick()"
     [ngClass]="[
-        isActive ? 'bg-primary text-base-100 hover:bg-blue-400' : 'hover:bg-base-200',
+        isActive ? 'bg-primary text-base-100 hover:bg-primary/40' : 'hover:bg-base-200',
         isSubmenuOpen ? 'pl-8' : '',
         'w-full inline-flex items-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 justify-start hover:bg-base-200'
     ]"

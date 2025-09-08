@@ -6,10 +6,10 @@
       <h2 class="text-lg font-semibold">{{ titulo }}</h2>
 
       <div>
-        <button type="button" class="btn btn-sm btn-ghost text-neutral-content hover:bg-base-200" aria-label="Fechar" (click)="onEdit()" *ngIf="agendamentoDetalhes && !this.podeSalvar" title="Editar">
+        <button type="button" class="btn btn-sm btn-ghost hover:bg-base-200" aria-label="Fechar" (click)="onEdit()" *ngIf="agendamentoDetalhes && !this.podeSalvar" title="Editar">
           <lucide-icon name="pencil" class="right-0 inline w-5 h-5"/>
         </button>
-        <button type="button" class="btn btn-sm btn-ghost text-neutral-content hover:bg-base-200" aria-label="Fechar" (click)="fechar()" title="Cancelar">
+        <button type="button" class="btn btn-sm btn-ghost hover:bg-base-200" aria-label="Fechar" (click)="fechar()" title="Cancelar">
           <lucide-icon name="x" class="right-0 inline w-6 h-6 ml-1"/>
         </button>
       </div>
@@ -198,7 +198,7 @@
       </div>
 
       <div class="flex justify-end gap-3 mt-6">
-        <button type="button" class="btn btn-neutral btn-sm" (click)="fechar()" >
+        <button type="button" class="btn btn-ghost btn-sm" (click)="fechar()" >
           Fechar
         </button>
         <button type="submit" class="btn btn-success btn-sm" *ngIf="podeSalvar" >

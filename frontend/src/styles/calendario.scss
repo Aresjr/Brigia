@@ -29,7 +29,7 @@
 
 /* bloco dos dias da semana */
 .cal-day-headers, .cal-header {
-  @apply bg-blue-100 border;
+  @apply bg-primary/20 border;
 }
 
 .cal-day-headers:first-child {

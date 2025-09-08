@@ -3,7 +3,7 @@
   <div class="p-4">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold">Detalhes do Paciente</h2>
-      <button type="button" (click)="fechar()" class="btn btn-sm btn-ghost text-neutral-content hover:bg-base-200" aria-label="Fechar">
+      <button type="button" (click)="fechar()" class="btn btn-sm btn-ghost hover:bg-base-200" aria-label="Fechar">
         <lucide-icon name="x" class="right-0 inline w-6 h-6"/>
       </button>
     </div>
@@ -11,32 +11,32 @@
     @if (paciente) {
       <div class="space-y-4">
         <div class="border-b pb-2">
-          <p class="text-sm text-base-300">Nome</p>
+          <p class="text-sm">Nome</p>
           <p class="font-medium">{{paciente.nome}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-sm text-base-300">CPF</p>
+          <p class="text-sm">CPF</p>
           <p class="font-medium">{{paciente.cpf | cpf}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-sm text-base-300">Data de Nascimento</p>
+          <p class="text-sm">Data de Nascimento</p>
           <p class="font-medium">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-sm text-base-300">Sexo</p>
+          <p class="text-sm">Sexo</p>
           <p class="font-medium">{{paciente.sexo | sexo}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-sm text-base-300">Celular</p>
+          <p class="text-sm">Celular</p>
           <p class="font-medium">{{paciente.celular | celular}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-sm text-base-300">Endereço</p>
+          <p class="text-sm">Endereço</p>
           <p class="font-medium">
             {{paciente.rua}}, {{paciente.complemento}}
             <br>{{paciente.bairro}}
@@ -46,38 +46,38 @@
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-sm text-base-300">Convênio</p>
+          <p class="text-sm">Convênio</p>
           <p class="font-medium">{{paciente.convenio?.nome}}</p>
         </div>
 
         <div class="border-b pb-2">
-          <p class="text-sm text-base-300">Empresa</p>
+          <p class="text-sm">Empresa</p>
           <p class="font-medium">{{paciente.empresa?.nome}}</p>
         </div>
 
         @if (paciente.ultimaConsulta) {
           <div class="border-b pb-2">
-            <p class="text-sm text-base-300">Última Consulta</p>
+            <p class="text-sm">Última Consulta</p>
             <p class="font-medium">{{paciente.ultimaConsulta | date:'dd/MM/yyyy'}}</p>
           </div>
         }
 
         @if (paciente.proximaConsulta) {
           <div class="border-b pb-2">
-            <p class="text-sm text-base-300">Próxima Consulta</p>
+            <p class="text-sm">Próxima Consulta</p>
             <p class="font-medium">{{paciente.proximaConsulta | date:'dd/MM/yyyy'}}</p>
           </div>
         }
 
         <div class="border-b pb-2">
-          <p class="text-sm text-base-300">Email</p>
+          <p class="text-sm">Email</p>
           <p class="font-medium">{{paciente.email || '-'}}</p>
         </div>
 
       </div>
 
       <div class="flex justify-end gap-3 mt-4">
-        <button class="btn btn-neutral btn-sm" (click)="fechar()" >
+        <button class="btn btn-ghost btn-sm" (click)="fechar()" >
           Fechar
         </button>
         <button class="btn btn-primary btn-sm" (click)="criarAgendamento(paciente.id)" >
