@@ -8,6 +8,7 @@ import { Title } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
 import { FormsModule } from '@angular/forms';
 import { Role } from '../../core/constans';
+import { UserService } from '../../core/user.service';
 
 interface MenuItem {
   label: string;
@@ -35,7 +36,8 @@ export class MainLayoutComponent {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private titleService: Title
+    private titleService: Title,
+    private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -49,7 +51,6 @@ export class MainLayoutComponent {
       )
       .subscribe((title) => this.updateTitle(title));
 
-    this.populateRoles();
     this.filterMenuItems();
 
     this.loggedUserName = localStorage.getItem('name') || '';
@@ -59,9 +60,8 @@ export class MainLayoutComponent {
   loggedUserName: string = '';
   isUserMenuOpen = false;
   searchTerm: string = '';
-  userRoles: Role[] = [];
   menuItems: MenuItem[] = [
-    { label: 'Página Inicial', icon: 'home', route: '/', roles: [Role.RECEPCIONISTA, Role.ADMIN] },
+    { label: 'Página Inicial', icon: 'home', route: '/', roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.MEDICO] },
     { label: 'Pacientes', icon: 'users', route: '/pacientes', roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.MEDICO] },
     { label: 'Agenda Diária', icon: 'calendar', route: '/agenda-diaria', roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.MEDICO] },
     { label: 'Atendimentos', icon: 'stethoscope', route: '/atendimentos', roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.FATURAMENTO, Role.MEDICO] },
@@ -90,7 +90,7 @@ export class MainLayoutComponent {
 
   filterMenuItems() {
     this.filteredMenuItems = this.menuItems.filter(menuItem => {
-      return menuItem.roles.some(role => this.userRoles.includes(role));
+      return menuItem.roles.some(role => this.userService.getRoles().includes(role));
     });
   }
 
@@ -142,12 +142,5 @@ export class MainLayoutComponent {
       }
       return null;
     }).filter((item): item is MenuItem => item !== null);
-  }
-
-  private populateRoles() {
-    const roles = JSON.parse(localStorage.getItem('roles') || '[]');
-    roles.forEach((role: string) => {
-      this.userRoles.push(Role[role as keyof typeof Role] as Role);
-    });
   }
 }

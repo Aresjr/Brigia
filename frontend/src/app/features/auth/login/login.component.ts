@@ -6,10 +6,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService, LoginResponse } from '../auth.service';
+import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { LucideAngularModule } from 'lucide-angular';
+import { UserService } from '../../../core/user.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private userService: UserService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -38,7 +40,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
-          this.populateLocalStorage(response);
+          this.userService.setUser(response);
           this.router.navigate(['/']);
         },
         error: (error) => {
@@ -59,13 +61,5 @@ export class LoginComponent implements OnInit {
     } else {
       this.toastr.error('Por favor, preencha todos os campos corretamente.');
     }
-  }
-
-  populateLocalStorage(response: LoginResponse) {
-    localStorage.setItem('email', response.email);
-    localStorage.setItem('name', response.name);
-    localStorage.setItem('avatarUrl', response.avatarUrl);
-    localStorage.setItem('roles', response.roles ? JSON.stringify(response.roles) : '[]');
-    localStorage.setItem('unidade', response.unidade.toString());
   }
 }

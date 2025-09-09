@@ -42,7 +42,7 @@ module.exports = {
           "base-content": "#1f2937", // texto principal (preto/cinza escuro)
           "base-100": "#ffffff",    // Fundo claro
           "base-200": "#f3f4f6",    // Mais escuro que antes (#f3f4f6)
-          "base-300": "#d1d5db",    // Mais contraste, próximo do slate-300
+          "base-300": "#e5e7eb",    // Mais contraste, próximo do slate-300
           "info": "#38bdf8",        // Azul claro para info
           "success": "#22c55e",     // Verde sucesso
           "success-content": "#ffffff",

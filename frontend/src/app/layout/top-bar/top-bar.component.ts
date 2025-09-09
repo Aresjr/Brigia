@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Entidade } from '../../features/shared/entidade.interface';
 import { UserService } from '../../core/user.service';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { Usuario } from '../../features/auth/auth.service';
 
 @Component({
   selector: 'app-top-bar',
@@ -24,11 +25,13 @@ export class TopBarComponent {
 
   showAddNovo: boolean = true;
   searchTerm: string = '';
+  usuario: Usuario | null;
 
   constructor(protected userService: UserService) {
     if (userService.isMedico()) {
       this.showAddNovo = false;
     }
+    this.usuario = userService.getUser();
   }
 
   onSearch($event: any): void {

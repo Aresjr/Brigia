@@ -9,7 +9,7 @@ interface LoginRequest {
   password: string;
 }
 
-export interface LoginResponse {
+export interface Usuario {
   email: string;
   name: string;
   avatarUrl: string;
@@ -23,8 +23,8 @@ export interface LoginResponse {
 export class AuthService {
   constructor(private http: HttpClient) {}
 
-  login(payload: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, payload, {
+  login(payload: LoginRequest): Observable<Usuario> {
+    return this.http.post<Usuario>(`${environment.apiUrl}/auth/login`, payload, {
       withCredentials: true,
     });
   }

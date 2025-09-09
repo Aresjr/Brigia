@@ -2,9 +2,12 @@
   <div>
     <h1 class="text-3xl">{{ title }}</h1>
   </div>
-  <div class="flex max-h-8">
 
-    <ng-select class="w-72 mr-4 shadow-md hover:shadow-lg max-h-8 leading-none" (change)="onSelectItem($event)" placeholder="Todos - {{ placeholderDropdown }}">
+  <!-- Filtros e ações -->
+  <div class="flex">
+    <ng-select *ngIf="!this.userService.isMedico() && showDropdown" class="w-72 mr-4 shadow-md hover:shadow-lg h-8 max-h-8 leading-none"
+               (change)="onSelectItem($event)" placeholder="Todos - {{ placeholderDropdown }}">
+      <ng-option class="max-h-8" value="0">Todos - {{ placeholderDropdown }}</ng-option>
       @for(registro of this.registrosDropdown; track registro.id) {
         <ng-option class="max-h-8" value="{{ registro.id }}">{{ registro.nome }}</ng-option>
       }
@@ -19,9 +22,25 @@
              id="filtro" placeholder="Filtrar" maxlength="20"
              class="pl-7 pr-4 py-1 rounded-full focus:outline-none focus:ring-2 focus:ring-grey-900 focus:border-transparent shadow-md" />
     </div>
-    <button type="button" *ngIf="showAddNovo" (click)="onAddNovo()" class="btn btn-success btn-sm shadow-md hover:shadow-lg">
+    <button type="button" *ngIf="showAddNovo" (click)="onAddNovo()" class="btn btn-success btn-sm mr-4 h-9 shadow-md hover:shadow-lg">
       <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
       Novo
     </button>
+
+    <details class="dropdown dropdown-end">
+      <summary class="btn btn-ghost btn-sm h-9">
+        {{ usuario?.name }}
+        <div class="avatar avatar-online avatar-placeholder">
+          <div class="bg-neutral text-neutral-content w-6 rounded-full">
+            <img *ngIf="usuario?.avatarUrl" [src]="usuario?.avatarUrl" alt="Avatar" />
+            <lucide-icon *ngIf="!usuario?.avatarUrl" name="user" class="inline w-5 h-5"/>
+          </div>
+        </div>
+      </summary>
+      <ul class="menu dropdown-content bg-base-100 rounded-box p-1 m-0 z-1 w-52 shadow-lg hover:shadow-xl">
+        <li><a href="/logout" class="text-error hover:bg-error/20">Sair</a></li>
+      </ul>
+    </details>
+
   </div>
 </div>
