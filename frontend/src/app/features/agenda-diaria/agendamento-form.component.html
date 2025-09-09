@@ -6,18 +6,18 @@
       <h2 class="text-lg font-semibold">{{ titulo }}</h2>
 
       <div>
-        <button type="button" class="btn btn-sm btn-ghost hover:bg-base-200" aria-label="Fechar" (click)="onEdit()" *ngIf="agendamentoDetalhes && !this.podeSalvar" title="Editar">
+        <button type="button" class="btn btn-sm btn-ghost" aria-label="Editar" (click)="onEdit()" *ngIf="agendamentoDetalhes && !this.podeSalvar" title="Editar">
           <lucide-icon name="pencil" class="right-0 inline w-5 h-5"/>
         </button>
-        <button type="button" class="btn btn-sm btn-ghost hover:bg-base-200" aria-label="Fechar" (click)="fechar()" title="Cancelar">
-          <lucide-icon name="x" class="right-0 inline w-6 h-6 ml-1"/>
+        <button type="button" class="btn btn-sm btn-ghost" aria-label="Fechar" (click)="fechar()" title="Fechar">
+          <lucide-icon name="x" class="right-0 inline w-5 h-5"/>
         </button>
       </div>
     </div>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6">
       <div class="flex">
-        <div class="w-[7rem] mr-4" >
+        <div class="w-[8rem] mr-4" >
           <label class="label-campo" for="data">
             Data <span aria-hidden="true" class="text-error">*</span>
             <input type="date" formControlName="data" required id="data" [min]="hoje"
@@ -51,11 +51,11 @@
             </div>
           </label>
         </div>
-        <div class="w-[24rem] mr-4" >
+        <div class="w-[23rem] mr-4" >
           <label class="label-campo" for="pacienteId">
             Paciente <span aria-hidden="true" class="text-error">*</span>
               <ng-select formControlName="pacienteId" class="campo-select"
-                         [ngClass]="styleClassesField('pacienteId')" labelForId="pacienteId" placeholder="Selecione o paciente"
+                         [ngClass]="styleClassesField('pacienteId')" labelForId="pacienteId" placeholder="Selecione"
                          (change)="selectPaciente($event)" (clear)="selectPaciente(null)" required >
                   @for(paciente of this.pacientes; track paciente.id) {
                     <ng-option [value]="paciente.id" class="b-0">{{ paciente.nome }} - {{ paciente.dataNascimento | date:'dd/MM/yyyy' }}</ng-option>
@@ -81,7 +81,7 @@
         <div class="w-[11rem]" >
           <label class="label-campo" for="tipoAgendamento">
             Tipo <span aria-hidden="true" class="text-error">*</span>
-            <ng-select formControlName="tipoAgendamento" class="campo-select" required
+            <ng-select formControlName="tipoAgendamento" class="campo-select" required placeholder="Selecione"
                        [ngClass]="styleClassesField('tipoAgendamento')" bindValue="valor" bindLabel="descricao"
                        [items]="this.tipoAgendamento" labelForId="tipoAgendamento" />
             <div *ngIf="isInvalid('tipoAgendamento')" class="text-error text-sm">
@@ -95,7 +95,7 @@
         <div class="w-[12rem] mr-4">
           <label class="label-campo" for="convenioId">Convênio</label>
           <ng-select formControlName="convenioId" class="campo-select"
-                     [ngClass]="styleClassesField('convenioId')"
+                     [ngClass]="styleClassesField('convenioId')" placeholder="Selecione"
                      [items]="this.convenios" bindValue="id" bindLabel="nome" labelForId="convenioId"
                      (change)="selectConvenio($event)" (clear)="selectConvenio(null)" />
         </div>
@@ -105,7 +105,7 @@
             Especialidade <span aria-hidden="true" class="text-error">*</span>
             <ng-select formControlName="especialidadeId" required class="campo-select"
                        labelForId="especialidadeId" [ngClass]="styleClassesField('especialidadeId')"
-                       [items]="this.especialidades" bindValue="id" bindLabel="nome"
+                       [items]="this.especialidades" bindValue="id" bindLabel="nome" placeholder="Selecione"
                        (change)="selectEspecialidade($event)" (clear)="selectEspecialidade(null)" />
             <div *ngIf="isInvalid('especialidadeId')" class="text-error text-sm">
               Obrigatório
@@ -117,7 +117,7 @@
           <label class="label-campo" for="profissionalId">
             Profissional <span aria-hidden="true" class="text-error">*</span>
             <ng-select formControlName="profissionalId" required class="campo-select"
-                       [ngClass]="styleClassesField('profissionalId')"
+                       [ngClass]="styleClassesField('profissionalId')" placeholder="Selecione"
                        [items]="this.profissionaisFiltrados" bindValue="id" bindLabel="nome" labelForId="profissionalId" />
             <div *ngIf="isInvalid('profissionalId')" class="text-error text-sm">
               Obrigatório
@@ -131,7 +131,7 @@
           <label class="label-campo" for="empresaId">
             Empresa
             <ng-select formControlName="empresaId" class="campo-select" [ngClass]="styleClassesField('empresaId')"
-                       [items]="this.empresas" bindValue="id" bindLabel="nome" labelForId="empresaId"
+                       [items]="this.empresas" bindValue="id" bindLabel="nome" labelForId="empresaId" placeholder="Selecione"
                        (change)="selectEmpresa($event)" (clear)="selectEmpresa(null)" />
             <div class="py-2 px-4 text-xs italic rounded-b-md" *ngIf="empresaSelecionada"
                  [ngClass]="empresaSelecionada.plano?.corFundo">
@@ -143,7 +143,7 @@
         <div class="w-[30rem]" >
           <label class="label-campo" for="procedimentoId">Procedimento</label>
           <ng-select formControlName="procedimentoId" class="campo-select"
-                     [ngClass]="styleClassesField('procedimentoId')"
+                     [ngClass]="styleClassesField('procedimentoId')" placeholder="Selecione"
                      (change)="selectProcedimento($event)" (clear)="selectProcedimento(null)"
                      [items]="this.procedimentos" bindValue="id" bindLabel="nome" labelForId="procedimentoId" />
         </div>
@@ -153,7 +153,7 @@
         <div class="w-[11rem] mr-4" >
           <label class="label-campo" for="formaPagamento">
             Forma de Pagamento <span aria-hidden="true" class="text-error">*</span>
-            <ng-select formControlName="formaPagamento" class="campo-select" required
+            <ng-select formControlName="formaPagamento" class="campo-select" required placeholder="Selecione"
                        [ngClass]="styleClassesField('formaPagamento')" bindValue="valor" bindLabel="descricao"
                        [items]="this.formasPagamento" labelForId="formaPagamento" />
             <div *ngIf="isInvalid('formaPagamento')" class="text-error text-sm">
@@ -170,7 +170,7 @@
             <input type="text" formControlName="valor" min="1" max="99999" id="valor"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker="," required
-                   class="campo pl-6 py-[7px]" [ngClass]="styleClassesField('valor', !this.valorEditavel) " [readOnly]="!this.valorEditavel">
+                   class="campo pl-7 py-[7px]" [ngClass]="styleClassesField('valor', !this.valorEditavel) " [readOnly]="!this.valorEditavel">
             <div *ngIf="isInvalid('valor')" class="text-error text-sm">
               Obrigatório
             </div>
@@ -183,7 +183,7 @@
             <input type="text" formControlName="desconto" min="1" max="99999" id="desconto"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker=","
-                   class="campo pl-6 py-[7px]" [ngClass]="styleClassesField('desconto')">
+                   class="campo pl-7 py-[7px]" [ngClass]="styleClassesField('desconto')">
           </label>
         </div>
         <div class="w-[30rem]" >

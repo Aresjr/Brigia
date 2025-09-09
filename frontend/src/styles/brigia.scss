@@ -1,13 +1,17 @@
 .campo {
-  @apply mt-1 p-1.5 block w-full rounded-md border border-base-300 font-normal hover:border-base-300;
+  @apply mt-1 p-1.5 block w-full rounded-md border font-normal hover:border-neutral;
 }
 
 .campo-select {
-  @apply mt-1 block w-full rounded-md border border-base-300 font-normal hover:border-base-300;
+  @apply mt-1 block w-full rounded-md border font-normal hover:border-neutral;
+}
+
+.ng-select-container, .ng-option {
+  @apply bg-base-100 text-base-content !important;
 }
 
 .label-campo {
-  @apply block font-medium text-neutral;
+  @apply block font-medium;
 }
 
 .borda-tabela {
