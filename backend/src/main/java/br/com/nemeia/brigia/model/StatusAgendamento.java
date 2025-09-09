@@ -9,10 +9,9 @@ import lombok.Getter;
 public enum StatusAgendamento {
     AGENDADO(0, "Agendado"),
     CONFIRMADO(1, "Confirmado"),
-    CANCELADO(2, "Cancelado"),
-    REALIZADO(3, "Realizado"),
-    NAO_COMPARECEU(4, "Não Compareceu"),
-    PENDENTE(5, "Pendente"),
+    EM_ATENDIMENTO(2, "Em Atendimento"),
+    CANCELADO(4, "Cancelado"),
+    NAO_COMPARECEU(5, "Não Compareceu"),
     REAGENDADO(6, "Reagendado"),
     FINALIZADO(7, "Finalizado");
 

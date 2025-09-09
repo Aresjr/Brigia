@@ -1,37 +1,92 @@
-<div class="bg-modal" (click)="onCancel()"></div>
-<div class="painel-direito">
-  <div class="p-4">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-semibold">{{isEditMode ? 'Editar Atendimento' : 'Novo Atendimento'}}</h2>
-      <button type="button" (click)="onCancel()" class="btn btn-sm btn-ghost" aria-label="Fechar">
-        <lucide-icon name="x" class="right-0 inline w-6 h-6"/>
-      </button>
+<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm" (click)="fechar()">
+  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[58rem]"
+       (click)="$event.stopPropagation()" >
+
+    <div class="flex justify-between items-center">
+      <h2 class="text-lg font-semibold">{{ titulo }}</h2>
+
+      <div>
+        <button type="button" class="btn btn-sm btn-ghost btn-circle" aria-label="Fechar" (click)="fechar()" title="Fechar">
+          <lucide-icon name="x" class="inline w-5 h-5"/>
+        </button>
+      </div>
     </div>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <div class="space-y-4">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6">
+      <div class="flex">
+        <div class="w-[8rem] mr-4" >
+          <label class="label-campo" for="data">
+            Data <span aria-hidden="true" class="text-error">*</span>
 
-        <div>
-          <label class="label-campo">Nome</label>
-          <input type="text" formControlName="nome" required class="campo" [ngClass]="styleClassesField('nome')">
+
+
+            <div *ngIf="isInvalid('data')" class="text-error text-sm">
+              Obrigatório
+            </div>
+          </label>
+        </div>
+        <div class="w-[4rem] mr-4 group">
+          <label class="label-campo" for="hora">
+            <div class="tooltip-campo">Horário inicial do agendamento</div>
+            Horário <span aria-hidden="true" class="text-error">*</span>
+
+
+
+            <div *ngIf="isInvalid('hora')" class="text-error text-sm">
+              Obrigatório
+            </div>
+          </label>
+        </div>
+        <div class="w-[5rem] mr-4 group" aria-placeholder="Duração em minutos">
+          <label class="label-campo" for="duracao">
+            <div class="tooltip-campo">Duração em minutos</div>
+            Duração <span aria-hidden="true" class="text-error">*</span>
+
+
+
+            <div *ngIf="isInvalid('duracao')" class="text-error text-sm">
+              Obrigatório
+            </div>
+          </label>
+        </div>
+        <div class="w-[23rem] mr-4" >
+          <label class="label-campo" for="pacienteId">
+            Paciente <span aria-hidden="true" class="text-error">*</span>
+
+            <div *ngIf="isInvalid('pacienteId')" class="text-error text-sm">
+              Obrigatório
+            </div>
+          </label>
         </div>
 
-        <div>
-          <label class="label-campo">Observações</label>
-          <textarea id="descricao"
-            formControlName="descricao" rows="5" emptyToNull
-            class="campo" >
-          </textarea>
-        </div>
+        <div class="w-[11rem]" >
+          <label class="label-campo" for="tipoAgendamento">
+            Tipo <span aria-hidden="true" class="text-error">*</span>
 
-        <div class="flex justify-end space-x-3 mt-6">
-          <button type="button" (click)="onCancel()" class="btn btn-ghost btn-sm">
-            Cancelar
-          </button>
-          <button type="submit" class="btn btn-success btn-sm">
-            Salvar
-          </button>
+            <div *ngIf="isInvalid('tipoAgendamento')" class="text-error text-sm">
+              Obrigatório
+            </div>
+          </label>
         </div>
+      </div>
+
+      <!-- Segunda linha -->
+      <div class="flex mt-2">
+
+      </div>
+
+      <!-- Terceira linha -->
+      <div class="flex mt-2">
+
+      </div>
+
+      <div class="flex justify-end gap-3 mt-6">
+        <button type="button" class="btn btn-ghost btn-sm" (click)="fechar()" >
+          Fechar
+        </button>
+        <button type="submit" class="btn btn-success btn-sm" >
+          Salvar
+        </button>
       </div>
     </form>
 

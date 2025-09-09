@@ -10,6 +10,7 @@ import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-atendimentos',
@@ -27,13 +28,22 @@ import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 })
 export class AtendimentosComponent extends BaseListComponent<Atendimento> implements OnInit {
   override nomeEntidade = 'Atendimento';
+  private agendamentoId: number;
 
-  constructor(private atendimentosService: AtendimentosService, private toastr: ToastrService) {
+  constructor(private atendimentosService: AtendimentosService, private toastr: ToastrService,
+              private router: Router) {
     super();
+    const navigation = this.router.getCurrentNavigation();
+    const agendamentoId = navigation?.extras.state?.['agendamentoId'];
+    this.agendamentoId = agendamentoId ? agendamentoId : null;
+    console.log('this.agendamentoId', this.agendamentoId);
   }
 
   ngOnInit(): void {
     this.carregarAtendimentos();
+    if (this.agendamentoId) {
+      this.mostrarFormularioNovo = true;
+    }
   }
 
   carregarAtendimentos(): void {

@@ -5,6 +5,8 @@ import { LucideAngularModule } from 'lucide-angular';
 import { Atendimento, AtendimentoRequest } from '../atendimento.interface';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
 import { FormComponent } from '../../shared/form.component';
+import { limitLength } from '../../../core/util-methods';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-atendimento-form',
@@ -14,11 +16,14 @@ import { FormComponent } from '../../shared/form.component';
     CommonModule,
     ReactiveFormsModule,
     LucideAngularModule,
-    EmptyToNullDirective
+    EmptyToNullDirective,
+    NgxMaskDirective
   ]
 })
 export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> implements OnInit {
   @Input() atendimento: Atendimento | null = null;
+  titulo: string = 'Atendimento';
+  exibeConfirmCancelamento: boolean = false;
 
   constructor(protected override fb: FormBuilder) {
     super(fb);
@@ -34,8 +39,13 @@ export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> 
     }
   }
 
-  get isEditMode(): boolean {
-    return !!this.atendimento;
+  fechar(confirmou: boolean = false) {
+    if (!confirmou && this.form.dirty) {
+      this.exibeConfirmCancelamento = true;
+      return;
+    }
+    this.cancel.emit();
   }
 
+  protected readonly limitLength = limitLength;
 }

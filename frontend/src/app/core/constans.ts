@@ -59,13 +59,25 @@ export const TIPO_AGENDAMENTO = [
   { valor: 5, descricao: 'Retorno' }
 ];
 
-export const STATUS_AGENDAMENTO = [
-  { valor: 0, descricao: 'Agendado' },
-  { valor: 1, descricao: 'Confirmado' },
-  { valor: 2, descricao: 'Cancelado' },
-  { valor: 3, descricao: 'Realizado' },
-  { valor: 4, descricao: 'Não Compareceu' },
-  { valor: 5, descricao: 'Pendente' },
-  { valor: 6, descricao: 'Reagendado' },
-  { valor: 7, descricao: 'Finalizado' }
-];
+export enum StatusAgendamento {
+  Agendado = 0,
+  Confirmado = 1,
+  EmAtendimento = 2,
+  Cancelado = 3,
+  NaoCompareceu = 4,
+  Reagendado = 5,
+  Finalizado = 6
+}
+
+export const StatusDescricao: Record<StatusAgendamento, string> = {
+  [StatusAgendamento.Agendado]: 'Agendado',
+  [StatusAgendamento.Confirmado]: 'Confirmado',
+  [StatusAgendamento.EmAtendimento]: 'Em Atendimento',
+  [StatusAgendamento.Cancelado]: 'Cancelado',
+  [StatusAgendamento.NaoCompareceu]: 'Não Compareceu',
+  [StatusAgendamento.Reagendado]: 'Reagendado',
+  [StatusAgendamento.Finalizado]: 'Finalizado'
+};
+
+export const STATUS_ABRIR_ATENDIMENTO = [StatusAgendamento.Agendado, StatusAgendamento.Confirmado,
+  StatusAgendamento.Reagendado];
