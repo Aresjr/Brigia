@@ -56,6 +56,9 @@
                 @for (sexo of SEXOS; track sexo.sigla) {
                   <ng-option [value]="sexo.sigla">{{sexo.descricao}}</ng-option>
                 }
+                <ng-template ng-notfound-tmp>
+                  <span class="text-sm p-6">Nenhum resultado</span>
+                </ng-template>
               </ng-select>
             </div>
           </div>
@@ -85,6 +88,9 @@
                 @for (estado of estados; track estado.sigla) {
                   <ng-option [value]="estado.sigla">{{estado.nome}}</ng-option>
                 }
+                <ng-template ng-notfound-tmp>
+                  <span class="text-sm p-6">Nenhum resultado</span>
+                </ng-template>
               </ng-select>
             </div>
           </div>
@@ -123,6 +129,9 @@
               @for (empresa of this.empresas; track empresa.id) {
                 <ng-option [value]="empresa.id">{{empresa.nome}}</ng-option>
               }
+              <ng-template ng-notfound-tmp>
+                <span class="text-sm p-6">Nenhum resultado</span>
+              </ng-template>
             </ng-select>
 
           </div>
@@ -132,6 +141,9 @@
               @for (convenio of this.convenios; track convenio.id) {
                 <ng-option [value]="convenio.id">{{convenio.nome}}</ng-option>
               }
+              <ng-template ng-notfound-tmp>
+                <span class="text-sm p-6">Nenhum resultado</span>
+              </ng-template>
             </ng-select>
           </div>
         </div>

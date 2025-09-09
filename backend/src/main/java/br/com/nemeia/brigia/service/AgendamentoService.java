@@ -1,11 +1,15 @@
 package br.com.nemeia.brigia.service;
 
+import br.com.nemeia.brigia.Utils;
 import br.com.nemeia.brigia.auth.SecurityUtils;
 import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
 import br.com.nemeia.brigia.mapper.AgendamentoMapper;
 import br.com.nemeia.brigia.model.*;
 import br.com.nemeia.brigia.repository.AgendamentoRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,6 +42,17 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         this.procedimentoService = procedimentoService;
         this.empresaService = empresaService;
         this.convenioService = convenioService;
+    }
+
+    public Page<Agendamento> getByProfissional(int page, int size) {
+        if (securityUtils.getLoggedUserRoles().contains(RoleUsuario.MEDICO.toString())) {
+            Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
+
+            Long profissionalId = profissionalService.getByUsuarioId(securityUtils.getLoggedUserId()).getId();
+            return repository.findAllByProfissionalIdIs(pageable, profissionalId);
+        } else {
+            return getPaged(page, size, false);
+        }
     }
 
     public Agendamento createAgendamento(AgendamentoRequest request) {

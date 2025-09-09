@@ -49,9 +49,16 @@
 
             <div class="grid grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_minmax(10px,20px)] gap-4 w-full px-2 py-2">
               <div>{{ empresa.nome }}</div>
-              <div [ngClass]="empresa.plano?.corFundo" class="text-xs rounded-lg p-1.5 inline-block w-fit h-fit" >
-                {{ empresa.plano?.nome }}
-              </div>
+
+              @if (empresa.plano) {
+                <div class="badge h-fit text-xs font-semibold" *ngIf="empresa.plano" [ngClass]="ColorUtils.getColorClasses(empresa.plano)">
+                  {{ empresa.plano.nome }}
+                </div>
+              }
+              @if (!empresa.plano) {
+                <div></div>
+              }
+
               <div>{{ empresa.codigoBc }}</div>
               <div>{{ empresa.valorMinimoMensal }}</div>
               <div>{{ empresa.minimoPorFuncionario }}</div>

@@ -58,3 +58,14 @@ export const TIPO_AGENDAMENTO = [
   { valor: 4, descricao: 'Sessão' },
   { valor: 5, descricao: 'Retorno' }
 ];
+
+export const STATUS_AGENDAMENTO = [
+  { valor: 0, descricao: 'Agendado' },
+  { valor: 1, descricao: 'Confirmado' },
+  { valor: 2, descricao: 'Cancelado' },
+  { valor: 3, descricao: 'Realizado' },
+  { valor: 4, descricao: 'Não Compareceu' },
+  { valor: 5, descricao: 'Pendente' },
+  { valor: 6, descricao: 'Reagendado' },
+  { valor: 7, descricao: 'Finalizado' }
+];

@@ -4,11 +4,12 @@ import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Entidade } from '../../features/shared/entidade.interface';
 import { UserService } from '../../core/user.service';
+import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-top-bar',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, LucideAngularModule, FormsModule, ReactiveFormsModule, NgSelectComponent, NgNotFoundTemplateDirective, NgOptionComponent],
   templateUrl: './top-bar.component.html'
 })
 export class TopBarComponent {
@@ -38,7 +39,7 @@ export class TopBarComponent {
     this.addNovo.emit();
   }
 
-  onSelectItem($event: any) {
-    this.selectRegistro.emit($event.target.value);
+  onSelectItem(entidadeId: any) {
+    this.selectRegistro.emit(entidadeId);
   }
 }

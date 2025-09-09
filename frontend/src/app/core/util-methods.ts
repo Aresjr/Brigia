@@ -40,16 +40,3 @@ export function isDataNoFuturo(data: string, hora: string): boolean {
   const agora = new Date();
   return agendamento.getTime() > agora.getTime();
 }
-
-export function isToday(dateStr: string): boolean {
-  const [day, month, year] = dateStr.split('-').map(Number);
-
-  const inputDate = new Date(year, month - 1, day);
-  const today = new Date();
-
-  return (
-    inputDate.getDate() === today.getDate() &&
-    inputDate.getMonth() === today.getMonth() &&
-    inputDate.getFullYear() === today.getFullYear()
-  );
-}

@@ -52,6 +52,9 @@
                 @for (sexo of SEXOS; track sexo.sigla) {
                   <ng-option [value]="sexo.sigla">{{sexo.descricao}}</ng-option>
                 }
+                <ng-template ng-notfound-tmp>
+                  <span class="text-sm p-6">Nenhum resultado</span>
+                </ng-template>
               </ng-select>
             </div>
           </div>
@@ -92,6 +95,9 @@
             @for (especialidade of this.listaEspecialidades; track especialidade.id) {
               <ng-option [value]="especialidade.id">{{especialidade.nome}}</ng-option>
             }
+            <ng-template ng-notfound-tmp>
+              <span class="text-sm p-6">Nenhum resultado</span>
+            </ng-template>
           </ng-select>
           @if (form.get('especialidades')?.touched) {
             <div *ngIf="isInvalid('especialidades')" class="text-error text-sm">

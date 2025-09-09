@@ -28,7 +28,7 @@ public class AgendamentoController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         log.info("GET /agendamentos - page: {}, size: {}", page, size);
-        return mapper.toPagedResponse(service.getPaged(page, size, mostrarExcluidos));
+        return mapper.toPagedResponse(service.getByProfissional(page, size));
     }
 
     @PostMapping

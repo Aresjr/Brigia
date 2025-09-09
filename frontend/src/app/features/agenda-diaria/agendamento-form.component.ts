@@ -22,11 +22,12 @@ import { FormComponent } from '../shared/form.component';
 import { Agendamento, AgendamentoRequest } from './agendamento.interface';
 import { IForm } from '../shared/form.interface';
 import { LucideAngularModule } from 'lucide-angular';
-import { autoResize, isDataNoFuturo, isToday, limitLength } from '../../core/util-methods';
+import { autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
 import { FORMAS_PAGAMENTO, TIPO_AGENDAMENTO } from '../../core/constans';
 import { forkJoin, map, Observable, tap } from 'rxjs';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { UserService } from '../../core/user.service';
+import { ColorUtils } from '../../core/color-utils';
 
 @Component({
   selector: 'app-agendamento-form',
@@ -296,9 +297,9 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
       return false;
     }
 
-    if (!isToday(agendamento.data)) {
-      return false;
-    }
+    console.log('podeAbrirAtendimento', agendamento);
+
+    //TODO - verificar status do agendamento
 
     return this.userService.isMedico();
   }
@@ -307,9 +308,8 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
     if (agendamento == null) {
       return;
     }
-    if (!isToday(agendamento.data)) {
-      this.toastr.warning('Somente é possível abrir atendimento para agendamento do dia de hoje');
-    }
+    this.toastr.info('Será implementado logo!');
+
     //TODO - implementar
   }
 
@@ -340,4 +340,6 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
       });
     }
   }
+
+  protected readonly ColorUtils = ColorUtils;
 }

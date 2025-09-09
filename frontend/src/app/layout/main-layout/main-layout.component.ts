@@ -115,7 +115,7 @@ export class MainLayoutComponent {
   }
 
   private updateTitle(title: string) {
-      this.titleService.setTitle(`${environment.clientName} | ${title}`);
+      this.titleService.setTitle(`${environment.clientName} - ${title}`);
   }
 
   onSearchChange() {

@@ -6,7 +6,7 @@ import { Empresa, EmpresaPlano, EmpresaRequest } from '../empresa.interface';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
 import { NgxMaskDirective } from 'ngx-mask';
 import { EmpresasService } from '../empresas.service';
-import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { FormComponent } from '../../shared/form.component';
 import { forkJoin, map, Observable, tap } from 'rxjs';
 
@@ -21,7 +21,8 @@ import { forkJoin, map, Observable, tap } from 'rxjs';
     EmptyToNullDirective,
     NgxMaskDirective,
     NgSelectComponent,
-    NgOptionComponent
+    NgOptionComponent,
+    NgNotFoundTemplateDirective
   ]
 })
 export class EmpresaFormComponent extends FormComponent<EmpresaRequest> implements OnInit {

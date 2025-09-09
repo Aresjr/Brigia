@@ -10,7 +10,7 @@ import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-dir
 import { ConveniosService } from '../../convenio/convenios.service';
 import { Convenio } from '../../convenio/convenio.interface';
 import { LucideAngularModule } from 'lucide-angular';
-import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { EmpresasService } from '../../empresa/empresas.service';
 import { Empresa } from '../../empresa/empresa.interface';
 import { FormComponent } from '../../shared/form.component';
@@ -18,7 +18,7 @@ import { FormComponent } from '../../shared/form.component';
 @Component({
   selector: 'app-paciente-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, LucideAngularModule, NgOptionComponent, NgSelectComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, LucideAngularModule, NgOptionComponent, NgSelectComponent, NgNotFoundTemplateDirective],
   templateUrl: 'paciente-form.component.html'
 })
 export class PacienteFormComponent extends FormComponent<PacienteRequest> implements OnInit {

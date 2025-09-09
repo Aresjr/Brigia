@@ -7,14 +7,14 @@ import { SEXOS } from '../../../core/constans';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
 import { EspecialidadeService } from '../../especialidade/especialidade.service';
 import { Especialidade } from '../../especialidade/especialidade.interface';
-import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormComponent } from '../../shared/form.component';
 
 @Component({
   selector: 'app-profissional-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, NgSelectComponent, NgOptionComponent, LucideAngularModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, NgSelectComponent, NgOptionComponent, LucideAngularModule, NgNotFoundTemplateDirective],
   templateUrl: 'profissional-form.component.html'
 })
 export class ProfissionalFormComponent extends FormComponent<ProfissionalRequest> implements OnInit {

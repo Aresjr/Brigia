@@ -55,6 +55,10 @@
   @apply absolute px-2 py-3 shrink-0 text-base text-neutral select-none sm:text-sm;
 }
 
+.contrast-text {
+  mix-blend-mode: difference;
+}
+
 .toast-center-screen {
   @apply toast-top-right;
   margin-right: 2rem;
@@ -63,4 +67,13 @@
 
 .ng-select .ng-select-container  {
   border:1px;
+  max-height: 1rem !important; /* 2rem ≈ 32px (h-8 no Tailwind) */
+  height: 1rem !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.ng-select .ng-value-container {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }

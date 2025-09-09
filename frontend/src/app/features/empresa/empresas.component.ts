@@ -10,6 +10,7 @@ import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
+import { ColorUtils } from '../../core/color-utils';
 
 @Component({
   selector: 'app-empresas',
@@ -98,4 +99,6 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
       }
     });
   }
+
+  protected readonly ColorUtils = ColorUtils;
 }

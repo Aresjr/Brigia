@@ -27,21 +27,21 @@
           <div class="w-full">
             <label class="label-campo">Valor Mín. Mensal</label>
             <div class="placeholder-esquerdo p-3.5">R$</div>
-            <input type="text" formControlName="valorMinimoMensal" class="campo pl-8 py-[7px]" mask="separator.2"
+            <input type="text" formControlName="valorMinimoMensal" class="campo pl-9 py-[7px]" mask="separator.2"
                    thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
           </div>
 
           <div class="w-full">
             <label class="label-campo">Mín. por Funcionário</label>
             <div class="placeholder-esquerdo p-3.5">R$</div>
-            <input type="text" formControlName="minimoPorFuncionario" class="campo pl-8" mask="separator.2"
+            <input type="text" formControlName="minimoPorFuncionario" class="campo pl-9" mask="separator.2"
                    thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
           </div>
 
           <div class="w-full">
             <label class="label-campo">Valor Mês</label>
             <div class="placeholder-esquerdo p-3.5">R$</div>
-            <input type="text" formControlName="valorMes" class="campo pl-8" mask="separator.2"
+            <input type="text" formControlName="valorMes" class="campo pl-9" mask="separator.2"
                    thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
           </div>
         </div>
@@ -59,6 +59,9 @@
                   </div>
                 </ng-option>
               }
+              <ng-template ng-notfound-tmp>
+                <span class="text-sm p-6">Nenhum resultado</span>
+              </ng-template>
             </ng-select>
           </label>
         </div>

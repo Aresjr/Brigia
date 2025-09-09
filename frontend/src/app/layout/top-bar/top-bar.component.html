@@ -2,22 +2,24 @@
   <div>
     <h1 class="text-3xl">{{ title }}</h1>
   </div>
-  <div class="flex">
+  <div class="flex max-h-8">
 
-    <select *ngIf="!this.userService.isMedico() && showDropdown" class="select select-neutral select-sm w-72 mr-4 shadow-md" (change)="onSelectItem($event)" >
-      <option value="0" selected>Todos - {{ placeholderDropdown }}</option>
+    <ng-select class="w-72 mr-4 shadow-md hover:shadow-lg max-h-8 leading-none" (change)="onSelectItem($event)" placeholder="Todos - {{ placeholderDropdown }}">
       @for(registro of this.registrosDropdown; track registro.id) {
-        <option value="{{ registro.id }}">{{ registro.nome }}</option>
+        <ng-option class="max-h-8" value="{{ registro.id }}">{{ registro.nome }}</ng-option>
       }
-    </select>
+      <ng-template ng-notfound-tmp>
+        <span class="text-sm p-6">Nenhum resultado</span>
+      </ng-template>
+    </ng-select>
 
     <div *ngIf="showSearchBar" class="mr-3">
-      <lucide-icon name="search" class="w-4 h-4 absolute mt-3 ml-1 transform -translate-y-1/2 "></lucide-icon>
+      <lucide-icon name="search" class="w-4 h-4 absolute mt-3 ml-1 transform -translate-y-1/2"></lucide-icon>
       <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearch($event)"
              id="filtro" placeholder="Filtrar" maxlength="20"
              class="pl-7 pr-4 py-1 rounded-full focus:outline-none focus:ring-2 focus:ring-grey-900 focus:border-transparent shadow-md" />
     </div>
-    <button type="button" *ngIf="showAddNovo" (click)="onAddNovo()" class="btn btn-success btn-sm">
+    <button type="button" *ngIf="showAddNovo" (click)="onAddNovo()" class="btn btn-success btn-sm shadow-md hover:shadow-lg">
       <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
       Novo
     </button>
