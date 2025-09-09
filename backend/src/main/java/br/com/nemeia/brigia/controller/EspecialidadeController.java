@@ -22,7 +22,7 @@ public class EspecialidadeController {
     private final EspecialidadeMapper mapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<EspecialidadeResponse> getAllEspecialidades(
             @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
             @RequestParam(defaultValue = "0") int page,
@@ -64,7 +64,7 @@ public class EspecialidadeController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public EspecialidadeResponse getEspecialidadeById(@PathVariable Long id) {
         log.info("GET /especialidades/{} - buscando especialidade pelo ID", id);
         return mapper.toResponse(service.getById(id));

@@ -4,7 +4,7 @@
   </div>
   <div class="flex">
 
-    <select *ngIf="showDropdown" class="select select-neutral select-sm w-72 mr-4 shadow-md" (change)="onSelectItem($event)" >
+    <select *ngIf="!this.userService.isMedico() && showDropdown" class="select select-neutral select-sm w-72 mr-4 shadow-md" (change)="onSelectItem($event)" >
       <option value="0" selected>Todos - {{ placeholderDropdown }}</option>
       @for(registro of this.registrosDropdown; track registro.id) {
         <option value="{{ registro.id }}">{{ registro.nome }}</option>
@@ -17,7 +17,7 @@
              id="filtro" placeholder="Filtrar" maxlength="20"
              class="pl-7 pr-4 py-1 rounded-full focus:outline-none focus:ring-2 focus:ring-grey-900 focus:border-transparent shadow-md" />
     </div>
-    <button type="button" *ngIf="addNovo" (click)="onAddNovo()" class="btn btn-success btn-sm">
+    <button type="button" *ngIf="showAddNovo" (click)="onAddNovo()" class="btn btn-success btn-sm">
       <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
       Novo
     </button>

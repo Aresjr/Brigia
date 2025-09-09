@@ -2,13 +2,13 @@
   <div class="flex items-center justify-between gap-4 mb-4">
     <div class="flex items-center">
       <button
-        class="btn btn-ghost btn-sm"
+        class="btn btn-ghost btn-sm mr-2 border border-base-300"
         mwlCalendarToday
         [(viewDate)]="currentDate" >
         Hoje
       </button>
       <button
-        class="btn btn-ghost btn-sm rounded-full"
+        class="btn btn-ghost btn-sm btn-circle mr-1"
         mwlCalendarPreviousView
         [view]="view"
         [(viewDate)]="currentDate"
@@ -16,7 +16,7 @@
         <lucide-icon name="chevron-left" class="w-6 h-6"></lucide-icon>
       </button>
       <button
-        class="btn btn-ghost btn-sm rounded-full"
+        class="btn btn-ghost btn-sm btn-circle"
         mwlCalendarNextView
         [view]="view"
         [(viewDate)]="currentDate"

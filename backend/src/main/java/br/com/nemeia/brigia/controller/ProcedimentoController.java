@@ -27,7 +27,7 @@ public class ProcedimentoController {
     private final ConvenioService convenioService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<ProcedimentoResponse> getAllProcedimentos(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
@@ -68,14 +68,14 @@ public class ProcedimentoController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public ProcedimentoResponse getProcedimentoById(@PathVariable Long id) {
         log.info("GET /procedimentos/{} - buscando procedimento pelo ID", id);
         return mapper.toResponse(service.getById(id));
     }
 
     @GetMapping("/{id}/tabela-preco")
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public TabelaPrecoResponse getTabelaPrecoProcedimentoById(@PathVariable Long id) {
         log.info(
                 "GET /procedimentos/{}/tabela-preco - buscando tabela de preço do procedimento ID",
@@ -84,7 +84,7 @@ public class ProcedimentoController {
     }
 
     @GetMapping("/{id}/tabela-preco/{convenioId}")
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PrecoProcedimentoResponse getPrecoProcedimentoConvenio(
             @PathVariable Long id, @PathVariable Long convenioId) {
         log.info(

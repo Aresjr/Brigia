@@ -22,10 +22,11 @@ import { FormComponent } from '../shared/form.component';
 import { Agendamento, AgendamentoRequest } from './agendamento.interface';
 import { IForm } from '../shared/form.interface';
 import { LucideAngularModule } from 'lucide-angular';
-import { autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
+import { autoResize, isDataNoFuturo, isToday, limitLength } from '../../core/util-methods';
 import { FORMAS_PAGAMENTO, TIPO_AGENDAMENTO } from '../../core/constans';
 import { forkJoin, map, Observable, tap } from 'rxjs';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
+import { UserService } from '../../core/user.service';
 
 @Component({
   selector: 'app-agendamento-form',
@@ -71,7 +72,8 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
   constructor(protected override fb: FormBuilder, private toastr: ToastrService,
               private pacientesService: PacienteService, private conveniosService: ConveniosService,
               private especialidadeService: EspecialidadeService, private profissionaisService: ProfissionaisService,
-              private empresasService: EmpresasService, private procedimentosService: ProcedimentosService) {
+              private empresasService: EmpresasService, private procedimentosService: ProcedimentosService,
+              protected userService: UserService) {
     super(fb);
     this.hoje = new Date().toISOString().split('T')[0];
     const form: IForm<AgendamentoRequest> = {
@@ -287,6 +289,28 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
     this.form.patchValue({
       valor: valor
     });
+  }
+
+  podeAbrirAtendimento(agendamento: Agendamento | null): boolean {
+    if (agendamento == null) {
+      return false;
+    }
+
+    if (!isToday(agendamento.data)) {
+      return false;
+    }
+
+    return this.userService.isMedico();
+  }
+
+  abrirAtendimento(agendamento: Agendamento | null) {
+    if (agendamento == null) {
+      return;
+    }
+    if (!isToday(agendamento.data)) {
+      this.toastr.warning('Somente é possível abrir atendimento para agendamento do dia de hoje');
+    }
+    //TODO - implementar
   }
 
   formValido(): boolean {

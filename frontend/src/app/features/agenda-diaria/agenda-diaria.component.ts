@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Profissional } from '../profissionais/profissional.interface';
 import { ProfissionaisService } from '../profissionais/profissionais.service';
 import { EventoFactory } from '../../core/evento-factory';
+import { UserService } from '../../core/user.service';
 
 @Component({
   selector: 'app-agenda-diaria',
@@ -31,7 +32,8 @@ export class AgendaDiariaComponent implements OnInit {
 
   constructor(private router: Router, private toastr: ToastrService,
               private agendamentoService: AgendamentosService,
-              private profissionaisService: ProfissionaisService) {
+              private profissionaisService: ProfissionaisService,
+              private userService: UserService) {
     const navigation = this.router.getCurrentNavigation();
     const pacienteId = navigation?.extras.state?.['pacienteId'];
     this.pacienteId = pacienteId ? pacienteId : null;
@@ -39,7 +41,11 @@ export class AgendaDiariaComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarAgendamentos();
-    this.carregarProfissionais();
+
+    if (!this.userService.isMedico()) {
+      this.carregarProfissionais();
+    }
+
     if (this.pacienteId) {
       this.onAddNovo();
     }
@@ -105,6 +111,11 @@ export class AgendaDiariaComponent implements OnInit {
   }
 
   horarioClicado(data: Date) {
+
+    if (this.userService.isMedico()) {
+      return;
+    }
+
     if (data.getTime() > new Date().getTime()) {
       this.dataAgendamento = data;
       this.exibeForm = true;

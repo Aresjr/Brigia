@@ -6,11 +6,11 @@
       <h2 class="text-lg font-semibold">{{ titulo }}</h2>
 
       <div>
-        <button type="button" class="btn btn-sm btn-ghost" aria-label="Editar" (click)="onEdit()" *ngIf="agendamentoDetalhes && !this.podeSalvar" title="Editar">
-          <lucide-icon name="pencil" class="right-0 inline w-5 h-5"/>
+        <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" aria-label="Editar" (click)="onEdit()" *ngIf="!this.userService.isMedico() && agendamentoDetalhes && !this.podeSalvar" title="Editar">
+          <lucide-icon name="pencil" class="inline w-5 h-5"/>
         </button>
-        <button type="button" class="btn btn-sm btn-ghost" aria-label="Fechar" (click)="fechar()" title="Fechar">
-          <lucide-icon name="x" class="right-0 inline w-5 h-5"/>
+        <button type="button" class="btn btn-sm btn-ghost btn-circle" aria-label="Fechar" (click)="fechar()" title="Fechar">
+          <lucide-icon name="x" class="inline w-5 h-5"/>
         </button>
       </div>
     </div>
@@ -200,6 +200,9 @@
       <div class="flex justify-end gap-3 mt-6">
         <button type="button" class="btn btn-ghost btn-sm" (click)="fechar()" >
           Fechar
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" *ngIf="podeAbrirAtendimento(agendamentoDetalhes)" (click)="abrirAtendimento(agendamentoDetalhes)" >
+          Abrir Atendimento
         </button>
         <button type="submit" class="btn btn-success btn-sm" *ngIf="podeSalvar" >
           Salvar

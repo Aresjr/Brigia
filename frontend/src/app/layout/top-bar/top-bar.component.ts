@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Entidade } from '../../features/shared/entidade.interface';
+import { UserService } from '../../core/user.service';
 
 @Component({
   selector: 'app-top-bar',
@@ -20,9 +21,14 @@ export class TopBarComponent {
   @Output() addNovo = new EventEmitter<void>();
   @Output() selectRegistro = new EventEmitter<any>();
 
+  showAddNovo: boolean = true;
   searchTerm: string = '';
 
-  constructor() {}
+  constructor(protected userService: UserService) {
+    if (userService.isMedico()) {
+      this.showAddNovo = false;
+    }
+  }
 
   onSearch($event: any): void {
     this.search.emit($event);
@@ -33,8 +39,6 @@ export class TopBarComponent {
   }
 
   onSelectItem($event: any) {
-    console.log('onSelectItem', $event);
-    console.log('onSelectItem', $event.target.value);
     this.selectRegistro.emit($event.target.value);
   }
 }
