@@ -62,6 +62,24 @@ public class Atendimento extends BaseModel {
     @Column(name = "forma_pagamento", length = 15)
     private FormaPagamento formaPagamento;
 
-    @Column(name = "observacoes")
+    @Column(name = "anamnese", columnDefinition = "TEXT")
+    private String anamnese;
+
+    @Column(name = "exame_fisico", columnDefinition = "TEXT")
+    private String exameFisico;
+
+    @Column(name = "diagnostico", columnDefinition = "TEXT")
+    private String diagnostico;
+
+    @Column(name = "evolucao_clinica", columnDefinition = "TEXT")
+    private String evolucaoClinica;
+
+    @Column(name = "exames_solicitados", columnDefinition = "TEXT")
+    private String examesSolicitados;
+
+    @Column(name = "prescricoes", columnDefinition = "TEXT")
+    private String prescricoes;
+
+    @Column(name = "observacoes", columnDefinition = "TEXT")
     private String observacoes;
 }

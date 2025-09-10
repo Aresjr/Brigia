@@ -7,6 +7,7 @@ import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-dir
 import { FormComponent } from '../../shared/form.component';
 import { limitLength } from '../../../core/util-methods';
 import { NgxMaskDirective } from 'ngx-mask';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-atendimento-form',
@@ -17,19 +18,25 @@ import { NgxMaskDirective } from 'ngx-mask';
     ReactiveFormsModule,
     LucideAngularModule,
     EmptyToNullDirective,
-    NgxMaskDirective
+    NgxMaskDirective,
+    ConfirmDialogComponent
   ]
 })
 export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> implements OnInit {
   @Input() atendimento: Atendimento | null = null;
-  titulo: string = 'Atendimento';
+  titulo: string = 'Novo Atendimento';
   exibeConfirmCancelamento: boolean = false;
 
   constructor(protected override fb: FormBuilder) {
     super(fb);
     this.form = this.fb.group({
-      nome: [null, [Validators.required, Validators.minLength(3)]],
-      descricao: [null]
+      anamnese: [null],
+      exameFisico: [null],
+      diagnostico: [null],
+      evolucaoClinica: [null],
+      examesSolicitados: [null],
+      prescricoes: [null],
+      observacoes: [null]
     });
   }
 

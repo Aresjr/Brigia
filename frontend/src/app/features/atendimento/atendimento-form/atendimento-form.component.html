@@ -1,5 +1,5 @@
 <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm" (click)="fechar()">
-  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[58rem]"
+  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[62rem]"
        (click)="$event.stopPropagation()" >
 
     <div class="flex justify-between items-center">
@@ -12,71 +12,86 @@
       </div>
     </div>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6">
-      <div class="flex">
-        <div class="w-[8rem] mr-4" >
-          <label class="label-campo" for="data">
-            Data <span aria-hidden="true" class="text-error">*</span>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-2">
 
-
-
-            <div *ngIf="isInvalid('data')" class="text-error text-sm">
-              Obrigatório
-            </div>
-          </label>
-        </div>
-        <div class="w-[4rem] mr-4 group">
-          <label class="label-campo" for="hora">
-            <div class="tooltip-campo">Horário inicial do agendamento</div>
-            Horário <span aria-hidden="true" class="text-error">*</span>
-
-
-
-            <div *ngIf="isInvalid('hora')" class="text-error text-sm">
-              Obrigatório
-            </div>
-          </label>
-        </div>
-        <div class="w-[5rem] mr-4 group" aria-placeholder="Duração em minutos">
-          <label class="label-campo" for="duracao">
-            <div class="tooltip-campo">Duração em minutos</div>
-            Duração <span aria-hidden="true" class="text-error">*</span>
-
-
-
-            <div *ngIf="isInvalid('duracao')" class="text-error text-sm">
-              Obrigatório
-            </div>
-          </label>
-        </div>
-        <div class="w-[23rem] mr-4" >
-          <label class="label-campo" for="pacienteId">
-            Paciente <span aria-hidden="true" class="text-error">*</span>
-
-            <div *ngIf="isInvalid('pacienteId')" class="text-error text-sm">
-              Obrigatório
-            </div>
-          </label>
+      <div class="tabs tabs-bordered tabs-lift tabs min-w-max">
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento"
+               aria-label="Anamnese" checked="checked" />
+        <div class="tab-content">
+          <div class="w-[52rem] p-4">
+            <label class="label-campo" for="anamnese">
+              Anamnese
+              <textarea id="anamnese" formControlName="anamnese" rows="5" emptyToNull class="campo"></textarea>
+            </label>
+          </div>
         </div>
 
-        <div class="w-[11rem]" >
-          <label class="label-campo" for="tipoAgendamento">
-            Tipo <span aria-hidden="true" class="text-error">*</span>
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento"
+               aria-label="Exame Físico" />
+        <div class="tab-content">
+          <div class="w-[52rem] p-4">
+            <label class="label-campo" for="exameFisico">
+              Exame Físico
+              <textarea id="exameFisico" formControlName="exameFisico" rows="5" emptyToNull class="campo"></textarea>
+            </label>
+          </div>
+        </div>
 
-            <div *ngIf="isInvalid('tipoAgendamento')" class="text-error text-sm">
-              Obrigatório
-            </div>
-          </label>
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento"
+               aria-label="Diagnóstico" />
+        <div class="tab-content">
+          <div class="w-[52rem] p-4">
+            <label class="label-campo" for="diagnostico">
+              Diagnóstico
+              <textarea id="diagnostico" formControlName="diagnostico" rows="5" emptyToNull class="campo"></textarea>
+            </label>
+          </div>
+        </div>
+
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Evolução Clínica" />
+        <div class="tab-content">
+          <div class="w-[52rem] p-4">
+            <label class="label-campo" for="evolucaoClinica">
+              Evolução Clínica
+              <textarea id="evolucaoClinica" formControlName="evolucaoClinica" rows="5" emptyToNull class="campo"></textarea>
+            </label>
+          </div>
+        </div>
+
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Exames Solicitados" />
+        <div class="tab-content">
+          <div class="w-[52rem] p-4">
+            <label class="label-campo" for="examesSolicitados">
+              Exames Solicitados
+              <textarea id="examesSolicitados" formControlName="examesSolicitados" rows="5" emptyToNull class="campo"></textarea>
+            </label>
+          </div>
+        </div>
+
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Prescrições" />
+        <div class="tab-content">
+          <div class="w-[52rem] p-4">
+            <label class="label-campo" for="prescricoes">
+              Prescrições
+              <textarea id="prescricoes" formControlName="prescricoes" rows="5" emptyToNull class="campo"></textarea>
+            </label>
+          </div>
+        </div>
+
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Observações" />
+        <div class="tab-content">
+          <div class="w-[52rem] p-4">
+            <label class="label-campo" for="observacoes">
+              Observações
+              <textarea id="observacoes" formControlName="observacoes" rows="5" emptyToNull class="campo"></textarea>
+            </label>
+          </div>
         </div>
       </div>
 
-      <!-- Segunda linha -->
       <div class="flex mt-2">
 
-      </div>
-
-      <!-- Terceira linha -->
-      <div class="flex mt-2">
+        Procedimentos Lançados:
 
       </div>
 
@@ -92,3 +107,10 @@
 
   </div>
 </div>
+
+<app-confirm-dialog
+  *ngIf="exibeConfirmCancelamento"
+  message="Você já preencheu algumas informações do atendimento, deseja realmente sair?"
+  (confirm)="fechar(true)"
+  (cancel)="exibeConfirmCancelamento = false"
+></app-confirm-dialog>

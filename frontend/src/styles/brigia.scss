@@ -55,8 +55,8 @@
   @apply absolute px-2 py-3 shrink-0 text-base text-neutral select-none sm:text-sm;
 }
 
-.contrast-text {
-  mix-blend-mode: difference;
+.tab-atendimento {
+  @apply tab font-bold text-base-content/50 hover:text-base-content/70 checked:text-base-content;
 }
 
 .toast-center-screen {
