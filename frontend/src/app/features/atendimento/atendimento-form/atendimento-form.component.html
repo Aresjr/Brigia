@@ -91,31 +91,31 @@
 
       <div class="flex mt-2">
         <div class="w-full">
-          <div class="flex mb-2">
+          <div class="flex justify-between items-center mb-2">
             <h3 class="text-lg font-medium">Procedimentos Lançados</h3>
+            <button type="button" class="btn btn-primary btn-xs" (click)="adicionarProcedimento()">
+              <i-lucide name="plus" class="w-4 h-4"></i-lucide>
+              Adicionar Procedimento
+            </button>
           </div>
 
-          <div class="p-2 flex items-center gap-3">
-            <div class="font-medium w-24">
-              Quantidade
-            </div>
-            <div class="font-medium flex-1">
-              Procedimento
-            </div>
-            <div class="font-medium w-32">
-              Valor
+          <div class="rounded-t-lg">
+            <div class="grid grid-cols-[6rem_1fr_8rem_1rem] gap-3 p-3 font-medium">
+              <div>Quantidade</div>
+              <div>Procedimento</div>
+              <div>Valor</div>
+              <div></div>
             </div>
           </div>
 
-          <div *ngFor="let procedimento of procedimentosLancados.controls; let i = index" [formGroupName]="i"
-               class="flex items-center gap-3 p-3 rounded-lg">
-            <div class="w-24">
+          <div class="space-y-1" formArrayName="procedimentosLancados">
+            <div *ngFor="let procedimento of procedimentosLancados.controls; let i = index" [formGroupName]="i"
+                 class="grid grid-cols-[6rem_1fr_8rem_2rem] gap-3 p-1.5 items-center hover:bg-base-200 rounded-lg">
+
               <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade"
-                     class="campo" (change)="atualizarValorPorQuantidade(i)">
-            </div>
+                     class="campo mt-0 p-2" (change)="atualizarValorPorQuantidade(i)">
 
-            <div class="flex-1">
-              <ng-select [id]="'procedimento_' + i"
+              <ng-select [id]="'procedimento_' + i"  class="campo-select mt-0"
                          formControlName="procedimentoId"
                          placeholder="Selecione um procedimento"
                          (change)="atualizarValorProcedimento(i, $event?.id)">
@@ -123,22 +123,14 @@
                   <ng-option [value]="procedimento.id">{{procedimento.nome}}</ng-option>
                 }
               </ng-select>
-            </div>
 
-            <div class="w-32">
-              <input [id]="'valor_' + i" type="number" formControlName="valor" class="campo" readonly>
-            </div>
+              <input [id]="'valor_' + i" type="number" formControlName="valor" class="campo mt-0 p-2" readonly >
 
-            <button type="button" class="btn btn-ghost btn-circle btn-xs self-end mb-2" (click)="removerProcedimento(i)">
-              <lucide-icon name="trash-2" class="w-4 h-4 text-error"></lucide-icon>
-            </button>
+              <button type="button" class="btn btn-ghost btn-circle btn-xs" (click)="removerProcedimento(i)" aria-label="Excluir lançamento">
+                <lucide-icon name="trash" class="w-4 h-4 text-error"></lucide-icon>
+              </button>
+            </div>
           </div>
-
-          <button type="button" class="btn btn-primary btn-xs" (click)="adicionarProcedimento()">
-            <i-lucide name="plus" class="w-4 h-4"></i-lucide>
-            Adicionar Procedimento
-          </button>
-
         </div>
       </div>
 
