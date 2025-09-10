@@ -24,15 +24,8 @@ public class AtendimentoProcedimento extends BaseModel {
     @JoinColumn(name = "procedimento_id", nullable = false)
     private Procedimento procedimento;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "convenio_id", nullable = false)
-    private Convenio convenio;
-
     @Column(name = "nome_procedimento", nullable = false)
     private String nomeProcedimento;
-
-    @Column(name = "nome_convenio", nullable = false)
-    private String nomeConvenio;
 
     @Column(name = "quantidade", nullable = false)
     private Integer quantidade;
