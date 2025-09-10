@@ -90,9 +90,52 @@
       </div>
 
       <div class="flex mt-2">
+        <div class="w-full">
+          <div class="flex mb-2">
+            <h3 class="text-lg font-medium">Procedimentos Lançados</h3>
+          </div>
 
-        Procedimentos Lançados:
+          <div class="space-y-3" formArrayName="procedimentosLancados">
 
+            <div *ngFor="let procedimento of procedimentosLancados.controls; let i = index" [formGroupName]="i"
+                 class="flex items-center gap-3 bg-base-200 p-3 rounded-lg">
+              <div class="w-24">
+                <label class="label-campo">
+                  Quantidade
+                  <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade"
+                         class="campo" (change)="atualizarValorPorQuantidade(i)">
+                </label>
+              </div>
+
+              <div class="flex-1">
+                <label class="label-campo" [for]="'procedimento_' + i">
+                  Procedimento
+                  <ng-select [id]="'procedimento_' + i"
+                           formControlName="procedimentoId"
+                           [items]="procedimentos"
+                           bindLabel="nome"
+                           bindValue="id"
+                           placeholder="Selecione um procedimento"
+                           (change)="atualizarValorProcedimento(i, $event?.id)">
+                    <ng-template ng-option-tmp let-item="item">
+                      {{item.nome}} <span *ngIf="item.codigo">({{item.codigo}})</span>
+                    </ng-template>
+                  </ng-select>
+                </label>
+              </div>
+
+              <button type="button" class="btn btn-ghost btn-square btn-xs self-end mb-2" (click)="removerProcedimento(i)">
+                <i-lucide name="trash-2" class="w-4 h-4 text-error"></i-lucide>
+              </button>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-primary btn-xs" (click)="adicionarProcedimento()">
+            <i-lucide name="plus" class="w-4 h-4"></i-lucide>
+            Adicionar Procedimento
+          </button>
+
+        </div>
       </div>
 
       <div class="flex justify-end gap-3 mt-6">

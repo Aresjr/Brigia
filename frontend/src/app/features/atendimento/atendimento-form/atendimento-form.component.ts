@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Atendimento, AtendimentoRequest } from '../atendimento.interface';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
@@ -8,6 +8,9 @@ import { FormComponent } from '../../shared/form.component';
 import { limitLength } from '../../../core/util-methods';
 import { NgxMaskDirective } from 'ngx-mask';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
+import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { ProcedimentosService } from '../../procedimentos/procedimentos.service';
+import { Procedimento } from '../../procedimentos/procedimento.interface';
 
 @Component({
   selector: 'app-atendimento-form',
@@ -19,15 +22,20 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dial
     LucideAngularModule,
     EmptyToNullDirective,
     NgxMaskDirective,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    NgSelectComponent,
+    NgOptionComponent,
+    NgNotFoundTemplateDirective
   ]
 })
 export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> implements OnInit {
   @Input() atendimento: Atendimento | null = null;
   titulo: string = 'Novo Atendimento';
   exibeConfirmCancelamento: boolean = false;
+  procedimentos: Procedimento[] = [];
 
-  constructor(protected override fb: FormBuilder) {
+  constructor(protected override fb: FormBuilder,
+              private procedimentosService: ProcedimentosService) {
     super(fb);
     this.form = this.fb.group({
       anamnese: [null],
@@ -36,13 +44,59 @@ export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> 
       evolucaoClinica: [null],
       examesSolicitados: [null],
       prescricoes: [null],
-      observacoes: [null]
+      observacoes: [null],
+      procedimentosLancados: this.fb.array([])
     });
   }
 
   ngOnInit() {
+    this.carregarProcedimentos();
     if (this.atendimento) {
       this.form.patchValue(this.atendimento);
+    }
+  }
+
+  get procedimentosLancados() {
+    return this.form.get('procedimentosLancados') as FormArray;
+  }
+
+  adicionarProcedimento() {
+    const procedimento = this.fb.group({
+      quantidade: [1, [Validators.required, Validators.min(1)]],
+      procedimentoId: [null, Validators.required],
+      valor: [null]
+    });
+
+    this.procedimentosLancados.push(procedimento);
+  }
+
+  removerProcedimento(index: number) {
+    this.procedimentosLancados.removeAt(index);
+  }
+
+  carregarProcedimentos() {
+    this.procedimentosService.listar().subscribe({
+      next: (response) => {
+        this.procedimentos = response.items;
+      }
+    });
+  }
+
+  atualizarValorProcedimento(index: number, procedimentoId: number) {
+    const procedimento = this.procedimentos.find(p => p.id === procedimentoId);
+    if (procedimento) {
+      const valor = procedimento.valorPadrao || 0;
+      const quantidade = this.procedimentosLancados.at(index).get('quantidade')?.value || 1;
+      this.procedimentosLancados.at(index).patchValue({
+        valor: valor * quantidade
+      });
+    }
+  }
+
+  atualizarValorPorQuantidade(index: number) {
+    const procedimentoId = this.procedimentosLancados.at(index).get('procedimentoId')?.value;
+    if (procedimentoId) {
+      this.atualizarValorProcedimento(index, procedimentoId);
     }
   }
 
