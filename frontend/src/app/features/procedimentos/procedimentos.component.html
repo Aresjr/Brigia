@@ -12,40 +12,40 @@
     </div>
   } @else {
     <div class="overflow-x-auto rounded-md min-h-96">
-      <table class="tabela-listagem">
+      <table class="tabela-listagem w-full table-fixed">
         <thead class="text-base-100 bg-primary">
         <tr>
-          <th (click)="ordenar('nome')" class="w-96 cabecalho-listagem">
+          <th (click)="ordenar('nome')" class="w-80 cabecalho-listagem truncate">
             <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
             Nome
           </th>
-          <th (click)="ordenar('codigo')" class="w-32 cabecalho-listagem">
+          <th (click)="ordenar('codigo')" class="w-32 cabecalho-listagem truncate">
             <lucide-icon *ngIf="getSortIcon('codigo')" [name]="getSortIcon('codigo')" class="icone-ordenacao"/>
             Código
           </th>
-          <th (click)="ordenar('especialidade')" class="w-96 cabecalho-listagem">
+          <th (click)="ordenar('especialidade')" class="w-64 cabecalho-listagem truncate">
             <lucide-icon *ngIf="getSortIcon('especialidade')" [name]="getSortIcon('especialidade')" class="icone-ordenacao"/>
             Especialidade
           </th>
-          <th (click)="ordenar('observacoes')" class="cabecalho-listagem">
+          <th (click)="ordenar('observacoes')" class="w-96 cabecalho-listagem truncate">
             <lucide-icon *ngIf="getSortIcon('observacoes')" [name]="getSortIcon('observacoes')" class="icone-ordenacao"/>
             Observações
           </th>
-          <th class="w-1"></th>
+          <th class="w-16"></th>
         </tr>
         </thead>
         <tbody class="bg-base-100">
           @for (procedimento of getItensPaginados(); track procedimento.id) {
             <tr class="border-b hover:bg-base-200 hover:cursor-pointer" [class.bg-error]="procedimento.excluido" [class.bg-opacity-50]="procedimento.excluido" (click)="selecionar(procedimento)">
-              <td class="w-96 px-6 py-2 whitespace-nowrap">
+              <td class="w-80 px-6 py-2 truncate">
                 {{procedimento.nome}}
                 @if (procedimento.excluido) {
                   <span class="excluido">Excluído</span>
                 }
               </td>
-              <td class="w-32 px-6 py-2 text-sm">{{procedimento.codigo}}</td>
-              <td class="w-72 px-6 py-2 text-sm">{{procedimento.especialidade.nome}}</td>
-              <td class="px-6 py-2 text-sm">{{procedimento.observacoes}}</td>
+              <td class="w-32 px-6 py-2 text-sm truncate">{{procedimento.codigo}}</td>
+              <td class="w-64 px-6 py-2 text-sm truncate">{{procedimento.especialidade.nome}}</td>
+              <td class="w-96 px-6 py-2 text-sm truncate">{{procedimento.observacoes}}</td>
               <td class="p-1 whitespace-nowrap text-right hover:bg-base-300 hover:cursor-pointer" (click)="toggleDropdown($event, procedimento.id)">
                   <lucide-icon name="ellipsis-vertical" class="h-5"  />
                   @if (dropdownAberto === procedimento.id) {

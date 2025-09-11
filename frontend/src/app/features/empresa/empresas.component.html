@@ -63,7 +63,7 @@
               <div>{{ empresa.valorMinimoMensal }}</div>
               <div>{{ empresa.minimoPorFuncionario }}</div>
               <div>{{ empresa.valorMes | currency:'BRL':'symbol':'1.2-2' }}</div>
-              <div>{{ empresa.observacao }}</div>
+              <div class="text-xs">{{ empresa.observacao }}</div>
 
               <div class="p-1 whitespace-nowrap text-right" (click)="toggleDropdown($event, empresa.id)">
                 <lucide-icon name="ellipsis-vertical" class="h-5 w-5 rounded-full hover:bg-base-300 hover:cursor-pointer"/>
