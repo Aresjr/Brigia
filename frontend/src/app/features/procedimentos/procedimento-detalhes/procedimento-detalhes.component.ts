@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PrecoProcedimentoConvenio, Procedimento, TabelaPrecoResponse } from '../procedimento.interface';
+import { Procedimento, TabelaPrecoResponse } from '../procedimento.interface';
 import { ProcedimentosService } from '../procedimentos.service';
-import { ToastrService } from 'ngx-toastr';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
+import { UserService } from '../../../core/user.service';
 
 @Component({
   selector: 'app-procedimento-detalhes',
@@ -14,12 +14,13 @@ import { FormsModule } from '@angular/forms';
 })
 export class ProcedimentoDetalhesComponent implements OnInit {
   @Input() procedimento: Procedimento | null = null;
+  @Output() editar = new EventEmitter<Procedimento>();
   @Output() fechou = new EventEmitter<void>();
   tabelaPreco: TabelaPrecoResponse | undefined = undefined;
   mostraTabelaConvenio: boolean = false;
 
   constructor(private procedimentosService: ProcedimentosService,
-              private toastr: ToastrService) {}
+              private userService: UserService) {}
 
   ngOnInit(): void {
     if (this.procedimento) {
@@ -35,15 +36,15 @@ export class ProcedimentoDetalhesComponent implements OnInit {
     this.fechou.emit();
   }
 
+  onEditar(procedimento: Procedimento): void {
+    this.editar.emit(procedimento);
+  }
+
   toggleTabelaConvenio() {
     this.mostraTabelaConvenio = !this.mostraTabelaConvenio;
   }
 
-  atualizarPreco(precoConvenio: PrecoProcedimentoConvenio) {
-    this.procedimentosService.atualizarPreco(precoConvenio).subscribe({
-      next: (response) => {
-        this.toastr.success('Preço atualizado');
-      }
-    });
+  exibeEditar() {
+    return !this.userService.isMedico();
   }
 }

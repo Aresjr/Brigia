@@ -42,6 +42,7 @@ export class ProcedimentoFormComponent implements OnInit {
     this.loadConvenios();
     if (this.procedimento) {
       this.form.patchValue(this.procedimento);
+      //TODO - dar patch nos preços também
     }
   }
 
@@ -74,7 +75,7 @@ export class ProcedimentoFormComponent implements OnInit {
     if (this.form.valid) {
       const formValue = this.form.value;
       const precos = formValue.precosConvenios.map((p: any) => ({
-        convenio: { id: p.convenioId },
+        convenioId: p.convenioId,
         preco: p.preco,
         repasse: p.repasse,
         unidade: null

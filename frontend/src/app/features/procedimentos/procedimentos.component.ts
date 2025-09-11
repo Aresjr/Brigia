@@ -103,4 +103,10 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
       }
     });
   }
+
+  mostrarEdicao(procedimento: Procedimento) {
+    this.itemEdicao = procedimento;
+    this.mostrarFormularioNovo = true;
+    this.itemSelecionado = null;
+  }
 }

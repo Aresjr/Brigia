@@ -11,66 +11,70 @@
     @if (procedimento) {
       <div class="grid grid-cols-1 gap-6">
         <div>
-          <p class="text-sm font-semibold uppercase tracking-wide text-neutral">
-            Nome
-          </p>
+          <p class="text-sm">Nome</p>
           <p class="mt-1 text-base font-medium">
             {{ procedimento.nome }}
           </p>
         </div>
         <div>
-          <p class="text-sm font-semibold uppercase tracking-wide text-neutral">
-            Código
-          </p>
+          <p class="text-sm">Código</p>
           <p class="mt-1 text-base font-medium">
             {{ procedimento.codigo }}
           </p>
         </div>
         <div>
-          <p class="text-sm font-semibold uppercase tracking-wide text-neutral">
-            Especialidade
-          </p>
+          <p class="text-sm">Especialidade</p>
           <p class="mt-1 text-base font-medium">
             {{ procedimento.especialidade.nome }}
           </p>
         </div>
+        <div>
+          <p class="text-sm">Preço Padrão (Particular)</p>
+          <p class="mt-1 text-base font-medium">
+            R$ {{ procedimento.valorPadrao || '-' }}
+          </p>
+        </div>
 
-        <div class=" border border-primary border-r">
-          <div class="p-3 flex items-center justify-between hover:bg-primary/40">
-            <p class="text-sm font-semibold uppercase tracking-wide text-neutral">
-              Preço Padrão (Particular)
-            </p>
-            <div class="inline right-0 font-medium">
-              R$ {{ procedimento.valorPadrao || '-' }}
-            </div>
+        <div class="bg-primary/10 text-primary rounded-lg overflow-hidden">
+          <div
+            class="p-3 flex items-center justify-between cursor-pointer hover:bg-primary/20 text-sm font-semibold tracking-wide"
+            (click)="toggleTabelaConvenio()">
+            <span>Preço Convênios</span>
+            <lucide-icon
+              [name]="mostraTabelaConvenio ? 'chevron-down' : 'chevron-right'"
+              class="w-4 h-4"/>
           </div>
-          <div>
-            <div class="p-3 flex items-center justify-between hover:bg-primary/40 text-sm hover:cursor-pointer font-semibold uppercase tracking-wide text-neutral" (click)="toggleTabelaConvenio()">
-              <div>Preço Convênios</div>
-              <div>
-                <lucide-icon [name]="mostraTabelaConvenio ? 'chevron-down' : 'chevron-right'" class="right-0 inline w-4 h-4"/>
+
+          @if (mostraTabelaConvenio) {
+            @if (tabelaPreco && tabelaPreco.tabelaConvenio.length > 0) {
+              <table class="min-w-full text-sm">
+                <tbody class="divide-y divide-primary/20">
+                  @for (precoConvenio of tabelaPreco.tabelaConvenio; track precoConvenio.id) {
+                    <tr class="hover:bg-primary/10">
+                      <td class="px-6 py-3">{{ precoConvenio.convenio.nome }}</td>
+                      <td class="px-6 py-3 w-28 text-right font-medium text-primary">
+                        R$ {{ precoConvenio.preco }}
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            }
+            @else {
+              <div class="p-4 text-sm italic text-gray-500">
+                Não há preços cadastrados para convênios para este procedimento.
               </div>
-            </div>
-            @if (mostraTabelaConvenio && tabelaPreco && tabelaPreco.tabelaConvenio.length > 0) {
-            <table class="min-w-full ">
-              <tbody>
-                @for (precoConvenio of tabelaPreco.tabelaConvenio; track precoConvenio.id) {
-                  <tr class="font-medium text-primary ">
-                    <td class="text-base px-3 py-1">{{ precoConvenio.convenio.nome }}</td>
-                    <td class="text-base px-3 py-1 right-0 w-28">
-                      R$ <input type="number" id="{{precoConvenio.id}}" class="w-16 inline text-right"
-                      [(ngModel)]="precoConvenio.preco"
-                      (change)="atualizarPreco(precoConvenio)" />
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
             }
-            @if (tabelaPreco && tabelaPreco.tabelaConvenio.length == 0) {
-              <span class="text-sm italic p-4">Não há preços cadastrados para convênios para este procedimento.</span>
-            }
-          </div>
+          }
+        </div>
+
+        <div class="flex justify-end gap-3 mt-2">
+          <button class="btn btn-ghost btn-sm" (click)="fechar()" >
+            Fechar
+          </button>
+          <button class="btn btn-primary btn-sm" (click)="onEditar(procedimento)" *ngIf="exibeEditar()" >
+            Editar
+          </button>
         </div>
 
       </div>

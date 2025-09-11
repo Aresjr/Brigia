@@ -56,7 +56,11 @@
 }
 
 .tab-atendimento {
-  @apply tab font-bold text-base-content/50 hover:text-base-content/70 checked:text-base-content;
+  @apply tab font-bold text-base-content/50 hover:text-primary/80;
+}
+
+.tab-atendimento:is(.tab-active, [aria-selected=true]):not(.tab-disabled):not([disabled]), .tab-atendimento:is(input:checked) {
+   @apply text-primary border-primary;
 }
 
 .toast-center-screen {

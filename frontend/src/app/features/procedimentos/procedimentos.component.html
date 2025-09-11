@@ -7,11 +7,11 @@
       <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
     </div>
   } @else if (itensExibicao.length === 0) {
-    <div class="text-center py-8 w-full bg-base-100 rounded-md">
+    <div class="text-center py-8 w-full bg-base-100 rounded-md shadow-md">
       <p>Nenhum registro encontrado.</p>
     </div>
   } @else {
-    <div class="overflow-x-auto rounded-md min-h-96">
+    <div class="overflow-x-auto rounded-md min-h-[26rem]">
       <table class="tabela-listagem w-full table-fixed">
         <thead class="text-base-100 bg-primary">
         <tr>
@@ -36,7 +36,8 @@
         </thead>
         <tbody class="bg-base-100">
           @for (procedimento of getItensPaginados(); track procedimento.id) {
-            <tr class="border-b hover:bg-base-200 hover:cursor-pointer" [class.bg-error]="procedimento.excluido" [class.bg-opacity-50]="procedimento.excluido" (click)="selecionar(procedimento)">
+            <tr class="border-b hover:bg-base-200 hover:cursor-pointer" [class.bg-error]="procedimento.excluido"
+                [class.bg-opacity-50]="procedimento.excluido" (click)="selecionar(procedimento)">
               <td class="w-80 px-6 py-2 truncate">
                 {{procedimento.nome}}
                 @if (procedimento.excluido) {
@@ -83,6 +84,7 @@
     <app-procedimento-detalhes
       [procedimento]="itemSelecionado"
       (fechou)="fecharDetalhes()"
+      (editar)="mostrarEdicao($event)"
     ></app-procedimento-detalhes>
   }
 

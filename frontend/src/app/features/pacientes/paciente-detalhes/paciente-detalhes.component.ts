@@ -7,6 +7,7 @@ import { CelularPipe } from '../../../core/pipes/celular.pipe';
 import { SexoPipe } from '../../../core/pipes/sexo.pipe';
 import { LucideAngularModule } from 'lucide-angular';
 import { Router } from '@angular/router';
+import { UserService } from '../../../core/user.service';
 
 @Component({
   selector: 'app-paciente-detalhes',
@@ -18,7 +19,7 @@ export class PacienteDetalhesComponent {
   @Input() paciente: Paciente | null = null;
   @Output() fechou = new EventEmitter<void>();
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private userService: UserService) {}
 
   fechar(): void {
     this.fechou.emit();
@@ -28,5 +29,9 @@ export class PacienteDetalhesComponent {
     this.router.navigate(['/agenda-diaria'], {
       state: { pacienteId }
     });
+  }
+
+  exibeCriarAgendamento() {
+    return !this.userService.isMedico();
   }
 }

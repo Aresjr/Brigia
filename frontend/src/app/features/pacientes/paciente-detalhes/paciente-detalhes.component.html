@@ -80,7 +80,7 @@
         <button class="btn btn-ghost btn-sm" (click)="fechar()" >
           Fechar
         </button>
-        <button class="btn btn-primary btn-sm" (click)="criarAgendamento(paciente.id)" >
+        <button class="btn btn-primary btn-sm" (click)="criarAgendamento(paciente.id)" *ngIf="exibeCriarAgendamento()" >
           Criar Agendamento
         </button>
       </div>

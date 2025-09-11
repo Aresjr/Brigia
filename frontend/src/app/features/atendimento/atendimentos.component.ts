@@ -36,7 +36,6 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
     const navigation = this.router.getCurrentNavigation();
     const agendamentoId = navigation?.extras.state?.['agendamentoId'];
     this.agendamentoId = agendamentoId ? agendamentoId : null;
-    console.log('this.agendamentoId', this.agendamentoId);
   }
 
   ngOnInit(): void {
