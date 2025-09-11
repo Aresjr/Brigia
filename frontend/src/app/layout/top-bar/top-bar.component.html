@@ -17,10 +17,10 @@
     </ng-select>
 
     <div *ngIf="showSearchBar" class="mr-3">
-      <lucide-icon name="search" class="w-4 h-4 absolute mt-3 ml-1 transform -translate-y-1/2"></lucide-icon>
+      <lucide-icon name="search" class="w-5 h-5 absolute mt-3.5 ml-1 transform -translate-y-1/2"></lucide-icon>
       <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearch($event)"
              id="filtro" placeholder="Filtrar" maxlength="20"
-             class="pl-7 pr-4 py-1 rounded-full focus:outline-none focus:ring-2 focus:ring-grey-900 focus:border-transparent shadow-md" />
+             class="pl-9 pr-4 py-1 h-9 rounded-full focus:outline-none focus:ring-2 focus:ring-grey-900 focus:border-transparent shadow-md" />
     </div>
     <button type="button" *ngIf="showAddNovo" (click)="onAddNovo()" class="btn btn-success btn-sm mr-4 h-9 shadow-md hover:shadow-lg">
       <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>

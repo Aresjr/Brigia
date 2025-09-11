@@ -48,6 +48,7 @@ module.exports = {
           "success-content": "#ffffff",
           "warning": "#facc15",     // Amarelo alerta
           "error": "#ef4444",       // Vermelho erro
+          "error-content": "#ffffff"
         },
       }
     ],

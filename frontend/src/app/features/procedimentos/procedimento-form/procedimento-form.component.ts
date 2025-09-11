@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Procedimento, ProcedimentoRequest } from '../procedimento.interface';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
+import { ConveniosService } from '../../convenio/convenios.service';
+import { Convenio } from '../../convenio/convenio.interface';
 
 @Component({
   selector: 'app-procedimento-form',
@@ -22,23 +24,66 @@ export class ProcedimentoFormComponent implements OnInit {
   @Output() cancel = new EventEmitter<void>();
 
   form: FormGroup;
+  convenios: Convenio[] = [];
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private conveniosService: ConveniosService
+  ) {
     this.form = this.fb.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
-      descricao: [null]
+      descricao: [null],
+      valorPadrao: [0, [Validators.required, Validators.min(0)]],
+      precosConvenios: this.fb.array([])
     });
   }
 
   ngOnInit() {
+    this.loadConvenios();
     if (this.procedimento) {
       this.form.patchValue(this.procedimento);
     }
   }
 
+  private loadConvenios() {
+    this.conveniosService.listar().subscribe(response => {
+      this.convenios = response.items;
+      this.initializePrecosConvenios();
+    });
+  }
+
+  private initializePrecosConvenios() {
+    const precosArray = this.form.get('precosConvenios') as FormArray;
+    precosArray.clear();
+
+    this.convenios.forEach(convenio => {
+      precosArray.push(this.fb.group({
+        convenioId: [convenio.id],
+        nome: [convenio.nome],
+        preco: [0, [Validators.required, Validators.min(0)]],
+        repasse: [0, [Validators.required, Validators.min(0)]]
+      }));
+    });
+  }
+
+  get precosConvenios() {
+    return this.form.get('precosConvenios') as FormArray;
+  }
+
   onSubmit() {
     if (this.form.valid) {
-      this.save.emit(this.form.value);
+      const formValue = this.form.value;
+      const precos = formValue.precosConvenios.map((p: any) => ({
+        convenio: { id: p.convenioId },
+        preco: p.preco,
+        repasse: p.repasse,
+        unidade: null
+      }));
+
+      this.save.emit({
+        ...formValue,
+        precosConvenios: precos
+      });
     } else {
       Object.keys(this.form.controls).forEach(field => {
         const control = this.form.get(field);

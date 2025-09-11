@@ -5,10 +5,8 @@ import { LucideAngularModule } from 'lucide-angular';
 import { Atendimento, AtendimentoRequest } from '../atendimento.interface';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
 import { FormComponent } from '../../shared/form.component';
-import { limitLength } from '../../../core/util-methods';
-import { NgxMaskDirective } from 'ngx-mask';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
-import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { ProcedimentosService } from '../../procedimentos/procedimentos.service';
 import { Procedimento } from '../../procedimentos/procedimento.interface';
 
@@ -21,11 +19,9 @@ import { Procedimento } from '../../procedimentos/procedimento.interface';
     ReactiveFormsModule,
     LucideAngularModule,
     EmptyToNullDirective,
-    NgxMaskDirective,
     ConfirmDialogComponent,
     NgSelectComponent,
-    NgOptionComponent,
-    NgNotFoundTemplateDirective
+    NgOptionComponent
   ]
 })
 export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> implements OnInit {
@@ -107,6 +103,4 @@ export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> 
     }
     this.cancel.emit();
   }
-
-  protected readonly limitLength = limitLength;
 }
