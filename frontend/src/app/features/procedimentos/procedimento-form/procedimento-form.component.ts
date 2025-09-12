@@ -1,11 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Procedimento, ProcedimentoRequest } from '../procedimento.interface';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
 import { ConveniosService } from '../../convenio/convenios.service';
 import { Convenio } from '../../convenio/convenio.interface';
+import { EspecialidadeService } from '../../especialidade/especialidade.service';
+import { Especialidade } from '../../especialidade/especialidade.interface';
+import { NgxMaskDirective } from 'ngx-mask';
+import { limitLength } from '../../../core/util-methods';
+import { FormComponent } from '../../shared/form.component';
 
 @Component({
   selector: 'app-procedimento-form',
@@ -15,24 +20,26 @@ import { Convenio } from '../../convenio/convenio.interface';
     CommonModule,
     ReactiveFormsModule,
     LucideAngularModule,
-    EmptyToNullDirective
+    EmptyToNullDirective,
+    NgxMaskDirective
   ]
 })
-export class ProcedimentoFormComponent implements OnInit {
+export class ProcedimentoFormComponent extends FormComponent<ProcedimentoRequest> implements OnInit {
   @Input() procedimento: Procedimento | null = null;
-  @Output() save = new EventEmitter<Partial<ProcedimentoRequest>>();
-  @Output() cancel = new EventEmitter<void>();
 
-  form: FormGroup;
   convenios: Convenio[] = [];
+  especialidades: Especialidade[] = [];
 
   constructor(
-    private fb: FormBuilder,
-    private conveniosService: ConveniosService
+    protected override fb: FormBuilder,
+    private conveniosService: ConveniosService,
+    private especialidadeService: EspecialidadeService
   ) {
+    super(fb);
     this.form = this.fb.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
-      descricao: [null],
+      observacoes: [null],
+      especialidadeId: [null, [Validators.required]],
       valorPadrao: [0, [Validators.required, Validators.min(0)]],
       precosConvenios: this.fb.array([])
     });
@@ -40,10 +47,16 @@ export class ProcedimentoFormComponent implements OnInit {
 
   ngOnInit() {
     this.loadConvenios();
+    this.loadEspecialidades();
     if (this.procedimento) {
       this.form.patchValue(this.procedimento);
-      //TODO - dar patch nos preços também
     }
+  }
+
+  private loadEspecialidades() {
+    this.especialidadeService.listar().subscribe(response => {
+      this.especialidades = response.items;
+    });
   }
 
   private loadConvenios() {
@@ -71,7 +84,7 @@ export class ProcedimentoFormComponent implements OnInit {
     return this.form.get('precosConvenios') as FormArray;
   }
 
-  onSubmit() {
+  override onSubmit() {
     if (this.form.valid) {
       const formValue = this.form.value;
       const precos = formValue.precosConvenios.map((p: any) => ({
@@ -93,12 +106,9 @@ export class ProcedimentoFormComponent implements OnInit {
     }
   }
 
-  onCancel() {
-    this.cancel.emit();
-  }
-
   get isEditMode(): boolean {
     return !!this.procedimento;
   }
 
+  protected readonly limitLength = limitLength;
 }

@@ -33,7 +33,4 @@ public class PrecoProcedimento extends BaseModel {
 
     @Column(name = "repasse")
     private BigDecimal repasse;
-
-    @Column(name = "observacao")
-    private String observacao;
 }

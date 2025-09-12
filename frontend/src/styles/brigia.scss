@@ -46,11 +46,6 @@
   @apply fixed right-0 top-0 h-full w-[36rem] bg-base-100 shadow-lg z-50 overflow-y-auto transform transition-all duration-500 ease-linear;
 }
 
-.tooltip-campo {
-  @apply absolute -mt-8 -ml-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200
-  pointer-events-none bg-neutral text-base-100 text-sm px-2 py-1 rounded-md whitespace-nowrap;
-}
-
 .placeholder-esquerdo {
   @apply absolute px-2 py-3 shrink-0 text-base text-neutral select-none sm:text-sm;
 }

@@ -6,6 +6,7 @@ import br.com.nemeia.brigia.dto.request.AtualizacaoPrecoRequest;
 import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ProcedimentoMapper;
+import br.com.nemeia.brigia.model.Convenio;
 import br.com.nemeia.brigia.model.Especialidade;
 import br.com.nemeia.brigia.model.PrecoProcedimento;
 import br.com.nemeia.brigia.model.Procedimento;
@@ -27,6 +28,7 @@ public class ProcedimentoService {
     private final ProcedimentoMapper mapper;
     private final SecurityUtils securityUtils;
     private final EspecialidadeService especialidadeService;
+    private final ConvenioService convenioService;
     private final PrecoProcedimentoService precoProcedimentoService;
 
     public Page<Procedimento> getPaged(int page, int size) {
@@ -46,7 +48,14 @@ public class ProcedimentoService {
 
         Procedimento procedimento = mapper.toEntity(request);
         procedimento.setEspecialidade(especialidade);
-        return repository.save(procedimento);
+
+        Procedimento procedimentoNovo = repository.save(procedimento);
+
+        request.precosConvenios().forEach(precoProcedimento -> {
+            Convenio convenio = convenioService.getById(precoProcedimento.convenioId());
+            precoProcedimentoService.save(procedimentoNovo, convenio, precoProcedimento);
+        });
+        return procedimentoNovo;
     }
 
     public Procedimento editProcedimento(Long id, ProcedimentoRequest request) {

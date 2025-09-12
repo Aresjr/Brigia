@@ -27,9 +27,8 @@
             </div>
           </label>
         </div>
-        <div class="w-[4rem] mr-4 group">
+        <div class="w-[4rem] mr-4 group tooltip text-left" data-tip="Horário inicial do agendamento">
           <label class="label-campo" for="hora">
-            <div class="tooltip-campo">Horário inicial do agendamento</div>
             Horário <span aria-hidden="true" class="text-error">*</span>
             <input type="text" formControlName="hora" maxlength="5" id="hora" required
                    mask="00:00" emptyToNull class="campo p-[7px]" [dropSpecialCharacters]="false"
@@ -39,9 +38,9 @@
             </div>
           </label>
         </div>
-        <div class="w-[5rem] mr-4 group" aria-placeholder="Duração em minutos" (mouseenter)="showTooltip = true" (mouseleave)="showTooltip = false" >
+        <div class="w-[5rem] mr-4 group tooltip text-left" aria-placeholder="Duração em minutos"
+             (mouseenter)="showTooltip = true" (mouseleave)="showTooltip = false" data-tip="Duração em minutos">
           <label class="label-campo" for="duracao">
-            <div class="tooltip-campo">Duração em minutos</div>
             Duração <span aria-hidden="true" class="text-error">*</span>
             <input type="number" formControlName="duracao" min="10" max="480" id="duracao" required
                    (input)="limitLength($event)" emptyToNull maxlength="3"
