@@ -92,7 +92,6 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
 
   restaurarItem(event: Event, convenio: Convenio) {
     event.stopPropagation();
-    this.dropdownAberto = null;
 
     this.conveniosService.restaurar(convenio.id).subscribe({
       next: () => {

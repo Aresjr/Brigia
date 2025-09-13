@@ -54,26 +54,6 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
     });
   }
 
-  handleAction(event: Event, action: string, profissional: Profissional) {
-    event.stopPropagation();
-    this.dropdownAberto = null;
-
-    switch (action) {
-      case 'agendar':
-        //TODO: Implementar agendamento de profissional
-        this.toastr.warning('Agenda de Profissional será implementada em breve.');
-        break;
-      case 'historico':
-        //TODO: Implementar histórico de profissional
-        this.toastr.warning('Histórico de Profissional será implementado em breve.');
-        break;
-      case 'excluir':
-        //TODO: Implementar exclusão de profissional
-        this.toastr.warning('Exclusão de Profissional será implementada em breve.');
-        break;
-    }
-  }
-
   override filter(profissional: Profissional, searchTerm: string): boolean | undefined {
     return profissional.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       profissional.celular?.includes(searchTerm) ||
@@ -101,5 +81,14 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
         }
       });
     }
+  }
+
+  restaurarItem($event: MouseEvent, profissional: Profissional) {
+    this.profissionaisService.restaurar(profissional.id).subscribe({
+      next: () => {
+        profissional.excluido = false;
+        this.toastr.success(`${this.nomeEntidade} restaurado com sucesso!`);
+      }
+    });
   }
 }

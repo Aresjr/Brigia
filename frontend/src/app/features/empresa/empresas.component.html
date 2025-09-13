@@ -38,16 +38,14 @@
             Valor Mês
           </div>
           <div>Observações</div>
-          <div>
-            <lucide-icon name="ellipsis-vertical" class="h-4"/>
-          </div>
+          <div></div>
         </div>
 
         <div class="flex flex-col gap-1 mt-2 min-h-[40rem]">
           <div *ngFor="let empresa of getItensPaginados()"
-               class="bg-base-100 hover:bg-base-200 rounded-lg flex items-center gap-4 border-l-8 border-primary" >
+               class="bg-base-100 hover:bg-base-200 rounded-lg flex items-center border-l-8 border-primary" >
 
-            <div class="grid grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_minmax(10px,20px)] gap-4 w-full px-2 py-2">
+            <div class="grid grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_minmax(10px,20px)] w-full px-2 py-2">
               <div>{{ empresa.nome }}</div>
 
               @if (empresa.plano) {
@@ -65,31 +63,33 @@
               <div>{{ empresa.valorMes | currency:'BRL':'symbol':'1.2-2' }}</div>
               <div class="text-xs">{{ empresa.observacao }}</div>
 
-              <div class="p-1 whitespace-nowrap text-right" (click)="toggleDropdown($event, empresa.id)">
-                <lucide-icon name="ellipsis-vertical" class="h-5 w-5 rounded-full hover:bg-base-300 hover:cursor-pointer"/>
-                @if (dropdownAberto === empresa.id) {
-                  <div class="absolute -ml-12 mt-1 rounded-md shadow-lg bg-base-100 ring-1 ring-accent ring-opacity-5 z-50">
-                    <div class="py-1 flex flex-col">
-                      <a *ngIf="!empresa.excluido"
-                         (click)="editar($event, empresa)"
-                         class="block px-4 py-2 text-sm text-neutral hover:bg-base-200 cursor-pointer">
+              <div class="text-right">
+                <div class="dropdown dropdown-end m-0 p-0" (click)="$event.stopPropagation()">
+                  <label tabindex="0" class="btn btn-ghost btn-sm m-0">
+                    <lucide-icon name="ellipsis-vertical" class="h-6" />
+                  </label>
+                  <ul tabindex="0" class="dropdown-content z-[1] menu bg-base-100 rounded-box p-1 shadow w-40">
+                    <li *ngIf="!empresa.excluido">
+                      <a (click)="editar($event, empresa)"
+                         class="block px-4 py-2 text-sm text-neutral hover:bg-base-200 cursor-pointer" >
                         Editar
                       </a>
-                      <a *ngIf="!empresa.excluido"
-                         (click)="perguntaExcluir($event, empresa)"
-                         class="block px-4 py-2 text-sm text-red-700 hover:bg-error/50 cursor-pointer">
+                    </li>
+                    <li *ngIf="!empresa.excluido">
+                      <a (click)="perguntaExcluir($event, empresa)"
+                         class="text-error hover:bg-error/50 cursor-pointer" >
                         Excluir
                       </a>
-                      <a *ngIf="empresa.excluido"
-                         (click)="restaurarItem($event, empresa)"
-                         class="btn btn-success btn-sm">
+                    </li>
+                    <li *ngIf="empresa.excluido">
+                      <a (click)="restaurarItem($event, empresa)"
+                         class="btn btn-sm text-success">
                         Restaurar
                       </a>
-                    </div>
-                  </div>
-                }
+                    </li>
+                  </ul>
+                </div>
               </div>
-
             </div>
           </div>
         </div>

@@ -92,7 +92,6 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
 
   restaurarItem(event: Event, empresa: Empresa) {
     event.stopPropagation();
-    this.dropdownAberto = null;
 
     this.empresasService.restaurar(empresa.id).subscribe({
       next: () => {

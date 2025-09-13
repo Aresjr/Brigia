@@ -11,7 +11,7 @@
       <p>Nenhum registro encontrado.</p>
     </div>
   } @else {
-    <div class="borda-tabela min-h-[26rem]">
+    <div class="min-h-[26rem]">
       <table class="tabela-listagem">
         <thead class="text-base-100 bg-primary">
         <tr>
@@ -31,7 +31,7 @@
             <lucide-icon *ngIf="getSortIcon('celular')" [name]="getSortIcon('celular')" class="icone-ordenacao"/>
             Celular
           </th>
-          <th class="w-1"></th>
+          <th class="p-0"></th>
         </tr>
         </thead>
         <tbody class="bg-base-100">
@@ -41,12 +41,33 @@
               <td class="px-6 py-2 whitespace-nowrap">{{profissional.email}}</td>
               <td class="px-6 py-2 whitespace-nowrap">{{profissional.crm}}</td>
               <td class="px-6 py-2 whitespace-nowrap">{{profissional.celular | celular}}</td>
-              <td class="p-1 whitespace-nowrap text-right hover:bg-base-300 hover:cursor-pointer" (click)="toggleDropdown($event, profissional.id)">
-                <div>
-                  <lucide-icon name="ellipsis-vertical" class="h-5" />
-                  @if (dropdownAberto === profissional.id) {
-                    <ng-template [ngTemplateOutlet]="acoesTemplate" [ngTemplateOutletContext]="{ profissional: profissional }"></ng-template>
-                  }
+              <td class="p-0 text-right w-4">
+                <div class="dropdown dropdown-end m-0 p-0" (click)="$event.stopPropagation()">
+                  <label tabindex="0" class="btn btn-ghost btn-sm m-0">
+                    <lucide-icon name="ellipsis-vertical" class="h-6" />
+                  </label>
+
+                  <ul tabindex="0" class="dropdown-content z-[1] menu bg-base-100 rounded-box p-1 shadow w-40">
+
+                    <li *ngIf="!profissional.excluido">
+                      <a (click)="editar($event, profissional)"
+                        class="block px-4 py-2 text-sm text-neutral hover:bg-base-200 cursor-pointer" >
+                        Editar
+                      </a>
+                    </li>
+                    <li *ngIf="!profissional.excluido">
+                      <a (click)="perguntaExcluir($event, profissional)"
+                        class="text-error hover:bg-error/50 cursor-pointer" >
+                        Excluir
+                      </a>
+                    </li>
+                    <li *ngIf="profissional.excluido">
+                      <a (click)="restaurarItem($event, profissional)"
+                         class="btn btn-success btn-sm">
+                        Restaurar
+                      </a>
+                    </li>
+                  </ul>
                 </div>
               </td>
             </tr>
@@ -76,30 +97,3 @@
   <app-fab (clicked)="onAddNovo()"></app-fab>
 
 </div>
-
-<ng-template #acoesTemplate let-profissional="profissional">
-  <div class="absolute -ml-28 mt-1 rounded-md shadow-lg bg-base-100 ring-1 ring-accent ring-opacity-5 z-50">
-    <div class="py-1 flex flex-col">
-      <a
-        (click)="handleAction($event, 'agendar', profissional)"
-        class="block px-4 py-2 text-sm text-neutral hover:bg-base-200 cursor-pointer" >
-        Agendar Consulta
-      </a>
-      <a
-        (click)="handleAction($event, 'historico', profissional)"
-        class="block px-4 py-2 text-sm text-neutral hover:bg-base-200 cursor-pointer" >
-        Ver Histórico
-      </a>
-      <a
-        (click)="editar($event, profissional)"
-        class="block px-4 py-2 text-sm text-neutral hover:bg-base-200 cursor-pointer" >
-        Editar
-      </a>
-      <a
-        (click)="handleAction($event, 'excluir', profissional)"
-        class="block px-4 py-2 text-sm text-red-700 hover:bg-error/50 cursor-pointer" >
-        Excluir
-      </a>
-    </div>
-  </div>
-</ng-template>

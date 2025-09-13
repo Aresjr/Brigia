@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
 import { Entidade } from './entidade.interface';
 
 type SortDirection = 'asc' | 'desc' | null;
@@ -19,7 +19,6 @@ export abstract class BaseListComponent<T extends object> {
   paginaAtual = 1;
   itensPorPagina = 10;
   totalPaginas = 1;
-  dropdownAberto: number | null = null;
   itemSelecionado: T | null = null;
   itemEdicao: T | null = null;
   mostrarFormularioNovo = false;
@@ -27,14 +26,6 @@ export abstract class BaseListComponent<T extends object> {
   nomeEntidade = '';
   exibeConfirmExclusao = false;
   idExclusao: number = 0;
-  fabOpen: boolean = false;
-
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    if (this.isDropdownAberto()) {
-      this.dropdownAberto = null;
-    }
-  }
 
   getItensPaginados(): T[] {
     const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
@@ -88,19 +79,6 @@ export abstract class BaseListComponent<T extends object> {
     this.mudarPagina(page);
   }
 
-  isDropdownAberto(): boolean {
-    return this.dropdownAberto !== null;
-  }
-
-  toggleDropdown(event: Event, id: number): void {
-    event.stopPropagation();
-    if (this.dropdownAberto === id) {
-      this.dropdownAberto = null;
-    } else {
-      this.dropdownAberto = id;
-    }
-  }
-
   selecionar(item: T): void {
     this.itemSelecionado = item;
   }
@@ -125,14 +103,12 @@ export abstract class BaseListComponent<T extends object> {
 
   editar(event: Event, item: T) {
     event.stopPropagation();
-    this.dropdownAberto = null;
     this.itemEdicao = item;
     this.mostrarFormularioNovo = true;
   }
 
   perguntaExcluir(event: Event, entidade: Entidade) {
     event.stopPropagation();
-    this.dropdownAberto = null;
     this.idExclusao = entidade.id;
     this.exibeConfirmExclusao = true;
   }
@@ -152,7 +128,7 @@ export abstract class BaseListComponent<T extends object> {
     return false;
   }
 
-  excluir() {
+  excluir(id: number = this.idExclusao) {
     this.exibeConfirmExclusao = false;
   }
 

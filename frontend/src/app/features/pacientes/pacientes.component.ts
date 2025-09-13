@@ -13,6 +13,7 @@ import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { FabComponent } from '../shared/fab/fab.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pacientes',
@@ -33,7 +34,8 @@ import { FabComponent } from '../shared/fab/fab.component';
 })
 export class PacientesComponent extends BaseListComponent<Paciente> implements OnInit {
 
-  constructor(private pacientesService: PacienteService, private toastr: ToastrService) {
+  constructor(private pacientesService: PacienteService, private toastr: ToastrService,
+              private router: Router) {
     super();
   }
 
@@ -58,7 +60,6 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
 
   handleAction(event: Event, action: string, paciente: Paciente) {
     event.stopPropagation();
-    this.dropdownAberto = null;
 
     switch (action) {
       case 'agendar':
@@ -103,5 +104,15 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
         }
       });
     }
+  }
+
+  criarAgendamento(pacienteId: number) {
+    return this.router.navigate(['/agenda-diaria'], {
+      state: { pacienteId }
+    });
+  }
+
+  verHistorico(id: number) {
+    this.toastr.warning('Histórico de Paciente será implementado em breve.');
   }
 }

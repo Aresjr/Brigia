@@ -91,8 +91,7 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
   }
 
   restaurarItem(event: Event, especialidade: Especialidade) {
-    event.stopPropagation();
-    this.dropdownAberto = null;
+    //event.stopPropagation();
 
     this.especialidadesService.restaurar(especialidade.id).subscribe({
       next: () => {

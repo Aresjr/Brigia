@@ -14,12 +14,8 @@
   @apply block font-medium;
 }
 
-.borda-tabela {
-  @apply overflow-x-auto rounded-md;
-}
-
 .tabela-listagem {
-  @apply min-w-full table-auto text-sm shadow-md;
+  @apply min-w-full table-auto text-sm rounded-md shadow-md;
 }
 
 .cabecalho-listagem {

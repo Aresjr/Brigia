@@ -96,7 +96,6 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
 
   restaurar(event: Event, procedimento: Procedimento) {
     event.stopPropagation();
-    this.dropdownAberto = null;
 
     this.procedimentosService.restaurar(procedimento.id).subscribe({
       next: () => {

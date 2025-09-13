@@ -101,7 +101,6 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
 
   restaurarItem(event: Event, atendimento: Atendimento) {
     event.stopPropagation();
-    this.dropdownAberto = null;
 
     this.atendimentosService.restaurar(atendimento.id).subscribe({
       next: () => {
