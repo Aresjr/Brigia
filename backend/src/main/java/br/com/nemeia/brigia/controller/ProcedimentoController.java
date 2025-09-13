@@ -1,11 +1,9 @@
 package br.com.nemeia.brigia.controller;
 
-import br.com.nemeia.brigia.dto.request.AtualizacaoPrecoRequest;
 import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.dto.response.PrecoProcedimentoResponse;
 import br.com.nemeia.brigia.dto.response.ProcedimentoResponse;
-import br.com.nemeia.brigia.dto.response.TabelaPrecoResponse;
 import br.com.nemeia.brigia.mapper.ProcedimentoMapper;
 import br.com.nemeia.brigia.service.ConvenioService;
 import br.com.nemeia.brigia.service.ProcedimentoService;
@@ -27,7 +25,8 @@ public class ProcedimentoController {
     private final ConvenioService convenioService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize(
+            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<ProcedimentoResponse> getAllProcedimentos(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
@@ -68,23 +67,16 @@ public class ProcedimentoController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize(
+            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public ProcedimentoResponse getProcedimentoById(@PathVariable Long id) {
         log.info("GET /procedimentos/{} - buscando procedimento pelo ID", id);
         return mapper.toResponse(service.getById(id));
     }
 
-    @GetMapping("/{id}/tabela-preco")
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
-    public TabelaPrecoResponse getTabelaPrecoProcedimentoById(@PathVariable Long id) {
-        log.info(
-                "GET /procedimentos/{}/tabela-preco - buscando tabela de preço do procedimento ID",
-                id);
-        return mapper.toTabelaPreco(service.getById(id));
-    }
-
     @GetMapping("/{id}/tabela-preco/{convenioId}")
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize(
+            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PrecoProcedimentoResponse getPrecoProcedimentoConvenio(
             @PathVariable Long id, @PathVariable Long convenioId) {
         log.info(
@@ -92,14 +84,5 @@ public class ProcedimentoController {
                 id,
                 convenioId);
         return mapper.toPrecoProcedimento(service.getById(id), convenioService.getById(convenioId));
-    }
-
-    @PatchMapping("/{id}/atualizar-preco")
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
-    public ResponseEntity<Void> atualizarPrecoProcedimento(
-            @PathVariable Long id, @RequestBody AtualizacaoPrecoRequest request) {
-        log.info("PATCH /procedimentos/{}/atualizar-preco", id);
-        service.atualizaPrecoProcedimento(request);
-        return ResponseEntity.noContent().build();
     }
 }

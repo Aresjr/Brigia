@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.nemeia</groupId>
 	<artifactId>brigia</artifactId>
-	<version>0.0.4</version>
+	<version>0.0.5</version>
 	<name>Brigida</name>
 	<description>Brigida - Software Clínico</description>
 	<url/>

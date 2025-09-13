@@ -48,7 +48,8 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         if (securityUtils.getLoggedUserRoles().contains(RoleUsuario.MEDICO.toString())) {
             Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
 
-            Long profissionalId = profissionalService.getByUsuarioId(securityUtils.getLoggedUserId()).getId();
+            Long profissionalId =
+                    profissionalService.getByUsuarioId(securityUtils.getLoggedUserId()).getId();
             return repository.findAllByProfissionalIdIs(pageable, profissionalId);
         } else {
             return getPaged(page, size, false);

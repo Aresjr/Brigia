@@ -35,8 +35,10 @@ public class PrecoProcedimentoService {
         return repository.save(precoProcedimento);
     }
 
-    public PrecoProcedimento save(Procedimento procedimento, Convenio convenio, PrecoProcedimentoRequest request) {
-        PrecoProcedimento precoProcedimento = mapper.toPrecoProcedimento(procedimento, convenio, request);
+    public PrecoProcedimento save(
+            Procedimento procedimento, Convenio convenio, PrecoProcedimentoRequest request) {
+        PrecoProcedimento precoProcedimento =
+                mapper.toPrecoProcedimento(procedimento, convenio, request);
         return repository.save(precoProcedimento);
     }
 }

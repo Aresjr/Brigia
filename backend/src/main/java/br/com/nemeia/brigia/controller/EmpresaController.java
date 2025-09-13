@@ -27,7 +27,8 @@ public class EmpresaController {
     private final EmpresaPlanoMapper empresaPlanoMapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize(
+            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<EmpresaResponse> getAllEmpresas(
             @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
             @RequestParam(defaultValue = "0") int page,
@@ -68,14 +69,16 @@ public class EmpresaController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize(
+            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public EmpresaResponse getEmpresaById(@PathVariable Long id) {
         log.info("GET /empresas/{} - buscando empresa pelo ID", id);
         return mapper.toResponse(service.getById(id));
     }
 
     @GetMapping("/planos")
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize(
+            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<EmpresaPlanoResponse> getPlanos(
             @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
             @RequestParam(defaultValue = "0") int page,

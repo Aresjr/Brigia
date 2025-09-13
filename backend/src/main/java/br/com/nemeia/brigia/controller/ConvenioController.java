@@ -21,7 +21,8 @@ public class ConvenioController {
     private final ConvenioMapper mapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize(
+            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<ConvenioResponse> getAllConvenios(
             @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
             @RequestParam(defaultValue = "0") int page,
@@ -62,7 +63,8 @@ public class ConvenioController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize(
+            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public ConvenioResponse getConvenioById(@PathVariable Long id) {
         log.info("GET /convenios/{} - buscando convenio pelo ID", id);
         return mapper.toResponse(service.getById(id));

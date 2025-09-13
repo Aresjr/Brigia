@@ -2,6 +2,7 @@ package br.com.nemeia.brigia.dto.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ProcedimentoResponse(
         Long id,
@@ -11,4 +12,5 @@ public record ProcedimentoResponse(
         EspecialidadeResponse especialidade,
         String observacoes,
         LocalDateTime criadoEm,
+        List<PrecoProcedimentoResponse> precosProcedimento,
         Boolean excluido) {}

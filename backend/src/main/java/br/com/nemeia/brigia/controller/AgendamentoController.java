@@ -22,7 +22,8 @@ public class AgendamentoController {
     private final AgendamentoMapper mapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize(
+            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<AgendamentoResponse> getAllAgendamentos(
             @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
             @RequestParam(defaultValue = "0") int page,
@@ -63,7 +64,8 @@ public class AgendamentoController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize(
+            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public AgendamentoResponse getAgendamentoById(@PathVariable Long id) {
         log.info("GET /agendamentos/{} - buscando agendamento pelo ID", id);
         return mapper.toResponse(service.getById(id));

@@ -2,13 +2,11 @@ package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.Utils;
 import br.com.nemeia.brigia.auth.SecurityUtils;
-import br.com.nemeia.brigia.dto.request.AtualizacaoPrecoRequest;
 import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ProcedimentoMapper;
 import br.com.nemeia.brigia.model.Convenio;
 import br.com.nemeia.brigia.model.Especialidade;
-import br.com.nemeia.brigia.model.PrecoProcedimento;
 import br.com.nemeia.brigia.model.Procedimento;
 import br.com.nemeia.brigia.repository.ProcedimentoRepository;
 import java.time.LocalDateTime;
@@ -49,10 +47,14 @@ public class ProcedimentoService {
         procedimento.setEspecialidade(especialidade);
 
         Procedimento procedimentoNovo = repository.save(procedimento);
-        request.precosConvenios().forEach(precoProcedimento -> {
-            Convenio convenio = convenioService.getById(precoProcedimento.convenioId());
-            precoProcedimentoService.save(procedimentoNovo, convenio, precoProcedimento);
-        });
+        request.precosConvenios()
+                .forEach(
+                        precoProcedimento -> {
+                            Convenio convenio =
+                                    convenioService.getById(precoProcedimento.convenioId());
+                            precoProcedimentoService.save(
+                                    procedimentoNovo, convenio, precoProcedimento);
+                        });
         return procedimentoNovo;
     }
 
@@ -65,11 +67,14 @@ public class ProcedimentoService {
 
         Procedimento procedimentoAtualizado = repository.save(procedimento);
 
-        // Atualiza os preços dos convênios
-        request.precosConvenios().forEach(precoProcedimento -> {
-            Convenio convenio = convenioService.getById(precoProcedimento.convenioId());
-            precoProcedimentoService.save(procedimentoAtualizado, convenio, precoProcedimento);
-        });
+        request.precosConvenios()
+                .forEach(
+                        precoProcedimento -> {
+                            Convenio convenio =
+                                    convenioService.getById(precoProcedimento.convenioId());
+                            precoProcedimentoService.save(
+                                    procedimentoAtualizado, convenio, precoProcedimento);
+                        });
 
         return procedimentoAtualizado;
     }
@@ -90,9 +95,5 @@ public class ProcedimentoService {
         procedimento.setExcluidoEm(null);
         procedimento.setExcluidoPor(null);
         repository.save(procedimento);
-    }
-
-    public PrecoProcedimento atualizaPrecoProcedimento(AtualizacaoPrecoRequest request) {
-        return precoProcedimentoService.atualizaPreco(request.id(), request.preco());
     }
 }

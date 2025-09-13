@@ -6,7 +6,6 @@ import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.model.Convenio;
 import br.com.nemeia.brigia.model.PrecoProcedimento;
 import br.com.nemeia.brigia.model.Procedimento;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +23,9 @@ public class ProcedimentoMapper {
             return null;
         }
 
+        List<PrecoProcedimentoResponse> precosResponse =
+                procedimento.getPrecos().stream().map(this::toResponse).toList();
+
         return new ProcedimentoResponse(
                 procedimento.getId(),
                 procedimento.getNome(),
@@ -32,6 +34,7 @@ public class ProcedimentoMapper {
                 especialidadeMapper.toResponse(procedimento.getEspecialidade()),
                 procedimento.getObservacoes(),
                 procedimento.getCriadoEm(),
+                precosResponse,
                 procedimento.getExcluido());
     }
 
@@ -47,46 +50,26 @@ public class ProcedimentoMapper {
                 request.codigo(), request.nome(), request.observacoes(), request.valorPadrao());
     }
 
-    public TabelaPrecoResponse toTabelaPreco(Procedimento procedimento) {
-        List<PrecoProcedimentoResponse> tabelaConvenio = new ArrayList<>();
-
-        procedimento
-                .getPrecos()
-                .forEach(
-                        precoProcedimento -> {
-                            if (precoProcedimento.getConvenio() != null) {
-                                var ppr =
-                                        toResponse(
-                                                precoProcedimento, precoProcedimento.getConvenio());
-                                tabelaConvenio.add(ppr);
-                            }
-                        });
-
-        return new TabelaPrecoResponse(toResponse(procedimento), tabelaConvenio);
-    }
-
     public PrecoProcedimentoResponse toPrecoProcedimento(
             Procedimento procedimento, Convenio convenio) {
         return toResponse(
                 procedimento.getPrecos().stream()
-                        .filter(pp -> convenio.getId().equals(pp.getConvenio().getId()))
+                        .filter(preco -> convenio.getId().equals(preco.getConvenio().getId()))
                         .findFirst()
                         .orElseThrow(
                                 () ->
                                         new NotFoundException(
                                                 String.format(
-                                                        "Tabela de preço não encontrado para procedimento %s e convênio %s",
-                                                        procedimento.getId(), convenio.getId()))),
-                convenio);
+                                                        "Preço não encontrado para procedimento %s e convênio %s",
+                                                        procedimento.getId(), convenio.getId()))));
     }
 
-    private PrecoProcedimentoResponse toResponse(
-            PrecoProcedimento precoProcedimento, Convenio convenio) {
+    private PrecoProcedimentoResponse toResponse(PrecoProcedimento precoProcedimento) {
         return new PrecoProcedimentoResponse(
                 precoProcedimento.getId(),
                 precoProcedimento.getPreco(),
                 precoProcedimento.getRepasse(),
-                convenioMapper.toResponse(convenio),
+                convenioMapper.toResponse(precoProcedimento.getConvenio()),
                 precoProcedimento.getCriadoEm(),
                 "", // TODO - colocar nome do usuário
                 precoProcedimento.getAtualizadoEm(),
