@@ -72,6 +72,7 @@
   @if (mostrarFormularioNovo) {
     <app-atendimento-form
       [atendimento]="itemEdicao"
+      [agendamentoId]="agendamentoId"
       (save)="onSalvarNovoAtendimento($event)"
       (cancel)="cancelarNovo()"
     ></app-atendimento-form>
@@ -84,6 +85,6 @@
     (cancel)="fecharConfirmExclusao()"
   ></app-confirm-dialog>
 
-  <app-fab (clicked)="onAddNovo()"></app-fab>
+  <app-fab (clicked)="novoAgendamento()"></app-fab>
 
 </div>

@@ -11,7 +11,7 @@ interface SortState<T> {
 @Component({
   template: '',
 })
-export abstract class BaseListComponent<T extends object> {
+export abstract class BaseListComponent<T extends Entidade> {
 
   itensExibicao: T[] = [];
   itensInternos: T[] = [];

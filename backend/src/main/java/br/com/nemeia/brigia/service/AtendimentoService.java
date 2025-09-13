@@ -11,35 +11,33 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepository> {
 
-    private final PacienteService pacienteService;
     private final ProfissionalService profissionalService;
     private final AgendamentoService agendamentoService;
-    private final ConvenioService convenioService;
-    private final EmpresaService empresaService;
-    private final EspecialidadeService especialidadeService;
+    private final ProcedimentoService procedimentoService;
+    private final PrecoProcedimentoService precoProcedimentoService;
     private final AtendimentoMapper mapper;
 
     public AtendimentoService(
             AtendimentoRepository repository,
             SecurityUtils securityUtils,
             AtendimentoMapper mapper,
-            PacienteService pacienteService,
             ProfissionalService profissionalService,
             AgendamentoService agendamentoService,
-            EspecialidadeService especialidadeService,
-            EmpresaService empresaService,
-            ConvenioService convenioService) {
+            ProcedimentoService procedimentoService,
+            PrecoProcedimentoService precoProcedimentoService) {
         super(repository, securityUtils);
         this.mapper = mapper;
-        this.pacienteService = pacienteService;
         this.profissionalService = profissionalService;
         this.agendamentoService = agendamentoService;
-        this.especialidadeService = especialidadeService;
-        this.empresaService = empresaService;
-        this.convenioService = convenioService;
+        this.procedimentoService = procedimentoService;
+        this.precoProcedimentoService = precoProcedimentoService;
     }
 
     public Page<Atendimento> getPaged(int page, int size, boolean mostrarExcluidos) {
@@ -50,12 +48,23 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
     public Atendimento createAtendimento(AtendimentoRequest request) {
         Atendimento atendimento = mapper.toEntity(request);
 
-        atendimento.setPaciente(pacienteService.getById(request.pacienteId()));
+        Agendamento agendamento = agendamentoService.getById(request.agendamentoId());
+
         atendimento.setUnidade(new Unidade(securityUtils.getLoggedUserUnidadeId()));
         atendimento.setProfissional(
                 profissionalService.getByUsuarioId(securityUtils.getLoggedUserId()));
 
-        setEntidades(request, atendimento);
+        setEntidades(request, atendimento, agendamento);
+
+        List<ProcedimentoAtendimento> pa = new ArrayList<>();
+        List<BigDecimal> valoresLancados = new ArrayList<>();
+        request.procedimentos().forEach( par -> {
+            Procedimento procedimento = procedimentoService.getById(par.procedimentoId());
+            valoresLancados.add(precoProcedimentoService.getPreco(procedimento, agendamento.getConvenio()));
+            pa.add(new ProcedimentoAtendimento(atendimento, procedimento, par.quantidade()));
+        });
+        atendimento.setProcedimentos(pa);
+        atendimento.setValorTotal(valoresLancados.stream().reduce(BigDecimal.ZERO, BigDecimal::add));
 
         return repository.save(atendimento);
     }
@@ -63,7 +72,9 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
     public Atendimento update(@Valid AtendimentoRequest request, Long id) {
         Atendimento original = getById(id);
         Atendimento atendimentoUpdate = mapper.toEntity(request);
-        setEntidades(request, atendimentoUpdate);
+
+        Agendamento agendamento = agendamentoService.getById(request.agendamentoId());
+        setEntidades(request, atendimentoUpdate, agendamento);
 
         atendimentoUpdate.setId(original.getId());
         atendimentoUpdate.setUnidade(original.getUnidade());
@@ -73,19 +84,12 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         return repository.save(atendimentoUpdate);
     }
 
-    private void setEntidades(AtendimentoRequest request, Atendimento atendimento) {
-        if (request.agendamentoId() != null) {
-            atendimento.setAgendamento(agendamentoService.getById(request.agendamentoId()));
-        }
-        if (request.convenioId() != null) {
-            atendimento.setConvenio(convenioService.getById(request.convenioId()));
-        }
-        if (request.empresaId() != null) {
-            atendimento.setEmpresa(empresaService.getById(request.empresaId()));
-        }
-        if (request.especialidadeId() != null) {
-            atendimento.setEspecialidade(especialidadeService.getById(request.especialidadeId()));
-        }
+    private void setEntidades(AtendimentoRequest request, Atendimento atendimento, Agendamento agendamento) {
+        atendimento.setAgendamento(agendamento);
+        atendimento.setConvenio(agendamento.getConvenio());
+        atendimento.setEmpresa(agendamento.getEmpresa());
+        atendimento.setEspecialidade(agendamento.getEspecialidade());
+        atendimento.setFormaPagamento(agendamento.getFormaPagamento());
     }
 
     @Override

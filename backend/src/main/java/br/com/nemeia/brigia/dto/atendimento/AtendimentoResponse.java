@@ -2,7 +2,6 @@ package br.com.nemeia.brigia.dto.atendimento;
 
 import br.com.nemeia.brigia.dto.response.*;
 import br.com.nemeia.brigia.model.FormaPagamento;
-import br.com.nemeia.brigia.model.StatusAtendimento;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -17,6 +16,5 @@ public record AtendimentoResponse(
         ConvenioResponse convenio,
         EmpresaResponse empresa,
         EspecialidadeResponse especialidade,
-        StatusAtendimento status,
         FormaPagamento formaPagamento,
         String observacoes) {}

@@ -30,7 +30,7 @@ import { FabComponent } from '../shared/fab/fab.component';
 })
 export class AtendimentosComponent extends BaseListComponent<Atendimento> implements OnInit {
   override nomeEntidade = 'Atendimento';
-  private agendamentoId: number;
+  agendamentoId: number;
 
   constructor(private atendimentosService: AtendimentosService, private toastr: ToastrService,
               private router: Router) {
@@ -108,5 +108,9 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
         this.toastr.success(`${this.nomeEntidade} restaurado`);
       }
     });
+  }
+
+  novoAgendamento() {
+    this.toastr.info('Será implementado logo...');
   }
 }

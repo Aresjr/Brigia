@@ -1,8 +1,13 @@
 package br.com.nemeia.brigia.model;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +21,10 @@ public class Atendimento extends BaseModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "agendamento_id")
+    private Agendamento agendamento;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "paciente_id", nullable = false)
@@ -39,10 +48,6 @@ public class Atendimento extends BaseModel {
     private Unidade unidade;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "agendamento_id")
-    private Agendamento agendamento;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "convenio_id")
     private Convenio convenio;
 
@@ -53,10 +58,6 @@ public class Atendimento extends BaseModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "especialidade_id")
     private Especialidade especialidade;
-
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "status", length = 15, nullable = false)
-    private StatusAtendimento status;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "forma_pagamento", length = 15)
@@ -82,4 +83,10 @@ public class Atendimento extends BaseModel {
 
     @Column(name = "observacoes", columnDefinition = "TEXT")
     private String observacoes;
+
+    @OneToMany(mappedBy = "atendimento", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProcedimentoAtendimento> procedimentos = new ArrayList<>();
+
+    @Column(name = "valor_total")
+    private BigDecimal valorTotal;
 }

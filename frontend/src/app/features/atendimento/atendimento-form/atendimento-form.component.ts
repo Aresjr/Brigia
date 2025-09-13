@@ -27,6 +27,7 @@ import { Procedimento } from '../../procedimentos/procedimento.interface';
 })
 export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> implements OnInit {
   @Input() atendimento: Atendimento | null = null;
+  @Input() agendamentoId: number | null = null;
   titulo: string = 'Novo Atendimento';
   exibeConfirmCancelamento: boolean = false;
   procedimentos: Procedimento[] = [];
@@ -42,7 +43,8 @@ export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> 
       examesSolicitados: [null],
       prescricoes: [null],
       observacoes: [null],
-      procedimentosLancados: this.fb.array([])
+      agendamentoId: [null],
+      procedimentos: this.fb.array([])
     });
   }
 
@@ -50,11 +52,14 @@ export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> 
     this.carregarProcedimentos();
     if (this.atendimento) {
       this.form.patchValue(this.atendimento);
+      this.form.patchValue({
+        agendamentoId: this.agendamentoId
+      });
     }
   }
 
   get procedimentosLancados() {
-    return this.form.get('procedimentosLancados') as FormArray;
+    return this.form.get('procedimentos') as FormArray;
   }
 
   adicionarProcedimento() {

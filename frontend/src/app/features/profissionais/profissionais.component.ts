@@ -30,6 +30,7 @@ import { FabComponent } from '../shared/fab/fab.component';
   standalone: true
 })
 export class ProfissionaisComponent extends BaseListComponent<Profissional> implements OnInit {
+  override nomeEntidade = 'Profissional';
 
   constructor(private profissionaisService: ProfissionaisService, private toastr: ToastrService) {
     super();

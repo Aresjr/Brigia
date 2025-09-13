@@ -29,6 +29,7 @@ import { FabComponent } from '../shared/fab/fab.component';
   ]
 })
 export class EmpresasComponent extends BaseListComponent<Empresa> implements OnInit {
+  override nomeEntidade = 'Empresa';
   override itensPorPagina = 10;
 
   constructor(private empresasService: EmpresasService, private toastr: ToastrService) {

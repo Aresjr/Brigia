@@ -59,6 +59,8 @@ export class BackendService {
       this.toastr.error('Sessão expirada, faça login novamente');
       this.router.navigate(['/login']);
       return EMPTY;
+    } else if (error.status === 403) {
+      this.toastr.error('Você não tem permissão');
     }
     return throwError(() => error);
   }

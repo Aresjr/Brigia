@@ -42,7 +42,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
 
   carregarProcedimentos(): void {
     this.isLoading = true;
-    this.procedimentosService.listar().subscribe({
+    this.procedimentosService.listar(true).subscribe({
       next: (response) => {
         this.itensInternos = response.items;
         this.itensExibicao = [...this.itensInternos];

@@ -26,7 +26,7 @@ public class ProcedimentoController {
 
     @GetMapping
     @PreAuthorize(
-            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+            "hasAuthority('FATURAMENTO') or hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<ProcedimentoResponse> getAllProcedimentos(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
@@ -35,7 +35,7 @@ public class ProcedimentoController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
     public ProcedimentoResponse createProcedimento(
             @Valid @RequestBody ProcedimentoRequest request) {
         log.info("POST /procedimentos");
@@ -43,7 +43,7 @@ public class ProcedimentoController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
     public ProcedimentoResponse updateProcedimento(
             @Valid @RequestBody ProcedimentoRequest request, @PathVariable Long id) {
         log.info("PUT /procedimentos - atualizando procedimento ID {}", id);
@@ -51,7 +51,7 @@ public class ProcedimentoController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteProcedimento(@PathVariable Long id) {
         log.info("DELETE /procedimentos - excluindo procedimento ID {}", id);
         service.deleteProcedimento(id);

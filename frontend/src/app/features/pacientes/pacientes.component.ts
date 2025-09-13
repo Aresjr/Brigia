@@ -33,6 +33,7 @@ import { Router } from '@angular/router';
   standalone: true
 })
 export class PacientesComponent extends BaseListComponent<Paciente> implements OnInit {
+  override nomeEntidade = 'Paciente';
 
   constructor(private pacientesService: PacienteService, private toastr: ToastrService,
               private router: Router) {

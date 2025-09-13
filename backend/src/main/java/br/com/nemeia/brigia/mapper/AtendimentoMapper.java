@@ -38,7 +38,6 @@ public class AtendimentoMapper {
                 convenioMapper.toResponse(atendimento.getConvenio()),
                 empresaMapper.toResponse(atendimento.getEmpresa()),
                 especialidadeMapper.toResponse(atendimento.getEspecialidade()),
-                atendimento.getStatus(),
                 atendimento.getFormaPagamento(),
                 atendimento.getObservacoes());
     }
