@@ -1,0 +1,17 @@
+<div class="fixed bottom-6 right-6 flex flex-col items-end gap-2">
+  <div
+    class="flex flex-col items-end gap-2 transition-all duration-300"
+    [class.opacity-0]="!fabOpen"
+    [class.translate-y-4]="!fabOpen"
+    [class.pointer-events-none]="!fabOpen" >
+    <div>Alguma ação
+      <button class="btn btn-success">
+        <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
+      </button>
+    </div>
+  </div>
+
+  <button class="btn btn-primary btn-circle btn-lg" (click)="subButtons ? toggle() : this.clicked.emit()">
+    <lucide-icon name="plus" class="w-6 h-6"></lucide-icon>
+  </button>
+</div>

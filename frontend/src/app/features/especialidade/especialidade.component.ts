@@ -10,6 +10,7 @@ import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
+import { FabComponent } from '../shared/fab/fab.component';
 
 @Component({
   selector: 'app-especialidades',
@@ -22,7 +23,8 @@ import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
     EspecialidadeFormComponent,
     PaginationComponent,
     ConfirmDialogComponent,
-    TopBarComponent
+    TopBarComponent,
+    FabComponent
   ]
 })
 export class EspecialidadeComponent extends BaseListComponent<Especialidade> implements OnInit {

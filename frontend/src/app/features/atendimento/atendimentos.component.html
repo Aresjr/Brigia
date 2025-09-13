@@ -84,10 +84,6 @@
     (cancel)="fecharConfirmExclusao()"
   ></app-confirm-dialog>
 
-</div>
+  <app-fab (clicked)="onAddNovo()"></app-fab>
 
-<div class="fixed bottom-6 right-6 flex flex-col items-end gap-2">
-  <button class="btn btn-primary btn-circle btn-lg" (click)="onAddNovo()">
-    <lucide-icon name="plus" class="w-6 h-6"></lucide-icon>
-  </button>
 </div>

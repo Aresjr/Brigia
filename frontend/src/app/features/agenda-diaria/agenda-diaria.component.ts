@@ -12,6 +12,7 @@ import { ProfissionaisService } from '../profissionais/profissionais.service';
 import { EventoFactory } from '../../core/evento-factory';
 import { UserService } from '../../core/user.service';
 import { LucideAngularModule } from 'lucide-angular';
+import { FabComponent } from '../shared/fab/fab.component';
 
 @Component({
   selector: 'app-agenda-diaria',
@@ -19,7 +20,8 @@ import { LucideAngularModule } from 'lucide-angular';
     TopBarComponent,
     AgendamentoFormComponent,
     CalendarioComponent,
-    LucideAngularModule
+    LucideAngularModule,
+    FabComponent
   ],
   templateUrl: './agenda-diaria.component.html'
 })

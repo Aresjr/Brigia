@@ -11,6 +11,7 @@ import { CelularPipe } from '../../core/pipes/celular.pipe';
 import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
+import { FabComponent } from '../shared/fab/fab.component';
 
 @Component({
   selector: 'app-profissionais',
@@ -22,7 +23,8 @@ import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
     FormsModule,
     CelularPipe,
     PaginationComponent,
-    TopBarComponent
+    TopBarComponent,
+    FabComponent
   ],
   templateUrl: './profissionais.component.html',
   standalone: true

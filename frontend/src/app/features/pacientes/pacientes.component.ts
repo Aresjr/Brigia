@@ -12,6 +12,7 @@ import { CelularPipe } from '../../core/pipes/celular.pipe';
 import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
+import { FabComponent } from '../shared/fab/fab.component';
 
 @Component({
   selector: 'app-pacientes',
@@ -24,7 +25,8 @@ import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
     CpfPipe,
     CelularPipe,
     PaginationComponent,
-    TopBarComponent
+    TopBarComponent,
+    FabComponent
   ],
   templateUrl: './pacientes.component.html',
   standalone: true

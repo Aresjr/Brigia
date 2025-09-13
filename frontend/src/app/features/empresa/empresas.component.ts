@@ -11,6 +11,7 @@ import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { ColorUtils } from '../../core/color-utils';
+import { FabComponent } from '../shared/fab/fab.component';
 
 @Component({
   selector: 'app-empresas',
@@ -23,7 +24,8 @@ import { ColorUtils } from '../../core/color-utils';
     EmpresaFormComponent,
     PaginationComponent,
     ConfirmDialogComponent,
-    TopBarComponent
+    TopBarComponent,
+    FabComponent
   ]
 })
 export class EmpresasComponent extends BaseListComponent<Empresa> implements OnInit {

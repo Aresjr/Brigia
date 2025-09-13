@@ -10,6 +10,7 @@ import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
+import { FabComponent } from '../shared/fab/fab.component';
 
 @Component({
   selector: 'app-convenios',
@@ -22,7 +23,8 @@ import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
     ConvenioFormComponent,
     PaginationComponent,
     ConfirmDialogComponent,
-    TopBarComponent
+    TopBarComponent,
+    FabComponent
   ]
 })
 export class ConveniosComponent extends BaseListComponent<Convenio> implements OnInit {

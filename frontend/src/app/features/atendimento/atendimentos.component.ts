@@ -11,6 +11,7 @@ import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { Router } from '@angular/router';
+import { FabComponent } from '../shared/fab/fab.component';
 
 @Component({
   selector: 'app-atendimentos',
@@ -23,7 +24,8 @@ import { Router } from '@angular/router';
     AtendimentoFormComponent,
     PaginationComponent,
     ConfirmDialogComponent,
-    TopBarComponent
+    TopBarComponent,
+    FabComponent
   ]
 })
 export class AtendimentosComponent extends BaseListComponent<Atendimento> implements OnInit {
