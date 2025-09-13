@@ -20,7 +20,6 @@ export class TopBarComponent {
   @Input() placeholderDropdown: string = '';
   @Input() registrosDropdown: Entidade[] = [];
   @Output() search = new EventEmitter<void>();
-  @Output() addNovo = new EventEmitter<void>();
   @Output() selectRegistro = new EventEmitter<any>();
 
   showAddNovo: boolean = true;
@@ -36,10 +35,6 @@ export class TopBarComponent {
 
   onSearch($event: any): void {
     this.search.emit($event);
-  }
-
-  onAddNovo(): void {
-    this.addNovo.emit();
   }
 
   onSelectItem(entidadeId: any) {

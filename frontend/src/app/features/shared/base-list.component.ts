@@ -27,6 +27,7 @@ export abstract class BaseListComponent<T extends object> {
   nomeEntidade = '';
   exibeConfirmExclusao = false;
   idExclusao: number = 0;
+  fabOpen: boolean = false;
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {

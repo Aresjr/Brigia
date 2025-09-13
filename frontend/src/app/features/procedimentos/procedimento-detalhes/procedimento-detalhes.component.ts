@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Procedimento, TabelaPrecoResponse } from '../procedimento.interface';
+import { Procedimento, PrecoProcedimentoConvenio } from '../procedimento.interface';
 import { ProcedimentosService } from '../procedimentos.service';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
@@ -16,7 +16,7 @@ export class ProcedimentoDetalhesComponent implements OnInit {
   @Input() procedimento: Procedimento | null = null;
   @Output() editar = new EventEmitter<Procedimento>();
   @Output() fechou = new EventEmitter<void>();
-  tabelaPreco: TabelaPrecoResponse | undefined = undefined;
+  precosProcedimento: PrecoProcedimentoConvenio[] | undefined = undefined;
   mostraTabelaConvenio: boolean = false;
 
   constructor(private procedimentosService: ProcedimentosService,
@@ -24,9 +24,9 @@ export class ProcedimentoDetalhesComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.procedimento) {
-      this.procedimentosService.listarTabelaPreco(this.procedimento.id).subscribe({
+      this.procedimentosService.listarPrecosProcedimento(this.procedimento.id).subscribe({
         next: (response) => {
-          this.tabelaPreco = response;
+          this.precosProcedimento = response.tabelaConvenio;
         }
       });
     }

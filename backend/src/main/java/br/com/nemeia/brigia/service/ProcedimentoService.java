@@ -45,12 +45,10 @@ public class ProcedimentoService {
 
     public Procedimento createProcedimento(ProcedimentoRequest request) {
         Especialidade especialidade = especialidadeService.getById(request.especialidadeId());
-
         Procedimento procedimento = mapper.toEntity(request);
         procedimento.setEspecialidade(especialidade);
 
         Procedimento procedimentoNovo = repository.save(procedimento);
-
         request.precosConvenios().forEach(precoProcedimento -> {
             Convenio convenio = convenioService.getById(precoProcedimento.convenioId());
             precoProcedimentoService.save(procedimentoNovo, convenio, precoProcedimento);
@@ -59,10 +57,21 @@ public class ProcedimentoService {
     }
 
     public Procedimento editProcedimento(Long id, ProcedimentoRequest request) {
-        getById(id);
+        Especialidade especialidade = especialidadeService.getById(request.especialidadeId());
+
         Procedimento procedimento = mapper.toEntity(request);
         procedimento.setId(id);
-        return repository.save(procedimento);
+        procedimento.setEspecialidade(especialidade);
+
+        Procedimento procedimentoAtualizado = repository.save(procedimento);
+
+        // Atualiza os preços dos convênios
+        request.precosConvenios().forEach(precoProcedimento -> {
+            Convenio convenio = convenioService.getById(precoProcedimento.convenioId());
+            precoProcedimentoService.save(procedimentoAtualizado, convenio, precoProcedimento);
+        });
+
+        return procedimentoAtualizado;
     }
 
     public void deleteProcedimento(Long id) {

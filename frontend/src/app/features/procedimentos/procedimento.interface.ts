@@ -29,7 +29,7 @@ export interface PrecoProcedimentoConvenio {
     unidade: Unidade | null;
 }
 
-export interface TabelaPrecoResponse {
+export interface PrecosProcedimentoResponse {
     procedimento: ProcedimentoResponse;
     tabelaConvenio: PrecoProcedimentoConvenio[];
 }

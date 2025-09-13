@@ -1,6 +1,6 @@
 <div class="mt-4">
 
-  <app-top-bar (search)="onSearch($event)" (addNovo)="onAddNovo()" title="Especialidades"></app-top-bar>
+  <app-top-bar (search)="onSearch($event)" title="Especialidades"></app-top-bar>
 
     @if (isLoading) {
         <div class="flex justify-center items-center h-32">
@@ -83,5 +83,11 @@
     (confirm)="excluir()"
     (cancel)="fecharConfirmExclusao()"
   ></app-confirm-dialog>
+
+  <div class="fixed bottom-6 right-6 flex flex-col items-end gap-2">
+    <button class="btn btn-primary btn-circle btn-lg" (click)="onAddNovo()">
+      <lucide-icon name="plus" class="w-6 h-6"></lucide-icon>
+    </button>
+  </div>
 
 </div>

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import {
   PrecoProcedimentoConvenio, Procedimento,
   ProcedimentoRequest,
-  TabelaPrecoResponse
+  PrecosProcedimentoResponse
 } from './procedimento.interface';
 import { BaseService } from './base.service';
 
@@ -14,13 +14,8 @@ export class ProcedimentosService extends BaseService<Procedimento, Procedimento
 
   override path = '/procedimentos';
 
-  listarTabelaPreco(id: number): Observable<TabelaPrecoResponse> {
-    return this.backend.get<TabelaPrecoResponse>(`${this.path}/${id}/tabela-preco`);
-  }
-
-  atualizarPreco(precoConvenio: PrecoProcedimentoConvenio): Observable<void> {
-    this.limparCache();
-    return this.backend.patch<PrecoProcedimentoConvenio>(`${this.path}/${precoConvenio.id}/atualizar-preco`, precoConvenio);
+  listarPrecosProcedimento(id: number): Observable<PrecosProcedimentoResponse> {
+    return this.backend.get<PrecosProcedimentoResponse>(`${this.path}/${id}/tabela-preco`);
   }
 
   obterPrecoProcedimentoConvenio(idProcedimento: number, idConvenio: number): Observable<PrecoProcedimentoConvenio> {
