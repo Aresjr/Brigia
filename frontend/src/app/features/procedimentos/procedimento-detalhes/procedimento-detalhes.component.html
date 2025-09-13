@@ -46,10 +46,10 @@
           </div>
 
           @if (mostraTabelaConvenio) {
-            @if (precosProcedimento && precosProcedimento.length > 0) {
+            @if (procedimento.precosProcedimento && procedimento.precosProcedimento.length > 0) {
               <table class="min-w-full text-sm">
                 <tbody class="divide-y divide-primary/20">
-                  @for (precoConvenio of precosProcedimento; track precoConvenio.id) {
+                  @for (precoConvenio of procedimento.precosProcedimento; track precoConvenio.id) {
                     <tr class="hover:bg-primary/10">
                       <td class="px-6 py-3">{{ precoConvenio.convenio.nome }}</td>
                       <td class="px-6 py-3 w-28 text-right font-medium text-primary">

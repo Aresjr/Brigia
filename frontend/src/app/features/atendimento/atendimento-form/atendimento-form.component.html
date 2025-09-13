@@ -122,6 +122,9 @@
                 @for (procedimento of procedimentos; track procedimento.id) {
                   <ng-option [value]="procedimento.id">{{procedimento.nome}}</ng-option>
                 }
+                <ng-template ng-notfound-tmp>
+                  <span class="text-sm p-6">Nenhum resultado</span>
+                </ng-template>
               </ng-select>
 
               <input [id]="'valor_' + i" type="number" formControlName="valor" class="campo mt-0 p-2" readonly >

@@ -11,5 +11,4 @@ import { FabComponent } from '../shared/fab/fab.component';
   templateUrl: './tabela-precos.component.html'
 })
 export class TabelaPrecosComponent {
-  fabOpen: boolean = false;
 }

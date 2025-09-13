@@ -7,12 +7,12 @@
       <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
     </div>
   } @else if (itensExibicao.length === 0) {
-    <div class="text-center py-8 w-full bg-base-100 rounded-md shadow-md">
+    <div class="text-center py-8 w-full bg-base-100 rounded shadow-md">
       <p>Nenhum registro encontrado.</p>
     </div>
   } @else {
-    <div class="rounded-md">
-      <table class="tabela-listagem w-full min-h-[26rem]">
+    <div class="rounded-lg min-h-[26rem] overflow-hidden">
+      <table class="tabela-listagem">
         <thead class="text-base-100 bg-primary">
         <tr>
           <th (click)="ordenar('nome')" class="w-80 cabecalho-listagem truncate">

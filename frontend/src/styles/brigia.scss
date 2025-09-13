@@ -15,7 +15,7 @@
 }
 
 .tabela-listagem {
-  @apply min-w-full table-auto text-sm rounded-md shadow-md;
+  @apply text-sm rounded overflow-hidden shadow-md w-full;
 }
 
 .cabecalho-listagem {

@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Procedimento, PrecoProcedimentoConvenio } from '../procedimento.interface';
-import { ProcedimentosService } from '../procedimentos.service';
+import { Procedimento } from '../procedimento.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../core/user.service';
@@ -12,25 +11,13 @@ import { UserService } from '../../../core/user.service';
   imports: [CommonModule, LucideAngularModule, FormsModule],
   templateUrl: './procedimento-detalhes.component.html',
 })
-export class ProcedimentoDetalhesComponent implements OnInit {
+export class ProcedimentoDetalhesComponent {
   @Input() procedimento: Procedimento | null = null;
   @Output() editar = new EventEmitter<Procedimento>();
   @Output() fechou = new EventEmitter<void>();
-  precosProcedimento: PrecoProcedimentoConvenio[] | undefined = undefined;
   mostraTabelaConvenio: boolean = false;
 
-  constructor(private procedimentosService: ProcedimentosService,
-              private userService: UserService) {}
-
-  ngOnInit(): void {
-    if (this.procedimento) {
-      this.procedimentosService.listarPrecosProcedimento(this.procedimento.id).subscribe({
-        next: (response) => {
-          this.precosProcedimento = response.tabelaConvenio;
-        }
-      });
-    }
-  }
+  constructor(private userService: UserService) {}
 
   fechar(): void {
     this.fechou.emit();

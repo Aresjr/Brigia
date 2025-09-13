@@ -17,7 +17,7 @@ export abstract class BaseListComponent<T extends object> {
   itensInternos: T[] = [];
   sortState: SortState<T> = { column: '', direction: null };
   paginaAtual = 1;
-  itensPorPagina = 10;
+  itensPorPagina = 15;
   totalPaginas = 1;
   itemSelecionado: T | null = null;
   itemEdicao: T | null = null;

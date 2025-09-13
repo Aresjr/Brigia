@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import {
-  PrecoProcedimentoConvenio,
   Procedimento,
   ProcedimentoRequest
 } from '../procedimento.interface';
@@ -16,7 +15,7 @@ import { NgxMaskDirective } from 'ngx-mask';
 import { limitLength } from '../../../core/util-methods';
 import { FormComponent } from '../../shared/form.component';
 import { forkJoin, map, Observable, tap } from 'rxjs';
-import { ProcedimentosService } from '../procedimentos.service';
+import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-procedimento-form',
@@ -27,7 +26,10 @@ import { ProcedimentosService } from '../procedimentos.service';
     ReactiveFormsModule,
     LucideAngularModule,
     EmptyToNullDirective,
-    NgxMaskDirective
+    NgxMaskDirective,
+    NgNotFoundTemplateDirective,
+    NgOptionComponent,
+    NgSelectComponent
   ]
 })
 export class ProcedimentoFormComponent extends FormComponent<ProcedimentoRequest> implements OnInit {
@@ -35,13 +37,11 @@ export class ProcedimentoFormComponent extends FormComponent<ProcedimentoRequest
 
   convenios: Convenio[] = [];
   especialidades: Especialidade[] = [];
-  precosProcedimento: PrecoProcedimentoConvenio[] | null = null;
 
   constructor(
     protected override fb: FormBuilder,
     private conveniosService: ConveniosService,
-    private especialidadeService: EspecialidadeService,
-    private procedimentosService: ProcedimentosService
+    private especialidadeService: EspecialidadeService
   ) {
     super(fb);
     this.form = this.fb.group({
@@ -58,15 +58,23 @@ export class ProcedimentoFormComponent extends FormComponent<ProcedimentoRequest
       this.loadConvenios(),
       this.loadEspecialidades()
     ];
-    if (this.procedimento) {
-      chamadas.push(this.loadPrecosProcedimento(this.procedimento.id));
-    }
     forkJoin(chamadas).subscribe(() => {
       if (this.procedimento) {
-        console.log('precosProcedimento', this.precosProcedimento);
         this.form.patchValue(this.procedimento);
         this.form.patchValue({
           especialidadeId: this.procedimento.especialidade.id
+        });
+        this.precosConvenios.controls.forEach(control => {
+          const convenioId = control.value.convenioId;
+          const precoProcedimento = this.procedimento?.precosProcedimento
+            ?.find(pp => pp.convenio.id === convenioId);
+
+          if (precoProcedimento) {
+            control.patchValue({
+              preco: precoProcedimento.preco,
+              repasse: precoProcedimento.repasse,
+            });
+          }
         });
       }
     });
@@ -89,16 +97,6 @@ export class ProcedimentoFormComponent extends FormComponent<ProcedimentoRequest
         tap(convenios => {
           this.convenios = convenios;
           this.initializePrecosConvenios();
-        })
-      );
-  }
-
-  private loadPrecosProcedimento(procedimentoId: number): Observable<PrecoProcedimentoConvenio[]> {
-    return this.procedimentosService.listarPrecosProcedimento(procedimentoId)
-      .pipe(
-        map(response => response.tabelaConvenio),
-        tap(precosProcedimento => {
-          this.precosProcedimento = precosProcedimento;
         })
       );
   }
