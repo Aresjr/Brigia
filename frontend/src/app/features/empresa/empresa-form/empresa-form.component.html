@@ -3,8 +3,8 @@
   <div class="p-4">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold">{{isEditMode ? 'Editar Empresa' : 'Nova Empresa'}}</h2>
-      <button (click)="onCancel()" class="btn btn-neutral btn-xs">
-        <lucide-icon name="x" />
+      <button type="button" (click)="onCancel()" class="btn btn-sm btn-ghost" aria-label="Fechar">
+        <lucide-icon name="x" class="right-0 inline w-6 h-6"/>
       </button>
     </div>
 
@@ -54,7 +54,8 @@
                        labelForId="planoId" >
               @for (plano of planos; track plano.id) {
                 <ng-option [value]="plano.id">
-                  <div [class]="plano.corFundo" class="p-2 -m-1">
+                  <div [ngClass]="ColorUtils.getColorClasses(plano)"
+                       class="p-1 -m-1 rounded-lg text-sm">
                     {{plano.nome}}
                   </div>
                 </ng-option>

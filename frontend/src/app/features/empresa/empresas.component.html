@@ -12,7 +12,7 @@
         </div>
     } @else {
 
-        <div class="grid grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_minmax(10px,10px)] gap-4 px-4 py-2 text-sm font-bold rounded-md text-neutral ">
+        <div class="grid grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_1fr] gap-4 px-4 py-2 text-sm font-bold rounded-md text-neutral ">
           <div (click)="ordenar('nome')" class="cursor-pointer">
             <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
             Nome
@@ -43,13 +43,13 @@
 
         <div class="flex flex-col gap-1 mt-2 min-h-[40rem]">
           <div *ngFor="let empresa of getItensPaginados()"
-               class="bg-base-100 hover:bg-base-200 rounded-lg flex items-center border-l-8 border-primary" >
+               class="bg-base-100 hover:bg-base-200 rounded-lg flex items-center" >
 
-            <div class="grid grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_minmax(10px,20px)] w-full px-2 py-2">
+            <div class="grid grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_1fr] gap-4 w-full px-4 py-2">
               <div>{{ empresa.nome }}</div>
 
               @if (empresa.plano) {
-                <div class="badge h-fit text-xs font-semibold" *ngIf="empresa.plano" [ngClass]="ColorUtils.getColorClasses(empresa.plano)">
+                <div class="h-fit w-fit rounded-lg p-1 text-xs font-semibold" *ngIf="empresa.plano" [ngClass]="ColorUtils.getColorClasses(empresa.plano)">
                   {{ empresa.plano.nome }}
                 </div>
               }
@@ -66,9 +66,9 @@
               <div class="text-right">
                 <div class="dropdown dropdown-end m-0 p-0" (click)="$event.stopPropagation()">
                   <label tabindex="0" class="btn btn-ghost btn-sm m-0">
-                    <lucide-icon name="ellipsis-vertical" class="h-6" />
+                    <lucide-icon name="ellipsis-vertical" class="h-5" />
                   </label>
-                  <ul tabindex="0" class="dropdown-content z-[1] menu bg-base-100 rounded-box p-1 shadow w-40">
+                  <ul tabindex="0" class="dropdown-content z-[1] menu bg-base-100 font-semibold rounded-box p-1 shadow-lg w-40">
                     <li *ngIf="!empresa.excluido">
                       <a (click)="editar($event, empresa)"
                          class="block px-4 py-2 text-sm text-neutral hover:bg-base-200 cursor-pointer" >

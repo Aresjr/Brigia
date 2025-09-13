@@ -9,6 +9,7 @@ import { EmpresasService } from '../empresas.service';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { FormComponent } from '../../shared/form.component';
 import { forkJoin, map, Observable, tap } from 'rxjs';
+import { ColorUtils } from '../../../core/color-utils';
 
 @Component({
   selector: 'app-empresa-form',
@@ -69,4 +70,6 @@ export class EmpresaFormComponent extends FormComponent<EmpresaRequest> implemen
   get isEditMode(): boolean {
     return !!this.empresa;
   }
+
+  protected readonly ColorUtils = ColorUtils;
 }
