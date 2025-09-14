@@ -1,4 +1,4 @@
-import { Entidade, EntidadeRequest, EntidadeResponse } from '../shared/entidade.interface';
+import { Entidade, EntidadeRequest } from '../shared/entidade.interface';
 import { Especialidade } from '../especialidade/especialidade.interface';
 
 export interface Profissional extends Entidade {
@@ -21,8 +21,4 @@ export interface ProfissionalRequest extends EntidadeRequest {
     crm: string | null;
     urlImagem: string | null;
     especialidades?: Especialidade[];
-}
-
-export interface ProfissionalResponse extends EntidadeResponse {
-    items: Profissional[];
 }

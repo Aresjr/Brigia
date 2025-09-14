@@ -1,17 +1,7 @@
 import { CalendarEvent } from 'angular-calendar';
 import { formatHora } from './util-methods';
 import { Agendamento } from '../features/agenda-diaria/agendamento.interface';
-import { StatusAgendamento, StatusDescricao } from './constans';
-
-export const CorAtendimento: Record<number, string> = {
-  [StatusAgendamento.Agendado]: '#60a5fa',
-  [StatusAgendamento.Confirmado]: '#2563EB',
-  [StatusAgendamento.EmAtendimento]: '#06B6D4',
-  [StatusAgendamento.Cancelado]: '#EF4444',
-  [StatusAgendamento.NaoCompareceu]: '#F59E0B',
-  [StatusAgendamento.Reagendado]: '#F59E0B',
-  [StatusAgendamento.Finalizado]: '#14B8A6'
-};
+import { CorAtendimento, StatusDescricao } from './constans';
 
 //Disponibilidade do médico - #D1FAE5
 

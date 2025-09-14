@@ -8,5 +8,6 @@ import java.time.LocalTime;
 public record AtendimentoResponse(Long id, PacienteResponse paciente, ProfissionalResponse profissional, LocalDate data,
         LocalTime horaInicio, LocalTime horaFim, AgendamentoResponse agendamento, ConvenioResponse convenio,
         EmpresaResponse empresa, EspecialidadeResponse especialidade, FormaPagamento formaPagamento,
-        String observacoes) {
+        String observacoes, String anamnese, String exameFisico, String diagnostico, String evolucaoClinica,
+        String examesSolicitados, String prescricoes) {
 }

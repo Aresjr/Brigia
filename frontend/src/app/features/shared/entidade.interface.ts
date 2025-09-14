@@ -5,16 +5,12 @@ export interface Entidade {
     excluido: boolean;
 }
 
-export interface EntidadeResponse {
-  items: Entidade[];
-  currentPage: number;
-  totalPages: number;
-  totalRecords: number;
-}
-
 export interface EntidadeRequest {
 }
 
 export interface PagedResponse<T> {
   items: T[];
+  currentPage: number;
+  totalPages: number;
+  totalRecords: number;
 }

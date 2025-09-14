@@ -23,14 +23,19 @@ import { Agendamento, AgendamentoRequest } from './agendamento.interface';
 import { IForm } from '../shared/form.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
-import { FORMAS_PAGAMENTO, STATUS_ABRIR_ATENDIMENTO, StatusDescricao, TIPO_AGENDAMENTO } from '../../core/constans';
+import {
+  CorAtendimento,
+  FORMAS_PAGAMENTO,
+  STATUS_ABRIR_ATENDIMENTO,
+  StatusDescricao,
+  TIPO_AGENDAMENTO
+} from '../../core/constans';
 import { forkJoin, map, Observable, tap } from 'rxjs';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { UserService } from '../../core/user.service';
 import { ColorUtils } from '../../core/color-utils';
 import { Router } from '@angular/router';
 import { AgendamentosService } from './agendamentos.service';
-import { CorAtendimento } from '../../core/evento-factory';
 
 @Component({
   selector: 'app-agendamento-form',

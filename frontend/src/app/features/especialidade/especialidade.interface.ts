@@ -1,4 +1,4 @@
-import { Entidade, EntidadeRequest, EntidadeResponse } from '../shared/entidade.interface';
+import { Entidade, EntidadeRequest } from '../shared/entidade.interface';
 
 export interface Especialidade extends Entidade {
     descricao: string | null;

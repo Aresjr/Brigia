@@ -15,15 +15,19 @@
             <table class="tabela-listagem">
                 <thead class="text-base-100 bg-primary">
                     <tr>
-                        <th (click)="ordenar('nome')" class="cabecalho-listagem">
-                            <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
-                            Nome
-                        </th>
-                        <th (click)="ordenar('descricao')" class="cabecalho-listagem">
-                            <lucide-icon *ngIf="getSortIcon('descricao')" [name]="getSortIcon('descricao')" class="icone-ordenacao"/>
-                            Observações
-                        </th>
-                        <th class="p-0"></th>
+                      <th (click)="ordenar('data')" class="cabecalho-listagem">
+                          <lucide-icon *ngIf="getSortIcon('data')" [name]="getSortIcon('data')" class="icone-ordenacao"/>
+                          Data
+                      </th>
+                      <th (click)="ordenar('horaInicio')" class="cabecalho-listagem">
+                          <lucide-icon *ngIf="getSortIcon('horaInicio')" [name]="getSortIcon('horaInicio')" class="icone-ordenacao"/>
+                        Início
+                      </th>
+                      <th (click)="ordenar('horaFim')" class="cabecalho-listagem">
+                          <lucide-icon *ngIf="getSortIcon('horaFim')" [name]="getSortIcon('horaFim')" class="icone-ordenacao"/>
+                        Fim
+                      </th>
+                      <th class="p-0"></th>
                     </tr>
                 </thead>
                 <tbody class="bg-base-100">
@@ -32,7 +36,9 @@
                             <td class="px-6 py-2 whitespace-nowrap">
                                 {{atendimento.nome}} <span *ngIf="atendimento.excluido" class="excluido">Excluído</span>
                             </td>
-                            <td class="px-6 py-2">{{atendimento.descricao}}</td>
+                            <td class="px-6 py-2">{{atendimento.data}}</td>
+                            <td class="px-6 py-2">{{atendimento.horaInicio}}</td>
+                            <td class="px-6 py-2">{{atendimento.horaFim}}</td>
                             <td class="p-0 text-right w-4">
                               <div class="dropdown dropdown-end m-0 p-0" (click)="$event.stopPropagation()">
                                 <label tabindex="0" class="btn btn-ghost btn-sm m-0">

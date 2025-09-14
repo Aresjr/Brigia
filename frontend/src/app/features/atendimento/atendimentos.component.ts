@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AtendimentosService } from './atendimentos.service';
-import { Atendimento } from './atendimento.interface';
+import { Atendimento, AtendimentoRequest } from './atendimento.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -63,11 +63,10 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
   }
 
   override filter(atendimento: Atendimento, searchTerm: string): boolean | undefined {
-    return atendimento.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      atendimento.descricao?.toLowerCase().includes(searchTerm.toLowerCase());
+    return atendimento.nome.toLowerCase().includes(searchTerm.toLowerCase());
   }
 
-  onSalvarNovoAtendimento(atendimento: Partial<Atendimento>) {
+  onSalvarNovoAtendimento(atendimento: Partial<AtendimentoRequest>) {
     if (this.itemEdicao) {
       const id = this.itemEdicao.id;
       this.atendimentosService.atualizar(id, atendimento).subscribe({

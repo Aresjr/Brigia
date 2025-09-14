@@ -1,3 +1,6 @@
+import { Agendamento } from '../features/agenda-diaria/agendamento.interface';
+import { CalendarEvent } from 'angular-calendar';
+
 export enum Role {
   ADMIN = 'ADMIN',
   PACIENTE = 'PACIENTE',
@@ -77,6 +80,16 @@ export const StatusDescricao: Record<number, string> = {
   [StatusAgendamento.NaoCompareceu]: 'Não Compareceu',
   [StatusAgendamento.Reagendado]: 'Reagendado',
   [StatusAgendamento.Finalizado]: 'Finalizado'
+};
+
+export const CorAtendimento: Record<number, string> = {
+  [StatusAgendamento.Agendado]: '#60a5fa',
+  [StatusAgendamento.Confirmado]: '#2563EB',
+  [StatusAgendamento.EmAtendimento]: '#06B6D4',
+  [StatusAgendamento.Cancelado]: '#EF4444',
+  [StatusAgendamento.NaoCompareceu]: '#F59E0B',
+  [StatusAgendamento.Reagendado]: '#F59E0B',
+  [StatusAgendamento.Finalizado]: '#14B8A6'
 };
 
 export const STATUS_ABRIR_ATENDIMENTO = [StatusAgendamento.Agendado, StatusAgendamento.Confirmado,

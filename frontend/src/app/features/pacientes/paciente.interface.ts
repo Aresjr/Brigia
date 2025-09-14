@@ -1,4 +1,4 @@
-import { Entidade, EntidadeRequest, EntidadeResponse } from '../shared/entidade.interface';
+import { Entidade, EntidadeRequest } from '../shared/entidade.interface';
 import { Convenio } from '../convenio/convenio.interface';
 import { Empresa } from '../empresa/empresa.interface';
 
@@ -40,8 +40,4 @@ export interface PacienteRequest extends EntidadeRequest {
     uf: string | null;
     convenioId: number | null;
     empresaId: number | null;
-}
-
-export interface PacienteResponse extends EntidadeResponse {
-    items: Paciente[];
 }
