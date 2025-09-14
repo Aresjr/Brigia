@@ -34,9 +34,7 @@ public class EmpresaService {
     }
 
     public Empresa getById(Long id) {
-        return repository
-                .findById(id)
-                .orElseThrow(() -> new NotFoundException("Empresa não encontrado com ID: " + id));
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Empresa não encontrado com ID: " + id));
     }
 
     public Empresa createEmpresa(EmpresaRequest request) {

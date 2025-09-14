@@ -12,9 +12,7 @@ public class ValidationMessageMapper {
 
     public List<String> extractMsg(MethodArgumentNotValidException ex) {
         List<String> errors = new ArrayList<>();
-        ex.getBindingResult()
-                .getFieldErrors()
-                .forEach(error -> errors.add(error.getDefaultMessage()));
+        ex.getBindingResult().getFieldErrors().forEach(error -> errors.add(error.getDefaultMessage()));
         return errors;
     }
 
@@ -22,8 +20,7 @@ public class ValidationMessageMapper {
         String msg = ex.getMessage();
         if (msg != null && msg.contains("duplicate key")) {
             String msgCompleta = msg.split("Key")[1];
-            String campoDuplicado =
-                    msgCompleta.split(" already exists")[0].trim().replaceAll("[()]", "");
+            String campoDuplicado = msgCompleta.split(" already exists")[0].trim().replaceAll("[()]", "");
 
             return "Já existe um cadastro com o campo " + campoDuplicado;
         }
@@ -48,11 +45,7 @@ public class ValidationMessageMapper {
                 } catch (Exception ignore) {
                 }
                 if (campo != null && valores != null) {
-                    return "Valor inválido para o campo '"
-                            + campo
-                            + "'. Os valores aceitos são: "
-                            + valores
-                            + ".";
+                    return "Valor inválido para o campo '" + campo + "'. Os valores aceitos são: " + valores + ".";
                 }
                 return "Valor inválido enviado para um campo do tipo Enum.";
             }

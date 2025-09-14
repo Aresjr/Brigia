@@ -21,11 +21,9 @@ public class AtendimentoController {
     private final AtendimentoMapper mapper;
 
     @GetMapping
-    @PreAuthorize(
-            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<AtendimentoResponse> getAllAtendimentos(
-            @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "false") Boolean mostrarExcluidos, @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         log.info("GET /atendimentos - page: {}, size: {}", page, size);
         return mapper.toPagedResponse(service.getPaged(page, size, mostrarExcluidos));
@@ -40,8 +38,8 @@ public class AtendimentoController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('MEDICO') or hasAuthority('ADMIN')")
-    public AtendimentoResponse updateAtendimento(
-            @Valid @RequestBody AtendimentoRequest request, @PathVariable Long id) {
+    public AtendimentoResponse updateAtendimento(@Valid @RequestBody AtendimentoRequest request,
+            @PathVariable Long id) {
         log.info("PUT /atendimentos - atualizando atendimento ID {}", id);
         return mapper.toResponse(service.update(request, id));
     }

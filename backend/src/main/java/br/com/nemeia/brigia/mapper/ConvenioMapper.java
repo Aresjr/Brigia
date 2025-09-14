@@ -16,19 +16,13 @@ public class ConvenioMapper {
             return null;
         }
 
-        return new ConvenioResponse(
-                convenio.getId(),
-                convenio.getNome(),
-                convenio.getDescricao(),
-                convenio.getCriadoEm(),
-                convenio.getExcluido());
+        return new ConvenioResponse(convenio.getId(), convenio.getNome(), convenio.getDescricao(),
+                convenio.getCriadoEm(), convenio.getExcluido());
     }
 
     public PagedResponse<ConvenioResponse> toPagedResponse(Page<Convenio> paged) {
-        List<ConvenioResponse> responses =
-                paged.getContent().stream().map(this::toResponse).toList();
-        return new PagedResponse<>(
-                responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
+        List<ConvenioResponse> responses = paged.getContent().stream().map(this::toResponse).toList();
+        return new PagedResponse<>(responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
     }
 
     public Convenio toEntity(ConvenioRequest request) {

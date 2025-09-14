@@ -24,11 +24,7 @@ public class EmpresaPlanoService {
     }
 
     public EmpresaPlano getById(Long id) {
-        return repository
-                .findById(id)
-                .orElseThrow(
-                        () ->
-                                new NotFoundException(
-                                        "Plano de Empresa não encontrado com ID: " + id));
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Plano de Empresa não encontrado com ID: " + id));
     }
 }

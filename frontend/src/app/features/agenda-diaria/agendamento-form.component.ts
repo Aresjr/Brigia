@@ -23,12 +23,14 @@ import { Agendamento, AgendamentoRequest } from './agendamento.interface';
 import { IForm } from '../shared/form.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
-import { FORMAS_PAGAMENTO, STATUS_ABRIR_ATENDIMENTO, TIPO_AGENDAMENTO } from '../../core/constans';
+import { FORMAS_PAGAMENTO, STATUS_ABRIR_ATENDIMENTO, StatusDescricao, TIPO_AGENDAMENTO } from '../../core/constans';
 import { forkJoin, map, Observable, tap } from 'rxjs';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { UserService } from '../../core/user.service';
 import { ColorUtils } from '../../core/color-utils';
 import { Router } from '@angular/router';
+import { AgendamentosService } from './agendamentos.service';
+import { CorAtendimento } from '../../core/evento-factory';
 
 @Component({
   selector: 'app-agendamento-form',
@@ -67,6 +69,7 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
   exibeConfirmCancelamento: boolean = false;
   valorEditavel: boolean = false;
   valorAntesEdicao: number | null = null;
+  isLoading: boolean = false;
 
   protected readonly autoResize = autoResize;
   protected readonly limitLength = limitLength;
@@ -75,7 +78,7 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
               private pacientesService: PacienteService, private conveniosService: ConveniosService,
               private especialidadeService: EspecialidadeService, private profissionaisService: ProfissionaisService,
               private empresasService: EmpresasService, private procedimentosService: ProcedimentosService,
-              protected userService: UserService, private router: Router) {
+              protected userService: UserService, private router: Router, private agendamentosService: AgendamentosService) {
     super(fb);
     this.hoje = new Date().toISOString().split('T')[0];
     const form: IForm<AgendamentoRequest> = {
@@ -119,6 +122,7 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
       this.titulo = 'Detalhes Agendamento';
     }
 
+    this.isLoading = true;
     forkJoin([
       this.carregarPacientes(),
       this.carregarConvenios(),
@@ -133,6 +137,7 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
       } else if (this.pacienteId) {
         this.selectPaciente(this.pacienteId);
       }
+      this.isLoading = false;
     });
   }
 
@@ -308,11 +313,17 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
       return;
     }
 
+    this.isLoading = true;
+
     const agendamentoId = agendamento.id;
-    //TODO - atualizar agendamento para "Em Atendimento"
-    return this.router.navigate(['/atendimentos'], {
-      state: { agendamentoId }
-    });
+    return this.agendamentosService.iniciarAtendimento(agendamentoId)
+      .subscribe({
+        next: () => {
+          return this.router.navigate(['/atendimentos'], {
+            state: { agendamentoId }
+          });
+        }
+      });
   }
 
   formValido(): boolean {
@@ -344,4 +355,6 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
   }
 
   protected readonly ColorUtils = ColorUtils;
+  protected readonly StatusDescricao = StatusDescricao;
+  protected readonly CorAtendimento = CorAtendimento;
 }

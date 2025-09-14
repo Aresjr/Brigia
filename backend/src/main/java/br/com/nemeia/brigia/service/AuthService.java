@@ -31,10 +31,7 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest request, HttpServletResponse httpServletResponse) {
         try {
-            Usuario usuario =
-                    usuarioService
-                            .getByEmail(request.email())
-                            .orElseThrow(InvalidCredentialsException::new);
+            Usuario usuario = usuarioService.getByEmail(request.email()).orElseThrow(InvalidCredentialsException::new);
 
             if (!passwordEncoder.matches(request.password(), usuario.getSenha())) {
                 log.error("Senha inválida para o usuário: {}", request.email());
@@ -50,8 +47,7 @@ public class AuthService {
             throw e;
         } catch (Exception e) {
             log.error("Erro ao realizar login: ", e);
-            throw new RuntimeException(
-                    "Serviço de login indisponível, tente novamente mais tarde.");
+            throw new RuntimeException("Serviço de login indisponível, tente novamente mais tarde.");
         }
     }
 

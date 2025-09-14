@@ -32,10 +32,8 @@ public class EspecialidadeService {
     }
 
     public Especialidade getById(Long id) {
-        return repository
-                .findById(id)
-                .orElseThrow(
-                        () -> new NotFoundException("Especialidade não encontrada com ID: " + id));
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Especialidade não encontrada com ID: " + id));
     }
 
     public Especialidade createEspecialidade(EspecialidadeRequest request) {

@@ -27,26 +27,19 @@ public class AtendimentoMapper {
             return null;
         }
 
-        return new AtendimentoResponse(
-                atendimento.getId(),
-                pacienteMapper.toResponse(atendimento.getPaciente()),
-                profissionalMapper.toResponse(atendimento.getProfissional()),
-                atendimento.getData(),
-                atendimento.getHoraInicio(),
-                atendimento.getHoraFim(),
+        return new AtendimentoResponse(atendimento.getId(), pacienteMapper.toResponse(atendimento.getPaciente()),
+                profissionalMapper.toResponse(atendimento.getProfissional()), atendimento.getData(),
+                atendimento.getHoraInicio(), atendimento.getHoraFim(),
                 agendamentoMapper.toResponse(atendimento.getAgendamento()),
                 convenioMapper.toResponse(atendimento.getConvenio()),
                 empresaMapper.toResponse(atendimento.getEmpresa()),
-                especialidadeMapper.toResponse(atendimento.getEspecialidade()),
-                atendimento.getFormaPagamento(),
+                especialidadeMapper.toResponse(atendimento.getEspecialidade()), atendimento.getFormaPagamento(),
                 atendimento.getObservacoes());
     }
 
     public PagedResponse<AtendimentoResponse> toPagedResponse(Page<Atendimento> paged) {
-        List<AtendimentoResponse> responses =
-                paged.getContent().stream().map(this::toResponse).toList();
-        return new PagedResponse<>(
-                responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
+        List<AtendimentoResponse> responses = paged.getContent().stream().map(this::toResponse).toList();
+        return new PagedResponse<>(responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
     }
 
     public Atendimento toEntity(AtendimentoRequest request) {

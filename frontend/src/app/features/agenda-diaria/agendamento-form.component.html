@@ -3,7 +3,13 @@
     (click)="$event.stopPropagation()" >
 
     <div class="flex justify-between items-center">
-      <h2 class="text-lg font-semibold">{{ titulo }}</h2>
+      <div class="flex items-center gap-4 justify-between">
+        <h2 class="text-lg font-semibold">{{ titulo }}</h2>
+        <div *ngIf="agendamentoDetalhes" class="badge font-semibold p-3 text-base-100"
+          [ngClass]="'bg-['+ CorAtendimento[agendamentoDetalhes.status] +']'">
+          {{ StatusDescricao[agendamentoDetalhes.status] }}
+        </div>
+      </div>
 
       <div>
         <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" aria-label="Editar" (click)="onEdit()" *ngIf="!this.userService.isMedico() && agendamentoDetalhes && !this.podeSalvar" title="Editar">
@@ -15,7 +21,11 @@
       </div>
     </div>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6">
+    <div *ngIf="isLoading" class="flex justify-center items-center h-32">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
+    </div>
+
+    <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6">
       <div class="flex">
         <div class="w-[8rem] mr-4" >
           <label class="label-campo" for="data">

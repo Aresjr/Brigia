@@ -14,7 +14,14 @@ module.exports = {
     "bg-yellow-100",
     "bg-red-100",
     "border-error",
-    "bg-white"
+    "bg-white",
+    "bg-[#60a5fa]",
+    "bg-[#3B82F6]",
+    "bg-[#2563EB]",
+    "bg-[#06B6D4]",
+    "bg-[#EF4444]",
+    "bg-[#F59E0B]",
+    "bg-[#14B8A6]"
   ],
   theme: {
     extend: {

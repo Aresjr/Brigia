@@ -15,17 +15,15 @@ import org.springframework.data.domain.Pageable;
 @RequiredArgsConstructor
 public abstract class BaseService<T extends BaseModel, R extends BaseRepository<T>> {
 
-    @Autowired protected final R repository;
+    @Autowired
+    protected final R repository;
 
-    @Autowired protected final SecurityUtils securityUtils;
+    @Autowired
+    protected final SecurityUtils securityUtils;
 
     public T getById(Long id) {
-        return repository
-                .findById(id)
-                .orElseThrow(
-                        () ->
-                                new NotFoundException(
-                                        getNomeEntidade() + " não encontrado com ID:" + id));
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException(getNomeEntidade() + " não encontrado com ID:" + id));
     }
 
     public Page<T> getPaged(int page, int size, Boolean mostrarExcluidos) {

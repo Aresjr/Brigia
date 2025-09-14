@@ -1,18 +1,19 @@
 import { CalendarEvent } from 'angular-calendar';
 import { formatHora } from './util-methods';
 import { Agendamento } from '../features/agenda-diaria/agendamento.interface';
+import { StatusAgendamento, StatusDescricao } from './constans';
 
-export const TAILWIND_BLUE = {
-  100: 'rgb(219, 234, 254)',
-  200: 'rgb(191, 219, 254)',
-  300: 'rgb(147, 197, 253)',
-  400: 'rgb(96, 165, 250)',
-  500: 'rgb(59, 130, 246)',
-  600: 'rgb(37, 99, 235)',
-  700: 'rgb(29, 78, 216)',
-  800: 'rgb(30, 64, 175)',
-  900: 'rgb(30, 58, 138)',
+export const CorAtendimento: Record<number, string> = {
+  [StatusAgendamento.Agendado]: '#60a5fa',
+  [StatusAgendamento.Confirmado]: '#2563EB',
+  [StatusAgendamento.EmAtendimento]: '#06B6D4',
+  [StatusAgendamento.Cancelado]: '#EF4444',
+  [StatusAgendamento.NaoCompareceu]: '#F59E0B',
+  [StatusAgendamento.Reagendado]: '#F59E0B',
+  [StatusAgendamento.Finalizado]: '#14B8A6'
 };
+
+//Disponibilidade do médico - #D1FAE5
 
 export class EventoFactory {
   static fromApi(agendamento: Agendamento): CalendarEvent {
@@ -25,8 +26,10 @@ export class EventoFactory {
     return {
       start: start,
       end: end,
-      title: `${agendamento.paciente.nome} | ${formatHora(start)}-${formatHora(end)}<br/>${agendamento.profissional.nome} | ${agendamento.especialidade.nome}`,
-      color: { primary: TAILWIND_BLUE[400], secondary: TAILWIND_BLUE[400] },
+      title: `${agendamento.paciente.nome} - ${StatusDescricao[agendamento.status].toUpperCase()}
+      <br/>
+      ${formatHora(start)}-${formatHora(end)} - ${agendamento.profissional.nome}`,
+      color: { primary: CorAtendimento[agendamento.status], secondary: CorAtendimento[agendamento.status] },
       meta: agendamento
     };
   }

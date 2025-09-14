@@ -21,19 +21,10 @@ public class ProfissionalMapper {
             return null;
         }
 
-        return new ProfissionalResponse(
-                profissional.getId(),
-                profissional.getNome(),
-                profissional.getEmail(),
-                profissional.getCpf(),
-                profissional.getDataNascimento(),
-                profissional.getSexo(),
-                profissional.getCelular(),
-                profissional.getUrlImagem(),
-                profissional.getCrm(),
-                getEspecialidades(profissional),
-                profissional.getCriadoEm(),
-                profissional.getExcluido());
+        return new ProfissionalResponse(profissional.getId(), profissional.getNome(), profissional.getEmail(),
+                profissional.getCpf(), profissional.getDataNascimento(), profissional.getSexo(),
+                profissional.getCelular(), profissional.getUrlImagem(), profissional.getCrm(),
+                getEspecialidades(profissional), profissional.getCriadoEm(), profissional.getExcluido());
     }
 
     public Profissional toEntity(ProfissionalRequest request) {
@@ -41,30 +32,20 @@ public class ProfissionalMapper {
             return null;
         }
 
-        return new Profissional(
-                request.nome(),
-                request.email(),
-                request.cpf(),
-                request.dataNascimento(),
-                request.sexo() != null ? request.sexo().charAt(0) : null,
-                request.celular(),
-                request.urlImagem(),
+        return new Profissional(request.nome(), request.email(), request.cpf(), request.dataNascimento(),
+                request.sexo() != null ? request.sexo().charAt(0) : null, request.celular(), request.urlImagem(),
                 request.crm());
     }
 
     public PagedResponse<ProfissionalResponse> toPagedResponse(Page<Profissional> paged) {
-        List<ProfissionalResponse> responses =
-                paged.getContent().stream().map(this::toResponse).toList();
-        return new PagedResponse<>(
-                responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
+        List<ProfissionalResponse> responses = paged.getContent().stream().map(this::toResponse).toList();
+        return new PagedResponse<>(responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
     }
 
     private List<EspecialidadeResponse> getEspecialidades(Profissional profissional) {
         if (profissional.getEspecialidades() == null) {
             return List.of();
         }
-        return profissional.getEspecialidades().stream()
-                .map(especialidadeMapper::toResponse)
-                .toList();
+        return profissional.getEspecialidades().stream().map(especialidadeMapper::toResponse).toList();
     }
 }

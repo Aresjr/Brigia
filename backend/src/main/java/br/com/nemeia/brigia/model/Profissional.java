@@ -46,21 +46,11 @@ public class Profissional extends BaseModel {
     private Usuario usuario;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "profissional_especialidade",
-            joinColumns = @JoinColumn(name = "profissional_id"),
-            inverseJoinColumns = @JoinColumn(name = "especialidade_id"))
+    @JoinTable(name = "profissional_especialidade", joinColumns = @JoinColumn(name = "profissional_id"), inverseJoinColumns = @JoinColumn(name = "especialidade_id"))
     private List<Especialidade> especialidades;
 
-    public Profissional(
-            String nome,
-            String email,
-            String cpf,
-            LocalDate dataNascimento,
-            Character sexo,
-            String celular,
-            String urlImagem,
-            String crm) {
+    public Profissional(String nome, String email, String cpf, LocalDate dataNascimento, Character sexo, String celular,
+            String urlImagem, String crm) {
         this.nome = nome;
         this.email = email;
         this.cpf = cpf;

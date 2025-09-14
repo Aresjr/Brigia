@@ -69,7 +69,7 @@ export enum StatusAgendamento {
   Finalizado = 6
 }
 
-export const StatusDescricao: Record<StatusAgendamento, string> = {
+export const StatusDescricao: Record<number, string> = {
   [StatusAgendamento.Agendado]: 'Agendado',
   [StatusAgendamento.Confirmado]: 'Confirmado',
   [StatusAgendamento.EmAtendimento]: 'Em Atendimento',

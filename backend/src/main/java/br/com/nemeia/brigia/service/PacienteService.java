@@ -42,8 +42,7 @@ public class PacienteService {
     }
 
     public Paciente getById(Long id) {
-        return repository
-                .findById(id)
+        return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Paciente não encontrado com ID: " + id));
     }
 

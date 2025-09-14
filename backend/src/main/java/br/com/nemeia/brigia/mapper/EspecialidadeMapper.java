@@ -16,19 +16,13 @@ public class EspecialidadeMapper {
             return null;
         }
 
-        return new EspecialidadeResponse(
-                especialidade.getId(),
-                especialidade.getNome(),
-                especialidade.getDescricao(),
-                especialidade.getCriadoEm(),
-                especialidade.getExcluido());
+        return new EspecialidadeResponse(especialidade.getId(), especialidade.getNome(), especialidade.getDescricao(),
+                especialidade.getCriadoEm(), especialidade.getExcluido());
     }
 
     public PagedResponse<EspecialidadeResponse> toPagedResponse(Page<Especialidade> paged) {
-        List<EspecialidadeResponse> responses =
-                paged.getContent().stream().map(this::toResponse).toList();
-        return new PagedResponse<>(
-                responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
+        List<EspecialidadeResponse> responses = paged.getContent().stream().map(this::toResponse).toList();
+        return new PagedResponse<>(responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
     }
 
     public Especialidade toEntity(EspecialidadeRequest request) {

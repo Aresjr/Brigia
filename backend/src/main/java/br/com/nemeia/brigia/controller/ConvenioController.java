@@ -21,11 +21,9 @@ public class ConvenioController {
     private final ConvenioMapper mapper;
 
     @GetMapping
-    @PreAuthorize(
-            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<ConvenioResponse> getAllConvenios(
-            @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "false") Boolean mostrarExcluidos, @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         log.info("GET /convenios - page: {}, size: {}", page, size);
         return mapper.toPagedResponse(service.getPaged(page, size, mostrarExcluidos));
@@ -40,8 +38,7 @@ public class ConvenioController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
-    public ConvenioResponse updateConvenio(
-            @Valid @RequestBody ConvenioRequest request, @PathVariable Long id) {
+    public ConvenioResponse updateConvenio(@Valid @RequestBody ConvenioRequest request, @PathVariable Long id) {
         log.info("PUT /convenios - atualizando convênio ID {}", id);
         return mapper.toResponse(service.editConvenio(id, request));
     }
@@ -63,8 +60,7 @@ public class ConvenioController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize(
-            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public ConvenioResponse getConvenioById(@PathVariable Long id) {
         log.info("GET /convenios/{} - buscando convenio pelo ID", id);
         return mapper.toResponse(service.getById(id));

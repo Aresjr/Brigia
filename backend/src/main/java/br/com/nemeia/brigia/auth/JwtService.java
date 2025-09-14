@@ -19,23 +19,15 @@ public class JwtService {
     private final long EXPIRATION = 1000 * 60 * 60 * 4;
 
     public String generateToken(Usuario usuario) {
-        return Jwts.builder()
-                .setSubject(usuario.getEmail())
-                .claim("id", usuario.getId())
-                .claim("roles", usuario.getRoles())
-                .claim("unidadeId", usuario.getUnidade().getId())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
-                .compact();
+        return Jwts.builder().setSubject(usuario.getEmail()).claim("id", usuario.getId())
+                .claim("roles", usuario.getRoles()).claim("unidadeId", usuario.getUnidade().getId())
+                .setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256).compact();
     }
 
     public Claims extractClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        return Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes())).build()
+                .parseClaimsJws(token).getBody();
     }
 
     public boolean isTokenValid(String token) {

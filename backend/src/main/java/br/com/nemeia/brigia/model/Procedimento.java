@@ -34,10 +34,7 @@ public class Procedimento extends BaseModel {
     private Especialidade especialidade;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "preco_procedimento",
-            joinColumns = @JoinColumn(name = "procedimento_id"),
-            inverseJoinColumns = @JoinColumn(name = "id"))
+    @JoinTable(name = "preco_procedimento", joinColumns = @JoinColumn(name = "procedimento_id"), inverseJoinColumns = @JoinColumn(name = "id"))
     private List<PrecoProcedimento> precos;
 
     public Procedimento(String codigo, String nome, String observacoes, BigDecimal valorPadrao) {

@@ -23,10 +23,7 @@ public class Especialidade extends BaseModel {
     private String descricao;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "profissional_especialidade",
-            joinColumns = @JoinColumn(name = "especialidade_id"),
-            inverseJoinColumns = @JoinColumn(name = "profissional_id"))
+    @JoinTable(name = "profissional_especialidade", joinColumns = @JoinColumn(name = "especialidade_id"), inverseJoinColumns = @JoinColumn(name = "profissional_id"))
     private List<Profissional> profissionais;
 
     public Especialidade(String nome, String descricao) {

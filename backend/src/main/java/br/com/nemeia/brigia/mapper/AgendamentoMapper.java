@@ -28,33 +28,21 @@ public class AgendamentoMapper {
             return null;
         }
 
-        return new AgendamentoResponse(
-                agendamento.getId(),
-                pacienteMapper.toResponse(agendamento.getPaciente()),
-                agendamento.getData(),
-                agendamento.getHora(),
-                unidadeMapper.toResponse(agendamento.getUnidade()),
+        return new AgendamentoResponse(agendamento.getId(), pacienteMapper.toResponse(agendamento.getPaciente()),
+                agendamento.getData(), agendamento.getHora(), unidadeMapper.toResponse(agendamento.getUnidade()),
                 especialidadeMapper.toResponse(agendamento.getEspecialidade()),
                 empresaMapper.toResponse(agendamento.getEmpresa()),
                 convenioMapper.toResponse(agendamento.getConvenio()),
                 profissionalMapper.toResponse(agendamento.getProfissional()),
-                procedimentoMapper.toResponse(agendamento.getProcedimento()),
-                agendamento.getStatus(),
-                agendamento.getTipoAgendamento(),
-                agendamento.getFormaPagamento(),
-                agendamento.getValor(),
-                agendamento.getDesconto(),
-                agendamento.getObservacoes(),
-                agendamento.getDuracao(),
-                agendamento.getCriadoEm(),
-                agendamento.getExcluido());
+                procedimentoMapper.toResponse(agendamento.getProcedimento()), agendamento.getStatus(),
+                agendamento.getTipoAgendamento(), agendamento.getFormaPagamento(), agendamento.getValor(),
+                agendamento.getDesconto(), agendamento.getObservacoes(), agendamento.getDuracao(),
+                agendamento.getCriadoEm(), agendamento.getExcluido());
     }
 
     public PagedResponse<AgendamentoResponse> toPagedResponse(Page<Agendamento> paged) {
-        List<AgendamentoResponse> responses =
-                paged.getContent().stream().map(this::toResponse).toList();
-        return new PagedResponse<>(
-                responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
+        List<AgendamentoResponse> responses = paged.getContent().stream().map(this::toResponse).toList();
+        return new PagedResponse<>(responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
     }
 
     public Agendamento toEntity(AgendamentoRequest request) {

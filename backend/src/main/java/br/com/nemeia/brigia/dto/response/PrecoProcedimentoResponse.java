@@ -4,12 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record PrecoProcedimentoResponse(
-        Long id,
-        BigDecimal preco,
-        BigDecimal repasse,
-        @JsonInclude(JsonInclude.Include.NON_NULL) ConvenioResponse convenio,
-        LocalDateTime criadoEm,
-        String criadoPor,
-        LocalDateTime atualizadoEm,
-        String atualizadoPor) {}
+public record PrecoProcedimentoResponse(Long id, BigDecimal preco, BigDecimal repasse,
+        @JsonInclude(JsonInclude.Include.NON_NULL) ConvenioResponse convenio, LocalDateTime criadoEm, String criadoPor,
+        LocalDateTime atualizadoEm, String atualizadoPor) {
+}

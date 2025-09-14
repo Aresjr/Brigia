@@ -25,10 +25,8 @@ public class EmpresaMapper {
     }
 
     public PagedResponse<EmpresaResponse> toPagedResponse(Page<Empresa> paged) {
-        List<EmpresaResponse> responses =
-                paged.getContent().stream().map(this::toResponse).toList();
-        return new PagedResponse<>(
-                responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
+        List<EmpresaResponse> responses = paged.getContent().stream().map(this::toResponse).toList();
+        return new PagedResponse<>(responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
     }
 
     public Empresa toEntity(EmpresaRequest request) {

@@ -7,12 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum TipoAgendamento {
-    CONSULTA(0, "Consulta"),
-    EXAME(1, "Exame"),
-    ASO(2, "ASO"),
-    PROCEDIMENTO(3, "Procedimento"),
-    SESSAO(4, "Sessão"),
-    RETORNO(5, "Retorno");
+    CONSULTA(0, "Consulta"), EXAME(1, "Exame"), ASO(2, "ASO"), PROCEDIMENTO(3, "Procedimento"), SESSAO(4,
+            "Sessão"), RETORNO(5, "Retorno");
 
     private final Integer codigo;
     private final String descricao;

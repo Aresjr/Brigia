@@ -23,28 +23,12 @@ public class PacienteMapper {
             return null;
         }
 
-        return new PacienteResponse(
-                paciente.getId(),
-                paciente.getNome(),
-                paciente.getEmail(),
-                paciente.getCpf(),
-                paciente.getDataNascimento(),
-                paciente.getSexo(),
-                paciente.getCelular(),
-                paciente.getUltimaConsulta(),
-                paciente.getProximaConsulta(),
-                paciente.getUrlImagem(),
-                paciente.getCorIdentificacao(),
-                paciente.getCep(),
-                paciente.getRua(),
-                paciente.getComplemento(),
-                paciente.getBairro(),
-                paciente.getCidade(),
-                paciente.getUf(),
-                convenioMapper.toResponse(paciente.getConvenio()),
-                empresaMapper.toResponse(paciente.getEmpresa()),
-                paciente.getCriadoEm(),
-                paciente.getExcluido());
+        return new PacienteResponse(paciente.getId(), paciente.getNome(), paciente.getEmail(), paciente.getCpf(),
+                paciente.getDataNascimento(), paciente.getSexo(), paciente.getCelular(), paciente.getUltimaConsulta(),
+                paciente.getProximaConsulta(), paciente.getUrlImagem(), paciente.getCorIdentificacao(),
+                paciente.getCep(), paciente.getRua(), paciente.getComplemento(), paciente.getBairro(),
+                paciente.getCidade(), paciente.getUf(), convenioMapper.toResponse(paciente.getConvenio()),
+                empresaMapper.toResponse(paciente.getEmpresa()), paciente.getCriadoEm(), paciente.getExcluido());
     }
 
     public Paciente toEntity(PacienteRequest request) {
@@ -55,9 +39,7 @@ public class PacienteMapper {
     }
 
     public PagedResponse<PacienteResponse> toPagedResponse(Page<Paciente> paged) {
-        List<PacienteResponse> responses =
-                paged.getContent().stream().map(this::toResponse).toList();
-        return new PagedResponse<>(
-                responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
+        List<PacienteResponse> responses = paged.getContent().stream().map(this::toResponse).toList();
+        return new PagedResponse<>(responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
     }
 }

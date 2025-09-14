@@ -25,8 +25,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         final String path = request.getRequestURI();
         if (path.startsWith("/auth")) {
@@ -47,9 +46,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             List<String> roles = getRoles(claims);
             Long unidadeId = claims.get("unidadeId", Double.class).longValue();
             UserAuth userAuth = new UserAuth(id, unidadeId, roles);
-            UsernamePasswordAuthenticationToken auth =
-                    new UsernamePasswordAuthenticationToken(
-                            userAuth, null, userAuth.getAuthorities());
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userAuth, null,
+                    userAuth.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
         } catch (JwtException e) {
             log.warn("JWT inválido: " + e.getMessage());
@@ -62,19 +60,14 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         if (request.getCookies() == null) {
             return null;
         }
-        return Arrays.stream(request.getCookies())
-                .filter(cookie -> "access-token".equals(cookie.getName()))
-                .map(Cookie::getValue)
-                .findFirst()
-                .orElse(null);
+        return Arrays.stream(request.getCookies()).filter(cookie -> "access-token".equals(cookie.getName()))
+                .map(Cookie::getValue).findFirst().orElse(null);
     }
 
     private List<String> getRoles(Claims claims) {
         Object rolesObj = claims.get("roles");
         if (rolesObj instanceof List<?> rolesList) {
-            return rolesList.stream()
-                    .filter(String.class::isInstance)
-                    .map(String.class::cast)
+            return rolesList.stream().filter(String.class::isInstance).map(String.class::cast)
                     .collect(Collectors.toList());
         }
         return Collections.emptyList();

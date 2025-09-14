@@ -11,8 +11,7 @@ public class SecurityUtils {
 
     public Long getLoggedUserId() {
         return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
-                .map(auth -> Long.valueOf(auth.getName()))
-                .orElse(null);
+                .map(auth -> Long.valueOf(auth.getName())).orElse(null);
     }
 
     public Long getLoggedUserUnidadeId() {

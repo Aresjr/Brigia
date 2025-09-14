@@ -35,28 +35,21 @@ public class ProfissionalService {
     }
 
     public Profissional getById(Long id) {
-        return repository
-                .findById(id)
-                .orElseThrow(
-                        () -> new NotFoundException("Profissional não encontrado com ID: " + id));
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Profissional não encontrado com ID: " + id));
     }
 
     public Profissional getByUsuarioId(Long usuarioId) {
-        return repository
-                .findOneByUsuarioIdIs(usuarioId)
-                .orElseThrow(
-                        () ->
-                                new NotFoundException(
-                                        "Profissional não encontrado com o usuário ID: "
-                                                + usuarioId));
+        return repository.findOneByUsuarioIdIs(usuarioId)
+                .orElseThrow(() -> new NotFoundException("Profissional não encontrado com o usuário ID: " + usuarioId));
     }
 
     public Profissional createProfissional(ProfissionalRequest request) {
         Profissional profissional = mapper.toEntity(request);
 
         if (!request.especialidades().isEmpty()) {
-            List<Especialidade> especialidades =
-                    request.especialidades().stream().map(especialidadeService::getById).toList();
+            List<Especialidade> especialidades = request.especialidades().stream().map(especialidadeService::getById)
+                    .toList();
             profissional.setEspecialidades(especialidades);
         }
 
@@ -72,8 +65,8 @@ public class ProfissionalService {
         Profissional profissional = mapper.toEntity(request);
 
         if (!request.especialidades().isEmpty()) {
-            List<Especialidade> especialidades =
-                    request.especialidades().stream().map(especialidadeService::getById).toList();
+            List<Especialidade> especialidades = request.especialidades().stream().map(especialidadeService::getById)
+                    .toList();
             profissional.setEspecialidades(especialidades);
         }
 

@@ -36,21 +36,14 @@ public class UsuarioService {
     }
 
     public Usuario findById(Long id) {
-        return repository
-                .findById(id)
+        return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado com o ID: " + id));
     }
 
     public Usuario create(UsuarioRequest request) {
 
-        Unidade unidade =
-                unidadeRepository
-                        .findById(request.unidadeId())
-                        .orElseThrow(
-                                () ->
-                                        new NotFoundException(
-                                                "Unidade não encontrada com o ID: "
-                                                        + request.unidadeId()));
+        Unidade unidade = unidadeRepository.findById(request.unidadeId())
+                .orElseThrow(() -> new NotFoundException("Unidade não encontrada com o ID: " + request.unidadeId()));
 
         log.info("Criando usuário: {}", request.email());
         Usuario usuario = mapper.toEntity(request);

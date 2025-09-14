@@ -13,11 +13,7 @@ public class UsuarioMapper {
             return null;
         }
 
-        return new UsuarioResponse(
-                usuario.getEmail(),
-                usuario.getNome(),
-                usuario.getAvatarUrl(),
-                usuario.getRoles(),
+        return new UsuarioResponse(usuario.getEmail(), usuario.getNome(), usuario.getAvatarUrl(), usuario.getRoles(),
                 usuario.getUnidade() != null ? usuario.getUnidade().getId() : null);
     }
 

@@ -14,7 +14,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseModel {
 
-    @CreatedDate private LocalDateTime criadoEm;
+    @CreatedDate
+    private LocalDateTime criadoEm;
 
     @CreatedBy
     @Column(name = "criado_por")

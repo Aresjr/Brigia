@@ -22,11 +22,9 @@ public class EspecialidadeController {
     private final EspecialidadeMapper mapper;
 
     @GetMapping
-    @PreAuthorize(
-            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<EspecialidadeResponse> getAllEspecialidades(
-            @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "false") Boolean mostrarExcluidos, @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         log.info("GET /especialidades - page: {}, size: {}", page, size);
         return mapper.toPagedResponse(service.getPaged(page, size, mostrarExcluidos));
@@ -34,16 +32,15 @@ public class EspecialidadeController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
-    public EspecialidadeResponse createEspecialidade(
-            @Valid @RequestBody EspecialidadeRequest request) {
+    public EspecialidadeResponse createEspecialidade(@Valid @RequestBody EspecialidadeRequest request) {
         log.info("POST /especialidades");
         return mapper.toResponse(service.createEspecialidade(request));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
-    public EspecialidadeResponse updateEspecialidade(
-            @Valid @RequestBody EspecialidadeRequest request, @PathVariable Long id) {
+    public EspecialidadeResponse updateEspecialidade(@Valid @RequestBody EspecialidadeRequest request,
+            @PathVariable Long id) {
         log.info("PUT /especialidades - atualizando especialidade ID {}", id);
         return mapper.toResponse(service.editEspecialidade(id, request));
     }
@@ -65,8 +62,7 @@ public class EspecialidadeController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize(
-            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public EspecialidadeResponse getEspecialidadeById(@PathVariable Long id) {
         log.info("GET /especialidades/{} - buscando especialidade pelo ID", id);
         return mapper.toResponse(service.getById(id));

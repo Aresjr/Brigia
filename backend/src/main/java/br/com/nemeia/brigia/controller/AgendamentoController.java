@@ -1,5 +1,6 @@
 package br.com.nemeia.brigia.controller;
 
+import br.com.nemeia.brigia.dto.request.AgendamentoPatchRequest;
 import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
 import br.com.nemeia.brigia.dto.response.AgendamentoResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
@@ -66,5 +67,14 @@ public class AgendamentoController {
     public AgendamentoResponse getAgendamentoById(@PathVariable Long id) {
         log.info("GET /agendamentos/{} - buscando agendamento pelo ID", id);
         return mapper.toResponse(service.getById(id));
+    }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    public ResponseEntity<Void> patchAgendamento(@PathVariable Long id,
+                                                 @Valid @RequestBody AgendamentoPatchRequest request) {
+      log.info("PATCH /agendamentos/{} status - {}", id, request);
+      service.update(id, request.status());
+      return ResponseEntity.noContent().build();
     }
 }

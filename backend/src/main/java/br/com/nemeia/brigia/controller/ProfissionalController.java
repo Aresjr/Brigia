@@ -22,10 +22,8 @@ public class ProfissionalController {
     private final ProfissionalMapper mapper;
 
     @GetMapping
-    @PreAuthorize(
-            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
-    public PagedResponse<ProfissionalResponse> getAllProfissionais(
-            @RequestParam(defaultValue = "0") int page,
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    public PagedResponse<ProfissionalResponse> getAllProfissionais(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         log.info("GET /profissionais - page: {}, size: {}", page, size);
         return mapper.toPagedResponse(service.getPaged(page, size));
@@ -33,15 +31,13 @@ public class ProfissionalController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
-    public ProfissionalResponse createProfissional(
-            @Valid @RequestBody ProfissionalRequest request) {
+    public ProfissionalResponse createProfissional(@Valid @RequestBody ProfissionalRequest request) {
         log.info("POST /profissionais");
         return mapper.toResponse(service.createProfissional(request));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize(
-            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public ProfissionalResponse getProfissionalById(@PathVariable Long id) {
         log.info("GET /profissionais/{} - buscando profissional por ID", id);
         return mapper.toResponse(service.getById(id));
@@ -49,15 +45,14 @@ public class ProfissionalController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
-    public ProfissionalResponse updateProfissional(
-            @Valid @RequestBody ProfissionalRequest request, @PathVariable Long id) {
+    public ProfissionalResponse updateProfissional(@Valid @RequestBody ProfissionalRequest request,
+            @PathVariable Long id) {
         log.info("PUT /profissionais - atualizando profissional ID {}", id);
         return mapper.toResponse(service.editProfissional(id, request));
     }
 
     @GetMapping("/aniversariantes")
-    @PreAuthorize(
-            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public List<ProfissionalResponse> aniversariantes() {
         log.info("GET /profissionais/aniversariantes");
         return service.getAniversariantes().stream().map(mapper::toResponse).toList();
