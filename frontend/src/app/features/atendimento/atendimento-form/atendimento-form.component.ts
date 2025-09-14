@@ -44,6 +44,7 @@ export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> 
       prescricoes: [null],
       observacoes: [null],
       agendamentoId: [null],
+      horaInicio: [null],
       procedimentos: this.fb.array([])
     });
   }
@@ -52,10 +53,17 @@ export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> 
     this.carregarProcedimentos();
     if (this.atendimento) {
       this.form.patchValue(this.atendimento);
-      this.form.patchValue({
-        agendamentoId: this.agendamentoId
-      });
     }
+
+    const horaAtual = new Date().toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false
+    });
+    this.form.patchValue({
+      agendamentoId: this.agendamentoId,
+      horaInicio: horaAtual
+    });
   }
 
   get procedimentosLancados() {

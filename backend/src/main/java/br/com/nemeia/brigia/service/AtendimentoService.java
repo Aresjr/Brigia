@@ -6,14 +6,15 @@ import br.com.nemeia.brigia.mapper.AtendimentoMapper;
 import br.com.nemeia.brigia.model.*;
 import br.com.nemeia.brigia.repository.*;
 import jakarta.validation.Valid;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepository> {
@@ -24,14 +25,9 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
     private final PrecoProcedimentoService precoProcedimentoService;
     private final AtendimentoMapper mapper;
 
-    public AtendimentoService(
-            AtendimentoRepository repository,
-            SecurityUtils securityUtils,
-            AtendimentoMapper mapper,
-            ProfissionalService profissionalService,
-            AgendamentoService agendamentoService,
-            ProcedimentoService procedimentoService,
-            PrecoProcedimentoService precoProcedimentoService) {
+    public AtendimentoService(AtendimentoRepository repository, SecurityUtils securityUtils, AtendimentoMapper mapper,
+            ProfissionalService profissionalService, AgendamentoService agendamentoService,
+            ProcedimentoService procedimentoService, PrecoProcedimentoService precoProcedimentoService) {
         super(repository, securityUtils);
         this.mapper = mapper;
         this.profissionalService = profissionalService;
@@ -51,22 +47,30 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         Agendamento agendamento = agendamentoService.getById(request.agendamentoId());
 
         atendimento.setUnidade(new Unidade(securityUtils.getLoggedUserUnidadeId()));
-        atendimento.setProfissional(
-                profissionalService.getByUsuarioId(securityUtils.getLoggedUserId()));
+        atendimento.setProfissional(profissionalService.getByUsuarioId(securityUtils.getLoggedUserId()));
 
-        setEntidades(request, atendimento, agendamento);
+        setEntidades(atendimento, agendamento);
 
         List<ProcedimentoAtendimento> pa = new ArrayList<>();
         List<BigDecimal> valoresLancados = new ArrayList<>();
-        request.procedimentos().forEach( par -> {
+        request.procedimentos().forEach(par -> {
             Procedimento procedimento = procedimentoService.getById(par.procedimentoId());
-            valoresLancados.add(precoProcedimentoService.getPreco(procedimento, agendamento.getConvenio()));
+            valoresLancados.add(precoProcedimentoService.getPreco(procedimento, agendamento.getConvenio())
+                    .multiply(BigDecimal.valueOf(par.quantidade())));
             pa.add(new ProcedimentoAtendimento(atendimento, procedimento, par.quantidade()));
         });
         atendimento.setProcedimentos(pa);
         atendimento.setValorTotal(valoresLancados.stream().reduce(BigDecimal.ZERO, BigDecimal::add));
 
-        return repository.save(atendimento);
+        atendimento.setData(LocalDate.now());
+        atendimento.setHoraFim(LocalTime.now());
+
+        Atendimento  atendimentoNovo = repository.save(atendimento);
+
+        agendamento.setStatus(StatusAgendamento.FINALIZADO);
+        agendamentoService.update(agendamento);
+
+        return atendimentoNovo;
     }
 
     public Atendimento update(@Valid AtendimentoRequest request, Long id) {
@@ -74,7 +78,7 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         Atendimento atendimentoUpdate = mapper.toEntity(request);
 
         Agendamento agendamento = agendamentoService.getById(request.agendamentoId());
-        setEntidades(request, atendimentoUpdate, agendamento);
+        setEntidades(atendimentoUpdate, agendamento);
 
         atendimentoUpdate.setId(original.getId());
         atendimentoUpdate.setUnidade(original.getUnidade());
@@ -84,12 +88,13 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         return repository.save(atendimentoUpdate);
     }
 
-    private void setEntidades(AtendimentoRequest request, Atendimento atendimento, Agendamento agendamento) {
+    private void setEntidades(Atendimento atendimento, Agendamento agendamento) {
         atendimento.setAgendamento(agendamento);
         atendimento.setConvenio(agendamento.getConvenio());
         atendimento.setEmpresa(agendamento.getEmpresa());
         atendimento.setEspecialidade(agendamento.getEspecialidade());
         atendimento.setFormaPagamento(agendamento.getFormaPagamento());
+        atendimento.setPaciente(agendamento.getPaciente());
     }
 
     @Override

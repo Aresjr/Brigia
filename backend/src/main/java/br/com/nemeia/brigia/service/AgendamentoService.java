@@ -24,16 +24,10 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     private final EmpresaService empresaService;
     private final ConvenioService convenioService;
 
-    public AgendamentoService(
-            AgendamentoRepository repository,
-            SecurityUtils securityUtils,
-            AgendamentoMapper mapper,
-            PacienteService pacienteService,
-            ProfissionalService profissionalService,
-            EspecialidadeService especialidadeService,
-            ProcedimentoService procedimentoService,
-            EmpresaService empresaService,
-            ConvenioService convenioService) {
+    public AgendamentoService(AgendamentoRepository repository, SecurityUtils securityUtils, AgendamentoMapper mapper,
+            PacienteService pacienteService, ProfissionalService profissionalService,
+            EspecialidadeService especialidadeService, ProcedimentoService procedimentoService,
+            EmpresaService empresaService, ConvenioService convenioService) {
         super(repository, securityUtils);
         this.mapper = mapper;
         this.pacienteService = pacienteService;
@@ -48,8 +42,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         if (securityUtils.getLoggedUserRoles().contains(RoleUsuario.MEDICO.toString())) {
             Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
 
-            Long profissionalId =
-                    profissionalService.getByUsuarioId(securityUtils.getLoggedUserId()).getId();
+            Long profissionalId = profissionalService.getByUsuarioId(securityUtils.getLoggedUserId()).getId();
             return repository.findAllByProfissionalIdIs(pageable, profissionalId);
         } else {
             return getPaged(page, size, false);
@@ -98,8 +91,13 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         }
     }
 
+    public void update(Agendamento agendamento) {
+      repository.save(agendamento);
+    }
+
     @Override
     String getNomeEntidade() {
         return "Agendamento";
     }
+
 }

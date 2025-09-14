@@ -7,11 +7,11 @@ import br.com.nemeia.brigia.model.Convenio;
 import br.com.nemeia.brigia.model.PrecoProcedimento;
 import br.com.nemeia.brigia.model.Procedimento;
 import br.com.nemeia.brigia.repository.PrecoProcedimentoRepository;
+import java.math.BigDecimal;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -22,24 +22,20 @@ public class PrecoProcedimentoService {
     private final PrecoProcedimentoMapper mapper;
 
     public PrecoProcedimento getById(Long id) {
-        return repository
-                .findById(id)
-                .orElseThrow(
-                        () ->
-                                new NotFoundException(
-                                        "Preço Procedimento não encontrada com ID: " + id));
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Preço Procedimento não encontrada com ID: " + id));
     }
 
-    public PrecoProcedimento save(
-            Procedimento procedimento, Convenio convenio, PrecoProcedimentoRequest request) {
-        PrecoProcedimento precoProcedimento =
-                mapper.toPrecoProcedimento(procedimento, convenio, request);
+    public PrecoProcedimento save(Procedimento procedimento, Convenio convenio, PrecoProcedimentoRequest request) {
+        PrecoProcedimento precoProcedimento = mapper.toPrecoProcedimento(procedimento, convenio, request);
         return repository.save(precoProcedimento);
     }
 
     public BigDecimal getPreco(Procedimento procedimento, Convenio convenio) {
-        return repository.findOneByProcedimentoAndConvenio(procedimento.getId(), convenio.getId())
-                .map(PrecoProcedimento::getPreco)
-                .orElse(procedimento.getValorPadrao());
+        return convenio != null
+                ? repository.findOneByProcedimentoAndConvenio(procedimento.getId(), convenio.getId())
+                        .map(PrecoProcedimento::getPreco).orElse(procedimento.getValorPadrao())
+                : Optional.ofNullable(procedimento.getValorPadrao()).orElseThrow(() -> new NotFoundException(
+                        String.format("Preço não cadastrado para procedimento %s", procedimento.getNome())));
     }
 }

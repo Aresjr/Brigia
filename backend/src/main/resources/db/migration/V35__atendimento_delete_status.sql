@@ -1,0 +1,1 @@
+ALTER TABLE atendimento DROP COLUMN IF EXISTS status;

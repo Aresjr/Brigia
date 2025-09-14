@@ -35,10 +35,8 @@ public class ProcedimentoService {
     }
 
     public Procedimento getById(Long id) {
-        return repository
-                .findById(id)
-                .orElseThrow(
-                        () -> new NotFoundException("Procedimento não encontrado com ID: " + id));
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Procedimento não encontrado com ID: " + id));
     }
 
     public Procedimento createProcedimento(ProcedimentoRequest request) {
@@ -47,14 +45,10 @@ public class ProcedimentoService {
         procedimento.setEspecialidade(especialidade);
 
         Procedimento procedimentoNovo = repository.save(procedimento);
-        request.precosConvenios()
-                .forEach(
-                        precoProcedimento -> {
-                            Convenio convenio =
-                                    convenioService.getById(precoProcedimento.convenioId());
-                            precoProcedimentoService.save(
-                                    procedimentoNovo, convenio, precoProcedimento);
-                        });
+        request.precosConvenios().forEach(precoProcedimento -> {
+            Convenio convenio = convenioService.getById(precoProcedimento.convenioId());
+            precoProcedimentoService.save(procedimentoNovo, convenio, precoProcedimento);
+        });
         return procedimentoNovo;
     }
 
@@ -67,14 +61,10 @@ public class ProcedimentoService {
 
         Procedimento procedimentoAtualizado = repository.save(procedimento);
 
-        request.precosConvenios()
-                .forEach(
-                        precoProcedimento -> {
-                            Convenio convenio =
-                                    convenioService.getById(precoProcedimento.convenioId());
-                            precoProcedimentoService.save(
-                                    procedimentoAtualizado, convenio, precoProcedimento);
-                        });
+        request.precosConvenios().forEach(precoProcedimento -> {
+            Convenio convenio = convenioService.getById(precoProcedimento.convenioId());
+            precoProcedimentoService.save(procedimentoAtualizado, convenio, precoProcedimento);
+        });
 
         return procedimentoAtualizado;
     }

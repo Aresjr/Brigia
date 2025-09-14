@@ -22,11 +22,9 @@ public class AgendamentoController {
     private final AgendamentoMapper mapper;
 
     @GetMapping
-    @PreAuthorize(
-            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<AgendamentoResponse> getAllAgendamentos(
-            @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "false") Boolean mostrarExcluidos, @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         log.info("GET /agendamentos - page: {}, size: {}", page, size);
         return mapper.toPagedResponse(service.getByProfissional(page, size));
@@ -41,8 +39,8 @@ public class AgendamentoController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
-    public AgendamentoResponse updateAgendamento(
-            @Valid @RequestBody AgendamentoRequest request, @PathVariable Long id) {
+    public AgendamentoResponse updateAgendamento(@Valid @RequestBody AgendamentoRequest request,
+            @PathVariable Long id) {
         log.info("PUT /agendamentos - atualizando convênio ID {}", id);
         return mapper.toResponse(service.editAgendamento(id, request));
     }
@@ -64,8 +62,7 @@ public class AgendamentoController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize(
-            "hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public AgendamentoResponse getAgendamentoById(@PathVariable Long id) {
         log.info("GET /agendamentos/{} - buscando agendamento pelo ID", id);
         return mapper.toResponse(service.getById(id));

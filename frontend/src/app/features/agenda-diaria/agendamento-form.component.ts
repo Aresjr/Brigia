@@ -309,6 +309,7 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
     }
 
     const agendamentoId = agendamento.id;
+    //TODO - atualizar agendamento para "Em Atendimento"
     return this.router.navigate(['/atendimentos'], {
       state: { agendamentoId }
     });

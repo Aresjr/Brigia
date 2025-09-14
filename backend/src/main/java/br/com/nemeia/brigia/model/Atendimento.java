@@ -1,13 +1,11 @@
 package br.com.nemeia.brigia.model;
 
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,7 +33,7 @@ public class Atendimento extends BaseModel {
     private Profissional profissional;
 
     @Column(name = "data", nullable = false)
-    private LocalDateTime data;
+    private LocalDate data;
 
     @Column(name = "hora_inicio", nullable = false)
     private LocalTime horaInicio;

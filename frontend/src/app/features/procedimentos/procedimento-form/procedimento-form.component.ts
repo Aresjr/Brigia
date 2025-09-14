@@ -16,6 +16,7 @@ import { limitLength } from '../../../core/util-methods';
 import { FormComponent } from '../../shared/form.component';
 import { forkJoin, map, Observable, tap } from 'rxjs';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-procedimento-form',
@@ -41,7 +42,8 @@ export class ProcedimentoFormComponent extends FormComponent<ProcedimentoRequest
   constructor(
     protected override fb: FormBuilder,
     private conveniosService: ConveniosService,
-    private especialidadeService: EspecialidadeService
+    private especialidadeService: EspecialidadeService,
+    private toastr: ToastrService
   ) {
     super(fb);
     this.form = this.fb.group({
@@ -110,7 +112,7 @@ export class ProcedimentoFormComponent extends FormComponent<ProcedimentoRequest
         convenioId: [convenio.id],
         nome: [convenio.nome],
         preco: [0, [Validators.required, Validators.min(0)]],
-        repasse: [0, [Validators.required, Validators.min(0)]]
+        repasse: [0]
       }));
     });
   }
@@ -134,6 +136,7 @@ export class ProcedimentoFormComponent extends FormComponent<ProcedimentoRequest
         precosConvenios: precos
       });
     } else {
+      this.toastr.warning('Alguns campos não foram preenchidos, verifique');
       Object.keys(this.form.controls).forEach(field => {
         const control = this.form.get(field);
         control?.markAsTouched({ onlySelf: true });

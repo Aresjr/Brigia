@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PrecoProcedimentoMapper {
 
-    public PrecoProcedimento toPrecoProcedimento(
-            Procedimento procedimento, Convenio convenio, PrecoProcedimentoRequest request) {
+    public PrecoProcedimento toPrecoProcedimento(Procedimento procedimento, Convenio convenio,
+            PrecoProcedimentoRequest request) {
         PrecoProcedimento precoProcedimento = new PrecoProcedimento();
         precoProcedimento.setProcedimento(procedimento);
         precoProcedimento.setConvenio(convenio);

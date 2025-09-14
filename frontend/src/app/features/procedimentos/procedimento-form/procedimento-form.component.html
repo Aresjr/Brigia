@@ -20,7 +20,7 @@
         <div class="flex space-x-4">
           <div class="w-24 tooltip text-left" data-tip="Valor (Particular)">
             <label class="label-campo">Valor</label>
-            <div class="placeholder-esquerdo">R$</div>
+            <div class="placeholder-esquerdo py-[13px]">R$</div>
             <input type="text" formControlName="valorPadrao" min="1" max="99999" id="valor"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker="," required
@@ -69,7 +69,7 @@
 
               <div class="text-sm">{{preco.get('nome')?.value}}</div>
 
-              <input type="text" [id]="'preco_' + i" formControlName="preco"
+              <input type="text" [id]="'preco_' + i" formControlName="preco" required
                      mask="separator.2" thousandSeparator="" decimalMarker=","
                      class="campo mt-0 p-2 text-right" min="0" max="99999" step="1"
                      [ngClass]="styleClassesField('preco_' + i)" >

@@ -149,10 +149,9 @@
 				<version>2.46.1</version>
 				<configuration>
 					<java>
-                        <googleJavaFormat>
-                            <version>1.17.0</version>
-                            <style>AOSP</style>
-                        </googleJavaFormat>
+                        <eclipse>
+                            <file>${project.basedir}/formatter/eclipse-java-style.xml</file>
+                        </eclipse>
 					</java>
 				</configuration>
 			</plugin>
