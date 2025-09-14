@@ -82,7 +82,7 @@ export const StatusAgendamentoDescricao: Record<number, string> = {
   [StatusAgendamento.Finalizado]: 'Finalizado'
 };
 
-export const CorAtendimento: Record<number, string> = {
+export const CorAgendamento: Record<number, string> = {
   [StatusAgendamento.Agendado]: '#60a5fa',
   [StatusAgendamento.Confirmado]: '#2563EB',
   [StatusAgendamento.EmAtendimento]: '#06B6D4',
@@ -90,6 +90,24 @@ export const CorAtendimento: Record<number, string> = {
   [StatusAgendamento.NaoCompareceu]: '#F59E0B',
   [StatusAgendamento.Reagendado]: '#F59E0B',
   [StatusAgendamento.Finalizado]: '#14B8A6'
+};
+
+export enum StatusAtendimento {
+  EmAtendimento = 0,
+  Cancelado = 1,
+  Finalizado = 2
+}
+
+export const StatusAtendimentoDescricao: Record<number, string> = {
+  [StatusAtendimento.EmAtendimento]: 'Em Atendimento',
+  [StatusAtendimento.Cancelado]: 'Cancelado',
+  [StatusAtendimento.Finalizado]: 'Finalizado'
+};
+
+export const CorAtendimento: Record<number, string> = {
+  [StatusAtendimento.EmAtendimento]: '#06B6D4',
+  [StatusAtendimento.Cancelado]: '#EF4444',
+  [StatusAtendimento.Finalizado]: '#14B8A6'
 };
 
 export const STATUS_ABRIR_ATENDIMENTO = [StatusAgendamento.Agendado, StatusAgendamento.Confirmado,

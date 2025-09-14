@@ -35,6 +35,7 @@ public class AtendimentoMapper {
                 atendimento.getHoraFim(),
                 agendamentoMapper.toResponse(atendimento.getAgendamento()),
                 convenioMapper.toResponse(atendimento.getConvenio()),
+                atendimento.getStatus(),
                 empresaMapper.toResponse(atendimento.getEmpresa()),
                 especialidadeMapper.toResponse(atendimento.getEspecialidade()),
                 atendimento.getFormaPagamento(),

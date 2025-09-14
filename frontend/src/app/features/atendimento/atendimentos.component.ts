@@ -12,6 +12,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { Router } from '@angular/router';
 import { FabComponent } from '../shared/fab/fab.component';
+import { CorAtendimento, StatusAtendimentoDescricao } from '../../core/constans';
 
 @Component({
   selector: 'app-atendimentos',
@@ -41,8 +42,6 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
     const atendimentoId = navigation?.extras.state?.['atendimentoId'];
     this.agendamentoId = agendamentoId ? agendamentoId : null;
     this.atendimentoId = atendimentoId ? atendimentoId : null;
-    console.log('atendimentoId', atendimentoId);
-    console.log('agendamentoId', agendamentoId);
   }
 
   ngOnInit(): void {
@@ -68,7 +67,9 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
   }
 
   override filter(atendimento: Atendimento, searchTerm: string): boolean | undefined {
-    return atendimento.nome.toLowerCase().includes(searchTerm.toLowerCase());
+    return atendimento.especialidade.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      this.StatusAtendimentoDescricao[atendimento.status].toLowerCase().includes(searchTerm.toLowerCase()) ||
+      atendimento.paciente.nome.toLowerCase().includes(searchTerm.toLowerCase());
   }
 
   onSalvarNovoAtendimento(atendimento: Partial<AtendimentoRequest>) {
@@ -126,4 +127,7 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
   novoAgendamento() {
     this.toastr.info('Será implementado logo...');
   }
+
+  protected readonly CorAtendimento = CorAtendimento;
+  protected readonly StatusAtendimentoDescricao = StatusAtendimentoDescricao;
 }

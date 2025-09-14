@@ -24,7 +24,7 @@ import { IForm } from '../shared/form.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
 import {
-  CorAtendimento,
+  CorAgendamento,
   FORMAS_PAGAMENTO,
   STATUS_ABRIR_ATENDIMENTO,
   StatusAgendamentoDescricao,
@@ -370,5 +370,5 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
 
   protected readonly ColorUtils = ColorUtils;
   protected readonly StatusDescricao = StatusAgendamentoDescricao;
-  protected readonly CorAtendimento = CorAtendimento;
+  protected readonly CorAtendimento = CorAgendamento;
 }

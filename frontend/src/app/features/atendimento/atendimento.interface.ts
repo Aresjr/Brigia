@@ -7,6 +7,7 @@ import { Empresa } from '../empresa/empresa.interface';
 import { Especialidade } from '../especialidade/especialidade.interface';
 
 export interface Atendimento extends Entidade {
+    status: number;
     paciente: Paciente;
     profissional: Profissional;
     data: Date;

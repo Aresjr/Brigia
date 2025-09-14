@@ -1,7 +1,7 @@
 import { CalendarEvent } from 'angular-calendar';
 import { formatHora } from './util-methods';
 import { Agendamento } from '../features/agenda-diaria/agendamento.interface';
-import { CorAtendimento, StatusAgendamentoDescricao } from './constans';
+import { CorAgendamento, StatusAgendamentoDescricao } from './constans';
 
 //Disponibilidade do médico - #D1FAE5
 
@@ -19,7 +19,7 @@ export class EventoFactory {
       title: `${agendamento.paciente.nome} - ${StatusAgendamentoDescricao[agendamento.status].toUpperCase()}
       <br/>
       ${formatHora(start)}-${formatHora(end)} - ${agendamento.profissional.nome}`,
-      color: { primary: CorAtendimento[agendamento.status], secondary: CorAtendimento[agendamento.status] },
+      color: { primary: CorAgendamento[agendamento.status], secondary: CorAgendamento[agendamento.status] },
       meta: agendamento
     };
   }

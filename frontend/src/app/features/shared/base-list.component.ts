@@ -81,6 +81,7 @@ export abstract class BaseListComponent<T extends Entidade> {
 
   selecionar(item: T): void {
     this.itemSelecionado = item;
+    console.log('this.itemSelecionado', this.itemSelecionado);
   }
 
   fecharDetalhes(): void {
