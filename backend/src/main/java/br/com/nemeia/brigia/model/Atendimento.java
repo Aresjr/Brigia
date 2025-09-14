@@ -38,11 +38,11 @@ public class Atendimento extends BaseModel {
     @Column(name = "hora_inicio", nullable = false)
     private LocalTime horaInicio;
 
-    @Column(name = "hora_fim", nullable = false)
+    @Column(name = "hora_fim")
     private LocalTime horaFim;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "unidade_id")
+    @JoinColumn(name = "unidade_id", nullable = false)
     private Unidade unidade;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -87,4 +87,8 @@ public class Atendimento extends BaseModel {
 
     @Column(name = "valor_total")
     private BigDecimal valorTotal;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "status", length = 15, nullable = false)
+    private StatusAtendimento status;
 }

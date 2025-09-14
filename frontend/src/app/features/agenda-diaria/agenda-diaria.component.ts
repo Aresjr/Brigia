@@ -140,4 +140,8 @@ export class AgendaDiariaComponent implements OnInit {
       this.eventosExibicao = [...this.eventosInternos];
     }
   }
+
+  mostraFab() {
+    return !this.userService.isMedico();
+  }
 }

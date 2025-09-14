@@ -1,7 +1,7 @@
 package br.com.nemeia.brigia.controller;
 
-import br.com.nemeia.brigia.dto.atendimento.AtendimentoRequest;
-import br.com.nemeia.brigia.dto.atendimento.AtendimentoResponse;
+import br.com.nemeia.brigia.dto.request.AtendimentoRequest;
+import br.com.nemeia.brigia.dto.response.AtendimentoResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.mapper.AtendimentoMapper;
 import br.com.nemeia.brigia.service.AtendimentoService;
@@ -42,5 +42,20 @@ public class AtendimentoController {
             @PathVariable Long id) {
         log.info("PUT /atendimentos - atualizando atendimento ID {}", id);
         return mapper.toResponse(service.update(request, id));
+    }
+
+    @PostMapping("/iniciar-atendimento/{agendamentoId}")
+    @PreAuthorize("hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    public AtendimentoResponse iniciarAtendimento(@PathVariable Long agendamentoId) {
+      log.info("POST /agendamentos/iniciar-atendimento/{}", agendamentoId);
+      return mapper.toResponse(service.iniciarAtendimento(agendamentoId));
+    }
+
+    @PostMapping("/finalizar-atendimento/{id}")
+    @PreAuthorize("hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    public AtendimentoResponse finalizarAtendimento(@PathVariable Long id,
+                                                    @Valid @RequestBody AtendimentoRequest request) {
+      log.info("POST /agendamentos/finalizar-atendimento/{}", id);
+      return mapper.toResponse(service.finalizarAtendimento(id, request));
     }
 }

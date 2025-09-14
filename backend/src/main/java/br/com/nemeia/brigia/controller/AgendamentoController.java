@@ -68,13 +68,4 @@ public class AgendamentoController {
         log.info("GET /agendamentos/{} - buscando agendamento pelo ID", id);
         return mapper.toResponse(service.getById(id));
     }
-
-    @PatchMapping("/{id}")
-    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
-    public ResponseEntity<Void> patchAgendamento(@PathVariable Long id,
-                                                 @Valid @RequestBody AgendamentoPatchRequest request) {
-      log.info("PATCH /agendamentos/{} status - {}", id, request);
-      service.update(id, request.status());
-      return ResponseEntity.noContent().build();
-    }
 }

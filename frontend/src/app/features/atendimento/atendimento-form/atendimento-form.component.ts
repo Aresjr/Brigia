@@ -9,6 +9,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dial
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { ProcedimentosService } from '../../procedimentos/procedimentos.service';
 import { Procedimento } from '../../procedimentos/procedimento.interface';
+import { AtendimentosService } from '../atendimentos.service';
 
 @Component({
   selector: 'app-atendimento-form',
@@ -28,12 +29,14 @@ import { Procedimento } from '../../procedimentos/procedimento.interface';
 export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> implements OnInit {
   @Input() atendimento: Atendimento | null = null;
   @Input() agendamentoId: number | null = null;
+  @Input() atendimentoId: number | null = null;
   titulo: string = 'Novo Atendimento';
   exibeConfirmCancelamento: boolean = false;
   procedimentos: Procedimento[] = [];
 
   constructor(protected override fb: FormBuilder,
-              private procedimentosService: ProcedimentosService) {
+              private procedimentosService: ProcedimentosService,
+              private atendimentosService: AtendimentosService) {
     super(fb);
     this.form = this.fb.group({
       anamnese: [null],

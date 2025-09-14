@@ -31,13 +31,18 @@ import { FabComponent } from '../shared/fab/fab.component';
 export class AtendimentosComponent extends BaseListComponent<Atendimento> implements OnInit {
   override nomeEntidade = 'Atendimento';
   agendamentoId: number;
+  atendimentoId: number;
 
   constructor(private atendimentosService: AtendimentosService, private toastr: ToastrService,
               private router: Router) {
     super();
     const navigation = this.router.getCurrentNavigation();
     const agendamentoId = navigation?.extras.state?.['agendamentoId'];
+    const atendimentoId = navigation?.extras.state?.['atendimentoId'];
     this.agendamentoId = agendamentoId ? agendamentoId : null;
+    this.atendimentoId = atendimentoId ? atendimentoId : null;
+    console.log('atendimentoId', atendimentoId);
+    console.log('agendamentoId', agendamentoId);
   }
 
   ngOnInit(): void {
@@ -77,6 +82,15 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
           this.itemEdicao = null;
         }
       });
+    } else if (this.atendimentoId != null) {
+      this.atendimentosService.finalizarAtendimento(this.atendimentoId, atendimento)
+        .subscribe({
+          next: () => {
+            this.toastr.success(`${this.nomeEntidade} cadastrado`);
+            this.carregarAtendimentos();
+            this.mostrarFormularioNovo = false;
+          }
+        });
     } else {
       this.atendimentosService.criar(atendimento).subscribe({
         next: () => {

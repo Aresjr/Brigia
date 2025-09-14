@@ -6,9 +6,10 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum StatusAgendamento {
-    AGENDADO(0, "Agendado"), CONFIRMADO(1, "Confirmado"), EM_ATENDIMENTO(2, "Em Atendimento"), CANCELADO(3,
-            "Cancelado"), NAO_COMPARECEU(4, "Não Compareceu"), REAGENDADO(5, "Reagendado"), FINALIZADO(6, "Finalizado");
+public enum StatusAtendimento {
+    EM_ATENDIMENTO(0, "Em Atendimento"),
+    CANCELADO(1, "Confirmado"),
+    FINALIZADO(2, "Finalizado");
 
     private final Integer codigo;
     private final String descricao;

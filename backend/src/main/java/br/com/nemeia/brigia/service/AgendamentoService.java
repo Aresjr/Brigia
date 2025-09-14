@@ -95,12 +95,6 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
       repository.save(agendamento);
     }
 
-    public void update(Long id, StatusAgendamento status) {
-      Agendamento agendamento = getById(id);
-      agendamento.setStatus(status);
-      update(agendamento);
-    }
-
     @Override
     String getNomeEntidade() {
         return "Agendamento";

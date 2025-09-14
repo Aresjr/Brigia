@@ -1,7 +1,8 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.auth.SecurityUtils;
-import br.com.nemeia.brigia.dto.atendimento.AtendimentoRequest;
+import br.com.nemeia.brigia.dto.request.AtendimentoRequest;
+import br.com.nemeia.brigia.dto.request.ProcedimentoAtendimentoRequest;
 import br.com.nemeia.brigia.mapper.AtendimentoMapper;
 import br.com.nemeia.brigia.model.*;
 import br.com.nemeia.brigia.repository.*;
@@ -46,26 +47,13 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
 
         Agendamento agendamento = agendamentoService.getById(request.agendamentoId());
 
-        atendimento.setUnidade(new Unidade(securityUtils.getLoggedUserUnidadeId()));
-        atendimento.setProfissional(profissionalService.getByUsuarioId(securityUtils.getLoggedUserId()));
-
         setEntidades(atendimento, agendamento);
-
-        List<ProcedimentoAtendimento> pa = new ArrayList<>();
-        List<BigDecimal> valoresLancados = new ArrayList<>();
-        request.procedimentos().forEach(par -> {
-            Procedimento procedimento = procedimentoService.getById(par.procedimentoId());
-            valoresLancados.add(precoProcedimentoService.getPreco(procedimento, agendamento.getConvenio())
-                    .multiply(BigDecimal.valueOf(par.quantidade())));
-            pa.add(new ProcedimentoAtendimento(atendimento, procedimento, par.quantidade()));
-        });
-        atendimento.setProcedimentos(pa);
-        atendimento.setValorTotal(valoresLancados.stream().reduce(BigDecimal.ZERO, BigDecimal::add));
+        setProcedimentos(atendimento, request.procedimentos(), agendamento.getConvenio());
 
         atendimento.setData(LocalDate.now());
         atendimento.setHoraFim(LocalTime.now());
 
-        Atendimento  atendimentoNovo = repository.save(atendimento);
+        Atendimento atendimentoNovo = repository.save(atendimento);
 
         agendamento.setStatus(StatusAgendamento.FINALIZADO);
         agendamentoService.update(agendamento);
@@ -73,6 +61,21 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         return atendimentoNovo;
     }
 
+    private void setProcedimentos(Atendimento atendimento, List<ProcedimentoAtendimentoRequest> procedimentos,
+                                  Convenio convenio) {
+      List<ProcedimentoAtendimento> pa = new ArrayList<>();
+      List<BigDecimal> valoresLancados = new ArrayList<>();
+      procedimentos.forEach(par -> {
+        Procedimento procedimento = procedimentoService.getById(par.procedimentoId());
+        valoresLancados.add(precoProcedimentoService.getPreco(procedimento, convenio)
+          .multiply(BigDecimal.valueOf(par.quantidade())));
+        pa.add(new ProcedimentoAtendimento(atendimento, procedimento, par.quantidade()));
+      });
+      atendimento.getProcedimentos().addAll(pa);
+      atendimento.setValorTotal(valoresLancados.stream().reduce(BigDecimal.ZERO, BigDecimal::add));
+    }
+
+    @Transactional
     public Atendimento update(@Valid AtendimentoRequest request, Long id) {
         Atendimento original = getById(id);
         Atendimento atendimentoUpdate = mapper.toEntity(request);
@@ -89,6 +92,9 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
     }
 
     private void setEntidades(Atendimento atendimento, Agendamento agendamento) {
+        atendimento.setUnidade(new Unidade(securityUtils.getLoggedUserUnidadeId()));
+        atendimento.setProfissional(profissionalService.getByUsuarioId(securityUtils.getLoggedUserId()));
+
         atendimento.setAgendamento(agendamento);
         atendimento.setConvenio(agendamento.getConvenio());
         atendimento.setEmpresa(agendamento.getEmpresa());
@@ -97,8 +103,43 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         atendimento.setPaciente(agendamento.getPaciente());
     }
 
+    public Atendimento iniciarAtendimento(Long agendamentoId) {
+        Agendamento agendamento = agendamentoService.getById(agendamentoId);
+
+        Atendimento atendimento = new Atendimento();
+        setEntidades(atendimento, agendamento);
+        atendimento.setStatus(StatusAtendimento.EM_ATENDIMENTO);
+        atendimento.setData(LocalDate.now());
+        atendimento.setHoraInicio(LocalTime.now());
+        atendimento = repository.save(atendimento);
+
+        agendamento.setStatus(StatusAgendamento.EM_ATENDIMENTO);
+        agendamentoService.update(agendamento);
+        return atendimento;
+    }
+
+    public Atendimento finalizarAtendimento(Long id, @Valid AtendimentoRequest request) {
+        Atendimento atendimento = getById(id);
+
+        Agendamento agendamento = agendamentoService.getById(atendimento.getAgendamento().getId());
+
+        setProcedimentos(atendimento, request.procedimentos(), agendamento.getConvenio());
+
+        atendimento.setData(LocalDate.now());
+        atendimento.setHoraFim(LocalTime.now());
+        atendimento.setStatus(StatusAtendimento.FINALIZADO);
+
+        atendimento = repository.save(atendimento);
+
+        agendamento.setStatus(StatusAgendamento.FINALIZADO);
+        agendamentoService.update(agendamento);
+
+        return atendimento;
+    }
+
     @Override
     String getNomeEntidade() {
         return "Atendimento";
     }
+
 }

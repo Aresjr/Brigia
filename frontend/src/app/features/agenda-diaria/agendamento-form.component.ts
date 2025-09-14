@@ -27,7 +27,7 @@ import {
   CorAtendimento,
   FORMAS_PAGAMENTO,
   STATUS_ABRIR_ATENDIMENTO,
-  StatusDescricao,
+  StatusAgendamentoDescricao,
   TIPO_AGENDAMENTO
 } from '../../core/constans';
 import { forkJoin, map, Observable, tap } from 'rxjs';
@@ -36,6 +36,7 @@ import { UserService } from '../../core/user.service';
 import { ColorUtils } from '../../core/color-utils';
 import { Router } from '@angular/router';
 import { AgendamentosService } from './agendamentos.service';
+import { AtendimentosService } from '../atendimento/atendimentos.service';
 
 @Component({
   selector: 'app-agendamento-form',
@@ -83,7 +84,8 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
               private pacientesService: PacienteService, private conveniosService: ConveniosService,
               private especialidadeService: EspecialidadeService, private profissionaisService: ProfissionaisService,
               private empresasService: EmpresasService, private procedimentosService: ProcedimentosService,
-              protected userService: UserService, private router: Router, private agendamentosService: AgendamentosService) {
+              protected userService: UserService, private router: Router, private agendamentosService: AgendamentosService,
+              private atendimentosService: AtendimentosService) {
     super(fb);
     this.hoje = new Date().toISOString().split('T')[0];
     const form: IForm<AgendamentoRequest> = {
@@ -321,12 +323,19 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
     this.isLoading = true;
 
     const agendamentoId = agendamento.id;
-    return this.agendamentosService.iniciarAtendimento(agendamentoId)
+    return this.atendimentosService.iniciarAtendimento(agendamentoId)
       .subscribe({
-        next: () => {
+        next: (response) => {
+          const atendimentoId = response.id;
           return this.router.navigate(['/atendimentos'], {
-            state: { agendamentoId }
+            state: {
+              'agendamentoId': agendamentoId,
+              'atendimentoId': atendimentoId
+            }
           });
+        },
+        error: () => {
+          this.isLoading = false;
         }
       });
   }
@@ -360,6 +369,6 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
   }
 
   protected readonly ColorUtils = ColorUtils;
-  protected readonly StatusDescricao = StatusDescricao;
+  protected readonly StatusDescricao = StatusAgendamentoDescricao;
   protected readonly CorAtendimento = CorAtendimento;
 }

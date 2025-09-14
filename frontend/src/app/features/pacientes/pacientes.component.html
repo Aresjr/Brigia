@@ -104,6 +104,8 @@
         ></app-paciente-form>
     }
 
-  <app-fab (clicked)="onAddNovo()"></app-fab>
+    @if (mostraFab()) {
+      <app-fab (clicked)="onAddNovo()"></app-fab>
+    }
 
 </div>

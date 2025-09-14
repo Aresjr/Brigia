@@ -14,6 +14,7 @@ import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { FabComponent } from '../shared/fab/fab.component';
 import { Router } from '@angular/router';
+import { UserService } from '../../core/user.service';
 
 @Component({
   selector: 'app-pacientes',
@@ -36,7 +37,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
   override nomeEntidade = 'Paciente';
 
   constructor(private pacientesService: PacienteService, private toastr: ToastrService,
-              private router: Router) {
+              private router: Router, private userService: UserService) {
     super();
   }
 
@@ -115,5 +116,9 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
 
   verHistorico(id: number) {
     this.toastr.warning('Histórico de Paciente será implementado em breve.');
+  }
+
+  mostraFab() {
+    return !this.userService.isMedico();
   }
 }

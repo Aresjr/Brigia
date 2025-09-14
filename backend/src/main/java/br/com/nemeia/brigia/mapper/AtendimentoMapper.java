@@ -1,7 +1,7 @@
 package br.com.nemeia.brigia.mapper;
 
-import br.com.nemeia.brigia.dto.atendimento.AtendimentoRequest;
-import br.com.nemeia.brigia.dto.atendimento.AtendimentoResponse;
+import br.com.nemeia.brigia.dto.request.AtendimentoRequest;
+import br.com.nemeia.brigia.dto.response.AtendimentoResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.model.Atendimento;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,14 +27,24 @@ public class AtendimentoMapper {
             return null;
         }
 
-        return new AtendimentoResponse(atendimento.getId(), pacienteMapper.toResponse(atendimento.getPaciente()),
-                profissionalMapper.toResponse(atendimento.getProfissional()), atendimento.getData(),
-                atendimento.getHoraInicio(), atendimento.getHoraFim(),
+        return new AtendimentoResponse(atendimento.getId(),
+                pacienteMapper.toResponse(atendimento.getPaciente()),
+                profissionalMapper.toResponse(atendimento.getProfissional()),
+                atendimento.getData(),
+                atendimento.getHoraInicio(),
+                atendimento.getHoraFim(),
                 agendamentoMapper.toResponse(atendimento.getAgendamento()),
                 convenioMapper.toResponse(atendimento.getConvenio()),
                 empresaMapper.toResponse(atendimento.getEmpresa()),
-                especialidadeMapper.toResponse(atendimento.getEspecialidade()), atendimento.getFormaPagamento(),
-                atendimento.getObservacoes());
+                especialidadeMapper.toResponse(atendimento.getEspecialidade()),
+                atendimento.getFormaPagamento(),
+                atendimento.getObservacoes(),
+                atendimento.getAnamnese(),
+                atendimento.getExameFisico(),
+                atendimento.getDiagnostico(),
+                atendimento.getEvolucaoClinica(),
+                atendimento.getExamesSolicitados(),
+                atendimento.getPrescricoes());
     }
 
     public PagedResponse<AtendimentoResponse> toPagedResponse(Page<Atendimento> paged) {

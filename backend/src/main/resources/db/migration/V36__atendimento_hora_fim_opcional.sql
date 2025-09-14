@@ -1,0 +1,1 @@
+alter table atendimento alter column hora_fim DROP NOT NULL;

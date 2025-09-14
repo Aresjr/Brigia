@@ -36,7 +36,7 @@
                             <td class="px-6 py-2 whitespace-nowrap">
                                 {{atendimento.nome}} <span *ngIf="atendimento.excluido" class="excluido">Excluído</span>
                             </td>
-                            <td class="px-6 py-2">{{atendimento.data}}</td>
+                            <td class="px-6 py-2">{{atendimento.data | date:'dd/MM/yyyy'}}</td>
                             <td class="px-6 py-2">{{atendimento.horaInicio}}</td>
                             <td class="px-6 py-2">{{atendimento.horaFim}}</td>
                             <td class="p-0 text-right w-4">
