@@ -11,59 +11,58 @@
             <p>Nenhum registro encontrado.</p>
         </div>
     } @else {
-        <div class="rounded-lg min-h-[26rem] overflow-hidden">
-            <table class="tabela-listagem">
-                <thead class="text-base-100 bg-primary">
-                    <tr>
-                        <th (click)="ordenar('nome')" class="cabecalho-listagem">
-                            <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
-                            Nome
-                        </th>
-                        <th (click)="ordenar('descricao')" class="cabecalho-listagem">
-                            <lucide-icon *ngIf="getSortIcon('descricao')" [name]="getSortIcon('descricao')" class="icone-ordenacao"/>
-                            Observações
-                        </th>
-                        <th class="p-0"></th>
-                    </tr>
-                </thead>
-                <tbody class="bg-base-100">
-                    @for (convenio of getItensPaginados(); track convenio.id) {
-                        <tr class="border-b hover:bg-base-200" [class.bg-error]="convenio.excluido" [class.bg-opacity-50]="convenio.excluido">
-                            <td class="px-6 py-2 whitespace-nowrap">
-                                {{convenio.nome}} <span *ngIf="convenio.excluido" class="excluido">Excluído</span>
-                            </td>
-                            <td class="px-6 py-2">{{convenio.descricao}}</td>
-                            <td class="p-0 text-right w-4">
-                              <div class="dropdown dropdown-end m-0 p-0" (click)="$event.stopPropagation()">
-                                <label tabindex="0" class="btn btn-ghost btn-sm m-0">
-                                  <lucide-icon name="ellipsis-vertical" class="h-6" />
+        <div class="rounded-lg min-h-[38rem] overflow-hidden">
+            <div class="grid grid-cols-[1fr_1fr_40px] bg-primary text-base-100">
+                <div (click)="ordenar('nome')" class="cabecalho-listagem flex items-center">
+                    <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
+                    Nome
+                </div>
+                <div (click)="ordenar('descricao')" class="cabecalho-listagem flex items-center">
+                    <lucide-icon *ngIf="getSortIcon('descricao')" [name]="getSortIcon('descricao')" class="icone-ordenacao"/>
+                    Observações
+                </div>
+                <div class="p-0"></div>
+            </div>
+
+            <div class="bg-base-100">
+                @for (convenio of getItensPaginados(); track convenio.id) {
+                    <div class="grid grid-cols-[1fr_1fr_40px] border-b hover:bg-base-200"
+                         [class.bg-error]="convenio.excluido"
+                         [class.bg-opacity-50]="convenio.excluido">
+                        <div class="px-6 py-2 whitespace-nowrap">
+                            {{convenio.nome}} <span *ngIf="convenio.excluido" class="excluido">Excluído</span>
+                        </div>
+                        <div class="px-6 py-2">{{convenio.descricao}}</div>
+                        <div class="p-0 text-right">
+                            <div class="dropdown dropdown-end m-0 p-0" (click)="$event.stopPropagation()">
+                                <label tabindex="0" class="btn btn-ghost btn-sm m-1 p-1">
+                                    <lucide-icon name="ellipsis-vertical" class="h-6" />
                                 </label>
                                 <ul tabindex="0" class="dropdown-content z-[1] menu bg-base-100 font-semibold rounded-box p-1 shadow-lg w-40">
-                                  <li *ngIf="!convenio.excluido">
-                                    <a (click)="editar($event, convenio)"
-                                       class="block px-4 py-2 text-sm text-neutral hover:bg-base-200 cursor-pointer" >
-                                      Editar
-                                    </a>
-                                  </li>
-                                  <li *ngIf="!convenio.excluido">
-                                    <a (click)="perguntaExcluir($event, convenio)"
-                                       class="text-error hover:bg-error/50 cursor-pointer" >
-                                      Excluir
-                                    </a>
-                                  </li>
-                                  <li *ngIf="convenio.excluido">
-                                    <a (click)="restaurarItem($event, convenio)"
-                                       class="btn btn-sm text-success">
-                                      Restaurar
-                                    </a>
-                                  </li>
+                                    <li *ngIf="!convenio.excluido">
+                                        <a (click)="editar($event, convenio)"
+                                           class="block px-4 py-2 text-sm text-neutral hover:bg-base-200 cursor-pointer" >
+                                            Editar
+                                        </a>
+                                    </li>
+                                    <li *ngIf="!convenio.excluido">
+                                        <a (click)="perguntaExcluir($event, convenio)"
+                                           class="text-error hover:bg-error/50 cursor-pointer" >
+                                            Excluir
+                                        </a>
+                                    </li>
+                                    <li *ngIf="convenio.excluido">
+                                        <a (click)="restaurarItem($event, convenio)"
+                                           class="btn btn-sm text-success">
+                                            Restaurar
+                                        </a>
+                                    </li>
                                 </ul>
-                              </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
 
         <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
