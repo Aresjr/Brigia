@@ -11,29 +11,29 @@
             <p>Nenhum registro encontrado.</p>
         </div>
     } @else {
-        <div class="rounded-lg min-h-[38rem] flex flex-col">
-            <div class="rounded-t-lg grid grid-cols-[10rem_1fr_7rem_6rem_6rem_12rem_36px] bg-primary text-base-100">
-                <div (click)="ordenar('status')" class="cabecalho-listagem flex items-center">
+        <div class="min-h-[38rem]">
+            <div class="titulo-listagem grid-cols-[10rem_1fr_7rem_6rem_6rem_12rem_32px]">
+                <div (click)="ordenar('status')" class="cabecalho-listagem">
                     <lucide-icon *ngIf="getSortIcon('status')" [name]="getSortIcon('status')" class="icone-ordenacao"/>
                     Status
                 </div>
-                <div (click)="ordenar('paciente')" class="cabecalho-listagem flex items-center">
+                <div (click)="ordenar('paciente')" class="cabecalho-listagem">
                     <lucide-icon *ngIf="getSortIcon('paciente')" [name]="getSortIcon('paciente')" class="icone-ordenacao"/>
                     Paciente
                 </div>
-                <div (click)="ordenar('data')" class="cabecalho-listagem flex items-center">
+                <div (click)="ordenar('data')" class="cabecalho-listagem">
                     <lucide-icon *ngIf="getSortIcon('data')" [name]="getSortIcon('data')" class="icone-ordenacao"/>
                     Data
                 </div>
-                <div (click)="ordenar('horaInicio')" class="cabecalho-listagem flex items-center">
+                <div (click)="ordenar('horaInicio')" class="cabecalho-listagem">
                     <lucide-icon *ngIf="getSortIcon('horaInicio')" [name]="getSortIcon('horaInicio')" class="icone-ordenacao"/>
                     Início
                 </div>
-                <div (click)="ordenar('horaFim')" class="cabecalho-listagem flex items-center">
+                <div (click)="ordenar('horaFim')" class="cabecalho-listagem">
                     <lucide-icon *ngIf="getSortIcon('horaFim')" [name]="getSortIcon('horaFim')" class="icone-ordenacao"/>
                     Fim
                 </div>
-                <div (click)="ordenar('especialidade')" class="cabecalho-listagem flex items-center">
+                <div (click)="ordenar('especialidade')" class="cabecalho-listagem">
                     <lucide-icon *ngIf="getSortIcon('especialidade')" [name]="getSortIcon('especialidade')" class="icone-ordenacao"/>
                     Especialidade
                 </div>
@@ -42,24 +42,24 @@
 
             <div class="bg-base-100 rounded-b-lg">
                 @for (atendimento of getItensPaginados(); track atendimento.id) {
-                    <div class="grid grid-cols-[10rem_1fr_7rem_6rem_6rem_12rem_36px] border-b hover:bg-base-200 cursor-pointer"
+                    <div class="item-listagem grid-cols-[10rem_1fr_7rem_6rem_6rem_12rem_32px]"
                          [class.bg-error]="atendimento.excluido"
                          [class.bg-opacity-50]="atendimento.excluido"
                          (click)="selecionar(atendimento); mostrarFormularioNovo = true;">
-                        <div class="px-6 py-2 whitespace-nowrap flex items-center">
+                        <div class="px-6 flex items-center whitespace-nowrap">
                             <div class="badge text-base-100" [ngClass]="'bg-['+CorAtendimento[atendimento.status]+']'">
                                 {{ StatusAtendimentoDescricao[atendimento.status] }}
                             </div>
                         </div>
-                        <div class="px-6 py-2 flex items-center truncate">{{atendimento.paciente.nome }}</div>
-                        <div class="px-6 py-2 flex items-center">{{atendimento.data | date:'dd/MM/yyyy' }}</div>
-                        <div class="px-6 py-2 flex items-center">{{atendimento.horaInicio }}</div>
-                        <div class="px-6 py-2 flex items-center">{{atendimento.horaFim }}</div>
-                        <div class="px-6 py-2 flex items-center truncate">{{atendimento.especialidade.nome }}</div>
+                        <div class="px-6 flex items-center truncate">{{atendimento.paciente.nome }}</div>
+                        <div class="px-6 flex items-center">{{atendimento.data | date:'dd/MM/yyyy' }}</div>
+                        <div class="px-6 flex items-center">{{atendimento.horaInicio }}</div>
+                        <div class="px-6 flex items-center">{{atendimento.horaFim }}</div>
+                        <div class="px-6 flex items-center truncate">{{atendimento.especialidade.nome }}</div>
                         <div class="p-0 text-right">
                             <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
-                                <label tabindex="0" class="btn btn-ghost btn-sm m-1 p-1">
-                                    <lucide-icon name="ellipsis-vertical" class="h-6" />
+                                <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
+                                    <lucide-icon name="ellipsis-vertical" class="h-5" />
                                 </label>
                                 <ul tabindex="0"
                                     class="dropdown-content menu p-2 shadow-lg bg-base-100 rounded-lg w-40">

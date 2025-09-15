@@ -14,12 +14,20 @@
   @apply block font-medium;
 }
 
-.tabela-listagem {
-  @apply text-sm rounded overflow-hidden shadow-md w-full table-fixed;
+.titulo-listagem {
+  @apply grid text-base-100 rounded-t-lg p-0 text-xs font-medium uppercase tracking-wider h-9 cursor-pointer;
 }
 
 .cabecalho-listagem {
-  @apply px-6 py-2 text-left text-xs font-medium uppercase tracking-wider cursor-pointer hover:bg-primary/50;
+  @apply px-6 py-2.5 bg-primary hover:bg-primary/50;
+}
+
+.itens-listagem {
+  @apply bg-base-100 rounded-b-lg;
+}
+
+.item-listagem {
+  @apply grid border-b hover:bg-base-200 cursor-pointer;
 }
 
 .icone-ordenacao {

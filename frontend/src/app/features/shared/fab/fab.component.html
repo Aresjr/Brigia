@@ -1,5 +1,6 @@
 <div class="fixed bottom-6 right-6 flex flex-col items-end gap-2">
   <div
+    *ngIf="fabOpen"
     class="flex flex-col items-end gap-2 transition-all duration-300"
     [class.opacity-0]="!fabOpen"
     [class.translate-y-4]="!fabOpen"
