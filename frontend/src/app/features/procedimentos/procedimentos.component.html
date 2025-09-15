@@ -46,10 +46,10 @@
             <div class="celula-listagem">{{procedimento.observacoes}}</div>
             <div class="p-0 text-right">
               <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
-                <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
+                <label tabindex="0" class="btn btn-ghost btn-sm p-0">
                   <lucide-icon name="ellipsis-vertical" class="h-5" />
                 </label>
-                <ul tabindex="0" class="dropdown-content menu p-2 shadow-lg bg-base-100 rounded-lg w-40">
+                <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-[1]">
                   <li *ngIf="!procedimento.excluido">
                     <a (click)="editar($event, procedimento)"
                        class="text-sm text-neutral hover:bg-base-200">
