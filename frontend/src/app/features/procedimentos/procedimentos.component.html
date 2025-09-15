@@ -38,18 +38,18 @@
                [class.bg-error]="procedimento.excluido"
                [class.bg-opacity-50]="procedimento.excluido"
                (click)="selecionar(procedimento)">
-            <div class="px-6 flex items-center truncate">
+            <div class="celula-listagem">
               {{procedimento.nome}} <span *ngIf="procedimento.excluido" class="excluido">Excluído</span>
             </div>
-            <div class="px-6 flex items-center text-sm truncate">{{procedimento.codigo}}</div>
-            <div class="px-6 flex items-center text-sm truncate tooltip" [attr.data-target]=procedimento.especialidade.nome >{{procedimento.especialidade.nome}}</div>
-            <div class="px-6 flex items-center text-sm truncate">{{procedimento.observacoes}}</div>
+            <div class="celula-listagem">{{procedimento.codigo}}</div>
+            <div class="celula-listagem">{{procedimento.especialidade.nome}}</div>
+            <div class="celula-listagem">{{procedimento.observacoes}}</div>
             <div class="p-0 text-right">
               <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
                 <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
                   <lucide-icon name="ellipsis-vertical" class="h-5" />
                 </label>
-                <ul tabindex="0" class="dropdown-content z-50 menu p-2 shadow-lg bg-base-100 rounded-lg w-40">
+                <ul tabindex="0" class="dropdown-content menu p-2 shadow-lg bg-base-100 rounded-lg w-40">
                   <li *ngIf="!procedimento.excluido">
                     <a (click)="editar($event, procedimento)"
                        class="text-sm text-neutral hover:bg-base-200">
