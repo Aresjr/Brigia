@@ -36,4 +36,8 @@ export class UserService {
   isMedico(): boolean {
     return this.hasRole(Role.MEDICO);
   }
+
+  logout() {
+    localStorage.clear();
+  }
 }
