@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './features/auth/login/login.component';
-import { LogoutComponent } from './features/auth/logout/logout.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { IndexComponent } from './features/index/index.component';
 import { PacientesComponent } from './features/pacientes/pacientes.component';
@@ -8,16 +7,15 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { ProfissionaisComponent } from './features/profissionais/profissionais.component';
 import { AgendaDiariaComponent } from './features/agenda-diaria/agenda-diaria.component';
 import { ProcedimentosComponent } from './features/procedimentos/procedimentos.component';
-import { TabelaPrecosComponent } from './features/tabela-precos/tabela-precos.component';
 import { ConveniosComponent } from './features/convenio/convenios.component';
 import { Role } from './core/constans';
 import { EspecialidadeComponent } from './features/especialidade/especialidade.component';
 import { EmpresasComponent } from './features/empresa/empresas.component';
 import { AtendimentosComponent } from './features/atendimento/atendimentos.component';
+import { ContaReceberComponent } from './features/contas-receber/contas-receber.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'logout', component: LogoutComponent },
   {
     path: '',
     component: MainLayoutComponent,
@@ -118,13 +116,13 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'tabela-precos',
-        component: TabelaPrecosComponent,
+        path: 'contas-receber',
+        component: ContaReceberComponent,
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         data: {
           roles: [Role.ADMIN, Role.FATURAMENTO],
-          title: 'Tabela de Preços',
+          title: 'Contas a Receber',
         },
       },
     ],

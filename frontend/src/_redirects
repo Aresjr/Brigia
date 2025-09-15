@@ -1,6 +1,11 @@
-/login          /index.html?route=login         200
-/pacientes      /index.html?route=pacientes     200
-/agendamentos   /index.html?route=agendamentos  200
-/procedimentos  /index.html?route=procedimentos 200
-/profissionais  /index.html?route=profissionais 200
-/tabela-precos  /index.html?route=tabela-precos 200
+/login          /?route=login         200
+/pacientes      /?route=pacientes     200
+/agendamentos   /?route=agendamentos  200
+/empresas       /?route=empresas      200
+/convenios      /?route=convenios     200
+/especialidades /?route=especialidades 200
+/procedimentos  /?route=procedimentos 200
+/profissionais  /?route=profissionais 200
+/atendimentos   /?route=atendimentos  200
+/contas-receber /?route=contas-receber  200
+/agenda-diaria  /?route=agenda-diaria  200

@@ -82,7 +82,7 @@ export class MainLayoutComponent {
       icon: 'receipt',
       hasSubmenu: true,
       children: [
-        { label: 'Tabela de Preços', icon: 'receipt', route: '/tabela-precos', roles: [Role.RECEPCIONISTA, Role.FATURAMENTO] }
+        { label: 'Contas a Receber', icon: 'receipt-text', route: '/contas-receber', roles: [Role.FATURAMENTO, Role.ADMIN] }
       ], roles: [Role.FATURAMENTO, Role.ADMIN]
     }
   ];
@@ -100,10 +100,6 @@ export class MainLayoutComponent {
 
   isSubmenuOpen(menu: string): boolean {
     return this.submenuState[menu] || false;
-  }
-
-  toggleUserMenu() {
-    this.isUserMenuOpen = !this.isUserMenuOpen;
   }
 
   private getTitleFromRoute(route: ActivatedRoute): string {

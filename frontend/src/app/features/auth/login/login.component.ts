@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -18,7 +18,7 @@ import { UserService } from '../../../core/user.service';
   imports: [CommonModule, ReactiveFormsModule, LucideAngularModule],
   templateUrl: './login.component.html',
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   loginForm: FormGroup;
 
   constructor(
@@ -33,8 +33,6 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required],
     });
   }
-
-  ngOnInit(): void {}
 
   onSubmit(): void {
     if (this.loginForm.valid) {

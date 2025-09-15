@@ -22,7 +22,7 @@ export abstract class BaseListComponent<T extends Entidade> {
   itemSelecionado: T | null = null;
   itemEdicao: T | null = null;
   mostrarFormularioNovo = false;
-  isLoading = true;
+  isLoading = false;
   nomeEntidade = '';
   exibeConfirmExclusao = false;
   idExclusao: number = 0;
@@ -81,7 +81,6 @@ export abstract class BaseListComponent<T extends Entidade> {
 
   selecionar(item: T): void {
     this.itemSelecionado = item;
-    console.log('this.itemSelecionado', this.itemSelecionado);
   }
 
   fecharDetalhes(): void {
