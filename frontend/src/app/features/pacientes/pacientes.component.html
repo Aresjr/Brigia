@@ -11,79 +11,75 @@
             <p>Nenhum registro encontrado.</p>
         </div>
     } @else {
-        <div class="rounded-lg min-h-[38rem] overflow-hidden">
-            <table class="tabela-listagem">
-                <thead class="text-base-100 bg-primary">
-                    <tr>
-                        <th (click)="ordenar('nome')" class="px-6 py-2 text-left text-xs font-medium uppercase tracking-wider w-auto cursor-pointer hover:bg-primary/50">
-                            <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
-                            Nome
-                        </th>
-                        <th (click)="ordenar('cpf')" class="px-6 py-2 text-left text-xs font-medium uppercase tracking-wider w-40 cursor-pointer hover:bg-primary/50">
-                            <lucide-icon *ngIf="getSortIcon('cpf')" [name]="getSortIcon('cpf')" class="icone-ordenacao"/>
-                            CPF
-                        </th>
-                        <th (click)="ordenar('dataNascimento')" class="px-6 py-2 text-left text-xs font-medium uppercase tracking-wider w-40 cursor-pointer hover:bg-primary/50">
-                            <lucide-icon *ngIf="getSortIcon('dataNascimento')" [name]="getSortIcon('dataNascimento')" class="icone-ordenacao"/>
-                            Nascimento
-                        </th>
-                        <th (click)="ordenar('celular')" class="px-6 py-2 text-left text-xs font-medium uppercase tracking-wider w-40 cursor-pointer hover:bg-primary/50">
-                            <lucide-icon *ngIf="getSortIcon('celular')" [name]="getSortIcon('celular')" class="icone-ordenacao"/>
-                            Celular
-                        </th>
-                        <th (click)="ordenar('proximaConsulta')" class="px-6 py-2 text-left text-xs font-medium uppercase tracking-wider w-48 cursor-pointer hover:bg-primary/50">
-                            <lucide-icon *ngIf="getSortIcon('proximaConsulta')" [name]="getSortIcon('proximaConsulta')" class="icone-ordenacao"/>
-                            Próxima Consulta
-                        </th>
-                        <th class="p-0"></th>
-                    </tr>
-                </thead>
-                <tbody class="bg-base-100">
-                    @for (paciente of getItensPaginados(); track paciente.id) {
-                        <tr class="border-b hover:bg-base-200 cursor-pointer" (click)="selecionar(paciente)">
-                            <td class="px-6 py-2 whitespace-nowrap">{{paciente.nome}}</td>
-                            <td class="px-6 py-2 whitespace-nowrap">{{paciente.cpf | cpf}}</td>
-                            <td class="px-6 py-2 whitespace-nowrap">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</td>
-                            <td class="px-6 py-2 whitespace-nowrap">{{paciente.celular | celular}}</td>
-                            <td class="px-6 py-2 whitespace-nowrap">{{paciente.proximaConsulta | date:'dd/MM/yyyy HH:mm'}}</td>
-                            <td class="p-0 text-right w-4">
-                              <div class="dropdown dropdown-end m-0 p-0" (click)="$event.stopPropagation()">
-                                <label tabindex="0" class="btn btn-ghost btn-sm m-0">
-                                  <lucide-icon name="ellipsis-vertical" class="h-6" />
-                                </label>
+        <div class="min-h-[36rem]">
+          <div class="titulo-listagem grid-cols-[1fr_10rem_10rem_10rem_12rem_32px]">
+            <div (click)="ordenar('nome')" class="cabecalho-listagem">
+              <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
+              Nome
+            </div>
+            <div (click)="ordenar('cpf')" class="cabecalho-listagem">
+              <lucide-icon *ngIf="getSortIcon('cpf')" [name]="getSortIcon('cpf')" class="icone-ordenacao"/>
+              CPF
+            </div>
+            <div (click)="ordenar('dataNascimento')" class="cabecalho-listagem">
+              <lucide-icon *ngIf="getSortIcon('dataNascimento')" [name]="getSortIcon('dataNascimento')" class="icone-ordenacao"/>
+              Nascimento
+            </div>
+            <div (click)="ordenar('celular')" class="cabecalho-listagem">
+              <lucide-icon *ngIf="getSortIcon('celular')" [name]="getSortIcon('celular')" class="icone-ordenacao"/>
+              Celular
+            </div>
+            <div (click)="ordenar('proximaConsulta')" class="cabecalho-listagem">
+              <lucide-icon *ngIf="getSortIcon('proximaConsulta')" [name]="getSortIcon('proximaConsulta')" class="icone-ordenacao"/>
+              Próx. Consulta
+            </div>
+            <div class="cabecalho-listagem p-0"></div>
+          </div>
 
-                                <ul tabindex="0" class="dropdown-content z-[1] menu bg-base-100 font-semibold rounded-box p-1 shadow-lg w-48">
-                                  <li>
-                                    <a (click)="criarAgendamento(paciente.id)"
-                                      class="block px-4 py-2 text-sm text-neutral hover:bg-base-200 cursor-pointer" >
-                                      Criar Agendamento
-                                    </a>
-                                  </li>
-                                  <li>
-                                    <a (click)="verHistorico(paciente.id)"
-                                      class="block px-4 py-2 text-sm text-neutral hover:bg-base-200 cursor-pointer" >
-                                      Ver Histórico
-                                    </a>
-                                  </li>
-                                  <li *ngIf="paciente.excluido">
-                                    <a (click)="editar($event, paciente)"
-                                      class="block px-4 py-2 text-sm text-neutral hover:bg-base-200 cursor-pointer" >
-                                      Editar
-                                    </a>
-                                  </li>
-                                  <li *ngIf="paciente.excluido">
-                                    <a (click)="idExclusao = paciente.id; excluir(paciente.id)"
-                                      class="text-error hover:bg-error/50 cursor-pointer" >
-                                      Excluir
-                                    </a>
-                                  </li>
-                                </ul>
-                              </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+          <div class="itens-listagem">
+            @for (paciente of getItensPaginados(); track paciente.id) {
+              <div class="item-listagem grid-cols-[1fr_10rem_10rem_10rem_12rem_32px]" (click)="selecionar(paciente)">
+                <div class="celula-listagem">{{paciente.nome}}</div>
+                <div class="celula-listagem">{{paciente.cpf | cpf}}</div>
+                <div class="celula-listagem">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</div>
+                <div class="celula-listagem">{{paciente.celular | celular}}</div>
+                <div class="celula-listagem">{{paciente.proximaConsulta | date:'dd/MM/yyyy HH:mm'}}</div>
+                <div class="p-0 text-right">
+                  <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
+                    <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
+                      <lucide-icon name="ellipsis-vertical" class="h-5" />
+                    </label>
+                    <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-48 z-[1]">
+                      <li>
+                        <a (click)="criarAgendamento(paciente.id)"
+                           class="text-sm text-neutral hover:bg-base-200">
+                          Criar Agendamento
+                        </a>
+                      </li>
+                      <li>
+                        <a (click)="verHistorico(paciente.id)"
+                           class="text-sm text-neutral hover:bg-base-200">
+                          Ver Histórico
+                        </a>
+                      </li>
+                      <li *ngIf="paciente.excluido">
+                        <a (click)="editar($event, paciente)"
+                           class="text-sm text-neutral hover:bg-base-200">
+                          Editar
+                        </a>
+                      </li>
+                      <li *ngIf="paciente.excluido">
+                        <a (click)="idExclusao = paciente.id; excluir(paciente.id)"
+                           class="text-error hover:bg-error/50">
+                          Excluir
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
         </div>
 
         <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
