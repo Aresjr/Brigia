@@ -11,7 +11,7 @@
       <p>Nenhum registro encontrado.</p>
     </div>
   } @else {
-    <div class="min-h-[38rem]">
+    <div class="min-h-[36rem]">
       <div class="titulo-listagem grid-cols-[1fr_14rem_10rem_10rem_32px]">
         <div (click)="ordenar('nome')" class="cabecalho-listagem">
           <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
@@ -49,7 +49,7 @@
                 <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
                   <lucide-icon name="ellipsis-vertical" class="h-5" />
                 </label>
-                <ul tabindex="0" class="dropdown-content menu p-2 shadow-lg bg-base-100 rounded-lg w-40">
+                <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-[1]">
                   <li *ngIf="!profissional.excluido">
                     <a (click)="editar($event, profissional)"
                        class="text-sm text-neutral hover:bg-base-200">

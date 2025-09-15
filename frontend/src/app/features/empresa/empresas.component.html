@@ -2,100 +2,99 @@
 
   <app-top-bar (search)="onSearch($event)" title="Empresas Parceiras"></app-top-bar>
 
-    @if (isLoading) {
-        <div class="flex justify-center items-center h-32">
-            <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
+  @if (isLoading) {
+    <div class="flex justify-center items-center h-32">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
+    </div>
+  } @else if (itensExibicao.length === 0) {
+    <div class="text-center py-8 w-full bg-base-100 rounded-md shadow-md">
+      <p>Nenhum registro encontrado.</p>
+    </div>
+  } @else {
+    <div class="min-h-[36rem]">
+      <div class="titulo-listagem grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_32px]">
+        <div (click)="ordenar('nome')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
+          Nome
         </div>
-    } @else if (itensExibicao.length === 0) {
-        <div class="text-center py-8 w-full bg-base-100 rounded-md shadow-md">
-            <p>Nenhum registro encontrado.</p>
+        <div (click)="ordenar('plano')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('plano')" [name]="getSortIcon('plano')" class="icone-ordenacao"/>
+          Plano
         </div>
-    } @else {
-
-        <div class="grid grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_1fr] gap-4 px-4 py-2 text-sm font-bold rounded-md text-neutral ">
-          <div (click)="ordenar('nome')" class="cursor-pointer">
-            <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
-            Nome
-          </div>
-          <div (click)="ordenar('plano')" class="cursor-pointer">
-            <lucide-icon *ngIf="getSortIcon('plano')" [name]="getSortIcon('plano')" class="icone-ordenacao"/>
-            Plano
-          </div>
-          <div (click)="ordenar('codigoBc')" class="cursor-pointer">
-            <lucide-icon *ngIf="getSortIcon('codigoBc')" [name]="getSortIcon('codigoBc')" class="icone-ordenacao"/>
-            Cód. BC
-          </div>
-          <div (click)="ordenar('valorMinimoMensal')" class="cursor-pointer">
-            <lucide-icon *ngIf="getSortIcon('valorMinimoMensal')" [name]="getSortIcon('valorMinimoMensal')" class="icone-ordenacao"/>
-            Mín. Mensal
-          </div>
-          <div (click)="ordenar('minimoPorFuncionario')" class="cursor-pointer">
-            <lucide-icon *ngIf="getSortIcon('minimoPorFuncionario')" [name]="getSortIcon('minimoPorFuncionario')" class="icone-ordenacao"/>
-            Mín. Func.
-          </div>
-          <div (click)="ordenar('valorMes')" class="cursor-pointer">
-            <lucide-icon *ngIf="getSortIcon('valorMes')" [name]="getSortIcon('valorMes')" class="icone-ordenacao"/>
-            Valor Mês
-          </div>
-          <div>Observações</div>
-          <div></div>
+        <div (click)="ordenar('codigoBc')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('codigoBc')" [name]="getSortIcon('codigoBc')" class="icone-ordenacao"/>
+          Cód. BC
         </div>
+        <div (click)="ordenar('valorMinimoMensal')" class="cabecalho-listagem text-xs pr-0">
+          <lucide-icon *ngIf="getSortIcon('valorMinimoMensal')" [name]="getSortIcon('valorMinimoMensal')" class="icone-ordenacao"/>
+          Mín. Mensal
+        </div>
+        <div (click)="ordenar('minimoPorFuncionario')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('minimoPorFuncionario')" [name]="getSortIcon('minimoPorFuncionario')" class="icone-ordenacao"/>
+          Mín. Func.
+        </div>
+        <div (click)="ordenar('valorMes')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('valorMes')" [name]="getSortIcon('valorMes')" class="icone-ordenacao"/>
+          Valor Mês
+        </div>
+        <div class="cabecalho-listagem">Observações</div>
+        <div class="cabecalho-listagem p-0"></div>
+      </div>
 
-        <div class="flex flex-col gap-1 mt-2 min-h-[40rem]">
-          <div *ngFor="let empresa of getItensPaginados()"
-               class="bg-base-100 hover:bg-base-200 rounded-lg flex items-center" >
-
-            <div class="grid grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_1fr] gap-4 w-full px-4 py-2">
-              <div>{{ empresa.nome }}</div>
-
+      <div class="itens-listagem">
+        @for (empresa of getItensPaginados(); track empresa.id) {
+          <div class="item-listagem grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_32px]"
+               [class.bg-error]="empresa.excluido"
+               [class.bg-opacity-50]="empresa.excluido">
+            <div class="celula-listagem truncate">
+              {{empresa.nome}} <span *ngIf="empresa.excluido" class="excluido">Excluído</span>
+            </div>
+            <div class="celula-listagem">
               @if (empresa.plano) {
-                <div class="h-fit w-fit rounded-lg p-1 text-xs font-semibold" *ngIf="empresa.plano" [ngClass]="ColorUtils.getColorClasses(empresa.plano)">
+                <div class="h-fit w-fit rounded-lg p-1 text-xs font-semibold" [ngClass]="ColorUtils.getColorClasses(empresa.plano)">
                   {{ empresa.plano.nome }}
                 </div>
               }
-              @if (!empresa.plano) {
-                <div></div>
-              }
-
-              <div>{{ empresa.codigoBc }}</div>
-              <div>{{ empresa.valorMinimoMensal }}</div>
-              <div>{{ empresa.minimoPorFuncionario }}</div>
-              <div>{{ empresa.valorMes | currency:'BRL':'symbol':'1.2-2' }}</div>
-              <div class="text-xs">{{ empresa.observacao }}</div>
-
-              <div class="text-right">
-                <div class="dropdown dropdown-end m-0 p-0" (click)="$event.stopPropagation()">
-                  <label tabindex="0" class="btn btn-ghost btn-sm m-0">
-                    <lucide-icon name="ellipsis-vertical" class="h-5" />
-                  </label>
-                  <ul tabindex="0" class="dropdown-content z-[1] menu bg-base-100 font-semibold rounded-box p-1 shadow-lg w-40">
-                    <li *ngIf="!empresa.excluido">
-                      <a (click)="editar($event, empresa)"
-                         class="block px-4 py-2 text-sm text-neutral hover:bg-base-200 cursor-pointer" >
-                        Editar
-                      </a>
-                    </li>
-                    <li *ngIf="!empresa.excluido">
-                      <a (click)="perguntaExcluir($event, empresa)"
-                         class="text-error hover:bg-error/50 cursor-pointer" >
-                        Excluir
-                      </a>
-                    </li>
-                    <li *ngIf="empresa.excluido">
-                      <a (click)="restaurarItem($event, empresa)"
-                         class="btn btn-sm text-success">
-                        Restaurar
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+            </div>
+            <div class="celula-listagem">{{empresa.codigoBc}}</div>
+            <div class="celula-listagem">{{empresa.valorMinimoMensal}}</div>
+            <div class="celula-listagem">{{empresa.minimoPorFuncionario}}</div>
+            <div class="celula-listagem">{{empresa.valorMes | currency:'BRL':'symbol':'1.2-2'}}</div>
+            <div class="celula-listagem truncate text-xs">{{empresa.observacao}}</div>
+            <div class="p-0 text-right">
+              <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
+                <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
+                  <lucide-icon name="ellipsis-vertical" class="h-5" />
+                </label>
+                <ul tabindex="0" class="dropdown-content menu p-2 shadow-lg bg-base-100 rounded-lg w-40">
+                  <li *ngIf="!empresa.excluido">
+                    <a (click)="editar($event, empresa)"
+                       class="text-sm text-neutral hover:bg-base-200">
+                      Editar
+                    </a>
+                  </li>
+                  <li *ngIf="!empresa.excluido">
+                    <a (click)="perguntaExcluir($event, empresa)"
+                       class="text-error hover:bg-error/50">
+                      Excluir
+                    </a>
+                  </li>
+                  <li *ngIf="empresa.excluido">
+                    <a (click)="restaurarItem($event, empresa)"
+                       class="text-success hover:bg-success/20">
+                      Restaurar
+                    </a>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
-        </div>
+        }
+      </div>
+    </div>
 
-        <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
-    }
+    <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
+  }
 
   @if (mostrarFormularioNovo) {
     <app-empresa-form
