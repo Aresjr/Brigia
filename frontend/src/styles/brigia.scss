@@ -6,10 +6,6 @@
   @apply mt-1 block w-full rounded-md border font-normal hover:border-neutral;
 }
 
-.ng-select-container, .ng-option {
-  @apply bg-base-100 text-base-content !important;
-}
-
 .label-campo {
   @apply block font-medium;
 }
@@ -72,29 +68,25 @@
   margin-top: 2rem;
 }
 
-.ng-select .ng-select-container  {
-  border:1px;
-  max-height: 1rem !important; /* 2rem ≈ 32px (h-8 no Tailwind) */
-  height: 1rem !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
+html {
+  font-family: 'Montserrat', sans-serif;
 }
 
-.ng-select .ng-value-container {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
+input, select, textarea {
+  @apply bg-base-100
 }
 
-::ng-deep .ng-select.ng-select-multiple .ng-select-container {
-  min-height: 2.5rem;   /* altura inicial */
-  height: auto;         /* deixa crescer */
-  flex-wrap: wrap;      /* quebra de linha dos itens */
-  align-items: flex-start; /* não forçar ao topo */
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px oklch(var(--b2)) inset !important;
+  -webkit-text-fill-color: oklch(var(--bc)) !important;
+  caret-color: oklch(var(--bc)); /* cor do cursor */
 }
 
-::ng-deep .ng-select.ng-select-multiple .ng-value-container {
-  flex-wrap: wrap;   /* valores/chips em várias linhas */
-  align-content: flex-start;
+@layer base {
+  input::placeholder,
+  textarea::placeholder {
+    @apply placeholder-base-content/50;
+  }
 }

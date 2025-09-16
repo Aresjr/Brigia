@@ -32,9 +32,11 @@ import { Agendamento } from '../../agenda-diaria/agendamento.interface';
 })
 export class CalendarioComponent implements AfterViewInit {
   @Input() events: CalendarEvent<Agendamento>[] = [];
+  @Input() isLoading!: boolean;
   @Output() detalhesAgendamento = new EventEmitter<Agendamento>();
   @Output() diaClicado = new EventEmitter<Date>();
   @Output() horarioClicado = new EventEmitter<Date>();
+  @Output() dataAlterada = new EventEmitter<Date>();
 
   view: CalendarView = CalendarView.Week;
   CalendarView = CalendarView;
@@ -112,5 +114,9 @@ export class CalendarioComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.formatTimeLabels();
+  }
+
+  dateChanged() {
+    this.dataAlterada.emit(this.currentDate);
   }
 }

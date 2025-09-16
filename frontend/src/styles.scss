@@ -2,31 +2,9 @@
 @use "@ng-select/ng-select/themes/default.theme.css";
 @use "angular-calendar/css/angular-calendar.css";
 @use "./styles/calendario";
+@use "./styles/select";
 @use "./styles/brigia";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-html {
-  font-family: 'Montserrat', sans-serif;
-}
-
-input, select, textarea {
-  @apply bg-base-100
-}
-
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0px 1000px oklch(var(--b2)) inset !important;
-  -webkit-text-fill-color: oklch(var(--bc)) !important;
-  caret-color: oklch(var(--bc)); /* cor do cursor */
-}
-
-@layer base {
-  input::placeholder,
-  textarea::placeholder {
-    @apply placeholder-base-content/50;
-  }
-}

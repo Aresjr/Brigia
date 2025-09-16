@@ -4,12 +4,12 @@
 
 /* evento dentro do calendário */
 .cal-week-view .cal-time-events .cal-event {
-  @apply text-sm border-0 m-0 p-2 leading-none text-base-100 relative flex  items-center;
+  @apply text-sm border-0 m-0 p-2 leading-none text-base-100 relative;
 }
 
 .cal-week-view .cal-time-events .cal-event:hover {
   @apply font-bold absolute z-[9999];
-  min-height: 52px;
+  min-height: 58px;
   min-width: 400px;
 }
 

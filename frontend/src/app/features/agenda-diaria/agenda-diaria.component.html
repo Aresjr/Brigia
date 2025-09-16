@@ -1,15 +1,31 @@
 <div class="mt-4">
 
-  <app-top-bar title="Agenda Diária" [showSearchBar]=false (search)="onSearch($event)"
-         placeholderDropdown="Selecione o Profissional"
-       [showDropdown]=true [registrosDropdown]="profissionais" (selectRegistro)="filtrarProfissional($event)" >
-  </app-top-bar>
+  <app-top-bar title="Agenda Diária" [showSearchBar]=false (search)="onSearch($event)" ></app-top-bar>
+
+  <div class="flex justify-between gap-4 my-4">
+    <div></div>
+
+    <div>
+      <ng-select *ngIf="!this.userService.isMedico()" class="w-72 shadow-md hover:shadow-lg h-8 max-h-8 leading-none"
+                 (change)="selectProfissional($event)" placeholder="Todos - Selecione o Profissional">
+        <ng-option class="max-h-8" value="0">Todos - Selecione o Profissional</ng-option>
+        @for(profissional of this.profissionais; track profissional.id) {
+          <ng-option class="max-h-8" value="{{ profissional.id }}">{{ profissional.nome }}</ng-option>
+        }
+        <ng-template ng-notfound-tmp>
+          <span class="text-sm p-6">Nenhum resultado</span>
+        </ng-template>
+      </ng-select>
+    </div>
+  </div>
 
 <app-calendario
   [events]="eventosExibicao"
+  [isLoading]="isLoading"
   (detalhesAgendamento)="detalhesAgendamento($event)"
   (diaClicado)="diaClicado($event)"
-  (horarioClicado)="horarioClicado($event)">
+  (horarioClicado)="horarioClicado($event)"
+  (dataAlterada)="dataAlterada($event)">
 </app-calendario>
 
 @if (exibeForm) {

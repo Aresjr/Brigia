@@ -1,6 +1,5 @@
 package br.com.nemeia.brigia.controller;
 
-import br.com.nemeia.brigia.dto.request.AgendamentoPatchRequest;
 import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
 import br.com.nemeia.brigia.dto.response.AgendamentoResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
@@ -25,10 +24,13 @@ public class AgendamentoController {
     @GetMapping
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<AgendamentoResponse> getAllAgendamentos(
-            @RequestParam(defaultValue = "false") Boolean mostrarExcluidos, @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
+            @RequestParam(required = false) Integer mes,
+            @RequestParam(required = false) Integer ano,
+            @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
-        log.info("GET /agendamentos - page: {}, size: {}", page, size);
-        return mapper.toPagedResponse(service.getByProfissional(page, size));
+        log.info("GET /agendamentos - mes: {}, ano: {}, page: {}, size: {}", mes, ano, page, size);
+        return mapper.toPagedResponse(service.getByProfissional(mes, ano, page, size));
     }
 
     @PostMapping

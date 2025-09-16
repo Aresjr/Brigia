@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 @Slf4j
 public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepository> {
@@ -38,14 +40,30 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         this.convenioService = convenioService;
     }
 
-    public Page<Agendamento> getByProfissional(int page, int size) {
-        if (securityUtils.getLoggedUserRoles().contains(RoleUsuario.MEDICO.toString())) {
-            Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
+    public Page<Agendamento> getByProfissional(Integer mes, Integer ano, int page, int size) {
+        if (mes == null) {
+            mes = java.time.LocalDate.now().getMonthValue();
+        }
+        if (ano == null) {
+            ano = java.time.LocalDate.now().getYear();
+        }
 
+        // Calcula o primeiro dia do mês anterior
+        java.time.LocalDate startDate = java.time.LocalDate.of(ano, mes, 1)
+            .minusMonths(1);
+
+        // Calcula o último dia do próximo mês
+        java.time.LocalDate endDate = java.time.LocalDate.of(ano, mes, 1)
+            .plusMonths(2)
+            .minusDays(1);
+
+        Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
+
+        if (securityUtils.getLoggedUserRoles().contains(RoleUsuario.MEDICO.toString())) {
             Long profissionalId = profissionalService.getByUsuarioId(securityUtils.getLoggedUserId()).getId();
-            return repository.findAllByProfissionalIdIs(pageable, profissionalId);
+            return repository.findAllByProfissionalIdAndDateRange(pageable, profissionalId, startDate, endDate);
         } else {
-            return getPaged(page, size, false);
+            return repository.findAllByDateRange(pageable, startDate, endDate);
         }
     }
 

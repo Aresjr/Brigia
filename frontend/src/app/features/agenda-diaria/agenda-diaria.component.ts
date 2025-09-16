@@ -4,7 +4,7 @@ import { AgendamentoFormComponent } from './agendamento-form.component';
 import { Agendamento, AgendamentoRequest } from './agendamento.interface';
 import { CalendarioComponent } from '../shared/calendario/calendario.component';
 import { CalendarEvent } from 'angular-calendar';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { AgendamentosService } from './agendamentos.service';
 import { ToastrService } from 'ngx-toastr';
 import { Profissional } from '../profissionais/profissional.interface';
@@ -13,6 +13,9 @@ import { EventoFactory } from '../../core/evento-factory';
 import { UserService } from '../../core/user.service';
 import { LucideAngularModule } from 'lucide-angular';
 import { FabComponent } from '../shared/fab/fab.component';
+import { filter } from 'rxjs/operators';
+import { NgIf } from '@angular/common';
+import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-agenda-diaria',
@@ -21,7 +24,11 @@ import { FabComponent } from '../shared/fab/fab.component';
     AgendamentoFormComponent,
     CalendarioComponent,
     LucideAngularModule,
-    FabComponent
+    FabComponent,
+    NgIf,
+    NgNotFoundTemplateDirective,
+    NgOptionComponent,
+    NgSelectComponent
   ],
   templateUrl: './agenda-diaria.component.html'
 })
@@ -33,11 +40,14 @@ export class AgendaDiariaComponent implements OnInit {
   profissionais: Profissional[] = [];
   exibeForm: boolean = false;
   pacienteId: number | null = null;
+  isLoading: boolean = false;
+  dataExibicao: Date = new Date();
+  profissionalFiltro: number = 0;
 
   constructor(private router: Router, private toastr: ToastrService,
               private agendamentoService: AgendamentosService,
               private profissionaisService: ProfissionaisService,
-              private userService: UserService) {
+              protected userService: UserService) {
     const navigation = this.router.getCurrentNavigation();
     const pacienteId = navigation?.extras.state?.['pacienteId'];
     this.pacienteId = pacienteId ? pacienteId : null;
@@ -53,14 +63,34 @@ export class AgendaDiariaComponent implements OnInit {
     if (this.pacienteId) {
       this.onAddNovo();
     }
+
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        if (event.urlAfterRedirects === '/agenda-diaria') {
+          this.carregarAgendamentos();
+        }
+      });
   }
 
   carregarAgendamentos() {
-    this.agendamentoService.listar().subscribe({
+    this.isLoading = true;
+
+    const ano = this.dataExibicao.getFullYear();
+    const mes = this.dataExibicao.getMonth() + 1;
+
+    this.agendamentoService.listarPorData(ano, mes).subscribe({
       next: value => {
         const agendamentos = value.items;
-        this.eventosExibicao = [...agendamentos.map(a => EventoFactory.fromApi(a))];
-        this.eventosInternos = [...this.eventosExibicao];
+        this.eventosInternos = agendamentos.map(a => EventoFactory.fromApi(a));
+        //this.eventosInternos = [...this.eventosExibicao];
+
+        this.filtrarProfissional();
+
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
       }
     });
   }
@@ -115,7 +145,6 @@ export class AgendaDiariaComponent implements OnInit {
   }
 
   horarioClicado(data: Date) {
-
     if (this.userService.isMedico()) {
       return;
     }
@@ -133,9 +162,14 @@ export class AgendaDiariaComponent implements OnInit {
     console.log(searchTerm);
   }
 
-  filtrarProfissional(profissionalId: number) {
-    if (profissionalId && profissionalId != 0) {
-      this.eventosExibicao = this.eventosInternos.filter(item => item.meta?.profissional.id == profissionalId);
+  selectProfissional(profissionalId: number) {
+    this.profissionalFiltro = profissionalId;
+    this.filtrarProfissional();
+  }
+
+  filtrarProfissional() {
+    if (this.profissionalFiltro && this.profissionalFiltro != 0) {
+      this.eventosExibicao = this.eventosInternos.filter(item => item.meta?.profissional.id == this.profissionalFiltro);
     } else {
       this.eventosExibicao = [...this.eventosInternos];
     }
@@ -143,5 +177,13 @@ export class AgendaDiariaComponent implements OnInit {
 
   mostraFab() {
     return !this.userService.isMedico();
+  }
+
+  dataAlterada(data: Date) {
+    if (data.getMonth() != this.dataExibicao.getMonth()
+      || data.getFullYear() != this.dataExibicao.getFullYear()) {
+      this.dataExibicao = data;
+      this.carregarAgendamentos();
+    }
   }
 }

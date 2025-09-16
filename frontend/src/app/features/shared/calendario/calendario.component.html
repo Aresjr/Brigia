@@ -1,15 +1,26 @@
 <div class="bg-base-100 p-4 rounded-md">
-  <div class="flex items-center justify-between gap-4 mb-4">
+
+  @if(isLoading) {
+
+    <div class="flex justify-center items-center h-32">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
+    </div>
+
+  } @else {
+
+    <div class="flex items-center justify-between gap-4 mb-4">
     <div class="flex items-center">
       <button
         class="btn btn-ghost btn-sm mr-2 border border-base-300"
         mwlCalendarToday
+        (click)="dateChanged()"
         [(viewDate)]="currentDate" >
         Hoje
       </button>
       <button
         class="btn btn-ghost btn-sm btn-circle mr-1"
         mwlCalendarPreviousView
+        (click)="dateChanged()"
         [view]="view"
         [(viewDate)]="currentDate"
         (viewDateChange)="closeOpenMonthViewDay()" >
@@ -18,6 +29,7 @@
       <button
         class="btn btn-ghost btn-sm btn-circle"
         mwlCalendarNextView
+        (click)="dateChanged()"
         [view]="view"
         [(viewDate)]="currentDate"
         (viewDateChange)="closeOpenMonthViewDay()" >
@@ -61,8 +73,7 @@
       [activeDayIsOpen]="activeDayIsOpen"
       (dayClicked)="dayClicked($event.day)"
       (eventClicked)="verAgendamento($event.event)"
-      locale='pt'
-    >
+      locale='pt'>
     </mwl-calendar-month-view>
     <mwl-calendar-week-view
       *ngSwitchCase="CalendarView.Week"
@@ -74,8 +85,7 @@
       [hourSegments]="hourSegments"
       [dayStartHour]="6"
       [dayEndHour]="24"
-      locale='pt'
-    >
+      locale='pt'>
     </mwl-calendar-week-view>
     <mwl-calendar-day-view
       *ngSwitchCase="CalendarView.Day"
@@ -87,8 +97,10 @@
       [hourSegments]="hourSegments"
       [dayStartHour]="6"
       [dayEndHour]="24"
-      locale='pt'
-    >
+      locale='pt'>
     </mwl-calendar-day-view>
   </div>
+
+  }
+
 </div>
