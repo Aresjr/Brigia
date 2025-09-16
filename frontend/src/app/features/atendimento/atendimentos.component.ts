@@ -13,6 +13,7 @@ import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { Router } from '@angular/router';
 import { FabComponent } from '../shared/fab/fab.component';
 import { CorAtendimento, StatusAtendimentoDescricao } from '../../core/constans';
+import { LoadingSpinnerComponent } from '../shared/loading/loading-spinner.component';
 
 @Component({
   selector: 'app-atendimentos',
@@ -26,7 +27,8 @@ import { CorAtendimento, StatusAtendimentoDescricao } from '../../core/constans'
     PaginationComponent,
     ConfirmDialogComponent,
     TopBarComponent,
-    FabComponent
+    FabComponent,
+    LoadingSpinnerComponent
   ]
 })
 export class AtendimentosComponent extends BaseListComponent<Atendimento> implements OnInit {

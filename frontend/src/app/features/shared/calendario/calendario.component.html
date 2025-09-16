@@ -2,23 +2,23 @@
 
   @if(isLoading) {
 
-    <div class="flex justify-center items-center h-32">
-      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
-    </div>
+    <app-loading-spinner></app-loading-spinner>
 
   } @else {
 
     <div class="flex items-center justify-between gap-4 mb-4">
     <div class="flex items-center">
       <button
-        class="btn btn-ghost btn-sm mr-2 border border-base-300"
+        class="btn btn-ghost btn-sm mr-2 border border-base-300 tooltip flex"
+        data-tip="Ir para o dia de hoje"
         mwlCalendarToday
         (click)="dateChanged()"
         [(viewDate)]="currentDate" >
         Hoje
       </button>
       <button
-        class="btn btn-ghost btn-sm btn-circle mr-1"
+        class="btn btn-ghost btn-sm btn-circle mr-1 tooltip flex"
+        data-tip="Anterior"
         mwlCalendarPreviousView
         (click)="dateChanged()"
         [view]="view"
@@ -27,13 +27,20 @@
         <lucide-icon name="chevron-left" class="w-6 h-6"></lucide-icon>
       </button>
       <button
-        class="btn btn-ghost btn-sm btn-circle"
+        class="btn btn-ghost btn-sm btn-circle mr-1 tooltip flex"
+        data-tip="Próximo"
         mwlCalendarNextView
         (click)="dateChanged()"
         [view]="view"
         [(viewDate)]="currentDate"
         (viewDateChange)="closeOpenMonthViewDay()" >
         <lucide-icon name="chevron-right" class="w-6 h-6"></lucide-icon>
+      </button>
+      <button
+        class="btn btn-ghost btn-sm btn-circle tooltip flex"
+        data-tip="Recarregar calendário"
+        (click)="this.recarrega.emit()" >
+        <lucide-icon name="refresh-cw" class="w-5 h-5"></lucide-icon>
       </button>
     </div>
 
@@ -64,8 +71,9 @@
     </div>
   </div>
 
-  <div [ngSwitch]="view">
+  <div [ngSwitch]="view" class="rounded-lg">
     <mwl-calendar-month-view
+      class="rounded-lg"
       *ngSwitchCase="CalendarView.Month"
       [viewDate]="currentDate"
       [events]="events"
@@ -76,6 +84,7 @@
       locale='pt'>
     </mwl-calendar-month-view>
     <mwl-calendar-week-view
+      class="rounded-lg"
       *ngSwitchCase="CalendarView.Week"
       [viewDate]="currentDate"
       [events]="events"
@@ -88,6 +97,7 @@
       locale='pt'>
     </mwl-calendar-week-view>
     <mwl-calendar-day-view
+      class="rounded-lg"
       *ngSwitchCase="CalendarView.Day"
       [viewDate]="currentDate"
       [events]="events"

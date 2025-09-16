@@ -11,6 +11,7 @@ import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { FabComponent } from '../shared/fab/fab.component';
+import { LoadingSpinnerComponent } from '../shared/loading/loading-spinner.component';
 
 @Component({
   selector: 'app-especialidades',
@@ -24,7 +25,8 @@ import { FabComponent } from '../shared/fab/fab.component';
     PaginationComponent,
     ConfirmDialogComponent,
     TopBarComponent,
-    FabComponent
+    FabComponent,
+    LoadingSpinnerComponent
   ]
 })
 export class EspecialidadeComponent extends BaseListComponent<Especialidade> implements OnInit {

@@ -11,6 +11,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { FabComponent } from '../shared/fab/fab.component';
 import { ContaReceberFormComponent } from './contas-receber-form/contas-receber-form.component';
+import { LoadingSpinnerComponent } from '../shared/loading/loading-spinner.component';
 
 @Component({
   selector: 'app-contas-receber',
@@ -24,7 +25,8 @@ import { ContaReceberFormComponent } from './contas-receber-form/contas-receber-
     PaginationComponent,
     ConfirmDialogComponent,
     TopBarComponent,
-    FabComponent
+    FabComponent,
+    LoadingSpinnerComponent
   ]
 })
 export class ContaReceberComponent extends BaseListComponent<ContaReceber> implements OnInit {

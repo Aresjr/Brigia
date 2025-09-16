@@ -7,6 +7,8 @@ import br.com.nemeia.brigia.mapper.AgendamentoMapper;
 import br.com.nemeia.brigia.model.*;
 import br.com.nemeia.brigia.repository.AgendamentoRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,20 +42,19 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         this.convenioService = convenioService;
     }
 
+    @Cacheable(value = "agendamentos", key = "#mes + '-' + #ano + '-' + #securityUtils.getLoggedUserId()")
     public Page<Agendamento> getByProfissional(Integer mes, Integer ano, int page, int size) {
         if (mes == null) {
-            mes = java.time.LocalDate.now().getMonthValue();
+            mes = LocalDate.now().getMonthValue();
         }
         if (ano == null) {
-            ano = java.time.LocalDate.now().getYear();
+            ano = LocalDate.now().getYear();
         }
 
-        // Calcula o primeiro dia do mês anterior
-        java.time.LocalDate startDate = java.time.LocalDate.of(ano, mes, 1)
+        LocalDate startDate = LocalDate.of(ano, mes, 1)
             .minusMonths(1);
 
-        // Calcula o último dia do próximo mês
-        java.time.LocalDate endDate = java.time.LocalDate.of(ano, mes, 1)
+        LocalDate endDate = LocalDate.of(ano, mes, 1)
             .plusMonths(2)
             .minusDays(1);
 
@@ -67,6 +68,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         }
     }
 
+    @CacheEvict(value = "agendamentos", allEntries = true)
     public Agendamento createAgendamento(AgendamentoRequest request) {
         Agendamento agendamento = mapper.toEntity(request);
         setEntidades(request, agendamento);
@@ -77,6 +79,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         return repository.save(agendamento);
     }
 
+    @CacheEvict(value = "agendamentos", allEntries = true)
     public Agendamento editAgendamento(Long id, AgendamentoRequest request) {
         Agendamento original = getById(id);
         Agendamento agendamentoUpdate = mapper.toEntity(request);
@@ -109,6 +112,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         }
     }
 
+    @CacheEvict(value = "agendamentos", allEntries = true)
     public void update(Agendamento agendamento) {
       repository.save(agendamento);
     }

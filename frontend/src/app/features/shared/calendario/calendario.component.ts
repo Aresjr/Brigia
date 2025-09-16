@@ -17,6 +17,7 @@ import { Subject } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Agendamento } from '../../agenda-diaria/agendamento.interface';
+import { LoadingSpinnerComponent } from '../loading/loading-spinner.component';
 
 @Component({
   selector: 'app-calendario',
@@ -25,7 +26,8 @@ import { Agendamento } from '../../agenda-diaria/agendamento.interface';
     CommonModule,
     CalendarModule,
     FormsModule,
-    LucideAngularModule
+    LucideAngularModule,
+    LoadingSpinnerComponent
   ],
   templateUrl: './calendario.component.html',
   styleUrl: 'calendario.component.css'
@@ -37,6 +39,7 @@ export class CalendarioComponent implements AfterViewInit {
   @Output() diaClicado = new EventEmitter<Date>();
   @Output() horarioClicado = new EventEmitter<Date>();
   @Output() dataAlterada = new EventEmitter<Date>();
+  @Output() recarrega = new EventEmitter<void>();
 
   view: CalendarView = CalendarView.Week;
   CalendarView = CalendarView;

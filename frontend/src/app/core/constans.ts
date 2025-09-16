@@ -90,6 +90,7 @@ export const CorAgendamento: Record<number, string> = {
   [StatusAgendamento.NaoCompareceu]: '#F59E0B',
   [StatusAgendamento.Reagendado]: '#F59E0B',
   [StatusAgendamento.Finalizado]: '#14B8A6'
+  //Disponibilidade do médico - #D1FAE5
 };
 
 export enum StatusAtendimento {

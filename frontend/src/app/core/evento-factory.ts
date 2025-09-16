@@ -2,11 +2,8 @@ import { CalendarEvent } from 'angular-calendar';
 import { Agendamento } from '../features/agenda-diaria/agendamento.interface';
 import { CorAgendamento, StatusAgendamentoDescricao } from './constans';
 
-//Disponibilidade do médico - #D1FAE5
-
 export class EventoFactory {
   static fromApi(agendamento: Agendamento): CalendarEvent {
-
     const data: DataAgendamento = this.getDataAgendamento(agendamento);
 
     return {

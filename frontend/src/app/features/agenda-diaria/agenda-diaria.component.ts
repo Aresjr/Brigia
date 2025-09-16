@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { AgendamentoFormComponent } from './agendamento-form.component';
 import { Agendamento, AgendamentoRequest } from './agendamento.interface';
@@ -16,6 +16,7 @@ import { FabComponent } from '../shared/fab/fab.component';
 import { filter } from 'rxjs/operators';
 import { NgIf } from '@angular/common';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { Subscription, interval } from 'rxjs';
 
 @Component({
   selector: 'app-agenda-diaria',
@@ -32,7 +33,7 @@ import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } fro
   ],
   templateUrl: './agenda-diaria.component.html'
 })
-export class AgendaDiariaComponent implements OnInit {
+export class AgendaDiariaComponent implements OnInit, OnDestroy {
   agendamentoDetalhes: Agendamento | null = null;
   dataAgendamento: Date | null = null;
   eventosExibicao: CalendarEvent<Agendamento>[] = [];
@@ -43,6 +44,7 @@ export class AgendaDiariaComponent implements OnInit {
   isLoading: boolean = false;
   dataExibicao: Date = new Date();
   profissionalFiltro: number = 0;
+  private subscription!: Subscription;
 
   constructor(private router: Router, private toastr: ToastrService,
               private agendamentoService: AgendamentosService,
@@ -71,6 +73,10 @@ export class AgendaDiariaComponent implements OnInit {
           this.carregarAgendamentos();
         }
       });
+
+    this.subscription = interval(1000 * 60).subscribe(() => {
+      this.carregarAgendamentos();
+    });
   }
 
   carregarAgendamentos() {
@@ -79,13 +85,14 @@ export class AgendaDiariaComponent implements OnInit {
     const ano = this.dataExibicao.getFullYear();
     const mes = this.dataExibicao.getMonth() + 1;
 
+    console.log('carregarAgendamentos');
+
     this.agendamentoService.listarPorData(ano, mes).subscribe({
       next: value => {
         const agendamentos = value.items;
         this.eventosInternos = agendamentos.map(a => EventoFactory.fromApi(a));
-        //this.eventosInternos = [...this.eventosExibicao];
 
-        this.filtrarProfissional();
+        this.filtrarRegistros();
 
         this.isLoading = false;
       },
@@ -167,6 +174,10 @@ export class AgendaDiariaComponent implements OnInit {
     this.filtrarProfissional();
   }
 
+  filtrarRegistros() {
+    this.filtrarProfissional();
+  }
+
   filtrarProfissional() {
     if (this.profissionalFiltro && this.profissionalFiltro != 0) {
       this.eventosExibicao = this.eventosInternos.filter(item => item.meta?.profissional.id == this.profissionalFiltro);
@@ -184,6 +195,12 @@ export class AgendaDiariaComponent implements OnInit {
       || data.getFullYear() != this.dataExibicao.getFullYear()) {
       this.dataExibicao = data;
       this.carregarAgendamentos();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 }

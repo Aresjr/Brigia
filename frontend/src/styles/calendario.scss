@@ -1,3 +1,10 @@
+/* Mudar cor do texto */
+.cal-day-header {
+  color: #000; /* azul */
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
 .cal-week-view .cal-time-events {
   overflow: visible !important;
 }
@@ -8,7 +15,7 @@
 }
 
 .cal-week-view .cal-time-events .cal-event:hover {
-  @apply font-bold absolute z-[9999];
+  @apply font-bold absolute;
   min-height: 58px;
   min-width: 400px;
 }
@@ -27,16 +34,30 @@
 
 /* bloco dos dias da semana */
 .cal-day-headers, .cal-header {
-  @apply bg-primary/20 border;
+  @apply border bg-base-200 text-base;
 }
 
 .cal-day-headers:first-child {
-  @apply bg-base-100;
+  @apply bg-base-100 text-base;
 }
 
 .cal-weekend {
-  @apply bg-error/50;
+  @apply text-base;
 }
+
+.cal-week-view {
+  @apply rounded-t-lg;
+}
+
+.cal-week-view .cal-header.cal-today {
+  @apply bg-base-300 text-base;
+}
+
+.cal-month-view .cal-cell-row {
+  @apply rounded-t-lg;
+}
+
+//cal-cell cal-day-cell cal-past cal-weekend cal-out-month ng-star-inserted
 
 .cal-week-view .cal-hour:not(:last-child) .cal-hour-segment, .cal-week-view .cal-hour:last-child :not(:last-child) .cal-hour-segment {
   cursor: pointer;
