@@ -118,6 +118,7 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         return atendimento;
     }
 
+    @Transactional
     public Atendimento finalizarAtendimento(Long id, @Valid AtendimentoRequest request) {
         Atendimento atendimento = getById(id);
 

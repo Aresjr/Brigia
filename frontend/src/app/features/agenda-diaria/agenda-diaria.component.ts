@@ -59,8 +59,8 @@ export class AgendaDiariaComponent implements OnInit {
     this.agendamentoService.listar().subscribe({
       next: value => {
         const agendamentos = value.items;
-        this.eventosExibicao = agendamentos.map(a => EventoFactory.fromApi(a));
-        this.eventosInternos = this.eventosExibicao;
+        this.eventosExibicao = [...agendamentos.map(a => EventoFactory.fromApi(a))];
+        this.eventosInternos = [...this.eventosExibicao];
       }
     });
   }

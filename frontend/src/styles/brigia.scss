@@ -84,3 +84,17 @@
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
+
+::ng-deep .ng-select.ng-select-multiple .ng-select-container {
+  min-height: 2.5rem;   /* altura inicial */
+  height: auto;         /* deixa crescer */
+  flex-wrap: wrap;      /* quebra de linha dos itens */
+  align-items: flex-start; /* não forçar ao topo */
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+::ng-deep .ng-select.ng-select-multiple .ng-value-container {
+  flex-wrap: wrap;   /* valores/chips em várias linhas */
+  align-content: flex-start;
+}
