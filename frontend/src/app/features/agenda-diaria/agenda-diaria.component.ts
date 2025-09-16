@@ -17,6 +17,8 @@ import { filter } from 'rxjs/operators';
 import { NgIf } from '@angular/common';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { Subscription, interval } from 'rxjs';
+import { PacienteService } from '../pacientes/paciente.service';
+import { Paciente } from '../pacientes/paciente.interface';
 
 @Component({
   selector: 'app-agenda-diaria',
@@ -39,16 +41,19 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   eventosExibicao: CalendarEvent<Agendamento>[] = [];
   eventosInternos: CalendarEvent<Agendamento>[] = [];
   profissionais: Profissional[] = [];
+  pacientes: Paciente[] = [];
   exibeForm: boolean = false;
   pacienteId: number | null = null;
   isLoading: boolean = false;
   dataExibicao: Date = new Date();
   profissionalFiltro: number = 0;
+  pacienteFiltro: number = 0;
   private subscription!: Subscription;
 
   constructor(private router: Router, private toastr: ToastrService,
               private agendamentoService: AgendamentosService,
               private profissionaisService: ProfissionaisService,
+              private pacientesService: PacienteService,
               protected userService: UserService) {
     const navigation = this.router.getCurrentNavigation();
     const pacienteId = navigation?.extras.state?.['pacienteId'];
@@ -58,6 +63,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.carregarAgendamentos();
 
+    this.carregarPacientes();
     if (!this.userService.isMedico()) {
       this.carregarProfissionais();
     }
@@ -106,6 +112,14 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     this.profissionaisService.listar().subscribe({
       next: value => {
         this.profissionais = value.items;
+      }
+    });
+  }
+
+  carregarPacientes() {
+    this.pacientesService.listar().subscribe({
+      next: value => {
+        this.pacientes = value.items;
       }
     });
   }
@@ -174,6 +188,11 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     this.filtrarProfissional();
   }
 
+  selectPaciente(pacienteId: number) {
+    this.pacienteFiltro = pacienteId;
+    this.filtrarPaciente();
+  }
+
   filtrarRegistros() {
     this.filtrarProfissional();
   }
@@ -181,6 +200,14 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   filtrarProfissional() {
     if (this.profissionalFiltro && this.profissionalFiltro != 0) {
       this.eventosExibicao = this.eventosInternos.filter(item => item.meta?.profissional.id == this.profissionalFiltro);
+    } else {
+      this.eventosExibicao = [...this.eventosInternos];
+    }
+  }
+
+  filtrarPaciente() {
+    if (this.pacienteFiltro && this.pacienteFiltro != 0) {
+      this.eventosExibicao = this.eventosInternos.filter(item => item.meta?.paciente.id == this.pacienteFiltro);
     } else {
       this.eventosExibicao = [...this.eventosInternos];
     }
