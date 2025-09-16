@@ -47,9 +47,9 @@
 
         <div class="border-b pb-2">
           <p class="text-sm">Especialidades</p>
-          <p class="">
+          <p class="font-semibold mt-2">
             @for (especialidade of profissional.especialidades; track especialidade.id) {
-              <div class="m-2 p-2 bg-primary/20 text-primary rounded w-fit">{{especialidade.nome}}</div>
+              <div class="badge m-1 p-4 bg-primary/20 text-primary">{{especialidade.nome}}</div>
             }
           </p>
         </div>

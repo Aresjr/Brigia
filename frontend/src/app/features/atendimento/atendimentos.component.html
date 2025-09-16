@@ -46,7 +46,7 @@
                [class.bg-error]="atendimento.excluido"
                [class.bg-opacity-50]="atendimento.excluido"
                (click)="selecionar(atendimento); mostrarFormularioNovo = true;">
-            <div class="celula-listagem flex items-center">
+            <div class="celula-listagem flex items-center px-4">
               <div class="badge text-base-100" [ngClass]="'bg-['+CorAtendimento[atendimento.status]+']'">
                 {{ StatusAtendimentoDescricao[atendimento.status] }}
               </div>

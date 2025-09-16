@@ -21,7 +21,8 @@ module.exports = {
     "bg-[#06B6D4]",
     "bg-[#EF4444]",
     "bg-[#F59E0B]",
-    "bg-[#14B8A6]"
+    "bg-[#14B8A6]",
+    "bg-[#A78BFA]"
   ],
   theme: {
     extend: {

@@ -90,7 +90,7 @@
         <div>
           <label class="label-campo">Especialidades</label>
           <ng-select [multiple]="true" formControlName="especialidades" required
-                     class="campo-select"
+                     class="campo-select h-16"
                      [ngClass]="{'border-error': form.get('especialidades')?.invalid && form.get('especialidades')?.touched}" >
             @for (especialidade of this.listaEspecialidades; track especialidade.id) {
               <ng-option [value]="especialidade.id">{{especialidade.nome}}</ng-option>

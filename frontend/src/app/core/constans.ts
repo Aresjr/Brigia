@@ -85,7 +85,7 @@ export const StatusAgendamentoDescricao: Record<number, string> = {
 export const CorAgendamento: Record<number, string> = {
   [StatusAgendamento.Agendado]: '#60a5fa',
   [StatusAgendamento.Confirmado]: '#2563EB',
-  [StatusAgendamento.EmAtendimento]: '#06B6D4',
+  [StatusAgendamento.EmAtendimento]: '#A78BFA',
   [StatusAgendamento.Cancelado]: '#EF4444',
   [StatusAgendamento.NaoCompareceu]: '#F59E0B',
   [StatusAgendamento.Reagendado]: '#F59E0B',
@@ -105,7 +105,7 @@ export const StatusAtendimentoDescricao: Record<number, string> = {
 };
 
 export const CorAtendimento: Record<number, string> = {
-  [StatusAtendimento.EmAtendimento]: '#06B6D4',
+  [StatusAtendimento.EmAtendimento]: '#A78BFA',
   [StatusAtendimento.Cancelado]: '#EF4444',
   [StatusAtendimento.Finalizado]: '#14B8A6'
 };

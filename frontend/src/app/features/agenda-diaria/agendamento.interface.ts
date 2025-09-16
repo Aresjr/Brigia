@@ -10,11 +10,12 @@ export interface Agendamento extends Entidade {
     descricao: string | null;
     data: string;
     hora: string;
+    horaFim: string;
     duracao: number;
     paciente: Paciente;
     profissional: Profissional;
     especialidade: Especialidade;
-    procedimento: Procedimento;
+    procedimento: Procedimento | null;
     convenio?: Convenio;
     empresa?: Empresa;
     tipoAgendamento: number | null;

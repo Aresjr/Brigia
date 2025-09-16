@@ -155,7 +155,7 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
         pacienteId: this.agendamentoDetalhes.paciente.id,
         profissionalId: this.agendamentoDetalhes.profissional.id,
         especialidadeId: this.agendamentoDetalhes.especialidade.id,
-        procedimentoId: this.agendamentoDetalhes.procedimento.id,
+        procedimentoId: this.agendamentoDetalhes.procedimento?.id,
         convenioId: this.agendamentoDetalhes.convenio?.id,
         empresaId: this.agendamentoDetalhes.empresa?.id,
       });

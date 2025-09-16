@@ -11,7 +11,9 @@ import java.time.LocalTime;
 
 public record AgendamentoResponse(Long id, PacienteResponse paciente,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate data,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm") LocalTime hora, UnidadeResponse unidade,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm") LocalTime hora,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm") LocalTime horaFim,
+        UnidadeResponse unidade,
         EspecialidadeResponse especialidade, EmpresaResponse empresa, ConvenioResponse convenio,
         ProfissionalResponse profissional, ProcedimentoResponse procedimento, StatusAgendamento status,
         TipoAgendamento tipoAgendamento, FormaPagamento formaPagamento, BigDecimal valor, BigDecimal desconto,

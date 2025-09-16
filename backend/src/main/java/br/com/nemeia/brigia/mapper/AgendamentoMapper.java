@@ -29,7 +29,9 @@ public class AgendamentoMapper {
         }
 
         return new AgendamentoResponse(agendamento.getId(), pacienteMapper.toResponse(agendamento.getPaciente()),
-                agendamento.getData(), agendamento.getHora(), unidadeMapper.toResponse(agendamento.getUnidade()),
+                agendamento.getData(), agendamento.getHora(),
+                agendamento.getHora().plusMinutes(agendamento.getDuracao()),
+                unidadeMapper.toResponse(agendamento.getUnidade()),
                 especialidadeMapper.toResponse(agendamento.getEspecialidade()),
                 empresaMapper.toResponse(agendamento.getEmpresa()),
                 convenioMapper.toResponse(agendamento.getConvenio()),
