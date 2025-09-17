@@ -1,5 +1,6 @@
 package br.com.nemeia.brigia.controller;
 
+import br.com.nemeia.brigia.auth.SecurityUtils;
 import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
 import br.com.nemeia.brigia.dto.response.AgendamentoResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
@@ -20,6 +21,7 @@ public class AgendamentoController {
 
     private final AgendamentoService service;
     private final AgendamentoMapper mapper;
+    private final SecurityUtils securityUtils;
 
     @GetMapping
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
@@ -29,8 +31,9 @@ public class AgendamentoController {
             @RequestParam(required = false) Integer ano,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
-        log.info("GET /agendamentos - mes: {}, ano: {}, page: {}, size: {}", mes, ano, page, size);
-        return mapper.toPagedResponse(service.getByProfissional(mes, ano, page, size));
+        Long userId = securityUtils.getLoggedUserId();
+        log.info("GET /agendamentos - mes: {}, ano: {}, page: {}, size: {}, userId: {}", mes, ano, page, size, userId);
+        return mapper.toPagedResponse(service.getByDate(userId, mes, ano, page, size));
     }
 
     @PostMapping

@@ -25,7 +25,7 @@
       <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
     </div>
 
-    <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6">
+    <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6" [ngClass]="{ 'visualizacao': !podeSalvar }">
       <div class="flex">
         <div class="w-[8rem] mr-4" >
           <label class="label-campo" for="data">
@@ -202,32 +202,39 @@
         <div class="w-[6rem] mr-4" >
           <label class="label-campo" for="valor">
             Valor <span aria-hidden="true" class="text-error">*</span>
-              <button type="button" class="btn btn-xs btn-ghost btn-circle ml-6" aria-label="Editar" (click)="editaValor()" *ngIf="this.podeSalvar && !valorEditavel" title="Editar Valor">
-                <lucide-icon name="pencil" class="inline w-4 h-4"/>
-              </button>
-              <button type="button" class="btn btn-xs btn-ghost btn-circle ml-6" aria-label="Fechar" (click)="cancelarEdicaoValor()" *ngIf="this.podeSalvar && valorEditavel" title="Cancelar Edição de Valor">
-                <lucide-icon name="x" class="inline w-4 h-4"/>
-              </button>
-            <div class="placeholder-esquerdo">R$</div>
+            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" aria-label="Editar" (click)="editaValor()" *ngIf="this.podeSalvar && !valorEditavel" title="Editar Valor">
+              <lucide-icon name="pencil" class="h-3.5"/>
+            </button>
+            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" aria-label="Fechar" (click)="cancelarEdicaoValor()" *ngIf="this.podeSalvar && valorEditavel" title="Cancelar Edição de Valor">
+              <lucide-icon name="x" class="h-3.5"/>
+            </button>
+          </label>
+
+          <label class="input input-sm input-bordered flex items-center h-[2.4rem] bg-base-100" [ngClass]="styleClassesField('valor', !this.valorEditavel)">
+            R$
             <input type="text" formControlName="valor" min="1" max="99999" id="valor"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker="," required
-                   class="campo pl-7 py-[7px]" [ngClass]="styleClassesField('valor', !this.valorEditavel) " [readOnly]="!this.valorEditavel">
-            <div *ngIf="isInvalid('valor')" class="text-error text-sm">
-              Obrigatório
-            </div>
+                   class="campo border-0" [readOnly]="!this.valorEditavel">
+          </label>
+          <label *ngIf="isInvalid('valor')" class="text-error text-sm">
+            Obrigatório
           </label>
         </div>
+
         <div class="w-[5rem] mr-4" >
           <label class="label-campo" for="desconto">
             Desconto
-            <div class="placeholder-esquerdo">R$</div>
+          </label>
+          <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="styleClassesField('desconto', !this.valorEditavel)">
+            R$
             <input type="text" formControlName="desconto" min="1" max="99999" id="desconto"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
-                   mask="separator.2" thousandSeparator="" decimalMarker=","
-                   class="campo pl-7 py-[7px]" [ngClass]="styleClassesField('desconto')">
+                   mask="separator.2" thousandSeparator="" decimalMarker="," required
+                   class="campo border-0" [ngClass]="styleClassesField('desconto')">
           </label>
         </div>
+
         <div class="w-[30rem]" >
           <label class="label-campo" for="observacoes">
             Observações

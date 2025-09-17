@@ -42,8 +42,8 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         this.convenioService = convenioService;
     }
 
-    @Cacheable(value = "agendamentos", key = "#mes + '-' + #ano + '-' + #securityUtils.getLoggedUserId()")
-    public Page<Agendamento> getByProfissional(Integer mes, Integer ano, int page, int size) {
+    @Cacheable(value = "agendamentos", key = "#mes + '-' + #ano + '-' + #userId")
+    public Page<Agendamento> getByDate(Long userId, Integer mes, Integer ano, int page, int size) {
         if (mes == null) {
             mes = LocalDate.now().getMonthValue();
         }
@@ -61,7 +61,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
 
         if (securityUtils.getLoggedUserRoles().contains(RoleUsuario.MEDICO.toString())) {
-            Long profissionalId = profissionalService.getByUsuarioId(securityUtils.getLoggedUserId()).getId();
+            Long profissionalId = profissionalService.getByUsuarioId(userId).getId();
             return repository.findAllByProfissionalIdAndDateRange(pageable, profissionalId, startDate, endDate);
         } else {
             return repository.findAllByDateRange(pageable, startDate, endDate);

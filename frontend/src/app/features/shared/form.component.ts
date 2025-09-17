@@ -36,7 +36,7 @@ export abstract class FormComponent<Request extends EntidadeRequest> {
       classes.push('border', 'border-error');
     }
     if (isReadOnly) {
-      classes.push('opacity-50', 'cursor-not-allowed');
+      classes.push('opacity-50', 'cursor-not-allowed', 'input-view-only');
     }
     return classes;
   }
