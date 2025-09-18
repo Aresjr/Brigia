@@ -62,13 +62,13 @@
                           Ver Histórico
                         </a>
                       </li>
-                      <li *ngIf="paciente.excluido">
-                        <a (click)="editar($event, paciente)"
+                      <li>
+                        <a (click)="editar(paciente)"
                            class="text-sm text-neutral hover:bg-base-200">
                           Editar
                         </a>
                       </li>
-                      <li *ngIf="paciente.excluido">
+                      <li *ngIf="!paciente.excluido">
                         <a (click)="idExclusao = paciente.id; excluir(paciente.id)"
                            class="text-error hover:bg-error/50">
                           Excluir
@@ -85,16 +85,18 @@
         <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
     }
 
-    @if (itemSelecionado) {
-        <app-paciente-detalhes
-            [paciente]="itemSelecionado"
-            (fechou)="fecharDetalhes()"
-        ></app-paciente-detalhes>
-    }
+      <app-paciente-detalhes
+          *ngIf="itemSelecionado && mostrarDetalhes"
+          [paciente]="itemSelecionado"
+          (fechou)="fecharDetalhes()"
+          (editou)="editar(itemSelecionado)"
+      ></app-paciente-detalhes>
 
     @if (mostrarFormularioNovo) {
         <app-paciente-form
+
             [paciente]="itemEdicao"
+            [isDetalhes]="mostrarDetalhes"
             (save)="salvarNovoPaciente($event)"
             (cancel)="cancelarNovo()"
         ></app-paciente-form>

@@ -23,6 +23,7 @@ import { FormComponent } from '../../shared/form.component';
 })
 export class PacienteFormComponent extends FormComponent<PacienteRequest> implements OnInit {
   @Input() paciente?: Paciente | null;
+  @Input() isDetalhes: boolean = false;
 
   estados: ({ sigla: string; nome: string })[] = ESTADOS;
   protected readonly SEXOS = SEXOS;
@@ -56,6 +57,9 @@ export class PacienteFormComponent extends FormComponent<PacienteRequest> implem
     if (this.paciente) {
       this.form.patchValue(this.paciente);
     }
+    if (this.isDetalhes) {
+
+    }
   }
 
   private carregarConvenios() {
@@ -84,7 +88,7 @@ export class PacienteFormComponent extends FormComponent<PacienteRequest> implem
     return !!this.paciente;
   }
 
-  buscarCep() {
+  buscarCep() { //TODO - colocar em um service separado
     const cep = this.form.get('cep')?.value?.replace(/\D/g, '');
     if (cep?.length === 8) {
       this.http.get<any>(`https://viacep.com.br/ws/${cep}/json/`)

@@ -21,6 +21,7 @@ export abstract class BaseListComponent<T extends Entidade> {
   totalPaginas = 1;
   itemSelecionado: T | null = null;
   itemEdicao: T | null = null;
+  mostrarDetalhes = false;
   mostrarFormularioNovo = false;
   isLoading = false;
   nomeEntidade = '';
@@ -81,6 +82,7 @@ export abstract class BaseListComponent<T extends Entidade> {
 
   selecionar(item: T): void {
     this.itemSelecionado = item;
+    this.mostrarDetalhes = true;
   }
 
   fecharDetalhes(): void {
@@ -101,10 +103,10 @@ export abstract class BaseListComponent<T extends Entidade> {
     this.itemEdicao = null;
   }
 
-  editar(event: Event, item: T) {
-    event.stopPropagation();
+  editar(item: T) {
     this.itemEdicao = item;
     this.mostrarFormularioNovo = true;
+    this.mostrarDetalhes = false;
   }
 
   perguntaExcluir(event: Event, entidade: Entidade) {

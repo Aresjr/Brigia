@@ -18,6 +18,7 @@ import { UserService } from '../../../core/user.service';
 export class PacienteDetalhesComponent {
   @Input() paciente: Paciente | null = null;
   @Output() fechou = new EventEmitter<void>();
+  @Output() editou = new EventEmitter<Paciente | null>();
 
   constructor(private router: Router, private userService: UserService) {}
 
@@ -33,5 +34,9 @@ export class PacienteDetalhesComponent {
 
   exibeCriarAgendamento() {
     return !this.userService.isMedico();
+  }
+
+  editar(paciente: Paciente | null) {
+    this.editou.emit(paciente);
   }
 }

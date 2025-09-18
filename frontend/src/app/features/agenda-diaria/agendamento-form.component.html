@@ -12,10 +12,10 @@
       </div>
 
       <div>
-        <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" aria-label="Editar" (click)="onEdit()" *ngIf="!this.userService.isMedico() && agendamentoDetalhes && !this.podeSalvar" title="Editar">
+        <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" title="Editar" (click)="onEdit()" *ngIf="!this.userService.isMedico() && agendamentoDetalhes && !this.podeSalvar" title="Editar">
           <lucide-icon name="pencil" class="inline w-5 h-5"/>
         </button>
-        <button type="button" class="btn btn-sm btn-ghost btn-circle" aria-label="Fechar" (click)="fechar()" title="Fechar">
+        <button type="button" class="btn btn-sm btn-ghost btn-circle" title="Fechar" (click)="fechar()" title="Fechar">
           <lucide-icon name="x" class="inline w-5 h-5"/>
         </button>
       </div>
@@ -202,10 +202,10 @@
         <div class="w-[6rem] mr-4" >
           <label class="label-campo" for="valor">
             Valor <span aria-hidden="true" class="text-error">*</span>
-            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" aria-label="Editar" (click)="editaValor()" *ngIf="this.podeSalvar && !valorEditavel" title="Editar Valor">
+            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" title="Editar" (click)="editaValor()" *ngIf="this.podeSalvar && !valorEditavel" title="Editar Valor">
               <lucide-icon name="pencil" class="h-3.5"/>
             </button>
-            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" aria-label="Fechar" (click)="cancelarEdicaoValor()" *ngIf="this.podeSalvar && valorEditavel" title="Cancelar Edição de Valor">
+            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" title="Fechar" (click)="cancelarEdicaoValor()" *ngIf="this.podeSalvar && valorEditavel" title="Cancelar Edição de Valor">
               <lucide-icon name="x" class="h-3.5"/>
             </button>
           </label>
@@ -230,8 +230,7 @@
             R$
             <input type="text" formControlName="desconto" min="1" max="99999" id="desconto"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
-                   mask="separator.2" thousandSeparator="" decimalMarker="," required
-                   class="campo border-0" [ngClass]="styleClassesField('desconto')">
+                   mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0">
           </label>
         </div>
 

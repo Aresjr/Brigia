@@ -18,7 +18,6 @@ public class EmailService {
 
   public void sendEmail(String to, String subject, String templateName, Map<String, Object> variables) throws UnsupportedEncodingException {
     String htmlContent = templateLoader.renderTemplate(templateName, variables);
-
     mailgunClient.sendMessage(to, subject, htmlContent);
   }
 }

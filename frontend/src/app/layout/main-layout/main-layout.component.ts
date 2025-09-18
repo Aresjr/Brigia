@@ -52,13 +52,9 @@ export class MainLayoutComponent {
       .subscribe((title) => this.updateTitle(title));
 
     this.filterMenuItems();
-
-    this.loggedUserName = localStorage.getItem('name') || '';
   }
 
   submenuState: Record<string, boolean> = {};
-  loggedUserName: string = '';
-  isUserMenuOpen = false;
   searchTerm: string = '';
   menuItems: MenuItem[] = [
     { label: 'Página Inicial', icon: 'home', route: '/', roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.MEDICO] },

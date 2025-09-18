@@ -6,7 +6,7 @@
       <h2 class="text-lg font-semibold">{{ titulo }}</h2>
 
       <div>
-        <button type="button" class="btn btn-sm btn-ghost btn-circle" aria-label="Fechar" (click)="fechar()" title="Fechar">
+        <button type="button" class="btn btn-sm btn-ghost btn-circle" title="Fechar" (click)="fechar()" title="Fechar">
           <lucide-icon name="x" class="inline w-5 h-5"/>
         </button>
       </div>
@@ -16,7 +16,7 @@
 
       <div class="tabs tabs-bordered min-w-max">
         <input type="radio" name="atendimento_tabs" class="tab-atendimento"
-               aria-label="Anamnese" checked="checked" />
+               title="Anamnese" checked="checked" />
         <div class="tab-content">
           <div class="w-[52rem] p-4">
             <label class="label-campo" for="anamnese">
@@ -27,7 +27,7 @@
         </div>
 
         <input type="radio" name="atendimento_tabs" class="tab-atendimento"
-               aria-label="Exame Físico" />
+               title="Exame Físico" />
         <div class="tab-content">
           <div class="w-[52rem] p-4">
             <label class="label-campo" for="exameFisico">
@@ -38,7 +38,7 @@
         </div>
 
         <input type="radio" name="atendimento_tabs" class="tab-atendimento"
-               aria-label="Diagnóstico" />
+               title="Diagnóstico" />
         <div class="tab-content">
           <div class="w-[52rem] p-4">
             <label class="label-campo" for="diagnostico">
@@ -48,7 +48,7 @@
           </div>
         </div>
 
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Evolução Clínica" />
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento" title="Evolução Clínica" />
         <div class="tab-content">
           <div class="w-[52rem] p-4">
             <label class="label-campo" for="evolucaoClinica">
@@ -58,7 +58,7 @@
           </div>
         </div>
 
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Exames Solicitados" />
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento" title="Exames Solicitados" />
         <div class="tab-content">
           <div class="w-[52rem] p-4">
             <label class="label-campo" for="examesSolicitados">
@@ -68,7 +68,7 @@
           </div>
         </div>
 
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Prescrições" />
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento" title="Prescrições" />
         <div class="tab-content">
           <div class="w-[52rem] p-4">
             <label class="label-campo" for="prescricoes">
@@ -78,7 +78,7 @@
           </div>
         </div>
 
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Observações" />
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento" title="Observações" />
         <div class="tab-content">
           <div class="w-[52rem] p-4">
             <label class="label-campo" for="observacoes">
@@ -129,7 +129,7 @@
 
               <input [id]="'valor_' + i" type="number" formControlName="valor" class="campo mt-0 p-2" readonly >
 
-              <button type="button" class="btn btn-ghost btn-circle btn-xs" (click)="removerProcedimento(i)" aria-label="Excluir lançamento">
+              <button type="button" class="btn btn-ghost btn-circle btn-xs" (click)="removerProcedimento(i)" title="Excluir lançamento">
                 <lucide-icon name="trash" class="w-4 h-4 text-error"></lucide-icon>
               </button>
             </div>

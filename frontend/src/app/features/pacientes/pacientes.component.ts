@@ -60,25 +60,6 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
     });
   }
 
-  handleAction(event: Event, action: string, paciente: Paciente) {
-    event.stopPropagation();
-
-    switch (action) {
-      case 'agendar':
-        //TODO: Implementar agendamento de paciente
-        this.toastr.warning('Agenda de Paciente será implementada em breve.');
-        break;
-      case 'historico':
-        //TODO: Implementar histórico de paciente
-        this.toastr.warning('Histórico de Paciente será implementado em breve.');
-        break;
-      case 'excluir':
-        //TODO: Implementar exclusão de paciente
-        this.toastr.warning('Exclusão de Paciente será implementada em breve.');
-        break;
-    }
-  }
-
   override filter(paciente: Paciente, searchTerm: string): boolean | undefined {
     return paciente.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       paciente.cpf?.includes(searchTerm) ||

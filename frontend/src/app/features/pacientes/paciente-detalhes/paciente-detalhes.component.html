@@ -3,9 +3,14 @@
   <div class="p-4">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold">Detalhes do Paciente</h2>
-      <button type="button" (click)="fechar()" class="btn btn-sm btn-ghost" aria-label="Fechar">
-        <lucide-icon name="x" class="right-0 inline w-6 h-6"/>
-      </button>
+      <div>
+        <button type="button" (click)="editar(paciente)" class="btn btn-sm btn-ghost" title="Editar">
+          <lucide-icon name="pencil" class="right-0 inline w-6 h-6"/>
+        </button>
+        <button type="button" (click)="fechar()" class="btn btn-sm btn-ghost" title="Fechar">
+          <lucide-icon name="x" class="right-0 inline w-6 h-6"/>
+        </button>
+      </div>
     </div>
 
     @if (paciente) {
