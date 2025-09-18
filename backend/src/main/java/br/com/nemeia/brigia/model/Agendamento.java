@@ -3,7 +3,10 @@ package br.com.nemeia.brigia.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.UUID;
+
 import lombok.*;
 
 @Getter
@@ -81,4 +84,20 @@ public class Agendamento extends BaseModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "atendimento_id")
     private Atendimento atendimento;
+
+    @Column(name = "token_publico", nullable = false)
+    private String tokenPublico;
+
+    @Column(name = "token_expiracao", nullable = false)
+    private LocalDateTime tokenExpiracao;
+
+    @PrePersist
+    public void prePersist() {
+      if (tokenPublico == null) {
+        tokenPublico = UUID.randomUUID().toString();
+      }
+      if (tokenExpiracao == null) {
+        tokenExpiracao = LocalDateTime.now().plusDays(7);
+      }
+    }
 }

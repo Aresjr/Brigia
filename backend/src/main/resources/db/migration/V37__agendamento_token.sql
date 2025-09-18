@@ -1,0 +1,3 @@
+ALTER TABLE agendamento
+ADD COLUMN IF NOT EXISTS token_publico VARCHAR(36),
+ADD COLUMN IF NOT EXISTS token_expiracao TIMESTAMP;

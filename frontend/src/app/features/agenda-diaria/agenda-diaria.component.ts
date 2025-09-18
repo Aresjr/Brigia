@@ -91,8 +91,6 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     const ano = this.dataExibicao.getFullYear();
     const mes = this.dataExibicao.getMonth() + 1;
 
-    console.log('carregarAgendamentos');
-
     this.agendamentoService.listarPorData(ano, mes).subscribe({
       next: value => {
         const agendamentos = value.items;

@@ -6,6 +6,7 @@ import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
 import br.com.nemeia.brigia.mapper.AgendamentoMapper;
 import br.com.nemeia.brigia.model.*;
 import br.com.nemeia.brigia.repository.AgendamentoRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -14,7 +15,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -27,11 +30,12 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     private final ProcedimentoService procedimentoService;
     private final EmpresaService empresaService;
     private final ConvenioService convenioService;
+    private final EmailService emailService;
 
     public AgendamentoService(AgendamentoRepository repository, SecurityUtils securityUtils, AgendamentoMapper mapper,
             PacienteService pacienteService, ProfissionalService profissionalService,
             EspecialidadeService especialidadeService, ProcedimentoService procedimentoService,
-            EmpresaService empresaService, ConvenioService convenioService) {
+            EmpresaService empresaService, ConvenioService convenioService, EmailService emailService) {
         super(repository, securityUtils);
         this.mapper = mapper;
         this.pacienteService = pacienteService;
@@ -40,6 +44,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         this.procedimentoService = procedimentoService;
         this.empresaService = empresaService;
         this.convenioService = convenioService;
+        this.emailService = emailService;
     }
 
     @Cacheable(value = "agendamentos", key = "#mes + '-' + #ano + '-' + #userId")
@@ -68,6 +73,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         }
     }
 
+    @Transactional
     @CacheEvict(value = "agendamentos", allEntries = true)
     public Agendamento createAgendamento(AgendamentoRequest request) {
         Agendamento agendamento = mapper.toEntity(request);
@@ -76,7 +82,14 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         agendamento.setStatus(StatusAgendamento.AGENDADO);
         agendamento.setUnidade(new Unidade(securityUtils.getLoggedUserUnidadeId()));
 
-        return repository.save(agendamento);
+        Agendamento agendamentoNovo = repository.save(agendamento);
+
+        String email = agendamentoNovo.getPaciente().getEmail();
+        if (email != null) {
+          sendEmail(agendamentoNovo);
+        }
+
+        return agendamentoNovo;
     }
 
     @CacheEvict(value = "agendamentos", allEntries = true)
@@ -115,6 +128,27 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     @CacheEvict(value = "agendamentos", allEntries = true)
     public void update(Agendamento agendamento) {
       repository.save(agendamento);
+    }
+
+    private void sendEmail(Agendamento agendamento) {
+      var email = agendamento.getPaciente().getEmail();
+      var linkConfirmacao = String.format("/detalhes-agendamento?token=%s", agendamento.getTokenPublico());
+      if (email != null) {
+        Map<String, Object> variables = Map.of(
+          "patientName", agendamento.getPaciente().getNome(),
+          "date", agendamento.getData(),
+          "time", agendamento.getHora(),
+          "doctorName", agendamento.getProfissional().getNome(),
+          "confirmationLink", linkConfirmacao,
+          "supportEmail", "bemestar@nemeia.com.br",
+          "clinica", agendamento.getUnidade().getNome()
+        );
+        try {
+          emailService.sendEmail(email, "Agendamento Realizado!", "agendamento-cadastrado", variables);
+        } catch (Exception e) {
+          log.error("Não foi possível enviar email: {}", e.getLocalizedMessage());
+        }
+      }
     }
 
     @Override

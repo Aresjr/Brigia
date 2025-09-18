@@ -14,7 +14,6 @@ export class PaginationComponent {
   @Input() itensPorPagina = 15;
   @Input() totalPaginas = 1;
   @Output() pageChange = new EventEmitter<number>();
-  protected readonly Math = Math;
   protected maxPaginasVisiveis = 5;
 
   mudarPagina(pagina: number): void {

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Agendamento Confirmado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f9fc;
+            margin: 0;
+            padding: 0;
+            color: #333333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: #2563eb;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+        p {
+            line-height: 1.5;
+            margin: 8px 0;
+        }
+        .highlight {
+            color: #10b981;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #777777;
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #2563eb;
+            color: #ffffff !important;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Agendamento confirmado 🎉</h1>
+    <p>Olá <span th:text="${patientName}">Paciente</span>,</p>
+    <p>Seu agendamento foi confirmado com sucesso!</p>
+
+    <p><strong>Data:</strong> <span th:text="${#temporals.format(date, 'dd/MM/yyyy')}"></span></p>
+    <p><strong>Horário:</strong> <span th:text="${time}"></span></p>
+    <p><strong>Profissional:</strong> <span th:text="${doctorName}"></span></p>
+    <p><strong>Local:</strong> <span th:text="${clinica}"></span></p>
+
+    <a th:href="${confirmationLink}" class="btn">Ver detalhes</a>
+
+    <div class="footer">
+        <p>Se tiver qualquer dúvida, entre em contato conosco:
+            <span th:text="${supportEmail}">suporte@nemeia.com.br</span>
+        </p>
+    </div>
+</div>
+</body>
+</html>

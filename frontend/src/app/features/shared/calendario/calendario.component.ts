@@ -93,6 +93,10 @@ export class CalendarioComponent implements AfterViewInit {
   formatTimeLabels() {
     const timeLabels = this.elementRef.nativeElement.querySelectorAll('.cal-time');
 
+    console.log('formatTimeLabels', timeLabels);
+
+    //TODO - fix
+
     timeLabels.forEach((label: HTMLElement) => {
       let textContent = label.textContent || '';
       const timeMatch = textContent.match(/(\d+)\s*(am|pm)/i);
