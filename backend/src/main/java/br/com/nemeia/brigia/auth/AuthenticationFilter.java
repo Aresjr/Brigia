@@ -28,7 +28,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         final String path = request.getRequestURI();
-        if (path.startsWith("/auth")) {
+        if (path.startsWith("/auth/") || path.startsWith("/agendamentos/token/")) {
             filterChain.doFilter(request, response);
             return;
         }

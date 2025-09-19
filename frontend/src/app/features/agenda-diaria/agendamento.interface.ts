@@ -5,6 +5,7 @@ import { Especialidade } from '../especialidade/especialidade.interface';
 import { Procedimento } from '../procedimentos/procedimento.interface';
 import { Convenio } from '../convenio/convenio.interface';
 import { Empresa } from '../empresa/empresa.interface';
+import { Unidade } from '../unidade/unidade.interface';
 
 export interface Agendamento extends Entidade {
     descricao: string | null;
@@ -18,6 +19,7 @@ export interface Agendamento extends Entidade {
     procedimento: Procedimento | null;
     convenio?: Convenio;
     empresa?: Empresa;
+    unidade: Unidade;
     tipoAgendamento: number | null;
     formaPagamento: number;
     status: number;

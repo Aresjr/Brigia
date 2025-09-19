@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SecurityUtils {
+public class SecurityService {
 
     public Long getLoggedUserId() {
         return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())

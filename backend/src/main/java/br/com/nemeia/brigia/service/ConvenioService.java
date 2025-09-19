@@ -1,7 +1,7 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.Utils;
-import br.com.nemeia.brigia.auth.SecurityUtils;
+import br.com.nemeia.brigia.auth.SecurityService;
 import br.com.nemeia.brigia.dto.request.ConvenioRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ConvenioMapper;
@@ -22,7 +22,7 @@ public class ConvenioService {
 
     private final ConvenioRepository repository;
     private final ConvenioMapper mapper;
-    private final SecurityUtils securityUtils;
+    private final SecurityService securityService;
 
     public Page<Convenio> getPaged(int page, int size, Boolean mostrarExcluidos) {
         Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
@@ -53,7 +53,7 @@ public class ConvenioService {
         convenio.setExcluido(true);
         convenio.setExcluidoEm(LocalDateTime.now());
 
-        Long userId = securityUtils.getLoggedUserId();
+        Long userId = securityService.getLoggedUserId();
         convenio.setExcluidoPor(userId);
         repository.save(convenio);
     }

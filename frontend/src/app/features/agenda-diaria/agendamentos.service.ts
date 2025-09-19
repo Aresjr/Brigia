@@ -21,4 +21,16 @@ export class AgendamentosService extends BaseService<Agendamento, AgendamentoReq
     );
   }
 
+  getByToken(token: string): Observable<Agendamento> {
+    return this.backend.get<Agendamento>(`${this.path}/token/${token}`).pipe(
+      shareReplay(1),
+      catchError((e) => {
+
+        console.log('e', e);
+
+        return throwError(() => e);
+      })
+    );
+  }
+
 }

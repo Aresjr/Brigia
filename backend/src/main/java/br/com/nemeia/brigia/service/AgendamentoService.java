@@ -1,8 +1,9 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.Utils;
-import br.com.nemeia.brigia.auth.SecurityUtils;
+import br.com.nemeia.brigia.auth.SecurityService;
 import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
+import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.AgendamentoMapper;
 import br.com.nemeia.brigia.model.*;
 import br.com.nemeia.brigia.repository.AgendamentoRepository;
@@ -37,12 +38,12 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     @Value("${app.base-url}")
     private String baseUrl;
 
-    public AgendamentoService(AgendamentoRepository repository, SecurityUtils securityUtils, AgendamentoMapper mapper,
-            PacienteService pacienteService, ProfissionalService profissionalService,
-            EspecialidadeService especialidadeService, ProcedimentoService procedimentoService,
-            EmpresaService empresaService, ConvenioService convenioService, UnidadeService unidadeService,
+    public AgendamentoService(AgendamentoRepository repository, SecurityService securityService, AgendamentoMapper mapper,
+                              PacienteService pacienteService, ProfissionalService profissionalService,
+                              EspecialidadeService especialidadeService, ProcedimentoService procedimentoService,
+                              EmpresaService empresaService, ConvenioService convenioService, UnidadeService unidadeService,
                               EmailService emailService) {
-        super(repository, securityUtils);
+        super(repository, securityService);
         this.mapper = mapper;
         this.pacienteService = pacienteService;
         this.profissionalService = profissionalService;
@@ -71,7 +72,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
 
         Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
 
-        if (securityUtils.getLoggedUserRoles().contains(RoleUsuario.MEDICO.toString())) {
+        if (securityService.getLoggedUserRoles().contains(RoleUsuario.MEDICO.toString())) {
             Long profissionalId = profissionalService.getByUsuarioId(userId).getId();
             return repository.findAllByProfissionalIdAndDateRange(pageable, profissionalId, startDate, endDate);
         } else {
@@ -85,7 +86,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         Agendamento agendamento = mapper.toEntity(request);
         setEntidades(request, agendamento);
         agendamento.setStatus(StatusAgendamento.AGENDADO);
-        agendamento.setUnidade(unidadeService.getById(securityUtils.getLoggedUserUnidadeId()));
+        agendamento.setUnidade(unidadeService.getById(securityService.getLoggedUserUnidadeId()));
 
         Agendamento agendamentoNovo = repository.save(agendamento);
 
@@ -161,6 +162,11 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
       return original.getHora() != request.hora()
         || original.getData() != request.data()
         || !Objects.equals(original.getProfissional().getId(), request.profissionalId());
+    }
+
+    public Agendamento getByToken(String token) {
+      return repository.findOneByToken(token)
+        .orElseThrow(() -> new NotFoundException(getNomeEntidade() + " não encontrado com token:" + token));
     }
 
     @Override

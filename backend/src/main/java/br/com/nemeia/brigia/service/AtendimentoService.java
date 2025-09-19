@@ -1,6 +1,6 @@
 package br.com.nemeia.brigia.service;
 
-import br.com.nemeia.brigia.auth.SecurityUtils;
+import br.com.nemeia.brigia.auth.SecurityService;
 import br.com.nemeia.brigia.dto.request.AtendimentoRequest;
 import br.com.nemeia.brigia.dto.request.ProcedimentoAtendimentoRequest;
 import br.com.nemeia.brigia.mapper.AtendimentoMapper;
@@ -26,10 +26,10 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
     private final PrecoProcedimentoService precoProcedimentoService;
     private final AtendimentoMapper mapper;
 
-    public AtendimentoService(AtendimentoRepository repository, SecurityUtils securityUtils, AtendimentoMapper mapper,
-            ProfissionalService profissionalService, AgendamentoService agendamentoService,
-            ProcedimentoService procedimentoService, PrecoProcedimentoService precoProcedimentoService) {
-        super(repository, securityUtils);
+    public AtendimentoService(AtendimentoRepository repository, SecurityService securityService, AtendimentoMapper mapper,
+                              ProfissionalService profissionalService, AgendamentoService agendamentoService,
+                              ProcedimentoService procedimentoService, PrecoProcedimentoService precoProcedimentoService) {
+        super(repository, securityService);
         this.mapper = mapper;
         this.profissionalService = profissionalService;
         this.agendamentoService = agendamentoService;
@@ -90,8 +90,8 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
     }
 
     private void setEntidades(Atendimento atendimento, Agendamento agendamento) {
-        atendimento.setUnidade(new Unidade(securityUtils.getLoggedUserUnidadeId()));
-        atendimento.setProfissional(profissionalService.getByUsuarioId(securityUtils.getLoggedUserId()));
+        atendimento.setUnidade(new Unidade(securityService.getLoggedUserUnidadeId()));
+        atendimento.setProfissional(profissionalService.getByUsuarioId(securityService.getLoggedUserId()));
 
         atendimento.setAgendamento(agendamento);
         atendimento.setConvenio(agendamento.getConvenio());

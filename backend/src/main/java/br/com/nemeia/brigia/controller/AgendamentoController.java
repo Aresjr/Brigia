@@ -1,6 +1,6 @@
 package br.com.nemeia.brigia.controller;
 
-import br.com.nemeia.brigia.auth.SecurityUtils;
+import br.com.nemeia.brigia.auth.SecurityService;
 import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
 import br.com.nemeia.brigia.dto.response.AgendamentoResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
@@ -21,7 +21,7 @@ public class AgendamentoController {
 
     private final AgendamentoService service;
     private final AgendamentoMapper mapper;
-    private final SecurityUtils securityUtils;
+    private final SecurityService securityService;
 
     @GetMapping
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
@@ -31,7 +31,7 @@ public class AgendamentoController {
             @RequestParam(required = false) Integer ano,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
-        Long userId = securityUtils.getLoggedUserId();
+        Long userId = securityService.getLoggedUserId();
         log.info("GET /agendamentos - mes: {}, ano: {}, page: {}, size: {}, userId: {}", mes, ano, page, size, userId);
         return mapper.toPagedResponse(service.getByDate(userId, mes, ano, page, size));
     }
@@ -72,5 +72,11 @@ public class AgendamentoController {
     public AgendamentoResponse getAgendamentoById(@PathVariable Long id) {
         log.info("GET /agendamentos/{} - buscando agendamento pelo ID", id);
         return mapper.toResponse(service.getById(id));
+    }
+
+    @GetMapping("/token/{token}")
+    public AgendamentoResponse getByToken(@PathVariable String token) {
+        log.info("GET /token/{} - buscando agendamento por token", token);
+        return mapper.toResponse(service.getByToken(token));
     }
 }
