@@ -2,7 +2,7 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Agendamento Confirmado</title>
+    <title>Agendamento Alterado</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -52,9 +52,9 @@
 </head>
 <body>
 <div class="container">
-    <h1>Agendamento confirmado 🎉</h1>
+    <h1>Agendamento Alterado ⚠️</h1>
     <p>Olá <span th:text="${nomePaciente}">Paciente</span>,</p>
-    <p>Seu agendamento foi confirmado com sucesso!</p>
+    <p>O horário do seu agendamento foi alterado! Segue os detalhes:</p>
 
     <p><strong>Data:</strong> <span th:text="${#temporals.format(data, 'dd/MM/yyyy')}"></span></p>
     <p><strong>Horário:</strong> <span th:text="${horario}"></span></p>

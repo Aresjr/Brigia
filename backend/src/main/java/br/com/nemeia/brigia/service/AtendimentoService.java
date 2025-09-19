@@ -54,9 +54,7 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         atendimento.setHoraFim(LocalTime.now());
 
         Atendimento atendimentoNovo = repository.save(atendimento);
-
-        agendamento.setStatus(StatusAgendamento.FINALIZADO);
-        agendamentoService.update(agendamento);
+        agendamentoService.updateStatus(agendamento, StatusAgendamento.FINALIZADO);
 
         return atendimentoNovo;
     }
@@ -113,8 +111,7 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         atendimento.setHoraInicio(LocalTime.now());
         atendimento = repository.save(atendimento);
 
-        agendamento.setStatus(StatusAgendamento.EM_ATENDIMENTO);
-        agendamentoService.update(agendamento);
+        agendamentoService.updateStatus(agendamento, StatusAgendamento.EM_ATENDIMENTO);
         return atendimento;
     }
 
@@ -132,8 +129,7 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
 
         atendimento = repository.save(atendimento);
 
-        agendamento.setStatus(StatusAgendamento.FINALIZADO);
-        agendamentoService.update(agendamento);
+        agendamentoService.updateStatus(agendamento, StatusAgendamento.FINALIZADO);
 
         return atendimento;
     }

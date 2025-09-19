@@ -85,22 +85,21 @@
         <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
     }
 
+  <!-- TODO - juntar os componentes em um só -->
       <app-paciente-detalhes
           *ngIf="itemSelecionado && mostrarDetalhes"
           [paciente]="itemSelecionado"
           (fechou)="fecharDetalhes()"
-          (editou)="editar(itemSelecionado)"
-      ></app-paciente-detalhes>
+          (editou)="editar(itemSelecionado)">
+      </app-paciente-detalhes>
 
-    @if (mostrarFormularioNovo) {
-        <app-paciente-form
-
-            [paciente]="itemEdicao"
-            [isDetalhes]="mostrarDetalhes"
-            (save)="salvarNovoPaciente($event)"
-            (cancel)="cancelarNovo()"
-        ></app-paciente-form>
-    }
+      <app-paciente-form
+          *ngIf="mostrarFormularioNovo"
+          [paciente]="itemEdicao"
+          [isDetalhes]="false"
+          (save)="salvarNovoPaciente($event)"
+          (cancel)="cancelarNovo()">
+      </app-paciente-form>
 
     @if (mostraFab()) {
       <app-fab (clicked)="onAddNovo()"></app-fab>

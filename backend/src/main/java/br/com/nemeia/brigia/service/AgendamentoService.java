@@ -8,6 +8,7 @@ import br.com.nemeia.brigia.model.*;
 import br.com.nemeia.brigia.repository.AgendamentoRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -15,9 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -30,12 +31,17 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     private final ProcedimentoService procedimentoService;
     private final EmpresaService empresaService;
     private final ConvenioService convenioService;
+    private final UnidadeService unidadeService;
     private final EmailService emailService;
+
+    @Value("${app.base-url}")
+    private String baseUrl;
 
     public AgendamentoService(AgendamentoRepository repository, SecurityUtils securityUtils, AgendamentoMapper mapper,
             PacienteService pacienteService, ProfissionalService profissionalService,
             EspecialidadeService especialidadeService, ProcedimentoService procedimentoService,
-            EmpresaService empresaService, ConvenioService convenioService, EmailService emailService) {
+            EmpresaService empresaService, ConvenioService convenioService, UnidadeService unidadeService,
+                              EmailService emailService) {
         super(repository, securityUtils);
         this.mapper = mapper;
         this.pacienteService = pacienteService;
@@ -45,6 +51,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         this.empresaService = empresaService;
         this.convenioService = convenioService;
         this.emailService = emailService;
+        this.unidadeService = unidadeService;
     }
 
     @Cacheable(value = "agendamentos", key = "#mes + '-' + #ano + '-' + #userId")
@@ -58,7 +65,6 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
 
         LocalDate startDate = LocalDate.of(ano, mes, 1)
             .minusMonths(1);
-
         LocalDate endDate = LocalDate.of(ano, mes, 1)
             .plusMonths(2)
             .minusDays(1);
@@ -78,16 +84,12 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     public Agendamento createAgendamento(AgendamentoRequest request) {
         Agendamento agendamento = mapper.toEntity(request);
         setEntidades(request, agendamento);
-
         agendamento.setStatus(StatusAgendamento.AGENDADO);
-        agendamento.setUnidade(new Unidade(securityUtils.getLoggedUserUnidadeId()));
+        agendamento.setUnidade(unidadeService.getById(securityUtils.getLoggedUserUnidadeId()));
 
         Agendamento agendamentoNovo = repository.save(agendamento);
 
-        String email = agendamentoNovo.getPaciente().getEmail();
-        if (email != null) {
-          sendEmail(agendamentoNovo);
-        }
+        sendEmail(agendamentoNovo, "Agendamento Realizado!", "agendamento-cadastrado");
 
         return agendamentoNovo;
     }
@@ -95,13 +97,17 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     @CacheEvict(value = "agendamentos", allEntries = true)
     public Agendamento editAgendamento(Long id, AgendamentoRequest request) {
         Agendamento original = getById(id);
-        Agendamento agendamentoUpdate = mapper.toEntity(request);
-        setEntidades(request, agendamentoUpdate);
+        Boolean deveMandarEmail = deveMandarEmail(original, request);
 
-        agendamentoUpdate.setId(id);
-        agendamentoUpdate.setStatus(original.getStatus());
-        agendamentoUpdate.setUnidade(original.getUnidade());
-        return repository.save(agendamentoUpdate);
+        Agendamento agendamentoUpdate = mapper.updateEntity(original, request);
+        setEntidades(request, agendamentoUpdate);
+        Agendamento agendamentoAtualizado = repository.save(agendamentoUpdate);
+
+        if (deveMandarEmail) {
+          sendEmail(agendamentoAtualizado, "Agendamento Atualizado!", "agendamento-atualizado");
+        }
+
+        return agendamentoAtualizado;
     }
 
     private void setEntidades(AgendamentoRequest request, Agendamento agendamento) {
@@ -126,29 +132,35 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     }
 
     @CacheEvict(value = "agendamentos", allEntries = true)
-    public void update(Agendamento agendamento) {
+    public void updateStatus(Agendamento agendamento, StatusAgendamento statusAgendamento) {
+      agendamento.setStatus(statusAgendamento);
       repository.save(agendamento);
     }
 
-    private void sendEmail(Agendamento agendamento) {
+    private void sendEmail(Agendamento agendamento, String status, String template) {
       var email = agendamento.getPaciente().getEmail();
-      var linkConfirmacao = String.format("/detalhes-agendamento?token=%s", agendamento.getTokenPublico());
       if (email != null) {
+        var linkConfirmacao = String.format("%s/detalhes-agendamento?token=%s", baseUrl, agendamento.getTokenPublico());
         Map<String, Object> variables = Map.of(
-          "patientName", agendamento.getPaciente().getNome(),
-          "date", agendamento.getData(),
-          "time", agendamento.getHora(),
-          "doctorName", agendamento.getProfissional().getNome(),
-          "confirmationLink", linkConfirmacao,
-          "supportEmail", "bemestar@nemeia.com.br",
+          "nomePaciente", agendamento.getPaciente().getNome(),
+          "data", agendamento.getData(),
+          "horario", agendamento.getHora(),
+          "nomeMedico", agendamento.getProfissional().getNome(),
+          "linkConfirmacao", linkConfirmacao,
           "clinica", agendamento.getUnidade().getNome()
         );
         try {
-          emailService.sendEmail(email, "Agendamento Realizado!", "agendamento-cadastrado", variables);
+          emailService.sendEmail(email, status, template, variables);
         } catch (Exception e) {
           log.error("Não foi possível enviar email: {}", e.getLocalizedMessage());
         }
       }
+    }
+
+    private boolean deveMandarEmail(Agendamento original, AgendamentoRequest request) {
+      return original.getHora() != request.hora()
+        || original.getData() != request.data()
+        || !Objects.equals(original.getProfissional().getId(), request.profissionalId());
     }
 
     @Override
