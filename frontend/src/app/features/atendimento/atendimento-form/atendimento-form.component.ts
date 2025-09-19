@@ -74,8 +74,7 @@ export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> 
   adicionarProcedimento() {
     const procedimento = this.fb.group({
       quantidade: [1, [Validators.required, Validators.min(1)]],
-      procedimentoId: [null, Validators.required],
-      valor: [null]
+      procedimentoId: [null, Validators.required]
     });
 
     this.procedimentosLancados.push(procedimento);
@@ -91,24 +90,6 @@ export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> 
         this.procedimentos = response.items;
       }
     });
-  }
-
-  atualizarValorProcedimento(index: number, procedimentoId: number) {
-    const procedimento = this.procedimentos.find(p => p.id === procedimentoId);
-    if (procedimento) {
-      const valor = procedimento.valorPadrao || 0;
-      const quantidade = this.procedimentosLancados.at(index).get('quantidade')?.value || 1;
-      this.procedimentosLancados.at(index).patchValue({
-        valor: valor * quantidade
-      });
-    }
-  }
-
-  atualizarValorPorQuantidade(index: number) {
-    const procedimentoId = this.procedimentosLancados.at(index).get('procedimentoId')?.value;
-    if (procedimentoId) {
-      this.atualizarValorProcedimento(index, procedimentoId);
-    }
   }
 
   fechar(confirmou: boolean = false) {

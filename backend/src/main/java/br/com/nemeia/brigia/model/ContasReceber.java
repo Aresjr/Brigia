@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,40 +20,38 @@ public class ContasReceber extends BaseModel {
     @Column(name = "id")
     private Long id;
 
-/*
-Paciente / Cliente
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "paciente_id")
+    private Paciente paciente;
 
-Nome
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empresa_id")
+    private Empresa empresa;
 
-Contato (telefone/whatsapp, e-mail)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "atendimento_id")
+    private Atendimento atendimento;
 
-Atendimento
+    @Column(name = "data_atendimento")
+    private LocalDateTime dataAtendimento;
 
-Data do atendimento
+    @Column(name = "profissional")
+    private String profissional;
 
-Profissional responsável (médico/dentista/etc.)
+    @Column(name = "valor_total", precision = 10, scale = 2)
+    private BigDecimal valorTotal;
 
-Procedimentos listados (ou link "ver mais")
+    @Column(name = "valor_recebido", precision = 10, scale = 2)
+    private BigDecimal valorRecebido;
 
-Financeiro
+    @Column(name = "valor_aberto", precision = 10, scale = 2)
+    private BigDecimal valorAberto;
 
-Valor total
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "forma_pagamento", length = 2)
+    private FormaPagamento formaPagamento;
 
-Valor recebido (se for parcial)
-
-Valor em aberto
-
-Forma de pagamento (dinheiro, cartão, convênio, Pix)
-
-Status: Aberto, Pago, Atrasado, Parcial (com cores/status badge)
-
-Controle
-
-Data de vencimento da fatura
-
-Dias em atraso (se já venceu)
-
-Botões rápidos: Marcar como pago, Editar, Gerar boleto/Pix, Enviar lembrete
- */
-
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "status")
+    private StatusContaReceber status;
 }

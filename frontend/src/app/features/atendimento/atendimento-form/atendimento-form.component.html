@@ -112,13 +112,11 @@
             <div *ngFor="let procedimento of procedimentosLancados.controls; let i = index" [formGroupName]="i"
                  class="grid grid-cols-[6rem_1fr_8rem_2rem] gap-3 p-1.5 items-center hover:bg-base-200 rounded-lg">
 
-              <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade"
-                     class="campo mt-0 p-2" (change)="atualizarValorPorQuantidade(i)">
+              <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2">
 
               <ng-select [id]="'procedimento_' + i"  class="campo-select mt-0"
                          formControlName="procedimentoId"
-                         placeholder="Selecione um procedimento"
-                         (change)="atualizarValorProcedimento(i, $event?.id)">
+                         placeholder="Selecione um procedimento">
                 @for (procedimento of procedimentos; track procedimento.id) {
                   <ng-option [value]="procedimento.id">{{procedimento.nome}}</ng-option>
                 }
@@ -126,8 +124,6 @@
                   <span class="text-sm p-6">Nenhum resultado</span>
                 </ng-template>
               </ng-select>
-
-              <input [id]="'valor_' + i" type="number" formControlName="valor" class="campo mt-0 p-2" readonly >
 
               <button type="button" class="btn btn-ghost btn-circle btn-xs" (click)="removerProcedimento(i)" title="Excluir lançamento">
                 <lucide-icon name="trash" class="w-4 h-4 text-error"></lucide-icon>
