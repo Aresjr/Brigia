@@ -13,6 +13,7 @@ import { EspecialidadeComponent } from './features/especialidade/especialidade.c
 import { EmpresasComponent } from './features/empresa/empresas.component';
 import { AtendimentosComponent } from './features/atendimento/atendimentos.component';
 import { ContaReceberComponent } from './features/contas-receber/contas-receber.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -127,4 +128,5 @@ export const routes: Routes = [
       },
     ],
   },
+  { path: '**', component: NotFoundComponent }
 ];

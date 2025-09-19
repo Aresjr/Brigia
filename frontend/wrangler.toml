@@ -1,4 +1,0 @@
-[env.bemestar]
-name = "bemestar"
-compatibility_date = "2025-09-15"
-assets = { directory = "dist/browser" }
