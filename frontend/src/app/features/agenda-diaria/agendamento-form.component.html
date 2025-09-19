@@ -261,16 +261,15 @@
   </div>
 </div>
 
-@if (mostrarFormularioNovoPaciente) {
-  <app-paciente-form
-    (save)="salvarNovoPaciente($event)"
-    (cancel)="cancelarNovoPaciente()"
-  ></app-paciente-form>
-}
+<app-paciente-form
+  *ngIf="mostrarFormularioNovoPaciente"
+  (save)="salvarNovoPaciente($event)"
+  (cancel)="cancelarNovoPaciente()">
+</app-paciente-form>
 
 <app-confirm-dialog
   *ngIf="exibeConfirmCancelamento"
   message="Você já preencheu algumas informações do agendamento, deseja realmente sair?"
   (confirm)="fechar(true)"
-  (cancel)="exibeConfirmCancelamento = false"
-></app-confirm-dialog>
+  (cancel)="exibeConfirmCancelamento = false">
+</app-confirm-dialog>

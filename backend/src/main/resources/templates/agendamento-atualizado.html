@@ -13,6 +13,7 @@
         }
         .container {
             max-width: 600px;
+            margin: 40px auto;
             background: #ffffff;
             border-radius: 8px;
             padding: 30px;
@@ -52,7 +53,8 @@
 <body>
 <div class="container">
     <h1>Agendamento Alterado ⚠️</h1>
-    <p>Olá <span th:text="${nomePaciente}">Paciente</span>, o horário do seu agendamento foi alterado! Segue os detalhes:</p>
+    <p>Olá <span th:text="${nomePaciente}">Paciente</span>,</p>
+    <p>o horário do seu agendamento foi alterado! Segue os detalhes:</p>
 
     <p><strong>Data:</strong> <span th:text="${#temporals.format(data, 'dd/MM/yyyy')}"></span></p>
     <p><strong>Horário:</strong> <span th:text="${horario}"></span></p>
