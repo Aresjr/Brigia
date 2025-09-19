@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from '../procedimentos/base.service';
-import { Agendamento, AgendamentoRequest } from './agendamento.interface';
+import { Agendamento, AgendamentoDetalhes, AgendamentoRequest } from './agendamento.interface';
 import { catchError, Observable, shareReplay, throwError } from 'rxjs';
 import { PagedResponse } from '../shared/entidade.interface';
 
@@ -21,8 +21,8 @@ export class AgendamentosService extends BaseService<Agendamento, AgendamentoReq
     );
   }
 
-  getByToken(token: string): Observable<Agendamento> {
-    return this.backend.get<Agendamento>(`${this.path}/token/${token}`).pipe(
+  getByToken(token: string): Observable<AgendamentoDetalhes> {
+    return this.backend.get<AgendamentoDetalhes>(`${this.path}/token/${token}`).pipe(
       shareReplay(1),
       catchError((e) => {
 

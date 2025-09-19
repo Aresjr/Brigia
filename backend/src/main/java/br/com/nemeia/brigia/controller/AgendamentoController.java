@@ -2,6 +2,7 @@ package br.com.nemeia.brigia.controller;
 
 import br.com.nemeia.brigia.auth.SecurityService;
 import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
+import br.com.nemeia.brigia.dto.response.AgendamentoDetalhesResponse;
 import br.com.nemeia.brigia.dto.response.AgendamentoResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.mapper.AgendamentoMapper;
@@ -75,8 +76,8 @@ public class AgendamentoController {
     }
 
     @GetMapping("/token/{token}")
-    public AgendamentoResponse getByToken(@PathVariable String token) {
-        log.info("GET /token/{} - buscando agendamento por token", token);
-        return mapper.toResponse(service.getByToken(token));
+    public AgendamentoDetalhesResponse getByToken(@PathVariable String token) {
+        log.info("GET /agendamentos/token/{} - buscando agendamento por token", token);
+        return mapper.toDetalhesResponse(service.getByToken(token));
     }
 }

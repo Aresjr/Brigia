@@ -1,6 +1,7 @@
 package br.com.nemeia.brigia.mapper;
 
 import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
+import br.com.nemeia.brigia.dto.response.AgendamentoDetalhesResponse;
 import br.com.nemeia.brigia.dto.response.AgendamentoResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.model.Agendamento;
@@ -40,6 +41,22 @@ public class AgendamentoMapper {
                 agendamento.getTipoAgendamento(), agendamento.getFormaPagamento(), agendamento.getValor(),
                 agendamento.getDesconto(), agendamento.getObservacoes(), agendamento.getDuracao(),
                 agendamento.getCriadoEm(), agendamento.getExcluido());
+    }
+
+    public AgendamentoDetalhesResponse toDetalhesResponse(Agendamento agendamento) {
+        if (agendamento == null) {
+            return null;
+        }
+
+        return new AgendamentoDetalhesResponse(
+          agendamento.getPaciente().getNome(),
+          agendamento.getData(), agendamento.getHora(),
+          agendamento.getHora().plusMinutes(agendamento.getDuracao()),
+          agendamento.getUnidade().getNome(),
+          agendamento.getUnidade().getEndereco(),
+          agendamento.getProfissional().getNome(),
+          agendamento.getStatus()
+        );
     }
 
     public PagedResponse<AgendamentoResponse> toPagedResponse(Page<Agendamento> paged) {

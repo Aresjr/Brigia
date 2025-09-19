@@ -10,9 +10,9 @@ import {ToastrService} from 'ngx-toastr';
 })
 export class BackendService {
 
-  constructor(private http: HttpClient, private router: Router, private toastr: ToastrService) { }
-
   baseUrl = environment.apiUrl;
+
+  constructor(private http: HttpClient, private router: Router, private toastr: ToastrService) { }
 
   get<Response>(path: string): Observable<Response> {
     return this.http.get<Response>(`${this.baseUrl}${path}`, { withCredentials: true, observe: 'response' })
@@ -22,7 +22,9 @@ export class BackendService {
       );
   }
 
-  post<Request, Response>(path: string, payload: Partial<Request>) {
+  post<Request, Response>(path: string, payload: Partial<Request> | null) {
+    console.log('${this.baseUrl}', `${this.baseUrl}`);
+    console.log('${this.baseUrl}${path}', `${this.baseUrl}${path}`);
     return this.http.post<Request>(`${this.baseUrl}${path}`, payload, { withCredentials: true, observe: 'response' })
       .pipe(
         map((response) => response.body as Response),

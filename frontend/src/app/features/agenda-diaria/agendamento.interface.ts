@@ -26,6 +26,17 @@ export interface Agendamento extends Entidade {
     observacoes?: string;
 }
 
+export interface AgendamentoDetalhes {
+    nomePaciente: string,
+    data: string;
+    hora: string;
+    horaFim: string;
+    nomeUnidade: string;
+    enderecoUnidade: string;
+    nomeProfissional: string;
+    status: number;
+}
+
 export interface AgendamentoRequest extends EntidadeRequest {
     pacienteId: number;
     data: Date;

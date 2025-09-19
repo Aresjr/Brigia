@@ -1,0 +1,62 @@
+<div class="flex flex-col items-center justify-center min-h-screen bg-base-200 p-6">
+  <div class="w-full max-w-xl bg-base-100 rounded-2xl shadow-xl p-8 transition-all duration-300 ease-in-out hover:shadow-2xl">
+
+    @if(isLoading) {
+
+      <app-loading-spinner></app-loading-spinner>
+
+    } @else if (agendamentoNaoEncontrado) {
+
+      <div class="text-center text-lg py-4 w-full bg-base-100 rounded-md">
+        <p>Agendamento não encontrado ou não disponível para visualização</p>
+      </div>
+
+    } @else {
+
+      <h1 class="text-3xl font-semibold mb-6 text-center">
+        Detalhes do Agendamento
+      </h1>
+
+      <div class="grid grid-cols-1 gap-4 mb-8">
+        <div class="flex justify-between border-b border-base-300 pb-2">
+          <span class="font-semibold text-base-content">Paciente:</span>
+          <span class="text-base-content">{{ agendamento?.nomePaciente }}</span>
+        </div>
+        <div class="flex justify-between border-b border-base-300 pb-2">
+          <span class="font-semibold">Médico:</span>
+          <span>{{ agendamento?.nomeProfissional }}</span>
+        </div>
+        <div class="flex justify-between border-b border-base-300 pb-2">
+          <span class="font-semibold">Data:</span>
+          <span>{{ agendamento?.data | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="flex justify-between border-b border-base-300 pb-2">
+          <span class="font-semibold">Hora:</span>
+          <span>{{ agendamento?.hora }}</span>
+        </div>
+        <div class="flex justify-between border-b border-base-300 pb-2">
+          <span class="font-semibold">Clínica:</span>
+          <span>{{ agendamento?.nomeUnidade }}</span>
+        </div>
+        <div class="flex justify-between border-b border-base-300 pb-2" *ngIf="agendamento?.enderecoUnidade">
+          <span class="font-semibold">Endereço:</span>
+          <span>{{ agendamento?.enderecoUnidade }}</span>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-4">
+        <button class="btn btn-error btn-sm transition-transform duration-200 hover:scale-105" (click)="cancelarAgendamento()">
+          Cancelar
+        </button>
+        <button class="btn btn-primary btn-sm transition-transform duration-200 hover:scale-105" (click)="reagendarAgendamento()">
+          Reagendar
+        </button>
+        <button class="btn btn-success btn-sm transition-transform duration-200 hover:scale-105" (click)="confirmarAgendamento()">
+          Confirmar Presença
+        </button>
+      </div>
+
+    }
+
+  </div>
+</div>

@@ -6,7 +6,7 @@ import { Entidade } from '../../features/shared/entidade.interface';
 import { UserService } from '../../core/user.service';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { Usuario } from '../../features/auth/auth.service';
-import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-top-bar',
@@ -27,8 +27,7 @@ export class TopBarComponent {
   searchTerm: string = '';
   usuario: Usuario | null;
 
-  constructor(protected userService: UserService,
-              private router: Router) {
+  constructor(protected userService: UserService) {
     if (userService.isMedico()) {
       this.showAddNovo = false;
     }
@@ -44,7 +43,18 @@ export class TopBarComponent {
   }
 
   logout() {
-    this.userService.logout();
-    this.router.navigate(['/login']);
+    console.log('top-bar.logout');
+    this.userService.logout().subscribe({
+      next: value => {
+
+        console.log('top-bar.success');
+        localStorage.clear();
+        //this.router.navigate(['/login']);
+      },
+      error: err => {
+        console.log('top-bar.error');
+        localStorage.clear();
+      }
+    });
   }
 }
