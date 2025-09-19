@@ -1,6 +1,6 @@
 package br.com.nemeia.brigia.controller;
 
-import br.com.nemeia.brigia.auth.SecurityService;
+import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
 import br.com.nemeia.brigia.dto.response.AgendamentoDetalhesResponse;
 import br.com.nemeia.brigia.dto.response.AgendamentoResponse;
@@ -22,17 +22,14 @@ public class AgendamentoController {
 
     private final AgendamentoService service;
     private final AgendamentoMapper mapper;
-    private final SecurityService securityService;
 
     @GetMapping
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<AgendamentoResponse> getAllAgendamentos(
-            @RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
-            @RequestParam(required = false) Integer mes,
-            @RequestParam(required = false) Integer ano,
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "false") Boolean mostrarExcluidos, @RequestParam(required = false) Integer mes,
+            @RequestParam(required = false) Integer ano, @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
-        Long userId = securityService.getLoggedUserId();
+        Long userId = SecurityHolder.getLoggedUserId();
         log.info("GET /agendamentos - mes: {}, ano: {}, page: {}, size: {}, userId: {}", mes, ano, page, size, userId);
         return mapper.toPagedResponse(service.getByDate(userId, mes, ano, page, size));
     }

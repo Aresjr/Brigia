@@ -7,10 +7,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public record AgendamentoDetalhesResponse(String nomePaciente,
-                                          @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate data,
-                                          @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm") LocalTime hora,
-                                          @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm") LocalTime horaFim,
-                                          String nomeUnidade,
-                                          String enderecoUnidade,
-                                          String nomeProfissional, StatusAgendamento status) {
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate data,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm") LocalTime hora,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm") LocalTime horaFim, String nomeUnidade,
+        String enderecoUnidade, String nomeProfissional, StatusAgendamento status) {
 }

@@ -42,10 +42,6 @@ public class Atendimento extends BaseModel {
     private LocalTime horaFim;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "unidade_id", nullable = false)
-    private Unidade unidade;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "convenio_id")
     private Convenio convenio;
 

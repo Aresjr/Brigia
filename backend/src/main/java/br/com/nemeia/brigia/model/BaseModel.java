@@ -1,5 +1,6 @@
 package br.com.nemeia.brigia.model;
 
+import br.com.nemeia.brigia.auth.SecurityHolder;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.*;
@@ -13,6 +14,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseModel {
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "unidade_id", nullable = false)
+    private Unidade unidade;
 
     @CreatedDate
     private LocalDateTime criadoEm;
@@ -37,6 +42,16 @@ public abstract class BaseModel {
 
     @Column(name = "excluido")
     private Boolean excluido = false;
+
+    @PrePersist
+    protected void onCreate() {
+      if (unidade == null) {
+        Long unidadeId = SecurityHolder.getLoggedUserUnidadeId();
+        if (unidadeId != null) {
+          this.unidade = new Unidade(unidadeId);
+        }
+      }
+    }
 
     @PreUpdate
     protected void onUpdate() {

@@ -41,11 +41,11 @@ export class ProcedimentoFormComponent extends FormComponent<ProcedimentoRequest
 
   constructor(
     protected override fb: FormBuilder,
+    protected override toastr: ToastrService,
     private conveniosService: ConveniosService,
     private especialidadeService: EspecialidadeService,
-    private toastr: ToastrService
   ) {
-    super(fb);
+    super(fb, toastr);
     this.form = this.fb.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
       observacoes: [null],

@@ -11,22 +11,23 @@ import java.util.Map;
 @Service
 public class EmailService {
 
-  private final MailgunClient mailgunClient;
-  private final TemplateLoader templateLoader;
+    private final MailgunClient mailgunClient;
+    private final TemplateLoader templateLoader;
 
-  @Value("${brigida.email.suporte}")
-  private String emailSuporte;
+    @Value("${brigida.email.suporte}")
+    private String emailSuporte;
 
-  public EmailService(MailgunClient mailgunClient, TemplateLoader templateLoader) {
-    this.mailgunClient = mailgunClient;
-    this.templateLoader = templateLoader;
-  }
+    public EmailService(MailgunClient mailgunClient, TemplateLoader templateLoader) {
+        this.mailgunClient = mailgunClient;
+        this.templateLoader = templateLoader;
+    }
 
-  @Async
-  public void sendEmail(String to, String subject, String templateName, Map<String, Object> variables) throws UnsupportedEncodingException {
-    Map<String, Object> variaveis = new HashMap<>(variables);
-    variaveis.putIfAbsent("emailSuporte", emailSuporte);
-    String htmlContent = templateLoader.renderTemplate(templateName, variaveis);
-    mailgunClient.sendMessage(to, subject, htmlContent);
-  }
+    @Async
+    public void sendEmail(String to, String subject, String templateName, Map<String, Object> variables)
+            throws UnsupportedEncodingException {
+        Map<String, Object> variaveis = new HashMap<>(variables);
+        variaveis.putIfAbsent("emailSuporte", emailSuporte);
+        String htmlContent = templateLoader.renderTemplate(templateName, variaveis);
+        mailgunClient.sendMessage(to, subject, htmlContent);
+    }
 }

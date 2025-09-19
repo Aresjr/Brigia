@@ -1,7 +1,7 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.Utils;
-import br.com.nemeia.brigia.auth.SecurityService;
+import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.AgendamentoMapper;
@@ -38,12 +38,12 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     @Value("${app.base-url}")
     private String baseUrl;
 
-    public AgendamentoService(AgendamentoRepository repository, SecurityService securityService, AgendamentoMapper mapper,
-                              PacienteService pacienteService, ProfissionalService profissionalService,
-                              EspecialidadeService especialidadeService, ProcedimentoService procedimentoService,
-                              EmpresaService empresaService, ConvenioService convenioService, UnidadeService unidadeService,
-                              EmailService emailService) {
-        super(repository, securityService);
+    public AgendamentoService(AgendamentoRepository repository,
+            AgendamentoMapper mapper, PacienteService pacienteService, ProfissionalService profissionalService,
+            EspecialidadeService especialidadeService, ProcedimentoService procedimentoService,
+            EmpresaService empresaService, ConvenioService convenioService, UnidadeService unidadeService,
+            EmailService emailService) {
+        super(repository);
         this.mapper = mapper;
         this.pacienteService = pacienteService;
         this.profissionalService = profissionalService;
@@ -64,15 +64,12 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             ano = LocalDate.now().getYear();
         }
 
-        LocalDate startDate = LocalDate.of(ano, mes, 1)
-            .minusMonths(1);
-        LocalDate endDate = LocalDate.of(ano, mes, 1)
-            .plusMonths(2)
-            .minusDays(1);
+        LocalDate startDate = LocalDate.of(ano, mes, 1).minusMonths(1);
+        LocalDate endDate = LocalDate.of(ano, mes, 1).plusMonths(2).minusDays(1);
 
         Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
 
-        if (securityService.getLoggedUserRoles().contains(RoleUsuario.MEDICO.toString())) {
+        if (SecurityHolder.getLoggedUserRoles().contains(RoleUsuario.MEDICO.toString())) {
             Long profissionalId = profissionalService.getByUsuarioId(userId).getId();
             return repository.findAllByProfissionalIdAndDateRange(pageable, profissionalId, startDate, endDate);
         } else {
@@ -86,7 +83,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         Agendamento agendamento = mapper.toEntity(request);
         setEntidades(request, agendamento);
         agendamento.setStatus(StatusAgendamento.AGENDADO);
-        agendamento.setUnidade(unidadeService.getById(securityService.getLoggedUserUnidadeId()));
+        agendamento.setUnidade(unidadeService.getById(SecurityHolder.getLoggedUserUnidadeId()));
 
         Agendamento agendamentoNovo = repository.save(agendamento);
 
@@ -105,7 +102,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         Agendamento agendamentoAtualizado = repository.save(agendamentoUpdate);
 
         if (deveMandarEmail) {
-          sendEmail(agendamentoAtualizado, "Agendamento Atualizado!", "agendamento-atualizado");
+            sendEmail(agendamentoAtualizado, "Agendamento Atualizado!", "agendamento-atualizado");
         }
 
         return agendamentoAtualizado;
@@ -134,39 +131,35 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
 
     @CacheEvict(value = "agendamentos", allEntries = true)
     public void updateStatus(Agendamento agendamento, StatusAgendamento statusAgendamento) {
-      agendamento.setStatus(statusAgendamento);
-      repository.save(agendamento);
+        agendamento.setStatus(statusAgendamento);
+        repository.save(agendamento);
     }
 
     private void sendEmail(Agendamento agendamento, String status, String template) {
-      var email = agendamento.getPaciente().getEmail();
-      if (email != null) {
-        var linkConfirmacao = String.format("%s/detalhes-agendamento?token=%s", baseUrl, agendamento.getTokenPublico());
-        Map<String, Object> variables = Map.of(
-          "nomePaciente", agendamento.getPaciente().getNome(),
-          "data", agendamento.getData(),
-          "horario", agendamento.getHora(),
-          "nomeMedico", agendamento.getProfissional().getNome(),
-          "linkConfirmacao", linkConfirmacao,
-          "clinica", agendamento.getUnidade().getNome()
-        );
-        try {
-          emailService.sendEmail(email, status, template, variables);
-        } catch (Exception e) {
-          log.error("Não foi possível enviar email: {}", e.getLocalizedMessage());
+        var email = agendamento.getPaciente().getEmail();
+        if (email != null) {
+            var linkConfirmacao = String.format("%s/detalhes-agendamento?token=%s", baseUrl,
+                    agendamento.getTokenPublico());
+            Map<String, Object> variables = Map.of("nomePaciente", agendamento.getPaciente().getNome(), "data",
+                    agendamento.getData(), "horario", agendamento.getHora(), "nomeMedico",
+                    agendamento.getProfissional().getNome(), "linkConfirmacao", linkConfirmacao, "clinica",
+                    agendamento.getUnidade().getNome());
+            try {
+                emailService.sendEmail(email, status, template, variables);
+            } catch (Exception e) {
+                log.error("Não foi possível enviar email: {}", e.getLocalizedMessage());
+            }
         }
-      }
     }
 
     private boolean deveMandarEmail(Agendamento original, AgendamentoRequest request) {
-      return original.getHora() != request.hora()
-        || original.getData() != request.data()
-        || !Objects.equals(original.getProfissional().getId(), request.profissionalId());
+        return original.getHora() != request.hora() || original.getData() != request.data()
+                || !Objects.equals(original.getProfissional().getId(), request.profissionalId());
     }
 
     public Agendamento getByToken(String token) {
-      return repository.findOneByToken(token)
-        .orElseThrow(() -> new NotFoundException(getNomeEntidade() + " não encontrado com token:" + token));
+        return repository.findOneByToken(token)
+                .orElseThrow(() -> new NotFoundException(getNomeEntidade() + " não encontrado com token:" + token));
     }
 
     @Override

@@ -10,6 +10,7 @@ import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } fro
 import { FormComponent } from '../../shared/form.component';
 import { forkJoin, map, Observable, tap } from 'rxjs';
 import { ColorUtils } from '../../../core/color-utils';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-empresa-form',
@@ -33,9 +34,10 @@ export class EmpresaFormComponent extends FormComponent<EmpresaRequest> implemen
 
   constructor(
     protected override fb: FormBuilder,
+    protected override toastr: ToastrService,
     private empresasService: EmpresasService
   ) {
-    super(fb);
+    super(fb, toastr);
     this.form = this.fb.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
       codigoBc: [null],

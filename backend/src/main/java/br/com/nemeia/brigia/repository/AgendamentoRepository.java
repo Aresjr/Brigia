@@ -10,21 +10,15 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 public interface AgendamentoRepository extends BaseRepository<Agendamento> {
-    @Query("SELECT a FROM Agendamento a WHERE a.profissional.id = :profissionalId " +
-           "AND a.data BETWEEN :startDate AND :endDate")
-    Page<Agendamento> findAllByProfissionalIdAndDateRange(
-        Pageable pageable,
-        @Param("profissionalId") Long profissionalId,
-        @Param("startDate") LocalDate startDate,
-        @Param("endDate") LocalDate endDate
-    );
+    @Query("SELECT a FROM Agendamento a WHERE a.profissional.id = :profissionalId "
+            + "AND a.data BETWEEN :startDate AND :endDate")
+    Page<Agendamento> findAllByProfissionalIdAndDateRange(Pageable pageable,
+            @Param("profissionalId") Long profissionalId, @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate);
 
     @Query("SELECT a FROM Agendamento a WHERE a.data BETWEEN :startDate AND :endDate")
-    Page<Agendamento> findAllByDateRange(
-        Pageable pageable,
-        @Param("startDate") LocalDate startDate,
-        @Param("endDate") LocalDate endDate
-    );
+    Page<Agendamento> findAllByDateRange(Pageable pageable, @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate);
 
     @Query("SELECT a FROM Agendamento a WHERE a.tokenPublico = :token")
     Optional<Agendamento> findOneByToken(@Param("token") String token);

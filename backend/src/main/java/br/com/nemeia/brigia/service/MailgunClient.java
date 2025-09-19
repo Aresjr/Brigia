@@ -16,43 +16,40 @@ import java.util.Base64;
 @Service
 public class MailgunClient {
 
-  @Value("${spring.application.name}")
-  private String clientName;
+    @Value("${spring.application.name}")
+    private String clientName;
 
-  @Value("${mailgun.api.key}")
-  private String apiKey;
+    @Value("${mailgun.api.key}")
+    private String apiKey;
 
-  @Value("${mailgun.domain}")
-  private String domain;
+    @Value("${mailgun.domain}")
+    private String domain;
 
-  @Value("${mailgun.from-name}")
-  private String fromName;
+    @Value("${mailgun.from-name}")
+    private String fromName;
 
-  @Value("${mailgun.from-email}")
-  private String fromEmail;
+    @Value("${mailgun.from-email}")
+    private String fromEmail;
 
-  public void sendMessage(String to, String subject, String htmlContent) throws UnsupportedEncodingException {
-    var from = new InternetAddress(fromEmail, clientName, "UTF-8");
-    to = "aresnemeia@gmail.com";
-    HttpRequest request = HttpRequest.newBuilder()
-      .uri(URI.create("https://api.mailgun.net/v3/" + domain + "/messages"))
-      .header("Authorization", "Basic " + Base64.getEncoder().encodeToString(("api:" + apiKey).getBytes()))
-      .POST(HttpRequest.BodyPublishers.ofString(
-        "from=" + from +
-          "&to=" + URLEncoder.encode(to, StandardCharsets.UTF_8) +
-          "&subject=" + URLEncoder.encode(subject, StandardCharsets.UTF_8) +
-          "&html=" + URLEncoder.encode(htmlContent, StandardCharsets.UTF_8)
-      ))
-      .header("Content-Type", "application/x-www-form-urlencoded")
-      .build();
+    public void sendMessage(String to, String subject, String htmlContent) throws UnsupportedEncodingException {
+        var from = new InternetAddress(fromEmail, clientName, "UTF-8");
+        to = "aresnemeia@gmail.com";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://api.mailgun.net/v3/" + domain + "/messages"))
+                .header("Authorization", "Basic " + Base64.getEncoder().encodeToString(("api:" + apiKey).getBytes()))
+                .POST(HttpRequest.BodyPublishers
+                        .ofString("from=" + from + "&to=" + URLEncoder.encode(to, StandardCharsets.UTF_8) + "&subject="
+                                + URLEncoder.encode(subject, StandardCharsets.UTF_8) + "&html="
+                                + URLEncoder.encode(htmlContent, StandardCharsets.UTF_8)))
+                .header("Content-Type", "application/x-www-form-urlencoded").build();
 
-    try (HttpClient httpClient = HttpClient.newHttpClient()) {
-      HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-      if (response.statusCode() >= 400) {
-        throw new RuntimeException("Erro ao enviar email: " + response.body());
-      }
-    } catch (Exception e) {
-      throw new RuntimeException("Falha no envio de email", e);
+        try (HttpClient httpClient = HttpClient.newHttpClient()) {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() >= 400) {
+                throw new RuntimeException("Erro ao enviar email: " + response.body());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Falha no envio de email", e);
+        }
     }
-  }
 }

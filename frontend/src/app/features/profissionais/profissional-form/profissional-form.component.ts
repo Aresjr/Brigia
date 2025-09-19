@@ -10,6 +10,7 @@ import { Especialidade } from '../../especialidade/especialidade.interface';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormComponent } from '../../shared/form.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-profissional-form',
@@ -24,8 +25,9 @@ export class ProfissionalFormComponent extends FormComponent<ProfissionalRequest
   listaEspecialidades: Especialidade[] = [];
 
   constructor(protected override fb: FormBuilder,
+              protected override toastr: ToastrService,
               private especialidadeService: EspecialidadeService) {
-    super(fb);
+    super(fb, toastr);
     this.form = this.fb.group({
       nome: [null, Validators.required],
       email: [null],

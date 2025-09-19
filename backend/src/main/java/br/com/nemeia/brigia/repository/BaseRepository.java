@@ -8,4 +8,5 @@ import org.springframework.data.repository.NoRepositoryBean;
 @NoRepositoryBean
 public interface BaseRepository<T> extends JpaRepository<T, Long> {
     Page<T> findAllByExcluidoIsOrExcluidoIsNull(Pageable pageable, Boolean excluido);
+    Page<T> findAllByUnidadeIdIs(Pageable pageable, Long unidadeId);
 }

@@ -6,14 +6,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "contas_receber")
-public class ContasReceber extends BaseModel {
+@Table(name = "conta_receber")
+public class ContaReceber extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,20 +33,15 @@ public class ContasReceber extends BaseModel {
     @JoinColumn(name = "atendimento_id")
     private Atendimento atendimento;
 
-    @Column(name = "data_atendimento")
-    private LocalDateTime dataAtendimento;
-
-    @Column(name = "profissional")
-    private String profissional;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profissional_id")
+    private Profissional profissional;
 
     @Column(name = "valor_total", precision = 10, scale = 2)
     private BigDecimal valorTotal;
 
     @Column(name = "valor_recebido", precision = 10, scale = 2)
     private BigDecimal valorRecebido;
-
-    @Column(name = "valor_aberto", precision = 10, scale = 2)
-    private BigDecimal valorAberto;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "forma_pagamento", length = 2)
@@ -54,4 +50,8 @@ public class ContasReceber extends BaseModel {
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "status")
     private StatusContaReceber status;
+
+    @OneToMany(mappedBy = "contaReceber", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ContaReceberItem> itens = new ArrayList<>();
+
 }

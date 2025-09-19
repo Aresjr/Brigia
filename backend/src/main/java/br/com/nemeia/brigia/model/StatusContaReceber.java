@@ -7,10 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum StatusContaReceber {
-    ABERTO(0, "Aberto"),
-    PAGO(1, "Pago"),
-    ATRASADO(2, "Atrasado"),
-    PARCIAL(3, "Parcial");
+    ABERTO(0, "Aberto"), PAGO(1, "Pago"), ATRASADO(2, "Atrasado"), PARCIAL(3, "Parcial");
 
     private final Integer codigo;
     private final String descricao;

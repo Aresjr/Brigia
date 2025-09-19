@@ -27,24 +27,15 @@ public class AtendimentoMapper {
             return null;
         }
 
-        return new AtendimentoResponse(atendimento.getId(),
-                pacienteMapper.toResponse(atendimento.getPaciente()),
-                profissionalMapper.toResponse(atendimento.getProfissional()),
-                atendimento.getData(),
-                atendimento.getHoraInicio(),
-                atendimento.getHoraFim(),
+        return new AtendimentoResponse(atendimento.getId(), pacienteMapper.toResponse(atendimento.getPaciente()),
+                profissionalMapper.toResponse(atendimento.getProfissional()), atendimento.getData(),
+                atendimento.getHoraInicio(), atendimento.getHoraFim(),
                 agendamentoMapper.toResponse(atendimento.getAgendamento()),
-                convenioMapper.toResponse(atendimento.getConvenio()),
-                atendimento.getStatus(),
+                convenioMapper.toResponse(atendimento.getConvenio()), atendimento.getStatus(),
                 empresaMapper.toResponse(atendimento.getEmpresa()),
-                especialidadeMapper.toResponse(atendimento.getEspecialidade()),
-                atendimento.getFormaPagamento(),
-                atendimento.getObservacoes(),
-                atendimento.getAnamnese(),
-                atendimento.getExameFisico(),
-                atendimento.getDiagnostico(),
-                atendimento.getEvolucaoClinica(),
-                atendimento.getExamesSolicitados(),
+                especialidadeMapper.toResponse(atendimento.getEspecialidade()), atendimento.getFormaPagamento(),
+                atendimento.getObservacoes(), atendimento.getAnamnese(), atendimento.getExameFisico(),
+                atendimento.getDiagnostico(), atendimento.getEvolucaoClinica(), atendimento.getExamesSolicitados(),
                 atendimento.getPrescricoes());
     }
 

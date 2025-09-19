@@ -1,6 +1,6 @@
 package br.com.nemeia.brigia.service;
 
-import br.com.nemeia.brigia.auth.SecurityService;
+import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.AtendimentoRequest;
 import br.com.nemeia.brigia.dto.request.ProcedimentoAtendimentoRequest;
 import br.com.nemeia.brigia.mapper.AtendimentoMapper;
@@ -26,10 +26,10 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
     private final PrecoProcedimentoService precoProcedimentoService;
     private final AtendimentoMapper mapper;
 
-    public AtendimentoService(AtendimentoRepository repository, SecurityService securityService, AtendimentoMapper mapper,
-                              ProfissionalService profissionalService, AgendamentoService agendamentoService,
-                              ProcedimentoService procedimentoService, PrecoProcedimentoService precoProcedimentoService) {
-        super(repository, securityService);
+    public AtendimentoService(AtendimentoRepository repository,
+            AtendimentoMapper mapper, ProfissionalService profissionalService, AgendamentoService agendamentoService,
+            ProcedimentoService procedimentoService, PrecoProcedimentoService precoProcedimentoService) {
+        super(repository);
         this.mapper = mapper;
         this.profissionalService = profissionalService;
         this.agendamentoService = agendamentoService;
@@ -60,17 +60,17 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
     }
 
     private void setProcedimentos(Atendimento atendimento, List<ProcedimentoAtendimentoRequest> procedimentos,
-                                  Convenio convenio) {
-      List<ProcedimentoAtendimento> pa = new ArrayList<>();
-      List<BigDecimal> valoresLancados = new ArrayList<>();
-      procedimentos.forEach(par -> {
-        Procedimento procedimento = procedimentoService.getById(par.procedimentoId());
-        valoresLancados.add(precoProcedimentoService.getPreco(procedimento, convenio)
-          .multiply(BigDecimal.valueOf(par.quantidade())));
-        pa.add(new ProcedimentoAtendimento(atendimento, procedimento, par.quantidade()));
-      });
-      atendimento.getProcedimentos().addAll(pa);
-      atendimento.setValorTotal(valoresLancados.stream().reduce(BigDecimal.ZERO, BigDecimal::add));
+            Convenio convenio) {
+        List<ProcedimentoAtendimento> pa = new ArrayList<>();
+        List<BigDecimal> valoresLancados = new ArrayList<>();
+        procedimentos.forEach(par -> {
+            Procedimento procedimento = procedimentoService.getById(par.procedimentoId());
+            valoresLancados.add(precoProcedimentoService.getPreco(procedimento, convenio)
+                    .multiply(BigDecimal.valueOf(par.quantidade())));
+            pa.add(new ProcedimentoAtendimento(atendimento, procedimento, par.quantidade()));
+        });
+        atendimento.getProcedimentos().addAll(pa);
+        atendimento.setValorTotal(valoresLancados.stream().reduce(BigDecimal.ZERO, BigDecimal::add));
     }
 
     @Transactional
@@ -90,8 +90,7 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
     }
 
     private void setEntidades(Atendimento atendimento, Agendamento agendamento) {
-        atendimento.setUnidade(new Unidade(securityService.getLoggedUserUnidadeId()));
-        atendimento.setProfissional(profissionalService.getByUsuarioId(securityService.getLoggedUserId()));
+        atendimento.setProfissional(profissionalService.getByUsuarioId(SecurityHolder.getLoggedUserId()));
 
         atendimento.setAgendamento(agendamento);
         atendimento.setConvenio(agendamento.getConvenio());

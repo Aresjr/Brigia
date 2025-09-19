@@ -9,6 +9,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dial
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { ProcedimentosService } from '../../procedimentos/procedimentos.service';
 import { Procedimento } from '../../procedimentos/procedimento.interface';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-atendimento-form',
@@ -34,8 +35,9 @@ export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> 
   procedimentos: Procedimento[] = [];
 
   constructor(protected override fb: FormBuilder,
+              protected override toastr: ToastrService,
               private procedimentosService: ProcedimentosService) {
-    super(fb);
+    super(fb, toastr);
     this.form = this.fb.group({
       anamnese: [null],
       exameFisico: [null],

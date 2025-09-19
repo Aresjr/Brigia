@@ -66,11 +66,11 @@ export class MainLayoutComponent {
       icon: 'user-plus',
       hasSubmenu: true,
       children: [
-        { label: 'Convênios', icon: 'heart-handshake', route: '/convenios', roles: [Role.RECEPCIONISTA, Role.ADMIN] },
+        { label: 'Convênios', icon: 'heart-handshake', route: '/convenios', roles: [Role.RECEPCIONISTA, Role.FATURAMENTO, Role.ADMIN] },
         { label: 'Empresas Parceiras', icon: 'building-2', route: '/empresas', roles: [Role.RECEPCIONISTA, Role.ADMIN] },
-        { label: 'Especialidades', icon: 'microscope', route: '/especialidades', roles: [Role.RECEPCIONISTA, Role.ADMIN] },
-        { label: 'Procedimentos', icon: 'clipboard-list', route: '/procedimentos', roles: [Role.RECEPCIONISTA, Role.ADMIN] },
-        { label: 'Profissionais', icon: 'briefcase-medical', route: '/profissionais', roles: [Role.RECEPCIONISTA, Role.ADMIN] },
+        { label: 'Especialidades', icon: 'microscope', route: '/especialidades', roles: [Role.FATURAMENTO, Role.ADMIN] },
+        { label: 'Procedimentos', icon: 'clipboard-list', route: '/procedimentos', roles: [Role.FATURAMENTO, Role.ADMIN] },
+        { label: 'Profissionais', icon: 'briefcase-medical', route: '/profissionais', roles: [Role.RECEPCIONISTA, Role.FATURAMENTO, Role.ADMIN] },
       ], roles: [Role.RECEPCIONISTA, Role.ADMIN]
     },
     {

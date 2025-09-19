@@ -32,12 +32,12 @@ export class PacienteFormComponent extends FormComponent<PacienteRequest> implem
 
   constructor(
     protected override fb: FormBuilder,
+    protected override toastr: ToastrService,
     private http: HttpClient,
-    private toastr: ToastrService,
     private conveniosService: ConveniosService,
     private empresasService: EmpresasService
   ) {
-    super(fb);
+    super(fb, toastr);
     this.form = this.fb.group({
       nome: [null, Validators.required],
       email: [null], cpf: [null],

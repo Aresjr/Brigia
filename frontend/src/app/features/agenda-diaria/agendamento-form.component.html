@@ -12,7 +12,7 @@
       </div>
 
       <div>
-        <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" title="Editar" (click)="onEdit()" *ngIf="!this.userService.isMedico() && agendamentoDetalhes && !this.podeSalvar" title="Editar">
+        <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" title="Editar" (click)="onEdit()" *ngIf="podeEditar()" title="Editar">
           <lucide-icon name="pencil" class="inline w-5 h-5"/>
         </button>
         <button type="button" class="btn btn-sm btn-ghost btn-circle" title="Fechar" (click)="fechar()" title="Fechar">

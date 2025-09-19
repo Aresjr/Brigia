@@ -34,10 +34,6 @@ public class Agendamento extends BaseModel {
     private Integer duracao;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "unidade_id")
-    private Unidade unidade;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "convenio_id")
     private Convenio convenio;
 
@@ -93,11 +89,11 @@ public class Agendamento extends BaseModel {
 
     @PrePersist
     public void prePersist() {
-      if (tokenPublico == null) {
-        tokenPublico = UUID.randomUUID().toString();
-      }
-      if (tokenExpiracao == null) {
-        tokenExpiracao = LocalDateTime.now().plusDays(7);
-      }
+        if (tokenPublico == null) {
+            tokenPublico = UUID.randomUUID().toString();
+        }
+        if (tokenExpiracao == null) {
+            tokenExpiracao = LocalDateTime.now().plusDays(7);
+        }
     }
 }

@@ -37,7 +37,7 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
   }
 
   ngOnInit(): void {
-    //this.carregarContasReceber();
+    this.carregarContasReceber();
   }
 
   carregarContasReceber(): void {

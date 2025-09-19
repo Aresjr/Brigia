@@ -48,15 +48,10 @@ public class AgendamentoMapper {
             return null;
         }
 
-        return new AgendamentoDetalhesResponse(
-          agendamento.getPaciente().getNome(),
-          agendamento.getData(), agendamento.getHora(),
-          agendamento.getHora().plusMinutes(agendamento.getDuracao()),
-          agendamento.getUnidade().getNome(),
-          agendamento.getUnidade().getEndereco(),
-          agendamento.getProfissional().getNome(),
-          agendamento.getStatus()
-        );
+        return new AgendamentoDetalhesResponse(agendamento.getPaciente().getNome(), agendamento.getData(),
+                agendamento.getHora(), agendamento.getHora().plusMinutes(agendamento.getDuracao()),
+                agendamento.getUnidade().getNome(), agendamento.getUnidade().getEndereco(),
+                agendamento.getProfissional().getNome(), agendamento.getStatus());
     }
 
     public PagedResponse<AgendamentoResponse> toPagedResponse(Page<Agendamento> paged) {
@@ -71,16 +66,16 @@ public class AgendamentoMapper {
         return objectMapper.convertValue(request, Agendamento.class);
     }
 
-  public Agendamento updateEntity(Agendamento original, AgendamentoRequest request) {
-      original.setData(request.data());
-      original.setHora(request.hora());
-      original.setTipoAgendamento(request.tipoAgendamento());
-      original.setFormaPagamento(request.formaPagamento());
-      original.setValor(request.valor());
-      original.setDesconto(request.desconto());
-      original.setDuracao(request.duracao());
-      original.setObservacoes(request.observacoes());
-      original.setPrecoAlterado(request.precoAlterado());
-      return original;
-  }
+    public Agendamento updateEntity(Agendamento original, AgendamentoRequest request) {
+        original.setData(request.data());
+        original.setHora(request.hora());
+        original.setTipoAgendamento(request.tipoAgendamento());
+        original.setFormaPagamento(request.formaPagamento());
+        original.setValor(request.valor());
+        original.setDesconto(request.desconto());
+        original.setDuracao(request.duracao());
+        original.setObservacoes(request.observacoes());
+        original.setPrecoAlterado(request.precoAlterado());
+        return original;
+    }
 }

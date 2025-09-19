@@ -40,10 +40,6 @@ public class Empresa extends BaseModel {
     private Long func;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "unidade_id")
-    private Unidade unidade;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "empresa_plano_id")
     private EmpresaPlano plano;
 }

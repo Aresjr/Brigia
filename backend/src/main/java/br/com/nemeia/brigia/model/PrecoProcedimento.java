@@ -24,10 +24,6 @@ public class PrecoProcedimento extends BaseModel {
     @JoinColumn(name = "convenio_id")
     private Convenio convenio;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "unidade_id")
-    private Unidade unidade;
-
     @Column(name = "preco", nullable = false)
     private BigDecimal preco;
 

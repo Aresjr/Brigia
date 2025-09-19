@@ -80,13 +80,13 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
   protected readonly autoResize = autoResize;
   protected readonly limitLength = limitLength;
 
-  constructor(protected override fb: FormBuilder, private toastr: ToastrService,
+  constructor(protected override fb: FormBuilder, protected override toastr: ToastrService,
               private pacientesService: PacienteService, private conveniosService: ConveniosService,
               private especialidadeService: EspecialidadeService, private profissionaisService: ProfissionaisService,
               private empresasService: EmpresasService, private procedimentosService: ProcedimentosService,
-              protected userService: UserService, private router: Router, private agendamentosService: AgendamentosService,
+              protected userService: UserService, private router: Router,
               private atendimentosService: AtendimentosService) {
-    super(fb);
+    super(fb, toastr);
     this.hoje = new Date().toISOString().split('T')[0];
     const form: IForm<AgendamentoRequest> = {
       pacienteId: [null, {nonNullable: true}],
@@ -338,6 +338,10 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
           this.isLoading = false;
         }
       });
+  }
+
+  podeEditar(): boolean {
+    return !this.userService.isMedico() && this.agendamentoDetalhes != null && !this.podeSalvar;
   }
 
   formValido(): boolean {

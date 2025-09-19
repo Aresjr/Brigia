@@ -47,15 +47,15 @@ public class AtendimentoController {
     @PostMapping("/iniciar-atendimento/{agendamentoId}")
     @PreAuthorize("hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public AtendimentoResponse iniciarAtendimento(@PathVariable Long agendamentoId) {
-      log.info("POST /agendamentos/iniciar-atendimento/{}", agendamentoId);
-      return mapper.toResponse(service.iniciarAtendimento(agendamentoId));
+        log.info("POST /agendamentos/iniciar-atendimento/{}", agendamentoId);
+        return mapper.toResponse(service.iniciarAtendimento(agendamentoId));
     }
 
     @PostMapping("/finalizar-atendimento/{id}")
     @PreAuthorize("hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public AtendimentoResponse finalizarAtendimento(@PathVariable Long id,
-                                                    @Valid @RequestBody AtendimentoRequest request) {
-      log.info("POST /agendamentos/finalizar-atendimento/{}", id);
-      return mapper.toResponse(service.finalizarAtendimento(id, request));
+            @Valid @RequestBody AtendimentoRequest request) {
+        log.info("POST /agendamentos/finalizar-atendimento/{}", id);
+        return mapper.toResponse(service.finalizarAtendimento(id, request));
     }
 }

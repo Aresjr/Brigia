@@ -10,27 +10,27 @@ import java.util.Map;
 @Component
 public class TemplateLoader {
 
-  private final TemplateEngine templateEngine;
+    private final TemplateEngine templateEngine;
 
-  public TemplateLoader(TemplateEngine templateEngine) {
-    this.templateEngine = templateEngine;
-  }
+    public TemplateLoader(TemplateEngine templateEngine) {
+        this.templateEngine = templateEngine;
+    }
 
-  public TemplateLoader() {
-    ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
-    resolver.setPrefix("templates/");
-    resolver.setSuffix(".html");
-    resolver.setTemplateMode("HTML");
-    resolver.setCharacterEncoding("UTF-8");
+    public TemplateLoader() {
+        ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
+        resolver.setPrefix("templates/");
+        resolver.setSuffix(".html");
+        resolver.setTemplateMode("HTML");
+        resolver.setCharacterEncoding("UTF-8");
 
-    templateEngine = new TemplateEngine();
-    templateEngine.setTemplateResolver(resolver);
-  }
+        templateEngine = new TemplateEngine();
+        templateEngine.setTemplateResolver(resolver);
+    }
 
-  public String renderTemplate(String templateName, Map<String, Object> variables) {
-    Context context = new Context();
-    context.setVariables(variables);
-    return templateEngine.process(templateName, context);
-  }
+    public String renderTemplate(String templateName, Map<String, Object> variables) {
+        Context context = new Context();
+        context.setVariables(variables);
+        return templateEngine.process(templateName, context);
+    }
 
 }

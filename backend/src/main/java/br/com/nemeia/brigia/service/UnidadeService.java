@@ -15,7 +15,6 @@ public class UnidadeService {
     private final UnidadeRepository repository;
 
     public Unidade getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Unidade não encontrada com ID: " + id));
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Unidade não encontrada com ID: " + id));
     }
 }

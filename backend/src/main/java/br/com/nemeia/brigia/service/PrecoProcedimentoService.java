@@ -33,10 +33,11 @@ public class PrecoProcedimentoService {
 
     public BigDecimal getPreco(Procedimento procedimento, Convenio convenio) {
         return convenio != null
-                ? Optional.ofNullable(repository.findOneByProcedimentoAndConvenio(procedimento.getId(), convenio.getId())
-                        .map(PrecoProcedimento::getPreco).orElse(procedimento.getValorPadrao()))
+                ? Optional
+                        .ofNullable(repository.findOneByProcedimentoAndConvenio(procedimento.getId(), convenio.getId())
+                                .map(PrecoProcedimento::getPreco).orElse(procedimento.getValorPadrao()))
                         .orElseThrow(() -> new NotFoundException(
-                          String.format("Preço não cadastrado para procedimento %s", procedimento.getNome())))
+                                String.format("Preço não cadastrado para procedimento %s", procedimento.getNome())))
                 : Optional.ofNullable(procedimento.getValorPadrao()).orElseThrow(() -> new NotFoundException(
                         String.format("Preço não cadastrado para procedimento %s", procedimento.getNome())));
     }
