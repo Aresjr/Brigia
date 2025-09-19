@@ -19,7 +19,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Procedimento } from '../procedimentos/procedimento.interface';
 import { ProcedimentosService } from '../procedimentos/procedimentos.service';
 import { FormComponent } from '../shared/form.component';
-import { Agendamento, AgendamentoRequest } from './agendamento.interface';
+import { Agendamento, AgendamentoRequest, podeEditarAgendamento } from './agendamento.interface';
 import { IForm } from '../shared/form.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
@@ -35,7 +35,6 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
 import { UserService } from '../../core/user.service';
 import { ColorUtils } from '../../core/color-utils';
 import { Router } from '@angular/router';
-import { AgendamentosService } from './agendamentos.service';
 import { AtendimentosService } from '../atendimento/atendimentos.service';
 
 @Component({
@@ -71,7 +70,7 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
   showTooltip: boolean = false;
   formasPagamento = FORMAS_PAGAMENTO;
   tipoAgendamento = TIPO_AGENDAMENTO;
-  podeSalvar: boolean = true;
+  modoSalvar: boolean = true;
   exibeConfirmCancelamento: boolean = false;
   valorEditavel: boolean = false;
   valorAntesEdicao: number | null = null;
@@ -125,7 +124,7 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
     this.form.markAsPristine();
 
     if (this.agendamentoDetalhes) {
-      this.podeSalvar = false;
+      this.modoSalvar = false;
       this.titulo = 'Detalhes Agendamento';
     }
 
@@ -211,7 +210,7 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
   onEdit() {
     this.form.enable();
     this.form.get('pacienteId')?.disable();
-    this.podeSalvar = true;
+    this.modoSalvar = true;
   }
 
   selectPaciente(id: number | null) {
@@ -341,7 +340,10 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
   }
 
   podeEditar(): boolean {
-    return !this.userService.isMedico() && this.agendamentoDetalhes != null && !this.podeSalvar;
+    return !this.userService.isMedico()
+      && !this.modoSalvar
+      && this.agendamentoDetalhes != null
+      && podeEditarAgendamento(this.agendamentoDetalhes);
   }
 
   formValido(): boolean {

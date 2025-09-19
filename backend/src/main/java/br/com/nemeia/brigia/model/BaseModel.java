@@ -16,7 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public abstract class BaseModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "unidade_id", nullable = false)
+    @JoinColumn(name = "unidade_id")
     private Unidade unidade;
 
     @CreatedDate

@@ -6,6 +6,7 @@ import { Procedimento } from '../procedimentos/procedimento.interface';
 import { Convenio } from '../convenio/convenio.interface';
 import { Empresa } from '../empresa/empresa.interface';
 import { Unidade } from '../unidade/unidade.interface';
+import { StatusAgendamento } from '../../core/constans';
 
 export interface Agendamento extends Entidade {
     descricao: string | null;
@@ -24,6 +25,10 @@ export interface Agendamento extends Entidade {
     formaPagamento: number;
     status: number;
     observacoes?: string;
+}
+
+export function podeEditarAgendamento(agendamento: Agendamento): boolean {
+  return [StatusAgendamento.Agendado, StatusAgendamento.Confirmado].includes(agendamento.status);
 }
 
 export interface AgendamentoDetalhes {

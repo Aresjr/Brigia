@@ -25,7 +25,7 @@
       <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
     </div>
 
-    <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6" [ngClass]="{ 'visualizacao': !podeSalvar }">
+    <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6" [ngClass]="{ 'visualizacao': !modoSalvar }">
       <div class="flex">
         <div class="w-[8rem] mr-4" >
           <label class="label-campo" for="data">
@@ -202,10 +202,10 @@
         <div class="w-[6rem] mr-4" >
           <label class="label-campo" for="valor">
             Valor <span aria-hidden="true" class="text-error">*</span>
-            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" title="Editar" (click)="editaValor()" *ngIf="this.podeSalvar && !valorEditavel" title="Editar Valor">
+            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" title="Editar" (click)="editaValor()" *ngIf="this.modoSalvar && !valorEditavel" title="Editar Valor">
               <lucide-icon name="pencil" class="h-3.5"/>
             </button>
-            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" title="Fechar" (click)="cancelarEdicaoValor()" *ngIf="this.podeSalvar && valorEditavel" title="Cancelar Edição de Valor">
+            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" title="Fechar" (click)="cancelarEdicaoValor()" *ngIf="this.modoSalvar && valorEditavel" title="Cancelar Edição de Valor">
               <lucide-icon name="x" class="h-3.5"/>
             </button>
           </label>
@@ -252,7 +252,7 @@
         <button type="button" class="btn btn-primary btn-sm" *ngIf="podeAbrirAtendimento(agendamentoDetalhes)" (click)="abrirAtendimento(agendamentoDetalhes)" >
           Abrir Atendimento
         </button>
-        <button type="submit" class="btn btn-success btn-sm" *ngIf="podeSalvar" >
+        <button type="submit" class="btn btn-success btn-sm" *ngIf="modoSalvar" >
           Salvar
         </button>
       </div>
