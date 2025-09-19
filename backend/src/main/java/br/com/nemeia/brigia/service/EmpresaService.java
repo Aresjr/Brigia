@@ -1,7 +1,7 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.Utils;
-import br.com.nemeia.brigia.auth.SecurityService;
+import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.EmpresaRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.EmpresaMapper;
@@ -23,7 +23,6 @@ public class EmpresaService {
 
     private final EmpresaRepository repository;
     private final EmpresaMapper mapper;
-    private final SecurityService securityService;
     private final EmpresaPlanoService empresaPlanoService;
 
     public Page<Empresa> getPaged(int page, int size, Boolean mostrarExcluidos) {
@@ -60,7 +59,7 @@ public class EmpresaService {
         empresa.setExcluido(true);
         empresa.setExcluidoEm(LocalDateTime.now());
 
-        Long userId = securityService.getLoggedUserId();
+        Long userId = SecurityHolder.getLoggedUserId();
         empresa.setExcluidoPor(userId);
         repository.save(empresa);
     }

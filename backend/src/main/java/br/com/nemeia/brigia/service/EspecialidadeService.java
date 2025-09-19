@@ -1,7 +1,7 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.Utils;
-import br.com.nemeia.brigia.auth.SecurityService;
+import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.EspecialidadeRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.EspecialidadeMapper;
@@ -22,7 +22,6 @@ public class EspecialidadeService {
 
     private final EspecialidadeRepository repository;
     private final EspecialidadeMapper mapper;
-    private final SecurityService securityService;
 
     public Page<Especialidade> getPaged(int page, int size, Boolean mostrarExcluidos) {
         Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
@@ -53,7 +52,7 @@ public class EspecialidadeService {
         especialidade.setExcluido(true);
         especialidade.setExcluidoEm(LocalDateTime.now());
 
-        Long userId = securityService.getLoggedUserId();
+        Long userId = SecurityHolder.getLoggedUserId();
         especialidade.setExcluidoPor(userId);
         repository.save(especialidade);
     }

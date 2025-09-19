@@ -1,7 +1,7 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.Utils;
-import br.com.nemeia.brigia.auth.SecurityService;
+import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ProcedimentoMapper;
@@ -24,7 +24,6 @@ public class ProcedimentoService {
 
     private final ProcedimentoRepository repository;
     private final ProcedimentoMapper mapper;
-    private final SecurityService securityService;
     private final EspecialidadeService especialidadeService;
     private final ConvenioService convenioService;
     private final PrecoProcedimentoService precoProcedimentoService;
@@ -74,7 +73,7 @@ public class ProcedimentoService {
         procedimento.setExcluido(true);
         procedimento.setExcluidoEm(LocalDateTime.now());
 
-        Long userId = securityService.getLoggedUserId();
+        Long userId = SecurityHolder.getLoggedUserId();
         procedimento.setExcluidoPor(userId);
         repository.save(procedimento);
     }

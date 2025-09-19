@@ -1,7 +1,7 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.Utils;
-import br.com.nemeia.brigia.auth.SecurityService;
+import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.model.BaseModel;
 import br.com.nemeia.brigia.repository.BaseRepository;
@@ -17,9 +17,6 @@ public abstract class BaseService<T extends BaseModel, R extends BaseRepository<
 
     @Autowired
     protected final R repository;
-
-    @Autowired
-    protected final SecurityService securityService;
 
     public T getById(Long id) {
         return repository.findById(id)
@@ -38,7 +35,7 @@ public abstract class BaseService<T extends BaseModel, R extends BaseRepository<
         entity.setExcluido(true);
         entity.setExcluidoEm(LocalDateTime.now());
 
-        Long userId = securityService.getLoggedUserId();
+        Long userId = SecurityHolder.getLoggedUserId();
         entity.setExcluidoPor(userId);
         repository.save(entity);
     }
