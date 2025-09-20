@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -24,17 +26,20 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
     private final AgendamentoService agendamentoService;
     private final ProcedimentoService procedimentoService;
     private final PrecoProcedimentoService precoProcedimentoService;
+    private final ContaReceberService contaReceberService;
     private final AtendimentoMapper mapper;
 
     public AtendimentoService(AtendimentoRepository repository,
             AtendimentoMapper mapper, ProfissionalService profissionalService, AgendamentoService agendamentoService,
-            ProcedimentoService procedimentoService, PrecoProcedimentoService precoProcedimentoService) {
+            ProcedimentoService procedimentoService, PrecoProcedimentoService precoProcedimentoService,
+                              ContaReceberService contaReceberService) {
         super(repository);
         this.mapper = mapper;
         this.profissionalService = profissionalService;
         this.agendamentoService = agendamentoService;
         this.procedimentoService = procedimentoService;
         this.precoProcedimentoService = precoProcedimentoService;
+        this.contaReceberService = contaReceberService;
     }
 
     public Page<Atendimento> getPaged(int page, int size, boolean mostrarExcluidos) {
@@ -70,7 +75,14 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
             pa.add(new ProcedimentoAtendimento(atendimento, procedimento, par.quantidade()));
         });
         atendimento.getProcedimentos().addAll(pa);
-        atendimento.setValorTotal(valoresLancados.stream().reduce(BigDecimal.ZERO, BigDecimal::add));
+        atendimento.setValorAgendamento(getValorAgendamento(atendimento));
+        atendimento.setValorLancado(valoresLancados.stream().reduce(BigDecimal.ZERO, BigDecimal::add));
+    }
+
+    private BigDecimal getValorAgendamento(Atendimento atendimento) {
+      var agendamento = atendimento.getAgendamento();
+      var desconto = Optional.ofNullable(agendamento.getDesconto()).orElse(BigDecimal.ZERO);
+      return agendamento.getValor().subtract(desconto);
     }
 
     @Transactional
@@ -115,7 +127,7 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
     }
 
     @Transactional
-    public Atendimento finalizarAtendimento(Long id, @Valid AtendimentoRequest request) {
+    public Atendimento finalizarAtendimento(Long id, AtendimentoRequest request) {
         Atendimento atendimento = getById(id);
 
         Agendamento agendamento = agendamentoService.getById(atendimento.getAgendamento().getId());
@@ -129,6 +141,9 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         atendimento = repository.save(atendimento);
 
         agendamentoService.updateStatus(agendamento, StatusAgendamento.FINALIZADO);
+
+        contaReceberService.createContaReceber(atendimento);
+        //TODO - criar Contas a Receber
 
         return atendimento;
     }

@@ -60,7 +60,7 @@ export class MainLayoutComponent {
     { label: 'Página Inicial', icon: 'home', route: '/', roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.MEDICO] },
     { label: 'Pacientes', icon: 'users', route: '/pacientes', roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.MEDICO] },
     { label: 'Agenda Diária', icon: 'calendar', route: '/agenda-diaria', roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.MEDICO] },
-    { label: 'Atendimentos', icon: 'stethoscope', route: '/atendimentos', roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.FATURAMENTO, Role.MEDICO] },
+    { label: 'Atendimentos', icon: 'stethoscope', route: '/atendimentos', roles: [Role.ADMIN, Role.MEDICO] },
     {
       label: 'Cadastros',
       icon: 'user-plus',

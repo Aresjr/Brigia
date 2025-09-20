@@ -12,80 +12,47 @@
       </div>
     </div>
 
+    <!-- TODO - Colocar informações do Paciente -->
+
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-2">
 
       <div class="tabs tabs-bordered min-w-max">
         <input type="radio" name="atendimento_tabs" class="tab-atendimento"
-               title="Anamnese" checked="checked" />
-        <div class="tab-content">
-          <div class="w-[52rem] p-4">
-            <label class="label-campo" for="anamnese">
-              Anamnese
-              <textarea id="anamnese" formControlName="anamnese" rows="5" emptyToNull class="campo"></textarea>
-            </label>
-          </div>
+               aria-label="Anamnese" checked="checked" />
+        <div class="tab-content border-base-300 w-[53rem]">
+          <textarea id="anamnese" formControlName="anamnese" rows="7" emptyToNull class="campo-aba"></textarea>
         </div>
 
         <input type="radio" name="atendimento_tabs" class="tab-atendimento"
-               title="Exame Físico" />
+               aria-label="Exame Físico" />
         <div class="tab-content">
-          <div class="w-[52rem] p-4">
-            <label class="label-campo" for="exameFisico">
-              Exame Físico
-              <textarea id="exameFisico" formControlName="exameFisico" rows="5" emptyToNull class="campo"></textarea>
-            </label>
-          </div>
+          <textarea id="exameFisico" formControlName="exameFisico" rows="7" emptyToNull class="campo-aba"></textarea>
         </div>
 
         <input type="radio" name="atendimento_tabs" class="tab-atendimento"
-               title="Diagnóstico" />
+               aria-label="Diagnóstico" />
         <div class="tab-content">
-          <div class="w-[52rem] p-4">
-            <label class="label-campo" for="diagnostico">
-              Diagnóstico
-              <textarea id="diagnostico" formControlName="diagnostico" rows="5" emptyToNull class="campo"></textarea>
-            </label>
-          </div>
+          <textarea id="diagnostico" formControlName="diagnostico" rows="7" emptyToNull class="campo-aba"></textarea>
         </div>
 
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento" title="Evolução Clínica" />
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Evolução Clínica" />
         <div class="tab-content">
-          <div class="w-[52rem] p-4">
-            <label class="label-campo" for="evolucaoClinica">
-              Evolução Clínica
-              <textarea id="evolucaoClinica" formControlName="evolucaoClinica" rows="5" emptyToNull class="campo"></textarea>
-            </label>
-          </div>
+          <textarea id="evolucaoClinica" formControlName="evolucaoClinica" rows="7" emptyToNull class="campo-aba"></textarea>
         </div>
 
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento" title="Exames Solicitados" />
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Exames Solicitados" />
         <div class="tab-content">
-          <div class="w-[52rem] p-4">
-            <label class="label-campo" for="examesSolicitados">
-              Exames Solicitados
-              <textarea id="examesSolicitados" formControlName="examesSolicitados" rows="5" emptyToNull class="campo"></textarea>
-            </label>
-          </div>
+          <textarea id="examesSolicitados" formControlName="examesSolicitados" rows="7" emptyToNull class="campo-aba"></textarea>
         </div>
 
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento" title="Prescrições" />
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Prescrições" />
         <div class="tab-content">
-          <div class="w-[52rem] p-4">
-            <label class="label-campo" for="prescricoes">
-              Prescrições
-              <textarea id="prescricoes" formControlName="prescricoes" rows="5" emptyToNull class="campo"></textarea>
-            </label>
-          </div>
+          <textarea id="prescricoes" formControlName="prescricoes" rows="7" emptyToNull class="campo-aba"></textarea>
         </div>
 
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento" title="Observações" />
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Observações" />
         <div class="tab-content">
-          <div class="w-[52rem] p-4">
-            <label class="label-campo" for="observacoes">
-              Observações
-              <textarea id="observacoes" formControlName="observacoes" rows="5" emptyToNull class="campo"></textarea>
-            </label>
-          </div>
+          <textarea id="observacoes" formControlName="observacoes" rows="7" emptyToNull class="campo-aba"></textarea>
         </div>
       </div>
 
@@ -100,17 +67,16 @@
           </div>
 
           <div class="rounded-t-lg">
-            <div class="grid grid-cols-[6rem_1fr_8rem_1rem] gap-3 p-3 font-medium">
+            <div class="grid grid-cols-[6rem_1fr_2rem] gap-3 p-3 font-medium">
               <div>Quantidade</div>
               <div>Procedimento</div>
-              <div>Valor</div>
               <div></div>
             </div>
           </div>
 
           <div class="space-y-1" formArrayName="procedimentos">
             <div *ngFor="let procedimento of procedimentosLancados.controls; let i = index" [formGroupName]="i"
-                 class="grid grid-cols-[6rem_1fr_8rem_2rem] gap-3 p-1.5 items-center hover:bg-base-200 rounded-lg">
+                 class="grid grid-cols-[6rem_1fr_2rem] gap-3 p-1.5 items-center hover:bg-base-200 rounded-lg">
 
               <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2">
 
@@ -125,8 +91,8 @@
                 </ng-template>
               </ng-select>
 
-              <button type="button" class="btn btn-ghost btn-circle btn-xs" (click)="removerProcedimento(i)" title="Excluir lançamento">
-                <lucide-icon name="trash" class="w-4 h-4 text-error"></lucide-icon>
+              <button type="button" class="btn btn-ghost btn-circle btn-sm" (click)="removerProcedimento(i)" title="Excluir lançamento">
+                <lucide-icon name="trash" class="h-5 text-error"></lucide-icon>
               </button>
             </div>
           </div>

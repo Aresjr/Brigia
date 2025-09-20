@@ -81,10 +81,17 @@ public class Atendimento extends BaseModel {
     @OneToMany(mappedBy = "atendimento", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProcedimentoAtendimento> procedimentos = new ArrayList<>();
 
-    @Column(name = "valor_total")
-    private BigDecimal valorTotal;
+    @Column(name = "valor_agendamento")
+    private BigDecimal valorAgendamento;
+
+    @Column(name = "valor_lancado")
+    private BigDecimal valorLancado;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "status", length = 15, nullable = false)
     private StatusAtendimento status;
+
+    public BigDecimal getValorTotal() {
+      return valorAgendamento.add(valorLancado);
+    }
 }

@@ -1,6 +1,10 @@
 .campo {
   @apply p-1.5 block w-full rounded-md border font-normal hover:border-neutral;
 }
+.campo-aba {
+  @apply campo hover:border-primary outline-none focus:border-primary;
+}
+
 .campo:disabled {
   @apply bg-base-100 text-neutral;
 }
@@ -113,7 +117,7 @@ input[type="number"] {
 }
 
 .tab-atendimento {
-  @apply tab font-bold text-base-content/50 hover:text-primary/80;
+  @apply tab font-bold text-base-content/40 hover:text-primary/70;
 }
 
 .tab-atendimento:is(.tab-active, [aria-selected=true]):not(.tab-disabled):not([disabled]), .tab-atendimento:is(input:checked) {

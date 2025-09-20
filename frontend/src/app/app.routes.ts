@@ -63,7 +63,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         data: {
-          roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.MEDICO],
+          roles: [Role.ADMIN, Role.MEDICO],
           title: 'Atendimentos'
         },
       },

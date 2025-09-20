@@ -23,6 +23,7 @@ public class ProcedimentoAtendimento {
     @JoinColumn(name = "procedimento_id")
     private Procedimento procedimento;
 
+    @Column(name = "quantidade", nullable = false)
     private Long quantidade;
 
     public ProcedimentoAtendimento(Atendimento atendimento, Procedimento procedimento, Long quantidade) {

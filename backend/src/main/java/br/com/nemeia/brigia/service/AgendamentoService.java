@@ -15,6 +15,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -129,6 +130,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         }
     }
 
+    @Async
     @CacheEvict(value = "agendamentos", allEntries = true)
     public void updateStatus(Agendamento agendamento, StatusAgendamento statusAgendamento) {
         agendamento.setStatus(statusAgendamento);

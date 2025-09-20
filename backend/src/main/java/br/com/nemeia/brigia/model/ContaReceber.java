@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -37,6 +35,15 @@ public class ContaReceber extends BaseModel {
     @JoinColumn(name = "profissional_id")
     private Profissional profissional;
 
+    @Column(name = "valor_agendamento", precision = 10, scale = 2)
+    private BigDecimal valorAgendamento;
+
+    @Column(name = "desconto_atendimento", precision = 10, scale = 2)
+    private BigDecimal descontoAtendimento;
+
+    @Column(name = "valor_total_lancado", precision = 10, scale = 2)
+    private BigDecimal valorTotalLancado;
+
     @Column(name = "valor_total", precision = 10, scale = 2)
     private BigDecimal valorTotal;
 
@@ -50,8 +57,5 @@ public class ContaReceber extends BaseModel {
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "status")
     private StatusContaReceber status;
-
-    @OneToMany(mappedBy = "contaReceber", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ContaReceberItem> itens = new ArrayList<>();
 
 }
