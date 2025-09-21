@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Role } from './constans';
-import { Usuario } from '../features/auth/auth.service';
+import { AuthService, Usuario } from '../features/auth/auth.service';
 import { Router } from '@angular/router';
 import { catchError, map, Observable, throwError } from 'rxjs';
-import { BackendService } from './backend/backend.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
   constructor(private router: Router,
-              private backend: BackendService) {}
+              private authService: AuthService) {}
 
   isLogged(): boolean {
     return this.getUser() != null;
@@ -44,7 +43,7 @@ export class UserService {
   }
 
   logout(): Observable<void> {
-    return this.backend.post<null, void>(`/auth/logout`, null).pipe(
+    return this.authService.logout().pipe(
       map(() => {
         localStorage.clear();
         this.router.navigate(['/login']);

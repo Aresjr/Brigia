@@ -93,7 +93,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         data: {
-          roles: [Role.ADMIN, Role.FATURAMENTO],
+          roles: [Role.ADMIN, Role.RECEPCIONISTA, Role.FATURAMENTO],
           title: 'Procedimentos',
         },
       },

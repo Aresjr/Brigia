@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Role } from '../../core/constans';
 
@@ -21,6 +21,8 @@ export interface Usuario {
   providedIn: 'root',
 })
 export class AuthService {
+  logout$ = new Subject<void>();
+
   constructor(private http: HttpClient) {}
 
   login(payload: LoginRequest): Observable<Usuario> {
@@ -30,6 +32,10 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/auth/logout`, {}, { withCredentials: true });
+    return this.http.post(`${environment.apiUrl}/auth/logout`, {}, { withCredentials: true }).pipe(
+      tap(() => {
+        this.logout$.next();
+      })
+    );
   }
 }

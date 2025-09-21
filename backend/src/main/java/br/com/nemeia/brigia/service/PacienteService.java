@@ -69,4 +69,8 @@ public class PacienteService {
         paciente.setId(id);
         return savePaciente(paciente, request.convenioId(), request.empresaId());
     }
+
+    public void update(Paciente paciente) {
+        repository.save(paciente);
+    }
 }

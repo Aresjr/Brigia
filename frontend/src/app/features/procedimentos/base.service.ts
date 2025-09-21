@@ -3,13 +3,17 @@ import { BackendService } from '../../core/backend/backend.service';
 import { ToastrService } from 'ngx-toastr';
 import { Injectable } from '@angular/core';
 import { Entidade, EntidadeRequest, PagedResponse } from '../shared/entidade.interface';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BaseService<Entid extends Entidade, Request extends EntidadeRequest> {
 
-  constructor(protected backend: BackendService, protected toastr: ToastrService) {}
+  constructor(protected backend: BackendService, protected toastr: ToastrService,
+              protected authService: AuthService) {
+    authService.logout$.subscribe(() => this.limparCache());
+  }
 
   path = '/';
   cache$: Observable<PagedResponse<Entid>> | null = null;

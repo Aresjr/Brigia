@@ -23,8 +23,6 @@ export class BackendService {
   }
 
   post<Request, Response>(path: string, payload: Partial<Request> | null) {
-    console.log('${this.baseUrl}', `${this.baseUrl}`);
-    console.log('${this.baseUrl}${path}', `${this.baseUrl}${path}`);
     return this.http.post<Request>(`${this.baseUrl}${path}`, payload, { withCredentials: true, observe: 'response' })
       .pipe(
         map((response) => response.body as Response),

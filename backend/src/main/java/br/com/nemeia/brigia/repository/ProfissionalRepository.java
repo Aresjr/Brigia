@@ -1,6 +1,7 @@
 package br.com.nemeia.brigia.repository;
 
 import br.com.nemeia.brigia.model.Profissional;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;

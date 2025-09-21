@@ -29,10 +29,10 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
     private final ContaReceberService contaReceberService;
     private final AtendimentoMapper mapper;
 
-    public AtendimentoService(AtendimentoRepository repository,
-            AtendimentoMapper mapper, ProfissionalService profissionalService, AgendamentoService agendamentoService,
+    public AtendimentoService(AtendimentoRepository repository, AtendimentoMapper mapper,
+            ProfissionalService profissionalService, AgendamentoService agendamentoService,
             ProcedimentoService procedimentoService, PrecoProcedimentoService precoProcedimentoService,
-                              ContaReceberService contaReceberService) {
+            ContaReceberService contaReceberService) {
         super(repository);
         this.mapper = mapper;
         this.profissionalService = profissionalService;
@@ -42,8 +42,8 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         this.contaReceberService = contaReceberService;
     }
 
-    public Page<Atendimento> getPaged(int page, int size, boolean mostrarExcluidos) {
-        return repository.findByExcluido(mostrarExcluidos, PageRequest.of(page, size));
+    public Page<Atendimento> getPaged(int page, int size) {
+        return repository.findAllByUnidadeIdIs(PageRequest.of(page, size), SecurityHolder.getLoggedUserUnidadeId());
     }
 
     @Transactional
@@ -80,9 +80,9 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
     }
 
     private BigDecimal getValorAgendamento(Atendimento atendimento) {
-      var agendamento = atendimento.getAgendamento();
-      var desconto = Optional.ofNullable(agendamento.getDesconto()).orElse(BigDecimal.ZERO);
-      return agendamento.getValor().subtract(desconto);
+        var agendamento = atendimento.getAgendamento();
+        var desconto = Optional.ofNullable(agendamento.getDesconto()).orElse(BigDecimal.ZERO);
+        return agendamento.getValor().subtract(desconto);
     }
 
     @Transactional
@@ -143,7 +143,7 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         agendamentoService.updateStatus(agendamento, StatusAgendamento.FINALIZADO);
 
         contaReceberService.createContaReceber(atendimento);
-        //TODO - criar Contas a Receber
+        // TODO - testar
 
         return atendimento;
     }

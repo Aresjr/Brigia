@@ -45,12 +45,12 @@ public abstract class BaseModel {
 
     @PrePersist
     protected void onCreate() {
-      if (unidade == null) {
-        Long unidadeId = SecurityHolder.getLoggedUserUnidadeId();
-        if (unidadeId != null) {
-          this.unidade = new Unidade(unidadeId);
+        if (unidade == null) {
+            Long unidadeId = SecurityHolder.getLoggedUserUnidadeId();
+            if (unidadeId != null) {
+                this.unidade = new Unidade(unidadeId);
+            }
         }
-      }
     }
 
     @PreUpdate

@@ -39,8 +39,8 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     @Value("${app.base-url}")
     private String baseUrl;
 
-    public AgendamentoService(AgendamentoRepository repository,
-            AgendamentoMapper mapper, PacienteService pacienteService, ProfissionalService profissionalService,
+    public AgendamentoService(AgendamentoRepository repository, AgendamentoMapper mapper,
+            PacienteService pacienteService, ProfissionalService profissionalService,
             EspecialidadeService especialidadeService, ProcedimentoService procedimentoService,
             EmpresaService empresaService, ConvenioService convenioService, UnidadeService unidadeService,
             EmailService emailService) {
@@ -56,7 +56,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         this.unidadeService = unidadeService;
     }
 
-    @Cacheable(value = "agendamentos", key = "#mes + '-' + #ano + '-' + #userId")
+    @Cacheable(value = "agendamentos", key = "#userId + '-' + #mes + '-' + #ano")
     public Page<Agendamento> getByDate(Long userId, Integer mes, Integer ano, int page, int size) {
         if (mes == null) {
             mes = LocalDate.now().getMonthValue();
@@ -64,7 +64,6 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         if (ano == null) {
             ano = LocalDate.now().getYear();
         }
-
         LocalDate startDate = LocalDate.of(ano, mes, 1).minusMonths(1);
         LocalDate endDate = LocalDate.of(ano, mes, 1).plusMonths(2).minusDays(1);
 
@@ -74,7 +73,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             Long profissionalId = profissionalService.getByUsuarioId(userId).getId();
             return repository.findAllByProfissionalIdAndDateRange(pageable, profissionalId, startDate, endDate);
         } else {
-            return repository.findAllByDateRange(pageable, startDate, endDate);
+            return repository.findAllByDate(pageable, SecurityHolder.getLoggedUserUnidadeId(), startDate, endDate);
         }
     }
 
@@ -85,7 +84,6 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         setEntidades(request, agendamento);
         agendamento.setStatus(StatusAgendamento.AGENDADO);
         agendamento.setUnidade(unidadeService.getById(SecurityHolder.getLoggedUserUnidadeId()));
-
         Agendamento agendamentoNovo = repository.save(agendamento);
 
         sendEmail(agendamentoNovo, "Agendamento Realizado!", "agendamento-cadastrado");
@@ -96,7 +94,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     @CacheEvict(value = "agendamentos", allEntries = true)
     public Agendamento editAgendamento(Long id, AgendamentoRequest request) {
         Agendamento original = getById(id);
-        Boolean deveMandarEmail = deveMandarEmail(original, request);
+        boolean deveMandarEmail = deveMandarEmail(original, request);
 
         Agendamento agendamentoUpdate = mapper.updateEntity(original, request);
         setEntidades(request, agendamentoUpdate);
@@ -111,7 +109,9 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
 
     private void setEntidades(AgendamentoRequest request, Agendamento agendamento) {
         if (request.pacienteId() != null) {
-            agendamento.setPaciente(pacienteService.getById(request.pacienteId()));
+            Paciente paciente = pacienteService.getById(request.pacienteId());
+            atualizaProximaConsultaPaciente(paciente, agendamento);
+            agendamento.setPaciente(paciente);
         }
         if (request.profissionalId() != null) {
             agendamento.setProfissional(profissionalService.getById(request.profissionalId()));
@@ -130,6 +130,11 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         }
     }
 
+    private void atualizaProximaConsultaPaciente(Paciente paciente, Agendamento agendamento) {
+        paciente.setProximaConsulta(agendamento.getData().atTime(agendamento.getHora()));
+        pacienteService.update(paciente);
+    }
+
     @Async
     @CacheEvict(value = "agendamentos", allEntries = true)
     public void updateStatus(Agendamento agendamento, StatusAgendamento statusAgendamento) {
@@ -137,21 +142,24 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         repository.save(agendamento);
     }
 
+    @Async
     private void sendEmail(Agendamento agendamento, String status, String template) {
         var email = agendamento.getPaciente().getEmail();
         if (email != null) {
-            var linkConfirmacao = String.format("%s/detalhes-agendamento?token=%s", baseUrl,
-                    agendamento.getTokenPublico());
-            Map<String, Object> variables = Map.of("nomePaciente", agendamento.getPaciente().getNome(), "data",
-                    agendamento.getData(), "horario", agendamento.getHora(), "nomeMedico",
-                    agendamento.getProfissional().getNome(), "linkConfirmacao", linkConfirmacao, "clinica",
-                    agendamento.getUnidade().getNome());
+            Map<String, Object> variables = getVariaveisEmail(agendamento);
             try {
                 emailService.sendEmail(email, status, template, variables);
             } catch (Exception e) {
                 log.error("Não foi possível enviar email: {}", e.getLocalizedMessage());
             }
         }
+    }
+
+    private Map<String, Object> getVariaveisEmail(Agendamento agendamento) {
+        var linkConfirmacao = String.format("%s/detalhes-agendamento?token=%s", baseUrl, agendamento.getTokenPublico());
+        return Map.of("nomePaciente", agendamento.getPaciente().getNome(), "data", agendamento.getData(), "horario",
+                agendamento.getHora(), "nomeMedico", agendamento.getProfissional().getNome(), "linkConfirmacao",
+                linkConfirmacao, "clinica", agendamento.getUnidade().getNome());
     }
 
     private boolean deveMandarEmail(Agendamento original, AgendamentoRequest request) {

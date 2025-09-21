@@ -6,7 +6,6 @@ import { Entidade } from '../../features/shared/entidade.interface';
 import { UserService } from '../../core/user.service';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { Usuario } from '../../features/auth/auth.service';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({

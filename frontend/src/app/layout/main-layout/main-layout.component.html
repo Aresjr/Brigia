@@ -29,11 +29,11 @@
               <ul>
                 <li *ngFor="let child of item.children">
                   <app-menu-item
+                    *ngIf="temAcessoMenu(child)"
                     [label]="child.label"
                     [icon]="child.icon"
                     [route]="child.route"
-                    [isSubmenuOpen]="true"
-                  >
+                    [isSubmenuOpen]="true">
                   </app-menu-item>
                 </li>
               </ul>
@@ -42,7 +42,7 @@
         </ul>
       </div>
       <div class="p-3 relative text-xs">
-        Brígida v0.0.5
+        Brígida v0.0.6
       </div>
     </nav>
   </aside>

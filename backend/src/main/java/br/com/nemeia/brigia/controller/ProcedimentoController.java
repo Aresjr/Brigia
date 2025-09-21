@@ -25,7 +25,7 @@ public class ProcedimentoController {
     private final ConvenioService convenioService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('FATURAMENTO') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('FATURAMENTO') or hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<ProcedimentoResponse> getAllProcedimentos(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         log.info("GET /procedimentos - page: {}, size: {}", page, size);

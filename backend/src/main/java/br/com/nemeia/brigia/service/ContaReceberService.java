@@ -36,7 +36,7 @@ public class ContaReceberService {
 
     @Transactional
     public void createContaReceber(Atendimento atendimento) {
-      ContaReceber contaReceber = mapper.fromAtendimento(atendimento);
-      repository.save(contaReceber);
+        ContaReceber contaReceber = mapper.fromAtendimento(atendimento);
+        repository.save(contaReceber);
     }
 }

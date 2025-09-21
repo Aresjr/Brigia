@@ -22,11 +22,10 @@ public class AtendimentoController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
-    public PagedResponse<AtendimentoResponse> getAllAtendimentos(
-            @RequestParam(defaultValue = "false") Boolean mostrarExcluidos, @RequestParam(defaultValue = "0") int page,
+    public PagedResponse<AtendimentoResponse> getAllAtendimentos(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         log.info("GET /atendimentos - page: {}, size: {}", page, size);
-        return mapper.toPagedResponse(service.getPaged(page, size, mostrarExcluidos));
+        return mapper.toPagedResponse(service.getPaged(page, size));
     }
 
     @PostMapping

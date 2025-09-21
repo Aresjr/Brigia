@@ -52,7 +52,7 @@ public class ContaReceberMapper {
         contaReceber.setStatus(StatusContaReceber.ABERTO);
         contaReceber.setValorRecebido(BigDecimal.ZERO);
 
-        //TODO - testar
+        // TODO - testar
 
         return contaReceber;
     }

@@ -1,6 +1,6 @@
 {
-  "name": "brigia",
-  "version": "0.0.5",
+  "name": "brigida",
+  "version": "0.0.6",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 8081",

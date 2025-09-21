@@ -92,6 +92,6 @@ public class Atendimento extends BaseModel {
     private StatusAtendimento status;
 
     public BigDecimal getValorTotal() {
-      return valorAgendamento.add(valorLancado);
+        return valorAgendamento.add(valorLancado);
     }
 }

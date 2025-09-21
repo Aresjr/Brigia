@@ -16,9 +16,9 @@ public interface AgendamentoRepository extends BaseRepository<Agendamento> {
             @Param("profissionalId") Long profissionalId, @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
 
-    @Query("SELECT a FROM Agendamento a WHERE a.data BETWEEN :startDate AND :endDate")
-    Page<Agendamento> findAllByDateRange(Pageable pageable, @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate);
+    @Query("SELECT a FROM Agendamento a WHERE a.unidade.id = :unidadeId AND a.data BETWEEN :startDate AND :endDate")
+    Page<Agendamento> findAllByDate(Pageable pageable, @Param("unidadeId") Long unidadeId,
+            @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
     @Query("SELECT a FROM Agendamento a WHERE a.tokenPublico = :token")
     Optional<Agendamento> findOneByToken(@Param("token") String token);
