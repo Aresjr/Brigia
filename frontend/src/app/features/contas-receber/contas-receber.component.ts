@@ -13,7 +13,11 @@ import {
   CorContaReceber,
   StatusContaReceberDescricao
 } from '../../core/constans';
-import { NgNotFoundTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { Paciente } from '../pacientes/paciente.interface';
+import { forkJoin, map, Observable, tap } from 'rxjs';
+import { Profissional } from '../profissionais/profissional.interface';
+import { ProfissionalService } from '../profissionais/profissional.service';
 
 @Component({
   selector: 'app-contas-receber',
@@ -28,58 +32,64 @@ import { NgNotFoundTemplateDirective, NgSelectComponent } from '@ng-select/ng-se
     LoadingSpinnerComponent,
     NgNotFoundTemplateDirective,
     NgSelectComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgOptionComponent
   ]
 })
 export class ContaReceberComponent extends BaseListComponent<ContaReceber> implements OnInit {
   override nomeEntidade = 'Conta a Receber';
+  pacientes: Paciente[] = [];
+  profissionais: Profissional[] = [];
+  profissionalFiltro: number = 0;
 
-  constructor(private contasReceberService: ContaReceberService, private toastr: ToastrService) {
+  constructor(private contasReceberService: ContaReceberService,
+              private profissionalService: ProfissionalService,
+              private toastr: ToastrService) {
     super();
   }
 
   ngOnInit(): void {
-    this.carregarContasReceber();
+    this.isLoading = true;
+    forkJoin([
+      this.carregarContasReceber(),
+      this.carregarProfissionais(),
+    ]).subscribe(() => {
+      this.isLoading = false;
+    });
   }
 
-  carregarContasReceber(): void {
+  carregarContasReceber() {
     this.isLoading = true;
-    this.contasReceberService.listar(true).subscribe({
-      next: (response) => {
-        this.itensInternos = response.items;
+    return this.contasReceberService.listar(true).pipe(
+      map(response => response.items),
+      tap(contasReceber => {
+        this.itensInternos = contasReceber;
         this.itensExibicao = [...this.itensInternos];
         this.atualizarPaginacao();
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      }
+      }));
+  }
+
+  carregarProfissionais(): Observable<Profissional[]> {
+    return this.profissionalService.listar().pipe(
+      map(response => response.items),
+      tap(profissionais => {
+        this.profissionais = profissionais;
+      }));
+  }
+
+  selectProfissional(profissionalId: number) {
+    this.profissionalFiltro = profissionalId | 0;
+    this.filtrar();
+  }
+
+  filtrar() {
+    this.itensExibicao = this.itensInternos.filter(item => {
+      return this.profissionalFiltro == 0 || item.profissional.id == this.profissionalFiltro
     });
   }
 
-  override filter(convenio: ContaReceber, searchTerm: string): boolean | undefined {
-    return convenio.paciente.nome.toLowerCase().includes(searchTerm.toLowerCase());
-  }
-
-  override excluir() {
-    super.excluir();
-    this.contasReceberService.excluir(this.idExclusao).subscribe({
-      next: () => {
-        this.toastr.success(`${this.nomeEntidade} excluído`);
-        this.carregarContasReceber();
-      }
-    });
-  }
-
-  restaurarItem(event: Event, convenio: ContaReceber) {
-    event.stopPropagation();
-
-    this.contasReceberService.restaurar(convenio.id).subscribe({
-      next: () => {
-        convenio.excluido = false;
-        this.toastr.success(`${this.nomeEntidade} restaurado`);
-      }
-    });
+  override filter(contaReceber: ContaReceber, searchTerm: string): boolean | undefined {
+    return contaReceber.paciente.nome.toLowerCase().includes(searchTerm.toLowerCase());
   }
 
   protected readonly StatusContaReceberDescricao = StatusContaReceberDescricao;

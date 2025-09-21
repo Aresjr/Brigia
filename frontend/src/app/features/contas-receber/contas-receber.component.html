@@ -4,65 +4,73 @@
 
   @if (isLoading) {
     <app-loading-spinner></app-loading-spinner>
-  } @else if (itensExibicao.length === 0) {
+  } @else {
+
+    <div class="grid grid-cols-[1fr_1fr_1fr_1fr_1fr] mb-2">
+      <div class="max-w-64 px-6 py-2.5">
+        <label class="label-campo tooltip text-left" data-tip="Filtrar Status">
+          Status
+          <ng-select class="campo-select" placeholder="Todos">
+            <ng-template ng-notfound-tmp>
+              <span class="text-sm p-6">Nenhum resultado</span>
+            </ng-template>
+          </ng-select>
+        </label>
+      </div>
+      <div class="max-w-64 px-6 py-2.5">
+        <label class="label-campo">
+          Paciente
+          <ng-select class="campo-select" placeholder="Todos">
+            <ng-template ng-notfound-tmp>
+              <span class="text-sm p-6">Nenhum resultado</span>
+            </ng-template>
+          </ng-select>
+        </label>
+      </div>
+      <div class="max-w-64 px-6 py-2.5">
+        <label class="label-campo" for="tipoAgendamento">
+          Empresa
+          <ng-select class="campo-select" placeholder="Todos">
+            <ng-template ng-notfound-tmp>
+              <span class="text-sm p-6">Nenhum resultado</span>
+            </ng-template>
+          </ng-select>
+        </label>
+      </div>
+      <div class="max-w-64 px-6 py-2.5">
+        <label class="label-campo" for="tipoAgendamento">
+          Profissional
+
+          <ng-select class="campo-select" placeholder="Todos" (change)="selectProfissional($event)">
+            <ng-option class="max-h-8" value="0">Todos</ng-option>
+            @for (profissional of profissionais; track profissional.id) {
+              <ng-option class="max-h-8" value="{{ profissional.id }}">{{ profissional.nome }}</ng-option>
+            }
+            <ng-template ng-notfound-tmp>
+              <span class="text-sm p-6">Nenhum resultado</span>
+            </ng-template>
+          </ng-select>
+        </label>
+      </div>
+      <div class="max-w-64 px-6 py-2.5">
+        <label class="label-campo" for="tipoAgendamento">
+          Data Atendimento
+          <ng-select class="campo-select" placeholder="Todos">
+            <ng-template ng-notfound-tmp>
+              <span class="text-sm p-6">Nenhum resultado</span>
+            </ng-template>
+          </ng-select>
+        </label>
+      </div>
+    </div>
+
+  @if(itensExibicao.length == 0) {
     <div class="text-center py-8 w-full bg-base-100 rounded-lg shadow-md">
       <p>Nenhum registro encontrado.</p>
     </div>
   } @else {
-    <div class="min-h-[36rem]">
-      <div class="grid grid-cols-[1fr_1fr_1fr_1fr_1fr] mb-2">
-        <div class="max-w-64 px-6 py-2.5">
-          <label class="label-campo tooltip text-left" data-tip="Filtrar Status">
-            Status
-            <ng-select class="" placeholder="Todos">
-              <ng-template ng-notfound-tmp>
-                <span class="text-sm p-6">Nenhum resultado</span>
-              </ng-template>
-            </ng-select>
-          </label>
-        </div>
-        <div class="max-w-64 px-6 py-2.5">
-          <label class="label-campo">
-            Paciente
-            <ng-select class="campo-select" placeholder="Todos">
-              <ng-template ng-notfound-tmp>
-                <span class="text-sm p-6">Nenhum resultado</span>
-              </ng-template>
-            </ng-select>
-          </label>
-        </div>
-        <div class="max-w-64 px-6 py-2.5">
-          <label class="label-campo" for="tipoAgendamento">
-            Empresa
-            <ng-select class="campo-select" placeholder="Todos">
-              <ng-template ng-notfound-tmp>
-                <span class="text-sm p-6">Nenhum resultado</span>
-              </ng-template>
-            </ng-select>
-          </label>
-        </div>
-        <div class="max-w-64 px-6 py-2.5">
-          <label class="label-campo" for="tipoAgendamento">
-            Profissional
-            <ng-select class="campo-select" placeholder="Todos">
-              <ng-template ng-notfound-tmp>
-                <span class="text-sm p-6">Nenhum resultado</span>
-              </ng-template>
-            </ng-select>
-          </label>
-        </div>
-        <div class="max-w-64 px-6 py-2.5">
-          <label class="label-campo" for="tipoAgendamento">
-            Data Atendimento
-            <ng-select class="campo-select" placeholder="Todos">
-              <ng-template ng-notfound-tmp>
-                <span class="text-sm p-6">Nenhum resultado</span>
-              </ng-template>
-            </ng-select>
-          </label>
-        </div>
-      </div>
 
+    <div class="min-h-[36rem]">
       <div class="titulo-listagem grid-cols-[1fr_1fr_1fr_1fr_1fr]">
         <div (click)="ordenar('status')" class="cabecalho-listagem rounded-tl-lg">
           <lucide-icon *ngIf="getSortIcon('status')" [name]="getSortIcon('status')" class="icone-ordenacao"/>
@@ -105,5 +113,7 @@
 
     <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
   }
+
+}
 
 </div>
