@@ -33,7 +33,7 @@ public class MailgunClient {
 
     public void sendMessage(String to, String subject, String htmlContent) throws UnsupportedEncodingException {
         var from = new InternetAddress(fromEmail, clientName, "UTF-8");
-        to = "aresnemeia@gmail.com";
+        to = "aresnemeia@gmail.com"; // TODO - remover
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.mailgun.net/v3/" + domain + "/messages"))
                 .header("Authorization", "Basic " + Base64.getEncoder().encodeToString(("api:" + apiKey).getBytes()))

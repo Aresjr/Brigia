@@ -142,7 +142,7 @@
                        [items]="this.profissionaisFiltrados" bindValue="id" bindLabel="nome" labelForId="profissionalId">
               <ng-template ng-notfound-tmp>
                 <span class="text-sm p-6">Nenhum resultado</span><br/>
-                <span class="text-xs p-6">Verifique a especialidade selecionada</span>
+                <span class="text-sm p-6">Verifique a especialidade selecionada</span>
               </ng-template>
             </ng-select>
             <div *ngIf="isInvalid('profissionalId')" class="text-error text-sm">

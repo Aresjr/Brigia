@@ -113,21 +113,14 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             atualizaProximaConsultaPaciente(paciente, agendamento);
             agendamento.setPaciente(paciente);
         }
-        if (request.profissionalId() != null) {
-            agendamento.setProfissional(profissionalService.getById(request.profissionalId()));
-        }
-        if (request.especialidadeId() != null) {
-            agendamento.setEspecialidade(especialidadeService.getById(request.especialidadeId()));
-        }
-        if (request.procedimentoId() != null) {
-            agendamento.setProcedimento(procedimentoService.getById(request.procedimentoId()));
-        }
-        if (request.empresaId() != null) {
-            agendamento.setEmpresa(empresaService.getById(request.empresaId()));
-        }
-        if (request.convenioId() != null) {
-            agendamento.setConvenio(convenioService.getById(request.convenioId()));
-        }
+        agendamento.setProfissional(
+                request.profissionalId() != null ? profissionalService.getById(request.profissionalId()) : null);
+        agendamento.setEspecialidade(
+                request.especialidadeId() != null ? especialidadeService.getById(request.especialidadeId()) : null);
+        agendamento.setProcedimento(
+                request.procedimentoId() != null ? procedimentoService.getById(request.procedimentoId()) : null);
+        agendamento.setEmpresa(request.empresaId() != null ? empresaService.getById(request.empresaId()) : null);
+        agendamento.setConvenio(request.convenioId() != null ? convenioService.getById(request.convenioId()) : null);
     }
 
     private void atualizaProximaConsultaPaciente(Paciente paciente, Agendamento agendamento) {
@@ -135,7 +128,6 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         pacienteService.update(paciente);
     }
 
-    @Async
     @CacheEvict(value = "agendamentos", allEntries = true)
     public void updateStatus(Agendamento agendamento, StatusAgendamento statusAgendamento) {
         agendamento.setStatus(statusAgendamento);

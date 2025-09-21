@@ -9,9 +9,13 @@ import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
-import { FabComponent } from '../shared/fab/fab.component';
-import { ContaReceberFormComponent } from './contas-receber-form/contas-receber-form.component';
 import { LoadingSpinnerComponent } from '../shared/loading/loading-spinner.component';
+import {
+  CorAgendamento, CorAtendimento,
+  CorContaReceber,
+  StatusAgendamentoDescricao, StatusAtendimentoDescricao,
+  StatusContaReceberDescricao
+} from '../../core/constans';
 
 @Component({
   selector: 'app-contas-receber',
@@ -21,11 +25,9 @@ import { LoadingSpinnerComponent } from '../shared/loading/loading-spinner.compo
     CommonModule,
     LucideAngularModule,
     FormsModule,
-    ContaReceberFormComponent,
     PaginationComponent,
     ConfirmDialogComponent,
     TopBarComponent,
-    FabComponent,
     LoadingSpinnerComponent
   ]
 })
@@ -56,30 +58,7 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
   }
 
   override filter(convenio: ContaReceber, searchTerm: string): boolean | undefined {
-    return convenio.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      convenio.descricao?.toLowerCase().includes(searchTerm.toLowerCase());
-  }
-
-  onSalvarNovoContaReceber(convenio: Partial<ContaReceber>) {
-    if (this.itemEdicao) {
-      const id = this.itemEdicao.id;
-      this.contasReceberService.atualizar(id, convenio).subscribe({
-        next: () => {
-          this.toastr.success('Registro atualizado');
-          this.carregarContasReceber();
-          this.mostrarFormularioNovo = false;
-          this.itemEdicao = null;
-        }
-      });
-    } else {
-      this.contasReceberService.criar(convenio).subscribe({
-        next: () => {
-          this.toastr.success(`${this.nomeEntidade} cadastrado`);
-          this.carregarContasReceber();
-          this.mostrarFormularioNovo = false;
-        }
-      });
-    }
+    return convenio.paciente.nome.toLowerCase().includes(searchTerm.toLowerCase());
   }
 
   override excluir() {
@@ -102,4 +81,10 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
       }
     });
   }
+
+  protected readonly StatusContaReceberDescricao = StatusContaReceberDescricao;
+  protected readonly StatusDescricao = StatusAgendamentoDescricao;
+  protected readonly CorAtendimento = CorAgendamento;
+  protected readonly CorContaReceber = CorContaReceber;
+  protected readonly StatusAtendimentoDescricao = StatusAtendimentoDescricao;
 }

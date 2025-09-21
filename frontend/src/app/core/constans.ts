@@ -1,6 +1,3 @@
-import { Agendamento } from '../features/agenda-diaria/agendamento.interface';
-import { CalendarEvent } from 'angular-calendar';
-
 export enum Role {
   ADMIN = 'ADMIN',
   PACIENTE = 'PACIENTE',
@@ -113,3 +110,32 @@ export const CorAtendimento: Record<number, string> = {
 
 export const STATUS_ABRIR_ATENDIMENTO = [StatusAgendamento.Agendado, StatusAgendamento.Confirmado,
   StatusAgendamento.Reagendado];
+
+export enum FormaPagamento {
+  DINHEIRO = 0,
+  CARTAO_CREDITO = 1,
+  CARTAO_DEBITO = 2,
+  PIX = 3,
+  BOLETO = 4
+}
+
+export enum StatusContaReceber {
+  Aberto = 0,
+  Pago = 1,
+  Atrasado = 2,
+  Parcial = 3
+}
+
+export const StatusContaReceberDescricao: Record<number, string> = {
+  [StatusContaReceber.Aberto]: 'Aberto',
+  [StatusContaReceber.Pago]: 'Pago',
+  [StatusContaReceber.Atrasado]: 'Atrasado',
+  [StatusContaReceber.Parcial]: 'Parcial'
+};
+
+export const CorContaReceber: Record<number, string> = {
+  [StatusContaReceber.Aberto]: '#60a5fa',
+  [StatusContaReceber.Parcial]: '#A78BFA',
+  [StatusContaReceber.Atrasado]: '#EF4444',
+  [StatusContaReceber.Pago]: '#14B8A6'
+};

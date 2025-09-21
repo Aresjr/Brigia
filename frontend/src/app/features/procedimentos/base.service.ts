@@ -8,7 +8,7 @@ import { AuthService } from '../auth/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class BaseService<Entid extends Entidade, Request extends EntidadeRequest> {
+export class BaseService<Entid extends Entidade, Request extends EntidadeRequest | null> {
 
   constructor(protected backend: BackendService, protected toastr: ToastrService,
               protected authService: AuthService) {

@@ -5,59 +5,32 @@
   @if (isLoading) {
     <app-loading-spinner></app-loading-spinner>
   } @else if (itensExibicao.length === 0) {
-    <div class="text-center py-8 w-full bg-base-100 rounded-md shadow-md">
+    <div class="text-center py-8 w-full bg-base-100 rounded-lg shadow-md">
       <p>Nenhum registro encontrado.</p>
     </div>
   } @else {
     <div class="min-h-[36rem]">
-      <div class="titulo-listagem grid-cols-[1fr_1fr_32px]">
-        <div (click)="ordenar('nome')" class="cabecalho-listagem">
-          <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
-          Nome
+      <div class="titulo-listagem grid-cols-[1fr_1fr]">
+        <div (click)="ordenar('paciente')" class="cabecalho-listagem rounded-tl-lg">
+          <lucide-icon *ngIf="getSortIcon('paciente')" [name]="getSortIcon('paciente')" class="icone-ordenacao"/>
+          Status
         </div>
-        <div (click)="ordenar('descricao')" class="cabecalho-listagem">
-          <lucide-icon *ngIf="getSortIcon('descricao')" [name]="getSortIcon('descricao')" class="icone-ordenacao"/>
-          Observações
+        <div (click)="ordenar('paciente')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('paciente')" [name]="getSortIcon('paciente')" class="icone-ordenacao"/>
+          Paciente
         </div>
-        <div class="cabecalho-listagem p-0"></div>
+        <!-- TODO - adicionar os outros campos -->
       </div>
 
       <div class="itens-listagem">
-        @for (convenio of getItensPaginados(); track convenio.id) {
-          <div class="item-listagem grid-cols-[1fr_1fr_32px]"
-               [class.bg-error]="convenio.excluido"
-               [class.bg-opacity-50]="convenio.excluido">
-            <div class="celula-listagem">
-              {{convenio.nome}} <span *ngIf="convenio.excluido" class="excluido">Excluído</span>
-            </div>
-            <div class="celula-listagem">{{convenio.descricao}}</div>
-            <div class="p-0 text-right">
-              <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
-                <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
-                  <lucide-icon name="ellipsis-vertical" class="h-5" />
-                </label>
-                <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-[1] font-semibold">
-                  <li *ngIf="!convenio.excluido">
-                    <a (click)="editar(convenio)"
-                       class="text-sm text-neutral hover:bg-base-200">
-                      Editar
-                    </a>
-                  </li>
-                  <li *ngIf="!convenio.excluido">
-                    <a (click)="perguntaExcluir($event, convenio)"
-                       class="text-error hover:bg-error/50">
-                      Excluir
-                    </a>
-                  </li>
-                  <li *ngIf="convenio.excluido">
-                    <a (click)="restaurarItem($event, convenio)"
-                       class="text-success hover:bg-success/20">
-                      Restaurar
-                    </a>
-                  </li>
-                </ul>
+        @for (contaReceber of getItensPaginados(); track contaReceber.id) {
+          <div class="item-listagem grid-cols-[1fr_1fr]">
+            <div class="celula-listagem flex items-center px-4 py-1.5">
+              <div class="badge text-base-100" [ngClass]="'bg-['+ CorContaReceber[contaReceber.status] +']'">
+                {{ StatusContaReceberDescricao[contaReceber.status] }}
               </div>
             </div>
+            <div class="celula-listagem">{{contaReceber.paciente.nome}}</div>
           </div>
         }
       </div>
@@ -66,21 +39,11 @@
     <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
   }
 
-  @if (mostrarFormularioNovo) {
-    <app-contas-receber-form
-      [contaReceber]="itemEdicao"
-      (save)="onSalvarNovoContaReceber($event)"
-      (cancel)="cancelarNovo()"
-    ></app-contas-receber-form>
-  }
-
   <app-confirm-dialog
     *ngIf="exibeConfirmExclusao"
     message="Deseja realmente excluir este convênio?"
     (confirm)="excluir()"
     (cancel)="fecharConfirmExclusao()"
   ></app-confirm-dialog>
-
-  <app-fab (clicked)="onAddNovo()"></app-fab>
 
 </div>

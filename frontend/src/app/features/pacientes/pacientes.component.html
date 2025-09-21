@@ -13,7 +13,7 @@
     } @else {
         <div class="min-h-[36rem]">
           <div class="titulo-listagem grid-cols-[1fr_10rem_10rem_10rem_12rem_32px]">
-            <div (click)="ordenar('nome')" class="cabecalho-listagem">
+            <div (click)="ordenar('nome')" class="cabecalho-listagem rounded-tl-lg">
               <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
               Nome
             </div>
@@ -33,7 +33,7 @@
               <lucide-icon *ngIf="getSortIcon('proximaConsulta')" [name]="getSortIcon('proximaConsulta')" class="icone-ordenacao"/>
               Próx. Consulta
             </div>
-            <div class="cabecalho-listagem p-0"></div>
+            <div class="cabecalho-listagem p-0 rounded-tr-lg"></div>
           </div>
 
           <div class="itens-listagem">

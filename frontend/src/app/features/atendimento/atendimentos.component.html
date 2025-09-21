@@ -5,13 +5,13 @@
   @if (isLoading) {
     <app-loading-spinner></app-loading-spinner>
   } @else if (itensExibicao.length === 0) {
-    <div class="text-center py-8 w-full bg-base-100 rounded-md shadow-md">
+    <div class="text-center py-8 w-full bg-base-100 rounded-lg shadow-md">
       <p>Nenhum registro encontrado.</p>
     </div>
   } @else {
     <div class="min-h-[36rem]">
       <div class="titulo-listagem grid-cols-[10rem_1fr_7rem_6rem_6rem_12rem_32px]">
-        <div (click)="ordenar('status')" class="cabecalho-listagem">
+        <div (click)="ordenar('status')" class="cabecalho-listagem rounded-tl-lg">
           <lucide-icon *ngIf="getSortIcon('status')" [name]="getSortIcon('status')" class="icone-ordenacao"/>
           Status
         </div>
@@ -35,7 +35,7 @@
           <lucide-icon *ngIf="getSortIcon('especialidade')" [name]="getSortIcon('especialidade')" class="icone-ordenacao"/>
           Especialidade
         </div>
-        <div class="cabecalho-listagem p-0"></div>
+        <div class="cabecalho-listagem p-0 rounded-tr-lg"></div>
       </div>
 
       <div class="itens-listagem">

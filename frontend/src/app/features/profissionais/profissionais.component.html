@@ -7,13 +7,13 @@
       <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
     </div>
   } @else if (itensExibicao.length === 0) {
-    <div class="text-center py-8 w-full bg-base-100 rounded-md shadow-md">
+    <div class="text-center py-8 w-full bg-base-100 rounded-lg shadow-md">
       <p>Nenhum registro encontrado.</p>
     </div>
   } @else {
     <div class="min-h-[36rem]">
       <div class="titulo-listagem grid-cols-[1fr_14rem_10rem_10rem_32px]">
-        <div (click)="ordenar('nome')" class="cabecalho-listagem">
+        <div (click)="ordenar('nome')" class="cabecalho-listagem rounded-tl-lg">
           <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
           Nome
         </div>
@@ -29,7 +29,7 @@
           <lucide-icon *ngIf="getSortIcon('celular')" [name]="getSortIcon('celular')" class="icone-ordenacao"/>
           Celular
         </div>
-        <div class="cabecalho-listagem p-0"></div>
+        <div class="cabecalho-listagem p-0 rounded-tr-lg"></div>
       </div>
 
       <div class="itens-listagem">
