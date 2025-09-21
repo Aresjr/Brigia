@@ -229,7 +229,7 @@
           <label class="label-campo" for="desconto">
             Desconto
           </label>
-          <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('desconto')">
+          <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('desconto', !this.valorEditavel)">
             R$
             <input type="text" formControlName="desconto" min="1" max="99999" id="desconto"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"

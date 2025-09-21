@@ -12,7 +12,7 @@
     </div>
   } @else {
     <div class="min-h-[36rem]">
-      <div class="titulo-listagem grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_32px]">
+      <div class="titulo-listagem grid-cols-[3fr_2fr_1fr_1.3fr_3fr_32px]">
         <div (click)="ordenar('nome')" class="cabecalho-listagem rounded-tl-lg">
           <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
           Nome
@@ -25,17 +25,9 @@
           <lucide-icon *ngIf="getSortIcon('codigoBc')" [name]="getSortIcon('codigoBc')" class="icone-ordenacao"/>
           Cód. BC
         </div>
-        <div (click)="ordenar('valorMinimoMensal')" class="cabecalho-listagem text-xs pr-0">
-          <lucide-icon *ngIf="getSortIcon('valorMinimoMensal')" [name]="getSortIcon('valorMinimoMensal')" class="icone-ordenacao"/>
-          Mín. Mensal
-        </div>
-        <div (click)="ordenar('minimoPorFuncionario')" class="cabecalho-listagem">
-          <lucide-icon *ngIf="getSortIcon('minimoPorFuncionario')" [name]="getSortIcon('minimoPorFuncionario')" class="icone-ordenacao"/>
-          Mín. Func.
-        </div>
-        <div (click)="ordenar('valorMes')" class="cabecalho-listagem">
-          <lucide-icon *ngIf="getSortIcon('valorMes')" [name]="getSortIcon('valorMes')" class="icone-ordenacao"/>
-          Valor Mês
+        <div (click)="ordenar('cnpj')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('cnpj')" [name]="getSortIcon('cnpj')" class="icone-ordenacao"/>
+          CNPJ
         </div>
         <div class="cabecalho-listagem">Observações</div>
         <div class="cabecalho-listagem p-0 rounded-tr-lg"></div>
@@ -43,9 +35,8 @@
 
       <div class="itens-listagem">
         @for (empresa of getItensPaginados(); track empresa.id) {
-          <div class="item-listagem grid-cols-[3fr_2fr_1fr_1fr_1fr_1fr_3fr_32px]"
-               [class.bg-error]="empresa.excluido"
-               [class.bg-opacity-50]="empresa.excluido">
+          <div class="item-listagem grid-cols-[3fr_2fr_1fr_1.3fr_3fr_32px]"
+               [class.bg-error]="empresa.excluido" [class.bg-opacity-50]="empresa.excluido" (click)="selecionar(empresa)">
             <div class="celula-listagem truncate">
               {{empresa.nome}} <span *ngIf="empresa.excluido" class="excluido">Excluído</span>
             </div>
@@ -57,9 +48,7 @@
               }
             </div>
             <div class="celula-listagem">{{empresa.codigoBc}}</div>
-            <div class="celula-listagem">{{empresa.valorMinimoMensal}}</div>
-            <div class="celula-listagem">{{empresa.minimoPorFuncionario}}</div>
-            <div class="celula-listagem">{{empresa.valorMes | currency:'BRL':'symbol':'1.2-2'}}</div>
+            <div class="celula-listagem">{{empresa.cnpj | cnpj }}</div>
             <div class="celula-listagem truncate text-xs">{{empresa.observacao}}</div>
             <div class="p-0 text-right">
               <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
@@ -96,11 +85,12 @@
     <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
   }
 
-  @if (mostrarFormularioNovo) {
+  @if (mostrarFormularioNovo || mostrarDetalhes) {
     <app-empresa-form
-      [empresa]="itemEdicao"
+      [empresa]="itemEdicao ? itemEdicao : itemSelecionado"
+      [isDetalhes]="mostrarDetalhes"
       (save)="onSalvarNovoEmpresa($event)"
-      (cancel)="cancelarNovo()"
+      (cancel)="cancelarNovo(); fecharDetalhes()"
     ></app-empresa-form>
   }
 

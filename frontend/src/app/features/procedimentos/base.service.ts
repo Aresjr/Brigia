@@ -50,7 +50,7 @@ export class BaseService<Entid extends Entidade, Request extends EntidadeRequest
     return this.backend.post<Request, Entid>(this.path, registro).pipe(
       catchError((e) => {
         const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
-        this.toastr.error(errorMessage, 'Erro ao cadastrar o registro.');
+        this.toastr.error(errorMessage, 'Erro ao salvar');
         return throwError(() => e);
       })
     );
@@ -61,7 +61,7 @@ export class BaseService<Entid extends Entidade, Request extends EntidadeRequest
     return this.backend.put<Request, Entid>(`${this.path}/${id}`, registro).pipe(
       catchError((e) => {
         const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
-        this.toastr.error(errorMessage, 'Erro ao atualizar o registro.');
+        this.toastr.error(errorMessage, 'Erro ao atualizar');
         return throwError(() => e);
       })
     );
@@ -72,7 +72,7 @@ export class BaseService<Entid extends Entidade, Request extends EntidadeRequest
     return this.backend.delete(`${this.path}/${id}`).pipe(
       catchError((e) => {
         const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
-        this.toastr.error(errorMessage, 'Erro ao excluir o registro. Por favor, tente novamente.');
+        this.toastr.error(errorMessage, 'Erro ao excluir. Por favor, tente novamente.');
         return throwError(() => e);
       })
     );
@@ -83,7 +83,7 @@ export class BaseService<Entid extends Entidade, Request extends EntidadeRequest
     return this.backend.patch<void>(`${this.path}/${id}/restaurar`, null).pipe(
       catchError((e) => {
         const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
-        this.toastr.error(errorMessage, 'Erro ao restaurar o registro. Por favor, tente novamente.');
+        this.toastr.error(errorMessage, 'Erro ao restaurar. Por favor, tente novamente.');
         return throwError(() => e);
       })
     );

@@ -87,6 +87,7 @@ export abstract class BaseListComponent<T extends Entidade> {
 
   fecharDetalhes(): void {
     this.itemSelecionado = null;
+    this.mostrarDetalhes = false;
   }
 
   fecharConfirmExclusao(): void {

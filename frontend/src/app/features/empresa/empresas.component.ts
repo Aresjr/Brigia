@@ -12,6 +12,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { ColorUtils } from '../../core/color-utils';
 import { FabComponent } from '../shared/fab/fab.component';
+import { CnpjPipe } from '../../core/pipes/cnpj.pipe';
 
 @Component({
   selector: 'app-empresas',
@@ -25,7 +26,8 @@ import { FabComponent } from '../shared/fab/fab.component';
     PaginationComponent,
     ConfirmDialogComponent,
     TopBarComponent,
-    FabComponent
+    FabComponent,
+    CnpjPipe
   ]
 })
 export class EmpresasComponent extends BaseListComponent<Empresa> implements OnInit {
@@ -60,14 +62,17 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
   }
 
   onSalvarNovoEmpresa(empresa: Partial<Empresa>) {
-    if (this.itemEdicao) {
-      const id = this.itemEdicao.id;
+    const itemEdicao = this.itemEdicao || this.itemSelecionado;
+    if (itemEdicao) {
+      const id = itemEdicao.id;
       this.empresasService.atualizar(id, empresa).subscribe({
         next: () => {
           this.toastr.success('Registro atualizado');
           this.carregarEmpresas();
           this.mostrarFormularioNovo = false;
+          this.mostrarDetalhes = false;
           this.itemEdicao = null;
+          this.itemSelecionado = null;
         }
       });
     } else {

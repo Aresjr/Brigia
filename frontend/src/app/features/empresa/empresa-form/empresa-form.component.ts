@@ -11,7 +11,6 @@ import { FormComponent } from '../../shared/form.component';
 import { forkJoin, map, Observable, tap } from 'rxjs';
 import { ColorUtils } from '../../../core/color-utils';
 import { ToastrService } from 'ngx-toastr';
-import { limitLength } from '../../../core/util-methods';
 
 @Component({
   selector: 'app-empresa-form',
@@ -30,6 +29,7 @@ import { limitLength } from '../../../core/util-methods';
 })
 export class EmpresaFormComponent extends FormComponent<EmpresaRequest> implements OnInit {
   @Input() empresa: Empresa | null = null;
+  @Input() isDetalhes: boolean = false;
 
   planos: EmpresaPlano[] = [];
 
@@ -63,6 +63,9 @@ export class EmpresaFormComponent extends FormComponent<EmpresaRequest> implemen
       this.form.patchValue({
         planoId: this.empresa?.plano?.id
       });
+      if (this.isDetalhes) {
+        this.form.disable();
+      }
     })
   }
 
@@ -76,6 +79,20 @@ export class EmpresaFormComponent extends FormComponent<EmpresaRequest> implemen
     return !!this.empresa;
   }
 
+  getTitulo(): string {
+    if (this.isDetalhes) {
+      return 'Detalhes Empresa';
+    } else if(this.empresa && !this.isDetalhes) {
+      return 'Editar Empresa';
+    } else {
+      return 'Nova Empresa';
+    }
+  }
+
+  habilitaEdicao() {
+    this.form.enable();
+    this.isDetalhes = false;
+  }
+
   protected readonly ColorUtils = ColorUtils;
-  protected readonly limitLength = limitLength;
 }
