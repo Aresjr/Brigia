@@ -10,6 +10,59 @@
     </div>
   } @else {
     <div class="min-h-[36rem]">
+      <div class="grid grid-cols-[1fr_1fr_1fr_1fr_1fr] mb-2">
+        <div class="max-w-64 px-6 py-2.5">
+          <label class="label-campo tooltip text-left" data-tip="Filtrar Status">
+            Status
+            <ng-select class="" placeholder="Todos">
+              <ng-template ng-notfound-tmp>
+                <span class="text-sm p-6">Nenhum resultado</span>
+              </ng-template>
+            </ng-select>
+          </label>
+        </div>
+        <div class="max-w-64 px-6 py-2.5">
+          <label class="label-campo">
+            Paciente
+            <ng-select class="campo-select" placeholder="Todos">
+              <ng-template ng-notfound-tmp>
+                <span class="text-sm p-6">Nenhum resultado</span>
+              </ng-template>
+            </ng-select>
+          </label>
+        </div>
+        <div class="max-w-64 px-6 py-2.5">
+          <label class="label-campo" for="tipoAgendamento">
+            Empresa
+            <ng-select class="campo-select" placeholder="Todos">
+              <ng-template ng-notfound-tmp>
+                <span class="text-sm p-6">Nenhum resultado</span>
+              </ng-template>
+            </ng-select>
+          </label>
+        </div>
+        <div class="max-w-64 px-6 py-2.5">
+          <label class="label-campo" for="tipoAgendamento">
+            Profissional
+            <ng-select class="campo-select" placeholder="Todos">
+              <ng-template ng-notfound-tmp>
+                <span class="text-sm p-6">Nenhum resultado</span>
+              </ng-template>
+            </ng-select>
+          </label>
+        </div>
+        <div class="max-w-64 px-6 py-2.5">
+          <label class="label-campo" for="tipoAgendamento">
+            Data Atendimento
+            <ng-select class="campo-select" placeholder="Todos">
+              <ng-template ng-notfound-tmp>
+                <span class="text-sm p-6">Nenhum resultado</span>
+              </ng-template>
+            </ng-select>
+          </label>
+        </div>
+      </div>
+
       <div class="titulo-listagem grid-cols-[1fr_1fr_1fr_1fr_1fr]">
         <div (click)="ordenar('status')" class="cabecalho-listagem rounded-tl-lg">
           <lucide-icon *ngIf="getSortIcon('status')" [name]="getSortIcon('status')" class="icone-ordenacao"/>

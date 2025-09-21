@@ -1,0 +1,50 @@
+<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm" (click)="fechar()">
+  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[58rem]" (click)="$event.stopPropagation()" *ngIf="contaReceber" >
+
+    <div class="flex justify-between items-center">
+      <div class="flex items-center gap-4 justify-between">
+        <h2 class="text-lg font-semibold">Conta a Receber</h2>
+        <div class="badge font-semibold p-3 text-base-100"
+          [ngClass]="'bg-['+ CorContaReceber[contaReceber.status] +']'">
+          {{ StatusContaReceberDescricao[contaReceber.status] }}
+        </div>
+      </div>
+
+      <div>
+        <button type="button" class="btn btn-sm btn-ghost btn-circle" title="Fechar" (click)="fechar()" title="Fechar">
+          <lucide-icon name="x" class="inline w-5 h-5"/>
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <div class="flex">
+        <div class="w-[8rem] mr-4" >
+          <label class="label-campo" for="data">
+            Data
+            Teste
+          </label>
+        </div>
+        <div class="w-[4rem] mr-4 group tooltip text-left" data-tip="Horário inicial do agendamento">
+          <label class="label-campo" for="hora">
+            Horário <span aria-hidden="true" class="text-error">*</span>
+            Teste
+          </label>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3 mt-6">
+        <button type="button" class="btn btn-ghost btn-sm" (click)="fechar()" >
+          Fechar
+        </button>
+        <button type="button" class="btn btn-primary btn-sm">
+          Abrir Atendimento
+        </button>
+        <button type="submit" class="btn btn-success btn-sm">
+          Salvar
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

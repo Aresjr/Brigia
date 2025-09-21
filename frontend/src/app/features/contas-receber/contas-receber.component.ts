@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ContaReceberService } from './contas-receber.service';
 import { ContaReceber } from './contas-receber.interface';
 import { LucideAngularModule } from 'lucide-angular';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
@@ -13,6 +13,7 @@ import {
   CorContaReceber,
   StatusContaReceberDescricao
 } from '../../core/constans';
+import { NgNotFoundTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-contas-receber',
@@ -24,7 +25,10 @@ import {
     FormsModule,
     PaginationComponent,
     TopBarComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    NgNotFoundTemplateDirective,
+    NgSelectComponent,
+    ReactiveFormsModule
   ]
 })
 export class ContaReceberComponent extends BaseListComponent<ContaReceber> implements OnInit {
