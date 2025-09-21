@@ -7,11 +7,11 @@ import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { ESTADOS, SEXOS } from '../../../core/constans';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
-import { ConveniosService } from '../../convenio/convenios.service';
+import { ConvenioService } from '../../convenio/convenio.service';
 import { Convenio } from '../../convenio/convenio.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
-import { EmpresasService } from '../../empresa/empresas.service';
+import { EmpresaService } from '../../empresa/empresa.service';
 import { Empresa } from '../../empresa/empresa.interface';
 import { FormComponent } from '../../shared/form.component';
 
@@ -34,8 +34,8 @@ export class PacienteFormComponent extends FormComponent<PacienteRequest> implem
     protected override fb: FormBuilder,
     protected override toastr: ToastrService,
     private http: HttpClient,
-    private conveniosService: ConveniosService,
-    private empresasService: EmpresasService
+    private convenioService: ConvenioService,
+    private empresaService: EmpresaService
   ) {
     super(fb, toastr);
     this.form = this.fb.group({
@@ -63,7 +63,7 @@ export class PacienteFormComponent extends FormComponent<PacienteRequest> implem
   }
 
   private carregarConvenios() {
-    this.conveniosService.listar().subscribe(
+    this.convenioService.listar().subscribe(
       response => {
         this.convenios = response.items;
         this.form.patchValue({
@@ -74,7 +74,7 @@ export class PacienteFormComponent extends FormComponent<PacienteRequest> implem
   }
 
   private carregarEmpresas() {
-    this.empresasService.listar().subscribe(
+    this.empresaService.listar().subscribe(
       response => {
         this.empresas = response.items;
         this.form.patchValue({

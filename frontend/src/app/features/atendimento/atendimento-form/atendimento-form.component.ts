@@ -7,7 +7,7 @@ import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-dir
 import { FormComponent } from '../../shared/form.component';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
-import { ProcedimentosService } from '../../procedimentos/procedimentos.service';
+import { ProcedimentoService } from '../../procedimentos/procedimento.service';
 import { Procedimento } from '../../procedimentos/procedimento.interface';
 import { ToastrService } from 'ngx-toastr';
 
@@ -36,7 +36,7 @@ export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> 
 
   constructor(protected override fb: FormBuilder,
               protected override toastr: ToastrService,
-              private procedimentosService: ProcedimentosService) {
+              private procedimentoService: ProcedimentoService) {
     super(fb, toastr);
     this.form = this.fb.group({
       anamnese: [null],
@@ -87,7 +87,7 @@ export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> 
   }
 
   carregarProcedimentos() {
-    this.procedimentosService.listar().subscribe({
+    this.procedimentoService.listar().subscribe({
       next: (response) => {
         this.procedimentos = response.items;
       }

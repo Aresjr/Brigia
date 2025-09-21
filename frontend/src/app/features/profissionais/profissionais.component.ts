@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProfissionaisService } from './profissionais.service';
+import { ProfissionalService } from './profissional.service';
 import { Profissional } from './profissional.interface';
 import { ProfissionalDetalhesComponent } from './profissional-detalhes/profissional-detalhes.component';
 import { ProfissionalFormComponent } from './profissional-form/profissional-form.component';
@@ -32,7 +32,7 @@ import { FabComponent } from '../shared/fab/fab.component';
 export class ProfissionaisComponent extends BaseListComponent<Profissional> implements OnInit {
   override nomeEntidade = 'Profissional';
 
-  constructor(private profissionaisService: ProfissionaisService, private toastr: ToastrService) {
+  constructor(private profissionalService: ProfissionalService, private toastr: ToastrService) {
     super();
   }
 
@@ -42,7 +42,7 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
 
   carregarProfissionais(): void {
     this.isLoading = true;
-    this.profissionaisService.listar().subscribe({
+    this.profissionalService.listar().subscribe({
       next: (response) => {
         this.itensInternos = response.items;
         this.itensExibicao = [...this.itensInternos];
@@ -65,7 +65,7 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
   onSalvarNovoProfissional(profissional: Partial<Profissional>) {
     if (this.itemEdicao) {
       const id = this.itemEdicao.id;
-      this.profissionaisService.atualizar(id, profissional).subscribe({
+      this.profissionalService.atualizar(id, profissional).subscribe({
         next: () => {
           this.toastr.success('Registro atualizado');
           this.carregarProfissionais();
@@ -74,7 +74,7 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
         }
       });
     } else {
-      this.profissionaisService.criar(profissional).subscribe({
+      this.profissionalService.criar(profissional).subscribe({
         next: () => {
           this.toastr.success('Profissional cadastrado');
           this.carregarProfissionais();
@@ -85,7 +85,7 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
   }
 
   restaurarItem($event: MouseEvent, profissional: Profissional) {
-    this.profissionaisService.restaurar(profissional.id).subscribe({
+    this.profissionalService.restaurar(profissional.id).subscribe({
       next: () => {
         profissional.excluido = false;
         this.toastr.success(`${this.nomeEntidade} restaurado com sucesso!`);

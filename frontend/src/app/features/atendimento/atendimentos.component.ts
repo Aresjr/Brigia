@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AtendimentosService } from './atendimentos.service';
+import { AtendimentoService } from './atendimento.service';
 import { Atendimento, AtendimentoRequest } from './atendimento.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
@@ -36,7 +36,7 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
   agendamentoId: number;
   atendimentoId: number;
 
-  constructor(private atendimentosService: AtendimentosService, private toastr: ToastrService,
+  constructor(private atendimentoService: AtendimentoService, private toastr: ToastrService,
               private router: Router) {
     super();
     const navigation = this.router.getCurrentNavigation();
@@ -55,7 +55,7 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
 
   carregarAtendimentos(): void {
     this.isLoading = true;
-    this.atendimentosService.listar(true).subscribe({
+    this.atendimentoService.listar(true).subscribe({
       next: (response) => {
         this.itensInternos = response.items;
         this.itensExibicao = [...this.itensInternos];
@@ -77,7 +77,7 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
   onSalvarNovoAtendimento(atendimento: Partial<AtendimentoRequest>) {
     if (this.itemEdicao) {
       const id = this.itemEdicao.id;
-      this.atendimentosService.atualizar(id, atendimento).subscribe({
+      this.atendimentoService.atualizar(id, atendimento).subscribe({
         next: () => {
           this.toastr.success('Registro atualizado');
           this.carregarAtendimentos();
@@ -86,7 +86,7 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
         }
       });
     } else if (this.atendimentoId != null) {
-      this.atendimentosService.finalizarAtendimento(this.atendimentoId, atendimento)
+      this.atendimentoService.finalizarAtendimento(this.atendimentoId, atendimento)
         .subscribe({
           next: () => {
             this.toastr.success(`${this.nomeEntidade} cadastrado`);
@@ -95,7 +95,7 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
           }
         });
     } else {
-      this.atendimentosService.criar(atendimento).subscribe({
+      this.atendimentoService.criar(atendimento).subscribe({
         next: () => {
           this.toastr.success(`${this.nomeEntidade} cadastrado`);
           this.carregarAtendimentos();
@@ -107,7 +107,7 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
 
   override excluir() {
     super.excluir();
-    this.atendimentosService.excluir(this.idExclusao).subscribe({
+    this.atendimentoService.excluir(this.idExclusao).subscribe({
       next: () => {
         this.toastr.success(`${this.nomeEntidade} excluído`);
         this.carregarAtendimentos();
@@ -118,7 +118,7 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
   restaurarItem(event: Event, atendimento: Atendimento) {
     event.stopPropagation();
 
-    this.atendimentosService.restaurar(atendimento.id).subscribe({
+    this.atendimentoService.restaurar(atendimento.id).subscribe({
       next: () => {
         atendimento.excluido = false;
         this.toastr.success(`${this.nomeEntidade} restaurado`);

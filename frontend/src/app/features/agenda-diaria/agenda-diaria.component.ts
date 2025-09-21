@@ -5,10 +5,10 @@ import { Agendamento, AgendamentoRequest } from './agendamento.interface';
 import { CalendarioComponent } from '../shared/calendario/calendario.component';
 import { CalendarEvent } from 'angular-calendar';
 import { NavigationEnd, Router } from '@angular/router';
-import { AgendamentosService } from './agendamentos.service';
+import { AgendamentoService } from './agendamento.service';
 import { ToastrService } from 'ngx-toastr';
 import { Profissional } from '../profissionais/profissional.interface';
-import { ProfissionaisService } from '../profissionais/profissionais.service';
+import { ProfissionalService } from '../profissionais/profissional.service';
 import { EventoFactory } from '../../core/evento-factory';
 import { UserService } from '../../core/user.service';
 import { LucideAngularModule } from 'lucide-angular';
@@ -51,9 +51,9 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   private subscription!: Subscription;
 
   constructor(private router: Router, private toastr: ToastrService,
-              private agendamentoService: AgendamentosService,
-              private profissionaisService: ProfissionaisService,
-              private pacientesService: PacienteService,
+              private agendamentoService: AgendamentoService,
+              private profissionalService: ProfissionalService,
+              private pacienteService: PacienteService,
               protected userService: UserService) {
     const navigation = this.router.getCurrentNavigation();
     const pacienteId = navigation?.extras.state?.['pacienteId'];
@@ -107,7 +107,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   }
 
   carregarProfissionais() {
-    this.profissionaisService.listar().subscribe({
+    this.profissionalService.listar().subscribe({
       next: value => {
         this.profissionais = value.items;
       }
@@ -115,7 +115,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   }
 
   carregarPacientes() {
-    this.pacientesService.listar().subscribe({
+    this.pacienteService.listar().subscribe({
       next: value => {
         this.pacientes = value.items;
       }

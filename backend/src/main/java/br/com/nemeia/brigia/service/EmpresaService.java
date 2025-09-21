@@ -38,13 +38,16 @@ public class EmpresaService {
 
     public Empresa createEmpresa(EmpresaRequest request) {
         Empresa empresa = mapper.toEntity(request);
+        if (request.planoId() != null) {
+          empresa.setPlano(empresaPlanoService.getById(request.planoId()));
+        }
+
         return repository.save(empresa);
     }
 
     public Empresa editEmpresa(Long id, EmpresaRequest request) {
         getById(id);
         Empresa empresa = mapper.toEntity(request);
-
         if (request.planoId() != null) {
             EmpresaPlano empresaPlano = empresaPlanoService.getById(request.planoId());
             empresa.setPlano(empresaPlano);

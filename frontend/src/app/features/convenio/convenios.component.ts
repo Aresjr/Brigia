@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ConveniosService } from './convenios.service';
+import { ConvenioService } from './convenio.service';
 import { Convenio } from './convenio.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
@@ -30,7 +30,7 @@ import { FabComponent } from '../shared/fab/fab.component';
 export class ConveniosComponent extends BaseListComponent<Convenio> implements OnInit {
   override nomeEntidade = 'Convênio';
 
-  constructor(private conveniosService: ConveniosService, private toastr: ToastrService) {
+  constructor(private convenioService: ConvenioService, private toastr: ToastrService) {
     super();
   }
 
@@ -40,7 +40,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
 
   carregarConvenios(): void {
     this.isLoading = true;
-    this.conveniosService.listar(true).subscribe({
+    this.convenioService.listar(true).subscribe({
       next: (response) => {
         this.itensInternos = response.items;
         this.itensExibicao = [...this.itensInternos];
@@ -61,7 +61,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
   onSalvarNovoConvenio(convenio: Partial<Convenio>) {
     if (this.itemEdicao) {
       const id = this.itemEdicao.id;
-      this.conveniosService.atualizar(id, convenio).subscribe({
+      this.convenioService.atualizar(id, convenio).subscribe({
         next: () => {
           this.toastr.success('Registro atualizado');
           this.carregarConvenios();
@@ -70,7 +70,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
         }
       });
     } else {
-      this.conveniosService.criar(convenio).subscribe({
+      this.convenioService.criar(convenio).subscribe({
         next: () => {
           this.toastr.success(`${this.nomeEntidade} cadastrado`);
           this.carregarConvenios();
@@ -82,7 +82,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
 
   override excluir() {
     super.excluir();
-    this.conveniosService.excluir(this.idExclusao).subscribe({
+    this.convenioService.excluir(this.idExclusao).subscribe({
       next: () => {
         this.toastr.success(`${this.nomeEntidade} excluído`);
         this.carregarConvenios();
@@ -93,7 +93,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
   restaurarItem(event: Event, convenio: Convenio) {
     event.stopPropagation();
 
-    this.conveniosService.restaurar(convenio.id).subscribe({
+    this.convenioService.restaurar(convenio.id).subscribe({
       next: () => {
         convenio.excluido = false;
         this.toastr.success(`${this.nomeEntidade} restaurado`);

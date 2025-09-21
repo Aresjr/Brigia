@@ -3,21 +3,21 @@ import { Paciente } from '../pacientes/paciente.interface';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PacienteService } from '../pacientes/paciente.service';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
-import { ConveniosService } from '../convenio/convenios.service';
+import { ConvenioService } from '../convenio/convenio.service';
 import { Convenio } from '../convenio/convenio.interface';
 import { Profissional } from '../profissionais/profissional.interface';
 import { Especialidade } from '../especialidade/especialidade.interface';
 import { EspecialidadeService } from '../especialidade/especialidade.service';
-import { ProfissionaisService } from '../profissionais/profissionais.service';
+import { ProfissionalService } from '../profissionais/profissional.service';
 import { DatePipe, NgClass, NgIf } from '@angular/common';
 import { EmptyToNullDirective } from '../../core/directives/empty-to-null-directive';
 import { NgxMaskDirective } from 'ngx-mask';
 import { Empresa } from '../empresa/empresa.interface';
-import { EmpresasService } from '../empresa/empresas.service';
+import { EmpresaService } from '../empresa/empresa.service';
 import { PacienteFormComponent } from '../pacientes/paciente-form/paciente-form.component';
 import { ToastrService } from 'ngx-toastr';
 import { Procedimento } from '../procedimentos/procedimento.interface';
-import { ProcedimentosService } from '../procedimentos/procedimentos.service';
+import { ProcedimentoService } from '../procedimentos/procedimento.service';
 import { FormComponent } from '../shared/form.component';
 import { Agendamento, AgendamentoRequest, podeEditarAgendamento } from './agendamento.interface';
 import { IForm } from '../shared/form.interface';
@@ -35,7 +35,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
 import { UserService } from '../../core/user.service';
 import { ColorUtils } from '../../core/color-utils';
 import { Router } from '@angular/router';
-import { AtendimentosService } from '../atendimento/atendimentos.service';
+import { AtendimentoService } from '../atendimento/atendimento.service';
 
 @Component({
   selector: 'app-agendamento-form',
@@ -80,11 +80,11 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
   protected readonly limitLength = limitLength;
 
   constructor(protected override fb: FormBuilder, protected override toastr: ToastrService,
-              private pacientesService: PacienteService, private conveniosService: ConveniosService,
-              private especialidadeService: EspecialidadeService, private profissionaisService: ProfissionaisService,
-              private empresasService: EmpresasService, private procedimentosService: ProcedimentosService,
+              private pacienteService: PacienteService, private convenioService: ConvenioService,
+              private especialidadeService: EspecialidadeService, private profissionalService: ProfissionalService,
+              private empresaService: EmpresaService, private procedimentoService: ProcedimentoService,
               protected userService: UserService, private router: Router,
-              private atendimentosService: AtendimentosService) {
+              private atendimentoService: AtendimentoService) {
     super(fb, toastr);
     this.hoje = new Date().toISOString().split('T')[0];
     const form: IForm<AgendamentoRequest> = {
@@ -163,13 +163,13 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
   }
 
   carregarPacientes(): Observable<Paciente[]> {
-    return this.pacientesService.listar().pipe(
+    return this.pacienteService.listar().pipe(
       map(response => response.items),
       tap(pacientes => this.pacientes = pacientes));
   }
 
   carregarConvenios(): Observable<Convenio[]> {
-    return this.conveniosService.listar().pipe(
+    return this.convenioService.listar().pipe(
       map(response => response.items),
       tap(convenios => this.convenios = convenios));
   }
@@ -181,20 +181,20 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
   }
 
   carregarProfissionais(): Observable<Profissional[]> {
-    return this.profissionaisService.listar().pipe(
+    return this.profissionalService.listar().pipe(
       map(response => response.items),
       tap(profissionais => { this.profissionais = profissionais;
         this.profissionaisFiltrados = profissionais;}));
   }
 
   carregarEmpresas(): Observable<Empresa[]> {
-    return this.empresasService.listar().pipe(
+    return this.empresaService.listar().pipe(
       map(response => response.items),
       tap(empresas => this.empresas = empresas));
   }
 
   carregarProcedimentos(): Observable<Procedimento[]> {
-    return this.procedimentosService.listar().pipe(
+    return this.procedimentoService.listar().pipe(
       map(response => response.items),
       tap(procedimentos => this.procedimentos = procedimentos));
   }
@@ -234,7 +234,7 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
   }
 
   salvarNovoPaciente(paciente: Partial<Paciente>) {
-    this.pacientesService.criar(paciente).subscribe({
+    this.pacienteService.criar(paciente).subscribe({
       next: (paciente) => {
         this.toastr.success('Paciente cadastrado');
         this.carregarPacientes();
@@ -283,7 +283,7 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
 
   atualizaPreco() {
     if (this.procedimentoSelecionado && this.convenioSelecionado) {
-      this.procedimentosService.obterPrecoProcedimentoConvenio(this.procedimentoSelecionado.id, this.convenioSelecionado.id).subscribe({
+      this.procedimentoService.obterPrecoProcedimentoConvenio(this.procedimentoSelecionado.id, this.convenioSelecionado.id).subscribe({
         next: (response) => {
           this.form.patchValue({
             valor: response.preco
@@ -322,7 +322,7 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
     this.isLoading = true;
 
     const agendamentoId = agendamento.id;
-    return this.atendimentosService.iniciarAtendimento(agendamentoId)
+    return this.atendimentoService.iniciarAtendimento(agendamentoId)
       .subscribe({
         next: (response) => {
           const atendimentoId = response.id;

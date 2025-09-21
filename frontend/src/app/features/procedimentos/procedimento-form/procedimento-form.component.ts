@@ -7,7 +7,7 @@ import {
   ProcedimentoRequest
 } from '../procedimento.interface';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
-import { ConveniosService } from '../../convenio/convenios.service';
+import { ConvenioService } from '../../convenio/convenio.service';
 import { Convenio } from '../../convenio/convenio.interface';
 import { EspecialidadeService } from '../../especialidade/especialidade.service';
 import { Especialidade } from '../../especialidade/especialidade.interface';
@@ -42,7 +42,7 @@ export class ProcedimentoFormComponent extends FormComponent<ProcedimentoRequest
   constructor(
     protected override fb: FormBuilder,
     protected override toastr: ToastrService,
-    private conveniosService: ConveniosService,
+    private convenioService: ConvenioService,
     private especialidadeService: EspecialidadeService,
   ) {
     super(fb, toastr);
@@ -93,7 +93,7 @@ export class ProcedimentoFormComponent extends FormComponent<ProcedimentoRequest
   }
 
   private loadConvenios(): Observable<Convenio[]> {
-    return this.conveniosService.listar()
+    return this.convenioService.listar()
       .pipe(
         map(response => response.items),
         tap(convenios => {

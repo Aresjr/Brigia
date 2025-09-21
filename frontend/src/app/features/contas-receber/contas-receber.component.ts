@@ -7,13 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
-import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { LoadingSpinnerComponent } from '../shared/loading/loading-spinner.component';
 import {
-  CorAgendamento, CorAtendimento,
   CorContaReceber,
-  StatusAgendamentoDescricao, StatusAtendimentoDescricao,
   StatusContaReceberDescricao
 } from '../../core/constans';
 
@@ -26,7 +23,6 @@ import {
     LucideAngularModule,
     FormsModule,
     PaginationComponent,
-    ConfirmDialogComponent,
     TopBarComponent,
     LoadingSpinnerComponent
   ]
@@ -83,8 +79,5 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
   }
 
   protected readonly StatusContaReceberDescricao = StatusContaReceberDescricao;
-  protected readonly StatusDescricao = StatusAgendamentoDescricao;
-  protected readonly CorAtendimento = CorAgendamento;
   protected readonly CorContaReceber = CorContaReceber;
-  protected readonly StatusAtendimentoDescricao = StatusAtendimentoDescricao;
 }

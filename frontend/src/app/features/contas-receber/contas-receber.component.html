@@ -31,12 +31,11 @@
           <lucide-icon *ngIf="getSortIcon('dataAtendimento')" [name]="getSortIcon('dataAtendimento')" class="icone-ordenacao"/>
           Data Atendimento
         </div>
-        <!-- TODO - adicionar os outros campos -->
       </div>
 
       <div class="itens-listagem">
         @for (contaReceber of getItensPaginados(); track contaReceber.id) {
-          <div class="item-listagem grid-cols-[1fr_1fr_1fr_1fr_1fr]">
+          <div class="item-listagem grid-cols-[1fr_1fr_1fr_1fr_1fr]" (click)="selecionar(contaReceber)">
             <div class="celula-listagem flex items-center px-4 py-1.5">
               <div class="badge text-base-100" [ngClass]="'bg-['+ CorContaReceber[contaReceber.status] +']'">
                 {{ StatusContaReceberDescricao[contaReceber.status] }}
@@ -53,12 +52,5 @@
 
     <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
   }
-
-  <app-confirm-dialog
-    *ngIf="exibeConfirmExclusao"
-    message="Deseja realmente excluir este convênio?"
-    (confirm)="excluir()"
-    (cancel)="fecharConfirmExclusao()"
-  ></app-confirm-dialog>
 
 </div>

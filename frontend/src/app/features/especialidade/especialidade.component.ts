@@ -32,7 +32,7 @@ import { LoadingSpinnerComponent } from '../shared/loading/loading-spinner.compo
 export class EspecialidadeComponent extends BaseListComponent<Especialidade> implements OnInit {
   override nomeEntidade = 'Especialidade';
 
-  constructor(private especialidadesService: EspecialidadeService, private toastr: ToastrService) {
+  constructor(private especialidadeService: EspecialidadeService, private toastr: ToastrService) {
     super();
   }
 
@@ -42,7 +42,7 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
 
   carregarEspecialidades(): void {
     this.isLoading = true;
-    this.especialidadesService.listar(true).subscribe({
+    this.especialidadeService.listar(true).subscribe({
       next: (response) => {
         this.itensInternos = response.items;
         this.itensExibicao = [...this.itensInternos];
@@ -63,7 +63,7 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
   onSalvarNovoEspecialidades(especialidade: Partial<Especialidade>) {
     if (this.itemEdicao) {
       const id = this.itemEdicao.id;
-      this.especialidadesService.atualizar(id, especialidade).subscribe({
+      this.especialidadeService.atualizar(id, especialidade).subscribe({
         next: () => {
           this.toastr.success(`${this.nomeEntidade} atualizada`);
           this.carregarEspecialidades();
@@ -72,7 +72,7 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
         }
       });
     } else {
-      this.especialidadesService.criar(especialidade).subscribe({
+      this.especialidadeService.criar(especialidade).subscribe({
         next: () => {
           this.toastr.success(`${this.nomeEntidade} cadastrada`);
           this.carregarEspecialidades();
@@ -84,7 +84,7 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
 
   override excluir() {
     super.excluir();
-    this.especialidadesService.excluir(this.idExclusao).subscribe({
+    this.especialidadeService.excluir(this.idExclusao).subscribe({
       next: () => {
         this.toastr.success(`${this.nomeEntidade} excluída`);
         this.carregarEspecialidades();
@@ -95,7 +95,7 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
   restaurarItem(event: Event, especialidade: Especialidade) {
     //event.stopPropagation();
 
-    this.especialidadesService.restaurar(especialidade.id).subscribe({
+    this.especialidadeService.restaurar(especialidade.id).subscribe({
       next: () => {
         especialidade.excluido = false;
         this.toastr.success(`${this.nomeEntidade} restaurada com sucesso!`);

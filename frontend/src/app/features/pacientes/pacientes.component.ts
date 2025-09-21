@@ -36,7 +36,7 @@ import { UserService } from '../../core/user.service';
 export class PacientesComponent extends BaseListComponent<Paciente> implements OnInit {
   override nomeEntidade = 'Paciente';
 
-  constructor(private pacientesService: PacienteService, private toastr: ToastrService,
+  constructor(private pacienteService: PacienteService, private toastr: ToastrService,
               private router: Router, private userService: UserService) {
     super();
   }
@@ -47,7 +47,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
 
   carregarPacientes(): void {
     this.isLoading = true;
-    this.pacientesService.listar().subscribe({
+    this.pacienteService.listar().subscribe({
       next: (response) => {
         this.itensInternos = response.items;
         this.itensExibicao = [...this.itensInternos];
@@ -70,7 +70,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
   salvarNovoPaciente(paciente: Partial<Paciente>) {
     if (this.itemEdicao) {
       const id = this.itemEdicao.id;
-      this.pacientesService.atualizar(id, paciente).subscribe({
+      this.pacienteService.atualizar(id, paciente).subscribe({
         next: () => {
           this.toastr.success('Registro atualizado');
           this.carregarPacientes();
@@ -79,7 +79,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
         }
       });
     } else {
-      this.pacientesService.criar(paciente).subscribe({
+      this.pacienteService.criar(paciente).subscribe({
         next: () => {
           this.toastr.success('Paciente cadastrado');
           this.carregarPacientes();

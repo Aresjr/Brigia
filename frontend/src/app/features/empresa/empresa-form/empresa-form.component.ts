@@ -5,7 +5,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { Empresa, EmpresaPlano, EmpresaRequest } from '../empresa.interface';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
 import { NgxMaskDirective } from 'ngx-mask';
-import { EmpresasService } from '../empresas.service';
+import { EmpresaService } from '../empresa.service';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { FormComponent } from '../../shared/form.component';
 import { forkJoin, map, Observable, tap } from 'rxjs';
@@ -36,7 +36,7 @@ export class EmpresaFormComponent extends FormComponent<EmpresaRequest> implemen
   constructor(
     protected override fb: FormBuilder,
     protected override toastr: ToastrService,
-    private empresasService: EmpresasService
+    private empresaService: EmpresaService
   ) {
     super(fb, toastr);
     this.form = this.fb.group({
@@ -70,7 +70,7 @@ export class EmpresaFormComponent extends FormComponent<EmpresaRequest> implemen
   }
 
   private carregarPlanos(): Observable<EmpresaPlano[]> {
-    return this.empresasService.getPlanos().pipe(
+    return this.empresaService.getPlanos().pipe(
         map(response => response.items),
         tap(planos => this.planos = planos));
   }

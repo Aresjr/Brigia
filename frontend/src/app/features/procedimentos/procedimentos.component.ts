@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProcedimentosService } from './procedimentos.service';
+import { ProcedimentoService } from './procedimento.service';
 import { Procedimento } from './procedimento.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
@@ -32,7 +32,7 @@ import { FabComponent } from '../shared/fab/fab.component';
 export class ProcedimentosComponent extends BaseListComponent<Procedimento> implements OnInit {
   override nomeEntidade = 'Procedimento';
 
-  constructor(private procedimentosService: ProcedimentosService, private toastr: ToastrService) {
+  constructor(private procedimentoService: ProcedimentoService, private toastr: ToastrService) {
     super();
   }
 
@@ -42,7 +42,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
 
   carregarProcedimentos(): void {
     this.isLoading = true;
-    this.procedimentosService.listar(true).subscribe({
+    this.procedimentoService.listar(true).subscribe({
       next: (response) => {
         this.itensInternos = response.items;
         this.itensExibicao = [...this.itensInternos];
@@ -65,7 +65,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
   onSalvarNovo(procedimento: Partial<Procedimento>) {
     if (this.itemEdicao) {
       const id = this.itemEdicao.id;
-      this.procedimentosService.atualizar(id, procedimento).subscribe({
+      this.procedimentoService.atualizar(id, procedimento).subscribe({
         next: () => {
           this.toastr.success(`Registro atualizado`);
           this.carregarProcedimentos();
@@ -74,7 +74,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
         }
       });
     } else {
-      this.procedimentosService.criar(procedimento).subscribe({
+      this.procedimentoService.criar(procedimento).subscribe({
         next: () => {
           this.toastr.success(`${this.nomeEntidade} cadastrado`);
           this.carregarProcedimentos();
@@ -86,7 +86,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
 
   override excluir() {
     super.excluir();
-    this.procedimentosService.excluir(this.idExclusao).subscribe({
+    this.procedimentoService.excluir(this.idExclusao).subscribe({
       next: () => {
         this.toastr.success(`${this.nomeEntidade} excluído`);
         this.carregarProcedimentos();
@@ -97,7 +97,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
   restaurar(event: Event, procedimento: Procedimento) {
     event.stopPropagation();
 
-    this.procedimentosService.restaurar(procedimento.id).subscribe({
+    this.procedimentoService.restaurar(procedimento.id).subscribe({
       next: () => {
         procedimento.excluido = false;
         this.toastr.success(`${this.nomeEntidade} restaurado`);

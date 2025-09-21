@@ -7,7 +7,7 @@ import { PagedResponse } from '../shared/entidade.interface';
 @Injectable({
   providedIn: 'root'
 })
-export class AgendamentosService extends BaseService<Agendamento, AgendamentoRequest> {
+export class AgendamentoService extends BaseService<Agendamento, AgendamentoRequest> {
 
   override path = '/agendamentos';
 

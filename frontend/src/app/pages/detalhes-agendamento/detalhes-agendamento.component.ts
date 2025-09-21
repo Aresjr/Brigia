@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { AgendamentoDetalhes } from '../../features/agenda-diaria/agendamento.interface';
 import { DatePipe, NgIf } from '@angular/common';
-import { AgendamentosService } from '../../features/agenda-diaria/agendamentos.service';
+import { AgendamentoService } from '../../features/agenda-diaria/agendamento.service';
 import { LoadingSpinnerComponent } from '../../features/shared/loading/loading-spinner.component';
 
 @Component({
@@ -27,7 +27,7 @@ export class DetalhesAgendamentoComponent implements OnInit {
     agendamentoNaoEncontrado: boolean = false;
 
     constructor(private route: ActivatedRoute,
-                private agendamentoService: AgendamentosService) {}
+                private agendamentoService: AgendamentoService) {}
 
     ngOnInit(): void {
         this.isLoading = true;

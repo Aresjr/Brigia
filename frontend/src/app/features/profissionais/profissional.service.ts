@@ -5,7 +5,7 @@ import { BaseService } from '../procedimentos/base.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ProfissionaisService extends BaseService<Profissional, ProfissionalRequest> {
+export class ProfissionalService extends BaseService<Profissional, ProfissionalRequest> {
 
   override path = '/profissionais';
 }

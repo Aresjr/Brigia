@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EmpresasService } from './empresas.service';
+import { EmpresaService } from './empresa.service';
 import { Empresa } from './empresa.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
@@ -33,7 +33,7 @@ import { CnpjPipe } from '../../core/pipes/cnpj.pipe';
 export class EmpresasComponent extends BaseListComponent<Empresa> implements OnInit {
   override nomeEntidade = 'Empresa';
 
-  constructor(private empresasService: EmpresasService, private toastr: ToastrService) {
+  constructor(private empresaService: EmpresaService, private toastr: ToastrService) {
     super();
   }
 
@@ -43,7 +43,7 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
 
   carregarEmpresas(): void {
     this.isLoading = true;
-    this.empresasService.listar(true).subscribe({
+    this.empresaService.listar(true).subscribe({
       next: (response) => {
         this.itensInternos = response.items;
         this.itensExibicao = [...this.itensInternos];
@@ -65,7 +65,7 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
     const itemEdicao = this.itemEdicao || this.itemSelecionado;
     if (itemEdicao) {
       const id = itemEdicao.id;
-      this.empresasService.atualizar(id, empresa).subscribe({
+      this.empresaService.atualizar(id, empresa).subscribe({
         next: () => {
           this.toastr.success('Registro atualizado');
           this.carregarEmpresas();
@@ -76,7 +76,7 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
         }
       });
     } else {
-      this.empresasService.criar(empresa).subscribe({
+      this.empresaService.criar(empresa).subscribe({
         next: () => {
           this.toastr.success('Empresa cadastrada');
           this.carregarEmpresas();
@@ -88,7 +88,7 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
 
   override excluir() {
     super.excluir();
-    this.empresasService.excluir(this.idExclusao).subscribe({
+    this.empresaService.excluir(this.idExclusao).subscribe({
       next: () => {
         this.toastr.success('Empresa excluída');
         this.carregarEmpresas();
@@ -99,7 +99,7 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
   restaurarItem(event: Event, empresa: Empresa) {
     event.stopPropagation();
 
-    this.empresasService.restaurar(empresa.id).subscribe({
+    this.empresaService.restaurar(empresa.id).subscribe({
       next: () => {
         empresa.excluido = false;
         this.toastr.success('Empresa restaurada');

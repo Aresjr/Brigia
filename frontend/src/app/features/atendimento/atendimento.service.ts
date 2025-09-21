@@ -6,7 +6,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class AtendimentosService extends BaseService<Atendimento, AtendimentoRequest> {
+export class AtendimentoService extends BaseService<Atendimento, AtendimentoRequest> {
 
   override path = '/atendimentos';
 

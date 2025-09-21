@@ -7,7 +7,7 @@ import { PagedResponse } from '../shared/entidade.interface';
 @Injectable({
   providedIn: 'root'
 })
-export class EmpresasService extends BaseService<Empresa, EmpresaRequest> {
+export class EmpresaService extends BaseService<Empresa, EmpresaRequest> {
 
   override path = '/empresas';
 
