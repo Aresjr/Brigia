@@ -43,7 +43,7 @@
           <div class="item-listagem grid-cols-[10rem_1fr_7rem_6rem_6rem_12rem_32px]"
                [class.bg-error]="atendimento.excluido"
                [class.bg-opacity-50]="atendimento.excluido"
-               (click)="selecionar(atendimento); mostrarFormularioNovo = true;">
+               (click)="selecionar(atendimento);">
             <div class="celula-listagem flex items-center px-4">
               <div class="badge text-base-100" [ngClass]="'bg-['+CorAtendimento[atendimento.status]+']'">
                 {{ StatusAtendimentoDescricao[atendimento.status] }}

@@ -112,10 +112,6 @@ input[type="number"] {
   @apply fixed right-0 top-0 h-full w-[36rem] bg-base-100 shadow-lg z-50 overflow-y-auto transform transition-all duration-500 ease-linear;
 }
 
-.placeholder-esquerdo {
-  @apply absolute px-2 py-3 shrink-0 text-base text-neutral select-none sm:text-sm;
-}
-
 .tab-atendimento {
   @apply tab font-bold text-base-content/40 hover:text-primary/70;
 }

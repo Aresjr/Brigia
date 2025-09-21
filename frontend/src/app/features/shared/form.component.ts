@@ -33,7 +33,7 @@ export abstract class FormComponent<Request extends EntidadeRequest> {
     this.cancel.emit();
   }
 
-  styleClassesField(field: string, isReadOnly: boolean = false): string[] {
+  classesCampo(field: string, isReadOnly: boolean = false): string[] {
     const classes = [];
     if (this.isInvalid(field)) {
       classes.push('border', 'border-error');

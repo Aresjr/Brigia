@@ -2,6 +2,8 @@ import { Entidade, EntidadeRequest } from '../shared/entidade.interface';
 
 export interface Empresa extends Entidade {
     observacao: string | null;
+    email: string | null;
+    cnpj: string | null;
     codigoBc: string | null;
     valorMinimoMensal: number | null;
     minimoPorFuncionario: number | null;
@@ -12,6 +14,8 @@ export interface Empresa extends Entidade {
 
 export interface EmpresaRequest extends EntidadeRequest {
     observacao: string | null;
+    email: string | null;
+    cnpj: string | null;
     codigoBc: string | null;
     valorMinimoMensal: number | null;
     minimoPorFuncionario: number | null;

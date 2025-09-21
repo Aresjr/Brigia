@@ -20,11 +20,12 @@
         <div class="flex space-x-4">
           <div class="w-24 tooltip text-left" data-tip="Valor (Particular)">
             <label class="label-campo">Valor</label>
-            <div class="placeholder-esquerdo py-[13px]">R$</div>
-            <input type="text" formControlName="valorPadrao" min="1" max="99999" id="valor"
-                   (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
-                   mask="separator.2" thousandSeparator="" decimalMarker="," required
-                   class="campo pl-7 py-[7px]" [ngClass]="styleClassesField('valor')">
+            <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
+              R$ <input type="text" formControlName="valorPadrao" min="1" max="99999" id="valor"
+                        (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
+                        mask="separator.2" thousandSeparator="" decimalMarker="," required
+                        class="campo border-0" [ngClass]="classesCampo('valor')">
+            </label>
             <div *ngIf="isInvalid('valor')" class="text-error text-sm">
               Obrigatório
             </div>
@@ -33,7 +34,7 @@
           <div class="w-[27rem]">
             <label class="label-campo">Especialidade</label>
             <ng-select formControlName="especialidadeId" class="campo-select" required placeholder="Selecione"
-                       [ngClass]="styleClassesField('especialidadeId')" labelForId="especialidadeId">
+                       [ngClass]="classesCampo('especialidadeId')" labelForId="especialidadeId">
               @for(especialidade of this.especialidades; track especialidade.id) {
                 <ng-option [value]="especialidade.id" class="b-0">{{ especialidade.nome }}</ng-option>
               }
@@ -46,7 +47,7 @@
 
         <div>
           <label class="label-campo">Observações</label>
-          <textarea id="observacoes" formControlName="observacoes" rows="5" emptyToNull class="campo" >
+          <textarea id="observacoes" formControlName="observacoes" rows="2" emptyToNull class="campo" >
           </textarea>
         </div>
 
@@ -72,7 +73,7 @@
               <input type="text" [id]="'preco_' + i" formControlName="preco" required
                      mask="separator.2" thousandSeparator="" decimalMarker=","
                      class="campo mt-0 p-2 text-right" min="0" max="99999" step="1"
-                     [ngClass]="styleClassesField('preco_' + i)" >
+                     [ngClass]="classesCampo('preco_' + i)" >
 
               <input [id]="'repasse_' + i" type="number" formControlName="repasse"
                      mask="separator.2" thousandSeparator="" decimalMarker=","

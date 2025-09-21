@@ -12,8 +12,7 @@
       <div class="space-y-4">
         <div>
           <label class="label-campo">Nome</label>
-          <input type="text" formControlName="nome" name="nome" required class="campo"
-             [ngClass]="{'border-error': form.get('nome')?.invalid && form.get('nome')?.touched}" >
+          <input type="text" formControlName="nome" name="nome" required class="campo" [ngClass]="classesCampo('nome')" >
               @if (form.get('nome')?.touched) {
                 <div *ngIf="isInvalid('nome')" class="text-error text-sm">
                   Obrigatório
@@ -33,8 +32,7 @@
           <div class="w-56">
             <label class="label-campo">Data Nascimento</label>
             <input type="date" formControlName="dataNascimento" required
-                   class="campo"
-                   [ngClass]="{'border-error': form.get('dataNascimento')?.invalid && form.get('dataNascimento')?.touched}" >
+                   class="campo" [ngClass]="classesCampo('dataNascimento')" >
             @if (form.get('dataNascimento')?.touched) {
               <div *ngIf="isInvalid('dataNascimento')" class="text-error text-sm">
                 Obrigatório
@@ -81,8 +79,7 @@
 
         <div>
           <label class="label-campo">Especialidades</label>
-          <ng-select [multiple]="true" formControlName="especialidades" required class="campo-select w-full"
-                     [ngClass]="{'border-error': form.get('especialidades')?.invalid && form.get('especialidades')?.touched}" >
+          <ng-select [multiple]="true" formControlName="especialidades" required class="campo-select w-full" [ngClass]="classesCampo('especialidades')" >
             @for (especialidade of this.listaEspecialidades; track especialidade.id) {
               <ng-option [value]="especialidade.id">{{especialidade.nome}}</ng-option>
             }

@@ -13,58 +13,74 @@
 
         <div>
           <label class="label-campo">Nome</label>
-          <input type="text" formControlName="nome"
-                 class="campo">
+          <input type="text" formControlName="nome" class="campo" required [ngClass]="classesCampo('nome')">
+          <div *ngIf="isInvalid('nome')" class="text-error text-sm">
+            Obrigatório
+          </div>
         </div>
 
-        <div>
-          <label class="label-campo">Código BC</label>
-          <input type="text" formControlName="codigoBc"
-                 class="campo">
+        <div class="flex gap-3">
+          <div class="w-full">
+            <label class="label-campo">Código BC</label>
+            <input type="text" formControlName="codigoBc" class="campo">
+          </div>
+          <div class="w-full">
+            <label class="label-campo">CNPJ</label>
+            <input type="text" formControlName="cnpj" class="campo" mask="00.000.000/0000-00">
+          </div>
         </div>
 
         <div class="flex gap-3">
           <div class="w-full">
             <label class="label-campo">Valor Mín. Mensal</label>
-            <div class="placeholder-esquerdo p-3.5">R$</div>
-            <input type="text" formControlName="valorMinimoMensal" class="campo pl-9 py-[7px]" mask="separator.2"
-                   thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
+            <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
+              R$ <input type="text" formControlName="valorMinimoMensal" class="campo border-0" mask="separator.2"
+                     thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
+            </label>
           </div>
 
           <div class="w-full">
             <label class="label-campo">Mín. por Funcionário</label>
-            <div class="placeholder-esquerdo p-3.5">R$</div>
-            <input type="text" formControlName="minimoPorFuncionario" class="campo pl-9" mask="separator.2"
-                   thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
+            <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
+              R$ <input type="text" formControlName="minimoPorFuncionario" class="campo border-0" mask="separator.2"
+                     thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
+            </label>
           </div>
 
           <div class="w-full">
             <label class="label-campo">Valor Mês</label>
-            <div class="placeholder-esquerdo p-3.5">R$</div>
-            <input type="text" formControlName="valorMes" class="campo pl-9" mask="separator.2"
-                   thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
+            <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
+              R$ <input type="text" formControlName="valorMes" class="campo border-0" mask="separator.2"
+                        thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
+            </label>
           </div>
         </div>
 
-        <div>
-          <label class="label-campo">
-            Plano
-            <ng-select formControlName="planoId" class="campo-select"
-                       [ngClass]="styleClassesField('planoId')"
-                       labelForId="planoId" >
-              @for (plano of planos; track plano.id) {
-                <ng-option [value]="plano.id">
-                  <div [ngClass]="ColorUtils.getColorClasses(plano)"
-                       class="p-1 -m-1 rounded-lg text-sm">
-                    {{plano.nome}}
-                  </div>
-                </ng-option>
-              }
-              <ng-template ng-notfound-tmp>
-                <span class="text-sm p-6">Nenhum resultado</span>
-              </ng-template>
-            </ng-select>
-          </label>
+        <div class="flex gap-3">
+          <div class="w-full">
+            <label class="label-campo">
+              Plano
+              <ng-select formControlName="planoId" class="campo-select"
+                         [ngClass]="classesCampo('planoId')"
+                         labelForId="planoId" >
+                @for (plano of planos; track plano.id) {
+                  <ng-option [value]="plano.id">
+                    <div [ngClass]="ColorUtils.getColorClasses(plano)"
+                         class="p-1 -m-1 rounded-lg text-sm">
+                      {{plano.nome}}
+                    </div>
+                  </ng-option>
+                }
+                <ng-template ng-notfound-tmp>
+                  <span class="text-sm p-6">Nenhum resultado</span>
+                </ng-template>
+              </ng-select>
+            </label>
+          </div>
+          <div class="w-full">
+            <label class="label-campo">Email</label>
+            <input type="email" formControlName="email" class="campo">
+          </div>
         </div>
 
         <div>

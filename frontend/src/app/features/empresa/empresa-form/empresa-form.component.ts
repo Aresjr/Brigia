@@ -11,6 +11,7 @@ import { FormComponent } from '../../shared/form.component';
 import { forkJoin, map, Observable, tap } from 'rxjs';
 import { ColorUtils } from '../../../core/color-utils';
 import { ToastrService } from 'ngx-toastr';
+import { limitLength } from '../../../core/util-methods';
 
 @Component({
   selector: 'app-empresa-form',
@@ -41,6 +42,8 @@ export class EmpresaFormComponent extends FormComponent<EmpresaRequest> implemen
     this.form = this.fb.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
       codigoBc: [null],
+      cnpj: [null],
+      email: [null],
       valorMinimoMensal: [null],
       minimoPorFuncionario: [null],
       valorMes: [null],
@@ -74,4 +77,5 @@ export class EmpresaFormComponent extends FormComponent<EmpresaRequest> implemen
   }
 
   protected readonly ColorUtils = ColorUtils;
+  protected readonly limitLength = limitLength;
 }

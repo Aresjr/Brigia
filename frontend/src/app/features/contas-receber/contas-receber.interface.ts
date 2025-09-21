@@ -10,6 +10,7 @@ export interface ContaReceber extends Entidade {
     empresa: Empresa;
     atendimento: Atendimento;
     profissional: Profissional;
+    dataAtendimento: Date;
     valorAgendamento: number;
     descontoAtendimento: number;
     valorTotalLancado: number;

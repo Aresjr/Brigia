@@ -27,8 +27,9 @@ public class ContaReceberMapper {
 
         return new ContaReceberResponse(contaReceber.getId(), pacienteMapper.toResponse(contaReceber.getPaciente()),
                 empresaMapper.toResponse(contaReceber.getEmpresa()),
-                profissionalMapper.toResponse(contaReceber.getProfissional()), contaReceber.getValorAgendamento(),
-                contaReceber.getValorRecebido(), contaReceber.getFormaPagamento(), contaReceber.getStatus());
+                profissionalMapper.toResponse(contaReceber.getProfissional()), contaReceber.getAtendimento().getData(),
+                contaReceber.getValorAgendamento(), contaReceber.getDescontoAgendamento(), contaReceber.getValorTotalLancado(),
+                contaReceber.getValorTotal(), contaReceber.getValorRecebido(), contaReceber.getFormaPagamento(), contaReceber.getStatus());
     }
 
     public PagedResponse<ContaReceberResponse> toPagedResponse(Page<ContaReceber> paged) {

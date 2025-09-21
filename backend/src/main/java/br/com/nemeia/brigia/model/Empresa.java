@@ -18,8 +18,14 @@ public class Empresa extends BaseModel {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "nome", unique = true, nullable = false)
+    @Column(name = "nome", nullable = false)
     private String nome;
+
+    @Column(name = "email", unique = true)
+    private String email;
+
+    @Column(name = "cnpj", unique = true)
+    private String cnpj;
 
     @Column(name = "observacao")
     private String observacao;

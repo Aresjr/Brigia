@@ -10,27 +10,42 @@
     </div>
   } @else {
     <div class="min-h-[36rem]">
-      <div class="titulo-listagem grid-cols-[1fr_1fr]">
-        <div (click)="ordenar('paciente')" class="cabecalho-listagem rounded-tl-lg">
-          <lucide-icon *ngIf="getSortIcon('paciente')" [name]="getSortIcon('paciente')" class="icone-ordenacao"/>
+      <div class="titulo-listagem grid-cols-[1fr_1fr_1fr_1fr_1fr]">
+        <div (click)="ordenar('status')" class="cabecalho-listagem rounded-tl-lg">
+          <lucide-icon *ngIf="getSortIcon('status')" [name]="getSortIcon('status')" class="icone-ordenacao"/>
           Status
         </div>
         <div (click)="ordenar('paciente')" class="cabecalho-listagem">
           <lucide-icon *ngIf="getSortIcon('paciente')" [name]="getSortIcon('paciente')" class="icone-ordenacao"/>
           Paciente
         </div>
+        <div (click)="ordenar('empresa')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('empresa')" [name]="getSortIcon('empresa')" class="icone-ordenacao"/>
+          Empresa
+        </div>
+        <div (click)="ordenar('profissional')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('profissional')" [name]="getSortIcon('profissional')" class="icone-ordenacao"/>
+          Profissional
+        </div>
+        <div (click)="ordenar('dataAtendimento')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('dataAtendimento')" [name]="getSortIcon('dataAtendimento')" class="icone-ordenacao"/>
+          Data Atendimento
+        </div>
         <!-- TODO - adicionar os outros campos -->
       </div>
 
       <div class="itens-listagem">
         @for (contaReceber of getItensPaginados(); track contaReceber.id) {
-          <div class="item-listagem grid-cols-[1fr_1fr]">
+          <div class="item-listagem grid-cols-[1fr_1fr_1fr_1fr_1fr]">
             <div class="celula-listagem flex items-center px-4 py-1.5">
               <div class="badge text-base-100" [ngClass]="'bg-['+ CorContaReceber[contaReceber.status] +']'">
                 {{ StatusContaReceberDescricao[contaReceber.status] }}
               </div>
             </div>
             <div class="celula-listagem">{{contaReceber.paciente.nome}}</div>
+            <div class="celula-listagem">{{contaReceber.empresa.nome}}</div>
+            <div class="celula-listagem">{{contaReceber.profissional.nome}}</div>
+            <div class="celula-listagem">{{contaReceber.dataAtendimento | date:'dd/MM/yyyy'}}</div>
           </div>
         }
       </div>

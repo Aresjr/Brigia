@@ -15,8 +15,7 @@
             Nome <span aria-hidden="true" class="text-error">*</span>
           </label>
           <input type="text" formControlName="nome" name="nome" required
-             class="campo"
-             [ngClass]="{'border-error': form.get('nome')?.invalid && form.get('nome')?.touched}" >
+             class="campo" [ngClass]="classesCampo('nome')" >
               @if (form.get('nome')?.touched) {
                 <div *ngIf="isInvalid('nome')" class="text-error text-sm">
                   Obrigatório
@@ -38,8 +37,7 @@
               Data Nascimento <span aria-hidden="true" class="text-error">*</span>
             </label>
             <input type="date" formControlName="dataNascimento" required
-                   class="campo"
-                   [ngClass]="{'border-error': form.get('dataNascimento')?.invalid && form.get('dataNascimento')?.touched}" >
+                   class="campo" [ngClass]="classesCampo('dataNascimento')" >
             @if (form.get('dataNascimento')?.touched) {
               <div *ngIf="isInvalid('dataNascimento')" class="text-error text-sm">
                 Obrigatório

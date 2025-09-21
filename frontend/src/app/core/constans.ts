@@ -66,7 +66,8 @@ export enum StatusAgendamento {
   Cancelado = 3,
   NaoCompareceu = 4,
   Reagendado = 5,
-  Finalizado = 6
+  Finalizado = 6,
+  CacneladoUsuario = 7
 }
 
 export const StatusAgendamentoDescricao: Record<number, string> = {
@@ -76,7 +77,8 @@ export const StatusAgendamentoDescricao: Record<number, string> = {
   [StatusAgendamento.Cancelado]: 'Cancelado',
   [StatusAgendamento.NaoCompareceu]: 'Não Compareceu',
   [StatusAgendamento.Reagendado]: 'Reagendado',
-  [StatusAgendamento.Finalizado]: 'Finalizado'
+  [StatusAgendamento.Finalizado]: 'Finalizado',
+  [StatusAgendamento.CacneladoUsuario]: 'Cancelado pelo Usuário'
 };
 
 export const CorAgendamento: Record<number, string> = {

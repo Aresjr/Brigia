@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -16,6 +17,10 @@ public class ContaReceberResponse {
     private PacienteResponse paciente;
     private EmpresaResponse empresa;
     private ProfissionalResponse profissional;
+    private LocalDate dataAtendimento;
+    private BigDecimal valorAgendamento;
+    private BigDecimal descontoAgendamento;
+    private BigDecimal valorTotalLancado;
     private BigDecimal valorTotal;
     private BigDecimal valorRecebido;
     private FormaPagamento formaPagamento;
