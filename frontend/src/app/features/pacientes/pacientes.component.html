@@ -2,121 +2,107 @@
 
   <app-top-bar (search)="onSearch($event)" title="Pacientes"></app-top-bar>
 
-  @if (isLoading) {
-    <div class="flex justify-center items-center h-32">
-      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
-    </div>
-  } @else if (itensExibicao.length === 0) {
-    <div class="text-center py-8 w-full bg-base-100 rounded-lg">
-      <p>Nenhum registro encontrado.</p>
-    </div>
-  } @else {
-    <div class="min-h-[36rem]">
-      <div class="titulo-listagem grid-cols-[1fr_10rem_10rem_10rem_12rem_32px]">
-        <div (click)="ordenar('nome')" class="cabecalho-listagem rounded-tl-lg">
-          @if (getSortIcon('nome')) {
-            <lucide-icon [name]="getSortIcon('nome')" class="icone-ordenacao"/>
-          }
-          Nome
+    @if (isLoading) {
+        <div class="flex justify-center items-center h-32">
+            <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
         </div>
-        <div (click)="ordenar('cpf')" class="cabecalho-listagem">
-          @if (getSortIcon('cpf')) {
-            <lucide-icon [name]="getSortIcon('cpf')" class="icone-ordenacao"/>
-          }
-          CPF
+    } @else if (itensExibicao.length === 0) {
+        <div class="text-center py-8 w-full bg-base-100 rounded-lg">
+            <p>Nenhum registro encontrado.</p>
         </div>
-        <div (click)="ordenar('dataNascimento')" class="cabecalho-listagem">
-          @if (getSortIcon('dataNascimento')) {
-            <lucide-icon [name]="getSortIcon('dataNascimento')" class="icone-ordenacao"/>
-          }
-          Nascimento
-        </div>
-        <div (click)="ordenar('celular')" class="cabecalho-listagem">
-          @if (getSortIcon('celular')) {
-            <lucide-icon [name]="getSortIcon('celular')" class="icone-ordenacao"/>
-          }
-          Celular
-        </div>
-        <div (click)="ordenar('proximaConsulta')" class="cabecalho-listagem">
-          @if (getSortIcon('proximaConsulta')) {
-            <lucide-icon [name]="getSortIcon('proximaConsulta')" class="icone-ordenacao"/>
-          }
-          Próx. Consulta
-        </div>
-        <div class="cabecalho-listagem p-0 rounded-tr-lg"></div>
-      </div>
-
-      <div class="itens-listagem">
-        @for (paciente of getItensPaginados(); track paciente.id) {
-          <div class="item-listagem grid-cols-[1fr_10rem_10rem_10rem_12rem_32px]" (click)="selecionar(paciente)">
-            <div class="celula-listagem">{{paciente.nome}}</div>
-            <div class="celula-listagem">{{paciente.cpf | cpf}}</div>
-            <div class="celula-listagem">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</div>
-            <div class="celula-listagem">{{paciente.celular | celular}}</div>
-            <div class="celula-listagem">{{paciente.proximaConsulta | date:'dd/MM/yyyy HH:mm'}}</div>
-            <div class="p-0 text-right">
-              <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
-                <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
-                  <lucide-icon name="ellipsis-vertical" class="h-5" />
-                </label>
-                <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-48 z-[1] font-semibold">
-                  <li>
-                    <a (click)="criarAgendamento(paciente.id)"
-                      class="text-sm text-neutral hover:bg-base-200">
-                      Criar Agendamento
-                    </a>
-                  </li>
-                  <li>
-                    <a (click)="verHistorico(paciente.id)"
-                      class="text-sm text-neutral hover:bg-base-200">
-                      Ver Histórico
-                    </a>
-                  </li>
-                  <li>
-                    <a (click)="editar(paciente)"
-                      class="text-sm text-neutral hover:bg-base-200">
-                      Editar
-                    </a>
-                  </li>
-                  @if (!paciente.excluido) {
-                    <li>
-                      <a (click)="idExclusao = paciente.id; excluir(paciente.id)"
-                        class="text-error hover:bg-error/50">
-                        Excluir
-                      </a>
-                    </li>
-                  }
-                </ul>
-              </div>
+    } @else {
+        <div class="min-h-[36rem]">
+          <div class="titulo-listagem grid-cols-[1fr_10rem_10rem_10rem_12rem_32px]">
+            <div (click)="ordenar('nome')" class="cabecalho-listagem rounded-tl-lg">
+              <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
+              Nome
             </div>
+            <div (click)="ordenar('cpf')" class="cabecalho-listagem">
+              <lucide-icon *ngIf="getSortIcon('cpf')" [name]="getSortIcon('cpf')" class="icone-ordenacao"/>
+              CPF
+            </div>
+            <div (click)="ordenar('dataNascimento')" class="cabecalho-listagem">
+              <lucide-icon *ngIf="getSortIcon('dataNascimento')" [name]="getSortIcon('dataNascimento')" class="icone-ordenacao"/>
+              Nascimento
+            </div>
+            <div (click)="ordenar('celular')" class="cabecalho-listagem">
+              <lucide-icon *ngIf="getSortIcon('celular')" [name]="getSortIcon('celular')" class="icone-ordenacao"/>
+              Celular
+            </div>
+            <div (click)="ordenar('proximaConsulta')" class="cabecalho-listagem">
+              <lucide-icon *ngIf="getSortIcon('proximaConsulta')" [name]="getSortIcon('proximaConsulta')" class="icone-ordenacao"/>
+              Próx. Consulta
+            </div>
+            <div class="cabecalho-listagem p-0 rounded-tr-lg"></div>
           </div>
-        }
-      </div>
-    </div>
 
-    <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
-  }
+          <div class="itens-listagem">
+            @for (paciente of getItensPaginados(); track paciente.id) {
+              <div class="item-listagem grid-cols-[1fr_10rem_10rem_10rem_12rem_32px]" (click)="selecionar(paciente)">
+                <div class="celula-listagem">{{paciente.nome}}</div>
+                <div class="celula-listagem">{{paciente.cpf | cpf}}</div>
+                <div class="celula-listagem">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</div>
+                <div class="celula-listagem">{{paciente.celular | celular}}</div>
+                <div class="celula-listagem">{{paciente.proximaConsulta | date:'dd/MM/yyyy HH:mm'}}</div>
+                <div class="p-0 text-right">
+                  <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
+                    <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
+                      <lucide-icon name="ellipsis-vertical" class="h-5" />
+                    </label>
+                    <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-48 z-[1] font-semibold">
+                      <li>
+                        <a (click)="criarAgendamento(paciente.id)"
+                           class="text-sm text-neutral hover:bg-base-200">
+                          Criar Agendamento
+                        </a>
+                      </li>
+                      <li>
+                        <a (click)="verHistorico(paciente.id)"
+                           class="text-sm text-neutral hover:bg-base-200">
+                          Ver Histórico
+                        </a>
+                      </li>
+                      <li>
+                        <a (click)="editar(paciente)"
+                           class="text-sm text-neutral hover:bg-base-200">
+                          Editar
+                        </a>
+                      </li>
+                      <li *ngIf="!paciente.excluido">
+                        <a (click)="idExclusao = paciente.id; excluir(paciente.id)"
+                           class="text-error hover:bg-error/50">
+                          Excluir
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
+    }
 
   <!-- TODO - juntar os componentes em um só -->
-  @if (itemSelecionado && mostrarDetalhes) {
-    <app-paciente-detalhes
-      [paciente]="itemSelecionado"
-      (fechou)="fecharDetalhes()"
-      (editou)="editar(itemSelecionado)">
-    </app-paciente-detalhes>
-  }
+      <app-paciente-detalhes
+          *ngIf="itemSelecionado && mostrarDetalhes"
+          [paciente]="itemSelecionado"
+          (fechou)="fecharDetalhes()"
+          (editou)="editar(itemSelecionado)">
+      </app-paciente-detalhes>
 
-  @if (mostrarFormularioNovo) {
-    <app-paciente-form
-      [paciente]="itemEdicao"
-      [isDetalhes]="false"
-      (save)="salvarNovoPaciente($event)"
-      (cancel)="cancelarNovo()">
-    </app-paciente-form>
-  }
+      <app-paciente-form
+          *ngIf="mostrarFormularioNovo"
+          [paciente]="itemEdicao"
+          [isDetalhes]="false"
+          (save)="salvarNovoPaciente($event)"
+          (cancel)="cancelarNovo()">
+      </app-paciente-form>
 
-  @if (mostraFab()) {
-    <app-fab (clicked)="onAddNovo()"></app-fab>
-  }
+    @if (mostraFab()) {
+      <app-fab (clicked)="onAddNovo()"></app-fab>
+    }
 
 </div>

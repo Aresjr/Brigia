@@ -13,103 +13,97 @@
         <div>
           <label class="label-campo">Nome</label>
           <input type="text" formControlName="nome" name="nome" required class="campo" [ngClass]="classesCampo('nome')" >
-          @if (form.get('nome')?.touched) {
-            @if (isInvalid('nome')) {
-              <div class="text-error text-sm">
-                Obrigatório
-              </div>
-            }
-          }
+              @if (form.get('nome')?.touched) {
+                <div *ngIf="isInvalid('nome')" class="text-error text-sm">
+                  Obrigatório
+                </div>
+              }
         </div>
 
         <div class="flex space-x-4">
           <div class="w-52">
             <label class="label-campo">CPF</label>
             <input type="text" formControlName="cpf" name="cpf"
-              mask="000.000.000-00"
-              emptyToNull
-              class="campo">
+                   mask="000.000.000-00"
+                   emptyToNull
+                   class="campo">
 
-            </div>
-            <div class="w-56">
-              <label class="label-campo">Data Nascimento</label>
-              <input type="date" formControlName="dataNascimento" required
-                class="campo" [ngClass]="classesCampo('dataNascimento')" >
-                @if (form.get('dataNascimento')?.touched) {
-                  @if (isInvalid('dataNascimento')) {
-                    <div class="text-error text-sm">
-                      Obrigatório
-                    </div>
-                  }
-                }
+          </div>
+          <div class="w-56">
+            <label class="label-campo">Data Nascimento</label>
+            <input type="date" formControlName="dataNascimento" required
+                   class="campo" [ngClass]="classesCampo('dataNascimento')" >
+            @if (form.get('dataNascimento')?.touched) {
+              <div *ngIf="isInvalid('dataNascimento')" class="text-error text-sm">
+                Obrigatório
               </div>
-            </div>
+            }
+          </div>
+        </div>
 
-            <div class="flex space-x-4">
-              <div class="w-52">
-                <div>
-                  <label class="label-campo">Sexo</label>
-                  <ng-select formControlName="sexo" class="campo-select" placeholder="Selecione o sexo">
-                    @for (sexo of SEXOS; track sexo.sigla) {
-                      <ng-option [value]="sexo.sigla">{{sexo.descricao}}</ng-option>
-                    }
-                    <ng-template ng-notfound-tmp>
-                      <span class="text-sm p-6">Nenhum resultado</span>
-                    </ng-template>
-                  </ng-select>
-                </div>
-              </div>
-              <div class="w-56">
-                <div>
-                  <label class="label-campo">Celular</label>
-                  <input type="tel" formControlName="celular" mask="(00) 00000-0000" emptyToNull class="campo">
-                </div>
-              </div>
-            </div>
-
-            <div class="flex space-x-4">
-              <div class="w-52">
-                <div>
-                  <label class="label-campo">CRM</label>
-                  <input type="text" formControlName="crm" mask="0000000" emptyToNull class="campo">
-                </div>
-              </div>
-            </div>
-
+        <div class="flex space-x-4">
+          <div class="w-52">
             <div>
-              <label class="label-campo">Email</label>
-              <input type="email" formControlName="email" class="campo">
-            </div>
-
-            <div>
-              <label class="label-campo">Especialidades</label>
-              <ng-select [multiple]="true" formControlName="especialidades" required class="campo-select w-full" [ngClass]="classesCampo('especialidades')" >
-                @for (especialidade of this.listaEspecialidades; track especialidade.id) {
-                  <ng-option [value]="especialidade.id">{{especialidade.nome}}</ng-option>
+              <label class="label-campo">Sexo</label>
+              <ng-select formControlName="sexo" class="campo-select" placeholder="Selecione o sexo">
+                @for (sexo of SEXOS; track sexo.sigla) {
+                  <ng-option [value]="sexo.sigla">{{sexo.descricao}}</ng-option>
                 }
                 <ng-template ng-notfound-tmp>
                   <span class="text-sm p-6">Nenhum resultado</span>
                 </ng-template>
               </ng-select>
-              @if (form.get('especialidades')?.touched) {
-                @if (isInvalid('especialidades')) {
-                  <div class="text-error text-sm">
-                    Obrigatório
-                  </div>
-                }
-              }
-            </div>
-
-            <div class="flex justify-end space-x-3 mt-6">
-              <button type="button" (click)="onCancel()" class="btn btn-ghost btn-sm" >
-                Cancelar
-              </button>
-              <button type="submit" class="btn btn-success btn-sm">
-                Salvar
-              </button>
             </div>
           </div>
-        </form>
+          <div class="w-56">
+            <div>
+              <label class="label-campo">Celular</label>
+              <input type="tel" formControlName="celular" mask="(00) 00000-0000" emptyToNull class="campo">
+            </div>
+          </div>
+        </div>
 
+        <div class="flex space-x-4">
+          <div class="w-52">
+            <div>
+              <label class="label-campo">CRM</label>
+              <input type="text" formControlName="crm" mask="0000000" emptyToNull class="campo">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="label-campo">Email</label>
+          <input type="email" formControlName="email" class="campo">
+        </div>
+
+        <div>
+          <label class="label-campo">Especialidades</label>
+          <ng-select [multiple]="true" formControlName="especialidades" required class="campo-select w-full" [ngClass]="classesCampo('especialidades')" >
+            @for (especialidade of this.listaEspecialidades; track especialidade.id) {
+              <ng-option [value]="especialidade.id">{{especialidade.nome}}</ng-option>
+            }
+            <ng-template ng-notfound-tmp>
+              <span class="text-sm p-6">Nenhum resultado</span>
+            </ng-template>
+          </ng-select>
+          @if (form.get('especialidades')?.touched) {
+            <div *ngIf="isInvalid('especialidades')" class="text-error text-sm">
+              Obrigatório
+            </div>
+          }
+        </div>
+
+        <div class="flex justify-end space-x-3 mt-6">
+          <button type="button" (click)="onCancel()" class="btn btn-ghost btn-sm" >
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-success btn-sm">
+            Salvar
+          </button>
+        </div>
       </div>
-    </div>
+    </form>
+
+  </div>
+</div>

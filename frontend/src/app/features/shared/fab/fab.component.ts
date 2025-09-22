@@ -1,12 +1,13 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
-
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-fab',
   imports: [
-    LucideAngularModule
-],
+    LucideAngularModule,
+    NgIf
+  ],
   templateUrl: './fab.component.html'
 })
 export class FabComponent {

@@ -2,98 +2,85 @@
 
   <app-top-bar (search)="onSearch($event)" title="Especialidades"></app-top-bar>
 
-  @if (isLoading) {
-    <app-loading-spinner></app-loading-spinner>
-  } @else if (itensExibicao.length === 0) {
-    <div class="text-center py-8 w-full bg-base-100 rounded-lg shadow-md">
-      <p>Nenhum registro encontrado.</p>
-    </div>
-  } @else {
-    <div class="min-h-[36rem]">
-      <div class="titulo-listagem grid-cols-[1fr_1fr_32px]">
-        <div (click)="ordenar('nome')" class="cabecalho-listagem rounded-tl-lg">
-          @if (getSortIcon('nome')) {
-            <lucide-icon [name]="getSortIcon('nome')" class="icone-ordenacao"/>
-          }
-          Nome
+    @if (isLoading) {
+        <app-loading-spinner></app-loading-spinner>
+    } @else if (itensExibicao.length === 0) {
+        <div class="text-center py-8 w-full bg-base-100 rounded-lg shadow-md">
+            <p>Nenhum registro encontrado.</p>
         </div>
-        <div (click)="ordenar('descricao')" class="cabecalho-listagem">
-          @if (getSortIcon('descricao')) {
-            <lucide-icon [name]="getSortIcon('descricao')" class="icone-ordenacao"/>
-          }
-          Observações
-        </div>
-        <div class="cabecalho-listagem p-0 rounded-tr-lg"></div>
-      </div>
+    } @else {
+        <div class="min-h-[36rem]">
+          <div class="titulo-listagem grid-cols-[1fr_1fr_32px]">
+            <div (click)="ordenar('nome')" class="cabecalho-listagem rounded-tl-lg">
+              <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
+              Nome
+            </div>
+            <div (click)="ordenar('descricao')" class="cabecalho-listagem">
+              <lucide-icon *ngIf="getSortIcon('descricao')" [name]="getSortIcon('descricao')" class="icone-ordenacao"/>
+              Observações
+            </div>
+            <div class="cabecalho-listagem p-0 rounded-tr-lg"></div>
+          </div>
 
-      <div class="itens-listagem">
-        @for (especialidade of getItensPaginados(); track especialidade.id) {
-          <div class="item-listagem grid-cols-[1fr_1fr_32px]"
-            [class.bg-error]="especialidade.excluido"
-            [class.bg-opacity-50]="especialidade.excluido">
-            <div class="celula-listagem">
-              {{especialidade.nome}} @if (especialidade.excluido) {
-              <span class="excluido">Excluído</span>
+          <div class="itens-listagem">
+            @for (especialidade of getItensPaginados(); track especialidade.id) {
+              <div class="item-listagem grid-cols-[1fr_1fr_32px]"
+                   [class.bg-error]="especialidade.excluido"
+                   [class.bg-opacity-50]="especialidade.excluido">
+                <div class="celula-listagem">
+                  {{especialidade.nome}} <span *ngIf="especialidade.excluido" class="excluido">Excluído</span>
+                </div>
+                <div class="celula-listagem">{{especialidade.descricao}}</div>
+                <div class="text-right">
+                  <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
+                    <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
+                      <lucide-icon name="ellipsis-vertical" class="h-5" />
+                    </label>
+                    <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-[1] font-semibold">
+                      <li *ngIf="!especialidade.excluido">
+                        <a (click)="editar(especialidade)"
+                           class="text-sm text-neutral hover:bg-base-200">
+                          Editar
+                        </a>
+                      </li>
+                      <li *ngIf="!especialidade.excluido">
+                        <a (click)="perguntaExcluir($event, especialidade)"
+                           class="text-error hover:bg-error/50">
+                          Excluir
+                        </a>
+                      </li>
+                      <li *ngIf="especialidade.excluido">
+                        <a (click)="restaurarItem($event, especialidade)"
+                           class="text-success hover:bg-success/20">
+                          Restaurar
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             }
           </div>
-          <div class="celula-listagem">{{especialidade.descricao}}</div>
-          <div class="text-right">
-            <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
-              <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
-                <lucide-icon name="ellipsis-vertical" class="h-5" />
-              </label>
-              <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-[1] font-semibold">
-                @if (!especialidade.excluido) {
-                  <li>
-                    <a (click)="editar(especialidade)"
-                      class="text-sm text-neutral hover:bg-base-200">
-                      Editar
-                    </a>
-                  </li>
-                }
-                @if (!especialidade.excluido) {
-                  <li>
-                    <a (click)="perguntaExcluir($event, especialidade)"
-                      class="text-error hover:bg-error/50">
-                      Excluir
-                    </a>
-                  </li>
-                }
-                @if (especialidade.excluido) {
-                  <li>
-                    <a (click)="restaurarItem($event, especialidade)"
-                      class="text-success hover:bg-success/20">
-                      Restaurar
-                    </a>
-                  </li>
-                }
-              </ul>
-            </div>
-          </div>
         </div>
-      }
-    </div>
-  </div>
 
-  <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
-}
+        <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
+    }
 
-@if (mostrarFormularioNovo) {
-  <app-especialidade-form
-    [especialidade]="itemEdicao"
-    (save)="onSalvarNovoEspecialidades($event)"
-    (cancel)="cancelarNovo()"
-  ></app-especialidade-form>
-}
+  @if (mostrarFormularioNovo) {
+    <app-especialidade-form
+      [especialidade]="itemEdicao"
+      (save)="onSalvarNovoEspecialidades($event)"
+      (cancel)="cancelarNovo()"
+    ></app-especialidade-form>
+  }
 
-@if (exibeConfirmExclusao) {
   <app-confirm-dialog
+    *ngIf="exibeConfirmExclusao"
     message="Deseja realmente excluir esta especialidade?"
     (confirm)="excluir()"
     (cancel)="fecharConfirmExclusao()"
   ></app-confirm-dialog>
-}
 
-<app-fab (clicked)="onAddNovo()"></app-fab>
+  <app-fab (clicked)="onAddNovo()"></app-fab>
 
 </div>

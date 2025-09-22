@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Atendimento, AtendimentoRequest } from '../atendimento.interface';
@@ -16,6 +16,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './atendimento-form.component.html',
   standalone: true,
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     LucideAngularModule,
     EmptyToNullDirective,
@@ -23,7 +24,7 @@ import { ToastrService } from 'ngx-toastr';
     NgSelectComponent,
     NgOptionComponent,
     NgNotFoundTemplateDirective
-]
+  ]
 })
 export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> implements OnInit {
   @Input() atendimento: Atendimento | null = null;

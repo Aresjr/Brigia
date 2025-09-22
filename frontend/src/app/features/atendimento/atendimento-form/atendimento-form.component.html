@@ -1,6 +1,6 @@
 <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm" (click)="fechar()">
   <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[62rem]"
-    (click)="$event.stopPropagation()" >
+       (click)="$event.stopPropagation()" >
 
     <div class="flex justify-between items-center">
       <h2 class="text-lg font-semibold">{{ titulo }}</h2>
@@ -18,103 +18,103 @@
 
       <div class="tabs tabs-bordered min-w-max">
         <input type="radio" name="atendimento_tabs" class="tab-atendimento"
-          aria-label="Anamnese" checked="checked" />
-          <div class="tab-content border-base-300 w-[53rem]">
-            <textarea id="anamnese" formControlName="anamnese" rows="7" emptyToNull class="campo-aba"></textarea>
-          </div>
+               aria-label="Anamnese" checked="checked" />
+        <div class="tab-content border-base-300 w-[53rem]">
+          <textarea id="anamnese" formControlName="anamnese" rows="7" emptyToNull class="campo-aba"></textarea>
+        </div>
 
-          <input type="radio" name="atendimento_tabs" class="tab-atendimento"
-            aria-label="Exame Físico" />
-            <div class="tab-content border-base-300 w-[53rem]">
-              <textarea id="exameFisico" formControlName="exameFisico" rows="7" emptyToNull class="campo-aba"></textarea>
-            </div>
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento"
+               aria-label="Exame Físico" />
+        <div class="tab-content border-base-300 w-[53rem]">
+          <textarea id="exameFisico" formControlName="exameFisico" rows="7" emptyToNull class="campo-aba"></textarea>
+        </div>
 
-            <input type="radio" name="atendimento_tabs" class="tab-atendimento"
-              aria-label="Diagnóstico" />
-              <div class="tab-content border-base-300 w-[53rem]">
-                <textarea id="diagnostico" formControlName="diagnostico" rows="7" emptyToNull class="campo-aba"></textarea>
-              </div>
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento"
+               aria-label="Diagnóstico" />
+        <div class="tab-content border-base-300 w-[53rem]">
+          <textarea id="diagnostico" formControlName="diagnostico" rows="7" emptyToNull class="campo-aba"></textarea>
+        </div>
 
-              <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Evolução Clínica" />
-              <div class="tab-content border-base-300 w-[53rem]">
-                <textarea id="evolucaoClinica" formControlName="evolucaoClinica" rows="7" emptyToNull class="campo-aba"></textarea>
-              </div>
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Evolução Clínica" />
+        <div class="tab-content border-base-300 w-[53rem]">
+          <textarea id="evolucaoClinica" formControlName="evolucaoClinica" rows="7" emptyToNull class="campo-aba"></textarea>
+        </div>
 
-              <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Exames Solicitados" />
-              <div class="tab-content border-base-300 w-[53rem]">
-                <textarea id="examesSolicitados" formControlName="examesSolicitados" rows="7" emptyToNull class="campo-aba"></textarea>
-              </div>
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Exames Solicitados" />
+        <div class="tab-content border-base-300 w-[53rem]">
+          <textarea id="examesSolicitados" formControlName="examesSolicitados" rows="7" emptyToNull class="campo-aba"></textarea>
+        </div>
 
-              <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Prescrições" />
-              <div class="tab-content border-base-300 w-[53rem]">
-                <textarea id="prescricoes" formControlName="prescricoes" rows="7" emptyToNull class="campo-aba"></textarea>
-              </div>
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Prescrições" />
+        <div class="tab-content border-base-300 w-[53rem]">
+          <textarea id="prescricoes" formControlName="prescricoes" rows="7" emptyToNull class="campo-aba"></textarea>
+        </div>
 
-              <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Observações" />
-              <div class="tab-content border-base-300 w-[53rem]">
-                <textarea id="observacoes" formControlName="observacoes" rows="7" emptyToNull class="campo-aba"></textarea>
-              </div>
-            </div>
-
-            <div class="flex mt-2">
-              <div class="w-full">
-                <div class="flex justify-between items-center mb-2">
-                  <h3 class="text-lg font-medium">Procedimentos Lançados</h3>
-                  <button type="button" class="btn btn-primary btn-xs" (click)="adicionarProcedimento()">
-                    <i-lucide name="plus" class="w-4 h-4"></i-lucide>
-                    Adicionar Procedimento
-                  </button>
-                </div>
-
-                <div class="rounded-t-lg">
-                  <div class="grid grid-cols-[6rem_1fr_2rem] gap-3 p-3 font-medium">
-                    <div>Quantidade</div>
-                    <div>Procedimento</div>
-                    <div></div>
-                  </div>
-                </div>
-
-                <div class="space-y-1" formArrayName="procedimentos">
-                  @for (procedimento of procedimentosLancados.controls; track procedimento; let i = $index) {
-                    <div [formGroupName]="i"
-                      class="grid grid-cols-[6rem_1fr_2rem] gap-3 p-1.5 items-center hover:bg-base-200 rounded-lg">
-                      <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2">
-                      <ng-select [id]="'procedimento_' + i"  class="campo-select mt-0"
-                        formControlName="procedimentoId"
-                        placeholder="Selecione um procedimento">
-                        @for (procedimento of procedimentos; track procedimento.id) {
-                          <ng-option [value]="procedimento.id">{{procedimento.nome}}</ng-option>
-                        }
-                        <ng-template ng-notfound-tmp>
-                          <span class="text-sm p-6">Nenhum resultado</span>
-                        </ng-template>
-                      </ng-select>
-                      <button type="button" class="btn btn-ghost btn-circle btn-sm" (click)="removerProcedimento(i)" title="Excluir lançamento">
-                        <lucide-icon name="trash" class="h-5 text-error"></lucide-icon>
-                      </button>
-                    </div>
-                  }
-                </div>
-              </div>
-            </div>
-
-            <div class="flex justify-end gap-3 mt-6">
-              <button type="button" class="btn btn-ghost btn-sm" (click)="fechar()" >
-                Fechar
-              </button>
-              <button type="submit" class="btn btn-success btn-sm" >
-                Salvar
-              </button>
-            </div>
-          </form>
-
+        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Observações" />
+        <div class="tab-content border-base-300 w-[53rem]">
+          <textarea id="observacoes" formControlName="observacoes" rows="7" emptyToNull class="campo-aba"></textarea>
         </div>
       </div>
 
-      @if (exibeConfirmCancelamento) {
-        <app-confirm-dialog
-          message="Você já preencheu algumas informações do atendimento, deseja realmente sair?"
-          (confirm)="fechar(true)"
-          (cancel)="exibeConfirmCancelamento = false"
-        ></app-confirm-dialog>
-      }
+      <div class="flex mt-2">
+        <div class="w-full">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-lg font-medium">Procedimentos Lançados</h3>
+            <button type="button" class="btn btn-primary btn-xs" (click)="adicionarProcedimento()">
+              <i-lucide name="plus" class="w-4 h-4"></i-lucide>
+              Adicionar Procedimento
+            </button>
+          </div>
+
+          <div class="rounded-t-lg">
+            <div class="grid grid-cols-[6rem_1fr_2rem] gap-3 p-3 font-medium">
+              <div>Quantidade</div>
+              <div>Procedimento</div>
+              <div></div>
+            </div>
+          </div>
+
+          <div class="space-y-1" formArrayName="procedimentos">
+            <div *ngFor="let procedimento of procedimentosLancados.controls; let i = index" [formGroupName]="i"
+                 class="grid grid-cols-[6rem_1fr_2rem] gap-3 p-1.5 items-center hover:bg-base-200 rounded-lg">
+
+              <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2">
+
+              <ng-select [id]="'procedimento_' + i"  class="campo-select mt-0"
+                         formControlName="procedimentoId"
+                         placeholder="Selecione um procedimento">
+                @for (procedimento of procedimentos; track procedimento.id) {
+                  <ng-option [value]="procedimento.id">{{procedimento.nome}}</ng-option>
+                }
+                <ng-template ng-notfound-tmp>
+                  <span class="text-sm p-6">Nenhum resultado</span>
+                </ng-template>
+              </ng-select>
+
+              <button type="button" class="btn btn-ghost btn-circle btn-sm" (click)="removerProcedimento(i)" title="Excluir lançamento">
+                <lucide-icon name="trash" class="h-5 text-error"></lucide-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3 mt-6">
+        <button type="button" class="btn btn-ghost btn-sm" (click)="fechar()" >
+          Fechar
+        </button>
+        <button type="submit" class="btn btn-success btn-sm" >
+          Salvar
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<app-confirm-dialog
+  *ngIf="exibeConfirmCancelamento"
+  message="Você já preencheu algumas informações do atendimento, deseja realmente sair?"
+  (confirm)="fechar(true)"
+  (cancel)="exibeConfirmCancelamento = false"
+></app-confirm-dialog>

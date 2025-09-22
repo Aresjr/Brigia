@@ -5,46 +5,38 @@
 
   <!-- Filtros e ações -->
   <div class="flex">
-    @if (!this.userService.isMedico() && showDropdown) {
-      <ng-select class="w-72 mr-4 shadow-md hover:shadow-lg h-8 max-h-8 leading-none"
-        (change)="onSelectItem($event)" placeholder="Todos - {{ placeholderDropdown }}">
-        <ng-option class="max-h-8" value="0">Todos - {{ placeholderDropdown }}</ng-option>
-        @for(registro of this.registrosDropdown; track registro.id) {
-          <ng-option class="max-h-8" value="{{ registro.id }}">{{ registro.nome }}</ng-option>
-        }
-        <ng-template ng-notfound-tmp>
-          <span class="text-sm p-6">Nenhum resultado</span>
-        </ng-template>
-      </ng-select>
-    }
-
-    @if (showSearchBar) {
-      <div class="mr-3">
-        <lucide-icon name="search" class="w-5 h-5 absolute mt-3.5 ml-1 transform -translate-y-1/2"></lucide-icon>
-        <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearch($event)"
-          id="filtro" placeholder="Filtrar" maxlength="20"
-          class="pl-9 pr-4 py-1 h-9 rounded-full focus:outline-none focus:ring-2 focus:ring-grey-900 focus:border-transparent shadow-md" />
-        </div>
+    <ng-select *ngIf="!this.userService.isMedico() && showDropdown" class="w-72 mr-4 shadow-md hover:shadow-lg h-8 max-h-8 leading-none"
+               (change)="onSelectItem($event)" placeholder="Todos - {{ placeholderDropdown }}">
+      <ng-option class="max-h-8" value="0">Todos - {{ placeholderDropdown }}</ng-option>
+      @for(registro of this.registrosDropdown; track registro.id) {
+        <ng-option class="max-h-8" value="{{ registro.id }}">{{ registro.nome }}</ng-option>
       }
+      <ng-template ng-notfound-tmp>
+        <span class="text-sm p-6">Nenhum resultado</span>
+      </ng-template>
+    </ng-select>
 
-      <details class="dropdown dropdown-end">
-        <summary class="btn btn-ghost btn-sm h-9">
-          {{ usuario?.name }}
-          <div class="avatar avatar-online avatar-placeholder">
-            <div class="bg-neutral text-neutral-content w-6 rounded-full">
-              @if (usuario?.avatarUrl) {
-                <img [src]="usuario?.avatarUrl" alt="Avatar" />
-              }
-              @if (!usuario?.avatarUrl) {
-                <lucide-icon name="user" class="inline w-5 h-5"/>
-              }
-            </div>
-          </div>
-        </summary>
-        <ul class="menu dropdown-content bg-base-100 rounded-lg p-1 m-0 z-[1001] w-52 shadow-lg hover:shadow-xl font-semibold">
-          <li><a (click)="logout()" class="text-error hover:bg-error/20">Sair</a></li>
-        </ul>
-      </details>
-
+    <div *ngIf="showSearchBar" class="mr-3">
+      <lucide-icon name="search" class="w-5 h-5 absolute mt-3.5 ml-1 transform -translate-y-1/2"></lucide-icon>
+      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearch($event)"
+             id="filtro" placeholder="Filtrar" maxlength="20"
+             class="pl-9 pr-4 py-1 h-9 rounded-full focus:outline-none focus:ring-2 focus:ring-grey-900 focus:border-transparent shadow-md" />
     </div>
+
+    <details class="dropdown dropdown-end">
+      <summary class="btn btn-ghost btn-sm h-9">
+        {{ usuario?.name }}
+        <div class="avatar avatar-online avatar-placeholder">
+          <div class="bg-neutral text-neutral-content w-6 rounded-full">
+            <img *ngIf="usuario?.avatarUrl" [src]="usuario?.avatarUrl" alt="Avatar" />
+            <lucide-icon *ngIf="!usuario?.avatarUrl" name="user" class="inline w-5 h-5"/>
+          </div>
+        </div>
+      </summary>
+      <ul class="menu dropdown-content bg-base-100 rounded-lg p-1 m-0 z-[1001] w-52 shadow-lg hover:shadow-xl font-semibold">
+        <li><a (click)="logout()" class="text-error hover:bg-error/20">Sair</a></li>
+      </ul>
+    </details>
+
   </div>
+</div>

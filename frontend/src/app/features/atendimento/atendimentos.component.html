@@ -12,39 +12,27 @@
     <div class="min-h-[36rem]">
       <div class="titulo-listagem grid-cols-[10rem_1fr_7rem_6rem_6rem_12rem_32px]">
         <div (click)="ordenar('status')" class="cabecalho-listagem rounded-tl-lg">
-          @if (getSortIcon('status')) {
-            <lucide-icon [name]="getSortIcon('status')" class="icone-ordenacao"/>
-          }
+          <lucide-icon *ngIf="getSortIcon('status')" [name]="getSortIcon('status')" class="icone-ordenacao"/>
           Status
         </div>
         <div (click)="ordenar('paciente')" class="cabecalho-listagem">
-          @if (getSortIcon('paciente')) {
-            <lucide-icon [name]="getSortIcon('paciente')" class="icone-ordenacao"/>
-          }
+          <lucide-icon *ngIf="getSortIcon('paciente')" [name]="getSortIcon('paciente')" class="icone-ordenacao"/>
           Paciente
         </div>
         <div (click)="ordenar('data')" class="cabecalho-listagem">
-          @if (getSortIcon('data')) {
-            <lucide-icon [name]="getSortIcon('data')" class="icone-ordenacao"/>
-          }
+          <lucide-icon *ngIf="getSortIcon('data')" [name]="getSortIcon('data')" class="icone-ordenacao"/>
           Data
         </div>
         <div (click)="ordenar('horaInicio')" class="cabecalho-listagem">
-          @if (getSortIcon('horaInicio')) {
-            <lucide-icon [name]="getSortIcon('horaInicio')" class="icone-ordenacao"/>
-          }
+          <lucide-icon *ngIf="getSortIcon('horaInicio')" [name]="getSortIcon('horaInicio')" class="icone-ordenacao"/>
           Início
         </div>
         <div (click)="ordenar('horaFim')" class="cabecalho-listagem">
-          @if (getSortIcon('horaFim')) {
-            <lucide-icon [name]="getSortIcon('horaFim')" class="icone-ordenacao"/>
-          }
+          <lucide-icon *ngIf="getSortIcon('horaFim')" [name]="getSortIcon('horaFim')" class="icone-ordenacao"/>
           Fim
         </div>
         <div (click)="ordenar('especialidade')" class="cabecalho-listagem">
-          @if (getSortIcon('especialidade')) {
-            <lucide-icon [name]="getSortIcon('especialidade')" class="icone-ordenacao"/>
-          }
+          <lucide-icon *ngIf="getSortIcon('especialidade')" [name]="getSortIcon('especialidade')" class="icone-ordenacao"/>
           Especialidade
         </div>
         <div class="cabecalho-listagem p-0 rounded-tr-lg"></div>
@@ -53,9 +41,9 @@
       <div class="itens-listagem">
         @for (atendimento of getItensPaginados(); track atendimento.id) {
           <div class="item-listagem grid-cols-[10rem_1fr_7rem_6rem_6rem_12rem_32px]"
-            [class.bg-error]="atendimento.excluido"
-            [class.bg-opacity-50]="atendimento.excluido"
-            (click)="selecionar(atendimento);">
+               [class.bg-error]="atendimento.excluido"
+               [class.bg-opacity-50]="atendimento.excluido"
+               (click)="selecionar(atendimento);">
             <div class="celula-listagem flex items-center px-4">
               <div class="badge text-base-100" [ngClass]="'bg-['+CorAtendimento[atendimento.status]+']'">
                 {{ StatusAtendimentoDescricao[atendimento.status] }}
@@ -72,30 +60,24 @@
                   <lucide-icon name="ellipsis-vertical" class="h-5" />
                 </label>
                 <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-[1] font-semibold">
-                  @if (!atendimento.excluido) {
-                    <li>
-                      <a (click)="editar(atendimento)"
-                        class="text-sm text-neutral hover:bg-base-200">
-                        Editar
-                      </a>
-                    </li>
-                  }
-                  @if (!atendimento.excluido) {
-                    <li>
-                      <a (click)="perguntaExcluir($event, atendimento)"
-                        class="text-error hover:bg-error/50">
-                        Excluir
-                      </a>
-                    </li>
-                  }
-                  @if (atendimento.excluido) {
-                    <li>
-                      <a (click)="restaurarItem($event, atendimento)"
-                        class="text-success hover:bg-success/20">
-                        Restaurar
-                      </a>
-                    </li>
-                  }
+                  <li *ngIf="!atendimento.excluido">
+                    <a (click)="editar(atendimento)"
+                       class="text-sm text-neutral hover:bg-base-200">
+                      Editar
+                    </a>
+                  </li>
+                  <li *ngIf="!atendimento.excluido">
+                    <a (click)="perguntaExcluir($event, atendimento)"
+                       class="text-error hover:bg-error/50">
+                      Excluir
+                    </a>
+                  </li>
+                  <li *ngIf="atendimento.excluido">
+                    <a (click)="restaurarItem($event, atendimento)"
+                       class="text-success hover:bg-success/20">
+                      Restaurar
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -116,13 +98,12 @@
     ></app-atendimento-form>
   }
 
-  @if (exibeConfirmExclusao) {
-    <app-confirm-dialog
-      message="Deseja realmente excluir este atendimento?"
-      (confirm)="excluir()"
-      (cancel)="fecharConfirmExclusao()"
-    ></app-confirm-dialog>
-  }
+  <app-confirm-dialog
+    *ngIf="exibeConfirmExclusao"
+    message="Deseja realmente excluir este atendimento?"
+    (confirm)="excluir()"
+    (cancel)="fecharConfirmExclusao()"
+  ></app-confirm-dialog>
 
   <app-fab (clicked)="novoAgendamento()"></app-fab>
 

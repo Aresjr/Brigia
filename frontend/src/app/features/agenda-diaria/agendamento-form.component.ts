@@ -9,7 +9,7 @@ import { Profissional } from '../profissionais/profissional.interface';
 import { Especialidade } from '../especialidade/especialidade.interface';
 import { EspecialidadeService } from '../especialidade/especialidade.service';
 import { ProfissionalService } from '../profissionais/profissional.service';
-import { DatePipe, NgClass } from '@angular/common';
+import { DatePipe, NgClass, NgIf } from '@angular/common';
 import { EmptyToNullDirective } from '../../core/directives/empty-to-null-directive';
 import { NgxMaskDirective } from 'ngx-mask';
 import { Empresa } from '../empresa/empresa.interface';
@@ -41,18 +41,12 @@ import { AtendimentoService } from '../atendimento/atendimento.service';
   selector: 'app-agendamento-form',
   templateUrl: './agendamento-form.component.html',
   imports: [
-    NgOptionComponent,
-    NgSelectComponent,
-    ReactiveFormsModule,
-    NgClass,
-    EmptyToNullDirective,
-    NgxMaskDirective,
-    PacienteFormComponent,
-    NgNotFoundTemplateDirective,
-    DatePipe,
-    LucideAngularModule,
-    ConfirmDialogComponent
-]
+    NgOptionComponent, NgSelectComponent,
+    ReactiveFormsModule, NgClass,
+    EmptyToNullDirective, NgxMaskDirective,
+    PacienteFormComponent, NgNotFoundTemplateDirective,
+    DatePipe, NgIf, LucideAngularModule, ConfirmDialogComponent
+  ]
 })
 export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> implements OnInit {
   @Input() agendamentoDetalhes: Agendamento | null = null;

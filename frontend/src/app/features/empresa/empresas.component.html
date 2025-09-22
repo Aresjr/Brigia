@@ -14,27 +14,19 @@
     <div class="min-h-[36rem]">
       <div class="titulo-listagem grid-cols-[3fr_2fr_1fr_1.3fr_3fr_32px]">
         <div (click)="ordenar('nome')" class="cabecalho-listagem rounded-tl-lg">
-          @if (getSortIcon('nome')) {
-            <lucide-icon [name]="getSortIcon('nome')" class="icone-ordenacao"/>
-          }
+          <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
           Nome
         </div>
         <div (click)="ordenar('plano')" class="cabecalho-listagem">
-          @if (getSortIcon('plano')) {
-            <lucide-icon [name]="getSortIcon('plano')" class="icone-ordenacao"/>
-          }
+          <lucide-icon *ngIf="getSortIcon('plano')" [name]="getSortIcon('plano')" class="icone-ordenacao"/>
           Plano
         </div>
         <div (click)="ordenar('codigoBc')" class="cabecalho-listagem">
-          @if (getSortIcon('codigoBc')) {
-            <lucide-icon [name]="getSortIcon('codigoBc')" class="icone-ordenacao"/>
-          }
+          <lucide-icon *ngIf="getSortIcon('codigoBc')" [name]="getSortIcon('codigoBc')" class="icone-ordenacao"/>
           Cód. BC
         </div>
         <div (click)="ordenar('cnpj')" class="cabecalho-listagem">
-          @if (getSortIcon('cnpj')) {
-            <lucide-icon [name]="getSortIcon('cnpj')" class="icone-ordenacao"/>
-          }
+          <lucide-icon *ngIf="getSortIcon('cnpj')" [name]="getSortIcon('cnpj')" class="icone-ordenacao"/>
           CNPJ
         </div>
         <div class="cabecalho-listagem">Observações</div>
@@ -44,80 +36,71 @@
       <div class="itens-listagem">
         @for (empresa of getItensPaginados(); track empresa.id) {
           <div class="item-listagem grid-cols-[3fr_2fr_1fr_1.3fr_3fr_32px]"
-            [class.bg-error]="empresa.excluido" [class.bg-opacity-50]="empresa.excluido" (click)="selecionar(empresa)">
+               [class.bg-error]="empresa.excluido" [class.bg-opacity-50]="empresa.excluido" (click)="selecionar(empresa)">
             <div class="celula-listagem truncate">
-              {{empresa.nome}} @if (empresa.excluido) {
-              <span class="excluido">Excluído</span>
-            }
-          </div>
-          <div class="celula-listagem">
-            @if (empresa.plano) {
-              <div class="h-fit w-fit rounded-lg p-1 text-xs font-semibold" [ngClass]="ColorUtils.getColorClasses(empresa.plano)">
-                {{ empresa.plano.nome }}
-              </div>
-            }
-          </div>
-          <div class="celula-listagem">{{empresa.codigoBc}}</div>
-          <div class="celula-listagem">{{empresa.cnpj | cnpj }}</div>
-          <div class="celula-listagem truncate text-xs">{{empresa.observacao}}</div>
-          <div class="p-0 text-right">
-            <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
-              <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
-                <lucide-icon name="ellipsis-vertical" class="h-5" />
-              </label>
-              <ul tabindex="0" class="dropdown-content menu p-2 shadow-lg bg-base-100 rounded-lg w-40 font-semibold">
-                @if (!empresa.excluido) {
-                  <li>
+              {{empresa.nome}} <span *ngIf="empresa.excluido" class="excluido">Excluído</span>
+            </div>
+            <div class="celula-listagem">
+              @if (empresa.plano) {
+                <div class="h-fit w-fit rounded-lg p-1 text-xs font-semibold" [ngClass]="ColorUtils.getColorClasses(empresa.plano)">
+                  {{ empresa.plano.nome }}
+                </div>
+              }
+            </div>
+            <div class="celula-listagem">{{empresa.codigoBc}}</div>
+            <div class="celula-listagem">{{empresa.cnpj | cnpj }}</div>
+            <div class="celula-listagem truncate text-xs">{{empresa.observacao}}</div>
+            <div class="p-0 text-right">
+              <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
+                <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
+                  <lucide-icon name="ellipsis-vertical" class="h-5" />
+                </label>
+                <ul tabindex="0" class="dropdown-content menu p-2 shadow-lg bg-base-100 rounded-lg w-40 font-semibold">
+                  <li *ngIf="!empresa.excluido">
                     <a (click)="editar(empresa)"
-                      class="text-sm text-neutral hover:bg-base-200">
+                       class="text-sm text-neutral hover:bg-base-200">
                       Editar
                     </a>
                   </li>
-                }
-                @if (!empresa.excluido) {
-                  <li>
+                  <li *ngIf="!empresa.excluido">
                     <a (click)="perguntaExcluir($event, empresa)"
-                      class="text-error hover:bg-error/50">
+                       class="text-error hover:bg-error/50">
                       Excluir
                     </a>
                   </li>
-                }
-                @if (empresa.excluido) {
-                  <li>
+                  <li *ngIf="empresa.excluido">
                     <a (click)="restaurarItem($event, empresa)"
-                      class="text-success hover:bg-success/20">
+                       class="text-success hover:bg-success/20">
                       Restaurar
                     </a>
                   </li>
-                }
-              </ul>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-      }
+        }
+      </div>
     </div>
-  </div>
 
-  <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
-}
+    <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
+  }
 
-@if (mostrarFormularioNovo || mostrarDetalhes) {
-  <app-empresa-form
-    [empresa]="itemEdicao ? itemEdicao : itemSelecionado"
-    [isDetalhes]="mostrarDetalhes"
-    (save)="onSalvarNovoEmpresa($event)"
-    (cancel)="cancelarNovo(); fecharDetalhes()"
-  ></app-empresa-form>
-}
+  @if (mostrarFormularioNovo || mostrarDetalhes) {
+    <app-empresa-form
+      [empresa]="itemEdicao ? itemEdicao : itemSelecionado"
+      [isDetalhes]="mostrarDetalhes"
+      (save)="onSalvarNovoEmpresa($event)"
+      (cancel)="cancelarNovo(); fecharDetalhes()"
+    ></app-empresa-form>
+  }
 
-@if (exibeConfirmExclusao) {
   <app-confirm-dialog
+    *ngIf="exibeConfirmExclusao"
     message="Deseja realmente excluir esta empresa?"
     (confirm)="excluir()"
     (cancel)="fecharConfirmExclusao()"
   ></app-confirm-dialog>
-}
 
-<app-fab (clicked)="onAddNovo()"></app-fab>
+  <app-fab (clicked)="onAddNovo()"></app-fab>
 
 </div>

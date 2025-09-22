@@ -14,7 +14,7 @@ import { UserService } from '../../core/user.service';
 import { LucideAngularModule } from 'lucide-angular';
 import { FabComponent } from '../shared/fab/fab.component';
 import { filter } from 'rxjs/operators';
-
+import { NgIf } from '@angular/common';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { Subscription, interval } from 'rxjs';
 import { PacienteService } from '../pacientes/paciente.service';
@@ -28,10 +28,11 @@ import { Paciente } from '../pacientes/paciente.interface';
     CalendarioComponent,
     LucideAngularModule,
     FabComponent,
+    NgIf,
     NgNotFoundTemplateDirective,
     NgOptionComponent,
     NgSelectComponent
-],
+  ],
   templateUrl: './agenda-diaria.component.html'
 })
 export class AgendaDiariaComponent implements OnInit, OnDestroy {
@@ -54,7 +55,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
               private profissionalService: ProfissionalService,
               private pacienteService: PacienteService,
               protected userService: UserService) {
-    const navigation = this.router.currentNavigation();
+    const navigation = this.router.getCurrentNavigation();
     const pacienteId = navigation?.extras.state?.['pacienteId'];
     this.pacienteId = pacienteId ? pacienteId : null;
   }

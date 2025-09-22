@@ -76,73 +76,62 @@
       </div>
     </div>
 
-    @if(itensExibicao.length == 0) {
-      <div class="text-center py-8 w-full bg-base-100 rounded-lg shadow-md">
-        <p>Nenhum registro encontrado.</p>
-      </div>
-    } @else {
+  @if(itensExibicao.length == 0) {
+    <div class="text-center py-8 w-full bg-base-100 rounded-lg shadow-md">
+      <p>Nenhum registro encontrado.</p>
+    </div>
+  } @else {
 
-      <div class="min-h-[36rem]">
-        <div class="titulo-listagem grid-cols-[1fr_1fr_1fr_1fr_1fr]">
-          <div (click)="ordenar('status')" class="cabecalho-listagem rounded-tl-lg">
-            @if (getSortIcon('status')) {
-              <lucide-icon [name]="getSortIcon('status')" class="icone-ordenacao"/>
-            }
-            Status
-          </div>
-          <div (click)="ordenar('paciente')" class="cabecalho-listagem">
-            @if (getSortIcon('paciente')) {
-              <lucide-icon [name]="getSortIcon('paciente')" class="icone-ordenacao"/>
-            }
-            Paciente
-          </div>
-          <div (click)="ordenar('empresa')" class="cabecalho-listagem">
-            @if (getSortIcon('empresa')) {
-              <lucide-icon [name]="getSortIcon('empresa')" class="icone-ordenacao"/>
-            }
-            Empresa
-          </div>
-          <div (click)="ordenar('profissional')" class="cabecalho-listagem">
-            @if (getSortIcon('profissional')) {
-              <lucide-icon [name]="getSortIcon('profissional')" class="icone-ordenacao"/>
-            }
-            Profissional
-          </div>
-          <div (click)="ordenar('dataAtendimento')" class="cabecalho-listagem">
-            @if (getSortIcon('dataAtendimento')) {
-              <lucide-icon [name]="getSortIcon('dataAtendimento')" class="icone-ordenacao"/>
-            }
-            Data Atendimento
-          </div>
+    <div class="min-h-[36rem]">
+      <div class="titulo-listagem grid-cols-[1fr_1fr_1fr_1fr_1fr]">
+        <div (click)="ordenar('status')" class="cabecalho-listagem rounded-tl-lg">
+          <lucide-icon *ngIf="getSortIcon('status')" [name]="getSortIcon('status')" class="icone-ordenacao"/>
+          Status
         </div>
+        <div (click)="ordenar('paciente')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('paciente')" [name]="getSortIcon('paciente')" class="icone-ordenacao"/>
+          Paciente
+        </div>
+        <div (click)="ordenar('empresa')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('empresa')" [name]="getSortIcon('empresa')" class="icone-ordenacao"/>
+          Empresa
+        </div>
+        <div (click)="ordenar('profissional')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('profissional')" [name]="getSortIcon('profissional')" class="icone-ordenacao"/>
+          Profissional
+        </div>
+        <div (click)="ordenar('dataAtendimento')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('dataAtendimento')" [name]="getSortIcon('dataAtendimento')" class="icone-ordenacao"/>
+          Data Atendimento
+        </div>
+      </div>
 
-        <div class="itens-listagem">
-          @for (contaReceber of getItensPaginados(); track contaReceber.id) {
-            <div class="item-listagem grid-cols-[1fr_1fr_1fr_1fr_1fr]" (click)="selecionar(contaReceber)">
-              <div class="celula-listagem flex items-center px-4 py-1.5">
-                <div class="badge text-base-100" [ngClass]="'bg-['+ CorContaReceber[contaReceber.status] +']'">
-                  {{ StatusContaReceberDescricao[contaReceber.status] }}
-                </div>
+      <div class="itens-listagem">
+        @for (contaReceber of getItensPaginados(); track contaReceber.id) {
+          <div class="item-listagem grid-cols-[1fr_1fr_1fr_1fr_1fr]" (click)="selecionar(contaReceber)">
+            <div class="celula-listagem flex items-center px-4 py-1.5">
+              <div class="badge text-base-100" [ngClass]="'bg-['+ CorContaReceber[contaReceber.status] +']'">
+                {{ StatusContaReceberDescricao[contaReceber.status] }}
               </div>
-              <div class="celula-listagem">{{contaReceber.paciente.nome}}</div>
-              <div class="celula-listagem">{{contaReceber.empresa.nome}}</div>
-              <div class="celula-listagem">{{contaReceber.profissional.nome}}</div>
-              <div class="celula-listagem">{{contaReceber.dataAtendimento | date:'dd/MM/yyyy'}}</div>
             </div>
-          }
-        </div>
+            <div class="celula-listagem">{{contaReceber.paciente.nome}}</div>
+            <div class="celula-listagem">{{contaReceber.empresa.nome}}</div>
+            <div class="celula-listagem">{{contaReceber.profissional.nome}}</div>
+            <div class="celula-listagem">{{contaReceber.dataAtendimento | date:'dd/MM/yyyy'}}</div>
+          </div>
+        }
       </div>
+    </div>
 
-      <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
-    }
-
+    <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
   }
 
-  @if (mostrarDetalhes) {
-    <app-contas-receber-detalhes
-      [contaReceber]="itemSelecionado"
-      (fechou)="fecharDetalhes()">
-    </app-contas-receber-detalhes>
-  }
+}
+
+  <app-contas-receber-detalhes
+    *ngIf="mostrarDetalhes"
+    [contaReceber]="itemSelecionado"
+    (fechou)="fecharDetalhes()">
+  </app-contas-receber-detalhes>
 
 </div>

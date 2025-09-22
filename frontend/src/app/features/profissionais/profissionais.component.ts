@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { ProfissionalService } from './profissional.service';
 import { Profissional } from './profissional.interface';
 import { ProfissionalDetalhesComponent } from './profissional-detalhes/profissional-detalhes.component';
@@ -16,6 +16,7 @@ import { FabComponent } from '../shared/fab/fab.component';
 @Component({
   selector: 'app-profissionais',
   imports: [
+    CommonModule,
     ProfissionalDetalhesComponent,
     ProfissionalFormComponent,
     LucideAngularModule,
@@ -24,7 +25,7 @@ import { FabComponent } from '../shared/fab/fab.component';
     PaginationComponent,
     TopBarComponent,
     FabComponent
-],
+  ],
   templateUrl: './profissionais.component.html',
   standalone: true
 })

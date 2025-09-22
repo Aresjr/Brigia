@@ -6,21 +6,19 @@
     <div></div>
 
     <div class="flex gap-4">
-      @if (!this.userService.isMedico()) {
-        <ng-select class="w-72 shadow-md hover:shadow-lg h-8 max-h-8 leading-none tooltip flex text-left"
-          (change)="selectProfissional($event)" placeholder="Todos os Profissionais - Selecione" data-tip="Filtrar Profissional">
-          <ng-option class="max-h-8" value="0">Todos os Profissionais - Selecione</ng-option>
-          @for(profissional of this.profissionais; track profissional.id) {
-            <ng-option class="max-h-8" value="{{ profissional.id }}">{{ profissional.nome }}</ng-option>
-          }
-          <ng-template ng-notfound-tmp>
-            <span class="text-sm p-6">Nenhum resultado</span>
-          </ng-template>
-        </ng-select>
-      }
+      <ng-select *ngIf="!this.userService.isMedico()" class="w-72 shadow-md hover:shadow-lg h-8 max-h-8 leading-none tooltip flex text-left"
+                 (change)="selectProfissional($event)" placeholder="Todos os Profissionais - Selecione" data-tip="Filtrar Profissional">
+        <ng-option class="max-h-8" value="0">Todos os Profissionais - Selecione</ng-option>
+        @for(profissional of this.profissionais; track profissional.id) {
+          <ng-option class="max-h-8" value="{{ profissional.id }}">{{ profissional.nome }}</ng-option>
+        }
+        <ng-template ng-notfound-tmp>
+          <span class="text-sm p-6">Nenhum resultado</span>
+        </ng-template>
+      </ng-select>
 
       <ng-select class="w-72 shadow-md hover:shadow-lg h-8 max-h-8 leading-none tooltip flex text-left"
-        (change)="selectPaciente($event)" placeholder="Todos os Pacientes - Selecione" data-tip="Filtrar Paciente">
+                 (change)="selectPaciente($event)" placeholder="Todos os Pacientes - Selecione" data-tip="Filtrar Paciente">
         <ng-option class="max-h-8" value="0">Todos os Pacientes - Selecione</ng-option>
         @for(paciente of this.pacientes; track paciente.id) {
           <ng-option class="max-h-8" value="{{ paciente.id }}">{{ paciente.nome }}</ng-option>
@@ -32,29 +30,29 @@
     </div>
   </div>
 
-  <app-calendario
-    class="z-10"
-    [events]="eventosExibicao"
-    [isLoading]="isLoading"
-    (detalhesAgendamento)="detalhesAgendamento($event)"
-    (diaClicado)="diaClicado($event)"
-    (horarioClicado)="horarioClicado($event)"
-    (dataAlterada)="dataAlterada($event)"
-    (recarrega)="carregarAgendamentos()">
-  </app-calendario>
+<app-calendario
+  class="z-10"
+  [events]="eventosExibicao"
+  [isLoading]="isLoading"
+  (detalhesAgendamento)="detalhesAgendamento($event)"
+  (diaClicado)="diaClicado($event)"
+  (horarioClicado)="horarioClicado($event)"
+  (dataAlterada)="dataAlterada($event)"
+  (recarrega)="carregarAgendamentos()">
+</app-calendario>
 
-  @if (exibeForm) {
-    <app-agendamento-form
-      [agendamentoDetalhes]="agendamentoDetalhes"
-      [dataAgendamento]="dataAgendamento"
-      [pacienteId]="pacienteId"
-      (save)="salvar($event)"
-      (cancel)="fecharForm()">
-    </app-agendamento-form>
-  }
+@if (exibeForm) {
+  <app-agendamento-form
+    [agendamentoDetalhes]="agendamentoDetalhes"
+    [dataAgendamento]="dataAgendamento"
+    [pacienteId]="pacienteId"
+    (save)="salvar($event)"
+    (cancel)="fecharForm()">
+  </app-agendamento-form>
+}
 
-  @if (mostraFab()) {
-    <app-fab (clicked)="onAddNovo()" class="fixed bottom-6 right-6 z-50"></app-fab>
-  }
+@if (mostraFab()) {
+  <app-fab (clicked)="onAddNovo()" class="fixed bottom-6 right-6 z-50"></app-fab>
+}
 
 </div>

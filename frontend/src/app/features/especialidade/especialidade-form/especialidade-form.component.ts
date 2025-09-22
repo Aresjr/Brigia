@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Especialidade, EspecialidadeRequest } from '../especialidade.interface';
@@ -10,10 +10,11 @@ import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-dir
   templateUrl: './especialidade-form.component.html',
   standalone: true,
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     LucideAngularModule,
     EmptyToNullDirective
-]
+  ]
 })
 export class EspecialidadeFormComponent implements OnInit {
   @Input() especialidade: Especialidade | null = null;

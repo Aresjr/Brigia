@@ -43,24 +43,24 @@
             <lucide-icon
               [name]="mostraTabelaConvenio ? 'chevron-down' : 'chevron-right'"
               class="w-4 h-4"/>
-            </div>
+          </div>
 
-            @if (mostraTabelaConvenio) {
-              @if (procedimento.precosProcedimento && procedimento.precosProcedimento.length > 0) {
-                <table class="min-w-full text-sm">
-                  <tbody class="divide-y divide-primary/20">
-                    @for (precoConvenio of procedimento.precosProcedimento; track precoConvenio.id) {
-                      <tr class="hover:bg-primary/10">
-                        <td class="px-6 py-3">{{ precoConvenio.convenio.nome }}</td>
-                        <td class="px-6 py-3 w-28 text-right font-medium text-primary">
-                          R$ {{ precoConvenio.preco | number:'1.2-2':'pt-BR' }}
-                        </td>
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-              }
-              @else {
+          @if (mostraTabelaConvenio) {
+            @if (procedimento.precosProcedimento && procedimento.precosProcedimento.length > 0) {
+              <table class="min-w-full text-sm">
+                <tbody class="divide-y divide-primary/20">
+                  @for (precoConvenio of procedimento.precosProcedimento; track precoConvenio.id) {
+                    <tr class="hover:bg-primary/10">
+                      <td class="px-6 py-3">{{ precoConvenio.convenio.nome }}</td>
+                      <td class="px-6 py-3 w-28 text-right font-medium text-primary">
+                        R$ {{ precoConvenio.preco | number:'1.2-2':'pt-BR' }}
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            }
+            @else {
               <div class="p-4 text-sm italic text-gray-500">
                 Não há preços cadastrados para convênios para este procedimento.
               </div>
@@ -72,11 +72,9 @@
           <button class="btn btn-ghost btn-sm" (click)="fechar()" >
             Fechar
           </button>
-          @if (exibeEditar()) {
-            <button class="btn btn-primary btn-sm" (click)="onEditar(procedimento)" >
-              Editar
-            </button>
-          }
+          <button class="btn btn-primary btn-sm" (click)="onEditar(procedimento)" *ngIf="exibeEditar()" >
+            Editar
+          </button>
         </div>
 
       </div>

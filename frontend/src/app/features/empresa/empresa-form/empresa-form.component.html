@@ -19,11 +19,9 @@
         <div>
           <label class="label-campo">Nome</label>
           <input type="text" formControlName="nome" class="campo" required [ngClass]="classesCampo('nome')">
-          @if (isInvalid('nome')) {
-            <div class="text-error text-sm">
-              Obrigatório
-            </div>
-          }
+          <div *ngIf="isInvalid('nome')" class="text-error text-sm">
+            Obrigatório
+          </div>
         </div>
 
         <div class="flex gap-3">
@@ -42,7 +40,7 @@
             <label class="label-campo">Valor Mín. Mensal</label>
             <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('valorMinimoMensal', this.isDetalhes)">
               R$ <input type="text" formControlName="valorMinimoMensal" class="campo border-0" mask="separator.2"
-              thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
+                     thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
             </label>
           </div>
 
@@ -50,7 +48,7 @@
             <label class="label-campo">Mín. por Funcionário</label>
             <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('minimoPorFuncionario', this.isDetalhes)">
               R$ <input type="text" formControlName="minimoPorFuncionario" class="campo border-0" mask="separator.2"
-              thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
+                     thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
             </label>
           </div>
 
@@ -58,7 +56,7 @@
             <label class="label-campo">Valor Mês</label>
             <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('valorMes', this.isDetalhes)">
               R$ <input type="text" formControlName="valorMes" class="campo border-0" mask="separator.2"
-              thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
+                        thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
             </label>
           </div>
         </div>
@@ -97,11 +95,9 @@
           <button type="button" (click)="onCancel()" class="btn btn-ghost btn-sm">
             Fechar
           </button>
-          @if (!isDetalhes) {
-            <button type="submit" class="btn btn-success btn-sm">
-              Salvar
-            </button>
-          }
+          <button type="submit" class="btn btn-success btn-sm" *ngIf="!isDetalhes">
+            Salvar
+          </button>
         </div>
       </div>
     </form>

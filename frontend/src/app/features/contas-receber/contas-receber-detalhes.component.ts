@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgClass } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import {
   CorContaReceber, StatusContaReceberDescricao
@@ -11,10 +11,9 @@ import { ContaReceber } from './contas-receber.interface';
   selector: 'app-contas-receber-detalhes',
   templateUrl: './contas-receber-detalhes.component.html',
   imports: [
-    ReactiveFormsModule,
-    NgClass,
-    LucideAngularModule
-]
+    ReactiveFormsModule, NgClass,
+    LucideAngularModule, NgIf
+  ]
 })
 export class AgendamentoFormComponent implements OnInit {
   @Input() contaReceber: ContaReceber | null = null;
