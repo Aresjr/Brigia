@@ -21,7 +21,9 @@ export class AgendamentoFormComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log('contaReceber', this.contaReceber);
+  }
 
   fechar(): void {
     this.fechou.emit();

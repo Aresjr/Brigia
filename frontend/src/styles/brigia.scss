@@ -68,6 +68,16 @@ input[type="number"] {
   @apply border-base-content;
 }
 
+input[type="date"] {
+  appearance: auto;
+  -webkit-appearance: auto;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 1;
+  display: block;
+  cursor: pointer;
+  color: black;
+}
 .label-campo {
   @apply block font-medium;
 }

@@ -1,5 +1,6 @@
 package br.com.nemeia.brigia.service;
 
+import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ContaReceberMapper;
 import br.com.nemeia.brigia.model.Atendimento;
@@ -25,7 +26,7 @@ public class ContaReceberService {
     public Page<ContaReceber> getPaged(int page, int size) {
         log.info("Buscando contas a receber paginadas - page: {}, size: {}", page, size);
         var pageable = PageRequest.of(page, size);
-        return repository.findAll(pageable);
+        return repository.findAllByUnidadeIdIs(pageable, SecurityHolder.getLoggedUserUnidadeId());
     }
 
     @Transactional(readOnly = true)

@@ -10,7 +10,11 @@
       <div class="max-w-64 px-6 py-2.5">
         <label class="label-campo tooltip text-left" data-tip="Filtrar Status">
           Status
-          <ng-select class="campo-select" placeholder="Todos">
+          <ng-select class="campo-select" placeholder="Todos" (change)="selectStatus($event)">
+            <ng-option class="max-h-8" value="0">Todos</ng-option>
+            @for (status of StatusContaReceber | keyvalue; track status.value) {
+              <ng-option class="max-h-8" value="{{ status.value }}">{{ StatusContaReceberDescricao[status.value] }}</ng-option>
+            }
             <ng-template ng-notfound-tmp>
               <span class="text-sm p-6">Nenhum resultado</span>
             </ng-template>
@@ -20,7 +24,11 @@
       <div class="max-w-64 px-6 py-2.5">
         <label class="label-campo">
           Paciente
-          <ng-select class="campo-select" placeholder="Todos">
+          <ng-select class="campo-select" placeholder="Todos" (change)="selectPaciente($event)">
+            <ng-option class="max-h-8" value="0">Todos</ng-option>
+            @for (paciente of pacientes; track paciente.id) {
+              <ng-option class="max-h-8" value="{{ paciente.id }}">{{ paciente.nome }}</ng-option>
+            }
             <ng-template ng-notfound-tmp>
               <span class="text-sm p-6">Nenhum resultado</span>
             </ng-template>
@@ -30,7 +38,11 @@
       <div class="max-w-64 px-6 py-2.5">
         <label class="label-campo" for="tipoAgendamento">
           Empresa
-          <ng-select class="campo-select" placeholder="Todos">
+          <ng-select class="campo-select" placeholder="Todos" (change)="selectEmpresa($event)">
+            <ng-option class="max-h-8" value="0">Todos</ng-option>
+            @for (empresa of empresas; track empresa.id) {
+              <ng-option class="max-h-8" value="{{ empresa.id }}">{{ empresa.nome }}</ng-option>
+            }
             <ng-template ng-notfound-tmp>
               <span class="text-sm p-6">Nenhum resultado</span>
             </ng-template>
@@ -55,11 +67,11 @@
       <div class="max-w-64 px-6 py-2.5">
         <label class="label-campo" for="tipoAgendamento">
           Data Atendimento
-          <ng-select class="campo-select" placeholder="Todos">
-            <ng-template ng-notfound-tmp>
-              <span class="text-sm p-6">Nenhum resultado</span>
-            </ng-template>
-          </ng-select>
+          <div class="flex items-center gap-2">
+            <input type="date" class="campo w-32" placeholder="Data Início">
+            <span class="text-sm">até</span>
+            <input type="date" class="campo w-32" placeholder="Data Fim">
+          </div>
         </label>
       </div>
     </div>
@@ -115,5 +127,11 @@
   }
 
 }
+
+  <app-contas-receber-detalhes
+    *ngIf="mostrarDetalhes"
+    [contaReceber]="itemSelecionado"
+    (fechou)="fecharDetalhes()">
+  </app-contas-receber-detalhes>
 
 </div>
