@@ -5,276 +5,299 @@
     <div class="flex justify-between items-center">
       <div class="flex items-center gap-4 justify-between">
         <h2 class="text-lg font-semibold">{{ titulo }}</h2>
-        <div *ngIf="agendamentoDetalhes" class="badge font-semibold p-3 text-base-100"
-          [ngClass]="'bg-['+ CorAtendimento[agendamentoDetalhes.status] +']'">
-          {{ StatusDescricao[agendamentoDetalhes.status] }}
-        </div>
+        @if (agendamentoDetalhes) {
+          <div class="badge font-semibold p-3 text-base-100"
+            [ngClass]="'bg-['+ CorAtendimento[agendamentoDetalhes.status] +']'">
+            {{ StatusDescricao[agendamentoDetalhes.status] }}
+          </div>
+        }
       </div>
 
       <div>
-        <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" title="Editar" (click)="onEdit()" *ngIf="podeEditar()" title="Editar">
-          <lucide-icon name="pencil" class="inline w-5 h-5"/>
-        </button>
+        @if (podeEditar()) {
+          <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" title="Editar" (click)="onEdit()" title="Editar">
+            <lucide-icon name="pencil" class="inline w-5 h-5"/>
+          </button>
+        }
         <button type="button" class="btn btn-sm btn-ghost btn-circle" title="Fechar" (click)="fechar()" title="Fechar">
           <lucide-icon name="x" class="inline w-5 h-5"/>
         </button>
       </div>
     </div>
 
-    <div *ngIf="isLoading" class="flex justify-center items-center h-32">
-      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
-    </div>
+    @if (isLoading) {
+      <div class="flex justify-center items-center h-32">
+        <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
+      </div>
+    }
 
-    <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6" [ngClass]="{ 'visualizacao': !modoSalvar }">
-      <div class="flex">
-        <div class="w-[8rem] mr-4" >
-          <label class="label-campo" for="data">
-            Data <span aria-hidden="true" class="text-error">*</span>
-            <input type="date" formControlName="data" required id="data" [min]="hoje"
-                   class="campo" [ngClass]="classesCampo('data')" >
-            <div *ngIf="isInvalid('data')" class="text-error text-sm">
-              Obrigatório
-            </div>
-          </label>
-        </div>
-        <div class="w-[4rem] mr-4 group tooltip text-left" data-tip="Horário inicial do agendamento">
-          <label class="label-campo" for="hora">
-            Horário <span aria-hidden="true" class="text-error">*</span>
-            <input type="text" formControlName="hora" maxlength="5" id="hora" required
-                   mask="00:00" emptyToNull class="campo p-[7px]" [dropSpecialCharacters]="false"
-                   [ngClass]="classesCampo('hora')">
-            <div *ngIf="isInvalid('hora')" class="text-error text-sm">
-              Obrigatório
-            </div>
-          </label>
-        </div>
-        <div class="w-[5rem] mr-4 group tooltip text-left" aria-placeholder="Duração em minutos"
-             (mouseenter)="showTooltip = true" (mouseleave)="showTooltip = false" data-tip="Duração em minutos">
-          <label class="label-campo" for="duracao">
-            Duração <span aria-hidden="true" class="text-error">*</span>
-            <input type="number" formControlName="duracao" min="10" max="480" id="duracao" required
-                   (input)="limitLength($event)" emptyToNull maxlength="3"
-                   class="campo p-[7px]" [ngClass]="classesCampo('duracao')">
-            <div *ngIf="isInvalid('duracao')" class="text-error text-sm">
-              Obrigatório
-            </div>
-          </label>
-        </div>
-        <div class="w-[23rem] mr-4" >
-          <label class="label-campo" for="pacienteId">
-            Paciente <span aria-hidden="true" class="text-error">*</span>
-              <ng-select formControlName="pacienteId" class="campo-select"
-                         [ngClass]="classesCampo('pacienteId')" labelForId="pacienteId" placeholder="Selecione"
-                         (change)="selectPaciente($event)" (clear)="selectPaciente(null)" required >
-                  @for(paciente of this.pacientes; track paciente.id) {
-                    <ng-option [value]="paciente.id" class="b-0">{{ paciente.nome }} - {{ paciente.dataNascimento | date:'dd/MM/yyyy' }}</ng-option>
-                  }
-                <ng-template ng-notfound-tmp>
-                  <div class="p-2 flex items-center justify-between gap-4">
-                    <div class="p-2 text-sm">
-                      Paciente não encontrado.
-                    </div>
-                    <button (click)="mostrarFormularioNovoPaciente=true" class="btn btn-success btn-xs flex items-center gap-2">
-                      <lucide-icon name="plus" class="w-3 h-3"></lucide-icon>
-                      Cadastrar
-                    </button>
+    @if (!isLoading) {
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6" [ngClass]="{ 'visualizacao': !modoSalvar }">
+        <div class="flex">
+          <div class="w-[8rem] mr-4" >
+            <label class="label-campo" for="data">
+              Data <span aria-hidden="true" class="text-error">*</span>
+              <input type="date" formControlName="data" required id="data" [min]="hoje"
+                class="campo" [ngClass]="classesCampo('data')" >
+                @if (isInvalid('data')) {
+                  <div class="text-error text-sm">
+                    Obrigatório
                   </div>
-                </ng-template>
-              </ng-select>
-            <div *ngIf="isInvalid('pacienteId')" class="text-error text-sm">
-              Obrigatório
+                }
+              </label>
             </div>
-          </label>
-        </div>
+            <div class="w-[4rem] mr-4 group tooltip text-left" data-tip="Horário inicial do agendamento">
+              <label class="label-campo" for="hora">
+                Horário <span aria-hidden="true" class="text-error">*</span>
+                <input type="text" formControlName="hora" maxlength="5" id="hora" required
+                  mask="00:00" emptyToNull class="campo p-[7px]" [dropSpecialCharacters]="false"
+                  [ngClass]="classesCampo('hora')">
+                  @if (isInvalid('hora')) {
+                    <div class="text-error text-sm">
+                      Obrigatório
+                    </div>
+                  }
+                </label>
+              </div>
+              <div class="w-[5rem] mr-4 group tooltip text-left" aria-placeholder="Duração em minutos"
+                (mouseenter)="showTooltip = true" (mouseleave)="showTooltip = false" data-tip="Duração em minutos">
+                <label class="label-campo" for="duracao">
+                  Duração <span aria-hidden="true" class="text-error">*</span>
+                  <input type="number" formControlName="duracao" min="10" max="480" id="duracao" required
+                    (input)="limitLength($event)" emptyToNull maxlength="3"
+                    class="campo p-[7px]" [ngClass]="classesCampo('duracao')">
+                    @if (isInvalid('duracao')) {
+                      <div class="text-error text-sm">
+                        Obrigatório
+                      </div>
+                    }
+                  </label>
+                </div>
+                <div class="w-[23rem] mr-4" >
+                  <label class="label-campo" for="pacienteId">
+                    Paciente <span aria-hidden="true" class="text-error">*</span>
+                    <ng-select formControlName="pacienteId" class="campo-select"
+                      [ngClass]="classesCampo('pacienteId')" labelForId="pacienteId" placeholder="Selecione"
+                      (change)="selectPaciente($event)" (clear)="selectPaciente(null)" required >
+                      @for(paciente of this.pacientes; track paciente.id) {
+                        <ng-option [value]="paciente.id" class="b-0">{{ paciente.nome }} - {{ paciente.dataNascimento | date:'dd/MM/yyyy' }}</ng-option>
+                      }
+                      <ng-template ng-notfound-tmp>
+                        <div class="p-2 flex items-center justify-between gap-4">
+                          <div class="p-2 text-sm">
+                            Paciente não encontrado.
+                          </div>
+                          <button (click)="mostrarFormularioNovoPaciente=true" class="btn btn-success btn-xs flex items-center gap-2">
+                            <lucide-icon name="plus" class="w-3 h-3"></lucide-icon>
+                            Cadastrar
+                          </button>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                    @if (isInvalid('pacienteId')) {
+                      <div class="text-error text-sm">
+                        Obrigatório
+                      </div>
+                    }
+                  </label>
+                </div>
+                <div class="w-[11rem]" >
+                  <label class="label-campo" for="tipoAgendamento">
+                    Tipo <span aria-hidden="true" class="text-error">*</span>
+                    <ng-select formControlName="tipoAgendamento" class="campo-select" required placeholder="Selecione"
+                      [ngClass]="classesCampo('tipoAgendamento')" bindValue="valor" bindLabel="descricao"
+                      [items]="this.tipoAgendamento" labelForId="tipoAgendamento">
+                      <ng-template ng-notfound-tmp>
+                        <span class="text-sm p-6">Nenhum resultado</span>
+                      </ng-template>
+                    </ng-select>
+                    @if (isInvalid('tipoAgendamento')) {
+                      <div class="text-error text-sm">
+                        Obrigatório
+                      </div>
+                    }
+                  </label>
+                </div>
+              </div>
+              <div class="flex mt-2">
+                <div class="w-[12rem] mr-4">
+                  <label class="label-campo" for="convenioId">Convênio</label>
+                  <ng-select formControlName="convenioId" class="campo-select"
+                    [ngClass]="classesCampo('convenioId')" placeholder="Selecione"
+                    [items]="this.convenios" bindValue="id" bindLabel="nome" labelForId="convenioId"
+                    (change)="selectConvenio($event)" (clear)="selectConvenio(null)">
+                    <ng-template ng-notfound-tmp>
+                      <span class="text-sm p-6">Nenhum resultado</span>
+                    </ng-template>
+                  </ng-select>
+                </div>
+                <div class="mr-4 w-[20rem]" >
+                  <label class="label-campo" for="especialidadeId">
+                    Especialidade <span aria-hidden="true" class="text-error">*</span>
+                    <ng-select formControlName="especialidadeId" required class="campo-select"
+                      labelForId="especialidadeId" [ngClass]="classesCampo('especialidadeId')"
+                      [items]="this.especialidades" bindValue="id" bindLabel="nome" placeholder="Selecione"
+                      (change)="selectEspecialidade($event)" (clear)="selectEspecialidade(null)">
+                      <ng-template ng-notfound-tmp>
+                        <span class="text-sm p-6">Nenhum resultado</span>
+                      </ng-template>
+                    </ng-select>
+                    @if (isInvalid('especialidadeId')) {
+                      <div class="text-error text-sm">
+                        Obrigatório
+                      </div>
+                    }
+                  </label>
+                </div>
+                <div class="w-[21rem]" >
+                  <label class="label-campo" for="profissionalId">
+                    Profissional <span aria-hidden="true" class="text-error">*</span>
+                    <ng-select formControlName="profissionalId" required class="campo-select"
+                      [ngClass]="classesCampo('profissionalId')" placeholder="Selecione"
+                      [items]="this.profissionaisFiltrados" bindValue="id" bindLabel="nome" labelForId="profissionalId">
+                      <ng-template ng-notfound-tmp>
+                        <span class="text-sm p-6">Nenhum resultado</span><br/>
+                        <span class="text-sm p-6">Verifique a especialidade selecionada</span>
+                      </ng-template>
+                    </ng-select>
+                    @if (isInvalid('profissionalId')) {
+                      <div class="text-error text-sm">
+                        Obrigatório
+                      </div>
+                    }
+                  </label>
+                </div>
+              </div>
+              <div class="flex mt-2">
+                <div class="w-[24rem] mr-4" >
+                  <label class="label-campo" for="empresaId">
+                    Empresa
+                    <ng-select formControlName="empresaId" class="campo-select" [ngClass]="classesCampo('empresaId')"
+                      [items]="this.empresas" bindValue="id" bindLabel="nome" labelForId="empresaId" placeholder="Selecione"
+                      (change)="selectEmpresa($event)" (clear)="selectEmpresa(null)">
+                      <ng-template ng-notfound-tmp>
+                        <span class="text-sm p-6">Nenhum resultado</span>
+                      </ng-template>
+                    </ng-select>
+                    @if (empresaSelecionada) {
+                      <div class="py-2 px-4 text-xs italic rounded-b-md"
+                        [ngClass]=" ColorUtils.getColorClasses(empresaSelecionada.plano) ">
+                        {{ empresaSelecionada.plano?.nome }}
+                      </div>
+                    }
+                  </label>
+                </div>
+                <div class="w-[30rem]" >
+                  <label class="label-campo" for="procedimentoId">Procedimento</label>
+                  <ng-select formControlName="procedimentoId" class="campo-select"
+                    [ngClass]="classesCampo('procedimentoId')" placeholder="Selecione"
+                    (change)="selectProcedimento($event)" (clear)="selectProcedimento(null)"
+                    [items]="this.procedimentos" bindValue="id" bindLabel="nome" labelForId="procedimentoId">
+                    <ng-template ng-notfound-tmp>
+                      <span class="text-sm p-6">Nenhum resultado</span>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+              <div class="flex mt-2">
+                @if (!userService.isMedico()) {
+                  <div class="w-[11rem] mr-4" >
+                    <label class="label-campo" for="formaPagamento">
+                      Forma de Pagamento <span aria-hidden="true" class="text-error">*</span>
+                      <ng-select formControlName="formaPagamento" class="campo-select" required placeholder="Selecione"
+                        [ngClass]="classesCampo('formaPagamento')" bindValue="valor" bindLabel="descricao"
+                        [items]="this.formasPagamento" labelForId="formaPagamento">
+                        <ng-template ng-notfound-tmp>
+                          <span class="text-sm p-6">Nenhum resultado</span>
+                        </ng-template>
+                      </ng-select>
+                      @if (isInvalid('formaPagamento')) {
+                        <div class="text-error text-sm">
+                          Obrigatório
+                        </div>
+                      }
+                    </label>
+                  </div>
+                  <div class="w-[6rem] mr-4" >
+                    <label class="label-campo" for="valor">
+                      Valor <span aria-hidden="true" class="text-error">*</span>
+                      @if (this.modoSalvar && !valorEditavel) {
+                        <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" title="Editar" (click)="editaValor()" title="Editar Valor">
+                          <lucide-icon name="pencil" class="h-3.5"/>
+                        </button>
+                      }
+                      @if (this.modoSalvar && valorEditavel) {
+                        <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" title="Fechar" (click)="cancelarEdicaoValor()" title="Cancelar Edição de Valor">
+                          <lucide-icon name="x" class="h-3.5"/>
+                        </button>
+                      }
+                    </label>
+                    <label class="input input-sm input-bordered flex items-center h-[2.4rem] bg-base-100" [ngClass]="classesCampo('valor', !this.valorEditavel)">
+                      R$
+                      <input type="text" formControlName="valor" min="1" max="99999" id="valor"
+                        (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
+                        mask="separator.2" thousandSeparator="" decimalMarker="," required
+                        class="campo border-0" [readOnly]="!this.valorEditavel">
+                      </label>
+                      @if (isInvalid('valor')) {
+                        <label class="text-error text-sm">
+                          Obrigatório
+                        </label>
+                      }
+                    </div>
+                    <div class="w-[5rem] mr-4" >
+                      <label class="label-campo" for="desconto">
+                        Desconto
+                      </label>
+                      <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('desconto', !this.valorEditavel)">
+                        R$
+                        <input type="text" formControlName="desconto" min="1" max="99999" id="desconto"
+                          (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
+                          mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0">
+                        </label>
+                      </div>
+                    }
+                    <div class="w-[30rem]" >
+                      <label class="label-campo" for="observacoes">
+                        Observações
+                        <textarea id="observacoes" formControlName="observacoes" rows="2" emptyToNull class="campo"
+                          (input)="autoResize($event)">
+                        </textarea>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" class="btn btn-ghost btn-sm" (click)="fechar()" >
+                      Fechar
+                    </button>
+                    @if (podeAbrirAtendimento(agendamentoDetalhes)) {
+                      <button type="button" class="btn btn-primary btn-sm" (click)="abrirAtendimento(agendamentoDetalhes)" >
+                        Abrir Atendimento
+                      </button>
+                    }
+                    @if (modoSalvar) {
+                      <button type="submit" class="btn btn-success btn-sm" >
+                        Salvar
+                      </button>
+                    }
+                  </div>
+                </form>
+              }
 
-        <div class="w-[11rem]" >
-          <label class="label-campo" for="tipoAgendamento">
-            Tipo <span aria-hidden="true" class="text-error">*</span>
-            <ng-select formControlName="tipoAgendamento" class="campo-select" required placeholder="Selecione"
-                       [ngClass]="classesCampo('tipoAgendamento')" bindValue="valor" bindLabel="descricao"
-                       [items]="this.tipoAgendamento" labelForId="tipoAgendamento">
-              <ng-template ng-notfound-tmp>
-                <span class="text-sm p-6">Nenhum resultado</span>
-              </ng-template>
-            </ng-select>
-            <div *ngIf="isInvalid('tipoAgendamento')" class="text-error text-sm">
-              Obrigatório
             </div>
-          </label>
-        </div>
-      </div>
+          </div>
 
-      <div class="flex mt-2">
-        <div class="w-[12rem] mr-4">
-          <label class="label-campo" for="convenioId">Convênio</label>
-          <ng-select formControlName="convenioId" class="campo-select"
-                     [ngClass]="classesCampo('convenioId')" placeholder="Selecione"
-                     [items]="this.convenios" bindValue="id" bindLabel="nome" labelForId="convenioId"
-                     (change)="selectConvenio($event)" (clear)="selectConvenio(null)">
-            <ng-template ng-notfound-tmp>
-              <span class="text-sm p-6">Nenhum resultado</span>
-            </ng-template>
-          </ng-select>
-        </div>
+          @if (mostrarFormularioNovoPaciente) {
+            <app-paciente-form
+              (save)="salvarNovoPaciente($event)"
+              (cancel)="cancelarNovoPaciente()">
+            </app-paciente-form>
+          }
 
-        <div class="mr-4 w-[20rem]" >
-          <label class="label-campo" for="especialidadeId">
-            Especialidade <span aria-hidden="true" class="text-error">*</span>
-            <ng-select formControlName="especialidadeId" required class="campo-select"
-                       labelForId="especialidadeId" [ngClass]="classesCampo('especialidadeId')"
-                       [items]="this.especialidades" bindValue="id" bindLabel="nome" placeholder="Selecione"
-                       (change)="selectEspecialidade($event)" (clear)="selectEspecialidade(null)">
-              <ng-template ng-notfound-tmp>
-                <span class="text-sm p-6">Nenhum resultado</span>
-              </ng-template>
-            </ng-select>
-            <div *ngIf="isInvalid('especialidadeId')" class="text-error text-sm">
-              Obrigatório
-            </div>
-          </label>
-        </div>
-
-        <div class="w-[21rem]" >
-          <label class="label-campo" for="profissionalId">
-            Profissional <span aria-hidden="true" class="text-error">*</span>
-            <ng-select formControlName="profissionalId" required class="campo-select"
-                       [ngClass]="classesCampo('profissionalId')" placeholder="Selecione"
-                       [items]="this.profissionaisFiltrados" bindValue="id" bindLabel="nome" labelForId="profissionalId">
-              <ng-template ng-notfound-tmp>
-                <span class="text-sm p-6">Nenhum resultado</span><br/>
-                <span class="text-sm p-6">Verifique a especialidade selecionada</span>
-              </ng-template>
-            </ng-select>
-            <div *ngIf="isInvalid('profissionalId')" class="text-error text-sm">
-              Obrigatório
-            </div>
-          </label>
-        </div>
-      </div>
-
-      <div class="flex mt-2">
-        <div class="w-[24rem] mr-4" >
-          <label class="label-campo" for="empresaId">
-            Empresa
-            <ng-select formControlName="empresaId" class="campo-select" [ngClass]="classesCampo('empresaId')"
-                       [items]="this.empresas" bindValue="id" bindLabel="nome" labelForId="empresaId" placeholder="Selecione"
-                       (change)="selectEmpresa($event)" (clear)="selectEmpresa(null)">
-              <ng-template ng-notfound-tmp>
-                <span class="text-sm p-6">Nenhum resultado</span>
-              </ng-template>
-            </ng-select>
-            <div class="py-2 px-4 text-xs italic rounded-b-md" *ngIf="empresaSelecionada"
-                 [ngClass]=" ColorUtils.getColorClasses(empresaSelecionada.plano) ">
-              {{ empresaSelecionada.plano?.nome }}
-            </div>
-          </label>
-        </div>
-
-        <div class="w-[30rem]" >
-          <label class="label-campo" for="procedimentoId">Procedimento</label>
-          <ng-select formControlName="procedimentoId" class="campo-select"
-                     [ngClass]="classesCampo('procedimentoId')" placeholder="Selecione"
-                     (change)="selectProcedimento($event)" (clear)="selectProcedimento(null)"
-                     [items]="this.procedimentos" bindValue="id" bindLabel="nome" labelForId="procedimentoId">
-            <ng-template ng-notfound-tmp>
-              <span class="text-sm p-6">Nenhum resultado</span>
-            </ng-template>
-          </ng-select>
-        </div>
-      </div>
-
-      <div class="flex mt-2">
-
-      @if (!userService.isMedico()) {
-
-        <div class="w-[11rem] mr-4" >
-          <label class="label-campo" for="formaPagamento">
-            Forma de Pagamento <span aria-hidden="true" class="text-error">*</span>
-            <ng-select formControlName="formaPagamento" class="campo-select" required placeholder="Selecione"
-                       [ngClass]="classesCampo('formaPagamento')" bindValue="valor" bindLabel="descricao"
-                       [items]="this.formasPagamento" labelForId="formaPagamento">
-              <ng-template ng-notfound-tmp>
-                <span class="text-sm p-6">Nenhum resultado</span>
-              </ng-template>
-            </ng-select>
-            <div *ngIf="isInvalid('formaPagamento')" class="text-error text-sm">
-              Obrigatório
-            </div>
-          </label>
-        </div>
-        <div class="w-[6rem] mr-4" >
-          <label class="label-campo" for="valor">
-            Valor <span aria-hidden="true" class="text-error">*</span>
-            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" title="Editar" (click)="editaValor()" *ngIf="this.modoSalvar && !valorEditavel" title="Editar Valor">
-              <lucide-icon name="pencil" class="h-3.5"/>
-            </button>
-            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" title="Fechar" (click)="cancelarEdicaoValor()" *ngIf="this.modoSalvar && valorEditavel" title="Cancelar Edição de Valor">
-              <lucide-icon name="x" class="h-3.5"/>
-            </button>
-          </label>
-
-          <label class="input input-sm input-bordered flex items-center h-[2.4rem] bg-base-100" [ngClass]="classesCampo('valor', !this.valorEditavel)">
-            R$
-            <input type="text" formControlName="valor" min="1" max="99999" id="valor"
-                   (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
-                   mask="separator.2" thousandSeparator="" decimalMarker="," required
-                   class="campo border-0" [readOnly]="!this.valorEditavel">
-          </label>
-          <label *ngIf="isInvalid('valor')" class="text-error text-sm">
-            Obrigatório
-          </label>
-        </div>
-
-        <div class="w-[5rem] mr-4" >
-          <label class="label-campo" for="desconto">
-            Desconto
-          </label>
-          <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('desconto', !this.valorEditavel)">
-            R$
-            <input type="text" formControlName="desconto" min="1" max="99999" id="desconto"
-                   (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
-                   mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0">
-          </label>
-        </div>
-
-      }
-
-        <div class="w-[30rem]" >
-          <label class="label-campo" for="observacoes">
-            Observações
-            <textarea id="observacoes" formControlName="observacoes" rows="2" emptyToNull class="campo"
-                      (input)="autoResize($event)">
-            </textarea>
-          </label>
-        </div>
-
-      </div>
-
-      <div class="flex justify-end gap-3 mt-6">
-        <button type="button" class="btn btn-ghost btn-sm" (click)="fechar()" >
-          Fechar
-        </button>
-        <button type="button" class="btn btn-primary btn-sm" *ngIf="podeAbrirAtendimento(agendamentoDetalhes)" (click)="abrirAtendimento(agendamentoDetalhes)" >
-          Abrir Atendimento
-        </button>
-        <button type="submit" class="btn btn-success btn-sm" *ngIf="modoSalvar" >
-          Salvar
-        </button>
-      </div>
-    </form>
-
-  </div>
-</div>
-
-<app-paciente-form
-  *ngIf="mostrarFormularioNovoPaciente"
-  (save)="salvarNovoPaciente($event)"
-  (cancel)="cancelarNovoPaciente()">
-</app-paciente-form>
-
-<app-confirm-dialog
-  *ngIf="exibeConfirmCancelamento"
-  message="Você já preencheu algumas informações do agendamento, deseja realmente sair?"
-  (confirm)="fechar(true)"
-  (cancel)="exibeConfirmCancelamento = false">
-</app-confirm-dialog>
+          @if (exibeConfirmCancelamento) {
+            <app-confirm-dialog
+              message="Você já preencheu algumas informações do agendamento, deseja realmente sair?"
+              (confirm)="fechar(true)"
+              (cancel)="exibeConfirmCancelamento = false">
+            </app-confirm-dialog>
+          }

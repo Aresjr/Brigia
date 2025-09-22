@@ -38,10 +38,12 @@
           <span class="font-semibold">Clínica:</span>
           <span>{{ agendamento?.nomeUnidade }}</span>
         </div>
-        <div class="flex justify-between border-b border-base-300 pb-2" *ngIf="agendamento?.enderecoUnidade">
-          <span class="font-semibold">Endereço:</span>
-          <span>{{ agendamento?.enderecoUnidade }}</span>
-        </div>
+        @if (agendamento?.enderecoUnidade) {
+          <div class="flex justify-between border-b border-base-300 pb-2">
+            <span class="font-semibold">Endereço:</span>
+            <span>{{ agendamento?.enderecoUnidade }}</span>
+          </div>
+        }
       </div>
 
       <div class="flex flex-wrap justify-center gap-4">

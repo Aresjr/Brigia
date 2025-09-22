@@ -14,84 +14,85 @@
         <div>
           <label class="label-campo">Nome</label>
           <input type="text" formControlName="nome"
-                 class="campo">
-        </div>
-
-        <div class="flex space-x-4">
-          <div class="w-24 tooltip text-left" data-tip="Valor (Particular)">
-            <label class="label-campo">Valor</label>
-            <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
-              R$ <input type="text" formControlName="valorPadrao" min="1" max="99999" id="valor"
-                        (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
-                        mask="separator.2" thousandSeparator="" decimalMarker="," required
-                        class="campo border-0" [ngClass]="classesCampo('valor')">
-            </label>
-            <div *ngIf="isInvalid('valor')" class="text-error text-sm">
-              Obrigatório
-            </div>
+            class="campo">
           </div>
 
-          <div class="w-[27rem]">
-            <label class="label-campo">Especialidade</label>
-            <ng-select formControlName="especialidadeId" class="campo-select" required placeholder="Selecione"
-                       [ngClass]="classesCampo('especialidadeId')" labelForId="especialidadeId">
-              @for(especialidade of this.especialidades; track especialidade.id) {
-                <ng-option [value]="especialidade.id" class="b-0">{{ especialidade.nome }}</ng-option>
+          <div class="flex space-x-4">
+            <div class="w-24 tooltip text-left" data-tip="Valor (Particular)">
+              <label class="label-campo">Valor</label>
+              <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
+                R$ <input type="text" formControlName="valorPadrao" min="1" max="99999" id="valor"
+                (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
+                mask="separator.2" thousandSeparator="" decimalMarker="," required
+                class="campo border-0" [ngClass]="classesCampo('valor')">
+              </label>
+              @if (isInvalid('valor')) {
+                <div class="text-error text-sm">
+                  Obrigatório
+                </div>
               }
-              <ng-template ng-notfound-tmp>
-                <span class="text-sm p-6">Nenhum resultado</span>
-              </ng-template>
-            </ng-select>
-          </div>
-        </div>
+            </div>
 
-        <div>
-          <label class="label-campo">Observações</label>
-          <textarea id="observacoes" formControlName="observacoes" rows="2" emptyToNull class="campo" >
-          </textarea>
-        </div>
-
-        <div class="mt-6">
-          <div class="flex justify-between items-center mb-2">
-            <h3 class="text-lg font-medium">Valores por Convênio</h3>
-          </div>
-
-          <div class="rounded-t-lg">
-            <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 p-3 font-medium">
-              <div>Convênio</div>
-              <div>Valor</div>
-              <div>Repasse</div>
+            <div class="w-[27rem]">
+              <label class="label-campo">Especialidade</label>
+              <ng-select formControlName="especialidadeId" class="campo-select" required placeholder="Selecione"
+                [ngClass]="classesCampo('especialidadeId')" labelForId="especialidadeId">
+                @for(especialidade of this.especialidades; track especialidade.id) {
+                  <ng-option [value]="especialidade.id" class="b-0">{{ especialidade.nome }}</ng-option>
+                }
+                <ng-template ng-notfound-tmp>
+                  <span class="text-sm p-6">Nenhum resultado</span>
+                </ng-template>
+              </ng-select>
             </div>
           </div>
 
-          <div class="space-y-1" formArrayName="precosConvenios">
-            <div *ngFor="let preco of precosConvenios.controls; let i = index" [formGroupName]="i"
-                 class="grid grid-cols-[1fr_8rem_8rem] gap-3 px-3 py-1 items-center hover:bg-base-200 rounded-lg">
-
-              <div class="text-sm">{{preco.get('nome')?.value}}</div>
-
-              <input type="text" [id]="'preco_' + i" formControlName="preco" required
-                     mask="separator.2" thousandSeparator="" decimalMarker=","
-                     class="campo mt-0 p-2 text-right" min="0" max="99999" step="1"
-                     [ngClass]="classesCampo('preco_' + i)" >
-
-              <input [id]="'repasse_' + i" type="number" formControlName="repasse"
-                     mask="separator.2" thousandSeparator="" decimalMarker=","
-                     class="campo mt-0 p-2 text-right" min="0" max="99999" step="1">
-            </div>
+          <div>
+            <label class="label-campo">Observações</label>
+            <textarea id="observacoes" formControlName="observacoes" rows="2" emptyToNull class="campo" >
+            </textarea>
           </div>
-        </div>
 
-        <div class="flex justify-end space-x-3 mt-6">
-          <button type="button" (click)="onCancel()" class="btn btn-ghost btn-sm" >
-            Cancelar
-          </button>
-          <button type="submit" class="btn btn-success btn-sm">
-            Salvar
-          </button>
+          <div class="mt-6">
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="text-lg font-medium">Valores por Convênio</h3>
+            </div>
+
+            <div class="rounded-t-lg">
+              <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 p-3 font-medium">
+                <div>Convênio</div>
+                <div>Valor</div>
+                <div>Repasse</div>
+              </div>
+            </div>
+
+            <div class="space-y-1" formArrayName="precosConvenios">
+              @for (preco of precosConvenios.controls; track preco; let i = $index) {
+                <div [formGroupName]="i"
+                  class="grid grid-cols-[1fr_8rem_8rem] gap-3 px-3 py-1 items-center hover:bg-base-200 rounded-lg">
+                  <div class="text-sm">{{preco.get('nome')?.value}}</div>
+                  <input type="text" [id]="'preco_' + i" formControlName="preco" required
+                    mask="separator.2" thousandSeparator="" decimalMarker=","
+                    class="campo mt-0 p-2 text-right" min="0" max="99999" step="1"
+                    [ngClass]="classesCampo('preco_' + i)" >
+                    <input [id]="'repasse_' + i" type="number" formControlName="repasse"
+                      mask="separator.2" thousandSeparator="" decimalMarker=","
+                      class="campo mt-0 p-2 text-right" min="0" max="99999" step="1">
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div class="flex justify-end space-x-3 mt-6">
+                <button type="button" (click)="onCancel()" class="btn btn-ghost btn-sm" >
+                  Cancelar
+                </button>
+                <button type="submit" class="btn btn-success btn-sm">
+                  Salvar
+                </button>
+              </div>
+            </div>
+          </form>
+
         </div>
       </div>
-    </form>
-
-  </div>
-</div>

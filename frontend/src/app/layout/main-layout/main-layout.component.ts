@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
-import { CommonModule } from '@angular/common';
+
 import { MenuItemComponent } from '../menu-item/menu-item.component';
 import { filter, map } from 'rxjs';
 import { Title } from '@angular/platform-browser';
@@ -25,11 +25,10 @@ interface MenuItem {
   imports: [
     RouterOutlet,
     LucideAngularModule,
-    CommonModule,
     RouterModule,
     MenuItemComponent,
     FormsModule
-  ],
+],
   templateUrl: './main-layout.component.html'
 })
 export class MainLayoutComponent {

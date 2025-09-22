@@ -39,7 +39,7 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
   constructor(private atendimentoService: AtendimentoService, private toastr: ToastrService,
               private router: Router) {
     super();
-    const navigation = this.router.getCurrentNavigation();
+    const navigation = this.router.currentNavigation();
     const agendamentoId = navigation?.extras.state?.['agendamentoId'];
     const atendimentoId = navigation?.extras.state?.['atendimentoId'];
     this.agendamentoId = agendamentoId ? agendamentoId : null;

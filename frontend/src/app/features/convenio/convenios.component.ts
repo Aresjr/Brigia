@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ConvenioService } from './convenio.service';
 import { Convenio } from './convenio.interface';
 import { LucideAngularModule } from 'lucide-angular';
@@ -17,7 +17,6 @@ import { FabComponent } from '../shared/fab/fab.component';
   templateUrl: './convenios.component.html',
   standalone: true,
   imports: [
-    CommonModule,
     LucideAngularModule,
     FormsModule,
     ConvenioFormComponent,
@@ -25,7 +24,7 @@ import { FabComponent } from '../shared/fab/fab.component';
     ConfirmDialogComponent,
     TopBarComponent,
     FabComponent
-  ]
+]
 })
 export class ConveniosComponent extends BaseListComponent<Convenio> implements OnInit {
   override nomeEntidade = 'Convênio';

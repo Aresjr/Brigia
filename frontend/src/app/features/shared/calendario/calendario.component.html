@@ -7,109 +7,114 @@
   } @else {
 
     <div class="flex items-center justify-between gap-4 mb-4">
-    <div class="flex items-center">
-      <button
-        class="btn btn-ghost btn-sm mr-2 border border-base-300 tooltip flex"
-        data-tip="Ir para o dia de hoje"
-        mwlCalendarToday
-        (click)="dateChanged()"
-        [(viewDate)]="currentDate" >
-        Hoje
-      </button>
-      <button
-        class="btn btn-ghost btn-sm btn-circle mr-1 tooltip flex"
-        data-tip="Anterior"
-        mwlCalendarPreviousView
-        (click)="dateChanged()"
-        [view]="view"
-        [(viewDate)]="currentDate"
-        (viewDateChange)="closeOpenMonthViewDay()" >
-        <lucide-icon name="chevron-left" class="w-6 h-6"></lucide-icon>
-      </button>
-      <button
-        class="btn btn-ghost btn-sm btn-circle mr-1 tooltip flex"
-        data-tip="Próximo"
-        mwlCalendarNextView
-        (click)="dateChanged()"
-        [view]="view"
-        [(viewDate)]="currentDate"
-        (viewDateChange)="closeOpenMonthViewDay()" >
-        <lucide-icon name="chevron-right" class="w-6 h-6"></lucide-icon>
-      </button>
-      <button
-        class="btn btn-ghost btn-sm btn-circle tooltip flex"
-        data-tip="Recarregar calendário"
-        (click)="this.recarrega.emit()" >
-        <lucide-icon name="refresh-cw" class="w-5 h-5"></lucide-icon>
-      </button>
+      <div class="flex items-center">
+        <button
+          class="btn btn-ghost btn-sm mr-2 border border-base-300 tooltip flex"
+          data-tip="Ir para o dia de hoje"
+          mwlCalendarToday
+          (click)="dateChanged()"
+          [(viewDate)]="currentDate" >
+          Hoje
+        </button>
+        <button
+          class="btn btn-ghost btn-sm btn-circle mr-1 tooltip flex"
+          data-tip="Anterior"
+          mwlCalendarPreviousView
+          (click)="dateChanged()"
+          [view]="view"
+          [(viewDate)]="currentDate"
+          (viewDateChange)="closeOpenMonthViewDay()" >
+          <lucide-icon name="chevron-left" class="w-6 h-6"></lucide-icon>
+        </button>
+        <button
+          class="btn btn-ghost btn-sm btn-circle mr-1 tooltip flex"
+          data-tip="Próximo"
+          mwlCalendarNextView
+          (click)="dateChanged()"
+          [view]="view"
+          [(viewDate)]="currentDate"
+          (viewDateChange)="closeOpenMonthViewDay()" >
+          <lucide-icon name="chevron-right" class="w-6 h-6"></lucide-icon>
+        </button>
+        <button
+          class="btn btn-ghost btn-sm btn-circle tooltip flex"
+          data-tip="Recarregar calendário"
+          (click)="this.recarrega.emit()" >
+          <lucide-icon name="refresh-cw" class="w-5 h-5"></lucide-icon>
+        </button>
+      </div>
+
+      <div class="text-2xl">{{ currentDate | date:'EEE, dd \'de\' MMMM \'de\' y':'UTC':'pt' }}</div>
+
+      <div>
+        <button
+          class="px-4 py-1 font-bold border-b-4 hover:text-primary/60"
+          (click)="setView(CalendarView.Day)"
+          [class.active]="view === CalendarView.Day"
+          [ngClass]="view === CalendarView.Day ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'" >
+          Dia
+        </button>
+        <button
+          class="px-4 py-1 font-bold border-b-4 hover:text-primary/60"
+          (click)="setView(CalendarView.Week)"
+          [class.active]="view === CalendarView.Week"
+          [ngClass]="view === CalendarView.Week ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'" >
+          Semana
+        </button>
+        <button
+          class="px-4 py-1 font-bold border-b-4 hover:text-primary/60"
+          (click)="setView(CalendarView.Month)"
+          [class.active]="view === CalendarView.Month"
+          [ngClass]="view === CalendarView.Month ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'" >
+          Mês
+        </button>
+      </div>
     </div>
 
-    <div class="text-2xl">{{ currentDate | date:'EEE, dd \'de\' MMMM \'de\' YYYY':'UTC':'pt' }}</div>
-
-    <div>
-      <button
-        class="px-4 py-1 font-bold border-b-4 hover:text-primary/60"
-        (click)="setView(CalendarView.Day)"
-        [class.active]="view === CalendarView.Day"
-        [ngClass]="view === CalendarView.Day ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'" >
-        Dia
-      </button>
-      <button
-        class="px-4 py-1 font-bold border-b-4 hover:text-primary/60"
-        (click)="setView(CalendarView.Week)"
-        [class.active]="view === CalendarView.Week"
-        [ngClass]="view === CalendarView.Week ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'" >
-        Semana
-      </button>
-      <button
-        class="px-4 py-1 font-bold border-b-4 hover:text-primary/60"
-        (click)="setView(CalendarView.Month)"
-        [class.active]="view === CalendarView.Month"
-        [ngClass]="view === CalendarView.Month ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'" >
-        Mês
-      </button>
+    <div class="rounded-lg">
+      @switch (view) {
+        @case (CalendarView.Month) {
+          <mwl-calendar-month-view
+            class="rounded-lg"
+            [viewDate]="currentDate"
+            [events]="events"
+            [refresh]="refresh"
+            [activeDayIsOpen]="activeDayIsOpen"
+            (dayClicked)="dayClicked($event.day)"
+            (eventClicked)="verAgendamento($event.event)"
+            locale='pt'>
+          </mwl-calendar-month-view>
+        }
+        @case (CalendarView.Week) {
+          <mwl-calendar-week-view
+            class="rounded-lg"
+            [viewDate]="currentDate"
+            [events]="events"
+            [refresh]="refresh"
+            (eventClicked)="verAgendamento($event.event)"
+            (hourSegmentClicked)="handleHour($event)"
+            [hourSegments]="hourSegments"
+            [dayStartHour]="6"
+            [dayEndHour]="24"
+            locale='pt'>
+          </mwl-calendar-week-view>
+        }
+        @case (CalendarView.Day) {
+          <mwl-calendar-day-view
+            class="rounded-lg"
+            [viewDate]="currentDate"
+            [events]="events"
+            [refresh]="refresh"
+            (eventClicked)="verAgendamento($event.event)"
+            (hourSegmentClicked)="handleHour($event)"
+            [hourSegments]="hourSegments"
+            [dayStartHour]="6"
+            [dayEndHour]="24"
+            locale='pt'>
+          </mwl-calendar-day-view>
+        }
+      }
     </div>
-  </div>
-
-  <div [ngSwitch]="view" class="rounded-lg">
-    <mwl-calendar-month-view
-      class="rounded-lg"
-      *ngSwitchCase="CalendarView.Month"
-      [viewDate]="currentDate"
-      [events]="events"
-      [refresh]="refresh"
-      [activeDayIsOpen]="activeDayIsOpen"
-      (dayClicked)="dayClicked($event.day)"
-      (eventClicked)="verAgendamento($event.event)"
-      locale='pt'>
-    </mwl-calendar-month-view>
-    <mwl-calendar-week-view
-      class="rounded-lg"
-      *ngSwitchCase="CalendarView.Week"
-      [viewDate]="currentDate"
-      [events]="events"
-      [refresh]="refresh"
-      (eventClicked)="verAgendamento($event.event)"
-      (hourSegmentClicked)="handleHour($event)"
-      [hourSegments]="hourSegments"
-      [dayStartHour]="6"
-      [dayEndHour]="24"
-      locale='pt'>
-    </mwl-calendar-week-view>
-    <mwl-calendar-day-view
-      class="rounded-lg"
-      *ngSwitchCase="CalendarView.Day"
-      [viewDate]="currentDate"
-      [events]="events"
-      [refresh]="refresh"
-      (eventClicked)="verAgendamento($event.event)"
-      (hourSegmentClicked)="handleHour($event)"
-      [hourSegments]="hourSegments"
-      [dayStartHour]="6"
-      [dayEndHour]="24"
-      locale='pt'>
-    </mwl-calendar-day-view>
-  </div>
 
   }
 

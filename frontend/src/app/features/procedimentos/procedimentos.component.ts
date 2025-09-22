@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ProcedimentoService } from './procedimento.service';
 import { Procedimento } from './procedimento.interface';
 import { LucideAngularModule } from 'lucide-angular';
@@ -18,7 +18,6 @@ import { FabComponent } from '../shared/fab/fab.component';
   templateUrl: './procedimentos.component.html',
   standalone: true,
   imports: [
-    CommonModule,
     LucideAngularModule,
     FormsModule,
     ProcedimentoFormComponent,
@@ -27,7 +26,7 @@ import { FabComponent } from '../shared/fab/fab.component';
     ConfirmDialogComponent,
     TopBarComponent,
     FabComponent
-  ]
+]
 })
 export class ProcedimentosComponent extends BaseListComponent<Procedimento> implements OnInit {
   override nomeEntidade = 'Procedimento';

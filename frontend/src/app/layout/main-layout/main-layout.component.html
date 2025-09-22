@@ -15,30 +15,37 @@
       <div class="shrink-0 bg-border h-[1px] w-full"></div>
       <div class="flex-1 overflow-y-auto">
         <ul>
-          <li *ngFor="let item of this.filteredMenuItems">
-            <app-menu-item
-              [label]="item.label"
-              [icon]="item.icon"
-              [route]="item.route"
-              [hasSubmenu]="item.hasSubmenu"
-              [submenuOpen]="isSubmenuOpen(item.label)"
-              (clicked)="toggleSubmenu(item.label)">
-            </app-menu-item>
-            <div *ngIf="item.children && isSubmenuOpen(item.label)"
-              class="overflow-hidden ease-in-out">
-              <ul>
-                <li *ngFor="let child of item.children">
-                  <app-menu-item
-                    *ngIf="temAcessoMenu(child)"
-                    [label]="child.label"
-                    [icon]="child.icon"
-                    [route]="child.route"
-                    [isSubmenuOpen]="true">
-                  </app-menu-item>
-                </li>
-              </ul>
-            </div>
-          </li>
+          @for (item of this.filteredMenuItems; track item) {
+            <li>
+              <app-menu-item
+                [label]="item.label"
+                [icon]="item.icon"
+                [route]="item.route"
+                [hasSubmenu]="item.hasSubmenu"
+                [submenuOpen]="isSubmenuOpen(item.label)"
+                (clicked)="toggleSubmenu(item.label)">
+              </app-menu-item>
+              @if (item.children && isSubmenuOpen(item.label)) {
+                <div
+                  class="overflow-hidden ease-in-out">
+                  <ul>
+                    @for (child of item.children; track child) {
+                      <li>
+                        @if (temAcessoMenu(child)) {
+                          <app-menu-item
+                            [label]="child.label"
+                            [icon]="child.icon"
+                            [route]="child.route"
+                            [isSubmenuOpen]="true">
+                          </app-menu-item>
+                        }
+                      </li>
+                    }
+                  </ul>
+                </div>
+              }
+            </li>
+          }
         </ul>
       </div>
       <div class="p-3 relative text-xs">

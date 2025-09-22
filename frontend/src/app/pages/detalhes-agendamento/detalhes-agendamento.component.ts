@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { AgendamentoDetalhes } from '../../features/agenda-diaria/agendamento.interface';
-import { DatePipe, NgIf } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { AgendamentoService } from '../../features/agenda-diaria/agendamento.service';
 import { LoadingSpinnerComponent } from '../../features/shared/loading/loading-spinner.component';
 
@@ -13,9 +13,8 @@ import { LoadingSpinnerComponent } from '../../features/shared/loading/loading-s
     FormsModule,
     LucideAngularModule,
     DatePipe,
-    NgIf,
     LoadingSpinnerComponent
-  ],
+],
   templateUrl: './detalhes-agendamento.component.html',
   styleUrl: './detalhes-agendamento.component.scss'
 })

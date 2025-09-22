@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { EspecialidadeService } from './especialidade.service';
 import { Especialidade } from './especialidade.interface';
 import { LucideAngularModule } from 'lucide-angular';
@@ -18,7 +18,6 @@ import { LoadingSpinnerComponent } from '../shared/loading/loading-spinner.compo
   templateUrl: './especialidade.component.html',
   standalone: true,
   imports: [
-    CommonModule,
     LucideAngularModule,
     FormsModule,
     EspecialidadeFormComponent,
@@ -27,7 +26,7 @@ import { LoadingSpinnerComponent } from '../shared/loading/loading-spinner.compo
     TopBarComponent,
     FabComponent,
     LoadingSpinnerComponent
-  ]
+]
 })
 export class EspecialidadeComponent extends BaseListComponent<Especialidade> implements OnInit {
   override nomeEntidade = 'Especialidade';

@@ -14,11 +14,15 @@
     <div class="min-h-[36rem]">
       <div class="titulo-listagem grid-cols-[1fr_1fr_32px]">
         <div (click)="ordenar('nome')" class="cabecalho-listagem rounded-tl-lg">
-          <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
+          @if (getSortIcon('nome')) {
+            <lucide-icon [name]="getSortIcon('nome')" class="icone-ordenacao"/>
+          }
           Nome
         </div>
         <div (click)="ordenar('descricao')" class="cabecalho-listagem">
-          <lucide-icon *ngIf="getSortIcon('descricao')" [name]="getSortIcon('descricao')" class="icone-ordenacao"/>
+          @if (getSortIcon('descricao')) {
+            <lucide-icon [name]="getSortIcon('descricao')" class="icone-ordenacao"/>
+          }
           Observações
         </div>
         <div class="cabecalho-listagem p-0 rounded-tr-lg"></div>
@@ -27,62 +31,71 @@
       <div class="itens-listagem">
         @for (convenio of getItensPaginados(); track convenio.id) {
           <div class="item-listagem grid-cols-[1fr_1fr_32px]"
-               [class.bg-error]="convenio.excluido"
-               [class.bg-opacity-50]="convenio.excluido">
+            [class.bg-error]="convenio.excluido"
+            [class.bg-opacity-50]="convenio.excluido">
             <div class="celula-listagem">
-              {{convenio.nome}} <span *ngIf="convenio.excluido" class="excluido">Excluído</span>
-            </div>
-            <div class="celula-listagem">{{convenio.descricao}}</div>
-            <div class="p-0 text-right">
-              <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
-                <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
-                  <lucide-icon name="ellipsis-vertical" class="h-5" />
-                </label>
-                <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-[1] font-semibold">
-                  <li *ngIf="!convenio.excluido">
+              {{convenio.nome}} @if (convenio.excluido) {
+              <span class="excluido">Excluído</span>
+            }
+          </div>
+          <div class="celula-listagem">{{convenio.descricao}}</div>
+          <div class="p-0 text-right">
+            <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
+              <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
+                <lucide-icon name="ellipsis-vertical" class="h-5" />
+              </label>
+              <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-[1] font-semibold">
+                @if (!convenio.excluido) {
+                  <li>
                     <a (click)="editar(convenio)"
-                       class="text-sm text-neutral hover:bg-base-200">
+                      class="text-sm text-neutral hover:bg-base-200">
                       Editar
                     </a>
                   </li>
-                  <li *ngIf="!convenio.excluido">
+                }
+                @if (!convenio.excluido) {
+                  <li>
                     <a (click)="perguntaExcluir($event, convenio)"
-                       class="text-error hover:bg-error/50">
+                      class="text-error hover:bg-error/50">
                       Excluir
                     </a>
                   </li>
-                  <li *ngIf="convenio.excluido">
+                }
+                @if (convenio.excluido) {
+                  <li>
                     <a (click)="restaurarItem($event, convenio)"
-                       class="text-success hover:bg-success/20">
+                      class="text-success hover:bg-success/20">
                       Restaurar
                     </a>
                   </li>
-                </ul>
-              </div>
+                }
+              </ul>
             </div>
           </div>
-        }
-      </div>
+        </div>
+      }
     </div>
+  </div>
 
-    <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
-  }
+  <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
+}
 
-  @if (mostrarFormularioNovo) {
-    <app-convenio-form
-      [convenio]="itemEdicao"
-      (save)="onSalvarNovoConvenio($event)"
-      (cancel)="cancelarNovo()"
-    ></app-convenio-form>
-  }
+@if (mostrarFormularioNovo) {
+  <app-convenio-form
+    [convenio]="itemEdicao"
+    (save)="onSalvarNovoConvenio($event)"
+    (cancel)="cancelarNovo()"
+  ></app-convenio-form>
+}
 
+@if (exibeConfirmExclusao) {
   <app-confirm-dialog
-    *ngIf="exibeConfirmExclusao"
     message="Deseja realmente excluir este convênio?"
     (confirm)="excluir()"
     (cancel)="fecharConfirmExclusao()"
   ></app-confirm-dialog>
+}
 
-  <app-fab (clicked)="onAddNovo()"></app-fab>
+<app-fab (clicked)="onAddNovo()"></app-fab>
 
 </div>

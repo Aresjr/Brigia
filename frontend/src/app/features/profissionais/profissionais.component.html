@@ -14,19 +14,27 @@
     <div class="min-h-[36rem]">
       <div class="titulo-listagem grid-cols-[1fr_14rem_10rem_10rem_32px]">
         <div (click)="ordenar('nome')" class="cabecalho-listagem rounded-tl-lg">
-          <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
+          @if (getSortIcon('nome')) {
+            <lucide-icon [name]="getSortIcon('nome')" class="icone-ordenacao"/>
+          }
           Nome
         </div>
         <div (click)="ordenar('email')" class="cabecalho-listagem">
-          <lucide-icon *ngIf="getSortIcon('email')" [name]="getSortIcon('email')" class="icone-ordenacao"/>
+          @if (getSortIcon('email')) {
+            <lucide-icon [name]="getSortIcon('email')" class="icone-ordenacao"/>
+          }
           Email
         </div>
         <div (click)="ordenar('crm')" class="cabecalho-listagem">
-          <lucide-icon *ngIf="getSortIcon('crm')" [name]="getSortIcon('crm')" class="icone-ordenacao"/>
+          @if (getSortIcon('crm')) {
+            <lucide-icon [name]="getSortIcon('crm')" class="icone-ordenacao"/>
+          }
           CRM
         </div>
         <div (click)="ordenar('celular')" class="cabecalho-listagem">
-          <lucide-icon *ngIf="getSortIcon('celular')" [name]="getSortIcon('celular')" class="icone-ordenacao"/>
+          @if (getSortIcon('celular')) {
+            <lucide-icon [name]="getSortIcon('celular')" class="icone-ordenacao"/>
+          }
           Celular
         </div>
         <div class="cabecalho-listagem p-0 rounded-tr-lg"></div>
@@ -35,65 +43,73 @@
       <div class="itens-listagem">
         @for (profissional of getItensPaginados(); track profissional.id) {
           <div class="item-listagem grid-cols-[1fr_14rem_10rem_10rem_32px]"
-               [class.bg-error]="profissional.excluido"
-               [class.bg-opacity-50]="profissional.excluido"
-               (click)="selecionar(profissional)">
+            [class.bg-error]="profissional.excluido"
+            [class.bg-opacity-50]="profissional.excluido"
+            (click)="selecionar(profissional)">
             <div class="celula-listagem truncate">
-              {{profissional.nome}} <span *ngIf="profissional.excluido" class="excluido">Excluído</span>
-            </div>
-            <div class="celula-listagem truncate">{{profissional.email}}</div>
-            <div class="celula-listagem">{{profissional.crm}}</div>
-            <div class="celula-listagem">{{profissional.celular | celular}}</div>
-            <div class="p-0 text-right">
-              <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
-                <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
-                  <lucide-icon name="ellipsis-vertical" class="h-5" />
-                </label>
-                <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-[1] font-semibold">
-                  <li *ngIf="!profissional.excluido">
+              {{profissional.nome}} @if (profissional.excluido) {
+              <span class="excluido">Excluído</span>
+            }
+          </div>
+          <div class="celula-listagem truncate">{{profissional.email}}</div>
+          <div class="celula-listagem">{{profissional.crm}}</div>
+          <div class="celula-listagem">{{profissional.celular | celular}}</div>
+          <div class="p-0 text-right">
+            <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
+              <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
+                <lucide-icon name="ellipsis-vertical" class="h-5" />
+              </label>
+              <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-[1] font-semibold">
+                @if (!profissional.excluido) {
+                  <li>
                     <a (click)="editar(profissional)"
-                       class="text-sm text-neutral hover:bg-base-200">
+                      class="text-sm text-neutral hover:bg-base-200">
                       Editar
                     </a>
                   </li>
-                  <li *ngIf="!profissional.excluido">
+                }
+                @if (!profissional.excluido) {
+                  <li>
                     <a (click)="perguntaExcluir($event, profissional)"
-                       class="text-error hover:bg-error/50">
+                      class="text-error hover:bg-error/50">
                       Excluir
                     </a>
                   </li>
-                  <li *ngIf="profissional.excluido">
+                }
+                @if (profissional.excluido) {
+                  <li>
                     <a (click)="restaurarItem($event, profissional)"
-                       class="text-success hover:bg-success/20">
+                      class="text-success hover:bg-success/20">
                       Restaurar
                     </a>
                   </li>
-                </ul>
-              </div>
+                }
+              </ul>
             </div>
           </div>
-        }
-      </div>
+        </div>
+      }
     </div>
+  </div>
 
-    <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
-  }
+  <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
+}
 
-  @if (itemSelecionado) {
-    <app-profissional-detalhes
-      [profissional]="itemSelecionado"
-      (fechou)="fecharDetalhes()"
-    ></app-profissional-detalhes>
-  }
+@if (itemSelecionado) {
+  <app-profissional-detalhes
+    [profissional]="itemSelecionado"
+    (fechou)="fecharDetalhes()"
+  ></app-profissional-detalhes>
+}
 
-  @if (mostrarFormularioNovo) {
-    <app-profissional-form
-      [profissional]="itemEdicao"
-      (save)="onSalvarNovoProfissional($event)"
-      (cancel)="cancelarNovo()"
-    ></app-profissional-form>
-  }
+@if (mostrarFormularioNovo) {
+  <app-profissional-form
+    [profissional]="itemEdicao"
+    (save)="onSalvarNovoProfissional($event)"
+    (cancel)="cancelarNovo()"
+  ></app-profissional-form>
+}
 
-  <app-fab (clicked)="onAddNovo()"></app-fab>
+<app-fab (clicked)="onAddNovo()"></app-fab>
 
 </div>
