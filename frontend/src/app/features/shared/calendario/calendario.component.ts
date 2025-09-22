@@ -81,7 +81,7 @@ export class CalendarioComponent implements AfterViewInit {
   setView(view: CalendarView) {
     this.view = view;
     this.cdr.detectChanges();
-    this.formatTimeLabels();
+    //this.formatTimeLabels();
   }
 
   closeOpenMonthViewDay() {
@@ -91,39 +91,37 @@ export class CalendarioComponent implements AfterViewInit {
   }
 
   formatTimeLabels() {
-    const timeLabels = this.elementRef.nativeElement.querySelectorAll('.cal-time');
-
-    console.log('formatTimeLabels', timeLabels);
-
-    //TODO - fix
-
-    timeLabels.forEach((label: HTMLElement) => {
-      let textContent = label.textContent || '';
-      const timeMatch = textContent.match(/(\d+)\s*(am|pm)/i);
-
-      if (timeMatch && timeMatch[1] && timeMatch[2]) {
-        let hour = parseInt(timeMatch[1], 10);
-        const ampm = timeMatch[2].toLowerCase();
-
-        if (ampm === 'pm' && hour !== 12) {
-          hour += 12;
-        } else if (ampm === 'am' && hour === 12) {
-          hour = 0;
+    setTimeout(() => {
+      const timeLabels = this.elementRef.nativeElement.querySelectorAll('.cal-time');
+      timeLabels.forEach((label: HTMLElement) => {
+        let textContent = label.textContent || '';
+        const timeMatch = textContent.match(/(\d+)\s*(am|pm)/i);
+        if (timeMatch && timeMatch[1] && timeMatch[2]) {
+          let hour = parseInt(timeMatch[1], 10);
+          const ampm = timeMatch[2].toLowerCase();
+          if (ampm === 'pm' && hour !== 12) {
+            hour += 12;
+          } else if (ampm === 'am' && hour === 12) {
+            hour = 0;
+          }
+          const formattedHour = hour.toString().padStart(2, '0');
+          this.renderer.setProperty(label, 'textContent', `${formattedHour}:00`);
         }
-
-        const formattedHour = hour.toString().padStart(2, '0');
-
-        const newContent = `${formattedHour}:00`;
-        this.renderer.setProperty(label, 'textContent', newContent);
-      }
-    });
+      });
+    }, 50);
   }
 
   ngAfterViewInit(): void {
+    this.cdr.detectChanges();
     this.formatTimeLabels();
   }
 
   dateChanged() {
     this.dataAlterada.emit(this.currentDate);
+  }
+
+  recarregar() {
+    this.recarrega.emit();
+    this.formatTimeLabels();
   }
 }

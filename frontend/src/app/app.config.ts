@@ -20,6 +20,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/moment';
 import moment from 'moment';
 import localePt from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 registerLocaleData(localePt);
 
@@ -53,7 +54,8 @@ export const appConfig: ApplicationConfig = {
           provide: DateAdapter,
           useFactory: momentAdapterFactory
         }
-      )
+      ),
+      NgApexchartsModule
     ),
     provideNgxMask(),
     CalendarUtils

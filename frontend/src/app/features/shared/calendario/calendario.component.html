@@ -1,12 +1,6 @@
 <div class="bg-base-100 p-4 rounded-md">
 
-  @if(isLoading) {
-
-    <app-loading-spinner></app-loading-spinner>
-
-  } @else {
-
-    <div class="flex items-center justify-between gap-4 mb-4">
+  <div class="flex items-center justify-between gap-4 mb-4">
     <div class="flex items-center">
       <button
         class="btn btn-ghost btn-sm mr-2 border border-base-300 tooltip flex"
@@ -39,7 +33,7 @@
       <button
         class="btn btn-ghost btn-sm btn-circle tooltip flex"
         data-tip="Recarregar calendário"
-        (click)="this.recarrega.emit()" >
+        (click)="recarregar()" >
         <lucide-icon name="refresh-cw" class="w-5 h-5"></lucide-icon>
       </button>
     </div>
@@ -72,6 +66,13 @@
   </div>
 
   <div [ngSwitch]="view" class="rounded-lg">
+
+    @if(isLoading) {
+      <div class="absolute flex justify-center items-center w-full h-32 bg-base-100">
+        <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-primary bg-base-100"></div>
+      </div>
+    }
+
     <mwl-calendar-month-view
       class="rounded-lg"
       *ngSwitchCase="CalendarView.Month"
@@ -81,6 +82,7 @@
       [activeDayIsOpen]="activeDayIsOpen"
       (dayClicked)="dayClicked($event.day)"
       (eventClicked)="verAgendamento($event.event)"
+      (load)="formatTimeLabels()"
       locale='pt'>
     </mwl-calendar-month-view>
     <mwl-calendar-week-view
@@ -94,6 +96,7 @@
       [hourSegments]="hourSegments"
       [dayStartHour]="6"
       [dayEndHour]="24"
+      (load)="formatTimeLabels()"
       locale='pt'>
     </mwl-calendar-week-view>
     <mwl-calendar-day-view
@@ -107,10 +110,10 @@
       [hourSegments]="hourSegments"
       [dayStartHour]="6"
       [dayEndHour]="24"
+      (load)="formatTimeLabels()"
       locale='pt'>
     </mwl-calendar-day-view>
-  </div>
 
-  }
+  </div>
 
 </div>
