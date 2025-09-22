@@ -23,12 +23,6 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:8081/`. The application will automatically reload whenever you modify any of the source files.
 
-### To deploy:
-```bash
-ng build --configuration=bemestar
-wrangler deploy --env bemestar
-```
-
 ## Running unit tests
 ```bash
 ng test
