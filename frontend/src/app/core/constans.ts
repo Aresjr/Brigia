@@ -59,85 +59,30 @@ export const TIPO_AGENDAMENTO = [
   { valor: 5, descricao: 'Retorno' }
 ];
 
-export enum StatusAgendamento {
-  Agendado = 0,
-  Confirmado = 1,
-  EmAtendimento = 2,
-  Cancelado = 3,
-  NaoCompareceu = 4,
-  Reagendado = 5,
-  Finalizado = 6,
-  CacneladoUsuario = 7
+export const StatusAgendamento: Record<number, { descricao: string; cor: string }> = {
+  0: { descricao: 'Agendado', cor: '#60a5fa' },
+  1: { descricao: 'Confirmado', cor: '#2563EB' },
+  2: { descricao: 'Em Atendimento', cor: '#A78BFA' },
+  3: { descricao: 'Cancelado', cor: '#EF4444' },
+  4: { descricao: 'Não Compareceu', cor: '#F59E0B' },
+  5: { descricao: 'Reagendado', cor: '#F59E0B' },
+  6: { descricao: 'Finalizado', cor: '#14B8A6' },
+  7: { descricao: 'Cancelado Pelo Usuário', cor: '#EF4444' }
+};
+
+export const AGENDAMENTO_PODE_EDITAR: number[] = [0, 1];
+
+export const StatusAtendimento: Record<number, { descricao: string; cor: string }> = {
+  0: { descricao: 'Em Atendimento', cor: '#A78BFA' },
+  1: { descricao: 'Cancelado', cor: '#EF4444' },
+  2: { descricao: 'Finalizado', cor: '#14B8A6' }
+};
+
+export const STATUS_ABRIR_ATENDIMENTO: number[] = [0, 1, 5];
+
+export const StatusContaReceber: Record<number, { descricao: string; cor: string }> = {
+  0: { descricao: 'Aberto', cor: '#60a5fa' },
+  1: { descricao: 'Pago', cor: '#A78BFA' },
+  2: { descricao: 'Atrasado', cor: '#EF4444' },
+  3: { descricao: 'Parcial', cor: '#14B8A6' }
 }
-
-export const StatusAgendamentoDescricao: Record<number, string> = {
-  [StatusAgendamento.Agendado]: 'Agendado',
-  [StatusAgendamento.Confirmado]: 'Confirmado',
-  [StatusAgendamento.EmAtendimento]: 'Em Atendimento',
-  [StatusAgendamento.Cancelado]: 'Cancelado',
-  [StatusAgendamento.NaoCompareceu]: 'Não Compareceu',
-  [StatusAgendamento.Reagendado]: 'Reagendado',
-  [StatusAgendamento.Finalizado]: 'Finalizado',
-  [StatusAgendamento.CacneladoUsuario]: 'Cancelado pelo Usuário'
-};
-
-export const CorAgendamento: Record<number, string> = {
-  [StatusAgendamento.Agendado]: '#60a5fa',
-  [StatusAgendamento.Confirmado]: '#2563EB',
-  [StatusAgendamento.EmAtendimento]: '#A78BFA',
-  [StatusAgendamento.Cancelado]: '#EF4444',
-  [StatusAgendamento.NaoCompareceu]: '#F59E0B',
-  [StatusAgendamento.Reagendado]: '#F59E0B',
-  [StatusAgendamento.Finalizado]: '#14B8A6'
-  //Disponibilidade do médico - #D1FAE5
-};
-
-export enum StatusAtendimento {
-  EmAtendimento = 0,
-  Cancelado = 1,
-  Finalizado = 2
-}
-
-export const StatusAtendimentoDescricao: Record<number, string> = {
-  [StatusAtendimento.EmAtendimento]: 'Em Atendimento',
-  [StatusAtendimento.Cancelado]: 'Cancelado',
-  [StatusAtendimento.Finalizado]: 'Finalizado'
-};
-
-export const CorAtendimento: Record<number, string> = {
-  [StatusAtendimento.EmAtendimento]: '#A78BFA',
-  [StatusAtendimento.Cancelado]: '#EF4444',
-  [StatusAtendimento.Finalizado]: '#14B8A6'
-};
-
-export const STATUS_ABRIR_ATENDIMENTO = [StatusAgendamento.Agendado, StatusAgendamento.Confirmado,
-  StatusAgendamento.Reagendado];
-
-export enum FormaPagamento {
-  DINHEIRO = 0,
-  CARTAO_CREDITO = 1,
-  CARTAO_DEBITO = 2,
-  PIX = 3,
-  BOLETO = 4
-}
-
-export enum StatusContaReceber {
-  Aberto = 0,
-  Pago = 1,
-  Atrasado = 2,
-  Parcial = 3
-}
-
-export const StatusContaReceberDescricao: Record<number, string> = {
-  [StatusContaReceber.Aberto]: 'Aberto',
-  [StatusContaReceber.Pago]: 'Pago',
-  [StatusContaReceber.Atrasado]: 'Atrasado',
-  [StatusContaReceber.Parcial]: 'Parcial'
-};
-
-export const CorContaReceber: Record<number, string> = {
-  [StatusContaReceber.Aberto]: '#60a5fa',
-  [StatusContaReceber.Parcial]: '#A78BFA',
-  [StatusContaReceber.Atrasado]: '#EF4444',
-  [StatusContaReceber.Pago]: '#14B8A6'
-};

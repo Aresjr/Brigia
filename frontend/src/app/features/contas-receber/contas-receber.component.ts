@@ -4,15 +4,10 @@ import { ContaReceberService } from './contas-receber.service';
 import { ContaReceber } from './contas-receber.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
 import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { LoadingSpinnerComponent } from '../shared/loading/loading-spinner.component';
-import {
-  CorContaReceber, StatusContaReceber,
-  StatusContaReceberDescricao
-} from '../../core/constans';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { Paciente } from '../pacientes/paciente.interface';
 import { forkJoin, map, Observable, tap } from 'rxjs';
@@ -22,6 +17,8 @@ import { PacienteService } from '../pacientes/paciente.service';
 import { EmpresaService } from '../empresa/empresa.service';
 import { Empresa } from '../empresa/empresa.interface';
 import { AgendamentoFormComponent } from './contas-receber-detalhes.component';
+import { StatusContaReceber } from '../../core/constans';
+import { abrirDatePicker } from '../../core/util-methods';
 
 @Component({
   selector: 'app-contas-receber',
@@ -46,22 +43,19 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
   pacientes: Paciente[] = [];
   profissionais: Profissional[] = [];
   empresas: Empresa[] = [];
-  profissionalFiltro: number = 0;
-  pacienteFiltro: number = 0;
-  statusFiltro: number = 0;
-  empresaFiltro: number = 0;
-  dataAtendimentoInicio: Date | null = null;
-  dataAtendimentoFim: Date | null = null;
   form = new FormGroup({
-    dataInicio: new FormControl<Date | null>(null),
-    dataFim: new FormControl<Date | null>(null)
+    status: new FormControl<number | null>(null),
+    paciente: new FormControl<number | null>(null),
+    empresa: new FormControl<number | null>(null),
+    profissional: new FormControl<number | null>(null),
+    dataInicio: new FormControl<string | null>(null),
+    dataFim: new FormControl<string | null>(null)
   });
 
   constructor(private contasReceberService: ContaReceberService,
               private profissionalService: ProfissionalService,
               private pacienteService: PacienteService,
-              private empresaService: EmpresaService,
-              private toastr: ToastrService) {
+              private empresaService: EmpresaService) {
     super();
     this.form.valueChanges.subscribe(() => {
       this.filtrar();
@@ -115,55 +109,25 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
       }));
   }
 
-  selectPaciente(pacienteId: number) {
-    this.pacienteFiltro = pacienteId | 0;
-    this.filtrar();
-  }
-
-  selectProfissional(profissionalId: number) {
-    this.profissionalFiltro = profissionalId | 0;
-    this.filtrar();
-  }
-
-  selectStatus(statusId: number) {
-    this.statusFiltro = statusId | 0;
-    this.filtrar();
-  }
-
-  selectEmpresa(empresaId: number) {
-    this.empresaFiltro = empresaId | 0;
-    this.filtrar();
-  }
-
-  selectDataAtendimento(event: { inicio: Date, fim: Date } | null) {
-    if (event) {
-      this.dataAtendimentoInicio = event.inicio;
-      this.dataAtendimentoFim = event.fim;
-    } else {
-      this.dataAtendimentoInicio = null;
-      this.dataAtendimentoFim = null;
-    }
-    this.filtrar();
-  }
-
   filtrar() {
+    const statusSelecionado = this.form.get('status')?.value;
+    const pacienteSelecionado = this.form.get('paciente')?.value;
+    const empresaSelecionada = this.form.get('empresa')?.value;
+    const profissionalSelecionado = this.form.get('profissional')?.value;
+    let matchData = true;
     this.itensExibicao = this.itensInternos.filter(item => {
-      const matchProfissional = this.profissionalFiltro == 0 || item.profissional.id == this.profissionalFiltro;
-      const matchPaciente = this.pacienteFiltro == 0 || item.paciente.id == this.pacienteFiltro;
-      const matchStatus = this.statusFiltro == 0 || item.status == this.statusFiltro;
-      const matchEmpresa = this.empresaFiltro == 0 || item.empresa.id == this.empresaFiltro;
+      const matchStatus = statusSelecionado == null || statusSelecionado == 0 || item.status == statusSelecionado;
+      const matchEmpresa = item.empresa == undefined || empresaSelecionada == undefined || empresaSelecionada == 0 || item.empresa.id == empresaSelecionada;
+      const matchPaciente = pacienteSelecionado == undefined || pacienteSelecionado == 0 || item.paciente.id == pacienteSelecionado;
+      const matchProfissional = profissionalSelecionado == undefined || profissionalSelecionado == 0 || item.profissional.id == profissionalSelecionado;
 
-      let matchData = true;
       const dataInicio = this.form.get('dataInicio')?.value;
       const dataFim = this.form.get('dataFim')?.value;
 
       if (dataInicio && dataFim) {
         const dataAtendimento = new Date(item.dataAtendimento);
-        dataAtendimento.setHours(0, 0, 0, 0);
-        const inicio = new Date(dataInicio);
-        const fim = new Date(dataFim);
-        fim.setHours(23, 59, 59, 999);
-
+        const inicio = new Date(dataInicio + 'T00:00:00');
+        const fim = new Date(dataFim + 'T23:59:59');
         matchData = dataAtendimento >= inicio && dataAtendimento <= fim;
       }
 
@@ -176,7 +140,7 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
     return contaReceber.paciente.nome.toLowerCase().includes(searchTerm.toLowerCase());
   }
 
-  protected readonly StatusContaReceberDescricao = StatusContaReceberDescricao;
-  protected readonly CorContaReceber = CorContaReceber;
   protected readonly StatusContaReceber = StatusContaReceber;
+
+  protected readonly abrirDatePicker = abrirDatePicker;
 }

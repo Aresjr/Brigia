@@ -24,10 +24,8 @@ import { IForm } from '../shared/form.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
 import {
-  CorAgendamento,
   FORMAS_PAGAMENTO,
-  STATUS_ABRIR_ATENDIMENTO,
-  StatusAgendamentoDescricao,
+  STATUS_ABRIR_ATENDIMENTO, StatusAgendamento,
   TIPO_AGENDAMENTO
 } from '../../core/constans';
 import { forkJoin, map, Observable, tap } from 'rxjs';
@@ -375,6 +373,5 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
   }
 
   protected readonly ColorUtils = ColorUtils;
-  protected readonly StatusDescricao = StatusAgendamentoDescricao;
-  protected readonly CorAtendimento = CorAgendamento;
+  protected readonly StatusAgendamento = StatusAgendamento;
 }

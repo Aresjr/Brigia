@@ -11,6 +11,7 @@ import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } fro
 import { LucideAngularModule } from 'lucide-angular';
 import { FormComponent } from '../../shared/form.component';
 import { ToastrService } from 'ngx-toastr';
+import { abrirDatePicker } from '../../../core/util-methods';
 
 @Component({
   selector: 'app-profissional-form',
@@ -61,4 +62,6 @@ export class ProfissionalFormComponent extends FormComponent<ProfissionalRequest
       }
     });
   }
+
+  protected readonly abrirDatePicker = abrirDatePicker;
 }

@@ -40,3 +40,11 @@ export function isDataNoFuturo(data: string, hora: string): boolean {
   const agora = new Date();
   return agendamento.getTime() > agora.getTime();
 }
+
+
+export function abrirDatePicker(input: HTMLInputElement) {
+  if (input.showPicker != undefined) {
+    input.showPicker();
+  }
+  input.focus();
+}

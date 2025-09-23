@@ -6,16 +6,16 @@
       <div class="flex items-center gap-4 justify-between">
         <h2 class="text-lg font-semibold">{{ titulo }}</h2>
         <div *ngIf="agendamentoDetalhes" class="badge font-semibold p-3 text-base-100"
-          [ngClass]="'bg-['+ CorAtendimento[agendamentoDetalhes.status] +']'">
-          {{ StatusDescricao[agendamentoDetalhes.status] }}
+          [ngClass]="'bg-['+ StatusAgendamento[agendamentoDetalhes.status].cor +']'">
+          {{ StatusAgendamento[agendamentoDetalhes.status].descricao }}
         </div>
       </div>
 
       <div>
-        <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" title="Editar" (click)="onEdit()" *ngIf="podeEditar()" title="Editar">
+        <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" title="Editar" (click)="onEdit()" *ngIf="podeEditar()">
           <lucide-icon name="pencil" class="inline w-5 h-5"/>
         </button>
-        <button type="button" class="btn btn-sm btn-ghost btn-circle" title="Fechar" (click)="fechar()" title="Fechar">
+        <button type="button" class="btn btn-sm btn-ghost btn-circle" title="Fechar" (click)="fechar()">
           <lucide-icon name="x" class="inline w-5 h-5"/>
         </button>
       </div>

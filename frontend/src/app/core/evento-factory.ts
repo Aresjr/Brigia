@@ -1,6 +1,6 @@
 import { CalendarEvent } from 'angular-calendar';
 import { Agendamento } from '../features/agenda-diaria/agendamento.interface';
-import { CorAgendamento, StatusAgendamentoDescricao } from './constans';
+import { StatusAgendamento } from './constans';
 
 export class EventoFactory {
   static fromApi(agendamento: Agendamento): CalendarEvent {
@@ -9,12 +9,12 @@ export class EventoFactory {
     return {
       start: data.start,
       end: data.end,
-      title: `${agendamento.paciente.nome} - ${StatusAgendamentoDescricao[agendamento.status].toUpperCase()}
+      title: `${agendamento.paciente.nome} - ${StatusAgendamento[agendamento.status].descricao.toUpperCase()}
       <br/>
       ${agendamento.hora} - ${agendamento.horaFim}
       <br/>
       ${agendamento.profissional.nome}`,
-      color: { primary: CorAgendamento[agendamento.status], secondary: CorAgendamento[agendamento.status] },
+      color: { primary: StatusAgendamento[agendamento.status].cor, secondary: StatusAgendamento[agendamento.status].cor },
       meta: agendamento
     };
   }

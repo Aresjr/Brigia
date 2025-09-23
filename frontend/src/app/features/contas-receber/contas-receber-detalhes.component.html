@@ -5,8 +5,8 @@
       <div class="flex items-center gap-4 justify-between">
         <h2 class="text-lg font-semibold">Conta a Receber</h2>
         <div class="badge font-semibold p-3 text-base-100"
-          [ngClass]="'bg-['+ CorContaReceber[contaReceber.status] +']'">
-          {{ StatusContaReceberDescricao[contaReceber.status] }}
+          [ngClass]="'bg-['+ StatusContaReceber[contaReceber.status].cor +']'">
+          {{ StatusContaReceber[contaReceber.status].descricao }}
         </div>
       </div>
 

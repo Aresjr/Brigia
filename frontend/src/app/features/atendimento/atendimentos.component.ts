@@ -12,7 +12,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { Router } from '@angular/router';
 import { FabComponent } from '../shared/fab/fab.component';
-import { CorAtendimento, StatusAtendimentoDescricao } from '../../core/constans';
+import { StatusAtendimento } from '../../core/constans';
 import { LoadingSpinnerComponent } from '../shared/loading/loading-spinner.component';
 
 @Component({
@@ -70,7 +70,7 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
 
   override filter(atendimento: Atendimento, searchTerm: string): boolean | undefined {
     return atendimento.especialidade.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      this.StatusAtendimentoDescricao[atendimento.status].toLowerCase().includes(searchTerm.toLowerCase()) ||
+      this.StatusAtendimento[atendimento.status].descricao.toLowerCase().includes(searchTerm.toLowerCase()) ||
       atendimento.paciente.nome.toLowerCase().includes(searchTerm.toLowerCase());
   }
 
@@ -130,6 +130,5 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
     this.toastr.info('Será implementado logo...');
   }
 
-  protected readonly CorAtendimento = CorAtendimento;
-  protected readonly StatusAtendimentoDescricao = StatusAtendimentoDescricao;
+  protected readonly StatusAtendimento = StatusAtendimento;
 }

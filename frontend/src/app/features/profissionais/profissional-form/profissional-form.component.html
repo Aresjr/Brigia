@@ -30,14 +30,19 @@
 
           </div>
           <div class="w-56">
-            <label class="label-campo">Data Nascimento</label>
-            <input type="date" formControlName="dataNascimento" required
-                   class="campo" [ngClass]="classesCampo('dataNascimento')" >
-            @if (form.get('dataNascimento')?.touched) {
-              <div *ngIf="isInvalid('dataNascimento')" class="text-error text-sm">
-                Obrigatório
-              </div>
-            }
+            <label class="label-campo">
+              Data Nascimento
+              <input #profissional type="date" formControlName="dataNascimento" required
+                     class="campo inline w-[8.5rem]" [ngClass]="classesCampo('dataNascimento')" />
+              <button type="button" class="inline -ml-8" (click)="abrirDatePicker(profissional)">
+                <lucide-icon name="calendar" class="inline h-4"/>
+              </button>
+              @if (form.get('dataNascimento')?.touched) {
+                <div *ngIf="isInvalid('dataNascimento')" class="text-error text-sm">
+                  Obrigatório
+                </div>
+              }
+            </label>
           </div>
         </div>
 

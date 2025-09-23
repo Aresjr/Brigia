@@ -45,8 +45,8 @@
                [class.bg-opacity-50]="atendimento.excluido"
                (click)="selecionar(atendimento);">
             <div class="celula-listagem flex items-center px-4">
-              <div class="badge text-base-100" [ngClass]="'bg-['+CorAtendimento[atendimento.status]+']'">
-                {{ StatusAtendimentoDescricao[atendimento.status] }}
+              <div class="badge text-base-100" [ngClass]="'bg-['+StatusAtendimento[atendimento.status].cor+']'">
+                {{ StatusAtendimento[atendimento.status].descricao }}
               </div>
             </div>
             <div class="celula-listagem">{{atendimento.paciente.nome }}</div>

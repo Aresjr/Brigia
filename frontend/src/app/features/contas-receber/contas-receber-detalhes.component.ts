@@ -2,10 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgClass, NgIf } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
-import {
-  CorContaReceber, StatusContaReceberDescricao
-} from '../../core/constans';
 import { ContaReceber } from './contas-receber.interface';
+import { StatusContaReceber } from '../../core/constans';
 
 @Component({
   selector: 'app-contas-receber-detalhes',
@@ -29,6 +27,5 @@ export class AgendamentoFormComponent implements OnInit {
     this.fechou.emit();
   }
 
-  protected readonly CorContaReceber = CorContaReceber;
-  protected readonly StatusContaReceberDescricao = StatusContaReceberDescricao;
+  protected readonly StatusContaReceber = StatusContaReceber;
 }

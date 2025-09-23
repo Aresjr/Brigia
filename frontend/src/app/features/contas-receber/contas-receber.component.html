@@ -6,78 +6,86 @@
     <app-loading-spinner></app-loading-spinner>
   } @else {
 
-    <div class="grid grid-cols-[1fr_1fr_1fr_1fr_1fr] mb-2">
-      <div class="max-w-64 px-6 py-2.5">
-        <label class="label-campo tooltip text-left" data-tip="Filtrar Status">
-          Status
-          <ng-select class="campo-select w-[18rem]" placeholder="Todos" (change)="selectStatus($event)">
-            <ng-option class="max-h-8" value="0">Todos</ng-option>
-            @for (status of StatusContaReceber | keyvalue; track status.value) {
-              <ng-option class="max-h-8" value="{{ status.value }}">{{ StatusContaReceberDescricao[status.value] }}</ng-option>
-            }
-            <ng-template ng-notfound-tmp>
-              <span class="text-sm p-6">Nenhum resultado</span>
-            </ng-template>
-          </ng-select>
-        </label>
-      </div>
-      <div class="max-w-64 px-6 py-2.5">
-        <label class="label-campo tooltip text-left" data-tip="Filtrar Paciente">
-          Paciente
-          <ng-select class="campo-select w-[18rem]" placeholder="Todos" (change)="selectPaciente($event)">
-            <ng-option class="max-h-8" value="0">Todos</ng-option>
-            @for (paciente of pacientes; track paciente.id) {
-              <ng-option class="max-h-8" value="{{ paciente.id }}">{{ paciente.nome }}</ng-option>
-            }
-            <ng-template ng-notfound-tmp>
-              <span class="text-sm p-6">Nenhum resultado</span>
-            </ng-template>
-          </ng-select>
-        </label>
-      </div>
-      <div class="max-w-64 px-6 py-2.5">
-        <label class="label-campo tooltip text-left" data-tip="Filtrar Empresa">
-          Empresa
-          <ng-select class="campo-select w-[18rem]" placeholder="Todos" (change)="selectEmpresa($event)">
-            <ng-option class="max-h-8" value="0">Todos</ng-option>
-            @for (empresa of empresas; track empresa.id) {
-              <ng-option class="max-h-8" value="{{ empresa.id }}">{{ empresa.nome }}</ng-option>
-            }
-            <ng-template ng-notfound-tmp>
-              <span class="text-sm p-6">Nenhum resultado</span>
-            </ng-template>
-          </ng-select>
-        </label>
-      </div>
-      <div class="max-w-64 px-6 py-2.5">
-        <label class="label-campo tooltip text-left" data-tip="Filtrar Profissional">
-          Profissional
-          <ng-select class="campo-select w-[18rem]" placeholder="Todos" (change)="selectProfissional($event)">
-            <ng-option class="max-h-8" value="0">Todos</ng-option>
-            @for (profissional of profissionais; track profissional.id) {
-              <ng-option class="max-h-8" value="{{ profissional.id }}">{{ profissional.nome }}</ng-option>
-            }
-            <ng-template ng-notfound-tmp>
-              <span class="text-sm p-6">Nenhum resultado</span>
-            </ng-template>
-          </ng-select>
-        </label>
-      </div>
-      <div class="max-w-64 px-6 py-2.5">
-        <label class="label-campo">
-          Data do Atendimento
-          <div class="flex items-center gap-2">
-            <div class="tooltip text-left" data-tip="Data Início">
-              <input type="date" class="campo w-[8.5rem]">
+    <form [formGroup]="form" class="grid grid-cols-[1fr_1fr_1fr_1fr_1fr] mb-2">
+        <div class="max-w-64 px-6 py-2.5">
+          <label class="label-campo tooltip text-left" data-tip="Filtrar Status">
+            Status
+            <ng-select formControlName="status" class="campo-select w-[18rem]" placeholder="Todos">
+              <ng-option class="max-h-8" value="0">Todos</ng-option>
+              @for (status of StatusContaReceber | keyvalue; track status) {
+                <ng-option class="max-h-8" value="{{ status.key }}">{{ status.value.descricao }}</ng-option>
+              }
+              <ng-template ng-notfound-tmp>
+                <span class="text-sm p-6">Nenhum resultado</span>
+              </ng-template>
+            </ng-select>
+          </label>
+        </div>
+        <div class="max-w-64 px-6 py-2.5">
+          <label class="label-campo tooltip text-left" data-tip="Filtrar Paciente">
+            Paciente
+            <ng-select formControlName="paciente" class="campo-select w-[18rem]" placeholder="Todos">
+              <ng-option class="max-h-8" value="0">Todos</ng-option>
+              @for (paciente of pacientes; track paciente.id) {
+                <ng-option class="max-h-8" value="{{ paciente.id }}">{{ paciente.nome }}</ng-option>
+              }
+              <ng-template ng-notfound-tmp>
+                <span class="text-sm p-6">Nenhum resultado</span>
+              </ng-template>
+            </ng-select>
+          </label>
+        </div>
+        <div class="max-w-64 px-6 py-2.5">
+          <label class="label-campo tooltip text-left" data-tip="Filtrar Empresa">
+            Empresa
+            <ng-select formControlName="empresa" class="campo-select w-[18rem]" placeholder="Todos">
+              <ng-option class="max-h-8" value="0">Todos</ng-option>
+              @for (empresa of empresas; track empresa.id) {
+                <ng-option class="max-h-8" value="{{ empresa.id }}">{{ empresa.nome }}</ng-option>
+              }
+              <ng-template ng-notfound-tmp>
+                <span class="text-sm p-6">Nenhum resultado</span>
+              </ng-template>
+            </ng-select>
+          </label>
+        </div>
+        <div class="max-w-64 px-6 py-2.5">
+          <label class="label-campo tooltip text-left" data-tip="Filtrar Profissional">
+            Profissional
+            <ng-select formControlName="profissional" class="campo-select w-[18rem]" placeholder="Todos">
+              <ng-option class="max-h-8" value="0">Todos</ng-option>
+              @for (profissional of profissionais; track profissional.id) {
+                <ng-option class="max-h-8" value="{{ profissional.id }}">{{ profissional.nome }}</ng-option>
+              }
+              <ng-template ng-notfound-tmp>
+                <span class="text-sm p-6">Nenhum resultado</span>
+              </ng-template>
+            </ng-select>
+          </label>
+        </div>
+        <div class="max-w-64 px-6 py-2.5">
+          <label class="label-campo">
+            Data do Atendimento
+            <div class="flex items-center gap-2">
+              <div class="tooltip text-left" data-tip="Data Início">
+                <input #dataInicio type="date" class="campo w-[8.5rem]" formControlName="dataInicio" />
+                <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2" (click)="abrirDatePicker(dataInicio)">
+                  <lucide-icon name="calendar" class="inline h-4"/>
+                </button>
+              </div>
+              <span class="text-sm">-</span>
+              <div class="tooltip text-left" data-tip="Data Fim">
+                <div class="relative">
+                  <input #dataFim type="date" class="campo w-[8.5rem]" formControlName="dataFim" />
+                  <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2" (click)="abrirDatePicker(dataFim)">
+                    <lucide-icon name="calendar" class="inline h-4"/>
+                  </button>
+                </div>
+              </div>
             </div>
-            <span class="text-sm">-</span>
-            <div class="tooltip text-left" data-tip="Data Fim">
-              <input type="date" class="campo w-[8.5rem]">
-            </div>
-          </div>
-        </label>
-      </div>
-    </div>
+          </label>
+        </div>
+    </form>
 
   @if(itensExibicao.length == 0) {
     <div class="text-center py-8 w-full bg-base-100 rounded-lg shadow-md">
@@ -103,7 +111,7 @@
           <lucide-icon *ngIf="getSortIcon('profissional')" [name]="getSortIcon('profissional')" class="icone-ordenacao"/>
           Profissional
         </div>
-        <div (click)="ordenar('dataAtendimento')" class="cabecalho-listagem">
+        <div (click)="ordenar('dataAtendimento')" class="cabecalho-listagem rounded-tr-lg">
           <lucide-icon *ngIf="getSortIcon('dataAtendimento')" [name]="getSortIcon('dataAtendimento')" class="icone-ordenacao"/>
           Data Atendimento
         </div>
@@ -113,12 +121,12 @@
         @for (contaReceber of getItensPaginados(); track contaReceber.id) {
           <div class="item-listagem grid-cols-[1fr_1fr_1fr_1fr_1fr]" (click)="selecionar(contaReceber)">
             <div class="celula-listagem flex items-center px-4 py-1.5">
-              <div class="badge text-base-100" [ngClass]="'bg-['+ CorContaReceber[contaReceber.status] +']'">
-                {{ StatusContaReceberDescricao[contaReceber.status] }}
+              <div class="badge text-base-100" [ngClass]="'bg-['+ StatusContaReceber[contaReceber.status].cor +']'">
+                {{ StatusContaReceber[contaReceber.status].descricao }}
               </div>
             </div>
             <div class="celula-listagem">{{contaReceber.paciente.nome}}</div>
-            <div class="celula-listagem">{{contaReceber.empresa.nome}}</div>
+            <div class="celula-listagem">{{contaReceber.empresa?.nome}}</div>
             <div class="celula-listagem">{{contaReceber.profissional.nome}}</div>
             <div class="celula-listagem">{{contaReceber.dataAtendimento | date:'dd/MM/yyyy'}}</div>
           </div>
