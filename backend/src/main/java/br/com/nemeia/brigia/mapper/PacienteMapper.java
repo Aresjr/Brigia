@@ -24,8 +24,9 @@ public class PacienteMapper {
         }
 
         return new PacienteResponse(paciente.getId(), paciente.getNome(), paciente.getEmail(), paciente.getCpf(),
-                paciente.getDataNascimento(), paciente.getSexo(), paciente.getCelular(), paciente.getUltimaConsulta(),
-                paciente.getProximaConsulta(), paciente.getUrlImagem(), paciente.getCorIdentificacao(),
+                paciente.getDataNascimento(), paciente.getUltimaConsulta(), paciente.getProximaConsulta(),
+                paciente.getUrlImagem(), paciente.getSexo(), paciente.getCelular(),
+                paciente.getCorIdentificacao(),
                 paciente.getCep(), paciente.getRua(), paciente.getComplemento(), paciente.getBairro(),
                 paciente.getCidade(), paciente.getUf(), convenioMapper.toResponse(paciente.getConvenio()),
                 empresaMapper.toResponse(paciente.getEmpresa()), paciente.getCriadoEm(), paciente.getExcluido());

@@ -10,7 +10,7 @@
       <div class="max-w-64 px-6 py-2.5">
         <label class="label-campo tooltip text-left" data-tip="Filtrar Status">
           Status
-          <ng-select class="campo-select" placeholder="Todos" (change)="selectStatus($event)">
+          <ng-select class="campo-select w-[18rem]" placeholder="Todos" (change)="selectStatus($event)">
             <ng-option class="max-h-8" value="0">Todos</ng-option>
             @for (status of StatusContaReceber | keyvalue; track status.value) {
               <ng-option class="max-h-8" value="{{ status.value }}">{{ StatusContaReceberDescricao[status.value] }}</ng-option>
@@ -22,9 +22,9 @@
         </label>
       </div>
       <div class="max-w-64 px-6 py-2.5">
-        <label class="label-campo">
+        <label class="label-campo tooltip text-left" data-tip="Filtrar Paciente">
           Paciente
-          <ng-select class="campo-select" placeholder="Todos" (change)="selectPaciente($event)">
+          <ng-select class="campo-select w-[18rem]" placeholder="Todos" (change)="selectPaciente($event)">
             <ng-option class="max-h-8" value="0">Todos</ng-option>
             @for (paciente of pacientes; track paciente.id) {
               <ng-option class="max-h-8" value="{{ paciente.id }}">{{ paciente.nome }}</ng-option>
@@ -36,9 +36,9 @@
         </label>
       </div>
       <div class="max-w-64 px-6 py-2.5">
-        <label class="label-campo" for="tipoAgendamento">
+        <label class="label-campo tooltip text-left" data-tip="Filtrar Empresa">
           Empresa
-          <ng-select class="campo-select" placeholder="Todos" (change)="selectEmpresa($event)">
+          <ng-select class="campo-select w-[18rem]" placeholder="Todos" (change)="selectEmpresa($event)">
             <ng-option class="max-h-8" value="0">Todos</ng-option>
             @for (empresa of empresas; track empresa.id) {
               <ng-option class="max-h-8" value="{{ empresa.id }}">{{ empresa.nome }}</ng-option>
@@ -50,10 +50,9 @@
         </label>
       </div>
       <div class="max-w-64 px-6 py-2.5">
-        <label class="label-campo" for="tipoAgendamento">
+        <label class="label-campo tooltip text-left" data-tip="Filtrar Profissional">
           Profissional
-
-          <ng-select class="campo-select" placeholder="Todos" (change)="selectProfissional($event)">
+          <ng-select class="campo-select w-[18rem]" placeholder="Todos" (change)="selectProfissional($event)">
             <ng-option class="max-h-8" value="0">Todos</ng-option>
             @for (profissional of profissionais; track profissional.id) {
               <ng-option class="max-h-8" value="{{ profissional.id }}">{{ profissional.nome }}</ng-option>
@@ -65,12 +64,16 @@
         </label>
       </div>
       <div class="max-w-64 px-6 py-2.5">
-        <label class="label-campo" for="tipoAgendamento">
-          Data Atendimento
+        <label class="label-campo">
+          Data do Atendimento
           <div class="flex items-center gap-2">
-            <input type="date" class="campo w-32" placeholder="Data Início">
-            <span class="text-sm">até</span>
-            <input type="date" class="campo w-32" placeholder="Data Fim">
+            <div class="tooltip text-left" data-tip="Data Início">
+              <input type="date" class="campo w-[8.5rem]">
+            </div>
+            <span class="text-sm">-</span>
+            <div class="tooltip text-left" data-tip="Data Fim">
+              <input type="date" class="campo w-[8.5rem]">
+            </div>
           </div>
         </label>
       </div>

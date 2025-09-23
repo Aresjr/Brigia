@@ -17,7 +17,6 @@ import { Subject } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Agendamento } from '../../agenda-diaria/agendamento.interface';
-import { LoadingSpinnerComponent } from '../loading/loading-spinner.component';
 
 @Component({
   selector: 'app-calendario',
@@ -26,8 +25,7 @@ import { LoadingSpinnerComponent } from '../loading/loading-spinner.component';
     CommonModule,
     CalendarModule,
     FormsModule,
-    LucideAngularModule,
-    LoadingSpinnerComponent
+    LucideAngularModule
   ],
   templateUrl: './calendario.component.html',
   styleUrl: 'calendario.component.css'

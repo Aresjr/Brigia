@@ -42,24 +42,27 @@
 
     <div>
       <button
-        class="px-4 py-1 font-bold border-b-4 hover:text-primary/60"
+        class="px-4 py-1 font-bold border-b-4 hover:text-primary/60 tooltip"
         (click)="setView(CalendarView.Day)"
         [class.active]="view === CalendarView.Day"
-        [ngClass]="view === CalendarView.Day ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'" >
+        [ngClass]="view === CalendarView.Day ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'"
+        data-tip="Visão do Dia">
         Dia
       </button>
       <button
-        class="px-4 py-1 font-bold border-b-4 hover:text-primary/60"
+        class="px-4 py-1 font-bold border-b-4 hover:text-primary/60 tooltip"
         (click)="setView(CalendarView.Week)"
         [class.active]="view === CalendarView.Week"
-        [ngClass]="view === CalendarView.Week ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'" >
+        [ngClass]="view === CalendarView.Week ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'"
+        data-tip="Visão Semanal">
         Semana
       </button>
       <button
-        class="px-4 py-1 font-bold border-b-4 hover:text-primary/60"
+        class="px-4 py-1 font-bold border-b-4 hover:text-primary/60 tooltip"
         (click)="setView(CalendarView.Month)"
         [class.active]="view === CalendarView.Month"
-        [ngClass]="view === CalendarView.Month ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'" >
+        [ngClass]="view === CalendarView.Month ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'"
+        data-tip="Visão Mensal">
         Mês
       </button>
     </div>

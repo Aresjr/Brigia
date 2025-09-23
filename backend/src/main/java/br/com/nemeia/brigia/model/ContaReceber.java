@@ -35,11 +35,11 @@ public class ContaReceber extends BaseModel {
     @JoinColumn(name = "profissional_id")
     private Profissional profissional;
 
-    @Column(name = "valor_agendamento", precision = 10, scale = 2)
-    private BigDecimal valorAgendamento;
+    @Column(name = "valor_atendimento", precision = 10, scale = 2)
+    private BigDecimal valorAtendimento;
 
-    @Column(name = "desconto_agendamento", precision = 10, scale = 2)
-    private BigDecimal descontoAgendamento;
+    @Column(name = "desconto_atendimento", precision = 10, scale = 2)
+    private BigDecimal descontoAtendimento;
 
     @Column(name = "valor_total_lancado", precision = 10, scale = 2)
     private BigDecimal valorTotalLancado;
