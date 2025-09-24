@@ -28,4 +28,8 @@ export class AgendamentoFormComponent implements OnInit {
   }
 
   protected readonly StatusContaReceber = StatusContaReceber;
+
+  confirmacaoCobranca() {
+    console.log('confirmacaoCobranca');
+  }
 }
