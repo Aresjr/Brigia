@@ -3,7 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DatePipe, NgClass, NgIf } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { ContaReceber } from './contas-receber.interface';
-import { StatusContaReceber } from '../../core/constans';
+import { FORMAS_PAGAMENTO, StatusContaReceber } from '../../core/constans';
 import { ContaReceberDonutComponent } from './conta-receber-donut.component';
 
 @Component({
@@ -32,5 +32,10 @@ export class ContasReceberDetalhesComponent implements OnInit {
     console.log('confirmacaoCobranca');
   }
 
+  valorTotal(contaReceber: ContaReceber) {
+    return contaReceber.valorAgendamento + contaReceber.valorProcedimentosLancados - contaReceber.valorDesconto;
+  }
+
   protected readonly StatusContaReceber = StatusContaReceber;
+  protected readonly FORMAS_PAGAMENTO = FORMAS_PAGAMENTO;
 }

@@ -76,6 +76,7 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         });
         atendimento.getProcedimentos().addAll(pa);
         atendimento.setValorAgendamento(atendimento.getAgendamento().getValor());
+        atendimento.setValorDescontoAgendamento(atendimento.getAgendamento().getDesconto());
         atendimento.setValorLancado(valoresLancados.stream().reduce(BigDecimal.ZERO, BigDecimal::add));
     }
 

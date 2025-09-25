@@ -28,8 +28,10 @@ public class ContaReceberMapper {
         return new ContaReceberResponse(contaReceber.getId(), pacienteMapper.toResponse(contaReceber.getPaciente()),
                 empresaMapper.toResponse(contaReceber.getEmpresa()),
                 profissionalMapper.toResponse(contaReceber.getProfissional()), contaReceber.getAtendimento().getData(),
-                contaReceber.getValorAtendimento(), contaReceber.getDescontoAtendimento(), contaReceber.getValorTotalLancado(),
-                contaReceber.getValorTotal(), contaReceber.getValorRecebido(), contaReceber.getFormaPagamento(), contaReceber.getStatus());
+                contaReceber.getValorAtendimento(), contaReceber.getValorDesconto(), contaReceber.getValorTotalLancado(),
+                contaReceber.getValorTotal(), contaReceber.getValorRecebido(),
+                contaReceber.getAtendimento().getConvenio() != null ? contaReceber.getAtendimento().getConvenio().getNome() : null,
+                contaReceber.getFormaPagamento(), contaReceber.getStatus());
     }
 
     public PagedResponse<ContaReceberResponse> toPagedResponse(Page<ContaReceber> paged) {
@@ -49,12 +51,10 @@ public class ContaReceberMapper {
         contaReceber.setProfissional(atendimento.getProfissional());
         contaReceber.setValorAtendimento(atendimento.getValorAgendamento());
         contaReceber.setValorDesconto(atendimento.getAgendamento().getDesconto());
-        contaReceber.setValorTotal(atendimento.getValorTotal());
+        contaReceber.setValorTotalLancado(atendimento.getValorLancado());
         contaReceber.setFormaPagamento(atendimento.getFormaPagamento());
         contaReceber.setStatus(StatusContaReceber.ABERTO);
         contaReceber.setValorRecebido(BigDecimal.ZERO);
-
-        // TODO - testar
 
         return contaReceber;
     }

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -38,17 +39,11 @@ public class ContaReceber extends BaseModel {
     @Column(name = "valor_atendimento", precision = 10, scale = 2)
     private BigDecimal valorAtendimento;
 
-    @Column(name = "desconto_atendimento", precision = 10, scale = 2)
-    private BigDecimal descontoAtendimento;
-
     @Column(name = "valor_total_lancado", precision = 10, scale = 2)
     private BigDecimal valorTotalLancado;
 
     @Column(name = "valor_desconto", precision = 10, scale = 2)
     private BigDecimal valorDesconto;
-
-    @Column(name = "valor_total", precision = 10, scale = 2)
-    private BigDecimal valorTotal;
 
     @Column(name = "valor_recebido", precision = 10, scale = 2)
     private BigDecimal valorRecebido;
@@ -61,4 +56,7 @@ public class ContaReceber extends BaseModel {
     @Column(name = "status")
     private StatusContaReceber status;
 
+    public BigDecimal getValorTotal() {
+      return valorAtendimento.add(valorTotalLancado).subtract(valorDesconto);
+    }
 }

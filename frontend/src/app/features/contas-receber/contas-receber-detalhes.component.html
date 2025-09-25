@@ -1,5 +1,5 @@
 <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm" (click)="fechar()">
-  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[42rem]" (click)="$event.stopPropagation()" *ngIf="contaReceber" >
+  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[45rem]" (click)="$event.stopPropagation()" *ngIf="contaReceber" >
 
     <div class="flex justify-between items-center">
       <div class="flex items-center gap-4 justify-between">
@@ -18,10 +18,10 @@
     </div>
 
     <div>
-      <div class="flex items-start gap-4 mt-4">
+      <div class="flex items-start mt-4 rounded-xl shadow-lg">
 
         <!-- Bloco dos valores -->
-        <div class="flex-1 p-4 rounded-xl bg-base-100 shadow-lg">
+        <div class="flex-1 p-4 bg-base-100">
 
           <label class="label-campo block mb-4 text-lg font-semibold">Detalhes dos Valores</label>
 
@@ -47,7 +47,7 @@
               <div class="flex items-center gap-2 text-success">
                 <span class="text-sm">Procedimentos Lançados</span>
               </div>
-              <span class="text-lg font-semibold text-success">R$ {{ contaReceber.valorTotalLancado || 0 }}</span>
+              <span class="text-lg font-semibold text-success">R$ {{ contaReceber.valorProcedimentosLancados || 0 }}</span>
             </div>
 
             <!-- Valor Total -->
@@ -62,7 +62,7 @@
         </div>
 
         <!-- Bloco do donut -->
-        <div class="w-64 p-4 rounded-xl shadow-lg">
+        <div class="w-72 p-4">
           <app-conta-receber-donut [contaReceber]="contaReceber"></app-conta-receber-donut>
 
           <!-- Recebido -->
@@ -80,7 +80,7 @@
       <!-- Bloco Detalhes -->
       <div class="mt-4 p-4 rounded-xl bg-base-100 shadow-lg">
         <label class="label-campo block mb-4 text-lg font-semibold">Detalhes do Atendimento</label>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-3 gap-2">
           <div>
             <span class="block text-sm text-neutral">Data</span>
             <span class="font-medium">{{ contaReceber.dataAtendimento | date:'dd/MM/yyyy' }}</span>
@@ -95,14 +95,22 @@
           </div>
           <div>
             <span class="block text-sm text-neutral">Empresa</span>
-            <span class="font-medium">{{ contaReceber.empresa?.nome }}</span>
+            <span class="font-medium">{{ contaReceber.empresa?.nome || '-' }}</span>
+          </div>
+          <div>
+            <span class="block text-sm text-neutral">Convênio</span>
+            <span class="font-medium">{{ contaReceber.convenio || '-' }}</span>
+          </div>
+          <div>
+            <span class="block text-sm text-neutral">Forma de Pagamento</span>
+            <span class="font-medium">{{ FORMAS_PAGAMENTO[contaReceber.formaPagamento].descricao }}</span>
           </div>
         </div>
       </div>
 
       <!-- Rodapé com botões -->
       <div class="flex justify-between mt-6">
-        <button type="button" class="btn btn-ghost btn-sm" (click)="fechar()">
+        <button type="button" class="btn btn-sm" (click)="fechar()">
           Fechar
         </button>
         <div class="flex justify-end gap-3">

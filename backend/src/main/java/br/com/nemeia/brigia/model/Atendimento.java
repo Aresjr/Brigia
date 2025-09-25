@@ -84,14 +84,13 @@ public class Atendimento extends BaseModel {
     @Column(name = "valor_agendamento")
     private BigDecimal valorAgendamento;
 
+    @Column(name = "valor_desconto_agendamento")
+    private BigDecimal valorDescontoAgendamento;
+
     @Column(name = "valor_lancado")
     private BigDecimal valorLancado;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "status", length = 15, nullable = false)
     private StatusAtendimento status;
-
-    public BigDecimal getValorTotal() {
-        return valorAgendamento.add(valorLancado);
-    }
 }

@@ -19,10 +19,11 @@ public class ContaReceberResponse {
     private ProfissionalResponse profissional;
     private LocalDate dataAtendimento;
     private BigDecimal valorAgendamento;
-    private BigDecimal descontoAgendamento;
-    private BigDecimal valorTotalLancado;
+    private BigDecimal valorDesconto;
+    private BigDecimal valorProcedimentosLancados;
     private BigDecimal valorTotal;
     private BigDecimal valorRecebido;
+    private String convenio;
     private FormaPagamento formaPagamento;
     private StatusContaReceber status;
 }
