@@ -44,6 +44,9 @@ public class ContaReceber extends BaseModel {
     @Column(name = "valor_total_lancado", precision = 10, scale = 2)
     private BigDecimal valorTotalLancado;
 
+    @Column(name = "valor_desconto", precision = 10, scale = 2)
+    private BigDecimal valorDesconto;
+
     @Column(name = "valor_total", precision = 10, scale = 2)
     private BigDecimal valorTotal;
 

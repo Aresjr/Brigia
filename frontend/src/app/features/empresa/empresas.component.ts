@@ -56,7 +56,7 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
     });
   }
 
-  override filter(empresa: Empresa, searchTerm: string): boolean | undefined {
+  override searchTermFilter(empresa: Empresa, searchTerm: string): boolean | undefined {
     return empresa.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       empresa.observacao?.toLowerCase().includes(searchTerm.toLowerCase());
   }

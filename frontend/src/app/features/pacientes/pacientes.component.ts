@@ -60,7 +60,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
     });
   }
 
-  override filter(paciente: Paciente, searchTerm: string): boolean | undefined {
+  override searchTermFilter(paciente: Paciente, searchTerm: string): boolean | undefined {
     return paciente.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       paciente.cpf?.includes(searchTerm) ||
       paciente.dataNascimento.includes(searchTerm) ||

@@ -119,7 +119,7 @@ export abstract class BaseListComponent<T extends Entidade> {
   onSearch($event: any): void {
     const searchTerm = $event.toLowerCase();
     if (searchTerm) {
-      this.itensExibicao = this.itensInternos.filter(item => this.filter(item, searchTerm));
+      this.itensExibicao = this.itensInternos.filter(item => this.searchTermFilter(item, searchTerm));
     } else {
       this.itensExibicao = [...this.itensInternos];
     }
@@ -127,7 +127,7 @@ export abstract class BaseListComponent<T extends Entidade> {
     this.atualizarPaginacao();
   }
 
-  filter(entidade: T, searchTerm: string): boolean | undefined {
+  searchTermFilter(entidade: T, searchTerm: string): boolean | undefined {
     return false;
   }
 

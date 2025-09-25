@@ -1,5 +1,5 @@
 <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm" (click)="fechar()">
-  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[58rem]" (click)="$event.stopPropagation()" *ngIf="contaReceber" >
+  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[42rem]" (click)="$event.stopPropagation()" *ngIf="contaReceber" >
 
     <div class="flex justify-between items-center">
       <div class="flex items-center gap-4 justify-between">
@@ -11,38 +11,108 @@
       </div>
 
       <div>
-        <button type="button" class="btn btn-sm btn-ghost btn-circle" title="Fechar" (click)="fechar()" title="Fechar">
+        <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="fechar()" title="Fechar">
           <lucide-icon name="x" class="inline w-5 h-5"/>
         </button>
       </div>
     </div>
 
     <div>
-      <div class="flex">
-        <div class="w-[8rem] mr-4" >
-          <label class="label-campo" for="data">
-            Data
-            Teste
-          </label>
+      <div class="flex items-start gap-4 mt-4">
+
+        <!-- Bloco dos valores -->
+        <div class="flex-1 p-4 rounded-xl bg-base-100 shadow-lg">
+
+          <label class="label-campo block mb-4 text-lg font-semibold">Detalhes dos Valores</label>
+
+          <div class="space-y-1 font-semibold">
+            <!-- Valor Agendamento -->
+            <div class="flex items-center justify-between px-3 py-1 rounded-lg bg-success/10">
+              <div class="flex items-center gap-2 text-success">
+                <span class="text-sm">Valor Agendamento</span>
+              </div>
+              <span class="text-lg font-semibold text-success">R$ {{ contaReceber.valorAgendamento || 0 }}</span>
+            </div>
+
+            <!-- Valor Desconto -->
+            <div class="flex items-center justify-between px-3 py-1 rounded-lg bg-amber-400/10">
+              <div class="flex items-center gap-2 text-amber-500">
+                <span class="text-sm">Desconto</span>
+              </div>
+              <span class="text-lg font-semibold text-amber-500">- R$ {{ contaReceber.valorDesconto || 0 }}</span>
+            </div>
+
+            <!-- Valor Lançado -->
+            <div class="flex items-center justify-between px-3 py-1 rounded-lg bg-success/10">
+              <div class="flex items-center gap-2 text-success">
+                <span class="text-sm">Procedimentos Lançados</span>
+              </div>
+              <span class="text-lg font-semibold text-success">R$ {{ contaReceber.valorTotalLancado || 0 }}</span>
+            </div>
+
+            <!-- Valor Total -->
+            <div class="flex items-center justify-between px-3 py-1 rounded-lg bg-success/10">
+              <div class="flex items-center gap-2 text-success">
+                <span class="text-lg">Total</span>
+              </div>
+              <span class="text-lg font-bold text-success">R$ {{ contaReceber.valorTotal || 0 }}</span>
+            </div>
+
+          </div>
         </div>
-        <div class="w-[4rem] mr-4 group tooltip text-left" data-tip="Horário inicial do agendamento">
-          <label class="label-campo" for="hora">
-            Horário <span aria-hidden="true" class="text-error">*</span>
-            Teste
-          </label>
+
+        <!-- Bloco do donut -->
+        <div class="w-64 p-4 rounded-xl shadow-lg">
+          <app-conta-receber-donut [contaReceber]="contaReceber"></app-conta-receber-donut>
+
+          <!-- Recebido -->
+          <div class="flex items-center justify-between px-3 py-1 rounded-lg bg-primary/10">
+            <div class="flex items-center gap-2 text-primary">
+              <span class="text-md">Recebido</span>
+            </div>
+            <span class="text-lg font-bold text-primary">R$ {{ contaReceber.valorRecebido || 0 }} / {{ contaReceber.valorTotal || 0 }}</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Bloco Detalhes -->
+      <div class="mt-4 p-4 rounded-xl bg-base-100 shadow-lg">
+        <label class="label-campo block mb-4 text-lg font-semibold">Detalhes do Atendimento</label>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <span class="block text-sm text-neutral">Data</span>
+            <span class="font-medium">{{ contaReceber.dataAtendimento | date:'dd/MM/yyyy' }}</span>
+          </div>
+          <div>
+            <span class="block text-sm text-neutral">Profissional</span>
+            <span class="font-medium">{{ contaReceber.profissional.nome }}</span>
+          </div>
+          <div>
+            <span class="block text-sm text-neutral">Paciente</span>
+            <span class="font-medium">{{ contaReceber.paciente.nome }}</span>
+          </div>
+          <div>
+            <span class="block text-sm text-neutral">Empresa</span>
+            <span class="font-medium">{{ contaReceber.empresa?.nome }}</span>
+          </div>
         </div>
       </div>
 
-      <div class="flex justify-end gap-3 mt-6">
-        <button type="button" class="btn btn-ghost btn-sm" (click)="fechar()" >
+      <!-- Rodapé com botões -->
+      <div class="flex justify-between mt-6">
+        <button type="button" class="btn btn-ghost btn-sm" (click)="fechar()">
           Fechar
         </button>
-        <button type="button" class="btn bg-amber-500 hover:bg-amber-600 text-white btn-sm" (click)="confirmacaoCobranca()">
-          Enviar Cobrança
-        </button>
-        <button type="button" class="btn btn-success btn-sm">
-          Adicionar Valor Faturado
-        </button>
+        <div class="flex justify-end gap-3">
+          <button type="button" class="btn bg-amber-500 hover:bg-amber-600 text-white btn-sm" (click)="confirmacaoCobranca()">
+            Enviar Cobrança
+          </button>
+          <button type="button" class="btn btn-success btn-sm">
+            Adicionar Valor Faturado
+          </button>
+        </div>
       </div>
     </div>
 

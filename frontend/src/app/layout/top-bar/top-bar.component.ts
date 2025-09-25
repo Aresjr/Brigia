@@ -47,11 +47,11 @@ export class TopBarComponent {
     this.userService.logout().subscribe({
       next: value => {
         localStorage.clear();
-        this.router.navigate(['/login']);
+        this.router.navigateByUrl('/login');
       },
       error: err => {
         localStorage.clear();
-        this.router.navigate(['/login']);
+        this.router.navigateByUrl('/login');
       }
     });
   }

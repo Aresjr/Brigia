@@ -6,7 +6,7 @@
       <h2 class="text-lg font-semibold">{{ titulo }}</h2>
 
       <div>
-        <button type="button" class="btn btn-sm btn-ghost btn-circle" title="Fechar" (click)="fechar()" title="Fechar">
+        <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="fechar()" title="Fechar">
           <lucide-icon name="x" class="inline w-5 h-5"/>
         </button>
       </div>
@@ -99,7 +99,7 @@
         </div>
       </div>
 
-      <div class="flex justify-end gap-3 mt-6">
+      <div class="flex justify-between mt-6">
         <button type="button" class="btn btn-ghost btn-sm" (click)="fechar()" >
           Fechar
         </button>

@@ -58,6 +58,23 @@ module.exports = {
           "error": "#ef4444",       // Vermelho erro
           "error-content": "#ffffff"
         },
+        "nemeia": {
+          "primary": "#3b3667",           // Indigo escuro
+          "secondary": "#2563eb",         // Azul vivo para contraste
+          "accent": "#5c6ac4",            // Indigo claro para destaques
+          "neutral": "#1f2937",           // slate-800 (fundo escuro principal)
+          "neutral-content": "#f9fafb",   // texto claro sobre neutral
+          "base-content": "#f9fafb",      // texto principal claro
+          "base-100": "#111827",          // fundo escuro primário
+          "base-200": "#1e293b",          // fundo secundário
+          "base-300": "#374151",          // fundo terciário
+          "info": "#3b82f6",              // azul para informação
+          "success": "#22c55e",           // verde sucesso
+          "success-content": "#ffffff",
+          "warning": "#f59e0b",           // amarelo alerta
+          "error": "#dc2626",             // vermelho erro
+          "error-content": "#ffffff"
+        }
       }
     ],
   },

@@ -48,6 +48,7 @@ public class ContaReceberMapper {
         contaReceber.setAtendimento(atendimento);
         contaReceber.setProfissional(atendimento.getProfissional());
         contaReceber.setValorAtendimento(atendimento.getValorAgendamento());
+        contaReceber.setValorDesconto(atendimento.getAgendamento().getDesconto());
         contaReceber.setValorTotal(atendimento.getValorTotal());
         contaReceber.setFormaPagamento(atendimento.getFormaPagamento());
         contaReceber.setStatus(StatusContaReceber.ABERTO);

@@ -46,11 +46,11 @@ export class UserService {
     return this.authService.logout().pipe(
       map(() => {
         localStorage.clear();
-        this.router.navigate(['/login']);
+        this.router.navigateByUrl('/login');
       }),
       catchError((e) => {
         localStorage.clear();
-        this.router.navigate(['/login']);
+        this.router.navigateByUrl('/login');
         return throwError(() => e);
       })
     );

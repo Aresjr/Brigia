@@ -68,7 +68,7 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
     });
   }
 
-  override filter(atendimento: Atendimento, searchTerm: string): boolean | undefined {
+  override searchTermFilter(atendimento: Atendimento, searchTerm: string): boolean | undefined {
     return atendimento.especialidade.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       this.StatusAtendimento[atendimento.status].descricao.toLowerCase().includes(searchTerm.toLowerCase()) ||
       atendimento.paciente.nome.toLowerCase().includes(searchTerm.toLowerCase());

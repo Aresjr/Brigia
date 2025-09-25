@@ -55,7 +55,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
     });
   }
 
-  override filter(procedimento: Procedimento, searchTerm: string): boolean | undefined {
+  override searchTermFilter(procedimento: Procedimento, searchTerm: string): boolean | undefined {
     return procedimento.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       procedimento.codigo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       procedimento.observacoes?.toLowerCase().includes(searchTerm.toLowerCase()) ||

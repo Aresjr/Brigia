@@ -14,6 +14,7 @@ export interface ContaReceber extends Entidade {
     descontoAtendimento: number;
     valorTotalLancado: number;
     valorTotal: number;
+    valorDesconto: number;
     valorRecebido: number;
     formaPagamento: number;
     status: number;

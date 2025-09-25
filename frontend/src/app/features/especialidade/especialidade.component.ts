@@ -55,7 +55,7 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
     });
   }
 
-  override filter(especialidade: Especialidade, searchTerm: string): boolean | undefined {
+  override searchTermFilter(especialidade: Especialidade, searchTerm: string): boolean | undefined {
     return especialidade.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       especialidade.descricao?.toLowerCase().includes(searchTerm.toLowerCase());
   }

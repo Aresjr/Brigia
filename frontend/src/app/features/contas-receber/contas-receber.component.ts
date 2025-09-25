@@ -16,7 +16,7 @@ import { ProfissionalService } from '../profissionais/profissional.service';
 import { PacienteService } from '../pacientes/paciente.service';
 import { EmpresaService } from '../empresa/empresa.service';
 import { Empresa } from '../empresa/empresa.interface';
-import { AgendamentoFormComponent } from './contas-receber-detalhes.component';
+import { ContasReceberDetalhesComponent } from './contas-receber-detalhes.component';
 import { StatusContaReceber } from '../../core/constans';
 import { abrirDatePicker } from '../../core/util-methods';
 
@@ -35,7 +35,7 @@ import { abrirDatePicker } from '../../core/util-methods';
     NgSelectComponent,
     ReactiveFormsModule,
     NgOptionComponent,
-    AgendamentoFormComponent
+    ContasReceberDetalhesComponent
   ]
 })
 export class ContaReceberComponent extends BaseListComponent<ContaReceber> implements OnInit {
@@ -63,6 +63,7 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
   }
 
   ngOnInit(): void {
+    console.log('ngOnInit');
     this.isLoading = true;
     forkJoin([
       this.carregarContasReceber(),
@@ -71,6 +72,8 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
       this.carregarEmpresas(),
     ]).subscribe(() => {
       this.isLoading = false;
+      console.log('ngOnInit finish');
+      this.filtrar();
     });
   }
 
@@ -90,6 +93,7 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
       map(response => response.items),
       tap(profissionais => {
         this.profissionais = profissionais;
+        console.log('carregarProfissionais');
       }));
   }
 
@@ -98,6 +102,7 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
       map(response => response.items),
       tap(pacientes => {
         this.pacientes = pacientes;
+        console.log('carregarPacientes');
       }));
   }
 
@@ -106,6 +111,7 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
       map(response => response.items),
       tap(empresas => {
         this.empresas = empresas;
+        console.log('carregarEmpresas');
       }));
   }
 
@@ -136,7 +142,7 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
     this.atualizarPaginacao();
   }
 
-  override filter(contaReceber: ContaReceber, searchTerm: string): boolean | undefined {
+  override searchTermFilter(contaReceber: ContaReceber, searchTerm: string): boolean | undefined {
     return contaReceber.paciente.nome.toLowerCase().includes(searchTerm.toLowerCase());
   }
 

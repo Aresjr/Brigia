@@ -53,7 +53,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
     });
   }
 
-  override filter(convenio: Convenio, searchTerm: string): boolean | undefined {
+  override searchTermFilter(convenio: Convenio, searchTerm: string): boolean | undefined {
     return convenio.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       convenio.descricao?.toLowerCase().includes(searchTerm.toLowerCase());
   }

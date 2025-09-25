@@ -75,14 +75,8 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
             pa.add(new ProcedimentoAtendimento(atendimento, procedimento, par.quantidade()));
         });
         atendimento.getProcedimentos().addAll(pa);
-        atendimento.setValorAgendamento(getValorAgendamento(atendimento));
+        atendimento.setValorAgendamento(atendimento.getAgendamento().getValor());
         atendimento.setValorLancado(valoresLancados.stream().reduce(BigDecimal.ZERO, BigDecimal::add));
-    }
-
-    private BigDecimal getValorAgendamento(Atendimento atendimento) {
-        var agendamento = atendimento.getAgendamento();
-        var desconto = Optional.ofNullable(agendamento.getDesconto()).orElse(BigDecimal.ZERO);
-        return agendamento.getValor().subtract(desconto);
     }
 
     @Transactional

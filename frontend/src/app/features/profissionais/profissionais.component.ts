@@ -55,7 +55,7 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
     });
   }
 
-  override filter(profissional: Profissional, searchTerm: string): boolean | undefined {
+  override searchTermFilter(profissional: Profissional, searchTerm: string): boolean | undefined {
     return profissional.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       profissional.celular?.includes(searchTerm) ||
       profissional.crm?.includes(searchTerm) ||

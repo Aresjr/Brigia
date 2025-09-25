@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
   private checkAuth(route: ActivatedRouteSnapshot): boolean {
     if (!this.userService.isLogged()) {
       this.toastr.error('Você precisa estar logado para acessar essa página.');
-      this.router.navigate(['/login']);
+      this.router.navigateByUrl('/login');
       return false;
     }
 
