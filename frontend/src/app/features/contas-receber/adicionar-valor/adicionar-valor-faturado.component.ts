@@ -3,6 +3,9 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective } from 'ngx-mask';
 import { limitLength } from '../../../core/util-methods';
 import { NgClass } from '@angular/common';
+import { ContaReceberService } from '../contas-receber.service';
+import { ContaReceber } from '../contas-receber.interface';
+import { LoadingSpinnerComponent } from '../../shared/loading/loading-spinner.component';
 
 @Component({
   selector: 'app-adicionar-valor-faturado',
@@ -11,20 +14,40 @@ import { NgClass } from '@angular/common';
     FormsModule,
     NgxMaskDirective,
     ReactiveFormsModule,
-    NgClass
+    NgClass,
+    LoadingSpinnerComponent
   ],
   standalone: true
 })
 export class AdicionarValorFaturadoComponent {
   @Input() message = 'Tem certeza que deseja continuar?';
-  @Input() valorTotal: number = 0;
-  @Output() confirm = new EventEmitter<void>();
+  @Input() contaReceber!: ContaReceber;
+  @Output() confirm = new EventEmitter<ContaReceber>();
   @Output() cancel = new EventEmitter<void>();
   valorRecebido = new FormControl<number | null>(null);
   usarValorTotal = false;
+  isLoading: boolean = false;
+
+  constructor(private contaReceberService: ContaReceberService) {}
 
   onConfirm() {
-    this.confirm.emit();
+    if (!this.isInvalid(this.valorRecebido) && this.valorRecebido.value != null) {
+
+      this.isLoading = true;
+      this.contaReceberService.registrarRecebimento(this.contaReceber.id, this.valorRecebido.value)
+        .subscribe({
+          next: (response) => {
+            this.isLoading = false;
+            this.confirm.emit(response);
+          },
+          error: () => {
+            this.isLoading = false;
+          }
+        });
+
+    } else {
+      this.valorRecebido.markAsTouched({ onlySelf: true });
+    }
   }
 
   onCancel() {
@@ -33,12 +56,17 @@ export class AdicionarValorFaturadoComponent {
 
   preencherValorTotal() {
     if (this.usarValorTotal) {
-      this.valorRecebido.setValue(this.valorTotal);
+      const aReceber = this.contaReceber.valorTotal - this.contaReceber.valorRecebido;
+      this.valorRecebido.setValue(aReceber);
       this.valorRecebido.disable();
     } else {
       this.valorRecebido.reset();
       this.valorRecebido.enable();
     }
+  }
+
+  isInvalid(control: FormControl): boolean {
+    return (control && control.invalid && (control.touched || control.dirty));
   }
 
   protected readonly limitLength = limitLength;

@@ -16,7 +16,7 @@ import { AdicionarValorFaturadoComponent } from './adicionar-valor/adicionar-val
   ]
 })
 export class ContasReceberDetalhesComponent {
-  @Input() contaReceber: ContaReceber | null = null;
+  @Input() contaReceber!: ContaReceber;
   @Output() fechou = new EventEmitter<void>();
   exibeAdicionarValor: boolean =  false;
 
@@ -30,8 +30,9 @@ export class ContasReceberDetalhesComponent {
     console.log('confirmacaoCobranca');
   }
 
-  valorAdicionado() {
-    console.log('valorAdicionado');
+  valorAdicionado(contaReceber: ContaReceber) {
+    this.contaReceber = contaReceber;
+    this.exibeAdicionarValor = false;
   }
 
   protected readonly StatusContaReceber = StatusContaReceber;

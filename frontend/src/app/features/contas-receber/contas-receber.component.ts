@@ -64,6 +64,16 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
 
   ngOnInit(): void {
     this.isLoading = true;
+    this.carregarDados();
+  }
+
+  ngOnChanges(): void {
+    if (this.isLoading) {
+      this.carregarDados();
+    }
+  }
+
+  carregarDados() {
     forkJoin([
       this.carregarContasReceber(),
       this.carregarProfissionais(),

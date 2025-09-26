@@ -1,9 +1,13 @@
 package br.com.nemeia.brigia.controller;
 
+import br.com.nemeia.brigia.dto.request.PacienteRequest;
+import br.com.nemeia.brigia.dto.request.RecebimentoRequest;
+import br.com.nemeia.brigia.dto.response.AtendimentoResponse;
 import br.com.nemeia.brigia.dto.response.ContaReceberResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.mapper.ContaReceberMapper;
 import br.com.nemeia.brigia.service.ContaReceberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,4 +36,13 @@ public class ContaReceberController {
         log.info("GET /contas-receber/{} - buscando conta a receber pelo ID", id);
         return mapper.toResponse(service.getById(id));
     }
+
+    @PostMapping("/registrar-recebimento/{contaReceberId}")
+    @PreAuthorize("hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
+    public ContaReceberResponse registrarRecebimento(@PathVariable Long contaReceberId,
+                                                     @Valid @RequestBody RecebimentoRequest request) {
+      log.info("POST /agendamentos/registrar-recebimento/{}", contaReceberId);
+      return mapper.toResponse(service.registrarRecebimento(contaReceberId, request.valorRecebido()));
+    }
+
 }

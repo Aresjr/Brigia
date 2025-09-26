@@ -1,6 +1,6 @@
 package br.com.nemeia.brigia.service;
 
-import br.com.nemeia.brigia.Utils;
+import br.com.nemeia.brigia.utils.DbUtil;
 import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.ProfissionalRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
@@ -27,7 +27,7 @@ public class ProfissionalService {
     private final EspecialidadeService especialidadeService;
 
     public Page<Profissional> getPaged(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
+        Pageable pageable = PageRequest.of(page, size, DbUtil.DEFAULT_SORT);
         return repository.findAllByUnidadeIdIs(pageable, SecurityHolder.getLoggedUserUnidadeId());
     }
 

@@ -27,7 +27,7 @@
 
           <div class="space-y-1 font-semibold">
             <!-- Valor Agendamento -->
-            <div class="flex items-center justify-between px-3 py-2 rounded-lg bg-success/10">
+            <div class="flex items-center justify-between px-3 py-2 rounded-lg">
               <div class="flex items-center gap-2 text-success">
                 <span class="">Valor Agendamento</span>
               </div>
@@ -35,7 +35,7 @@
             </div>
 
             <!-- Valor Desconto -->
-            <div class="flex items-center justify-between px-3 py-2 rounded-lg bg-amber-400/10">
+            <div class="flex items-center justify-between px-3 py-2 rounded-lg ">
               <div class="flex items-center gap-2 text-amber-500">
                 <span class="text-sm">Desconto</span>
               </div>
@@ -43,7 +43,7 @@
             </div>
 
             <!-- Valor Lançado -->
-            <div class="flex items-center justify-between px-3 py-2 rounded-lg bg-success/10">
+            <div class="flex items-center justify-between px-3 py-2 rounded-lg">
               <div class="flex items-center gap-2 text-success">
                 <span class="text-sm">Procedimentos Lançados</span>
               </div>
@@ -62,7 +62,7 @@
         </div>
 
         <!-- Bloco do donut -->
-        <div class="w-72 p-4">
+        <div class="w-[20rem] p-4">
           <app-conta-receber-donut [contaReceber]="contaReceber"></app-conta-receber-donut>
 
           <!-- Recebido -->
@@ -128,7 +128,8 @@
 
   <app-adicionar-valor-faturado
     *ngIf="exibeAdicionarValor"
-    (confirm)="valorAdicionado()"
+    [contaReceber]="contaReceber"
+    (confirm)="valorAdicionado($event)"
     (cancel)="exibeAdicionarValor = false">
   </app-adicionar-valor-faturado>
 

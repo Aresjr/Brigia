@@ -1,6 +1,6 @@
 package br.com.nemeia.brigia.service;
 
-import br.com.nemeia.brigia.Utils;
+import br.com.nemeia.brigia.utils.DbUtil;
 import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
@@ -67,7 +67,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         LocalDate startDate = LocalDate.of(ano, mes, 1).minusMonths(1);
         LocalDate endDate = LocalDate.of(ano, mes, 1).plusMonths(2).minusDays(1);
 
-        Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
+        Pageable pageable = PageRequest.of(page, size, DbUtil.DEFAULT_SORT);
 
         if (SecurityHolder.getLoggedUserRoles().contains(RoleUsuario.MEDICO.toString())) {
             Long profissionalId = profissionalService.getByUsuarioId(userId).getId();

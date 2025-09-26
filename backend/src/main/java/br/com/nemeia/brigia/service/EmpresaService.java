@@ -1,6 +1,6 @@
 package br.com.nemeia.brigia.service;
 
-import br.com.nemeia.brigia.Utils;
+import br.com.nemeia.brigia.utils.DbUtil;
 import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.EmpresaRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
@@ -26,7 +26,7 @@ public class EmpresaService {
     private final EmpresaPlanoService empresaPlanoService;
 
     public Page<Empresa> getPaged(int page, int size, Boolean mostrarExcluidos) {
-        Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
+        Pageable pageable = PageRequest.of(page, size, DbUtil.DEFAULT_SORT);
         return mostrarExcluidos
                 ? repository.findAll(pageable)
                 : repository.findAllByExcluidoIsOrExcluidoIsNull(pageable, false);

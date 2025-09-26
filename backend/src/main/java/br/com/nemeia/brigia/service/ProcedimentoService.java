@@ -1,6 +1,6 @@
 package br.com.nemeia.brigia.service;
 
-import br.com.nemeia.brigia.Utils;
+import br.com.nemeia.brigia.utils.DbUtil;
 import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
@@ -29,7 +29,7 @@ public class ProcedimentoService {
     private final PrecoProcedimentoService precoProcedimentoService;
 
     public Page<Procedimento> getPaged(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Utils.DEFAULT_SORT);
+        Pageable pageable = PageRequest.of(page, size, DbUtil.DEFAULT_SORT);
         return repository.findAll(pageable);
     }
 
