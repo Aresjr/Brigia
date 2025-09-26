@@ -63,7 +63,6 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
   }
 
   ngOnInit(): void {
-    console.log('ngOnInit');
     this.isLoading = true;
     forkJoin([
       this.carregarContasReceber(),
@@ -72,7 +71,6 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
       this.carregarEmpresas(),
     ]).subscribe(() => {
       this.isLoading = false;
-      console.log('ngOnInit finish');
       this.filtrar();
     });
   }
@@ -93,7 +91,6 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
       map(response => response.items),
       tap(profissionais => {
         this.profissionais = profissionais;
-        console.log('carregarProfissionais');
       }));
   }
 
@@ -102,7 +99,6 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
       map(response => response.items),
       tap(pacientes => {
         this.pacientes = pacientes;
-        console.log('carregarPacientes');
       }));
   }
 
@@ -111,7 +107,6 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
       map(response => response.items),
       tap(empresas => {
         this.empresas = empresas;
-        console.log('carregarEmpresas');
       }));
   }
 

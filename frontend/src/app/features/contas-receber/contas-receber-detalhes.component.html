@@ -27,27 +27,27 @@
 
           <div class="space-y-1 font-semibold">
             <!-- Valor Agendamento -->
-            <div class="flex items-center justify-between px-3 py-1 rounded-lg bg-success/10">
+            <div class="flex items-center justify-between px-3 py-2 rounded-lg bg-success/10">
               <div class="flex items-center gap-2 text-success">
-                <span class="text-sm">Valor Agendamento</span>
+                <span class="">Valor Agendamento</span>
               </div>
-              <span class="text-lg font-semibold text-success">R$ {{ contaReceber.valorAgendamento || 0 }}</span>
+              <span class="font-semibold text-success">R$ {{ contaReceber.valorAgendamento || 0 | number:'1.2-2':'pt-BR' }}</span>
             </div>
 
             <!-- Valor Desconto -->
-            <div class="flex items-center justify-between px-3 py-1 rounded-lg bg-amber-400/10">
+            <div class="flex items-center justify-between px-3 py-2 rounded-lg bg-amber-400/10">
               <div class="flex items-center gap-2 text-amber-500">
                 <span class="text-sm">Desconto</span>
               </div>
-              <span class="text-lg font-semibold text-amber-500">- R$ {{ contaReceber.valorDesconto || 0 }}</span>
+              <span class="font-semibold text-amber-500">- R$ {{ contaReceber.valorDesconto || 0 | number:'1.2-2':'pt-BR' }}</span>
             </div>
 
             <!-- Valor Lançado -->
-            <div class="flex items-center justify-between px-3 py-1 rounded-lg bg-success/10">
+            <div class="flex items-center justify-between px-3 py-2 rounded-lg bg-success/10">
               <div class="flex items-center gap-2 text-success">
                 <span class="text-sm">Procedimentos Lançados</span>
               </div>
-              <span class="text-lg font-semibold text-success">R$ {{ contaReceber.valorProcedimentosLancados || 0 }}</span>
+              <span class="font-semibold text-success">R$ {{ contaReceber.valorProcedimentosLancados || 0 | number:'1.2-2':'pt-BR' }}</span>
             </div>
 
             <!-- Valor Total -->
@@ -55,7 +55,7 @@
               <div class="flex items-center gap-2 text-success">
                 <span class="text-lg">Total</span>
               </div>
-              <span class="text-lg font-bold text-success">R$ {{ contaReceber.valorTotal || 0 }}</span>
+              <span class="text-lg font-bold text-success">R$ {{ contaReceber.valorTotal || 0 | number:'1.2-2':'pt-BR' }}</span>
             </div>
 
           </div>
@@ -68,9 +68,9 @@
           <!-- Recebido -->
           <div class="flex items-center justify-between px-3 py-1 rounded-lg bg-primary/10">
             <div class="flex items-center gap-2 text-primary">
-              <span class="text-md">Recebido</span>
+              <span class="text-md font-semibold">Recebido</span>
             </div>
-            <span class="text-lg font-bold text-primary">R$ {{ contaReceber.valorRecebido || 0 }} / {{ contaReceber.valorTotal || 0 }}</span>
+            <span class="text-lg font-bold text-primary">R$ {{ contaReceber.valorRecebido | number:'1.2-2':'pt-BR' }} / {{ contaReceber.valorTotal | number:'1.2-2':'pt-BR' }}</span>
           </div>
 
         </div>
@@ -115,14 +115,21 @@
         </button>
         <div class="flex justify-end gap-3">
           <button type="button" class="btn bg-amber-500 hover:bg-amber-600 text-white btn-sm" (click)="confirmacaoCobranca()">
-            Enviar Cobrança
+            Realizar Cobrança
           </button>
-          <button type="button" class="btn btn-success btn-sm">
-            Adicionar Valor Faturado
+          <button type="button" class="btn btn-success btn-sm" (click)="exibeAdicionarValor = true">
+            Registrar Recebimento
           </button>
         </div>
       </div>
     </div>
 
   </div>
+
+  <app-adicionar-valor-faturado
+    *ngIf="exibeAdicionarValor"
+    (confirm)="valorAdicionado()"
+    (cancel)="exibeAdicionarValor = false">
+  </app-adicionar-valor-faturado>
+
 </div>

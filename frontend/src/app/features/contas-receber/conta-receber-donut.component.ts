@@ -47,7 +47,6 @@ export class ContaReceberDonutComponent {
   protected chartOptions: Partial<ChartOptions> = {};
 
   ngOnChanges(): void {
-    console.log('this.contaReceber', this.contaReceber);
     if (!this.contaReceber) {
       return;
     }
