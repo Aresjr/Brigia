@@ -22,17 +22,14 @@ export type ChartOptions = {
         labels?: {
           show?: boolean;
           value?: {};
-          total?: {
-            show?: boolean;
-            label?: string;
-            formatter?: () => string;
-          };
+          total?: {};
         };
       };
     };
   };
   responsive: ApexResponsive[];
-  tooltip: ApexTooltip
+  tooltip: ApexTooltip;
+  dataLabels: ApexDataLabels;
 };
 
 @Component({
@@ -60,7 +57,7 @@ export class ContaReceberDonutComponent {
       series: [valorRecebido, valorNaoRecebido, valorDesconto],
       chart: {
         type: "donut",
-        height: 162
+        height: 180
       },
       states: {
         hover: {
@@ -70,7 +67,7 @@ export class ContaReceberDonutComponent {
         }
       },
       labels: ["Recebido", "A Receber", "Desconto"],
-      colors: ["#22c55e", "#FFCA28", '#60a5fa'],
+      colors: ["#22c55e", "#FFCA28", '#3986ff'],
       legend: { show: false },
       fill: { type: "solid" },
       plotOptions: {
@@ -80,16 +77,21 @@ export class ContaReceberDonutComponent {
             labels: {
               show: true,
               value: {
-                formatter: (val: string) => `R$ ${parseFloat(val).toLocaleString("pt-BR")}`
+                formatter: (val: number) => {
+                  return `R$ ${val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                }
               },
               total: {
                 show: true,
                 label: "Total",
-                formatter: () => `R$ ${valorTotal}`
+                formatter: (val: number) => `R$ ${(valorTotal + valorDesconto).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
               }
             }
           }
         }
+      },
+      dataLabels: {
+        enabled: false
       },
       responsive: [
         {
@@ -102,7 +104,7 @@ export class ContaReceberDonutComponent {
       ],
       tooltip: {
         y: {
-          formatter: (val: number) => `R$ ${val.toLocaleString("pt-BR")}`
+          formatter: (val: number) => `R$ ${val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
         }
       },
     };

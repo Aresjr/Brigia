@@ -85,14 +85,15 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
     });
   }
 
-  carregarContasReceber() {
-    this.isLoading = true;
-    return this.contasReceberService.listar(true).pipe(
+  carregarContasReceber(limparCache: boolean = false) {
+    console.log('carregarContasReceber');
+    return this.contasReceberService.listar(true, limparCache).pipe(
       map(response => response.items),
       tap(contasReceber => {
         this.itensInternos = contasReceber;
         this.itensExibicao = [...this.itensInternos];
         this.atualizarPaginacao();
+        console.log('atualizarPaginacao');
       }));
   }
 
@@ -149,6 +150,11 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
 
   override searchTermFilter(contaReceber: ContaReceber, searchTerm: string): boolean | undefined {
     return contaReceber.paciente.nome.toLowerCase().includes(searchTerm.toLowerCase());
+  }
+
+  fecharDetalhesContaReceber(infoAlterada: boolean) {
+    this.fecharDetalhes();
+    return this.carregarContasReceber(infoAlterada);
   }
 
   protected readonly StatusContaReceber = StatusContaReceber;

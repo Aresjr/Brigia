@@ -139,10 +139,11 @@
 
 }
 
-  <app-contas-receber-detalhes
-    *ngIf="mostrarDetalhes"
-    [contaReceber]="itemSelecionado"
-    (fechou)="fecharDetalhes()">
-  </app-contas-receber-detalhes>
+  @if(mostrarDetalhes && itemSelecionado) {
+    <app-contas-receber-detalhes
+      [contaReceber]="itemSelecionado"
+      (fechou)="fecharDetalhesContaReceber($event)">
+    </app-contas-receber-detalhes>
+  }
 
 </div>

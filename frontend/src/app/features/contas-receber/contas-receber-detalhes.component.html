@@ -25,7 +25,7 @@
 
           <label class="label-campo block mb-4 text-lg font-semibold">Detalhes dos Valores</label>
 
-          <div class="space-y-1 font-semibold">
+          <div class="font-semibold mt-[2rem]">
             <!-- Valor Agendamento -->
             <div class="flex items-center justify-between px-3 py-2 rounded-lg">
               <div class="flex items-center gap-2 text-success">
@@ -51,7 +51,7 @@
             </div>
 
             <!-- Valor Total -->
-            <div class="flex items-center justify-between px-3 py-1 rounded-lg bg-success/10">
+            <div class="flex items-center justify-between px-3 py-1 rounded-lg bg-success/10 mt-[1rem]">
               <div class="flex items-center gap-2 text-success">
                 <span class="text-lg">Total</span>
               </div>
@@ -114,12 +114,14 @@
           Fechar
         </button>
         <div class="flex justify-end gap-3">
-          <button type="button" class="btn bg-amber-500 hover:bg-amber-600 text-white btn-sm" (click)="confirmacaoCobranca()">
-            Realizar Cobrança
-          </button>
-          <button type="button" class="btn btn-success btn-sm" (click)="exibeAdicionarValor = true">
-            Registrar Recebimento
-          </button>
+          @if (!contaReceber.faturado) {
+            <button type="button" class="btn bg-amber-500 hover:bg-amber-600 text-white btn-sm" (click)="confirmacaoCobranca()">
+              Realizar Cobrança
+            </button>
+            <button type="button" class="btn btn-success btn-sm" (click)="exibeAdicionarValor = true">
+              Registrar Recebimento
+            </button>
+          }
         </div>
       </div>
     </div>

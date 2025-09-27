@@ -1,6 +1,7 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.exception.ValorRecebidoUltrapassadoException;
+import br.com.nemeia.brigia.model.StatusContaReceber;
 import br.com.nemeia.brigia.utils.BigDecimals;
 import br.com.nemeia.brigia.utils.DbUtil;
 import br.com.nemeia.brigia.auth.SecurityHolder;
@@ -52,7 +53,9 @@ public class ContaReceberService {
     if (BigDecimals.gt(valorRecebido, contaReceber.getValorTotal())) {
       throw new ValorRecebidoUltrapassadoException();
     }
-    contaReceber.setValorRecebido( contaReceber.getValorRecebido().add(valorRecebido) );
+    contaReceber.setValorRecebido(contaReceber.getValorRecebido().add(valorRecebido));
+    boolean pagoTotalmente = contaReceber.getValorRecebido().equals(contaReceber.getValorTotal());
+    contaReceber.setStatus(pagoTotalmente ? StatusContaReceber.PAGO : StatusContaReceber.PARCIAL);
     repository.save(contaReceber);
     return contaReceber;
   }

@@ -18,9 +18,13 @@ export class BaseService<Entid extends Entidade, Request extends EntidadeRequest
   path = '/';
   cache$: Observable<PagedResponse<Entid>> | null = null;
 
-  listar(mostrarExcluidos: boolean = false): Observable<PagedResponse<Entid>> {
+  listar(mostrarExcluidos: boolean = false, limpaCache: boolean = false): Observable<PagedResponse<Entid>> {
+    console.log('this.cache$', this.cache$);
+    if (limpaCache) {
+      this.limparCache();
+    }
     if (!this.cache$) {
-      this.cache$ = this.backend.get<PagedResponse<Entid>>(`${this.path}?mostrarExcluidos=true&size=9999`).pipe(
+      return this.cache$ = this.backend.get<PagedResponse<Entid>>(`${this.path}?mostrarExcluidos=${mostrarExcluidos}&size=9999`).pipe(
         shareReplay(1),
         catchError((e) => {
           this.toastr.error('Erro ao carregar os registros. Por favor, tente novamente.');
@@ -29,10 +33,12 @@ export class BaseService<Entid extends Entidade, Request extends EntidadeRequest
       );
     }
 
-    if (!mostrarExcluidos) {
-      return this.listarNaoExcluidos();
-    }
+    // if (!mostrarExcluidos) {
+    //   console.log('this.listarNaoExcluidos');
+    //   return this.listarNaoExcluidos();
+    // }
 
+    console.log('return this.cache$', this.cache$);
     return this.cache$;
   }
 

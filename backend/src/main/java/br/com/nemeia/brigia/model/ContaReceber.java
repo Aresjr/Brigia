@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -58,5 +58,9 @@ public class ContaReceber extends BaseModel {
 
     public BigDecimal getValorTotal() {
       return valorAtendimento.add(valorTotalLancado).subtract(valorDesconto);
+    }
+
+    public Boolean isFaturado() {
+      return Objects.equals(valorRecebido, getValorTotal());
     }
 }

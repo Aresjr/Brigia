@@ -16,4 +16,5 @@ export interface ContaReceber extends Entidade {
     convenio: string;
     formaPagamento: number;
     status: number;
+    faturado: boolean;
 }
