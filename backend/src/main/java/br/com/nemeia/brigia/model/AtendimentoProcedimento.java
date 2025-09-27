@@ -1,38 +1,40 @@
 package br.com.nemeia.brigia.model;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.math.BigDecimal;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "atendimento_procedimento")
-public class AtendimentoProcedimento extends BaseModel {
-
+public class AtendimentoProcedimento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "atendimento_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "atendimento_id")
     private Atendimento atendimento;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "procedimento_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "procedimento_id")
     private Procedimento procedimento;
 
-    @Column(name = "nome_procedimento", nullable = false)
-    private String nomeProcedimento;
-
     @Column(name = "quantidade", nullable = false)
-    private Integer quantidade;
+    private Long quantidade;
 
-    @Column(name = "valor", nullable = false)
+    @Column(name = "valor")
     private BigDecimal valor;
 
-    @Column(name = "preco_alterado", nullable = false)
-    private Boolean precoAlterado = false;
+    public AtendimentoProcedimento(Atendimento atendimento, Procedimento procedimento, Long quantidade, BigDecimal valor) {
+        this.atendimento = atendimento;
+        this.procedimento = procedimento;
+        this.quantidade = quantidade;
+        this.valor = valor;
+    }
 }

@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -66,13 +65,13 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
 
     private void setProcedimentos(Atendimento atendimento, List<ProcedimentoAtendimentoRequest> procedimentos,
             Convenio convenio) {
-        List<ProcedimentoAtendimento> pa = new ArrayList<>();
+        List<AtendimentoProcedimento> pa = new ArrayList<>();
         List<BigDecimal> valoresLancados = new ArrayList<>();
         procedimentos.forEach(par -> {
             Procedimento procedimento = procedimentoService.getById(par.procedimentoId());
-            valoresLancados.add(precoProcedimentoService.getPreco(procedimento, convenio)
-                    .multiply(BigDecimal.valueOf(par.quantidade())));
-            pa.add(new ProcedimentoAtendimento(atendimento, procedimento, par.quantidade()));
+            var precoProcedimento = precoProcedimentoService.getPreco(procedimento, convenio);
+            valoresLancados.add(precoProcedimento.multiply(BigDecimal.valueOf(par.quantidade())));
+            pa.add(new AtendimentoProcedimento(atendimento, procedimento, par.quantidade(), precoProcedimento));
         });
         atendimento.getProcedimentos().addAll(pa);
         atendimento.setValorAgendamento(atendimento.getAgendamento().getValor());
@@ -138,7 +137,6 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         agendamentoService.updateStatus(agendamento, StatusAgendamento.FINALIZADO);
 
         contaReceberService.createContaReceber(atendimento);
-        // TODO - testar
 
         return atendimento;
     }

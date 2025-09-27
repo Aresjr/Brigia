@@ -26,4 +26,5 @@ public class ContaReceberResponse {
     private String convenio;
     private FormaPagamento formaPagamento;
     private StatusContaReceber status;
+    private Boolean faturado;
 }

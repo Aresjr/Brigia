@@ -57,10 +57,10 @@ public class ContaReceber extends BaseModel {
     private StatusContaReceber status;
 
     public BigDecimal getValorTotal() {
-      return valorAtendimento.add(valorTotalLancado).subtract(valorDesconto);
+        return valorAtendimento.add(valorTotalLancado).subtract(valorDesconto);
     }
 
     public Boolean isFaturado() {
-      return Objects.equals(valorRecebido, getValorTotal());
+        return Objects.equals(valorRecebido, getValorTotal());
     }
 }

@@ -47,16 +47,16 @@ public class ContaReceberService {
         repository.save(contaReceber);
     }
 
-  @Transactional
-  public ContaReceber registrarRecebimento(Long id, BigDecimal valorRecebido) {
-    ContaReceber contaReceber = getById(id);
-    if (BigDecimals.gt(valorRecebido, contaReceber.getValorTotal())) {
-      throw new ValorRecebidoUltrapassadoException();
+    @Transactional
+    public ContaReceber registrarRecebimento(Long id, BigDecimal valorRecebido) {
+        ContaReceber contaReceber = getById(id);
+        if (BigDecimals.gt(valorRecebido, contaReceber.getValorTotal())) {
+            throw new ValorRecebidoUltrapassadoException();
+        }
+        contaReceber.setValorRecebido(contaReceber.getValorRecebido().add(valorRecebido));
+        boolean pagoTotalmente = contaReceber.getValorRecebido().equals(contaReceber.getValorTotal());
+        contaReceber.setStatus(pagoTotalmente ? StatusContaReceber.PAGO : StatusContaReceber.PARCIAL);
+        repository.save(contaReceber);
+        return contaReceber;
     }
-    contaReceber.setValorRecebido(contaReceber.getValorRecebido().add(valorRecebido));
-    boolean pagoTotalmente = contaReceber.getValorRecebido().equals(contaReceber.getValorTotal());
-    contaReceber.setStatus(pagoTotalmente ? StatusContaReceber.PAGO : StatusContaReceber.PARCIAL);
-    repository.save(contaReceber);
-    return contaReceber;
-  }
 }

@@ -79,7 +79,7 @@ public class Atendimento extends BaseModel {
     private String observacoes;
 
     @OneToMany(mappedBy = "atendimento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProcedimentoAtendimento> procedimentos = new ArrayList<>();
+    private List<AtendimentoProcedimento> procedimentos = new ArrayList<>();
 
     @Column(name = "valor_agendamento")
     private BigDecimal valorAgendamento;

@@ -30,19 +30,22 @@ public class GenericExceptionHandler extends BaseExceptionHandler {
     }
 
     @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException ex,
+            HttpServletRequest request) {
         log.error("NullPointer: {}", ex.getMessage());
         return buildErrorResponse(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
     @ExceptionHandler(ValorRecebidoUltrapassadoException.class)
-    public ResponseEntity<ErrorResponse> handleBadRequestException(NullPointerException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleBadRequestException(NullPointerException ex,
+            HttpServletRequest request) {
         log.error("Mapped BadRequest: {}", ex.getMessage());
         return buildErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException ex,
+            HttpServletRequest request) {
         log.error("NoResourceFoundException: {}", ex.getMessage());
         return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND, request);
     }

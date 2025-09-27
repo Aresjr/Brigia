@@ -82,7 +82,7 @@ export const STATUS_ABRIR_ATENDIMENTO: number[] = [0, 1, 5];
 
 export const StatusContaReceber: Record<number, { descricao: string; cor: string }> = {
   0: { descricao: 'Aberto', cor: '#60a5fa' },
-  1: { descricao: 'Pago', cor: '#A78BFA' },
+  1: { descricao: 'Pago', cor: '#14B8A6' },
   2: { descricao: 'Atrasado', cor: '#EF4444' },
-  3: { descricao: 'Parcial', cor: '#14B8A6' }
+  3: { descricao: 'Parcial', cor: '#A78BFA' }
 }

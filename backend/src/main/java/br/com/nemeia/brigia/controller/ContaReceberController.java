@@ -40,9 +40,9 @@ public class ContaReceberController {
     @PostMapping("/registrar-recebimento/{contaReceberId}")
     @PreAuthorize("hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
     public ContaReceberResponse registrarRecebimento(@PathVariable Long contaReceberId,
-                                                     @Valid @RequestBody RecebimentoRequest request) {
-      log.info("POST /agendamentos/registrar-recebimento/{}", contaReceberId);
-      return mapper.toResponse(service.registrarRecebimento(contaReceberId, request.valorRecebido()));
+            @Valid @RequestBody RecebimentoRequest request) {
+        log.info("POST /agendamentos/registrar-recebimento/{}", contaReceberId);
+        return mapper.toResponse(service.registrarRecebimento(contaReceberId, request.valorRecebido()));
     }
 
 }

@@ -1,4 +1,4 @@
-import { catchError, map, Observable, shareReplay, throwError } from 'rxjs';
+import { catchError, Observable, shareReplay, throwError } from 'rxjs';
 import { BackendService } from '../../core/backend/backend.service';
 import { ToastrService } from 'ngx-toastr';
 import { Injectable } from '@angular/core';
@@ -19,36 +19,22 @@ export class BaseService<Entid extends Entidade, Request extends EntidadeRequest
   cache$: Observable<PagedResponse<Entid>> | null = null;
 
   listar(mostrarExcluidos: boolean = false, limpaCache: boolean = false): Observable<PagedResponse<Entid>> {
-    console.log('this.cache$', this.cache$);
     if (limpaCache) {
       this.limparCache();
     }
-    if (!this.cache$) {
-      return this.cache$ = this.backend.get<PagedResponse<Entid>>(`${this.path}?mostrarExcluidos=${mostrarExcluidos}&size=9999`).pipe(
-        shareReplay(1),
-        catchError((e) => {
-          this.toastr.error('Erro ao carregar os registros. Por favor, tente novamente.');
-          return throwError(() => e);
-        })
-      );
+
+    if (this.cache$) {
+      return this.cache$;
     }
 
-    // if (!mostrarExcluidos) {
-    //   console.log('this.listarNaoExcluidos');
-    //   return this.listarNaoExcluidos();
-    // }
-
-    console.log('return this.cache$', this.cache$);
-    return this.cache$;
-  }
-
-  listarNaoExcluidos(): Observable<PagedResponse<Entid>> {
-    return this.cache$!.pipe(
-      map(response => ({
-        ...response,
-        items: response.items.filter(item => !item.excluido)
-      }))
+    this.cache$ = this.backend.get<PagedResponse<Entid>>(`${this.path}?mostrarExcluidos=${mostrarExcluidos}&size=9999`).pipe(
+      shareReplay(1),
+      catchError((e) => {
+        this.toastr.error('Erro ao carregar os registros. Por favor, tente novamente.');
+        return throwError(() => e);
+      })
     );
+    return this.cache$;
   }
 
   criar(registro: Partial<Request>): Observable<Entid> {

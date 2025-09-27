@@ -86,14 +86,12 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
   }
 
   carregarContasReceber(limparCache: boolean = false) {
-    console.log('carregarContasReceber');
     return this.contasReceberService.listar(true, limparCache).pipe(
       map(response => response.items),
       tap(contasReceber => {
         this.itensInternos = contasReceber;
         this.itensExibicao = [...this.itensInternos];
         this.atualizarPaginacao();
-        console.log('atualizarPaginacao');
       }));
   }
 
@@ -154,7 +152,9 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
 
   fecharDetalhesContaReceber(infoAlterada: boolean) {
     this.fecharDetalhes();
-    return this.carregarContasReceber(infoAlterada);
+    if (infoAlterada) {
+      this.carregarContasReceber(infoAlterada).subscribe();
+    }
   }
 
   protected readonly StatusContaReceber = StatusContaReceber;
