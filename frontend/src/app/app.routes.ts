@@ -15,6 +15,7 @@ import { AtendimentosComponent } from './features/atendimento/atendimentos.compo
 import { ContaReceberComponent } from './features/contas-receber/contas-receber.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { DetalhesAgendamentoComponent } from './pages/detalhes-agendamento/detalhes-agendamento.component';
+import { UsuariosComponent } from './features/usuarios/usuarios.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -125,6 +126,16 @@ export const routes: Routes = [
         data: {
           roles: [Role.ADMIN, Role.FATURAMENTO],
           title: 'Contas a Receber',
+        },
+      },
+      {
+        path: 'usuarios',
+        component: UsuariosComponent,
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        data: {
+          roles: [Role.ADMIN],
+          title: 'Usuários'
         },
       },
     ],

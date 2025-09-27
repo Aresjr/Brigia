@@ -1,11 +1,11 @@
 package br.com.nemeia.brigia.controller;
 
 import br.com.nemeia.brigia.dto.request.UsuarioRequest;
+import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.dto.response.UsuarioResponse;
 import br.com.nemeia.brigia.mapper.UsuarioMapper;
 import br.com.nemeia.brigia.service.UsuarioService;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,16 +22,17 @@ public class UsuarioController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<UsuarioResponse> getAllMedicalPlans() {
+    public PagedResponse<UsuarioResponse> getAll(@RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
         log.info("GET /usuarios");
-        return service.getAll().stream().map(mapper::toResponse).toList();
+        return mapper.toPagedResponse(service.getPaged(page, size, mostrarExcluidos));
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public UsuarioResponse getMedicalPlanById(@PathVariable Long id) {
+    public UsuarioResponse getById(@PathVariable Long id) {
         log.info("GET /usuarios/{} - buscando usuario pelo ID", id);
-        return mapper.toResponse(service.findById(id));
+        return mapper.toResponse(service.getById(id));
     }
 
     @PostMapping

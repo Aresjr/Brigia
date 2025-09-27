@@ -1,38 +1,24 @@
 package br.com.nemeia.brigia.service;
 
-import br.com.nemeia.brigia.utils.DbUtil;
-import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.ConvenioRequest;
-import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ConvenioMapper;
 import br.com.nemeia.brigia.model.Convenio;
 import br.com.nemeia.brigia.repository.ConvenioRepository;
-import java.time.LocalDateTime;
-import lombok.RequiredArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
-public class ConvenioService {
+public class ConvenioService extends BaseService<Convenio, ConvenioRepository> {
 
     private final ConvenioRepository repository;
     private final ConvenioMapper mapper;
 
-    public Page<Convenio> getPaged(int page, int size, Boolean mostrarExcluidos) {
-        Pageable pageable = PageRequest.of(page, size, DbUtil.DEFAULT_SORT);
-        return mostrarExcluidos
-                ? repository.findAll(pageable)
-                : repository.findAllByExcluidoIsOrExcluidoIsNull(pageable, false);
-    }
-
-    public Convenio getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Convênio não encontrado com ID: " + id));
+    public ConvenioService(ConvenioRepository repository, ConvenioMapper mapper) {
+        super(repository);
+        this.repository = repository;
+        this.mapper = mapper;
     }
 
     public Convenio createConvenio(ConvenioRequest request) {
@@ -47,21 +33,9 @@ public class ConvenioService {
         return repository.save(convenio);
     }
 
-    public void deleteConvenio(Long id) {
-        Convenio convenio = getById(id);
-        convenio.setExcluido(true);
-        convenio.setExcluidoEm(LocalDateTime.now());
-
-        Long userId = SecurityHolder.getLoggedUserId();
-        convenio.setExcluidoPor(userId);
-        repository.save(convenio);
+    @Override
+    String getNomeEntidade() {
+        return "Convênio";
     }
 
-    public void restoreConvenio(Long id) {
-        Convenio convenio = getById(id);
-        convenio.setExcluido(false);
-        convenio.setExcluidoEm(null);
-        convenio.setExcluidoPor(null);
-        repository.save(convenio);
-    }
 }

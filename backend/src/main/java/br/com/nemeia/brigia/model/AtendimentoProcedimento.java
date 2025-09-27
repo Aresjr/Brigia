@@ -31,7 +31,8 @@ public class AtendimentoProcedimento {
     @Column(name = "valor")
     private BigDecimal valor;
 
-    public AtendimentoProcedimento(Atendimento atendimento, Procedimento procedimento, Long quantidade, BigDecimal valor) {
+    public AtendimentoProcedimento(Atendimento atendimento, Procedimento procedimento, Long quantidade,
+            BigDecimal valor) {
         this.atendimento = atendimento;
         this.procedimento = procedimento;
         this.quantidade = quantidade;

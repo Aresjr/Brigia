@@ -1,0 +1,81 @@
+<div class="mt-4">
+  <app-top-bar (search)="onSearch($event)" title="Usuários"></app-top-bar>
+
+  @if (isLoading) {
+    <div class="flex justify-center items-center h-32">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
+    </div>
+  } @else if (itensExibicao.length === 0) {
+    <div class="text-center py-8 w-full bg-base-100 rounded-lg shadow-md">
+      <p>Nenhum registro encontrado.</p>
+    </div>
+  } @else {
+    <div class="min-h-[36rem]">
+      <div class="titulo-listagem grid-cols-[1fr_1fr_1fr_1fr_32px]">
+        <div (click)="ordenar('nome')" class="cabecalho-listagem rounded-tl-lg">
+          <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
+          Nome
+        </div>
+        <div (click)="ordenar('email')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('email')" [name]="getSortIcon('email')" class="icone-ordenacao"/>
+          E-mail
+        </div>
+        <div (click)="ordenar('unidade')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('unidade')" [name]="getSortIcon('unidade')" class="icone-ordenacao"/>
+          Unidade
+        </div>
+        <div (click)="ordenar('roles')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('roles')" [name]="getSortIcon('roles')" class="icone-ordenacao"/>
+          Perfil
+        </div>
+        <div class="cabecalho-listagem p-0 rounded-tr-lg"></div>
+      </div>
+
+      <div class="itens-listagem">
+        @for (usuario of getItensPaginados(); track usuario.id) {
+          <div class="item-listagem grid-cols-[1fr_1fr_1fr_1fr_32px]">
+            <div class="celula-listagem">{{usuario.nome}}</div>
+            <div class="celula-listagem">{{usuario.email}}</div>
+            <div class="celula-listagem">{{usuario.unidade.nome}}</div>
+            <div class="celula-listagem">{{usuario.roles[0]}}</div>
+            <div class="p-0 text-right">
+              <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
+                <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
+                  <lucide-icon name="ellipsis-vertical" class="h-5" />
+                </label>
+                <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-[1] font-semibold">
+                  <li>
+                    <a (click)="editar(usuario)"
+                       class="text-sm text-neutral hover:bg-base-200">
+                      Editar
+                    </a>
+                  </li>
+                  <li>
+                    <a (click)="perguntaExcluir($event, usuario)"
+                       class="text-error hover:bg-error/50">
+                      Excluir
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
+    </div>
+  }
+
+  <app-fab (click)="onAddNovo()"></app-fab>
+
+  @if (exibeConfirmExclusao) {
+    <app-confirm-dialog
+      *ngIf="exibeConfirmExclusao"
+      message="Deseja realmente excluir este usuário?"
+      (confirm)="excluir()"
+      (cancel)="fecharConfirmExclusao()">
+    </app-confirm-dialog>
+  }
+
+</div>

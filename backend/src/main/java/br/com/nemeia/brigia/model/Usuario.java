@@ -9,7 +9,7 @@ import org.hibernate.type.SqlTypes;
 @Data
 @Entity
 @Table(name = "usuario")
-public class Usuario {
+public class Usuario extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,10 +24,6 @@ public class Usuario {
 
     @Column(name = "nome", nullable = false)
     private String nome;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "unidade_id", nullable = false)
-    private Unidade unidade;
 
     @Column(name = "avatar_url")
     private String avatarUrl;
