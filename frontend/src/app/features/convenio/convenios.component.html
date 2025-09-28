@@ -70,7 +70,7 @@
 
   @if (mostrarFormularioNovo) {
     <app-convenio-form
-      [convenio]="itemEdicao"
+      [registro]="itemEdicao"
       (save)="salvarNovo($event)"
       (cancel)="cancelarNovo()"
     ></app-convenio-form>

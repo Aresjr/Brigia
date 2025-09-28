@@ -89,7 +89,7 @@
 
   @if (mostrarFormularioNovo) {
     <app-procedimento-form
-      [procedimento]="itemEdicao"
+      [registro]="itemEdicao"
       (save)="salvarNovo($event)"
       (cancel)="cancelarNovo()"
     ></app-procedimento-form>

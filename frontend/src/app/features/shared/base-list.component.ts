@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Entidade, EntidadeRequest } from './entidade.interface';
 import { BaseService } from '../procedimentos/base.service';
 import { ToastrService } from 'ngx-toastr';
-import { Empresa } from '../empresa/empresa.interface';
 
 type SortDirection = 'asc' | 'desc' | null;
 

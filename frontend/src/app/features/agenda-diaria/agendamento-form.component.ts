@@ -46,7 +46,7 @@ import { AtendimentoService } from '../atendimento/atendimento.service';
     DatePipe, NgIf, LucideAngularModule, ConfirmDialogComponent
   ]
 })
-export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> implements OnInit {
+export class AgendamentoFormComponent extends FormComponent<Agendamento, AgendamentoRequest> implements OnInit {
   @Input() agendamentoDetalhes: Agendamento | null = null;
   @Input() dataAgendamento: Date | null = null;
   @Input() pacienteId!: number | null;
@@ -105,7 +105,7 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
     this.form = this.fb.group(form);
   }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
     let data = this.hoje;
     let hora = null;
     if (this.dataAgendamento) {
@@ -213,6 +213,8 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
 
   selectPaciente(id: number | null) {
     this.pacienteSelecionado = id ? [...this.pacientes.filter(e => e.id === id)].at(0) : null;
+
+    console.log('selectPaciente', id, this.pacienteSelecionado);
 
     this.form.patchValue({
       pacienteId: this.pacienteSelecionado ? this.pacienteSelecionado.id : null,

@@ -59,7 +59,7 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
       atendimento.paciente.nome.toLowerCase().includes(searchTerm.toLowerCase());
   }
 
-  onSalvarNovoAtendimento(atendimento: Partial<AtendimentoRequest>) {
+  salvarNovoAtendimento(atendimento: Partial<AtendimentoRequest>) {
     if (this.itemEdicao) {
       const id = this.itemEdicao.id;
       this.atendimentoService.atualizar(id, atendimento).subscribe({

@@ -21,7 +21,7 @@ import { FormComponent } from '../../shared/form.component';
   imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, LucideAngularModule, NgOptionComponent, NgSelectComponent, NgNotFoundTemplateDirective],
   templateUrl: 'paciente-form.component.html'
 })
-export class PacienteFormComponent extends FormComponent<PacienteRequest> implements OnInit {
+export class PacienteFormComponent extends FormComponent<Paciente, PacienteRequest> implements OnInit {
   @Input() paciente?: Paciente | null;
   @Input() isDetalhes: boolean = false;
 
@@ -50,7 +50,7 @@ export class PacienteFormComponent extends FormComponent<PacienteRequest> implem
     });
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     this.carregarConvenios();
     this.carregarEmpresas();
 
@@ -82,10 +82,6 @@ export class PacienteFormComponent extends FormComponent<PacienteRequest> implem
         });
       }
     );
-  }
-
-  get isEditMode(): boolean {
-    return !!this.paciente;
   }
 
   buscarCep() { //TODO - colocar em um service separado

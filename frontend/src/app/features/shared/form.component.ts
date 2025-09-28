@@ -1,12 +1,13 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { EntidadeRequest } from './entidade.interface';
+import { Entidade, EntidadeRequest } from './entidade.interface';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
   template: ''
 })
-export abstract class FormComponent<Request extends EntidadeRequest> {
+export abstract class FormComponent<E extends Entidade, Request extends EntidadeRequest> implements OnInit {
+  @Input() registro: E | null = null;
   @Output() save = new EventEmitter<Partial<Request>>();
   @Output() cancel = new EventEmitter<void>();
 
@@ -16,6 +17,12 @@ export abstract class FormComponent<Request extends EntidadeRequest> {
   }
 
   protected form: FormGroup;
+
+  ngOnInit() {
+    if (this.registro) {
+      this.form.patchValue(this.registro);
+    }
+  }
 
   onSubmit() {
     if (this.form.valid) {
@@ -31,6 +38,10 @@ export abstract class FormComponent<Request extends EntidadeRequest> {
 
   onCancel() {
     this.cancel.emit();
+  }
+
+  get isEditMode(): boolean {
+    return !!this.registro;
   }
 
   classesCampo(field: string, isReadOnly: boolean = false): string[] {

@@ -87,7 +87,7 @@
 
   @if (mostrarFormularioNovo || mostrarDetalhes) {
     <app-empresa-form
-      [empresa]="itemEdicao ? itemEdicao : itemSelecionado"
+      [registro]="itemEdicao ? itemEdicao : itemSelecionado"
       [isDetalhes]="mostrarDetalhes"
       (save)="salvarNovo($event)"
       (cancel)="cancelarNovo(); fecharDetalhes()"

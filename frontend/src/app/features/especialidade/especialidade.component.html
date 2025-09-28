@@ -68,7 +68,7 @@
 
   @if (mostrarFormularioNovo) {
     <app-especialidade-form
-      [especialidade]="itemEdicao"
+      [registro]="itemEdicao"
       (save)="salvarNovo($event)"
       (cancel)="cancelarNovo()"
     ></app-especialidade-form>

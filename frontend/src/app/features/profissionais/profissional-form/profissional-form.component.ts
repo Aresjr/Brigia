@@ -19,7 +19,7 @@ import { abrirDatePicker } from '../../../core/util-methods';
   imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, EmptyToNullDirective, NgSelectComponent, NgOptionComponent, LucideAngularModule, NgNotFoundTemplateDirective],
   templateUrl: 'profissional-form.component.html'
 })
-export class ProfissionalFormComponent extends FormComponent<ProfissionalRequest> implements OnInit {
+export class ProfissionalFormComponent extends FormComponent<Profissional, ProfissionalRequest> implements OnInit {
   @Input() profissional?: Profissional | null;
 
   protected readonly SEXOS = SEXOS;
@@ -41,7 +41,7 @@ export class ProfissionalFormComponent extends FormComponent<ProfissionalRequest
     });
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     if (this.profissional) {
       this.form.patchValue(this.profissional);
       let esp: number[] = [];
@@ -49,10 +49,6 @@ export class ProfissionalFormComponent extends FormComponent<ProfissionalRequest
       this.form.controls['especialidades'].setValue(esp);
     }
     this.carregarEspecialidades();
-  }
-
-  get isEditMode(): boolean {
-    return !!this.profissional;
   }
 
   private carregarEspecialidades() {

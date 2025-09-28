@@ -16,7 +16,7 @@ import { Unidade } from '../../unidade/unidade.interface';
   imports: [CommonModule, FormsModule, ReactiveFormsModule, LucideAngularModule, NgOptionComponent, NgSelectComponent, NgNotFoundTemplateDirective],
   templateUrl: 'usuario-form.component.html'
 })
-export class UsuarioFormComponent extends FormComponent<UsuarioRequest> implements OnInit {
+export class UsuarioFormComponent extends FormComponent<Usuario, UsuarioRequest> implements OnInit {
   @Input() usuario?: Usuario | null;
   @Input() isDetalhes: boolean = false;
   unidades: Unidade[] = [];
@@ -35,7 +35,7 @@ export class UsuarioFormComponent extends FormComponent<UsuarioRequest> implemen
     });
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     this.carregarUnidades();
 
     if (this.usuario) {
@@ -52,10 +52,6 @@ export class UsuarioFormComponent extends FormComponent<UsuarioRequest> implemen
         this.unidades = response.items;
       }
     );
-  }
-
-  get isEditMode(): boolean {
-    return !!this.usuario;
   }
 
   protected readonly Role = Role;

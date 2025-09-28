@@ -1,9 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Especialidade, EspecialidadeRequest } from '../especialidade.interface';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
+import { FormComponent } from '../../shared/form.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-especialidade-form',
@@ -16,38 +18,17 @@ import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-dir
     EmptyToNullDirective
   ]
 })
-export class EspecialidadeFormComponent implements OnInit {
-  @Input() especialidade: Especialidade | null = null;
-  @Output() save = new EventEmitter<Partial<EspecialidadeRequest>>();
-  @Output() cancel = new EventEmitter<void>();
+export class EspecialidadeFormComponent extends FormComponent<Especialidade, EspecialidadeRequest> implements OnInit {
 
-  form: FormGroup;
-
-  constructor(private fb: FormBuilder) {
+  constructor(
+    protected override fb: FormBuilder,
+    protected override toastr: ToastrService,
+  ) {
+    super(fb, toastr);
     this.form = this.fb.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
       descricao: [null]
     });
-  }
-
-  ngOnInit() {
-    if (this.especialidade) {
-      this.form.patchValue(this.especialidade);
-    }
-  }
-
-  onSubmit() {
-    if (this.form.valid) {
-      this.save.emit(this.form.value);
-    }
-  }
-
-  onCancel() {
-    this.cancel.emit();
-  }
-
-  get isEditMode(): boolean {
-    return !!this.especialidade;
   }
 
 }
