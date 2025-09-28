@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import { Entidade } from './entidade.interface';
+import { Component, OnInit } from '@angular/core';
+import { Entidade, EntidadeRequest } from './entidade.interface';
+import { BaseService } from '../procedimentos/base.service';
+import { ToastrService } from 'ngx-toastr';
 
 type SortDirection = 'asc' | 'desc' | null;
 
@@ -11,7 +13,7 @@ interface SortState<T> {
 @Component({
   template: '',
 })
-export abstract class BaseListComponent<T extends Entidade> {
+export abstract class BaseListComponent<T extends Entidade> implements OnInit {
 
   itensExibicao: T[] = [];
   itensInternos: T[] = [];
@@ -24,9 +26,67 @@ export abstract class BaseListComponent<T extends Entidade> {
   mostrarDetalhes = false;
   mostrarFormularioNovo = false;
   isLoading = false;
+  erroCarregar = false;
   nomeEntidade = '';
   exibeConfirmExclusao = false;
   idExclusao: number = 0;
+
+  protected constructor(protected service: BaseService<T, EntidadeRequest | null>,
+                        protected toastr: ToastrService) {}
+
+  ngOnInit(): void {
+    this.carregarRegistros();
+  }
+
+  ngOnChanges(): void {
+    console.log('ngOnChanges');
+    if (this.erroCarregar) {
+      this.carregarRegistros();
+    }
+  }
+
+  carregarRegistros(): void {
+    this.isLoading = true;
+    this.service.listar(true).subscribe({
+      next: (response) => {
+        this.itensInternos = response.items;
+        this.itensExibicao = [...this.itensInternos];
+        this.atualizarPaginacao();
+        this.isLoading = false;
+        this.erroCarregar = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        this.toastr.error('Erro ao carregar');
+        this.erroCarregar = true;
+      }
+    });
+  }
+
+  salvarNovo(registro: Partial<T>) {
+    const itemEdicao = this.itemEdicao || this.itemSelecionado;
+    if (itemEdicao) {
+      const id = itemEdicao.id;
+      return this.service.atualizar(id, registro).subscribe({
+        next: () => {
+          this.toastr.success('Registro atualizado');
+          this.carregarRegistros();
+          this.mostrarFormularioNovo = false;
+          this.mostrarDetalhes = false;
+          this.itemEdicao = null;
+          this.itemSelecionado = null;
+        }
+      });
+    } else {
+      return this.service.criar(registro).subscribe({
+        next: () => {
+          this.toastr.success('Registro cadastrado');
+          this.carregarRegistros();
+          this.mostrarFormularioNovo = false;
+        }
+      });
+    }
+  }
 
   getItensPaginados(): T[] {
     const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
@@ -87,6 +147,7 @@ export abstract class BaseListComponent<T extends Entidade> {
 
   fecharDetalhes(): void {
     this.itemSelecionado = null;
+    this.itemEdicao = null;
     this.mostrarDetalhes = false;
   }
 
@@ -97,6 +158,7 @@ export abstract class BaseListComponent<T extends Entidade> {
   onAddNovo() {
     this.mostrarFormularioNovo = true;
     this.itemSelecionado = null;
+    this.itemEdicao = null;
   }
 
   cancelarNovo() {
@@ -133,6 +195,23 @@ export abstract class BaseListComponent<T extends Entidade> {
 
   excluir(id: number = this.idExclusao) {
     this.exibeConfirmExclusao = false;
+    this.service.excluir(this.idExclusao).subscribe({
+      next: () => {
+        this.toastr.success(`Registro excluído`);
+        this.carregarRegistros();
+      }
+    });
+  }
+
+  restaurar(event: Event, registro: T) {
+    event.stopPropagation();
+
+    this.service.restaurar(registro.id).subscribe({
+      next: () => {
+        registro.excluido = false;
+        this.toastr.success('Registro restaurado');
+      }
+    });
   }
 
   private toComparableString(valor: NonNullable<T[keyof T]> | '' | number): string | number {

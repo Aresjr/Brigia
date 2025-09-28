@@ -55,8 +55,6 @@ public abstract class BaseModel {
 
     @PreUpdate
     protected void onUpdate() {
-        if (atualizadoEm == null) {
-            atualizadoEm = LocalDateTime.now();
-        }
+        atualizadoEm = LocalDateTime.now();
     }
 }

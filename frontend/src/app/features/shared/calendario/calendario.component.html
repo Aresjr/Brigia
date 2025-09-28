@@ -71,8 +71,8 @@
   <div [ngSwitch]="view" class="rounded-lg">
 
     @if(isLoading) {
-      <div class="absolute flex justify-center items-center w-full h-32 bg-base-100">
-        <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-primary bg-base-100"></div>
+      <div class="absolute inset-0 flex justify-center bg-base-100 bg-opacity-90 z-10 rounded-lg h-[64rem] mt-[11rem]">
+        <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-primary mt-32"></div>
       </div>
     }
 

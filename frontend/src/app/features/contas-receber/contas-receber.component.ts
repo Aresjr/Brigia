@@ -19,6 +19,7 @@ import { Empresa } from '../empresa/empresa.interface';
 import { ContasReceberDetalhesComponent } from './contas-receber-detalhes.component';
 import { StatusContaReceber } from '../../core/constans';
 import { abrirDatePicker } from '../../core/util-methods';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-contas-receber',
@@ -53,21 +54,22 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
   });
 
   constructor(private contasReceberService: ContaReceberService,
+              protected override toastr: ToastrService,
               private profissionalService: ProfissionalService,
               private pacienteService: PacienteService,
               private empresaService: EmpresaService) {
-    super();
+    super(contasReceberService, toastr);
     this.form.valueChanges.subscribe(() => {
       this.filtrar();
     });
   }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
     this.isLoading = true;
     this.carregarDados();
   }
 
-  ngOnChanges(): void {
+  override ngOnChanges(): void {
     if (this.isLoading) {
       this.carregarDados();
     }

@@ -21,6 +21,9 @@ public class Unidade extends BaseModel {
     @Column(name = "endereco")
     private String endereco;
 
+    @Column(name = "email")
+    private String email;
+
     public Unidade(Long unidadeId) {
         this.id = unidadeId;
     }

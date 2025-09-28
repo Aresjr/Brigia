@@ -47,7 +47,7 @@ public class ConvenioController {
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteConvenio(@PathVariable Long id) {
         log.info("DELETE /convenios - excluindo convênio ID {}", id);
-        service.deleteConvenio(id);
+        service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -55,7 +55,7 @@ public class ConvenioController {
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public ResponseEntity<Void> restoreConvenio(@PathVariable Long id) {
         log.info("PATCH /convenios/{}/restaurar", id);
-        service.restoreConvenio(id);
+        service.restore(id);
         return ResponseEntity.noContent().build();
     }
 

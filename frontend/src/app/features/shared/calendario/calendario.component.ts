@@ -1,4 +1,5 @@
 import {
+  AfterContentInit,
   AfterViewInit,
   ChangeDetectorRef,
   Component,
@@ -30,7 +31,7 @@ import { Agendamento } from '../../agenda-diaria/agendamento.interface';
   templateUrl: './calendario.component.html',
   styleUrl: 'calendario.component.css'
 })
-export class CalendarioComponent implements AfterViewInit {
+export class CalendarioComponent implements AfterContentInit {
   @Input() events: CalendarEvent<Agendamento>[] = [];
   @Input() isLoading!: boolean;
   @Output() detalhesAgendamento = new EventEmitter<Agendamento>();
@@ -109,7 +110,7 @@ export class CalendarioComponent implements AfterViewInit {
     }, 50);
   }
 
-  ngAfterViewInit(): void {
+  ngAfterContentInit(): void {
     this.cdr.detectChanges();
     this.formatTimeLabels();
   }

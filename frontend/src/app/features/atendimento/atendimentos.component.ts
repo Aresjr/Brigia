@@ -36,9 +36,9 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
   agendamentoId: number;
   atendimentoId: number;
 
-  constructor(private atendimentoService: AtendimentoService, private toastr: ToastrService,
+  constructor(private atendimentoService: AtendimentoService, protected override toastr: ToastrService,
               private router: Router) {
-    super();
+    super(atendimentoService, toastr);
     const navigation = this.router.getCurrentNavigation();
     const agendamentoId = navigation?.extras.state?.['agendamentoId'];
     const atendimentoId = navigation?.extras.state?.['atendimentoId'];
@@ -46,26 +46,11 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
     this.atendimentoId = atendimentoId ? atendimentoId : null;
   }
 
-  ngOnInit(): void {
-    this.carregarAtendimentos();
+  override ngOnInit(): void {
+    super.ngOnInit();
     if (this.agendamentoId) {
       this.mostrarFormularioNovo = true;
     }
-  }
-
-  carregarAtendimentos(): void {
-    this.isLoading = true;
-    this.atendimentoService.listar(true).subscribe({
-      next: (response) => {
-        this.itensInternos = response.items;
-        this.itensExibicao = [...this.itensInternos];
-        this.atualizarPaginacao();
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      }
-    });
   }
 
   override searchTermFilter(atendimento: Atendimento, searchTerm: string): boolean | undefined {
@@ -74,13 +59,13 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
       atendimento.paciente.nome.toLowerCase().includes(searchTerm.toLowerCase());
   }
 
-  onSalvarNovoAtendimento(atendimento: Partial<AtendimentoRequest>) {
+  salvarNovoAtendimento(atendimento: Partial<AtendimentoRequest>) {
     if (this.itemEdicao) {
       const id = this.itemEdicao.id;
       this.atendimentoService.atualizar(id, atendimento).subscribe({
         next: () => {
           this.toastr.success('Registro atualizado');
-          this.carregarAtendimentos();
+          this.carregarRegistros();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
         }
@@ -90,7 +75,7 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
         .subscribe({
           next: () => {
             this.toastr.success(`${this.nomeEntidade} cadastrado`);
-            this.carregarAtendimentos();
+            this.carregarRegistros();
             this.mostrarFormularioNovo = false;
           }
         });
@@ -98,32 +83,11 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
       this.atendimentoService.criar(atendimento).subscribe({
         next: () => {
           this.toastr.success(`${this.nomeEntidade} cadastrado`);
-          this.carregarAtendimentos();
+          this.carregarRegistros();
           this.mostrarFormularioNovo = false;
         }
       });
     }
-  }
-
-  override excluir() {
-    super.excluir();
-    this.atendimentoService.excluir(this.idExclusao).subscribe({
-      next: () => {
-        this.toastr.success(`${this.nomeEntidade} excluído`);
-        this.carregarAtendimentos();
-      }
-    });
-  }
-
-  restaurarItem(event: Event, atendimento: Atendimento) {
-    event.stopPropagation();
-
-    this.atendimentoService.restaurar(atendimento.id).subscribe({
-      next: () => {
-        atendimento.excluido = false;
-        this.toastr.success(`${this.nomeEntidade} restaurado`);
-      }
-    });
   }
 
   novoAgendamento() {

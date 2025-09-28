@@ -1,9 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Convenio, ConvenioRequest } from '../convenio.interface';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
+import { FormComponent } from '../../shared/form.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-convenio-form',
@@ -16,43 +18,16 @@ import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-dir
     EmptyToNullDirective
   ]
 })
-export class ConvenioFormComponent implements OnInit {
-  @Input() convenio: Convenio | null = null;
-  @Output() save = new EventEmitter<Partial<ConvenioRequest>>();
-  @Output() cancel = new EventEmitter<void>();
+export class ConvenioFormComponent extends FormComponent<Convenio, ConvenioRequest> implements OnInit {
 
-  form: FormGroup;
-
-  constructor(private fb: FormBuilder) {
+  constructor(
+    protected override fb: FormBuilder,
+    protected override toastr: ToastrService,
+  ) {
+    super(fb, toastr);
     this.form = this.fb.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
       descricao: [null]
     });
   }
-
-  ngOnInit() {
-    if (this.convenio) {
-      this.form.patchValue(this.convenio);
-    }
-  }
-
-  onSubmit() {
-    if (this.form.valid) {
-      this.save.emit(this.form.value);
-    } else {
-      Object.keys(this.form.controls).forEach(field => {
-        const control = this.form.get(field);
-        control?.markAsTouched({ onlySelf: true });
-      });
-    }
-  }
-
-  onCancel() {
-    this.cancel.emit();
-  }
-
-  get isEditMode(): boolean {
-    return !!this.convenio;
-  }
-
 }

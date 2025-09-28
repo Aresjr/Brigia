@@ -32,27 +32,8 @@ import { FabComponent } from '../shared/fab/fab.component';
 export class ProcedimentosComponent extends BaseListComponent<Procedimento> implements OnInit {
   override nomeEntidade = 'Procedimento';
 
-  constructor(private procedimentoService: ProcedimentoService, private toastr: ToastrService) {
-    super();
-  }
-
-  ngOnInit(): void {
-    this.carregarProcedimentos();
-  }
-
-  carregarProcedimentos(): void {
-    this.isLoading = true;
-    this.procedimentoService.listar(true).subscribe({
-      next: (response) => {
-        this.itensInternos = response.items;
-        this.itensExibicao = [...this.itensInternos];
-        this.atualizarPaginacao();
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      }
-    });
+  constructor(private procedimentoService: ProcedimentoService, protected override toastr: ToastrService) {
+    super(procedimentoService, toastr);
   }
 
   override searchTermFilter(procedimento: Procedimento, searchTerm: string): boolean | undefined {
@@ -60,49 +41,6 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
       procedimento.codigo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       procedimento.observacoes?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       procedimento.especialidade.nome?.toLowerCase().includes(searchTerm.toLowerCase());
-  }
-
-  onSalvarNovo(procedimento: Partial<Procedimento>) {
-    if (this.itemEdicao) {
-      const id = this.itemEdicao.id;
-      this.procedimentoService.atualizar(id, procedimento).subscribe({
-        next: () => {
-          this.toastr.success(`Registro atualizado`);
-          this.carregarProcedimentos();
-          this.mostrarFormularioNovo = false;
-          this.itemEdicao = null;
-        }
-      });
-    } else {
-      this.procedimentoService.criar(procedimento).subscribe({
-        next: () => {
-          this.toastr.success(`${this.nomeEntidade} cadastrado`);
-          this.carregarProcedimentos();
-          this.mostrarFormularioNovo = false;
-        }
-      });
-    }
-  }
-
-  override excluir() {
-    super.excluir();
-    this.procedimentoService.excluir(this.idExclusao).subscribe({
-      next: () => {
-        this.toastr.success(`${this.nomeEntidade} excluído`);
-        this.carregarProcedimentos();
-      }
-    });
-  }
-
-  restaurar(event: Event, procedimento: Procedimento) {
-    event.stopPropagation();
-
-    this.procedimentoService.restaurar(procedimento.id).subscribe({
-      next: () => {
-        procedimento.excluido = false;
-        this.toastr.success(`${this.nomeEntidade} restaurado`);
-      }
-    });
   }
 
   mostrarEdicao(procedimento: Procedimento) {

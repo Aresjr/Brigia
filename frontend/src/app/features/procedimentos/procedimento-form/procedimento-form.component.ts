@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
@@ -33,8 +33,7 @@ import { ToastrService } from 'ngx-toastr';
     NgSelectComponent
   ]
 })
-export class ProcedimentoFormComponent extends FormComponent<ProcedimentoRequest> implements OnInit {
-  @Input() procedimento: Procedimento | null = null;
+export class ProcedimentoFormComponent extends FormComponent<Procedimento, ProcedimentoRequest> implements OnInit {
 
   convenios: Convenio[] = [];
   especialidades: Especialidade[] = [];
@@ -55,20 +54,20 @@ export class ProcedimentoFormComponent extends FormComponent<ProcedimentoRequest
     });
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     const chamadas:Observable<any[]>[] = [
       this.loadConvenios(),
       this.loadEspecialidades()
     ];
     forkJoin(chamadas).subscribe(() => {
-      if (this.procedimento) {
-        this.form.patchValue(this.procedimento);
+      if (this.registro) {
+        this.form.patchValue(this.registro);
         this.form.patchValue({
-          especialidadeId: this.procedimento.especialidade.id
+          especialidadeId: this.registro.especialidade.id
         });
         this.precosConvenios.controls.forEach(control => {
           const convenioId = control.value.convenioId;
-          const precoProcedimento = this.procedimento?.precosProcedimento
+          const precoProcedimento = this.registro?.precosProcedimento
             ?.find(pp => pp.convenio.id === convenioId);
 
           if (precoProcedimento) {
@@ -142,10 +141,6 @@ export class ProcedimentoFormComponent extends FormComponent<ProcedimentoRequest
         control?.markAsTouched({ onlySelf: true });
       });
     }
-  }
-
-  get isEditMode(): boolean {
-    return !!this.procedimento;
   }
 
   protected readonly limitLength = limitLength;

@@ -1,41 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ConvenioService } from './convenio.service';
-import { Convenio } from './convenio.interface';
+import { UsuarioService } from './usuario.service';
+import { Usuario, UsuarioRequest } from './usuario.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ConvenioFormComponent } from './convenio-form/convenio-form.component';
 import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { FabComponent } from '../shared/fab/fab.component';
+import { UsuarioFormComponent } from './usuario-form/usuario-form.component';
 
 @Component({
-  selector: 'app-convenios',
-  templateUrl: './convenios.component.html',
+  selector: 'app-usuarios',
+  templateUrl: './usuarios.component.html',
   standalone: true,
   imports: [
     CommonModule,
     LucideAngularModule,
     FormsModule,
-    ConvenioFormComponent,
     PaginationComponent,
     ConfirmDialogComponent,
     TopBarComponent,
-    FabComponent
+    FabComponent,
+    UsuarioFormComponent
   ]
 })
-export class ConveniosComponent extends BaseListComponent<Convenio> implements OnInit {
-  override nomeEntidade = 'Convênio';
+export class UsuariosComponent extends BaseListComponent<Usuario> implements OnInit {
+  override nomeEntidade = 'Usuário';
 
-  constructor(private convenioService: ConvenioService, protected override toastr: ToastrService) {
-    super(convenioService, toastr);
+  constructor(private usuarioService: UsuarioService, protected override toastr: ToastrService) {
+    super(usuarioService, toastr);
   }
 
-  override searchTermFilter(convenio: Convenio, searchTerm: string): boolean | undefined {
-    return convenio.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      convenio.descricao?.toLowerCase().includes(searchTerm.toLowerCase());
+  cadastraUsuarioNovo(usuarioNovo: Partial<UsuarioRequest>) {
+    console.log('cadastraUsuarioNovo', usuarioNovo);
   }
 }

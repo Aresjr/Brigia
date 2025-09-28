@@ -27,8 +27,7 @@ import { ToastrService } from 'ngx-toastr';
     NgNotFoundTemplateDirective
   ]
 })
-export class EmpresaFormComponent extends FormComponent<EmpresaRequest> implements OnInit {
-  @Input() empresa: Empresa | null = null;
+export class EmpresaFormComponent extends FormComponent<Empresa, EmpresaRequest> implements OnInit {
   @Input() isDetalhes: boolean = false;
 
   planos: EmpresaPlano[] = [];
@@ -52,16 +51,14 @@ export class EmpresaFormComponent extends FormComponent<EmpresaRequest> implemen
     });
   }
 
-  ngOnInit() {
-    if (this.empresa) {
-      this.form.patchValue(this.empresa);
-    }
+  override ngOnInit() {
+    super.ngOnInit();
 
     forkJoin([
       this.carregarPlanos()
     ]).subscribe(() => {
       this.form.patchValue({
-        planoId: this.empresa?.plano?.id
+        planoId: this.registro?.plano?.id
       });
       if (this.isDetalhes) {
         this.form.disable();
@@ -75,14 +72,10 @@ export class EmpresaFormComponent extends FormComponent<EmpresaRequest> implemen
         tap(planos => this.planos = planos));
   }
 
-  get isEditMode(): boolean {
-    return !!this.empresa;
-  }
-
   getTitulo(): string {
     if (this.isDetalhes) {
       return 'Detalhes Empresa';
-    } else if(this.empresa && !this.isDetalhes) {
+    } else if(this.registro && !this.isDetalhes) {
       return 'Editar Empresa';
     } else {
       return 'Nova Empresa';

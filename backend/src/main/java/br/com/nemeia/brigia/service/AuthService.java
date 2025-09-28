@@ -1,6 +1,7 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.auth.JwtService;
+import br.com.nemeia.brigia.dto.request.CadastrarSenhaRequest;
 import br.com.nemeia.brigia.dto.request.LoginRequest;
 import br.com.nemeia.brigia.dto.response.LoginResponse;
 import br.com.nemeia.brigia.exception.InvalidCredentialsException;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -67,5 +69,11 @@ public class AuthService {
         cookie.setPath("/");
         cookie.setMaxAge(0);
         response.addCookie(cookie);
+    }
+
+    public void cadastrarSenha(CadastrarSenhaRequest request) throws BadRequestException {
+        Usuario usuario = usuarioService.getByToken(request.token());
+        usuario.setSenha(passwordEncoder.encode(request.senha()));
+        usuarioService.save(usuario);
     }
 }

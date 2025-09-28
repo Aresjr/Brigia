@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EmpresaService } from './empresa.service';
 import { Empresa } from './empresa.interface';
@@ -30,81 +30,16 @@ import { CnpjPipe } from '../../core/pipes/cnpj.pipe';
     CnpjPipe
   ]
 })
-export class EmpresasComponent extends BaseListComponent<Empresa> implements OnInit {
+export class EmpresasComponent extends BaseListComponent<Empresa> {
   override nomeEntidade = 'Empresa';
 
-  constructor(private empresaService: EmpresaService, private toastr: ToastrService) {
-    super();
-  }
-
-  ngOnInit(): void {
-    this.carregarEmpresas();
-  }
-
-  carregarEmpresas(): void {
-    this.isLoading = true;
-    this.empresaService.listar(true).subscribe({
-      next: (response) => {
-        this.itensInternos = response.items;
-        this.itensExibicao = [...this.itensInternos];
-        this.atualizarPaginacao();
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      }
-    });
+  constructor(private empresaService: EmpresaService, protected override toastr: ToastrService) {
+    super(empresaService, toastr);
   }
 
   override searchTermFilter(empresa: Empresa, searchTerm: string): boolean | undefined {
     return empresa.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       empresa.observacao?.toLowerCase().includes(searchTerm.toLowerCase());
-  }
-
-  onSalvarNovoEmpresa(empresa: Partial<Empresa>) {
-    const itemEdicao = this.itemEdicao || this.itemSelecionado;
-    if (itemEdicao) {
-      const id = itemEdicao.id;
-      this.empresaService.atualizar(id, empresa).subscribe({
-        next: () => {
-          this.toastr.success('Registro atualizado');
-          this.carregarEmpresas();
-          this.mostrarFormularioNovo = false;
-          this.mostrarDetalhes = false;
-          this.itemEdicao = null;
-          this.itemSelecionado = null;
-        }
-      });
-    } else {
-      this.empresaService.criar(empresa).subscribe({
-        next: () => {
-          this.toastr.success('Empresa cadastrada');
-          this.carregarEmpresas();
-          this.mostrarFormularioNovo = false;
-        }
-      });
-    }
-  }
-
-  override excluir() {
-    super.excluir();
-    this.empresaService.excluir(this.idExclusao).subscribe({
-      next: () => {
-        this.toastr.success('Empresa excluída');
-        this.carregarEmpresas();
-      }
-    });
-  }
-
-  restaurarItem(event: Event, empresa: Empresa) {
-    event.stopPropagation();
-
-    this.empresaService.restaurar(empresa.id).subscribe({
-      next: () => {
-        empresa.excluido = false;
-        this.toastr.success('Empresa restaurada');
-      }
-    });
   }
 
   protected readonly ColorUtils = ColorUtils;

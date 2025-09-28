@@ -61,12 +61,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.carregarAgendamentos();
-
-    this.carregarPacientes();
-    if (!this.userService.isMedico()) {
-      this.carregarProfissionais();
-    }
+    this.carregarDados();
 
     if (this.pacienteId) {
       this.onAddNovo();
@@ -83,6 +78,20 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     this.subscription = interval(1000 * 60).subscribe(() => {
       this.carregarAgendamentos();
     });
+  }
+
+  ngOnChanges(): void {
+    if (this.isLoading) {
+      this.carregarDados();
+    }
+  }
+
+  carregarDados() {
+    this.carregarAgendamentos();
+    this.carregarPacientes();
+    if (!this.userService.isMedico()) {
+      this.carregarProfissionais();
+    }
   }
 
   carregarAgendamentos() {

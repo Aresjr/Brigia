@@ -16,8 +16,8 @@ public class AuditingConfig {
     public AuditorAware<Long> auditorProvider() {
         return () -> {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication == null || !authentication.isAuthenticated()) {
-                return Optional.of(null);
+            if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getName())) {
+                return null;
             }
 
             return Optional.of(Long.valueOf(authentication.getName()));

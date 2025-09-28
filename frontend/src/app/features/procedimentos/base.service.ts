@@ -31,6 +31,7 @@ export class BaseService<Entid extends Entidade, Request extends EntidadeRequest
       shareReplay(1),
       catchError((e) => {
         this.toastr.error('Erro ao carregar os registros. Por favor, tente novamente.');
+        this.limparCache();
         return throwError(() => e);
       })
     );

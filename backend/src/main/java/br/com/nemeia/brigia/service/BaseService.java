@@ -30,6 +30,10 @@ public abstract class BaseService<T extends BaseModel, R extends BaseRepository<
                 : repository.findAllByExcluidoIsOrExcluidoIsNull(pageable, false);
     }
 
+    public void save(T entity) {
+        repository.save(entity);
+    }
+
     public void delete(Long id) {
         T entity = getById(id);
         entity.setExcluido(true);

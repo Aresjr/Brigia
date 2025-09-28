@@ -26,11 +26,7 @@
         <div class="flex space-x-4">
           <div class="w-72">
             <label class="label-campo">CPF</label>
-            <input type="text" formControlName="cpf" name="cpf"
-                   mask="000.000.000-00"
-                   emptyToNull
-                   class="campo">
-
+            <input type="text" formControlName="cpf" name="cpf" mask="000.000.000-00" emptyToNull class="campo">
           </div>
           <div class="w-60">
             <label class="label-campo">
@@ -62,10 +58,7 @@
           </div>
           <div class="w-60">
             <label class="label-campo">Celular</label>
-            <input type="tel" formControlName="celular"
-                   mask="(00) 00000-0000"
-                   emptyToNull
-                   class="campo">
+            <input type="tel" formControlName="celular" mask="(00) 00000-0000" emptyToNull class="campo">
           </div>
         </div>
 
@@ -73,10 +66,7 @@
           <div>
             <div class="w-72">
               <label class="label-campo">CEP</label>
-              <input type="text" formControlName="cep"
-                     (blur)="buscarCep()" mask="00000-000"
-                     emptyToNull
-                     class="campo">
+              <input type="text" formControlName="cep" (blur)="buscarCep()" mask="00000-000" emptyToNull class="campo">
             </div>
           </div>
           <div>
@@ -97,26 +87,22 @@
         <div class="flex space-x-4">
           <div class="w-72">
             <label class="label-campo">Cidade</label>
-            <input type="text" formControlName="cidade" emptyToNull
-                   class="campo">
+            <input type="text" formControlName="cidade" emptyToNull class="campo">
           </div>
           <div class="w-60">
             <label class="label-campo">Bairro</label>
-            <input type="text" formControlName="bairro" emptyToNull
-                   class="campo">
+            <input type="text" formControlName="bairro" emptyToNull class="campo">
           </div>
         </div>
 
         <div class="flex space-x-4">
           <div class="w-72">
             <label class="label-campo">Rua</label>
-            <input type="text" formControlName="rua" emptyToNull
-                   class="campo">
+            <input type="text" formControlName="rua" emptyToNull class="campo">
           </div>
           <div class="w-60">
             <label class="label-campo">Complemento</label>
-            <input type="text" formControlName="complemento" emptyToNull
-                   class="campo">
+            <input type="text" formControlName="complemento" emptyToNull class="campo">
           </div>
         </div>
 
@@ -148,8 +134,7 @@
 
         <div>
           <label class="label-campo">Email</label>
-          <input type="email" formControlName="email"
-                 class="campo">
+          <input type="email" formControlName="email" class="campo">
         </div>
 
         <div class="flex justify-between space-x-3 mt-6">

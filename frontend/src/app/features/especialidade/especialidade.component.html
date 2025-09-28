@@ -50,7 +50,7 @@
                         </a>
                       </li>
                       <li *ngIf="especialidade.excluido">
-                        <a (click)="restaurarItem($event, especialidade)"
+                        <a (click)="restaurar($event, especialidade)"
                            class="text-success hover:bg-success/20">
                           Restaurar
                         </a>
@@ -68,8 +68,8 @@
 
   @if (mostrarFormularioNovo) {
     <app-especialidade-form
-      [especialidade]="itemEdicao"
-      (save)="onSalvarNovoEspecialidades($event)"
+      [registro]="itemEdicao"
+      (save)="salvarNovo($event)"
       (cancel)="cancelarNovo()"
     ></app-especialidade-form>
   }

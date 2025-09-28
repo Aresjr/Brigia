@@ -52,7 +52,7 @@
                     </a>
                   </li>
                   <li *ngIf="convenio.excluido">
-                    <a (click)="restaurarItem($event, convenio)"
+                    <a (click)="restaurar($event, convenio)"
                        class="text-success hover:bg-success/20">
                       Restaurar
                     </a>
@@ -70,8 +70,8 @@
 
   @if (mostrarFormularioNovo) {
     <app-convenio-form
-      [convenio]="itemEdicao"
-      (save)="onSalvarNovoConvenio($event)"
+      [registro]="itemEdicao"
+      (save)="salvarNovo($event)"
       (cancel)="cancelarNovo()"
     ></app-convenio-form>
   }

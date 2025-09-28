@@ -17,6 +17,11 @@ export interface Usuario {
   unidade: number;
 }
 
+export interface CadastrarSenhaRequest {
+  token: string;
+  senha: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -37,5 +42,10 @@ export class AuthService {
         this.logout$.next();
       })
     );
+  }
+
+  cadastrarSenha(token: string, senha: string): Observable<void> {
+    const payload: CadastrarSenhaRequest = { token, senha };
+    return this.http.post<void>(`${environment.apiUrl}/auth/cadastrar-senha`, payload);
   }
 }

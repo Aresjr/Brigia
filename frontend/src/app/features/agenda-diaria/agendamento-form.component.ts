@@ -46,7 +46,7 @@ import { AtendimentoService } from '../atendimento/atendimento.service';
     DatePipe, NgIf, LucideAngularModule, ConfirmDialogComponent
   ]
 })
-export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> implements OnInit {
+export class AgendamentoFormComponent extends FormComponent<Agendamento, AgendamentoRequest> implements OnInit {
   @Input() agendamentoDetalhes: Agendamento | null = null;
   @Input() dataAgendamento: Date | null = null;
   @Input() pacienteId!: number | null;
@@ -105,7 +105,7 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
     this.form = this.fb.group(form);
   }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
     let data = this.hoje;
     let hora = null;
     if (this.dataAgendamento) {
@@ -232,12 +232,17 @@ export class AgendamentoFormComponent extends FormComponent<AgendamentoRequest> 
   }
 
   salvarNovoPaciente(paciente: Partial<Paciente>) {
+    this.isLoading = true;
+    this.mostrarFormularioNovoPaciente = false;
     this.pacienteService.criar(paciente).subscribe({
       next: (paciente) => {
         this.toastr.success('Paciente cadastrado');
-        this.carregarPacientes();
-        this.mostrarFormularioNovoPaciente = false;
-        this.selectPaciente(paciente.id);
+        this.carregarPacientes().subscribe({
+          next: () => {
+            this.selectPaciente(paciente.id);
+            this.isLoading = false;
+          }
+        });
       }
     });
   }

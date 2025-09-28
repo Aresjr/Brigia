@@ -69,7 +69,7 @@
                     </a>
                   </li>
                   <li *ngIf="empresa.excluido">
-                    <a (click)="restaurarItem($event, empresa)"
+                    <a (click)="restaurar($event, empresa)"
                        class="text-success hover:bg-success/20">
                       Restaurar
                     </a>
@@ -87,9 +87,9 @@
 
   @if (mostrarFormularioNovo || mostrarDetalhes) {
     <app-empresa-form
-      [empresa]="itemEdicao ? itemEdicao : itemSelecionado"
+      [registro]="itemEdicao ? itemEdicao : itemSelecionado"
       [isDetalhes]="mostrarDetalhes"
-      (save)="onSalvarNovoEmpresa($event)"
+      (save)="salvarNovo($event)"
       (cancel)="cancelarNovo(); fecharDetalhes()"
     ></app-empresa-form>
   }

@@ -26,7 +26,7 @@ import { ToastrService } from 'ngx-toastr';
     NgNotFoundTemplateDirective
   ]
 })
-export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> implements OnInit {
+export class AtendimentoFormComponent extends FormComponent<Atendimento, AtendimentoRequest> implements OnInit {
   @Input() atendimento: Atendimento | null = null;
   @Input() agendamentoId: number | null = null;
   @Input() atendimentoId: number | null = null;
@@ -52,7 +52,7 @@ export class AtendimentoFormComponent extends FormComponent<AtendimentoRequest> 
     });
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     this.carregarProcedimentos();
     if (this.atendimento) {
       this.form.patchValue(this.atendimento);

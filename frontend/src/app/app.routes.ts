@@ -15,6 +15,8 @@ import { AtendimentosComponent } from './features/atendimento/atendimentos.compo
 import { ContaReceberComponent } from './features/contas-receber/contas-receber.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { DetalhesAgendamentoComponent } from './pages/detalhes-agendamento/detalhes-agendamento.component';
+import { UsuariosComponent } from './features/usuarios/usuarios.component';
+import { CadastrarSenhaComponent } from './features/auth/cadastrar-senha/cadastrar-senha.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -127,8 +129,19 @@ export const routes: Routes = [
           title: 'Contas a Receber',
         },
       },
+      {
+        path: 'usuarios',
+        component: UsuariosComponent,
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        data: {
+          roles: [Role.ADMIN],
+          title: 'Usuários'
+        },
+      },
     ],
   },
   { path: 'detalhes-agendamento', component: DetalhesAgendamentoComponent },
+  { path: 'cadastrar-senha', component: CadastrarSenhaComponent },
   { path: '**', component: NotFoundComponent }
 ];

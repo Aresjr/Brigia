@@ -71,6 +71,7 @@ export class MainLayoutComponent {
         { label: 'Especialidades', icon: 'microscope', route: '/especialidades', roles: [Role.RECEPCIONISTA, Role.FATURAMENTO, Role.ADMIN] },
         { label: 'Procedimentos', icon: 'clipboard-list', route: '/procedimentos', roles: [Role.RECEPCIONISTA, Role.FATURAMENTO, Role.ADMIN] },
         { label: 'Profissionais', icon: 'briefcase-medical', route: '/profissionais', roles: [Role.RECEPCIONISTA, Role.FATURAMENTO, Role.ADMIN] },
+        { label: 'Usuários', icon: 'lock', route: '/usuarios', roles: [Role.ADMIN] },
       ], roles: [Role.RECEPCIONISTA, Role.ADMIN]
     },
     {
