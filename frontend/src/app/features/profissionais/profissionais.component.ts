@@ -42,35 +42,4 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
       profissional.crm?.includes(searchTerm) ||
       profissional.email?.includes(searchTerm);
   }
-
-  onSalvarNovoProfissional(profissional: Partial<Profissional>) {
-    if (this.itemEdicao) {
-      const id = this.itemEdicao.id;
-      this.profissionalService.atualizar(id, profissional).subscribe({
-        next: () => {
-          this.toastr.success('Registro atualizado');
-          this.carregarRegistros();
-          this.mostrarFormularioNovo = false;
-          this.itemEdicao = null;
-        }
-      });
-    } else {
-      this.profissionalService.criar(profissional).subscribe({
-        next: () => {
-          this.toastr.success('Profissional cadastrado');
-          this.carregarRegistros();
-          this.mostrarFormularioNovo = false;
-        }
-      });
-    }
-  }
-
-  restaurarItem($event: MouseEvent, profissional: Profissional) {
-    this.profissionalService.restaurar(profissional.id).subscribe({
-      next: () => {
-        profissional.excluido = false;
-        this.toastr.success(`${this.nomeEntidade} restaurado com sucesso!`);
-      }
-    });
-  }
 }

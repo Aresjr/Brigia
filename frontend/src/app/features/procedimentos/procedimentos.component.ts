@@ -43,49 +43,6 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
       procedimento.especialidade.nome?.toLowerCase().includes(searchTerm.toLowerCase());
   }
 
-  onSalvarNovo(procedimento: Partial<Procedimento>) {
-    if (this.itemEdicao) {
-      const id = this.itemEdicao.id;
-      this.procedimentoService.atualizar(id, procedimento).subscribe({
-        next: () => {
-          this.toastr.success(`Registro atualizado`);
-          this.carregarRegistros();
-          this.mostrarFormularioNovo = false;
-          this.itemEdicao = null;
-        }
-      });
-    } else {
-      this.procedimentoService.criar(procedimento).subscribe({
-        next: () => {
-          this.toastr.success(`${this.nomeEntidade} cadastrado`);
-          this.carregarRegistros();
-          this.mostrarFormularioNovo = false;
-        }
-      });
-    }
-  }
-
-  override excluir() {
-    super.excluir();
-    this.procedimentoService.excluir(this.idExclusao).subscribe({
-      next: () => {
-        this.toastr.success(`${this.nomeEntidade} excluído`);
-        this.carregarRegistros();
-      }
-    });
-  }
-
-  restaurar(event: Event, procedimento: Procedimento) {
-    event.stopPropagation();
-
-    this.procedimentoService.restaurar(procedimento.id).subscribe({
-      next: () => {
-        procedimento.excluido = false;
-        this.toastr.success(`${this.nomeEntidade} restaurado`);
-      }
-    });
-  }
-
   mostrarEdicao(procedimento: Procedimento) {
     this.itemEdicao = procedimento;
     this.mostrarFormularioNovo = true;

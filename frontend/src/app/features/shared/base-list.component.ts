@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Entidade, EntidadeRequest } from './entidade.interface';
 import { BaseService } from '../procedimentos/base.service';
 import { ToastrService } from 'ngx-toastr';
+import { Empresa } from '../empresa/empresa.interface';
 
 type SortDirection = 'asc' | 'desc' | null;
 
@@ -57,6 +58,31 @@ export abstract class BaseListComponent<T extends Entidade> implements OnInit {
         this.toastr.error('Erro ao carregar');
       }
     });
+  }
+
+  salvarNovo(registro: Partial<T>) {
+    const itemEdicao = this.itemEdicao || this.itemSelecionado;
+    if (itemEdicao) {
+      const id = itemEdicao.id;
+      this.service.atualizar(id, registro).subscribe({
+        next: () => {
+          this.toastr.success('Registro atualizado');
+          this.carregarRegistros();
+          this.mostrarFormularioNovo = false;
+          this.mostrarDetalhes = false;
+          this.itemEdicao = null;
+          this.itemSelecionado = null;
+        }
+      });
+    } else {
+      this.service.criar(registro).subscribe({
+        next: () => {
+          this.toastr.success('Registro cadastrado');
+          this.carregarRegistros();
+          this.mostrarFormularioNovo = false;
+        }
+      });
+    }
   }
 
   getItensPaginados(): T[] {
@@ -166,8 +192,19 @@ export abstract class BaseListComponent<T extends Entidade> implements OnInit {
     this.exibeConfirmExclusao = false;
     this.service.excluir(this.idExclusao).subscribe({
       next: () => {
-        this.toastr.success(`${this.nomeEntidade} excluído`);
+        this.toastr.success(`Registro excluído`);
         this.carregarRegistros();
+      }
+    });
+  }
+
+  restaurar(event: Event, registro: T) {
+    event.stopPropagation();
+
+    this.service.restaurar(registro.id).subscribe({
+      next: () => {
+        registro.excluido = false;
+        this.toastr.success('Registro restaurado');
       }
     });
   }

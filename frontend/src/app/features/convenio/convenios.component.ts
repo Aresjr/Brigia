@@ -38,47 +38,4 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
     return convenio.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       convenio.descricao?.toLowerCase().includes(searchTerm.toLowerCase());
   }
-
-  onSalvarNovoConvenio(convenio: Partial<Convenio>) {
-    if (this.itemEdicao) {
-      const id = this.itemEdicao.id;
-      this.convenioService.atualizar(id, convenio).subscribe({
-        next: () => {
-          this.toastr.success('Registro atualizado');
-          this.carregarRegistros();
-          this.mostrarFormularioNovo = false;
-          this.itemEdicao = null;
-        }
-      });
-    } else {
-      this.convenioService.criar(convenio).subscribe({
-        next: () => {
-          this.toastr.success(`${this.nomeEntidade} cadastrado`);
-          this.carregarRegistros();
-          this.mostrarFormularioNovo = false;
-        }
-      });
-    }
-  }
-
-  override excluir() {
-    super.excluir();
-    this.convenioService.excluir(this.idExclusao).subscribe({
-      next: () => {
-        this.toastr.success(`${this.nomeEntidade} excluído`);
-        this.carregarRegistros();
-      }
-    });
-  }
-
-  restaurarItem(event: Event, convenio: Convenio) {
-    event.stopPropagation();
-
-    this.convenioService.restaurar(convenio.id).subscribe({
-      next: () => {
-        convenio.excluido = false;
-        this.toastr.success(`${this.nomeEntidade} restaurado`);
-      }
-    });
-  }
 }

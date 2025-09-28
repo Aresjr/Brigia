@@ -40,47 +40,4 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
     return especialidade.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       especialidade.descricao?.toLowerCase().includes(searchTerm.toLowerCase());
   }
-
-  onSalvarNovoEspecialidades(especialidade: Partial<Especialidade>) {
-    if (this.itemEdicao) {
-      const id = this.itemEdicao.id;
-      this.especialidadeService.atualizar(id, especialidade).subscribe({
-        next: () => {
-          this.toastr.success(`${this.nomeEntidade} atualizada`);
-          this.carregarRegistros();
-          this.mostrarFormularioNovo = false;
-          this.itemEdicao = null;
-        }
-      });
-    } else {
-      this.especialidadeService.criar(especialidade).subscribe({
-        next: () => {
-          this.toastr.success(`${this.nomeEntidade} cadastrada`);
-          this.carregarRegistros();
-          this.mostrarFormularioNovo = false;
-        }
-      });
-    }
-  }
-
-  override excluir() {
-    super.excluir();
-    this.especialidadeService.excluir(this.idExclusao).subscribe({
-      next: () => {
-        this.toastr.success(`${this.nomeEntidade} excluída`);
-        this.carregarRegistros();
-      }
-    });
-  }
-
-  restaurarItem(event: Event, especialidade: Especialidade) {
-    //event.stopPropagation();
-
-    this.especialidadeService.restaurar(especialidade.id).subscribe({
-      next: () => {
-        especialidade.excluido = false;
-        this.toastr.success(`${this.nomeEntidade} restaurada com sucesso!`);
-      }
-    });
-  }
 }

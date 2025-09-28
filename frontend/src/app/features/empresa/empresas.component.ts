@@ -37,60 +37,9 @@ export class EmpresasComponent extends BaseListComponent<Empresa> {
     super(empresaService, toastr);
   }
 
-  carregarEmpresas(): void {
-    this.isLoading = true;
-    this.empresaService.listar(true).subscribe({
-      next: (response) => {
-        this.itensInternos = response.items;
-        this.itensExibicao = [...this.itensInternos];
-        this.atualizarPaginacao();
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      }
-    });
-  }
-
   override searchTermFilter(empresa: Empresa, searchTerm: string): boolean | undefined {
     return empresa.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       empresa.observacao?.toLowerCase().includes(searchTerm.toLowerCase());
-  }
-
-  onSalvarNovoEmpresa(empresa: Partial<Empresa>) {
-    const itemEdicao = this.itemEdicao || this.itemSelecionado;
-    if (itemEdicao) {
-      const id = itemEdicao.id;
-      this.empresaService.atualizar(id, empresa).subscribe({
-        next: () => {
-          this.toastr.success('Registro atualizado');
-          this.carregarEmpresas();
-          this.mostrarFormularioNovo = false;
-          this.mostrarDetalhes = false;
-          this.itemEdicao = null;
-          this.itemSelecionado = null;
-        }
-      });
-    } else {
-      this.empresaService.criar(empresa).subscribe({
-        next: () => {
-          this.toastr.success('Empresa cadastrada');
-          this.carregarEmpresas();
-          this.mostrarFormularioNovo = false;
-        }
-      });
-    }
-  }
-
-  restaurarItem(event: Event, empresa: Empresa) {
-    event.stopPropagation();
-
-    this.empresaService.restaurar(empresa.id).subscribe({
-      next: () => {
-        empresa.excluido = false;
-        this.toastr.success('Empresa restaurada');
-      }
-    });
   }
 
   protected readonly ColorUtils = ColorUtils;

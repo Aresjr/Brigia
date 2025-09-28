@@ -90,27 +90,6 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
     }
   }
 
-  override excluir() {
-    super.excluir();
-    this.atendimentoService.excluir(this.idExclusao).subscribe({
-      next: () => {
-        this.toastr.success(`${this.nomeEntidade} excluído`);
-        this.carregarRegistros();
-      }
-    });
-  }
-
-  restaurarItem(event: Event, atendimento: Atendimento) {
-    event.stopPropagation();
-
-    this.atendimentoService.restaurar(atendimento.id).subscribe({
-      next: () => {
-        atendimento.excluido = false;
-        this.toastr.success(`${this.nomeEntidade} restaurado`);
-      }
-    });
-  }
-
   novoAgendamento() {
     this.toastr.info('Será implementado logo...');
   }
