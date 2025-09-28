@@ -26,6 +26,7 @@ export abstract class BaseListComponent<T extends Entidade> implements OnInit {
   mostrarDetalhes = false;
   mostrarFormularioNovo = false;
   isLoading = false;
+  erroCarregar = false;
   nomeEntidade = '';
   exibeConfirmExclusao = false;
   idExclusao: number = 0;
@@ -38,7 +39,8 @@ export abstract class BaseListComponent<T extends Entidade> implements OnInit {
   }
 
   ngOnChanges(): void {
-    if (this.isLoading) {
+    console.log('ngOnChanges');
+    if (this.erroCarregar) {
       this.carregarRegistros();
     }
   }
@@ -51,10 +53,12 @@ export abstract class BaseListComponent<T extends Entidade> implements OnInit {
         this.itensExibicao = [...this.itensInternos];
         this.atualizarPaginacao();
         this.isLoading = false;
+        this.erroCarregar = false;
       },
       error: () => {
         this.isLoading = false;
         this.toastr.error('Erro ao carregar');
+        this.erroCarregar = true;
       }
     });
   }
@@ -143,6 +147,7 @@ export abstract class BaseListComponent<T extends Entidade> implements OnInit {
 
   fecharDetalhes(): void {
     this.itemSelecionado = null;
+    this.itemEdicao = null;
     this.mostrarDetalhes = false;
   }
 
@@ -153,6 +158,7 @@ export abstract class BaseListComponent<T extends Entidade> implements OnInit {
   onAddNovo() {
     this.mostrarFormularioNovo = true;
     this.itemSelecionado = null;
+    this.itemEdicao = null;
   }
 
   cancelarNovo() {

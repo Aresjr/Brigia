@@ -8,6 +8,7 @@ import br.com.nemeia.brigia.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,12 @@ public class UsuarioController {
         return mapper.toResponse(service.getById(id));
     }
 
+    @GetMapping("/token/{token}")
+    public UsuarioResponse getByToken(@PathVariable String token) throws BadRequestException {
+        log.info("GET /usuarios/{} - buscando usuario pelo token", token);
+        return mapper.toResponse(service.getByToken(token));
+    }
+
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public UsuarioResponse post(@Valid @RequestBody UsuarioRequest request) {
@@ -46,24 +53,24 @@ public class UsuarioController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public UsuarioResponse update(@Valid @RequestBody UsuarioRequest request, @PathVariable Long id) {
-      log.info("PUT /usuarios - atualizando usuario ID {}", id);
-      return mapper.toResponse(service.edit(id, request));
+        log.info("PUT /usuarios - atualizando usuario ID {}", id);
+        return mapper.toResponse(service.edit(id, request));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-      log.info("DELETE /usuarios - excluindo convênio ID {}", id);
-      service.delete(id);
-      return ResponseEntity.noContent().build();
+        log.info("DELETE /usuarios - excluindo convênio ID {}", id);
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}/restaurar")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> restaurar(@PathVariable Long id) {
-      log.info("PATCH /usuarios/{}/restaurar", id);
-      service.restore(id);
-      return ResponseEntity.noContent().build();
+        log.info("PATCH /usuarios/{}/restaurar", id);
+        service.restore(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

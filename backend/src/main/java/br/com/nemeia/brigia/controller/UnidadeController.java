@@ -21,7 +21,7 @@ public class UnidadeController {
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public PagedResponse<UnidadeResponse> getAll(@RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
-                                                 @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
         log.info("GET /unidades - page: {}, size: {}", page, size);
         return mapper.toPagedResponse(service.getPaged(page, size, mostrarExcluidos));
     }

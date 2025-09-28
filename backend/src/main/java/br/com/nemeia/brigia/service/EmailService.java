@@ -15,7 +15,7 @@ public class EmailService {
     private final TemplateLoader templateLoader;
 
     @Value("${brigida.email.suporte}")
-    private String emailSuporte; //TODO - pegar do cadastro da Unidade
+    private String emailSuporte; // TODO - pegar do cadastro da Unidade
 
     public EmailService(MailgunClient mailgunClient, TemplateLoader templateLoader) {
         this.mailgunClient = mailgunClient;

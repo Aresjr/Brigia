@@ -5,4 +5,5 @@ import java.util.Optional;
 
 public interface UsuarioRepository extends BaseRepository<Usuario> {
     Optional<Usuario> findByEmail(String email);
+    Optional<Usuario> findByTokenPublico(String token);
 }

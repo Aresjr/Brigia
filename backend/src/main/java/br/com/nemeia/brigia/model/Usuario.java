@@ -45,11 +45,11 @@ public class Usuario extends BaseModel {
 
     @PrePersist
     public void prePersist() {
-      if (tokenPublico == null) {
-        tokenPublico = UUID.randomUUID().toString();
-      }
-      if (tokenExpiracao == null) {
-        tokenExpiracao = LocalDateTime.now().plusHours(1);
-      }
+        if (tokenPublico == null) {
+            tokenPublico = UUID.randomUUID().toString();
+        }
+        if (tokenExpiracao == null) {
+            tokenExpiracao = LocalDateTime.now().plusHours(1);
+        }
     }
 }
