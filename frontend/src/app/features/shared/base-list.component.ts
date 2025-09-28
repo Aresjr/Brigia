@@ -63,7 +63,7 @@ export abstract class BaseListComponent<T extends Entidade> implements OnInit {
     const itemEdicao = this.itemEdicao || this.itemSelecionado;
     if (itemEdicao) {
       const id = itemEdicao.id;
-      this.service.atualizar(id, registro).subscribe({
+      return this.service.atualizar(id, registro).subscribe({
         next: () => {
           this.toastr.success('Registro atualizado');
           this.carregarRegistros();
@@ -74,7 +74,7 @@ export abstract class BaseListComponent<T extends Entidade> implements OnInit {
         }
       });
     } else {
-      this.service.criar(registro).subscribe({
+      return this.service.criar(registro).subscribe({
         next: () => {
           this.toastr.success('Registro cadastrado');
           this.carregarRegistros();

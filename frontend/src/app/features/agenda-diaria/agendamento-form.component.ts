@@ -214,8 +214,6 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   selectPaciente(id: number | null) {
     this.pacienteSelecionado = id ? [...this.pacientes.filter(e => e.id === id)].at(0) : null;
 
-    console.log('selectPaciente', id, this.pacienteSelecionado);
-
     this.form.patchValue({
       pacienteId: this.pacienteSelecionado ? this.pacienteSelecionado.id : null,
       convenioId: this.pacienteSelecionado?.convenio ? this.pacienteSelecionado.convenio.id : null,

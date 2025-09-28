@@ -37,6 +37,7 @@ export abstract class FormComponent<E extends Entidade, Request extends Entidade
   }
 
   onCancel() {
+    this.registro = null;
     this.cancel.emit();
   }
 

@@ -17,7 +17,6 @@ import { Unidade } from '../../unidade/unidade.interface';
   templateUrl: 'usuario-form.component.html'
 })
 export class UsuarioFormComponent extends FormComponent<Usuario, UsuarioRequest> implements OnInit {
-  @Input() usuario?: Usuario | null;
   @Input() isDetalhes: boolean = false;
   unidades: Unidade[] = [];
 
@@ -31,15 +30,20 @@ export class UsuarioFormComponent extends FormComponent<Usuario, UsuarioRequest>
       nome: [null, Validators.required],
       email: [null, Validators.required],
       role: [null, Validators.required],
-      unidade: [null, Validators.required],
+      unidadeId: [null, Validators.required],
     });
   }
 
   override ngOnInit() {
     this.carregarUnidades();
 
-    if (this.usuario) {
-      //this.form.patchValue(this.usuario);
+    if (this.registro) {
+      this.form.patchValue({
+        nome: this.registro.nome,
+        email: this.registro.email,
+        role: this.registro.roles[0],
+        unidadeId: this.registro.unidade.id
+      });
     }
     if (this.isDetalhes) {
 

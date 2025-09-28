@@ -40,11 +40,10 @@ public class UsuarioService extends BaseService<Usuario, UsuarioRepository> {
         Unidade unidade = unidadeRepository.findById(request.unidadeId())
                 .orElseThrow(() -> new NotFoundException("Unidade não encontrada com o ID: " + request.unidadeId()));
 
-        log.info("Criando usuário: {}", request.email());
         Usuario usuario = mapper.toEntity(request);
 
         usuario.setUnidade(unidade);
-        return usuario;
+        return repository.save(usuario);
     }
 
     @Override

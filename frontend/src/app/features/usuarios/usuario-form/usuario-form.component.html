@@ -61,7 +61,7 @@
               <label class="label-campo">
                 Unidade <span aria-hidden="true" class="text-error">*</span>
               </label>
-              <ng-select formControlName="unidade" class="campo-select" [ngClass]="classesCampo('unidade')">
+              <ng-select formControlName="unidadeId" class="campo-select" [ngClass]="classesCampo('unidade')">
                 @for (unidade of unidades; track unidade.id) {
                   <ng-option [value]="unidade.id">{{unidade.nome}}</ng-option>
                 }

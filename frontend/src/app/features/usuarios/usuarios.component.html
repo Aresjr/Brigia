@@ -79,7 +79,8 @@
 
   @if (mostrarFormularioNovo) {
     <app-usuario-form
-      (save)="cadastraUsuarioNovo($event)"
+      [registro]="itemEdicao"
+      (save)="salvarNovo($event)"
       (cancel)="mostrarFormularioNovo = false">
     </app-usuario-form>
   }

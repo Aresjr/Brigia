@@ -49,10 +49,4 @@ public class GenericExceptionHandler extends BaseExceptionHandler {
         log.error("NoResourceFoundException: {}", ex.getMessage());
         return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND, request);
     }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, HttpServletRequest request) {
-        log.error("Exceção não mapeada: {}", ex.getMessage());
-        return buildErrorResponse(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, request);
-    }
 }
