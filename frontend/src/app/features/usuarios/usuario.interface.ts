@@ -13,5 +13,6 @@ export interface Usuario extends Entidade {
 export interface UsuarioRequest extends EntidadeRequest {
   email: string;
   nome: string;
-  unidadeId: Role;
+  unidadeId: number;
+  roles: Role[];
 }

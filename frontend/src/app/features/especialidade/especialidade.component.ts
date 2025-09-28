@@ -32,27 +32,8 @@ import { LoadingSpinnerComponent } from '../shared/loading/loading-spinner.compo
 export class EspecialidadeComponent extends BaseListComponent<Especialidade> implements OnInit {
   override nomeEntidade = 'Especialidade';
 
-  constructor(private especialidadeService: EspecialidadeService, private toastr: ToastrService) {
-    super();
-  }
-
-  ngOnInit(): void {
-    this.carregarEspecialidades();
-  }
-
-  carregarEspecialidades(): void {
-    this.isLoading = true;
-    this.especialidadeService.listar(true).subscribe({
-      next: (response) => {
-        this.itensInternos = response.items;
-        this.itensExibicao = [...this.itensInternos];
-        this.atualizarPaginacao();
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      }
-    });
+  constructor(private especialidadeService: EspecialidadeService, protected override toastr: ToastrService) {
+    super(especialidadeService, toastr);
   }
 
   override searchTermFilter(especialidade: Especialidade, searchTerm: string): boolean | undefined {
@@ -66,7 +47,7 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
       this.especialidadeService.atualizar(id, especialidade).subscribe({
         next: () => {
           this.toastr.success(`${this.nomeEntidade} atualizada`);
-          this.carregarEspecialidades();
+          this.carregarRegistros();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
         }
@@ -75,7 +56,7 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
       this.especialidadeService.criar(especialidade).subscribe({
         next: () => {
           this.toastr.success(`${this.nomeEntidade} cadastrada`);
-          this.carregarEspecialidades();
+          this.carregarRegistros();
           this.mostrarFormularioNovo = false;
         }
       });
@@ -87,7 +68,7 @@ export class EspecialidadeComponent extends BaseListComponent<Especialidade> imp
     this.especialidadeService.excluir(this.idExclusao).subscribe({
       next: () => {
         this.toastr.success(`${this.nomeEntidade} excluída`);
-        this.carregarEspecialidades();
+        this.carregarRegistros();
       }
     });
   }

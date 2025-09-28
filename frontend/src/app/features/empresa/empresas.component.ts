@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EmpresaService } from './empresa.service';
 import { Empresa } from './empresa.interface';
@@ -30,15 +30,11 @@ import { CnpjPipe } from '../../core/pipes/cnpj.pipe';
     CnpjPipe
   ]
 })
-export class EmpresasComponent extends BaseListComponent<Empresa> implements OnInit {
+export class EmpresasComponent extends BaseListComponent<Empresa> {
   override nomeEntidade = 'Empresa';
 
-  constructor(private empresaService: EmpresaService, private toastr: ToastrService) {
-    super();
-  }
-
-  ngOnInit(): void {
-    this.carregarEmpresas();
+  constructor(private empresaService: EmpresaService, protected override toastr: ToastrService) {
+    super(empresaService, toastr);
   }
 
   carregarEmpresas(): void {
@@ -84,16 +80,6 @@ export class EmpresasComponent extends BaseListComponent<Empresa> implements OnI
         }
       });
     }
-  }
-
-  override excluir() {
-    super.excluir();
-    this.empresaService.excluir(this.idExclusao).subscribe({
-      next: () => {
-        this.toastr.success('Empresa excluída');
-        this.carregarEmpresas();
-      }
-    });
   }
 
   restaurarItem(event: Event, empresa: Empresa) {

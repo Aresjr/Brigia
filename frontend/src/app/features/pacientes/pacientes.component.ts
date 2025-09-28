@@ -36,28 +36,9 @@ import { UserService } from '../../core/user.service';
 export class PacientesComponent extends BaseListComponent<Paciente> implements OnInit {
   override nomeEntidade = 'Paciente';
 
-  constructor(private pacienteService: PacienteService, private toastr: ToastrService,
+  constructor(private pacienteService: PacienteService, protected override toastr: ToastrService,
               private router: Router, private userService: UserService) {
-    super();
-  }
-
-  ngOnInit(): void {
-    this.carregarPacientes();
-  }
-
-  carregarPacientes(): void {
-    this.isLoading = true;
-    this.pacienteService.listar().subscribe({
-      next: (response) => {
-        this.itensInternos = response.items;
-        this.itensExibicao = [...this.itensInternos];
-        this.atualizarPaginacao();
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.isLoading = false;
-      }
-    });
+    super(pacienteService, toastr);
   }
 
   override searchTermFilter(paciente: Paciente, searchTerm: string): boolean | undefined {
@@ -73,7 +54,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
       this.pacienteService.atualizar(id, paciente).subscribe({
         next: () => {
           this.toastr.success('Registro atualizado');
-          this.carregarPacientes();
+          this.carregarRegistros();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
         }
@@ -82,7 +63,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
       this.pacienteService.criar(paciente).subscribe({
         next: () => {
           this.toastr.success('Paciente cadastrado');
-          this.carregarPacientes();
+          this.carregarRegistros();
           this.mostrarFormularioNovo = false;
         }
       });

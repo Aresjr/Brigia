@@ -24,8 +24,7 @@
           <lucide-icon *ngIf="getSortIcon('unidade')" [name]="getSortIcon('unidade')" class="icone-ordenacao"/>
           Unidade
         </div>
-        <div (click)="ordenar('roles')" class="cabecalho-listagem">
-          <lucide-icon *ngIf="getSortIcon('roles')" [name]="getSortIcon('roles')" class="icone-ordenacao"/>
+        <div class="cabecalho-listagem">
           Perfil
         </div>
         <div class="cabecalho-listagem p-0 rounded-tr-lg"></div>
@@ -37,7 +36,7 @@
             <div class="celula-listagem">{{usuario.nome}}</div>
             <div class="celula-listagem">{{usuario.email}}</div>
             <div class="celula-listagem">{{usuario.unidade.nome}}</div>
-            <div class="celula-listagem">{{usuario.roles[0]}}</div>
+            <div class="celula-listagem">{{usuario.roles.join(', ')}}</div>
             <div class="p-0 text-right">
               <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
                 <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
@@ -62,9 +61,9 @@
           </div>
         }
       </div>
-
-      <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
     </div>
+
+    <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
   }
 
   <app-fab (click)="onAddNovo()"></app-fab>
@@ -76,6 +75,13 @@
       (confirm)="excluir()"
       (cancel)="fecharConfirmExclusao()">
     </app-confirm-dialog>
+  }
+
+  @if (mostrarFormularioNovo) {
+    <app-usuario-form
+      (save)="cadastraUsuarioNovo($event)"
+      (cancel)="mostrarFormularioNovo = false">
+    </app-usuario-form>
   }
 
 </div>

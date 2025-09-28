@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import { Entidade } from './entidade.interface';
+import { Component, OnInit } from '@angular/core';
+import { Entidade, EntidadeRequest } from './entidade.interface';
+import { BaseService } from '../procedimentos/base.service';
+import { ToastrService } from 'ngx-toastr';
 
 type SortDirection = 'asc' | 'desc' | null;
 
@@ -11,7 +13,7 @@ interface SortState<T> {
 @Component({
   template: '',
 })
-export abstract class BaseListComponent<T extends Entidade> {
+export abstract class BaseListComponent<T extends Entidade> implements OnInit {
 
   itensExibicao: T[] = [];
   itensInternos: T[] = [];
@@ -27,6 +29,35 @@ export abstract class BaseListComponent<T extends Entidade> {
   nomeEntidade = '';
   exibeConfirmExclusao = false;
   idExclusao: number = 0;
+
+  protected constructor(protected service: BaseService<T, EntidadeRequest | null>,
+                        protected toastr: ToastrService) {}
+
+  ngOnInit(): void {
+    this.carregarRegistros();
+  }
+
+  ngOnChanges(): void {
+    if (this.isLoading) {
+      this.carregarRegistros();
+    }
+  }
+
+  carregarRegistros(): void {
+    this.isLoading = true;
+    this.service.listar(true).subscribe({
+      next: (response) => {
+        this.itensInternos = response.items;
+        this.itensExibicao = [...this.itensInternos];
+        this.atualizarPaginacao();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        this.toastr.error('Erro ao carregar');
+      }
+    });
+  }
 
   getItensPaginados(): T[] {
     const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
@@ -133,6 +164,12 @@ export abstract class BaseListComponent<T extends Entidade> {
 
   excluir(id: number = this.idExclusao) {
     this.exibeConfirmExclusao = false;
+    this.service.excluir(this.idExclusao).subscribe({
+      next: () => {
+        this.toastr.success(`${this.nomeEntidade} excluído`);
+        this.carregarRegistros();
+      }
+    });
   }
 
   private toComparableString(valor: NonNullable<T[keyof T]> | '' | number): string | number {

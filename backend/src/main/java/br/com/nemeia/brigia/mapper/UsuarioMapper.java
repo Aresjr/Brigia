@@ -21,7 +21,8 @@ public class UsuarioMapper {
             return null;
         }
 
-        return new UsuarioResponse(usuario.getId(), usuario.getEmail(), usuario.getNome(), usuario.getAvatarUrl(), usuario.getRoles(),
+        return new UsuarioResponse(usuario.getId(), usuario.getEmail(), usuario.getNome(), usuario.getAvatarUrl(),
+                usuario.getRoles(),
                 usuario.getUnidade() != null ? unidadeMapper.toResponse(usuario.getUnidade()) : null);
     }
 

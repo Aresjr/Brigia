@@ -32,27 +32,8 @@ import { FabComponent } from '../shared/fab/fab.component';
 export class ProfissionaisComponent extends BaseListComponent<Profissional> implements OnInit {
   override nomeEntidade = 'Profissional';
 
-  constructor(private profissionalService: ProfissionalService, private toastr: ToastrService) {
-    super();
-  }
-
-  ngOnInit(): void {
-    this.carregarProfissionais();
-  }
-
-  carregarProfissionais(): void {
-    this.isLoading = true;
-    this.profissionalService.listar().subscribe({
-      next: (response) => {
-        this.itensInternos = response.items;
-        this.itensExibicao = [...this.itensInternos];
-        this.atualizarPaginacao();
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.isLoading = false;
-      }
-    });
+  constructor(private profissionalService: ProfissionalService, protected override toastr: ToastrService) {
+    super(profissionalService, toastr);
   }
 
   override searchTermFilter(profissional: Profissional, searchTerm: string): boolean | undefined {
@@ -68,7 +49,7 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
       this.profissionalService.atualizar(id, profissional).subscribe({
         next: () => {
           this.toastr.success('Registro atualizado');
-          this.carregarProfissionais();
+          this.carregarRegistros();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
         }
@@ -77,7 +58,7 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
       this.profissionalService.criar(profissional).subscribe({
         next: () => {
           this.toastr.success('Profissional cadastrado');
-          this.carregarProfissionais();
+          this.carregarRegistros();
           this.mostrarFormularioNovo = false;
         }
       });

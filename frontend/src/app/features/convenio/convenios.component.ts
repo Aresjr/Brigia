@@ -30,27 +30,8 @@ import { FabComponent } from '../shared/fab/fab.component';
 export class ConveniosComponent extends BaseListComponent<Convenio> implements OnInit {
   override nomeEntidade = 'Convênio';
 
-  constructor(private convenioService: ConvenioService, private toastr: ToastrService) {
-    super();
-  }
-
-  ngOnInit(): void {
-    this.carregarConvenios();
-  }
-
-  carregarConvenios(): void {
-    this.isLoading = true;
-    this.convenioService.listar(true).subscribe({
-      next: (response) => {
-        this.itensInternos = response.items;
-        this.itensExibicao = [...this.itensInternos];
-        this.atualizarPaginacao();
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      }
-    });
+  constructor(private convenioService: ConvenioService, protected override toastr: ToastrService) {
+    super(convenioService, toastr);
   }
 
   override searchTermFilter(convenio: Convenio, searchTerm: string): boolean | undefined {
@@ -64,7 +45,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
       this.convenioService.atualizar(id, convenio).subscribe({
         next: () => {
           this.toastr.success('Registro atualizado');
-          this.carregarConvenios();
+          this.carregarRegistros();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
         }
@@ -73,7 +54,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
       this.convenioService.criar(convenio).subscribe({
         next: () => {
           this.toastr.success(`${this.nomeEntidade} cadastrado`);
-          this.carregarConvenios();
+          this.carregarRegistros();
           this.mostrarFormularioNovo = false;
         }
       });
@@ -85,7 +66,7 @@ export class ConveniosComponent extends BaseListComponent<Convenio> implements O
     this.convenioService.excluir(this.idExclusao).subscribe({
       next: () => {
         this.toastr.success(`${this.nomeEntidade} excluído`);
-        this.carregarConvenios();
+        this.carregarRegistros();
       }
     });
   }

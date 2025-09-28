@@ -32,27 +32,8 @@ import { FabComponent } from '../shared/fab/fab.component';
 export class ProcedimentosComponent extends BaseListComponent<Procedimento> implements OnInit {
   override nomeEntidade = 'Procedimento';
 
-  constructor(private procedimentoService: ProcedimentoService, private toastr: ToastrService) {
-    super();
-  }
-
-  ngOnInit(): void {
-    this.carregarProcedimentos();
-  }
-
-  carregarProcedimentos(): void {
-    this.isLoading = true;
-    this.procedimentoService.listar(true).subscribe({
-      next: (response) => {
-        this.itensInternos = response.items;
-        this.itensExibicao = [...this.itensInternos];
-        this.atualizarPaginacao();
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      }
-    });
+  constructor(private procedimentoService: ProcedimentoService, protected override toastr: ToastrService) {
+    super(procedimentoService, toastr);
   }
 
   override searchTermFilter(procedimento: Procedimento, searchTerm: string): boolean | undefined {
@@ -68,7 +49,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
       this.procedimentoService.atualizar(id, procedimento).subscribe({
         next: () => {
           this.toastr.success(`Registro atualizado`);
-          this.carregarProcedimentos();
+          this.carregarRegistros();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
         }
@@ -77,7 +58,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
       this.procedimentoService.criar(procedimento).subscribe({
         next: () => {
           this.toastr.success(`${this.nomeEntidade} cadastrado`);
-          this.carregarProcedimentos();
+          this.carregarRegistros();
           this.mostrarFormularioNovo = false;
         }
       });
@@ -89,7 +70,7 @@ export class ProcedimentosComponent extends BaseListComponent<Procedimento> impl
     this.procedimentoService.excluir(this.idExclusao).subscribe({
       next: () => {
         this.toastr.success(`${this.nomeEntidade} excluído`);
-        this.carregarProcedimentos();
+        this.carregarRegistros();
       }
     });
   }
