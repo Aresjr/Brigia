@@ -1,8 +1,10 @@
 package br.com.nemeia.brigia.service;
 
+import br.com.nemeia.brigia.dto.request.ConvenioRequest;
 import br.com.nemeia.brigia.dto.request.UsuarioRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.UsuarioMapper;
+import br.com.nemeia.brigia.model.Convenio;
 import br.com.nemeia.brigia.model.Unidade;
 import br.com.nemeia.brigia.model.Usuario;
 import br.com.nemeia.brigia.repository.UnidadeRepository;
@@ -43,7 +45,20 @@ public class UsuarioService extends BaseService<Usuario, UsuarioRepository> {
         Usuario usuario = mapper.toEntity(request);
 
         usuario.setUnidade(unidade);
+        //TODO - enviar email com o link para que seja cadastrada a senha
         return repository.save(usuario);
+    }
+
+    public Usuario edit(Long id, UsuarioRequest request) {
+      getById(id);
+      Usuario usuario = mapper.toEntity(request);
+
+      Unidade unidade = unidadeRepository.findById(request.unidadeId())
+        .orElseThrow(() -> new NotFoundException("Unidade não encontrada com o ID: " + request.unidadeId()));
+
+      usuario.setUnidade(unidade);
+      usuario.setId(id);
+      return repository.save(usuario);
     }
 
     @Override

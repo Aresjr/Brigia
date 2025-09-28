@@ -8,6 +8,7 @@ import br.com.nemeia.brigia.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,8 +38,32 @@ public class UsuarioController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public UsuarioResponse createUsuario(@Valid @RequestBody UsuarioRequest request) {
+    public UsuarioResponse post(@Valid @RequestBody UsuarioRequest request) {
         log.info("POST /usuarios - criando novo usuario");
         return mapper.toResponse(service.create(request));
     }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public UsuarioResponse update(@Valid @RequestBody UsuarioRequest request, @PathVariable Long id) {
+      log.info("PUT /usuarios - atualizando usuario ID {}", id);
+      return mapper.toResponse(service.edit(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+      log.info("DELETE /usuarios - excluindo convênio ID {}", id);
+      service.delete(id);
+      return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/restaurar")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Void> restaurar(@PathVariable Long id) {
+      log.info("PATCH /usuarios/{}/restaurar", id);
+      service.restore(id);
+      return ResponseEntity.noContent().build();
+    }
+
 }

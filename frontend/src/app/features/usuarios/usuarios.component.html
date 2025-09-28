@@ -32,8 +32,12 @@
 
       <div class="itens-listagem">
         @for (usuario of getItensPaginados(); track usuario.id) {
-          <div class="item-listagem grid-cols-[1fr_1fr_1fr_1fr_32px]">
-            <div class="celula-listagem">{{usuario.nome}}</div>
+          <div class="item-listagem grid-cols-[1fr_1fr_1fr_1fr_32px]"
+               [class.bg-error]="usuario.excluido"
+               [class.bg-opacity-50]="usuario.excluido" >
+            <div class="celula-listagem">
+              {{usuario.nome}} <span *ngIf="usuario.excluido" class="excluido">Excluído</span>
+            </div>
             <div class="celula-listagem">{{usuario.email}}</div>
             <div class="celula-listagem">{{usuario.unidade.nome}}</div>
             <div class="celula-listagem">{{usuario.roles.join(', ')}}</div>
@@ -43,16 +47,22 @@
                   <lucide-icon name="ellipsis-vertical" class="h-5" />
                 </label>
                 <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-[1] font-semibold">
-                  <li>
+                  <li *ngIf="!usuario.excluido">
                     <a (click)="editar(usuario)"
                        class="text-sm text-neutral hover:bg-base-200">
                       Editar
                     </a>
                   </li>
-                  <li>
+                  <li *ngIf="!usuario.excluido">
                     <a (click)="perguntaExcluir($event, usuario)"
                        class="text-error hover:bg-error/50">
                       Excluir
+                    </a>
+                  </li>
+                  <li *ngIf="usuario.excluido">
+                    <a (click)="restaurar($event, usuario)"
+                       class="text-success hover:bg-success/20">
+                      Restaurar
                     </a>
                   </li>
                 </ul>

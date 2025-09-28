@@ -23,7 +23,7 @@ public class UsuarioMapper {
 
         return new UsuarioResponse(usuario.getId(), usuario.getEmail(), usuario.getNome(), usuario.getAvatarUrl(),
                 usuario.getRoles(),
-                usuario.getUnidade() != null ? unidadeMapper.toResponse(usuario.getUnidade()) : null);
+          (usuario.getUnidade() != null ? unidadeMapper.toResponse(usuario.getUnidade()) : null), usuario.getExcluido());
     }
 
     public Usuario toEntity(UsuarioRequest request) {

@@ -4,5 +4,5 @@ import br.com.nemeia.brigia.model.RoleUsuario;
 import java.util.List;
 
 public record UsuarioResponse(Long id, String email, String nome, String avatarUrl, List<RoleUsuario> roles,
-        UnidadeResponse unidade) {
+        UnidadeResponse unidade, Boolean excluido) {
 }
