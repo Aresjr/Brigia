@@ -234,12 +234,17 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   salvarNovoPaciente(paciente: Partial<Paciente>) {
+    this.isLoading = true;
+    this.mostrarFormularioNovoPaciente = false;
     this.pacienteService.criar(paciente).subscribe({
       next: (paciente) => {
         this.toastr.success('Paciente cadastrado');
-        this.carregarPacientes();
-        this.mostrarFormularioNovoPaciente = false;
-        this.selectPaciente(paciente.id);
+        this.carregarPacientes().subscribe({
+          next: () => {
+            this.selectPaciente(paciente.id);
+            this.isLoading = false;
+          }
+        });
       }
     });
   }
