@@ -79,7 +79,8 @@ export class MainLayoutComponent {
       icon: 'receipt',
       hasSubmenu: true,
       children: [
-        { label: 'Contas a Receber', icon: 'receipt-text', route: '/contas-receber', roles: [Role.FATURAMENTO, Role.ADMIN] }
+        { label: 'Contas a Receber', icon: 'receipt-text', route: '/contas-receber', roles: [Role.FATURAMENTO, Role.ADMIN] },
+        { label: 'Orçamentos', icon: 'calculator', route: '/orcamentos', roles: [Role.FATURAMENTO, Role.ADMIN] }
       ], roles: [Role.FATURAMENTO, Role.ADMIN]
     }
   ];
