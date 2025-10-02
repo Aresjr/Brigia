@@ -20,6 +20,8 @@ export interface Paciente extends Entidade {
     uf: string | null;
     convenio: Convenio | null;
     empresa: Empresa | null;
+    nomeSocial: string;
+    pressaoArterial: string;
 }
 
 export interface PacienteRequest extends EntidadeRequest {

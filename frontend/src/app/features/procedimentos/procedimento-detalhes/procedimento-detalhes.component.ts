@@ -4,6 +4,7 @@ import { Procedimento } from '../procedimento.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../core/user.service';
+import { TIPO_AGENDAMENTO } from '../../../core/constans';
 
 @Component({
   selector: 'app-procedimento-detalhes',
@@ -16,6 +17,7 @@ export class ProcedimentoDetalhesComponent {
   @Output() editar = new EventEmitter<Procedimento>();
   @Output() fechou = new EventEmitter<void>();
   mostraTabelaConvenio: boolean = false;
+  TIPO_AGENDAMENTO = TIPO_AGENDAMENTO;
 
   constructor(private userService: UserService) {}
 

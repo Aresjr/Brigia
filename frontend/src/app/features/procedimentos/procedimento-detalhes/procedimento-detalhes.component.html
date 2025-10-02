@@ -35,6 +35,27 @@
           </p>
         </div>
 
+        <div>
+          <p class="text-sm" title="Valor Repasse (Particular)">Valor Repasse</p>
+          <p class="mt-1 text-base font-medium">
+            R$ {{ procedimento.valorRepasse || '-' }}
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm" title="Duração em Minutos">Duração</p>
+          <p class="mt-1 text-base font-medium">
+            {{ procedimento.duracao || '-' }} min
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm">Tipo</p>
+          <p class="mt-1 text-base font-medium">
+            {{ TIPO_AGENDAMENTO[procedimento.tipo].descricao }}
+          </p>
+        </div>
+
         <div class="bg-primary/10 text-primary rounded-lg overflow-hidden">
           <div
             class="p-3 flex items-center justify-between cursor-pointer hover:bg-primary/20 text-sm font-semibold tracking-wide"

@@ -20,6 +20,12 @@ public class Paciente extends BaseModel {
     @Column(name = "nome", nullable = false)
     private String nome;
 
+    @Column(name = "nome_social")
+    private String nomeSocial;
+
+    @Column(name = "pressao_arterial")
+    private String pressaoArterial;
+
     @Column(name = "email", unique = true)
     private String email;
 

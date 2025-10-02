@@ -4,7 +4,7 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 
-public record PacienteRequest(@NotBlank(message = "Nome é obrigatório") String nome, String email, @Nullable String cpf,
+public record PacienteRequest(@NotBlank(message = "Nome é obrigatório") String nome, String nomeSocial, String pressaoArterial, String email, @Nullable String cpf,
         @NotNull LocalDate dataNascimento,
         @Nullable @Size(min = 1, max = 1) @Pattern(regexp = "^[MFO]$", message = "Sexo deve ser 'M', 'F' ou 'O'") String sexo,
         @Pattern(regexp = "^\\d{11}$", message = "Celuar com formato inválido, deve conter 11 dígitos") String celular,

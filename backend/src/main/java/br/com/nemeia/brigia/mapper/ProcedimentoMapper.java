@@ -27,8 +27,10 @@ public class ProcedimentoMapper {
                 .toList();
 
         return new ProcedimentoResponse(procedimento.getId(), procedimento.getNome(), procedimento.getCodigo(),
-                procedimento.getValorPadrao(), especialidadeMapper.toResponse(procedimento.getEspecialidade()),
-                procedimento.getObservacoes(), procedimento.getCriadoEm(), precosResponse, procedimento.getExcluido());
+                procedimento.getObservacoes(), procedimento.getValorPadrao(), procedimento.getValorRepasse(),
+                procedimento.getDuracao(), procedimento.getTipo(),
+                especialidadeMapper.toResponse(procedimento.getEspecialidade()),
+                procedimento.getCriadoEm(), precosResponse, procedimento.getExcluido());
     }
 
     public PagedResponse<ProcedimentoResponse> toPagedResponse(Page<Procedimento> paged) {

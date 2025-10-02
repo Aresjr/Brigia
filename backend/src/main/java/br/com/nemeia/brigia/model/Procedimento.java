@@ -29,6 +29,16 @@ public class Procedimento extends BaseModel {
     @Column(name = "valor_padrao")
     private BigDecimal valorPadrao;
 
+    @Column(name = "valor_repasse")
+    private BigDecimal valorRepasse;
+
+    @Column(name = "duracao")
+    private Integer duracao;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "tipo")
+    private TipoAgendamento tipo;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "especialidade_id")
     private Especialidade especialidade;

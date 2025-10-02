@@ -9,6 +9,9 @@ export interface Procedimento extends Entidade {
     valorPadrao?: number;
     observacoes: string | null;
     precosProcedimento: PrecoProcedimentoConvenio[];
+    valorRepasse: number;
+    duracao: number;
+    tipo: number;
 }
 
 export interface ProcedimentoRequest extends EntidadeRequest {
