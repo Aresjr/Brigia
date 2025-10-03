@@ -31,9 +31,9 @@ export class ProfissionalFormComponent extends FormComponent<Profissional, Profi
     super(fb, toastr);
     this.form = this.fb.group({
       nome: [null, Validators.required],
-      email: [null],
+      email: [null, Validators.required],
       cpf: [null],
-      dataNascimento: [null, Validators.required],
+      dataNascimento: [null],
       sexo: [null],
       celular: [null],
       crm: [null],

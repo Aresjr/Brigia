@@ -76,11 +76,11 @@ export class MainLayoutComponent {
     },
     {
       label: 'Faturamento',
-      icon: 'receipt',
+      icon: 'dollar-sign',
       hasSubmenu: true,
       children: [
-        { label: 'Contas a Receber', icon: 'receipt-text', route: '/contas-receber', roles: [Role.FATURAMENTO, Role.ADMIN] },
-        { label: 'Orçamentos', icon: 'calculator', route: '/orcamentos', roles: [Role.FATURAMENTO, Role.ADMIN] }
+        { label: 'Contas a Receber', icon: 'banknote-arrow-up', route: '/contas-receber', roles: [Role.FATURAMENTO, Role.ADMIN] },
+        { label: 'Orçamentos', icon: 'receipt-text', route: '/orcamentos', roles: [Role.FATURAMENTO, Role.ADMIN] }
       ], roles: [Role.FATURAMENTO, Role.ADMIN]
     }
   ];

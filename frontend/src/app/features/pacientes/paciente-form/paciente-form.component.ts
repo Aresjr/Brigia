@@ -42,6 +42,7 @@ export class PacienteFormComponent extends FormComponent<Paciente, PacienteReque
       nome: [null, Validators.required],
       email: [null], cpf: [null],
       dataNascimento: [null, Validators.required],
+      nomeSocial: [null], pressaoArterial: [null],
       sexo: [null], celular: [null], cep: [null],
       rua: [null], complemento: [null], bairro: [null],
       cidade: [null],

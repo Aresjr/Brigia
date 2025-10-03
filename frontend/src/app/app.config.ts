@@ -5,10 +5,10 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@a
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { LucideAngularModule } from 'lucide-angular';
-import { Home, User, Calendar, LogIn, UserPlus, Stethoscope, ChevronRight, MessageSquare,
-  MessageCircle, CircleUser, ChevronFirst, Users, Search, ClipboardList, Building, ChevronDown,
+import { Home, User, Calendar, LogIn, UserPlus, Stethoscope, ChevronRight, MessageSquare, DollarSign,
+  MessageCircle, CircleUser, ChevronFirst, Users, Search, ClipboardList, Building, ChevronDown, BanknoteArrowUp,
   ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon, Plus, ChevronLeft, HeartHandshake, Receipt, Mail, Lock, Building2,
-  Microscope, Menu, EllipsisVertical, X, Pencil, Trash, BriefcaseMedical, ReceiptText, RefreshCw
+  Microscope, Menu, EllipsisVertical, X, Pencil, Trash, BriefcaseMedical, ReceiptText, RefreshCw, Calculator
  } from 'lucide-angular/src/icons';
 import { provideNgxMask } from 'ngx-mask';
 import {
@@ -47,10 +47,10 @@ export const appConfig: ApplicationConfig = {
     { provide: LOCALE_ID, useValue: 'pt' },
     importProvidersFrom(
       LucideAngularModule.pick({ Home, User, Calendar, LogIn, UserPlus, Stethoscope, ChevronRight,
-        MessageSquare, MessageCircle, CircleUser, ChevronFirst, Users, Search, ClipboardList,
+        MessageSquare, MessageCircle, CircleUser, ChevronFirst, Users, Search, ClipboardList, BanknoteArrowUp,
         Building, ChevronDown, ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon, Plus, ChevronLeft,
         HeartHandshake, Receipt, Mail, Lock, Building2, Microscope, Menu, EllipsisVertical, X, Pencil, Trash,
-        BriefcaseMedical, ReceiptText, RefreshCw
+        BriefcaseMedical, ReceiptText, RefreshCw, Calculator, DollarSign
        }),
       CalendarModule.forRoot({
           provide: DateAdapter,

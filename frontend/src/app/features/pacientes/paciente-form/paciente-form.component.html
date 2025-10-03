@@ -44,6 +44,17 @@
 
         <div class="flex space-x-4">
           <div class="w-72">
+            <label class="label-campo">Nome Social</label>
+            <input type="text" formControlName="nomeSocial" name="nomeSocial" emptyToNull class="campo">
+          </div>
+          <div class="w-60">
+            <label class="label-campo">Pressão Arterial</label>
+            <input type="text" formControlName="pressaoArterial" name="pressaoArterial" emptyToNull class="campo">
+          </div>
+        </div>
+
+        <div class="flex space-x-4">
+          <div class="w-72">
             <div>
               <label class="label-campo">Sexo</label>
               <ng-select formControlName="sexo" class="campo-select">
