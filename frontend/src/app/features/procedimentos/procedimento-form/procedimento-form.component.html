@@ -18,6 +18,31 @@
         </div>
 
         <div class="flex space-x-4">
+          <div class="w-[10rem]">
+            <label class="label-campo">Tipo</label>
+            <ng-select formControlName="tipo" class="campo-select" required placeholder="Selecione"
+                       [ngClass]="classesCampo('tipo')" labelForId="tipo">
+              @for(tipo of TIPO_AGENDAMENTO; track tipo.valor) {
+                <ng-option [value]="tipo.valor">{{ tipo.descricao }}</ng-option>
+              }
+            </ng-select>
+          </div>
+
+          <div class="w-[22rem]">
+            <label class="label-campo">Especialidade</label>
+            <ng-select formControlName="especialidadeId" class="campo-select" required placeholder="Selecione"
+                       [ngClass]="classesCampo('especialidadeId')" labelForId="especialidadeId">
+              @for(especialidade of this.especialidades; track especialidade.id) {
+                <ng-option [value]="especialidade.id" class="b-0">{{ especialidade.nome }}</ng-option>
+              }
+              <ng-template ng-notfound-tmp>
+                <span class="text-sm p-6">Nenhum resultado</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="flex space-x-4">
           <div class="w-24 tooltip text-left" data-tip="Valor (Particular)">
             <label class="label-campo">Valor</label>
             <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
@@ -31,18 +56,22 @@
             </div>
           </div>
 
-          <div class="w-[27rem]">
-            <label class="label-campo">Especialidade</label>
-            <ng-select formControlName="especialidadeId" class="campo-select" required placeholder="Selecione"
-                       [ngClass]="classesCampo('especialidadeId')" labelForId="especialidadeId">
-              @for(especialidade of this.especialidades; track especialidade.id) {
-                <ng-option [value]="especialidade.id" class="b-0">{{ especialidade.nome }}</ng-option>
-              }
-              <ng-template ng-notfound-tmp>
-                <span class="text-sm p-6">Nenhum resultado</span>
-              </ng-template>
-            </ng-select>
+          <div class="w-24 tooltip text-left" data-tip="Valor Repasse (Particular)">
+            <label class="label-campo">Repasse</label>
+            <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
+              R$ <input type="text" formControlName="valorRepasse" min="0" max="99999"
+                        emptyToNull maxlength="8" placeholder="00,00"
+                        mask="separator.2" thousandSeparator="" decimalMarker=","
+                        class="campo border-0">
+            </label>
           </div>
+
+          <div class="w-24 tooltip text-left" data-tip="Duração em Minutos">
+            <label class="label-campo">Duração</label>
+            <input type="number" formControlName="duracao" min="1" max="999"
+                   class="campo" placeholder="min">
+          </div>
+
         </div>
 
         <div>

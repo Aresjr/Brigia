@@ -17,6 +17,7 @@ import { FormComponent } from '../../shared/form.component';
 import { forkJoin, map, Observable, tap } from 'rxjs';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
+import { TIPO_AGENDAMENTO } from '../../../core/constans';
 
 @Component({
   selector: 'app-procedimento-form',
@@ -37,6 +38,7 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
 
   convenios: Convenio[] = [];
   especialidades: Especialidade[] = [];
+  TIPO_AGENDAMENTO = TIPO_AGENDAMENTO;
 
   constructor(
     protected override fb: FormBuilder,
@@ -50,6 +52,9 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
       observacoes: [null],
       especialidadeId: [null, [Validators.required]],
       valorPadrao: [0, [Validators.required, Validators.min(0)]],
+      valorRepasse: [0, [Validators.min(0)]],
+      duracao: [null, [Validators.min(1), Validators.max(999)]],
+      tipo: [null, [Validators.required]],
       precosConvenios: this.fb.array([])
     });
   }
