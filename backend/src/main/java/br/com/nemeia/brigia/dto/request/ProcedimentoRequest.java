@@ -6,14 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
-public record ProcedimentoRequest(
-        @NotBlank(message = "Nome é obrigatório") String nome,
-        String codigo,
-        String observacoes,
-        BigDecimal valorPadrao,
-        BigDecimal valorRepasse,
-        Integer duracao,
-        TipoAgendamento tipo,
+public record ProcedimentoRequest(@NotBlank(message = "Nome é obrigatório") String nome, String codigo,
+        String observacoes, BigDecimal valorPadrao, BigDecimal valorRepasse, Integer duracao, TipoAgendamento tipo,
         @NotNull(message = "Especialidade é obrigatória") Long especialidadeId,
         List<PrecoProcedimentoRequest> precosConvenios) {
 }

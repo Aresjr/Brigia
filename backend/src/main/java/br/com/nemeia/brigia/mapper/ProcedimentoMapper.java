@@ -18,11 +18,12 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
     private final EspecialidadeMapper especialidadeMapper;
     private final ConvenioMapper convenioMapper;
 
-    public ProcedimentoMapper(ObjectMapper objectMapper, EspecialidadeMapper especialidadeMapper, ConvenioMapper convenioMapper) {
-      super(objectMapper, Procedimento.class, ProcedimentoResponse.class);
-      this.objectMapper = objectMapper;
-      this.especialidadeMapper = especialidadeMapper;
-      this.convenioMapper = convenioMapper;
+    public ProcedimentoMapper(ObjectMapper objectMapper, EspecialidadeMapper especialidadeMapper,
+            ConvenioMapper convenioMapper) {
+        super(objectMapper, Procedimento.class, ProcedimentoResponse.class);
+        this.objectMapper = objectMapper;
+        this.especialidadeMapper = especialidadeMapper;
+        this.convenioMapper = convenioMapper;
     }
 
     public ProcedimentoResponse toResponse(Procedimento procedimento) {
@@ -36,8 +37,8 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
         return new ProcedimentoResponse(procedimento.getId(), procedimento.getNome(), procedimento.getCodigo(),
                 procedimento.getObservacoes(), procedimento.getValorPadrao(), procedimento.getValorRepasse(),
                 procedimento.getDuracao(), procedimento.getTipo(),
-                especialidadeMapper.toResponse(procedimento.getEspecialidade()),
-                procedimento.getCriadoEm(), precosResponse, procedimento.getExcluido());
+                especialidadeMapper.toResponse(procedimento.getEspecialidade()), procedimento.getCriadoEm(),
+                precosResponse, procedimento.getExcluido());
     }
 
     public PrecoProcedimentoResponse toPrecoProcedimento(Procedimento procedimento, Convenio convenio) {

@@ -62,16 +62,18 @@ public class ProfissionalService {
     }
 
     public Profissional editProfissional(Long id, ProfissionalRequest request) {
-        getById(id);
-        Profissional profissional = mapper.toEntity(request);
+        Profissional profissional = getById(id);
+        Profissional profissionalEdicao = mapper.toEntity(request);
 
         if (!request.especialidades().isEmpty()) {
             List<Especialidade> especialidades = request.especialidades().stream().map(especialidadeService::getById)
                     .toList();
-            profissional.setEspecialidades(especialidades);
+            profissionalEdicao.setEspecialidades(especialidades);
         }
 
-        profissional.setId(id);
-        return saveProfissional(profissional);
+        profissionalEdicao.setId(id);
+        profissionalEdicao.setUnidade(profissional.getUnidade());
+        profissionalEdicao.setUsuario(profissional.getUsuario());
+        return saveProfissional(profissionalEdicao);
     }
 }
