@@ -174,7 +174,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         this.agendamentoDetalhes.procedimentos.forEach(proc => {
           const procedimento = this.fb.group({
             quantidade: [proc.quantidade, [Validators.required, Validators.min(1)]],
-            procedimentoId: [proc.procedimento.id, Validators.required]
+            procedimentoId: [proc.procedimento.id, Validators.required],
+            valor: [proc.procedimento.valorPadrao]
           });
           this.procedimentosLancados.push(procedimento);
         });
@@ -314,6 +315,10 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   selectConvenio(convenio: Convenio | null) {
     this.convenioSelecionado = convenio;
     this.atualizaPreco();
+    // Recalcular valores dos procedimentos quando o convênio mudar
+    this.procedimentosLancados.controls.forEach((_, index) => {
+      this.calcularValorProcedimento(index);
+    });
   }
 
   editaValor() {
@@ -434,7 +439,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   adicionarProcedimento() {
     const procedimento = this.fb.group({
       quantidade: [1, [Validators.required, Validators.min(1)]],
-      procedimentoId: [null, Validators.required]
+      procedimentoId: [null, Validators.required],
+      valor: [null]
     });
 
     this.procedimentosLancados.push(procedimento);
@@ -442,6 +448,33 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
   removerProcedimento(index: number) {
     this.procedimentosLancados.removeAt(index);
+  }
+
+  calcularValorProcedimento(index: number) {
+    const procedimentoControl = this.procedimentosLancados.at(index);
+    const procedimentoId = procedimentoControl.get('procedimentoId')?.value;
+    const convenioId = this.form.get('convenioId')?.value;
+
+    if (procedimentoId && convenioId) {
+      this.procedimentoService.obterPrecoProcedimentoConvenio(procedimentoId, convenioId).subscribe({
+        next: (response) => {
+          procedimentoControl.patchValue({
+            valor: response.preco
+          });
+        },
+        error: () => {
+          const procedimento = this.procedimentos.find(p => p.id === procedimentoId);
+          procedimentoControl.patchValue({
+            valor: procedimento?.valorPadrao || null
+          });
+        }
+      });
+    } else if (procedimentoId) {
+      const procedimento = this.procedimentos.find(p => p.id === procedimentoId);
+      procedimentoControl.patchValue({
+        valor: procedimento?.valorPadrao || null
+      });
+    }
   }
 
   protected readonly ColorUtils = ColorUtils;

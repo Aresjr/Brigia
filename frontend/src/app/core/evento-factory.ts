@@ -10,9 +10,11 @@ export class EventoFactory {
     return {
       start: data.start,
       end: data.end,
-      title: `${agendamento.paciente.nome} - ${StatusAgendamento[agendamento.status].descricao.toUpperCase()}
+      title: `${agendamento.paciente.nome}
       <br/>
       ${agendamento.encaixe ? 'ENCAIXE' : ''} ${agendamento.hora} - ${agendamento.horaFim}
+      <br/>
+      ${StatusAgendamento[agendamento.status].descricao.toUpperCase()}
       <br/>
       ${agendamento.profissional.nome}`,
       color: { primary: StatusAgendamento[agendamento.status].cor, secondary: StatusAgendamento[agendamento.status].cor },
