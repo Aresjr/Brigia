@@ -60,7 +60,7 @@
             </div>
           </label>
         </div>
-        <div class="w-[23rem] mr-4" >
+        <div class="w-[19rem] mr-4" >
           <label class="label-campo" for="pacienteId">
             Paciente <span aria-hidden="true" class="text-error">*</span>
               <ng-select formControlName="pacienteId" class="campo-select"
@@ -87,7 +87,7 @@
           </label>
         </div>
 
-        <div class="w-[11rem]" >
+        <div class="w-[10rem] mr-4" >
           <label class="label-campo" for="tipoAgendamento">
             Tipo <span aria-hidden="true" class="text-error">*</span>
             <ng-select formControlName="tipoAgendamento" class="campo-select" required placeholder="Selecione"
@@ -100,6 +100,12 @@
             <div *ngIf="isInvalid('tipoAgendamento')" class="text-error text-sm">
               Obrigatório
             </div>
+          </label>
+        </div>
+
+        <div class="w-[4rem]">
+          <label class="label-campo rounded-lg px-1.5 hover:border hover:border-neutral" for="encaixe">
+            Encaixe <br/><input type="checkbox" id="encaixe" formControlName="encaixe" class="campo my-1.5 mx-3 checkbox checkbox-primary" />
           </label>
         </div>
       </div>
