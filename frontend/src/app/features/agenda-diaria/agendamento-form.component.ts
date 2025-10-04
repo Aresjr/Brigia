@@ -251,8 +251,15 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     this.form.patchValue({
       profissionalId: profissional ? profissional.id : null
     });
-    //TODO - filtrar as especialidades para somente as especialidades do profissional selecionado.
-    console.log('profissional.especialidades', profissional?.especialidades);
+
+    // Filtrar especialidades de acordo com as especialidades do profissional selecionado
+    if (profissional && profissional.especialidades && profissional.especialidades.length > 0) {
+      this.especialidadesFiltradas = this.especialidades.filter(e =>
+        profissional.especialidades?.some(pe => pe.id === e.id)
+      );
+    } else {
+      this.especialidadesFiltradas = this.especialidades;
+    }
   }
 
   selectTipo(tipo: { valor: number, descricao: string } | null) {
