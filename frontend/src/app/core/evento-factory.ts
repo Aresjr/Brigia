@@ -28,7 +28,9 @@ export class EventoFactory {
       end: data.end,
       title: `${disponibilidade.profissional.nome}
       <br/>
-      ${disponibilidade.horaInicial} - ${disponibilidade.horaFinal} | Disponibilidade
+      ${disponibilidade.horaInicial} - ${disponibilidade.horaFinal}
+      <br/>
+      DISPONÍVEL
       `,
       color: { primary: '#10b981', secondary: '#10b981' },
       meta: disponibilidade

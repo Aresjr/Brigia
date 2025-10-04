@@ -83,7 +83,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
       });
 
     this.subscription = interval(1000 * 60).subscribe(() => {
-      this.carregarVisualizacaoAtual();
+      this.carregarAgendamentos();
     });
   }
 
@@ -101,14 +101,27 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     const ano = this.dataExibicao.getFullYear();
     const mes = this.dataExibicao.getMonth() + 1;
 
-    this.agendamentoService.listarPorData(ano, mes).subscribe({
-      next: value => {
-        const agendamentos = value.items;
-        this.eventosInternos = agendamentos.map(a => EventoFactory.fromAgendamento(a));
+    const agendamentos$ = this.agendamentoService.listarPorData(ano, mes);
+    const disponibilidades$ = this.disponibilidadeService.listarPorData(ano, mes);
 
-        this.filtrarRegistros();
+    agendamentos$.subscribe({
+      next: agendamentosResponse => {
+        const eventosAgendamentos = agendamentosResponse.items.map(a => EventoFactory.fromAgendamento(a));
 
-        this.isLoading = false;
+        disponibilidades$.subscribe({
+          next: disponibilidadesResponse => {
+            const eventosDisponibilidades = disponibilidadesResponse.items.map(d => EventoFactory.fromDisponibilidade(d));
+            this.eventosInternos = [...eventosAgendamentos, ...eventosDisponibilidades];
+
+            this.filtrarRegistros();
+            this.isLoading = false;
+          },
+          error: () => {
+            this.eventosInternos = eventosAgendamentos;
+            this.filtrarRegistros();
+            this.isLoading = false;
+          }
+        });
       },
       error: () => {
         this.isLoading = false;
@@ -186,11 +199,6 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSearch($event: any): void {
-    const searchTerm = $event.toLowerCase(); //TODO - implementar
-    console.log(searchTerm);
-  }
-
   selectProfissional(profissionalId: number) {
     this.profissionalFiltro = profissionalId;
     this.filtrarProfissional();
@@ -202,23 +210,31 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   }
 
   filtrarRegistros() {
-    this.filtrarProfissional();
+    let eventosFiltrados = [...this.eventosInternos];
+
+    if (this.modoVisualizacao === 'disponibilidades') {
+      eventosFiltrados = eventosFiltrados.filter(item => !item.meta?.paciente);
+    }
+
+    // Filtrar por profissional
+    if (this.profissionalFiltro && this.profissionalFiltro != 0) {
+      eventosFiltrados = eventosFiltrados.filter(item => item.meta?.profissional.id == this.profissionalFiltro);
+    }
+
+    // Filtrar por paciente (apenas agendamentos têm paciente)
+    if (this.pacienteFiltro && this.pacienteFiltro != 0) {
+      eventosFiltrados = eventosFiltrados.filter(item => item.meta?.paciente?.id == this.pacienteFiltro);
+    }
+
+    this.eventosExibicao = eventosFiltrados;
   }
 
   filtrarProfissional() {
-    if (this.profissionalFiltro && this.profissionalFiltro != 0) {
-      this.eventosExibicao = this.eventosInternos.filter(item => item.meta?.profissional.id == this.profissionalFiltro);
-    } else {
-      this.eventosExibicao = [...this.eventosInternos];
-    }
+    this.filtrarRegistros();
   }
 
   filtrarPaciente() {
-    if (this.pacienteFiltro && this.pacienteFiltro != 0) {
-      this.eventosExibicao = this.eventosInternos.filter(item => item.meta?.paciente.id == this.pacienteFiltro);
-    } else {
-      this.eventosExibicao = [...this.eventosInternos];
-    }
+    this.filtrarRegistros();
   }
 
   mostraFab() {
@@ -241,36 +257,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
 
   alternarModoVisualizacao(modo: 'agendamentos' | 'disponibilidades') {
     this.modoVisualizacao = modo;
-    this.carregarVisualizacaoAtual();
-  }
-
-  carregarVisualizacaoAtual() {
-    if (this.modoVisualizacao === 'agendamentos') {
-      this.carregarAgendamentos();
-    } else {
-      this.carregarDisponibilidades();
-    }
-  }
-
-  carregarDisponibilidades() {
-    this.isLoading = true;
-
-    const ano = this.dataExibicao.getFullYear();
-    const mes = this.dataExibicao.getMonth() + 1;
-
-    this.disponibilidadeService.listarPorData(ano, mes).subscribe({
-      next: value => {
-        const disponibilidades = value.items;
-        this.eventosInternos = disponibilidades.map(d => EventoFactory.fromDisponibilidade(d));
-
-        this.filtrarRegistros();
-
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      }
-    });
+    this.filtrarRegistros();
   }
 
   addDisponibilidade() {

@@ -1,6 +1,6 @@
 <div class="mt-4">
 
-  <app-top-bar title="Agenda Diária" [showSearchBar]=false (search)="onSearch($event)" ></app-top-bar>
+  <app-top-bar title="Agenda Diária" [showSearchBar]=false ></app-top-bar>
 
   <div class="bg-base-100 p-4 rounded-md">
 
@@ -41,8 +41,8 @@
 
       <div>
         <ng-select class="w-72 shadow-md hover:shadow-lg h-8 max-h-8 leading-none tooltip flex text-left"
-                   (change)="selectPaciente($event)" placeholder="Todos os Pacientes - Selecione" data-tip="Filtrar Paciente">
-          <ng-option class="max-h-8" value="0">Todos os Pacientes - Selecione</ng-option>
+                   (change)="selectPaciente($event)" placeholder="Todos os Pacientes" data-tip="Filtrar Paciente">
+          <ng-option class="max-h-8" value="0">Todos os Pacientes</ng-option>
           @for(paciente of this.pacientes; track paciente.id) {
             <ng-option class="max-h-8" value="{{ paciente.id }}">{{ paciente.nome }}</ng-option>
           }
@@ -61,7 +61,7 @@
       (diaClicado)="diaClicado($event)"
       (horarioClicado)="horarioClicado($event)"
       (dataAlterada)="dataAlterada($event)"
-      (recarrega)="carregarVisualizacaoAtual()">
+      (recarrega)="carregarAgendamentos()">
     </app-calendario>
   </div>
 
