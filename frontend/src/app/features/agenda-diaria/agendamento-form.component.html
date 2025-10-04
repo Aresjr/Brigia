@@ -66,7 +66,7 @@
               <ng-select formControlName="pacienteId" class="campo-select"
                          [ngClass]="classesCampo('pacienteId')" labelForId="pacienteId" placeholder="Selecione"
                          (change)="selectPaciente($event)" (clear)="selectPaciente(null)" required >
-                  @for(paciente of this.pacientes; track paciente.id) {
+                  @for(paciente of pacientes; track paciente.id) {
                     <ng-option [value]="paciente.id" class="b-0">{{ paciente.nome }} - {{ paciente.dataNascimento | date:'dd/MM/yyyy' }}</ng-option>
                   }
                 <ng-template ng-notfound-tmp>
@@ -92,7 +92,7 @@
             Tipo <span aria-hidden="true" class="text-error">*</span>
             <ng-select formControlName="tipoAgendamento" class="campo-select" required placeholder="Selecione"
                        [ngClass]="classesCampo('tipoAgendamento')" bindValue="valor" bindLabel="descricao"
-                       [items]="this.tipoAgendamento" labelForId="tipoAgendamento">
+                       [items]="tipoAgendamento" labelForId="tipoAgendamento">
               <ng-template ng-notfound-tmp>
                 <span class="text-sm p-6">Nenhum resultado</span>
               </ng-template>
@@ -109,7 +109,7 @@
           <label class="label-campo" for="convenioId">Convênio</label>
           <ng-select formControlName="convenioId" class="campo-select"
                      [ngClass]="classesCampo('convenioId')" placeholder="Selecione"
-                     [items]="this.convenios" bindValue="id" bindLabel="nome" labelForId="convenioId"
+                     [items]="convenios" bindValue="id" bindLabel="nome" labelForId="convenioId"
                      (change)="selectConvenio($event)" (clear)="selectConvenio(null)">
             <ng-template ng-notfound-tmp>
               <span class="text-sm p-6">Nenhum resultado</span>
@@ -122,7 +122,7 @@
             Especialidade <span aria-hidden="true" class="text-error">*</span>
             <ng-select formControlName="especialidadeId" required class="campo-select"
                        labelForId="especialidadeId" [ngClass]="classesCampo('especialidadeId')"
-                       [items]="this.especialidades" bindValue="id" bindLabel="nome" placeholder="Selecione"
+                       [items]="especialidades" bindValue="id" bindLabel="nome" placeholder="Selecione"
                        (change)="selectEspecialidade($event)" (clear)="selectEspecialidade(null)">
               <ng-template ng-notfound-tmp>
                 <span class="text-sm p-6">Nenhum resultado</span>
@@ -139,7 +139,7 @@
             Profissional <span aria-hidden="true" class="text-error">*</span>
             <ng-select formControlName="profissionalId" required class="campo-select"
                        [ngClass]="classesCampo('profissionalId')" placeholder="Selecione"
-                       [items]="this.profissionaisFiltrados" bindValue="id" bindLabel="nome" labelForId="profissionalId"
+                       [items]="profissionaisFiltrados" bindValue="id" bindLabel="nome" labelForId="profissionalId"
                        (change)="selectProfissional($event.id)" (clear)="selectProfissional(null)">
               <ng-template ng-notfound-tmp>
                 <span class="text-sm p-6">Nenhum resultado</span><br/>
@@ -158,7 +158,7 @@
           <label class="label-campo" for="empresaId">
             Empresa
             <ng-select formControlName="empresaId" class="campo-select" [ngClass]="classesCampo('empresaId')"
-                       [items]="this.empresas" bindValue="id" bindLabel="nome" labelForId="empresaId" placeholder="Selecione"
+                       [items]="empresas" bindValue="id" bindLabel="nome" labelForId="empresaId" placeholder="Selecione"
                        (change)="selectEmpresa($event)" (clear)="selectEmpresa(null)">
               <ng-template ng-notfound-tmp>
                 <span class="text-sm p-6">Nenhum resultado</span>
@@ -176,7 +176,7 @@
           <ng-select formControlName="procedimentoId" class="campo-select"
                      [ngClass]="classesCampo('procedimentoId')" placeholder="Selecione"
                      (change)="selectProcedimento($event)" (clear)="selectProcedimento(null)"
-                     [items]="this.procedimentos" bindValue="id" bindLabel="nome" labelForId="procedimentoId">
+                     [items]="procedimentos" bindValue="id" bindLabel="nome" labelForId="procedimentoId">
             <ng-template ng-notfound-tmp>
               <span class="text-sm p-6">Nenhum resultado</span>
             </ng-template>

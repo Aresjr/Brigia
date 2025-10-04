@@ -20,7 +20,7 @@
           Profissional <span aria-hidden="true" class="text-error">*</span>
           <ng-select formControlName="profissionalId" class="campo-select"
                      [ngClass]="classesCampo('profissionalId')" placeholder="Selecione"
-                     [items]="this.profissionais" bindValue="id" bindLabel="nome" labelForId="profissionalId"
+                     [items]="profissionais" bindValue="id" bindLabel="nome" labelForId="profissionalId"
                      required>
             <ng-template ng-notfound-tmp>
               <span class="text-sm p-6">Nenhum resultado</span>

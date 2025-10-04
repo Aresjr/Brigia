@@ -68,8 +68,10 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
     forkJoin([
       this.carregarProfissionais()
     ]).subscribe(() => {
-      this.form.patchValue({
-        profissionalId: this.profissionalId
+      setTimeout(()=>{
+        this.form.patchValue({
+          profissionalId: this.profissionalId
+        });
       });
       this.isLoading = false;
     });
