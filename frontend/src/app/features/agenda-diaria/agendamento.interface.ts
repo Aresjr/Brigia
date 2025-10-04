@@ -18,6 +18,7 @@ export interface Agendamento extends Entidade {
     profissional: Profissional;
     especialidade: Especialidade;
     procedimento: Procedimento | null;
+    procedimentos: ProcedimentoAgendamento[] | null;
     convenio?: Convenio;
     empresa?: Empresa;
     unidade: Unidade;
@@ -60,4 +61,15 @@ export interface AgendamentoRequest extends EntidadeRequest {
     observacoes: string | null;
     precoAlterado: boolean;
     encaixe: boolean;
+    procedimentos: ProcedimentoAgendamentoRequest[];
+}
+
+export interface ProcedimentoAgendamentoRequest {
+    procedimentoId: number;
+    quantidade: number;
+}
+
+export interface ProcedimentoAgendamento {
+    procedimento: Procedimento;
+    quantidade: number;
 }

@@ -293,9 +293,11 @@
                 </ng-template>
               </ng-select>
 
-              <button type="button" class="btn btn-ghost btn-circle btn-sm" (click)="removerProcedimento(i)" title="Excluir procedimento">
-                <lucide-icon name="trash" class="h-5 text-error"></lucide-icon>
-              </button>
+              @if (modoSalvar) {
+                <button type="button" class="btn btn-ghost btn-circle btn-sm" (click)="removerProcedimento(i)" title="Excluir procedimento">
+                  <lucide-icon name="trash" class="h-5 text-error"></lucide-icon>
+                </button>
+              }
             </div>
           </div>
         </div>

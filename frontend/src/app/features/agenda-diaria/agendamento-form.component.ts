@@ -168,6 +168,18 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         convenioId: this.agendamentoDetalhes.convenio?.id,
         empresaId: this.agendamentoDetalhes.empresa?.id,
       });
+
+      // Carregar procedimentos
+      if (this.agendamentoDetalhes.procedimentos && this.agendamentoDetalhes.procedimentos.length > 0) {
+        this.agendamentoDetalhes.procedimentos.forEach(proc => {
+          const procedimento = this.fb.group({
+            quantidade: [proc.quantidade, [Validators.required, Validators.min(1)]],
+            procedimentoId: [proc.procedimento.id, Validators.required]
+          });
+          this.procedimentosLancados.push(procedimento);
+        });
+      }
+
       this.form.markAsPristine();
     }
   }
