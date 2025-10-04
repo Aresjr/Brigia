@@ -11,8 +11,11 @@ import { NgIf } from '@angular/common';
   templateUrl: './fab.component.html'
 })
 export class FabComponent {
-  @Input() subButtons = false;
+  @Input() tituloBotao1: string | null = null;
+  @Input() tituloBotao2: string | null = null;
   @Output() clicked = new EventEmitter<void>();
+  @Output() clickedBotao1 = new EventEmitter<void>();
+  @Output() clickedBotao2 = new EventEmitter<void>();
   fabOpen: boolean = false;
 
   constructor(private eRef: ElementRef) {}

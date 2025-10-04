@@ -5,14 +5,19 @@
     [class.opacity-0]="!fabOpen"
     [class.translate-y-4]="!fabOpen"
     [class.pointer-events-none]="!fabOpen" >
-    <div>Alguma ação
-      <button class="btn btn-success">
-        <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
+    @if (tituloBotao1) {
+      <button class="btn btn-success" (click)="clickedBotao1.emit(); fabOpen = false;">
+        <lucide-icon name="plus" class="w-4 h-4"></lucide-icon> {{ tituloBotao1 }}
       </button>
-    </div>
+    }
+    @if (tituloBotao2) {
+      <button class="btn btn-success" (click)="clickedBotao2.emit(); fabOpen = false;">
+        <lucide-icon name="plus" class="w-4 h-4"></lucide-icon> {{ tituloBotao2 }}
+      </button>
+    }
   </div>
 
-  <button class="btn btn-primary btn-circle btn-lg shadow-2xl" (click)="subButtons ? toggle() : this.clicked.emit()">
+  <button class="btn btn-primary btn-circle btn-lg shadow-2xl" (click)="tituloBotao1 ? toggle() : this.clicked.emit()">
     <lucide-icon name="plus" class="w-6 h-6"></lucide-icon>
   </button>
 </div>

@@ -50,6 +50,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   @Input() agendamentoDetalhes: Agendamento | null = null;
   @Input() dataAgendamento: Date | null = null;
   @Input() pacienteId!: number | null;
+  @Input() profissionalId: number | null = null;
 
   titulo: string = 'Novo Agendamento';
   hoje: string;
@@ -138,8 +139,13 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       if (this.agendamentoDetalhes) {
         this.carregaDadosAgendamento();
         this.form.disable();
-      } else if (this.pacienteId) {
-        this.selectPaciente(this.pacienteId);
+      } else {
+        if (this.pacienteId) {
+          this.selectPaciente(this.pacienteId);
+        }
+        if (this.profissionalId) {
+          this.selectProfissional(this.profissionalId);
+        }
       }
       this.isLoading = false;
     });
@@ -229,6 +235,13 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   selectProcedimento(procedimento: Procedimento | null) {
     this.procedimentoSelecionado = procedimento;
     this.atualizaPreco();
+  }
+
+  selectProfissional(id: number | null) {
+    const profissional = id ? [...this.profissionais.filter(p => p.id == id)].at(0) : null;
+    this.form.patchValue({
+      profissionalId: profissional ? profissional.id : null
+    });
   }
 
   salvarNovoPaciente(paciente: Partial<Paciente>) {

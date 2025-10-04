@@ -237,4 +237,8 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe();
     }
   }
+
+  addDisponibilidade() {
+    console.log('addDisponibilidade');
+  }
 }

@@ -17,16 +17,11 @@ export class BaseService<Entid extends Entidade, Request extends EntidadeRequest
 
   path = '/';
   cache$: Observable<PagedResponse<Entid>> | null = null;
-  erroCarregarRegistros: boolean = false;
 
   listar(mostrarExcluidos: boolean = false, limpaCache: boolean = false): Observable<PagedResponse<Entid>> {
-    console.log('this.erroCarregarRegistros', this.erroCarregarRegistros);
-    if (limpaCache || this.erroCarregarRegistros) {
-      this.erroCarregarRegistros = false;
+    if (limpaCache) {
       this.limparCache();
     }
-
-    console.log('this.cache$', this.cache$);
 
     if (this.cache$) {
       return this.cache$;
@@ -35,8 +30,6 @@ export class BaseService<Entid extends Entidade, Request extends EntidadeRequest
     this.cache$ = this.backend.get<PagedResponse<Entid>>(`${this.path}?mostrarExcluidos=${mostrarExcluidos}&size=9999`).pipe(
       shareReplay(1),
       catchError((e) => {
-        console.log('catchError');
-        this.erroCarregarRegistros = true;
         return throwError(() => e);
       })
     );
