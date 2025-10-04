@@ -63,49 +63,19 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
   override selecionar(atendimento: Atendimento) {
     this.atendimentoDetalhes = atendimento;
     this.mostrarFormularioNovo = true;
-    console.log('this.atendimentoDetalhes', this.atendimentoDetalhes);
-    console.log('this.mostrarFormularioNovo', this.mostrarFormularioNovo);
   }
 
-  salvarNovoAtendimento(atendimento: Partial<AtendimentoRequest>) {
-    if (this.atendimentoDetalhes) {
-      const id = this.atendimentoDetalhes.id;
-      this.atendimentoService.atualizar(id, atendimento).subscribe({
+  salvarAtendimento(atendimento: Partial<AtendimentoRequest>) {
+    this.atendimentoService.finalizarAtendimento(this.atendimentoId, atendimento)
+      .subscribe({
         next: () => {
-          this.toastr.success('Registro atualizado');
-          this.carregarRegistros();
-          this.mostrarFormularioNovo = false;
-          this.atendimentoDetalhes = null;
-        }
-      });
-    } else if (this.itemEdicao) {
-      const id = this.itemEdicao.id;
-      this.atendimentoService.atualizar(id, atendimento).subscribe({
-        next: () => {
-          this.toastr.success('Registro atualizado');
+          this.toastr.success(`Atendimento Finalizado`);
           this.carregarRegistros();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
+          this.atendimentoDetalhes = null;
         }
       });
-    } else if (this.atendimentoId != null) {
-      this.atendimentoService.finalizarAtendimento(this.atendimentoId, atendimento)
-        .subscribe({
-          next: () => {
-            this.toastr.success(`${this.nomeEntidade} cadastrado`);
-            this.carregarRegistros();
-            this.mostrarFormularioNovo = false;
-          }
-        });
-    } else {
-      this.atendimentoService.criar(atendimento).subscribe({
-        next: () => {
-          this.toastr.success(`${this.nomeEntidade} cadastrado`);
-          this.carregarRegistros();
-          this.mostrarFormularioNovo = false;
-        }
-      });
-    }
   }
 
   override cancelarNovo() {

@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Atendimento, AtendimentoRequest } from '../atendimento.interface';
-import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
 import { FormComponent } from '../../shared/form.component';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
@@ -12,6 +11,7 @@ import { Procedimento } from '../../procedimentos/procedimento.interface';
 import { ToastrService } from 'ngx-toastr';
 import { AgendamentoService } from '../../agenda-diaria/agendamento.service';
 import { Agendamento } from '../../agenda-diaria/agendamento.interface';
+import { QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-atendimento-form',
@@ -21,12 +21,12 @@ import { Agendamento } from '../../agenda-diaria/agendamento.interface';
     CommonModule,
     ReactiveFormsModule,
     LucideAngularModule,
-    EmptyToNullDirective,
     ConfirmDialogComponent,
     NgSelectComponent,
     NgOptionComponent,
     NgNotFoundTemplateDirective,
-    DatePipe
+    DatePipe,
+    QuillModule
   ]
 })
 export class AtendimentoFormComponent extends FormComponent<Atendimento, AtendimentoRequest> implements OnInit {
@@ -41,6 +41,17 @@ export class AtendimentoFormComponent extends FormComponent<Atendimento, Atendim
   readonly: boolean = false;
   modoSalvar: boolean = true;
   abaAtiva: string = 'anamnese';
+
+  quillModules = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],
+      ['blockquote', 'code-block'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'color': [] }, { 'background': [] }],
+      ['clean']
+    ]
+  };
 
   constructor(protected override fb: FormBuilder,
               protected override toastr: ToastrService,

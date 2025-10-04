@@ -1,4 +1,4 @@
-<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm" (click)="fechar()">
+<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm">
   <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[62rem]"
        (click)="$event.stopPropagation()" >
 
@@ -35,7 +35,7 @@
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-2" [ngClass]="{ 'visualizacao': readonly }">
 
-      <div class="inline-flex rounded-lg border border-base-300 p-1 mb-4">
+      <div class="inline-flex rounded-lg border border-base-300 p-1 mb-1">
         <button type="button"
           (click)="selecionarAba('anamnese')"
           class="btn btn-sm"
@@ -94,27 +94,76 @@
         </button>
       </div>
 
-      <div class="mb-4">
-        <div *ngIf="abaAtiva === 'anamnese'">
-          <textarea id="anamnese" formControlName="anamnese" rows="7" emptyToNull class="campo-aba"></textarea>
+      <div>
+        <div *ngIf="abaAtiva === 'anamnese'" class="quill-editor w-full">
+          <quill-editor
+            formControlName="anamnese"
+            class="w-full"
+            [modules]="readonly ? {} : quillModules"
+            [styles]="{ height: '200px' }"
+            [readOnly]="readonly"
+            placeholder="">
+          </quill-editor>
         </div>
-        <div *ngIf="abaAtiva === 'exameFisico'">
-          <textarea id="exameFisico" formControlName="exameFisico" rows="7" emptyToNull class="campo-aba"></textarea>
+        <div *ngIf="abaAtiva === 'exameFisico'" class="quill-editor">
+          <quill-editor
+            formControlName="exameFisico"
+            class="w-full"
+            [modules]="readonly ? {} : quillModules"
+            [styles]="{ height: '200px' }"
+            [readOnly]="readonly"
+            placeholder="">
+          </quill-editor>
         </div>
-        <div *ngIf="abaAtiva === 'diagnostico'">
-          <textarea id="diagnostico" formControlName="diagnostico" rows="7" emptyToNull class="campo-aba"></textarea>
+        <div *ngIf="abaAtiva === 'diagnostico'" class="quill-editor">
+          <quill-editor
+            formControlName="diagnostico"
+            class="w-full"
+            [modules]="readonly ? {} : quillModules"
+            [styles]="{ height: '200px' }"
+            [readOnly]="readonly"
+            placeholder="">
+          </quill-editor>
         </div>
-        <div *ngIf="abaAtiva === 'evolucaoClinica'">
-          <textarea id="evolucaoClinica" formControlName="evolucaoClinica" rows="7" emptyToNull class="campo-aba"></textarea>
+        <div *ngIf="abaAtiva === 'evolucaoClinica'" class="quill-editor">
+          <quill-editor
+            formControlName="evolucaoClinica"
+            class="w-full"
+            [modules]="readonly ? {} : quillModules"
+            [styles]="{ height: '200px' }"
+            [readOnly]="readonly"
+            placeholder="">
+          </quill-editor>
         </div>
-        <div *ngIf="abaAtiva === 'examesSolicitados'">
-          <textarea id="examesSolicitados" formControlName="examesSolicitados" rows="7" emptyToNull class="campo-aba"></textarea>
+        <div *ngIf="abaAtiva === 'examesSolicitados'" class="quill-editor">
+          <quill-editor
+            formControlName="examesSolicitados"
+            class="w-full"
+            [modules]="readonly ? {} : quillModules"
+            [styles]="{ height: '200px' }"
+            [readOnly]="readonly"
+            placeholder="">
+          </quill-editor>
         </div>
-        <div *ngIf="abaAtiva === 'prescricoes'">
-          <textarea id="prescricoes" formControlName="prescricoes" rows="7" emptyToNull class="campo-aba"></textarea>
+        <div *ngIf="abaAtiva === 'prescricoes'" class="quill-editor">
+          <quill-editor
+            formControlName="prescricoes"
+            class="w-full"
+            [modules]="readonly ? {} : quillModules"
+            [styles]="{ height: '200px' }"
+            [readOnly]="readonly"
+            placeholder="">
+          </quill-editor>
         </div>
-        <div *ngIf="abaAtiva === 'observacoes'">
-          <textarea id="observacoes" formControlName="observacoes" rows="7" emptyToNull class="campo-aba"></textarea>
+        <div *ngIf="abaAtiva === 'observacoes'" class="quill-editor">
+          <quill-editor
+            formControlName="observacoes"
+            class="w-full"
+            [modules]="readonly ? {} : quillModules"
+            [styles]="{ height: '200px' }"
+            [readOnly]="readonly"
+            placeholder="">
+          </quill-editor>
         </div>
       </div>
 
