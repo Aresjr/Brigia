@@ -111,7 +111,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
         disponibilidades$.subscribe({
           next: disponibilidadesResponse => {
             const eventosDisponibilidades = disponibilidadesResponse.items.map(d => EventoFactory.fromDisponibilidade(d));
-            this.eventosInternos = [...eventosAgendamentos, ...eventosDisponibilidades];
+            this.eventosInternos = [...eventosDisponibilidades, ...eventosAgendamentos];
 
             this.filtrarRegistros();
             this.isLoading = false;
@@ -272,6 +272,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     this.disponibilidadeService.criar(disponibilidade).subscribe({
       next: () => {
         this.toastr.success('Disponibilidade criada');
+        this.carregarAgendamentos();
         this.fecharFormDisponibilidade();
       }
     });
