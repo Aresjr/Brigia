@@ -77,6 +77,9 @@ public class Agendamento extends BaseModel {
     @Column(name = "preco_alterado", nullable = false)
     private Boolean precoAlterado = false;
 
+    @Column(name = "encaixe", nullable = false)
+    private Boolean encaixe = false; //TODO - verificar se está salvando
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "atendimento_id")
     private Atendimento atendimento;

@@ -40,7 +40,7 @@ public class AgendamentoMapper {
                 procedimentoMapper.toResponse(agendamento.getProcedimento()), agendamento.getStatus(),
                 agendamento.getTipoAgendamento(), agendamento.getFormaPagamento(), agendamento.getValor(),
                 agendamento.getDesconto(), agendamento.getObservacoes(), agendamento.getDuracao(),
-                agendamento.getCriadoEm(), agendamento.getExcluido());
+                agendamento.getEncaixe(), agendamento.getCriadoEm(), agendamento.getExcluido());
     }
 
     public AgendamentoDetalhesResponse toDetalhesResponse(Agendamento agendamento) {
@@ -76,6 +76,7 @@ public class AgendamentoMapper {
         original.setDuracao(request.duracao());
         original.setObservacoes(request.observacoes());
         original.setPrecoAlterado(request.precoAlterado());
+        original.setEncaixe(request.encaixe() != null ? request.encaixe() : false);
         return original;
     }
 }

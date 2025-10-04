@@ -14,5 +14,5 @@ public record AgendamentoRequest(@NotNull(message = "Paciente é obrigatório") 
         @NotNull(message = "Profissional é obrigatório") Long profissionalId, TipoAgendamento tipoAgendamento,
         Long procedimentoId, Long empresaId, Long convenioId, FormaPagamento formaPagamento, BigDecimal valor,
         BigDecimal desconto, @NotNull(message = "Duração é obrigatória") Integer duracao, String observacoes,
-        Boolean precoAlterado) {
+        Boolean precoAlterado, Boolean encaixe) {
 }

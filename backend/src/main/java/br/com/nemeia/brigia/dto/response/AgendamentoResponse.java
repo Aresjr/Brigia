@@ -16,5 +16,5 @@ public record AgendamentoResponse(Long id, PacienteResponse paciente,
         EspecialidadeResponse especialidade, EmpresaResponse empresa, ConvenioResponse convenio,
         ProfissionalResponse profissional, ProcedimentoResponse procedimento, StatusAgendamento status,
         TipoAgendamento tipoAgendamento, FormaPagamento formaPagamento, BigDecimal valor, BigDecimal desconto,
-        String observacoes, Integer duracao, LocalDateTime criadoEm, Boolean excluido) {
+        String observacoes, Integer duracao, Boolean encaixe, LocalDateTime criadoEm, Boolean excluido) {
 }

@@ -94,7 +94,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     @CacheEvict(value = "agendamentos", allEntries = true)
     public Agendamento editAgendamento(Long id, AgendamentoRequest request) {
         Agendamento original = getById(id);
-        boolean deveMandarEmail = deveMandarEmail(original, request);
+        boolean deveMandarEmail = deveMandarEmail(original, request); //TODO - verificar porque está mandando email na edição
 
         Agendamento agendamentoUpdate = mapper.updateEntity(original, request);
         setEntidades(request, agendamentoUpdate);
