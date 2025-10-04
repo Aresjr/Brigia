@@ -7,12 +7,12 @@
     [class.pointer-events-none]="!fabOpen" >
     @if (tituloBotao1) {
       <button class="btn btn-success" (click)="clickedBotao1.emit(); fabOpen = false;">
-        <lucide-icon name="plus" class="w-4 h-4"></lucide-icon> {{ tituloBotao1 }}
+        <lucide-icon [name]="iconeBotao1" class="w-4 h-4"></lucide-icon> {{ tituloBotao1 }}
       </button>
     }
     @if (tituloBotao2) {
-      <button class="btn btn-success" (click)="clickedBotao2.emit(); fabOpen = false;">
-        <lucide-icon name="plus" class="w-4 h-4"></lucide-icon> {{ tituloBotao2 }}
+      <button class="btn btn-secondary" (click)="clickedBotao2.emit(); fabOpen = false;">
+        <lucide-icon [name]="iconeBotao2" class="w-4 h-4"></lucide-icon> {{ tituloBotao2 }}
       </button>
     }
   </div>

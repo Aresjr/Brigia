@@ -13,6 +13,8 @@ import { NgIf } from '@angular/common';
 export class FabComponent {
   @Input() tituloBotao1: string | null = null;
   @Input() tituloBotao2: string | null = null;
+  @Input() iconeBotao1: string = 'plus';
+  @Input() iconeBotao2: string = 'plus';
   @Output() clicked = new EventEmitter<void>();
   @Output() clickedBotao1 = new EventEmitter<void>();
   @Output() clickedBotao2 = new EventEmitter<void>();
