@@ -260,12 +260,14 @@
 
       <div class="flex mt-4">
         <div class="w-full">
-          <div class="flex justify-between items-center mb-2">
+          <div class="flex justify-start items-center mb-2 gap-4">
             <h3 class="text-base font-medium">Procedimentos</h3>
-            <button type="button" class="btn btn-primary btn-xs" (click)="adicionarProcedimento()">
-              <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
-              Adicionar Procedimento
-            </button>
+            @if (modoSalvar) {
+              <button type="button" class="btn btn-primary btn-sm" (click)="adicionarProcedimento()">
+                <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
+                Adicionar
+              </button>
+            }
           </div>
 
           <div class="rounded-t-lg">

@@ -3,6 +3,7 @@ package br.com.nemeia.brigia.service;
 import br.com.nemeia.brigia.utils.DbUtil;
 import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
+import br.com.nemeia.brigia.dto.request.ProcedimentoAgendamentoRequest;
 import br.com.nemeia.brigia.exception.DisponibilidadeNaoEncontradaException;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.AgendamentoMapper;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -93,7 +95,18 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
 
         agendamento.setStatus(StatusAgendamento.AGENDADO);
         agendamento.setUnidade(unidadeService.getById(SecurityHolder.getLoggedUserUnidadeId()));
+
+        // Salvar agendamento primeiro para obter o ID
+        var listaProcedimentos = request.procedimentos();
+        agendamento.setProcedimentos(null);
         Agendamento agendamentoNovo = repository.save(agendamento);
+
+        // Processar lista de procedimentos após o agendamento ter sido salvo
+        if (listaProcedimentos != null && !listaProcedimentos.isEmpty()) {
+            processarProcedimentos(agendamentoNovo, listaProcedimentos);
+            // Salvar novamente para persistir os procedimentos
+            agendamentoNovo = repository.save(agendamentoNovo);
+        }
 
         sendEmail(agendamentoNovo, "Agendamento Realizado!", "agendamento-cadastrado");
 
@@ -110,6 +123,13 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
 
         Agendamento agendamentoUpdate = mapper.updateEntity(original, request);
         setEntidades(request, agendamentoUpdate);
+
+        // Remover procedimentos antigos e adicionar novos
+        agendamentoUpdate.getProcedimentos().clear();
+        if (request.procedimentos() != null && !request.procedimentos().isEmpty()) {
+            processarProcedimentos(agendamentoUpdate, request.procedimentos());
+        }
+
         Agendamento agendamentoAtualizado = repository.save(agendamentoUpdate);
 
         if (deveMandarEmail) {
@@ -209,6 +229,21 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
                     "Já existe um agendamento para o profissional neste horário. " +
                     "Troque o horário ou marque como encaixe."
             );
+        }
+    }
+
+    private void processarProcedimentos(Agendamento agendamento, List<ProcedimentoAgendamentoRequest> procedimentosRequest) {
+        if (agendamento.getProcedimentos() == null) {
+          agendamento.setProcedimentos(new ArrayList<>());
+        }
+        for (ProcedimentoAgendamentoRequest procReq : procedimentosRequest) {
+            Procedimento procedimento = procedimentoService.getById(procReq.procedimentoId());
+            AgendamentoProcedimento agendamentoProcedimento = new AgendamentoProcedimento(
+                    agendamento,
+                    procedimento,
+                    procReq.quantidade()
+            );
+            agendamento.getProcedimentos().add(agendamentoProcedimento);
         }
     }
 
