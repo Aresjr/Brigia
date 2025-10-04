@@ -52,6 +52,14 @@
   </app-agendamento-form>
 }
 
+@if (exibeFormDisponibilidade) {
+  <app-disponibilidade-form
+    [profissionalId]="profissionalFiltro !== 0 ? profissionalFiltro : null"
+    (save)="salvarDisponibilidade($event)"
+    (cancel)="fecharFormDisponibilidade()">
+  </app-disponibilidade-form>
+}
+
 @if (mostraFab()) {
   <app-fab [tituloBotao1]="'Criar Agendamento'" [iconeBotao1]="'calendar-plus'"
            (clickedBotao1)="onAddNovo()"

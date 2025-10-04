@@ -1,0 +1,83 @@
+ <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm" (click)="fechar()">
+  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[24rem]"
+    (click)="$event.stopPropagation()" >
+
+    <div class="flex justify-between items-center">
+      <h2 class="text-lg font-semibold">{{ titulo }}</h2>
+      <button type="button" class="btn btn-sm btn-ghost btn-circle" title="Fechar" (click)="fechar()">
+        <lucide-icon name="x" class="inline w-5 h-5"/>
+      </button>
+    </div>
+
+    <div *ngIf="isLoading" class="flex justify-center items-center h-32">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
+    </div>
+
+    <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6">
+
+      <div class="mb-4">
+        <label class="label-campo" for="profissionalId">
+          Profissional <span aria-hidden="true" class="text-error">*</span>
+          <ng-select formControlName="profissionalId" class="campo-select"
+                     [ngClass]="classesCampo('profissionalId')" placeholder="Selecione"
+                     [items]="this.profissionais" bindValue="id" bindLabel="nome" labelForId="profissionalId"
+                     required>
+            <ng-template ng-notfound-tmp>
+              <span class="text-sm p-6">Nenhum resultado</span>
+            </ng-template>
+          </ng-select>
+          <div *ngIf="isInvalid('profissionalId')" class="text-error text-sm">
+            Obrigatório
+          </div>
+        </label>
+      </div>
+
+      <div class="flex gap-4 mb-4">
+        <label class="label-campo" for="dia">
+          Dia <span aria-hidden="true" class="text-error">*</span>
+          <input type="date" formControlName="dia" required id="dia" [min]="hoje"
+                 class="campo" [ngClass]="classesCampo('dia')" >
+          <div *ngIf="isInvalid('dia')" class="text-error text-sm">
+            Obrigatório
+          </div>
+        </label>
+
+        <label class="label-campo" for="horaInicial">
+          Hora Inicial <span aria-hidden="true" class="text-error">*</span>
+          <input type="time" formControlName="horaInicial" id="horaInicial" required
+                 emptyToNull class="campo" [ngClass]="classesCampo('horaInicial')">
+          <div *ngIf="isInvalid('horaInicial')" class="text-error text-sm">
+            Obrigatório
+          </div>
+        </label>
+
+        <label class="label-campo" for="horaFinal">
+          Hora Final <span aria-hidden="true" class="text-error">*</span>
+          <input type="time" formControlName="horaFinal" id="horaFinal" required
+                 emptyToNull class="campo" [ngClass]="classesCampo('horaFinal')">
+          <div *ngIf="isInvalid('horaFinal')" class="text-error text-sm">
+            Obrigatório
+          </div>
+        </label>
+
+      </div>
+
+      <div class="flex justify-between mt-6">
+        <button type="button" class="btn btn-sm" (click)="fechar()" >
+          Fechar
+        </button>
+        <button type="submit" class="btn btn-success btn-sm">
+          Salvar
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<app-confirm-dialog
+  *ngIf="exibeConfirmCancelamento"
+  message="Você já preencheu algumas informações da disponibilidade, deseja realmente sair?"
+  (confirm)="fechar(true)"
+  (cancel)="exibeConfirmCancelamento = false">
+</app-confirm-dialog>

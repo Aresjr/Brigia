@@ -19,6 +19,9 @@ import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } fro
 import { Subscription, interval } from 'rxjs';
 import { PacienteService } from '../pacientes/paciente.service';
 import { Paciente } from '../pacientes/paciente.interface';
+import { DisponibilidadeFormComponent } from '../disponibilidade/disponibilidade-form.component';
+import { DisponibilidadeRequest } from '../disponibilidade/disponibilidade.interface';
+import { DisponibilidadeService } from '../disponibilidade/disponibilidade.service';
 
 @Component({
   selector: 'app-agenda-diaria',
@@ -31,7 +34,8 @@ import { Paciente } from '../pacientes/paciente.interface';
     NgIf,
     NgNotFoundTemplateDirective,
     NgOptionComponent,
-    NgSelectComponent
+    NgSelectComponent,
+    DisponibilidadeFormComponent
   ],
   templateUrl: './agenda-diaria.component.html'
 })
@@ -43,6 +47,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   profissionais: Profissional[] = [];
   pacientes: Paciente[] = [];
   exibeForm: boolean = false;
+  exibeFormDisponibilidade: boolean = false;
   pacienteId: number | null = null;
   isLoading: boolean = false;
   dataExibicao: Date = new Date();
@@ -54,6 +59,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
               private agendamentoService: AgendamentoService,
               private profissionalService: ProfissionalService,
               private pacienteService: PacienteService,
+              private disponibilidadeService: DisponibilidadeService,
               protected userService: UserService) {
     const navigation = this.router.getCurrentNavigation();
     const pacienteId = navigation?.extras.state?.['pacienteId'];
@@ -239,6 +245,19 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   }
 
   addDisponibilidade() {
-    console.log('addDisponibilidade');
+    this.exibeFormDisponibilidade = true;
+  }
+
+  fecharFormDisponibilidade() {
+    this.exibeFormDisponibilidade = false;
+  }
+
+  salvarDisponibilidade(disponibilidade: Partial<DisponibilidadeRequest>) {
+    this.disponibilidadeService.criar(disponibilidade).subscribe({
+      next: () => {
+        this.toastr.success('Disponibilidade criada');
+        this.fecharFormDisponibilidade();
+      }
+    });
   }
 }
