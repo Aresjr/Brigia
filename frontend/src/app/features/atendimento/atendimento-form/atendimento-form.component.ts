@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Atendimento, AtendimentoRequest } from '../atendimento.interface';
@@ -10,6 +10,8 @@ import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } fro
 import { ProcedimentoService } from '../../procedimentos/procedimento.service';
 import { Procedimento } from '../../procedimentos/procedimento.interface';
 import { ToastrService } from 'ngx-toastr';
+import { AgendamentoService } from '../../agenda-diaria/agendamento.service';
+import { Agendamento } from '../../agenda-diaria/agendamento.interface';
 
 @Component({
   selector: 'app-atendimento-form',
@@ -23,20 +25,27 @@ import { ToastrService } from 'ngx-toastr';
     ConfirmDialogComponent,
     NgSelectComponent,
     NgOptionComponent,
-    NgNotFoundTemplateDirective
+    NgNotFoundTemplateDirective,
+    DatePipe
   ]
 })
 export class AtendimentoFormComponent extends FormComponent<Atendimento, AtendimentoRequest> implements OnInit {
   @Input() atendimento: Atendimento | null = null;
+  @Input() atendimentoDetalhes: Atendimento | null = null;
   @Input() agendamentoId: number | null = null;
   @Input() atendimentoId: number | null = null;
   titulo: string = 'Novo Atendimento';
   exibeConfirmCancelamento: boolean = false;
   procedimentos: Procedimento[] = [];
+  agendamento: Agendamento | null = null;
+  readonly: boolean = false;
+  modoSalvar: boolean = true;
+  abaAtiva: string = 'anamnese';
 
   constructor(protected override fb: FormBuilder,
               protected override toastr: ToastrService,
-              private procedimentoService: ProcedimentoService) {
+              private procedimentoService: ProcedimentoService,
+              private agendamentoService: AgendamentoService) {
     super(fb, toastr);
     this.form = this.fb.group({
       anamnese: [null],
@@ -54,6 +63,37 @@ export class AtendimentoFormComponent extends FormComponent<Atendimento, Atendim
 
   override ngOnInit() {
     this.carregarProcedimentos();
+
+    // Modo detalhes/edição
+    if (this.atendimentoDetalhes) {
+      this.readonly = true;
+      this.modoSalvar = false;
+      this.titulo = 'Detalhes do Atendimento';
+      this.form.patchValue(this.atendimentoDetalhes);
+      this.form.disable();
+
+      // Carregar agendamento para exibir informações do paciente
+      if (this.atendimentoDetalhes.agendamento?.id) {
+        this.agendamentoService.getById(this.atendimentoDetalhes.agendamento.id).subscribe({
+          next: (agendamento) => {
+            this.agendamento = agendamento;
+            // Carregar procedimentos do agendamento
+            if (agendamento.procedimentos && agendamento.procedimentos.length > 0) {
+              agendamento.procedimentos.forEach(proc => {
+                const procedimento = this.fb.group({
+                  quantidade: [proc.quantidade],
+                  procedimentoId: [proc.procedimento.id]
+                });
+                this.procedimentosLancados.push(procedimento);
+              });
+            }
+          }
+        });
+      }
+      return;
+    }
+
+    // Modo novo/edição
     if (this.atendimento) {
       this.form.patchValue(this.atendimento);
     }
@@ -67,6 +107,25 @@ export class AtendimentoFormComponent extends FormComponent<Atendimento, Atendim
       agendamentoId: this.agendamentoId,
       horaInicio: horaAtual
     });
+
+    // Carregar dados do agendamento
+    if (this.agendamentoId) {
+      this.agendamentoService.getById(this.agendamentoId).subscribe({
+        next: (agendamento) => {
+          this.agendamento = agendamento;
+          // Carregar procedimentos do agendamento
+          if (agendamento.procedimentos && agendamento.procedimentos.length > 0) {
+            agendamento.procedimentos.forEach(proc => {
+              const procedimento = this.fb.group({
+                quantidade: [proc.quantidade],
+                procedimentoId: [proc.procedimento.id]
+              });
+              this.procedimentosLancados.push(procedimento);
+            });
+          }
+        }
+      });
+    }
   }
 
   get procedimentosLancados() {
@@ -87,5 +146,20 @@ export class AtendimentoFormComponent extends FormComponent<Atendimento, Atendim
       return;
     }
     this.cancel.emit();
+  }
+
+  habilitarEdicao() {
+    this.readonly = false;
+    this.modoSalvar = true;
+    this.titulo = 'Editar Atendimento';
+    this.form.enable();
+  }
+
+  podeEditar(): boolean {
+    return this.readonly && this.atendimentoDetalhes?.status !== 2; // Não finalizado
+  }
+
+  selecionarAba(aba: string) {
+    this.abaAtiva = aba;
   }
 }

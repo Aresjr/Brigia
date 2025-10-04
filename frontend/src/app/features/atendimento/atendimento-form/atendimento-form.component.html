@@ -6,52 +6,114 @@
       <h2 class="text-lg font-semibold">{{ titulo }}</h2>
 
       <div>
+        <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" title="Editar" (click)="habilitarEdicao()" *ngIf="podeEditar()">
+          <lucide-icon name="pencil" class="inline w-5 h-5"/>
+        </button>
         <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="fechar()" title="Fechar">
           <lucide-icon name="x" class="inline w-5 h-5"/>
         </button>
       </div>
     </div>
 
-    <!-- TODO - Colocar informações do Paciente -->
+    <!-- Informações do Paciente -->
+    <div *ngIf="agendamento" class="mt-4 p-4 bg-base-200 rounded-lg">
+      <div class="grid grid-cols-3 gap-4">
+        <div>
+          <p class="text-xs text-neutral font-medium">Paciente</p>
+          <p class="font-semibold">{{ agendamento.paciente.nome }}</p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral font-medium">Data de Nascimento</p>
+          <p class="font-semibold">{{ agendamento.paciente.dataNascimento | date:'dd/MM/yyyy' }}</p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral font-medium">Convênio</p>
+          <p class="font-semibold">{{ agendamento.convenio?.nome || 'Particular' }}</p>
+        </div>
+      </div>
+    </div>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-2">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-2" [ngClass]="{ 'visualizacao': readonly }">
 
-      <div class="tabs tabs-bordered min-w-max">
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento"
-               aria-label="Anamnese" checked="checked" />
-        <div class="tab-content border-base-300 w-[53rem]">
+      <div class="inline-flex rounded-lg border border-base-300 p-1 mb-4">
+        <button type="button"
+          (click)="selecionarAba('anamnese')"
+          class="btn btn-sm"
+          [class]="abaAtiva === 'anamnese'
+            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+          Anamnese
+        </button>
+        <button type="button"
+          (click)="selecionarAba('exameFisico')"
+          class="btn btn-sm"
+          [class]="abaAtiva === 'exameFisico'
+            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+          Exame Físico
+        </button>
+        <button type="button"
+          (click)="selecionarAba('diagnostico')"
+          class="btn btn-sm"
+          [class]="abaAtiva === 'diagnostico'
+            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+          Diagnóstico
+        </button>
+        <button type="button"
+          (click)="selecionarAba('evolucaoClinica')"
+          class="btn btn-sm"
+          [class]="abaAtiva === 'evolucaoClinica'
+            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+          Evolução Clínica
+        </button>
+        <button type="button"
+          (click)="selecionarAba('examesSolicitados')"
+          class="btn btn-sm"
+          [class]="abaAtiva === 'examesSolicitados'
+            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+          Exames Solicitados
+        </button>
+        <button type="button"
+          (click)="selecionarAba('prescricoes')"
+          class="btn btn-sm"
+          [class]="abaAtiva === 'prescricoes'
+            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+          Prescrições
+        </button>
+        <button type="button"
+          (click)="selecionarAba('observacoes')"
+          class="btn btn-sm"
+          [class]="abaAtiva === 'observacoes'
+            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+          Observações
+        </button>
+      </div>
+
+      <div class="mb-4">
+        <div *ngIf="abaAtiva === 'anamnese'">
           <textarea id="anamnese" formControlName="anamnese" rows="7" emptyToNull class="campo-aba"></textarea>
         </div>
-
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento"
-               aria-label="Exame Físico" />
-        <div class="tab-content border-base-300 w-[53rem]">
+        <div *ngIf="abaAtiva === 'exameFisico'">
           <textarea id="exameFisico" formControlName="exameFisico" rows="7" emptyToNull class="campo-aba"></textarea>
         </div>
-
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento"
-               aria-label="Diagnóstico" />
-        <div class="tab-content border-base-300 w-[53rem]">
+        <div *ngIf="abaAtiva === 'diagnostico'">
           <textarea id="diagnostico" formControlName="diagnostico" rows="7" emptyToNull class="campo-aba"></textarea>
         </div>
-
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Evolução Clínica" />
-        <div class="tab-content border-base-300 w-[53rem]">
+        <div *ngIf="abaAtiva === 'evolucaoClinica'">
           <textarea id="evolucaoClinica" formControlName="evolucaoClinica" rows="7" emptyToNull class="campo-aba"></textarea>
         </div>
-
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Exames Solicitados" />
-        <div class="tab-content border-base-300 w-[53rem]">
+        <div *ngIf="abaAtiva === 'examesSolicitados'">
           <textarea id="examesSolicitados" formControlName="examesSolicitados" rows="7" emptyToNull class="campo-aba"></textarea>
         </div>
-
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Prescrições" />
-        <div class="tab-content border-base-300 w-[53rem]">
+        <div *ngIf="abaAtiva === 'prescricoes'">
           <textarea id="prescricoes" formControlName="prescricoes" rows="7" emptyToNull class="campo-aba"></textarea>
         </div>
-
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Observações" />
-        <div class="tab-content border-base-300 w-[53rem]">
+        <div *ngIf="abaAtiva === 'observacoes'">
           <textarea id="observacoes" formControlName="observacoes" rows="7" emptyToNull class="campo-aba"></textarea>
         </div>
       </div>
@@ -59,19 +121,19 @@
       <div class="flex mt-2">
         <div class="w-full">
           <div class="flex justify-between items-center mb-2">
-            <h3 class="text-lg font-medium">Procedimentos Lançados</h3>
+            <h3 class="text-lg font-medium">Procedimentos</h3>
           </div>
 
           <div class="rounded-t-lg">
-            <div class="grid grid-cols-[6rem_1fr] gap-3 p-3 font-medium">
-              <div>Quantidade</div>
+            <div class="grid grid-cols-[3rem_1fr] gap-3 p-3 font-medium">
+              <div>Qtd.</div>
               <div>Procedimento</div>
             </div>
           </div>
 
           <div class="space-y-1" formArrayName="procedimentos">
             <div *ngFor="let procedimento of procedimentosLancados.controls; let i = index" [formGroupName]="i"
-                 class="grid grid-cols-[6rem_1fr] gap-3 p-1.5 items-center hover:bg-base-200 rounded-lg">
+                 class="grid grid-cols-[3rem_1fr] gap-3 items-center hover:bg-base-200 rounded-lg">
 
               <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2" readonly>
 
@@ -95,7 +157,7 @@
         <button type="button" class="btn btn-sm" (click)="fechar()" >
           Fechar
         </button>
-        <button type="submit" class="btn btn-success btn-sm" >
+        <button type="submit" class="btn btn-success btn-sm" *ngIf="modoSalvar">
           Salvar
         </button>
       </div>
