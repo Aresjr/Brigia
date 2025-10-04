@@ -23,10 +23,11 @@ public class DisponibilidadeController {
     @GetMapping
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<DisponibilidadeResponse> getAllDisponibilidades(
-            @RequestParam(defaultValue = "false") Boolean mostrarExcluidos, @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "false") Boolean mostrarExcluidos, @RequestParam(required = false) Integer mes,
+            @RequestParam(required = false) Integer ano, @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
-        log.info("GET /disponibilidades - page: {}, size: {}", page, size);
-        return mapper.toPagedResponse(service.getPaged(page, size, mostrarExcluidos));
+        log.info("GET /disponibilidades - mes: {}, ano: {}, page: {}, size: {}", mes, ano, page, size);
+        return mapper.toPagedResponse(service.getByDate(mes, ano, page, size));
     }
 
     @PostMapping

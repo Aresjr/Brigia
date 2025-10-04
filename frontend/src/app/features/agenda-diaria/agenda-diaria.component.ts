@@ -54,6 +54,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   profissionalFiltro: number = 0;
   pacienteFiltro: number = 0;
   private subscription!: Subscription;
+  modoVisualizacao: 'agendamentos' | 'disponibilidades' = 'agendamentos';
 
   constructor(private router: Router, private toastr: ToastrService,
               private agendamentoService: AgendamentoService,
@@ -82,14 +83,8 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
       });
 
     this.subscription = interval(1000 * 60).subscribe(() => {
-      this.carregarAgendamentos();
+      this.carregarVisualizacaoAtual();
     });
-  }
-
-  ngOnChanges(): void {
-    if (this.isLoading) {
-      this.carregarDados();
-    }
   }
 
   carregarDados() {
@@ -109,7 +104,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     this.agendamentoService.listarPorData(ano, mes).subscribe({
       next: value => {
         const agendamentos = value.items;
-        this.eventosInternos = agendamentos.map(a => EventoFactory.fromApi(a));
+        this.eventosInternos = agendamentos.map(a => EventoFactory.fromAgendamento(a));
 
         this.filtrarRegistros();
 
@@ -242,6 +237,40 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  alternarModoVisualizacao(modo: 'agendamentos' | 'disponibilidades') {
+    this.modoVisualizacao = modo;
+    this.carregarVisualizacaoAtual();
+  }
+
+  carregarVisualizacaoAtual() {
+    if (this.modoVisualizacao === 'agendamentos') {
+      this.carregarAgendamentos();
+    } else {
+      this.carregarDisponibilidades();
+    }
+  }
+
+  carregarDisponibilidades() {
+    this.isLoading = true;
+
+    const ano = this.dataExibicao.getFullYear();
+    const mes = this.dataExibicao.getMonth() + 1;
+
+    this.disponibilidadeService.listarPorData(ano, mes).subscribe({
+      next: value => {
+        const disponibilidades = value.items;
+        this.eventosInternos = disponibilidades.map(d => EventoFactory.fromDisponibilidade(d));
+
+        this.filtrarRegistros();
+
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      }
+    });
   }
 
   addDisponibilidade() {
