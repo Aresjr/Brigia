@@ -73,19 +73,6 @@ export class AtendimentoFormComponent extends FormComponent<Atendimento, Atendim
     return this.form.get('procedimentos') as FormArray;
   }
 
-  adicionarProcedimento() {
-    const procedimento = this.fb.group({
-      quantidade: [1, [Validators.required, Validators.min(1)]],
-      procedimentoId: [null, Validators.required]
-    });
-
-    this.procedimentosLancados.push(procedimento);
-  }
-
-  removerProcedimento(index: number) {
-    this.procedimentosLancados.removeAt(index);
-  }
-
   carregarProcedimentos() {
     this.procedimentoService.listar().subscribe({
       next: (response) => {

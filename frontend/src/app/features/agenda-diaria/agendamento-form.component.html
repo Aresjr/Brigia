@@ -258,6 +258,47 @@
 
       </div>
 
+      <div class="flex mt-4">
+        <div class="w-full">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-base font-medium">Procedimentos</h3>
+            <button type="button" class="btn btn-primary btn-xs" (click)="adicionarProcedimento()">
+              <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
+              Adicionar Procedimento
+            </button>
+          </div>
+
+          <div class="rounded-t-lg">
+            <div class="grid grid-cols-[6rem_1fr_2rem] gap-3 p-3 font-medium text-sm">
+              <div>Quantidade</div>
+              <div>Procedimento</div>
+              <div></div>
+            </div>
+          </div>
+
+          <div class="space-y-1" formArrayName="procedimentos">
+            <div *ngFor="let procedimento of procedimentosLancados.controls; let i = index" [formGroupName]="i"
+                 class="grid grid-cols-[6rem_1fr_2rem] gap-3 p-1.5 items-center hover:bg-base-200 rounded-lg">
+
+              <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2">
+
+              <ng-select [id]="'procedimento_' + i"  class="campo-select mt-0"
+                         formControlName="procedimentoId"
+                         placeholder="Selecione um procedimento"
+                         [items]="procedimentos" bindValue="id" bindLabel="nome">
+                <ng-template ng-notfound-tmp>
+                  <span class="text-sm p-6">Nenhum resultado</span>
+                </ng-template>
+              </ng-select>
+
+              <button type="button" class="btn btn-ghost btn-circle btn-sm" (click)="removerProcedimento(i)" title="Excluir procedimento">
+                <lucide-icon name="trash" class="h-5 text-error"></lucide-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="flex justify-between mt-6">
         <button type="button" class="btn btn-sm" (click)="fechar()" >
           Fechar

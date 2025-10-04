@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Paciente } from '../pacientes/paciente.interface';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PacienteService } from '../pacientes/paciente.service';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { ConvenioService } from '../convenio/convenio.service';
@@ -9,7 +9,7 @@ import { Profissional } from '../profissionais/profissional.interface';
 import { Especialidade } from '../especialidade/especialidade.interface';
 import { EspecialidadeService } from '../especialidade/especialidade.service';
 import { ProfissionalService } from '../profissionais/profissional.service';
-import { DatePipe, NgClass, NgIf } from '@angular/common';
+import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { EmptyToNullDirective } from '../../core/directives/empty-to-null-directive';
 import { NgxMaskDirective } from 'ngx-mask';
 import { Empresa } from '../empresa/empresa.interface';
@@ -43,7 +43,7 @@ import { AtendimentoService } from '../atendimento/atendimento.service';
     ReactiveFormsModule, NgClass,
     EmptyToNullDirective, NgxMaskDirective,
     PacienteFormComponent, NgNotFoundTemplateDirective,
-    DatePipe, NgIf, LucideAngularModule, ConfirmDialogComponent
+    DatePipe, NgIf, NgFor, LucideAngularModule, ConfirmDialogComponent
   ]
 })
 export class AgendamentoFormComponent extends FormComponent<Agendamento, AgendamentoRequest> implements OnInit {
@@ -106,7 +106,10 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       precoAlterado: [false],
       encaixe: [false],
     };
-    this.form = this.fb.group(form);
+    this.form = this.fb.group({
+      ...form,
+      procedimentos: this.fb.array([])
+    });
   }
 
   override ngOnInit(): void {
@@ -410,6 +413,23 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         control?.markAsTouched({ onlySelf: true });
       });
     }
+  }
+
+  get procedimentosLancados() {
+    return this.form.get('procedimentos') as FormArray;
+  }
+
+  adicionarProcedimento() {
+    const procedimento = this.fb.group({
+      quantidade: [1, [Validators.required, Validators.min(1)]],
+      procedimentoId: [null, Validators.required]
+    });
+
+    this.procedimentosLancados.push(procedimento);
+  }
+
+  removerProcedimento(index: number) {
+    this.procedimentosLancados.removeAt(index);
   }
 
   protected readonly ColorUtils = ColorUtils;

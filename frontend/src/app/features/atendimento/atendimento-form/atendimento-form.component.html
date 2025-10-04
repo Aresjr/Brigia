@@ -60,29 +60,25 @@
         <div class="w-full">
           <div class="flex justify-between items-center mb-2">
             <h3 class="text-lg font-medium">Procedimentos Lançados</h3>
-            <button type="button" class="btn btn-primary btn-xs" (click)="adicionarProcedimento()">
-              <i-lucide name="plus" class="w-4 h-4"></i-lucide>
-              Adicionar Procedimento
-            </button>
           </div>
 
           <div class="rounded-t-lg">
-            <div class="grid grid-cols-[6rem_1fr_2rem] gap-3 p-3 font-medium">
+            <div class="grid grid-cols-[6rem_1fr] gap-3 p-3 font-medium">
               <div>Quantidade</div>
               <div>Procedimento</div>
-              <div></div>
             </div>
           </div>
 
           <div class="space-y-1" formArrayName="procedimentos">
             <div *ngFor="let procedimento of procedimentosLancados.controls; let i = index" [formGroupName]="i"
-                 class="grid grid-cols-[6rem_1fr_2rem] gap-3 p-1.5 items-center hover:bg-base-200 rounded-lg">
+                 class="grid grid-cols-[6rem_1fr] gap-3 p-1.5 items-center hover:bg-base-200 rounded-lg">
 
-              <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2">
+              <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2" readonly>
 
               <ng-select [id]="'procedimento_' + i"  class="campo-select mt-0"
                          formControlName="procedimentoId"
-                         placeholder="Selecione um procedimento">
+                         placeholder="Selecione um procedimento"
+                         [readonly]="true">
                 @for (procedimento of procedimentos; track procedimento.id) {
                   <ng-option [value]="procedimento.id">{{procedimento.nome}}</ng-option>
                 }
@@ -90,10 +86,6 @@
                   <span class="text-sm p-6">Nenhum resultado</span>
                 </ng-template>
               </ng-select>
-
-              <button type="button" class="btn btn-ghost btn-circle btn-sm" (click)="removerProcedimento(i)" title="Excluir lançamento">
-                <lucide-icon name="trash" class="h-5 text-error"></lucide-icon>
-              </button>
             </div>
           </div>
         </div>
