@@ -184,10 +184,10 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         disponibilidadeService.findByProfissionalAndDiaAndHora(
                 request.profissionalId(),
                 request.data(),
-                request.hora()
+                request.hora().plusMinutes(request.duracao())
         ).orElseThrow(() -> new DisponibilidadeNaoEncontradaException(
                 "Não há disponibilidade cadastrada para o profissional no horário selecionado. " +
-                "Marque como encaixe para agendar fora do horário de disponibilidade."
+                "Troque o horário ou marque como encaixe."
         ));
     }
 
