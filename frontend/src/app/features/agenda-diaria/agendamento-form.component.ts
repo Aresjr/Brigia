@@ -245,6 +245,13 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     });
   }
 
+  selectTipo(tipo: { valor: number, descricao: string } | null) {
+    console.log('tipo', tipo);
+    // this.form.patchValue({
+    //   profissionalId: profissional ? profissional.id : null
+    // });
+  }
+
   salvarNovoPaciente(paciente: Partial<Paciente>) {
     this.isLoading = true;
     this.mostrarFormularioNovoPaciente = false;

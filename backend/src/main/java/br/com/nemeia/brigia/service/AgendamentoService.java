@@ -3,6 +3,7 @@ package br.com.nemeia.brigia.service;
 import br.com.nemeia.brigia.utils.DbUtil;
 import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
+import br.com.nemeia.brigia.exception.DisponibilidadeNaoEncontradaException;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.AgendamentoMapper;
 import br.com.nemeia.brigia.model.*;
@@ -35,6 +36,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     private final ConvenioService convenioService;
     private final UnidadeService unidadeService;
     private final EmailService emailService;
+    private final DisponibilidadeService disponibilidadeService;
 
     @Value("${app.base-url}")
     private String baseUrl;
@@ -43,7 +45,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             PacienteService pacienteService, ProfissionalService profissionalService,
             EspecialidadeService especialidadeService, ProcedimentoService procedimentoService,
             EmpresaService empresaService, ConvenioService convenioService, UnidadeService unidadeService,
-            EmailService emailService) {
+            EmailService emailService, DisponibilidadeService disponibilidadeService) {
         super(repository);
         this.mapper = mapper;
         this.pacienteService = pacienteService;
@@ -54,6 +56,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         this.convenioService = convenioService;
         this.emailService = emailService;
         this.unidadeService = unidadeService;
+        this.disponibilidadeService = disponibilidadeService;
     }
 
     @Cacheable(value = "agendamentos", key = "#userId + '-' + #mes + '-' + #ano")
@@ -82,6 +85,10 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     public Agendamento createAgendamento(AgendamentoRequest request) {
         Agendamento agendamento = mapper.toEntity(request);
         setEntidades(request, agendamento);
+
+        // Validar disponibilidade do profissional, exceto se for encaixe
+        validarDisponibilidadeProfissional(request);
+
         agendamento.setStatus(StatusAgendamento.AGENDADO);
         agendamento.setUnidade(unidadeService.getById(SecurityHolder.getLoggedUserUnidadeId()));
         Agendamento agendamentoNovo = repository.save(agendamento);
@@ -95,6 +102,9 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     public Agendamento editAgendamento(Long id, AgendamentoRequest request) {
         Agendamento original = getById(id);
         boolean deveMandarEmail = deveMandarEmail(original, request); //TODO - verificar porque está mandando email na edição
+
+        // Validar disponibilidade do profissional, exceto se for encaixe
+        validarDisponibilidadeProfissional(request);
 
         Agendamento agendamentoUpdate = mapper.updateEntity(original, request);
         setEntidades(request, agendamentoUpdate);
@@ -162,6 +172,23 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     public Agendamento getByToken(String token) {
         return repository.findOneByToken(token)
                 .orElseThrow(() -> new NotFoundException(getNomeEntidade() + " não encontrado com token:" + token));
+    }
+
+    private void validarDisponibilidadeProfissional(AgendamentoRequest request) {
+        // Se for encaixe, não precisa validar disponibilidade
+        if (Boolean.TRUE.equals(request.encaixe())) {
+            return;
+        }
+
+        // Validar se há disponibilidade cadastrada para o profissional no horário solicitado
+        disponibilidadeService.findByProfissionalAndDiaAndHora(
+                request.profissionalId(),
+                request.data(),
+                request.hora()
+        ).orElseThrow(() -> new DisponibilidadeNaoEncontradaException(
+                "Não há disponibilidade cadastrada para o profissional no horário selecionado. " +
+                "Marque como encaixe para agendar fora do horário de disponibilidade."
+        ));
     }
 
     @Override

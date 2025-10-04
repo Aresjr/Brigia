@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -58,6 +60,10 @@ public class DisponibilidadeService extends BaseService<Disponibilidade, Disponi
         Pageable pageable = PageRequest.of(page, size, DbUtil.DEFAULT_SORT);
 
         return repository.findAllByDateRange(pageable, startDate, endDate);
+    }
+
+    public Optional<Disponibilidade> findByProfissionalAndDiaAndHora(Long profissionalId, LocalDate dia, LocalTime hora) {
+        return repository.findByProfissionalAndDiaAndHora(profissionalId, dia, hora);
     }
 
     @Override

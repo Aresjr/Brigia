@@ -1,0 +1,1 @@
+ALTER TABLE agendamento ADD COLUMN IF NOT EXISTS encaixe boolean DEFAULT false;

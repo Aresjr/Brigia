@@ -42,7 +42,7 @@ export class BaseService<Entid extends Entidade, Request extends EntidadeRequest
     return this.backend.post<Request, Entid>(this.path, registro).pipe(
       catchError((e) => {
         const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
-        this.toastr.error(errorMessage, 'Erro ao salvar');
+        this.toastr.error(errorMessage);
         return throwError(() => e);
       })
     );
