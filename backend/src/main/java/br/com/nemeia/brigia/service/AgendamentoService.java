@@ -20,6 +20,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -87,7 +89,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         setEntidades(request, agendamento);
 
         // Validar disponibilidade do profissional, exceto se for encaixe
-        validarDisponibilidadeProfissional(request);
+        validarDisponibilidadeProfissional(request, null);
 
         agendamento.setStatus(StatusAgendamento.AGENDADO);
         agendamento.setUnidade(unidadeService.getById(SecurityHolder.getLoggedUserUnidadeId()));
@@ -104,7 +106,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         boolean deveMandarEmail = deveMandarEmail(original, request); //TODO - verificar porque está mandando email na edição
 
         // Validar disponibilidade do profissional, exceto se for encaixe
-        validarDisponibilidadeProfissional(request);
+        validarDisponibilidadeProfissional(request, id);
 
         Agendamento agendamentoUpdate = mapper.updateEntity(original, request);
         setEntidades(request, agendamentoUpdate);
@@ -174,7 +176,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
                 .orElseThrow(() -> new NotFoundException(getNomeEntidade() + " não encontrado com token:" + token));
     }
 
-    private void validarDisponibilidadeProfissional(AgendamentoRequest request) {
+    private void validarDisponibilidadeProfissional(AgendamentoRequest request, Long agendamentoId) {
         // Se for encaixe, não precisa validar disponibilidade
         if (Boolean.TRUE.equals(request.encaixe())) {
             return;
@@ -189,6 +191,25 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
                 "Não há disponibilidade cadastrada para o profissional no horário selecionado. " +
                 "Troque o horário ou marque como encaixe."
         ));
+
+        // Validar se não há conflito com outros agendamentos do mesmo profissional
+        LocalTime horaFim = request.hora().plusMinutes(request.duracao());
+        Long idParaVerificar = agendamentoId != null ? agendamentoId : -1L;
+
+        List<Agendamento> agendamentosConflitantes = repository.findAgendamentosConflitantes(
+                request.profissionalId(),
+                request.data(),
+                request.hora(),
+                horaFim,
+                idParaVerificar
+        );
+
+        if (!agendamentosConflitantes.isEmpty()) {
+            throw new DisponibilidadeNaoEncontradaException(
+                    "Já existe um agendamento para o profissional neste horário. " +
+                    "Troque o horário ou marque como encaixe."
+            );
+        }
     }
 
     @Override
