@@ -55,7 +55,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   profissionalFiltro: number = 0;
   pacienteFiltro: number = 0;
   private subscription!: Subscription;
-  modoVisualizacao: 'agendamentos' | 'disponibilidades' = 'agendamentos';
+  modoVisualizacao: 'tudo' | 'agendamentos' | 'disponibilidades' = 'tudo';
 
   constructor(private router: Router, private toastr: ToastrService,
               private agendamentoService: AgendamentoService,
@@ -213,9 +213,15 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   filtrarRegistros() {
     let eventosFiltrados = [...this.eventosInternos];
 
-    if (this.modoVisualizacao === 'disponibilidades') {
+    // Filtrar por modo de visualização
+    if (this.modoVisualizacao === 'agendamentos') {
+      // Mostrar apenas agendamentos (itens com paciente)
+      eventosFiltrados = eventosFiltrados.filter(item => item.meta?.paciente);
+    } else if (this.modoVisualizacao === 'disponibilidades') {
+      // Mostrar apenas disponibilidades (itens sem paciente)
       eventosFiltrados = eventosFiltrados.filter(item => !item.meta?.paciente);
     }
+    // Se for 'tudo', não filtra por tipo
 
     // Filtrar por profissional
     if (this.profissionalFiltro && this.profissionalFiltro != 0) {
@@ -256,7 +262,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     }
   }
 
-  alternarModoVisualizacao(modo: 'agendamentos' | 'disponibilidades') {
+  alternarModoVisualizacao(modo: 'tudo' | 'agendamentos' | 'disponibilidades') {
     this.modoVisualizacao = modo;
     this.filtrarRegistros();
   }
@@ -271,13 +277,25 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   }
 
   salvarDisponibilidade(disponibilidade: Partial<DisponibilidadeRequest>) {
-    this.disponibilidadeService.criar(disponibilidade).subscribe({
-      next: () => {
-        this.toastr.success('Disponibilidade criada');
-        this.carregarAgendamentos();
-        this.fecharFormDisponibilidade();
-      }
-    });
+    if (this.disponibilidadeDetalhes) {
+      // Atualizar disponibilidade existente
+      this.disponibilidadeService.atualizar(this.disponibilidadeDetalhes.id, disponibilidade).subscribe({
+        next: () => {
+          this.toastr.success('Disponibilidade atualizada');
+          this.carregarAgendamentos();
+          this.fecharFormDisponibilidade();
+        }
+      });
+    } else {
+      // Criar nova disponibilidade
+      this.disponibilidadeService.criar(disponibilidade).subscribe({
+        next: () => {
+          this.toastr.success('Disponibilidade criada');
+          this.carregarAgendamentos();
+          this.fecharFormDisponibilidade();
+        }
+      });
+    }
   }
 
   detalhesDisponibilidade(disponibilidade: any) {

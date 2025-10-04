@@ -129,7 +129,7 @@
             Especialidade <span aria-hidden="true" class="text-error">*</span>
             <ng-select formControlName="especialidadeId" required class="campo-select"
                        labelForId="especialidadeId" [ngClass]="classesCampo('especialidadeId')"
-                       [items]="especialidades" bindValue="id" bindLabel="nome" placeholder="Selecione"
+                       [items]="especialidadesFiltradas" bindValue="id" bindLabel="nome" placeholder="Selecione"
                        (change)="selectEspecialidade($event)" (clear)="selectEspecialidade(null)">
               <ng-template ng-notfound-tmp>
                 <span class="text-sm p-6">Nenhum resultado</span>

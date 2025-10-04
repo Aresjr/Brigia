@@ -57,6 +57,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   pacientes: Paciente[] = [];
   convenios: Convenio[] = [];
   especialidades: Especialidade[] = [];
+  especialidadesFiltradas: Especialidade[] = [];
   profissionais: Profissional[] = [];
   profissionaisFiltrados: Profissional[] = [];
   empresas: Empresa[] = [];
@@ -183,7 +184,10 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   carregarEspecialidades(): Observable<Especialidade[]> {
     return this.especialidadeService.listar().pipe(
       map(response => response.items),
-      tap(especialidades => this.especialidades = especialidades));
+      tap(especialidades => {
+        this.especialidades = especialidades;
+        this.especialidadesFiltradas = especialidades;
+      }));
   }
 
   carregarProfissionais(): Observable<Profissional[]> {
@@ -247,6 +251,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     this.form.patchValue({
       profissionalId: profissional ? profissional.id : null
     });
+    //TODO - filtrar as especialidades para somente as especialidades do profissional selecionado.
+    console.log('profissional.especialidades', profissional?.especialidades);
   }
 
   selectTipo(tipo: { valor: number, descricao: string } | null) {

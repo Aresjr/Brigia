@@ -139,4 +139,10 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
       });
     }
   }
+
+  habilitarEdicao() {
+    this.readonly = false;
+    this.titulo = 'Editar Disponibilidade';
+    this.form.enable();
+  }
 }

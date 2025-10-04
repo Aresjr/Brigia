@@ -8,6 +8,14 @@
       <div>
         <div class="inline-flex rounded-lg border border-base-300 p-1">
           <button
+            (click)="alternarModoVisualizacao('tudo')"
+            class="btn btn-sm"
+            [class]="modoVisualizacao === 'tudo'
+          ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+          : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-gray-50'">
+            Tudo
+          </button>
+          <button
             (click)="alternarModoVisualizacao('agendamentos')"
             class="btn btn-sm"
             [class]="modoVisualizacao === 'agendamentos'
