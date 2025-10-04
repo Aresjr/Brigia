@@ -92,7 +92,8 @@
             Tipo <span aria-hidden="true" class="text-error">*</span>
             <ng-select formControlName="tipoAgendamento" class="campo-select" required placeholder="Selecione"
                        [ngClass]="classesCampo('tipoAgendamento')" bindValue="valor" bindLabel="descricao"
-                       [items]="tipoAgendamento" labelForId="tipoAgendamento">
+                       [items]="tipoAgendamento" labelForId="tipoAgendamento"
+                       (change)="selectTipo($event)" (clear)="selectTipo(null)">
               <ng-template ng-notfound-tmp>
                 <span class="text-sm p-6">Nenhum resultado</span>
               </ng-template>
@@ -182,7 +183,7 @@
           <ng-select formControlName="procedimentoId" class="campo-select"
                      [ngClass]="classesCampo('procedimentoId')" placeholder="Selecione"
                      (change)="selectProcedimento($event)" (clear)="selectProcedimento(null)"
-                     [items]="procedimentos" bindValue="id" bindLabel="nome" labelForId="procedimentoId">
+                     [items]="procedimentosFiltrados" bindValue="id" bindLabel="nome" labelForId="procedimentoId">
             <ng-template ng-notfound-tmp>
               <span class="text-sm p-6">Nenhum resultado</span>
             </ng-template>

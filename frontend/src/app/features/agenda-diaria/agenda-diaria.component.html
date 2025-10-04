@@ -58,6 +58,7 @@
       [events]="eventosExibicao"
       [isLoading]="isLoading"
       (detalhesAgendamento)="detalhesAgendamento($event)"
+      (detalhesDisponibilidade)="detalhesDisponibilidade($event)"
       (diaClicado)="diaClicado($event)"
       (horarioClicado)="horarioClicado($event)"
       (dataAlterada)="dataAlterada($event)"
@@ -78,6 +79,7 @@
 
 @if (exibeFormDisponibilidade) {
   <app-disponibilidade-form
+    [disponibilidadeDetalhes]="disponibilidadeDetalhes"
     [profissionalId]="profissionalFiltro !== 0 ? profissionalFiltro : null"
     (save)="salvarDisponibilidade($event)"
     (cancel)="fecharFormDisponibilidade()">

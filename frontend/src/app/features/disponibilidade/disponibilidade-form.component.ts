@@ -30,12 +30,14 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
 export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade, DisponibilidadeRequest> implements OnInit {
   @Input() dataDisponibilidade: Date | null = null;
   @Input() profissionalId: number | null = null;
+  @Input() disponibilidadeDetalhes: any = null;
 
   titulo: string = 'Nova Disponibilidade';
   hoje: string;
   profissionais: Profissional[] = [];
   isLoading: boolean = false;
   exibeConfirmCancelamento: boolean = false;
+  readonly: boolean = false;
 
   constructor(
     protected override fb: FormBuilder,
@@ -55,6 +57,12 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   }
 
   override ngOnInit(): void {
+    // Verificar se está em modo readonly (visualizando disponibilidade existente)
+    if (this.disponibilidadeDetalhes) {
+      this.readonly = true;
+      this.titulo = 'Detalhes da Disponibilidade';
+    }
+
     let dia = this.hoje;
     if (this.dataDisponibilidade) {
       dia = this.dataDisponibilidade.toISOString().split('T')[0];
@@ -69,9 +77,21 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
       this.carregarProfissionais()
     ]).subscribe(() => {
       setTimeout(()=>{
-        this.form.patchValue({
-          profissionalId: this.profissionalId
-        });
+        if (this.disponibilidadeDetalhes) {
+          // Preencher form com dados da disponibilidade
+          this.form.patchValue({
+            profissionalId: this.disponibilidadeDetalhes.profissional.id,
+            dia: this.disponibilidadeDetalhes.dia,
+            horaInicial: this.disponibilidadeDetalhes.horaInicial,
+            horaFinal: this.disponibilidadeDetalhes.horaFinal
+          });
+          // Desabilitar formulário para modo readonly
+          this.form.disable();
+        } else {
+          this.form.patchValue({
+            profissionalId: this.profissionalId
+          });
+        }
       });
       this.isLoading = false;
     });
@@ -85,7 +105,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   }
 
   fechar(confirmou: boolean = false) {
-    if (!confirmou && this.form.dirty) {
+    // Não verificar dirty se estiver em modo readonly
+    if (!confirmou && !this.readonly && this.form.dirty) {
       this.exibeConfirmCancelamento = true;
       return;
     }

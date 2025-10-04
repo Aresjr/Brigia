@@ -48,6 +48,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   pacientes: Paciente[] = [];
   exibeForm: boolean = false;
   exibeFormDisponibilidade: boolean = false;
+  disponibilidadeDetalhes: any = null;
   pacienteId: number | null = null;
   isLoading: boolean = false;
   dataExibicao: Date = new Date();
@@ -265,6 +266,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   }
 
   fecharFormDisponibilidade() {
+    this.disponibilidadeDetalhes = null;
     this.exibeFormDisponibilidade = false;
   }
 
@@ -276,5 +278,10 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
         this.fecharFormDisponibilidade();
       }
     });
+  }
+
+  detalhesDisponibilidade(disponibilidade: any) {
+    this.disponibilidadeDetalhes = disponibilidade;
+    this.exibeFormDisponibilidade = true;
   }
 }

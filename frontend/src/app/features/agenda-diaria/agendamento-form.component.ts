@@ -61,6 +61,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   profissionaisFiltrados: Profissional[] = [];
   empresas: Empresa[] = [];
   procedimentos: Procedimento[] = [];
+  procedimentosFiltrados: Procedimento[] = [];
   pacienteSelecionado?: Paciente | null;
   empresaSelecionada?: Empresa | null;
   procedimentoSelecionado?: Procedimento | null;
@@ -201,7 +202,10 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   carregarProcedimentos(): Observable<Procedimento[]> {
     return this.procedimentoService.listar().pipe(
       map(response => response.items),
-      tap(procedimentos => this.procedimentos = procedimentos));
+      tap(procedimentos => {
+        this.procedimentos = procedimentos;
+        this.procedimentosFiltrados = procedimentos;
+      }));
   }
 
   fechar(confirmou: boolean = false) {
@@ -246,10 +250,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   selectTipo(tipo: { valor: number, descricao: string } | null) {
-    console.log('tipo', tipo);
-    // this.form.patchValue({
-    //   profissionalId: profissional ? profissional.id : null
-    // });
+    this.procedimentosFiltrados = tipo ? [...this.procedimentos.filter(p => p.tipo == tipo.valor)] : this.procedimentos;
   }
 
   salvarNovoPaciente(paciente: Partial<Paciente>) {

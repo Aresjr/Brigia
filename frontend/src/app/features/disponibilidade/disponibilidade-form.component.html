@@ -66,7 +66,7 @@
         <button type="button" class="btn btn-sm" (click)="fechar()" >
           Fechar
         </button>
-        <button type="submit" class="btn btn-success btn-sm">
+        <button *ngIf="!readonly" type="submit" class="btn btn-success btn-sm">
           Salvar
         </button>
       </div>
