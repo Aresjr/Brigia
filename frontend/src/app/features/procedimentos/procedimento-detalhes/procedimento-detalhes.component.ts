@@ -17,6 +17,7 @@ export class ProcedimentoDetalhesComponent {
   @Output() editar = new EventEmitter<Procedimento>();
   @Output() fechou = new EventEmitter<void>();
   mostraTabelaConvenio: boolean = false;
+  mostraTabelaPlanos: boolean = false;
   TIPO_AGENDAMENTO = TIPO_AGENDAMENTO;
 
   constructor(private userService: UserService) {}
@@ -31,6 +32,10 @@ export class ProcedimentoDetalhesComponent {
 
   toggleTabelaConvenio() {
     this.mostraTabelaConvenio = !this.mostraTabelaConvenio;
+  }
+
+  toggleTabelaPlanos() {
+    this.mostraTabelaPlanos = !this.mostraTabelaPlanos;
   }
 
   exibeEditar() {
