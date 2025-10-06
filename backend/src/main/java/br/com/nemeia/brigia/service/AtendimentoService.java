@@ -2,17 +2,13 @@ package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.AtendimentoRequest;
-import br.com.nemeia.brigia.dto.request.ProcedimentoAtendimentoRequest;
 import br.com.nemeia.brigia.mapper.AtendimentoMapper;
 import br.com.nemeia.brigia.model.*;
 import br.com.nemeia.brigia.repository.*;
 import br.com.nemeia.brigia.utils.DbUtil;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,22 +21,14 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
 
     private final ProfissionalService profissionalService;
     private final AgendamentoService agendamentoService;
-    private final ProcedimentoService procedimentoService;
-    private final PrecoProcedimentoService precoProcedimentoService;
-    private final ContaReceberService contaReceberService;
     private final AtendimentoMapper mapper;
 
     public AtendimentoService(AtendimentoRepository repository, AtendimentoMapper mapper,
-            ProfissionalService profissionalService, AgendamentoService agendamentoService,
-            ProcedimentoService procedimentoService, PrecoProcedimentoService precoProcedimentoService,
-            ContaReceberService contaReceberService) {
+            ProfissionalService profissionalService, AgendamentoService agendamentoService) {
         super(repository);
         this.mapper = mapper;
         this.profissionalService = profissionalService;
         this.agendamentoService = agendamentoService;
-        this.procedimentoService = procedimentoService;
-        this.precoProcedimentoService = precoProcedimentoService;
-        this.contaReceberService = contaReceberService;
     }
 
     public Page<Atendimento> getPaged(int page, int size) {
@@ -55,7 +43,6 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         Agendamento agendamento = agendamentoService.getById(request.agendamentoId());
 
         setEntidades(atendimento, agendamento);
-        setProcedimentos(atendimento, request.procedimentos(), agendamento.getConvenio());
 
         atendimento.setData(LocalDate.now());
         atendimento.setHoraFim(LocalTime.now());
@@ -63,22 +50,6 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         Atendimento atendimentoNovo = repository.save(atendimento);
         agendamentoService.updateStatus(agendamento, StatusAgendamento.FINALIZADO);
         return atendimentoNovo;
-    }
-
-    private void setProcedimentos(Atendimento atendimento, List<ProcedimentoAtendimentoRequest> procedimentos,
-            Convenio convenio) {
-        List<AtendimentoProcedimento> pa = new ArrayList<>();
-        List<BigDecimal> valoresLancados = new ArrayList<>();
-        procedimentos.forEach(par -> {
-            Procedimento procedimento = procedimentoService.getById(par.procedimentoId());
-            var precoProcedimento = precoProcedimentoService.getPreco(procedimento, convenio);
-            valoresLancados.add(precoProcedimento.multiply(BigDecimal.valueOf(par.quantidade())));
-            pa.add(new AtendimentoProcedimento(atendimento, procedimento, par.quantidade(), precoProcedimento));
-        });
-        atendimento.getProcedimentos().addAll(pa);
-        atendimento.setValorAgendamento(atendimento.getAgendamento().getValor());
-        atendimento.setValorDescontoAgendamento(atendimento.getAgendamento().getDesconto());
-        atendimento.setValorLancado(valoresLancados.stream().reduce(BigDecimal.ZERO, BigDecimal::add));
     }
 
     private void setEntidades(Atendimento atendimento, Agendamento agendamento) {

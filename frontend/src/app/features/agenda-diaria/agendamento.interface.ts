@@ -6,7 +6,7 @@ import { Procedimento } from '../procedimentos/procedimento.interface';
 import { Convenio } from '../convenio/convenio.interface';
 import { Empresa } from '../empresa/empresa.interface';
 import { Unidade } from '../unidade/unidade.interface';
-import { AGENDAMENTO_PODE_EDITAR, StatusAgendamento } from '../../core/constans';
+import { AGENDAMENTO_PODE_EDITAR } from '../../core/constans';
 
 export interface Agendamento extends Entidade {
     descricao: string | null;

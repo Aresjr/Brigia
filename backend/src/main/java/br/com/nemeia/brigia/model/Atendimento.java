@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -77,9 +76,6 @@ public class Atendimento extends BaseModel {
 
     @Column(name = "observacoes", columnDefinition = "TEXT")
     private String observacoes;
-
-    @OneToMany(mappedBy = "atendimento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AtendimentoProcedimento> procedimentos = new ArrayList<>();
 
     @Column(name = "valor_agendamento")
     private BigDecimal valorAgendamento;
