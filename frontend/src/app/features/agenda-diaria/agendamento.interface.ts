@@ -24,6 +24,8 @@ export interface Agendamento extends Entidade {
     unidade: Unidade;
     tipoAgendamento: number | null;
     formaPagamento: number;
+    valor: number;
+    valorTotal: number;
     status: number;
     observacoes?: string;
     encaixe: boolean;

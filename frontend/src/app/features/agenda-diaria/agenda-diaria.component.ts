@@ -22,6 +22,7 @@ import { Paciente } from '../pacientes/paciente.interface';
 import { DisponibilidadeFormComponent } from '../disponibilidade/disponibilidade-form.component';
 import { DisponibilidadeRequest } from '../disponibilidade/disponibilidade.interface';
 import { DisponibilidadeService } from '../disponibilidade/disponibilidade.service';
+import { HonorariosFormComponent } from '../honorarios/honorarios-form.component';
 
 @Component({
   selector: 'app-agenda-diaria',
@@ -35,7 +36,8 @@ import { DisponibilidadeService } from '../disponibilidade/disponibilidade.servi
     NgNotFoundTemplateDirective,
     NgOptionComponent,
     NgSelectComponent,
-    DisponibilidadeFormComponent
+    DisponibilidadeFormComponent,
+    HonorariosFormComponent
   ],
   templateUrl: './agenda-diaria.component.html'
 })

@@ -8,6 +8,8 @@ import br.com.nemeia.brigia.dto.response.ProcedimentoAgendamentoResponse;
 import br.com.nemeia.brigia.model.Agendamento;
 import br.com.nemeia.brigia.model.AgendamentoProcedimento;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -50,7 +52,8 @@ public class AgendamentoMapper {
                 procedimentoMapper.toResponse(agendamento.getProcedimento()), agendamento.getStatus(),
                 agendamento.getTipoAgendamento(), agendamento.getFormaPagamento(), agendamento.getValor(),
                 agendamento.getDesconto(), agendamento.getObservacoes(), agendamento.getDuracao(),
-                agendamento.getEncaixe(), procedimentos, agendamento.getCriadoEm(), agendamento.getExcluido());
+                agendamento.getEncaixe(), procedimentos, BigDecimal.ZERO,
+          agendamento.getCriadoEm(), agendamento.getExcluido());
     }
 
     private ProcedimentoAgendamentoResponse toProcedimentoAgendamentoResponse(AgendamentoProcedimento ap) {

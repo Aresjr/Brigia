@@ -95,9 +95,12 @@
 }
 
   @if (exibeFormHonorarios) {
-    
-  }
-  
+  <app-honorarios-form
+    [profissionalId]="profissionalFiltro !== 0 ? profissionalFiltro : null"
+    (cancel)="fecharFormHonorarios()">
+  </app-honorarios-form>
+}
+
 @if (mostraFab()) {
   <app-fab [tituloBotao1]="'Criar Agendamento'" [iconeBotao1]="'calendar-plus'"
            (clickedBotao1)="addNovo()"
