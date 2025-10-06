@@ -57,6 +57,14 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
                                 convenio.getId()))));
     }
 
+    public ProcedimentoPlanoResponse toPrecoProcedimentoPlano(Procedimento procedimento, EmpresaPlano plano) {
+        return toProcedimentoPlanoResponse(procedimento.getPrecosPlanos().stream()
+                .filter(preco -> plano.getId().equals(preco.getPlano().getId())).findFirst()
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Preço não encontrado para procedimento %s e plano %s", procedimento.getId(),
+                                plano.getId()))));
+    }
+
     private PrecoProcedimentoResponse toResponse(PrecoProcedimento precoProcedimento) {
         return new PrecoProcedimentoResponse(precoProcedimento.getId(), precoProcedimento.getPreco(),
                 precoProcedimento.getRepasse(), convenioMapper.toResponse(precoProcedimento.getConvenio()),

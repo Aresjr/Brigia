@@ -80,7 +80,7 @@ public class Agendamento extends BaseModel {
     private Boolean precoAlterado = false;
 
     @Column(name = "encaixe", nullable = false)
-    private Boolean encaixe = false; //TODO - verificar se está salvando
+    private Boolean encaixe = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "atendimento_id")

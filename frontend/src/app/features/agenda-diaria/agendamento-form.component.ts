@@ -255,11 +255,16 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
   selectEmpresa(empresa: Empresa | null) {
     this.empresaSelecionada = empresa;
+    this.calcularValorProcedimento(null);
+    // Recalcular valores dos procedimentos quando a empresa mudar
+    this.procedimentosLancados.controls.forEach((_, index) => {
+      this.calcularValorProcedimento(index);
+    });
   }
 
   selectProcedimento(procedimento: Procedimento | null) {
     this.procedimentoSelecionado = procedimento;
-    this.atualizaPreco();
+    this.calcularValorProcedimento(null);
   }
 
   selectProfissional(id: number | null) {
@@ -314,7 +319,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
   selectConvenio(convenio: Convenio | null) {
     this.convenioSelecionado = convenio;
-    this.atualizaPreco();
+    this.calcularValorProcedimento(null);
     // Recalcular valores dos procedimentos quando o convênio mudar
     this.procedimentosLancados.controls.forEach((_, index) => {
       this.calcularValorProcedimento(index);
@@ -337,29 +342,6 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       precoAlterado: false
     });
     this.valorAntesEdicao = null;
-  }
-
-  atualizaPreco() {
-    if (this.procedimentoSelecionado && this.convenioSelecionado) {
-      this.procedimentoService.obterPrecoProcedimentoConvenio(this.procedimentoSelecionado.id, this.convenioSelecionado.id).subscribe({
-        next: (response) => {
-          this.form.patchValue({
-            valor: response.preco
-          })
-        },
-        error: () => {
-          if (this.procedimentoSelecionado) {
-            this.form.patchValue({
-              valor: this.procedimentoSelecionado.valorPadrao
-            });
-          }
-        }
-      });
-    }
-    const valor = this.procedimentoSelecionado != null && this.procedimentoSelecionado?.valorPadrao != null ? this.procedimentoSelecionado.valorPadrao : null;
-    this.form.patchValue({
-      valor: valor
-    });
   }
 
   podeAbrirAtendimento(agendamento: Agendamento | null): boolean {
@@ -450,30 +432,50 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     this.procedimentosLancados.removeAt(index);
   }
 
-  calcularValorProcedimento(index: number) {
-    const procedimentoControl = this.procedimentosLancados.at(index);
-    const procedimentoId = procedimentoControl.get('procedimentoId')?.value;
-    const convenioId = this.form.get('convenioId')?.value;
+  calcularValorProcedimento(index: number | null) {
+    const procedimentoPrincipal = (index == null);
+    if (procedimentoPrincipal && !this.procedimentoSelecionado) {
+      this.form.patchValue({ valor: null });
+      return;
+    }
 
-    if (procedimentoId && convenioId) {
+    const procedimentoControl = procedimentoPrincipal ? this.form : this.procedimentosLancados.at(index);
+    const procedimentoId = procedimentoPrincipal ? this.procedimentoSelecionado?.id : procedimentoControl.get('procedimentoId')?.value;
+    if (!procedimentoId) {
+      return;
+    }
+
+    const convenioId = this.form.get('convenioId')?.value;
+    const empresaId = this.form.get('empresaId')?.value;
+
+    const procedimento = this.procedimentos.find(p => p.id === procedimentoId);
+
+    // Prioridade: Convênio > Plano Empresarial > Valor Padrão
+    if (convenioId) {
       this.procedimentoService.obterPrecoProcedimentoConvenio(procedimentoId, convenioId).subscribe({
         next: (response) => {
-          procedimentoControl.patchValue({
-            valor: response.preco
-          });
+          console.log('convênio', response.preco);
+          const valor = (response.preco > 0 ? response.preco : (procedimento?.valorPadrao || 0) );
+          procedimentoControl.patchValue({ valor: valor });
         },
         error: () => {
-          const procedimento = this.procedimentos.find(p => p.id === procedimentoId);
-          procedimentoControl.patchValue({
-            valor: procedimento?.valorPadrao || null
-          });
+          procedimentoControl.patchValue({ valor: procedimento?.valorPadrao || null });
         }
       });
-    } else if (procedimentoId) {
-      const procedimento = this.procedimentos.find(p => p.id === procedimentoId);
-      procedimentoControl.patchValue({
-        valor: procedimento?.valorPadrao || null
+    } else if (empresaId && this.empresaSelecionada?.plano?.id) {
+      this.procedimentoService.obterPrecoProcedimentoPlano(procedimentoId, this.empresaSelecionada.plano.id).subscribe({
+        next: (response) => {
+          console.log('plano', response.preco);
+          const valor = (response.preco > 0 ? response.preco : (procedimento?.valorPadrao || 0) );
+          procedimentoControl.patchValue({ valor: valor });
+        },
+        error: () => {
+          procedimentoControl.patchValue({ valor: procedimento?.valorPadrao || null });
+        }
       });
+    } else {
+      console.log('valor padrão', procedimento?.valorPadrao);
+      procedimentoControl.patchValue({ valor: procedimento?.valorPadrao || null });
     }
   }
 
