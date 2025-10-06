@@ -88,7 +88,19 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
             });
           }
         });
-        // TODO: Carregar preços por plano quando existir no backend
+
+        this.precosPlanos.controls.forEach(control => {
+          const planoId = control.value.planoId;
+          const precoPlano = this.registro?.precosPlanos
+            ?.find(pp => pp.plano.id === planoId);
+
+          if (precoPlano) {
+            control.patchValue({
+              preco: precoPlano.preco,
+              repasse: precoPlano.repasse,
+            });
+          }
+        });
       }
     });
   }

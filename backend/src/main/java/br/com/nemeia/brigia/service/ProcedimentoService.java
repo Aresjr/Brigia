@@ -5,9 +5,7 @@ import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ProcedimentoMapper;
-import br.com.nemeia.brigia.model.Convenio;
-import br.com.nemeia.brigia.model.Especialidade;
-import br.com.nemeia.brigia.model.Procedimento;
+import br.com.nemeia.brigia.model.*;
 import br.com.nemeia.brigia.repository.ProcedimentoRepository;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +25,7 @@ public class ProcedimentoService {
     private final EspecialidadeService especialidadeService;
     private final ConvenioService convenioService;
     private final PrecoProcedimentoService precoProcedimentoService;
+    private final EmpresaPlanoService empresaPlanoService;
 
     public Page<Procedimento> getPaged(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, DbUtil.DEFAULT_SORT);
@@ -42,28 +41,74 @@ public class ProcedimentoService {
         Especialidade especialidade = especialidadeService.getById(request.especialidadeId());
         Procedimento procedimento = mapper.toEntity(request);
         procedimento.setEspecialidade(especialidade);
+        procedimento.setPrecosPlanos(new java.util.ArrayList<>());
 
         Procedimento procedimentoNovo = repository.save(procedimento);
-        request.precosConvenios().forEach(precoProcedimento -> {
-            Convenio convenio = convenioService.getById(precoProcedimento.convenioId());
-            precoProcedimentoService.save(procedimentoNovo, convenio, precoProcedimento);
-        });
+
+        // Salvar preços por convênio
+        if (request.precosConvenios() != null) {
+            request.precosConvenios().forEach(precoProcedimento -> {
+                Convenio convenio = convenioService.getById(precoProcedimento.convenioId());
+                precoProcedimentoService.save(procedimentoNovo, convenio, precoProcedimento);
+            });
+        }
+
+        // Salvar preços por plano
+        if (request.precosPlanos() != null) {
+            request.precosPlanos().forEach(precoPlano -> {
+                EmpresaPlano plano = empresaPlanoService.getById(precoPlano.planoId());
+                ProcedimentoPlano procedimentoPlano = new ProcedimentoPlano(
+                    procedimentoNovo,
+                    plano,
+                    precoPlano.preco(),
+                    precoPlano.repasse()
+                );
+                procedimentoNovo.getPrecosPlanos().add(procedimentoPlano);
+            });
+            repository.save(procedimentoNovo);
+        }
+
         return procedimentoNovo;
     }
 
     public Procedimento editProcedimento(Long id, ProcedimentoRequest request) {
         Especialidade especialidade = especialidadeService.getById(request.especialidadeId());
+        Procedimento existing = getById(id);
 
         Procedimento procedimento = mapper.toEntity(request);
         procedimento.setId(id);
         procedimento.setEspecialidade(especialidade);
 
+        // Limpar preços por plano existentes
+        if (existing.getPrecosPlanos() != null) {
+            existing.getPrecosPlanos().clear();
+        }
+        procedimento.setPrecosPlanos(existing.getPrecosPlanos() != null ? existing.getPrecosPlanos() : new java.util.ArrayList<>());
+
         Procedimento procedimentoAtualizado = repository.save(procedimento);
 
-        request.precosConvenios().forEach(precoProcedimento -> {
-            Convenio convenio = convenioService.getById(precoProcedimento.convenioId());
-            precoProcedimentoService.save(procedimentoAtualizado, convenio, precoProcedimento);
-        });
+        // Salvar preços por convênio
+        if (request.precosConvenios() != null) {
+            request.precosConvenios().forEach(precoProcedimento -> {
+                Convenio convenio = convenioService.getById(precoProcedimento.convenioId());
+                precoProcedimentoService.save(procedimentoAtualizado, convenio, precoProcedimento);
+            });
+        }
+
+        // Salvar preços por plano
+        if (request.precosPlanos() != null) {
+            request.precosPlanos().forEach(precoPlano -> {
+                EmpresaPlano plano = empresaPlanoService.getById(precoPlano.planoId());
+                ProcedimentoPlano procedimentoPlano = new ProcedimentoPlano(
+                    procedimentoAtualizado,
+                    plano,
+                    precoPlano.preco(),
+                    precoPlano.repasse()
+                );
+                procedimentoAtualizado.getPrecosPlanos().add(procedimentoPlano);
+            });
+            repository.save(procedimentoAtualizado);
+        }
 
         return procedimentoAtualizado;
     }

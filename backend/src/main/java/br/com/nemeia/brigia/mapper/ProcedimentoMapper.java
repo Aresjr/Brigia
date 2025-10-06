@@ -3,9 +3,8 @@ package br.com.nemeia.brigia.mapper;
 import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
 import br.com.nemeia.brigia.dto.response.*;
 import br.com.nemeia.brigia.exception.NotFoundException;
-import br.com.nemeia.brigia.model.Convenio;
-import br.com.nemeia.brigia.model.PrecoProcedimento;
-import br.com.nemeia.brigia.model.Procedimento;
+import br.com.nemeia.brigia.model.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,13 +16,15 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
     private final ObjectMapper objectMapper;
     private final EspecialidadeMapper especialidadeMapper;
     private final ConvenioMapper convenioMapper;
+    private final EmpresaPlanoMapper empresaPlanoMapper;
 
     public ProcedimentoMapper(ObjectMapper objectMapper, EspecialidadeMapper especialidadeMapper,
-            ConvenioMapper convenioMapper) {
+            ConvenioMapper convenioMapper, EmpresaPlanoMapper empresaPlanoMapper) {
         super(objectMapper, Procedimento.class, ProcedimentoResponse.class);
         this.objectMapper = objectMapper;
         this.especialidadeMapper = especialidadeMapper;
         this.convenioMapper = convenioMapper;
+        this.empresaPlanoMapper = empresaPlanoMapper;
     }
 
     public ProcedimentoResponse toResponse(Procedimento procedimento) {
@@ -34,11 +35,18 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
         List<PrecoProcedimentoResponse> precosResponse = procedimento.getPrecos().stream().map(this::toResponse)
                 .toList();
 
+        List<ProcedimentoPlanoResponse> precosPlanos = new ArrayList<>();
+        if (procedimento.getPrecosPlanos() != null) {
+            precosPlanos = procedimento.getPrecosPlanos().stream()
+                    .map(this::toProcedimentoPlanoResponse)
+                    .toList();
+        }
+
         return new ProcedimentoResponse(procedimento.getId(), procedimento.getNome(), procedimento.getCodigo(),
                 procedimento.getObservacoes(), procedimento.getValorPadrao(), procedimento.getValorRepasse(),
                 procedimento.getDuracao(), procedimento.getTipo(),
                 especialidadeMapper.toResponse(procedimento.getEspecialidade()), procedimento.getCriadoEm(),
-                precosResponse, procedimento.getExcluido());
+                precosResponse, precosPlanos, procedimento.getExcluido());
     }
 
     public PrecoProcedimentoResponse toPrecoProcedimento(Procedimento procedimento, Convenio convenio) {
@@ -54,5 +62,13 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
                 precoProcedimento.getRepasse(), convenioMapper.toResponse(precoProcedimento.getConvenio()),
                 precoProcedimento.getCriadoEm(), "", // TODO - colocar nome do usuário
                 precoProcedimento.getAtualizadoEm(), "");
+    }
+
+    private ProcedimentoPlanoResponse toProcedimentoPlanoResponse(ProcedimentoPlano procedimentoPlano) {
+        return new ProcedimentoPlanoResponse(
+                procedimentoPlano.getId(),
+                empresaPlanoMapper.toResponse(procedimentoPlano.getPlano()),
+                procedimentoPlano.getPreco(),
+                procedimentoPlano.getRepasse());
     }
 }

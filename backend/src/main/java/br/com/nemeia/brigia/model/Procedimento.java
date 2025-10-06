@@ -47,6 +47,9 @@ public class Procedimento extends BaseModel {
     @JoinTable(name = "preco_procedimento", joinColumns = @JoinColumn(name = "procedimento_id"), inverseJoinColumns = @JoinColumn(name = "id"))
     private List<PrecoProcedimento> precos;
 
+    @OneToMany(mappedBy = "procedimento", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<ProcedimentoPlano> precosPlanos;
+
     public Procedimento(String codigo, String nome, String observacoes, BigDecimal valorPadrao) {
         this.codigo = codigo;
         this.nome = nome;
