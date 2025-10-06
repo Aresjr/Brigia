@@ -111,6 +111,37 @@
           </div>
         </div>
 
+        <div class="mt-6">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-lg font-medium">Valores por Plano Empresarial</h3>
+          </div>
+
+          <div class="rounded-t-lg">
+            <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 p-3 font-medium">
+              <div>Plano</div>
+              <div>Valor</div>
+              <div>Repasse</div>
+            </div>
+          </div>
+
+          <div class="space-y-1" formArrayName="precosPlanos">
+            <div *ngFor="let preco of precosPlanos.controls; let i = index" [formGroupName]="i"
+                 class="grid grid-cols-[1fr_8rem_8rem] gap-3 px-3 py-1 items-center hover:bg-base-200 rounded-lg">
+
+              <div class="text-sm">{{preco.get('nome')?.value}}</div>
+
+              <input type="text" [id]="'preco_plano_' + i" formControlName="preco" required
+                     mask="separator.2" thousandSeparator="" decimalMarker=","
+                     class="campo mt-0 p-2 text-right" min="0" max="99999" step="1"
+                     [ngClass]="classesCampo('preco_plano_' + i)" >
+
+              <input [id]="'repasse_plano_' + i" type="number" formControlName="repasse"
+                     mask="separator.2" thousandSeparator="" decimalMarker=","
+                     class="campo mt-0 p-2 text-right" min="0" max="99999" step="1">
+            </div>
+          </div>
+        </div>
+
         <div class="flex justify-between space-x-3 mt-6">
           <button type="button" (click)="onCancel()" class="btn btn-sm" >
             Fechar
