@@ -15,6 +15,11 @@
         <lucide-icon [name]="iconeBotao2" class="w-4 h-4"></lucide-icon> {{ tituloBotao2 }}
       </button>
     }
+    @if (tituloBotao3) {
+      <button class="btn btn-primary" (click)="clickedBotao3.emit(); fabOpen = false;">
+        <lucide-icon [name]="iconeBotao3" class="w-4 h-4"></lucide-icon> {{ tituloBotao3 }}
+      </button>
+    }
   </div>
 
   <button class="btn btn-primary btn-circle btn-lg shadow-2xl" (click)="tituloBotao1 ? toggle() : this.clicked.emit()">

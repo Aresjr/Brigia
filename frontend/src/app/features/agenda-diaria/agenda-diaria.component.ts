@@ -48,6 +48,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   pacientes: Paciente[] = [];
   exibeForm: boolean = false;
   exibeFormDisponibilidade: boolean = false;
+  exibeFormHonorarios: boolean = false;
   disponibilidadeDetalhes: any = null;
   pacienteId: number | null = null;
   isLoading: boolean = false;
@@ -72,7 +73,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     this.carregarDados();
 
     if (this.pacienteId) {
-      this.onAddNovo();
+      this.addNovo();
     }
 
     this.router.events
@@ -146,7 +147,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     });
   }
 
-  onAddNovo() {
+  addNovo() {
     this.dataAgendamento = null;
     this.agendamentoDetalhes = null;
     this.exibeForm = true;
@@ -274,6 +275,14 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   fecharFormDisponibilidade() {
     this.disponibilidadeDetalhes = null;
     this.exibeFormDisponibilidade = false;
+  }
+
+  gerarHonorarios() {
+    this.exibeFormHonorarios = true;
+  }
+
+  fecharFormHonorarios() {
+    this.exibeFormHonorarios = false;
   }
 
   salvarDisponibilidade(disponibilidade: Partial<DisponibilidadeRequest>) {

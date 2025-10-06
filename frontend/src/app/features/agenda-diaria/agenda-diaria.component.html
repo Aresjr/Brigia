@@ -94,11 +94,17 @@
   </app-disponibilidade-form>
 }
 
+  @if (exibeFormHonorarios) {
+    
+  }
+  
 @if (mostraFab()) {
   <app-fab [tituloBotao1]="'Criar Agendamento'" [iconeBotao1]="'calendar-plus'"
-           (clickedBotao1)="onAddNovo()"
+           (clickedBotao1)="addNovo()"
            [tituloBotao2]="'Criar Disponibilidade'" [iconeBotao2]="'calendar-check'"
            (clickedBotao2)="addDisponibilidade()"
+           [tituloBotao3]="'Gerar Honorários'" [iconeBotao3]="'dollar-sign'"
+           (clickedBotao3)="gerarHonorarios()"
            class="fixed bottom-6 right-6 z-50"></app-fab>
 }
 
