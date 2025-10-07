@@ -69,12 +69,6 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
     this.carregarDados();
   }
 
-  override ngOnChanges(): void {
-    if (this.isLoading) {
-      this.carregarDados();
-    }
-  }
-
   carregarDados() {
     forkJoin([
       this.carregarContasReceber(),

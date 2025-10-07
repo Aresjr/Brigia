@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 public record AgendamentoResponse(Long id, PacienteResponse paciente,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate data,
@@ -16,5 +17,7 @@ public record AgendamentoResponse(Long id, PacienteResponse paciente,
         EspecialidadeResponse especialidade, EmpresaResponse empresa, ConvenioResponse convenio,
         ProfissionalResponse profissional, ProcedimentoResponse procedimento, StatusAgendamento status,
         TipoAgendamento tipoAgendamento, FormaPagamento formaPagamento, BigDecimal valor, BigDecimal desconto,
-        String observacoes, Integer duracao, LocalDateTime criadoEm, Boolean excluido) {
+        String observacoes, Integer duracao, Boolean encaixe, List<ProcedimentoAgendamentoResponse> procedimentos,
+        BigDecimal valorTotal,
+        LocalDateTime criadoEm, Boolean excluido) {
 }

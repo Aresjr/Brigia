@@ -4,8 +4,13 @@ import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
 import br.com.nemeia.brigia.dto.response.AgendamentoDetalhesResponse;
 import br.com.nemeia.brigia.dto.response.AgendamentoResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
+import br.com.nemeia.brigia.dto.response.ProcedimentoAgendamentoResponse;
 import br.com.nemeia.brigia.model.Agendamento;
+import br.com.nemeia.brigia.model.AgendamentoProcedimento;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,6 +34,13 @@ public class AgendamentoMapper {
             return null;
         }
 
+        List<ProcedimentoAgendamentoResponse> procedimentos = new ArrayList<>();
+        if (agendamento.getProcedimentos() != null) {
+            procedimentos = agendamento.getProcedimentos().stream()
+                    .map(this::toProcedimentoAgendamentoResponse)
+                    .toList();
+        }
+
         return new AgendamentoResponse(agendamento.getId(), pacienteMapper.toResponse(agendamento.getPaciente()),
                 agendamento.getData(), agendamento.getHora(),
                 agendamento.getHora().plusMinutes(agendamento.getDuracao()),
@@ -40,7 +52,16 @@ public class AgendamentoMapper {
                 procedimentoMapper.toResponse(agendamento.getProcedimento()), agendamento.getStatus(),
                 agendamento.getTipoAgendamento(), agendamento.getFormaPagamento(), agendamento.getValor(),
                 agendamento.getDesconto(), agendamento.getObservacoes(), agendamento.getDuracao(),
-                agendamento.getCriadoEm(), agendamento.getExcluido());
+                agendamento.getEncaixe(), procedimentos, BigDecimal.ZERO,
+          agendamento.getCriadoEm(), agendamento.getExcluido());
+    }
+
+    private ProcedimentoAgendamentoResponse toProcedimentoAgendamentoResponse(AgendamentoProcedimento ap) {
+        return new ProcedimentoAgendamentoResponse(
+                ap.getId(),
+                procedimentoMapper.toResponse(ap.getProcedimento()),
+                ap.getQuantidade()
+        );
     }
 
     public AgendamentoDetalhesResponse toDetalhesResponse(Agendamento agendamento) {
@@ -76,6 +97,7 @@ public class AgendamentoMapper {
         original.setDuracao(request.duracao());
         original.setObservacoes(request.observacoes());
         original.setPrecoAlterado(request.precoAlterado());
+        original.setEncaixe(request.encaixe() != null ? request.encaixe() : false);
         return original;
     }
 }

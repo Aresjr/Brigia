@@ -35,6 +35,7 @@ export class CalendarioComponent implements AfterContentInit {
   @Input() events: CalendarEvent<Agendamento>[] = [];
   @Input() isLoading!: boolean;
   @Output() detalhesAgendamento = new EventEmitter<Agendamento>();
+  @Output() detalhesDisponibilidade = new EventEmitter<any>();
   @Output() diaClicado = new EventEmitter<Date>();
   @Output() horarioClicado = new EventEmitter<Date>();
   @Output() dataAlterada = new EventEmitter<Date>();
@@ -62,7 +63,12 @@ export class CalendarioComponent implements AfterContentInit {
   }
 
   verAgendamento(evento: CalendarEvent<Agendamento>): void {
-    this.detalhesAgendamento.emit(evento.meta);
+    // Verificar se é um evento de disponibilidade (não tem paciente)
+    if (evento.meta && !evento.meta.paciente) {
+      this.detalhesDisponibilidade.emit(evento.meta);
+    } else {
+      this.detalhesAgendamento.emit(evento.meta);
+    }
   }
 
   handleHour($event: { date: Date; sourceEvent: MouseEvent }) {

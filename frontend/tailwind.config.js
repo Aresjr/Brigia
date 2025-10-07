@@ -27,6 +27,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
+        sans: ['Montserrat', 'sans-serif'],
         montserrat: ['Montserrat', 'sans-serif'],
       },
       scale: {
@@ -43,7 +44,8 @@ module.exports = {
       {
         brigida: {
           "primary": "#2563eb",
-          "secondary": "#10b981",
+          "secondary": "#A78BFA",
+          "secondary-content": "#ffffff",
           "accent": "#60a5fa",
           "neutral": "#6b7280",
           "neutral-content": "#ffffff",

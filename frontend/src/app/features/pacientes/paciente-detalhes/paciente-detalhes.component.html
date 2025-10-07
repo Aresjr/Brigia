@@ -21,6 +21,11 @@
         </div>
 
         <div class="border-b pb-2">
+          <p class="text-sm">Nome Social</p>
+          <p class="font-medium">{{paciente.nomeSocial || '-'}}</p>
+        </div>
+
+        <div class="border-b pb-2">
           <p class="text-sm">CPF</p>
           <p class="font-medium">{{paciente.cpf | cpf}}</p>
         </div>
@@ -38,6 +43,11 @@
         <div class="border-b pb-2">
           <p class="text-sm">Celular</p>
           <p class="font-medium">{{paciente.celular | celular}}</p>
+        </div>
+
+        <div class="border-b pb-2">
+          <p class="text-sm">Pressão Arterial</p>
+          <p class="font-medium">{{paciente.pressaoArterial || '-'}}</p>
         </div>
 
         <div class="border-b pb-2">

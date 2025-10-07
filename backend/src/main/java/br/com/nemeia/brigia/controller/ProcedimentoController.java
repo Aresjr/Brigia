@@ -23,6 +23,7 @@ public class ProcedimentoController {
     private final ProcedimentoService service;
     private final ProcedimentoMapper mapper;
     private final ConvenioService convenioService;
+    private final br.com.nemeia.brigia.service.EmpresaPlanoService empresaPlanoService;
 
     @GetMapping
     @PreAuthorize("hasAuthority('FATURAMENTO') or hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
@@ -77,5 +78,14 @@ public class ProcedimentoController {
         log.info("GET /procedimentos/{}/tabela-preco/{} - buscando tabela de preço do procedimento ID e convenio ID",
                 id, convenioId);
         return mapper.toPrecoProcedimento(service.getById(id), convenioService.getById(convenioId));
+    }
+
+    @GetMapping("/{id}/tabela-preco-plano/{planoId}")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    public br.com.nemeia.brigia.dto.response.ProcedimentoPlanoResponse getPrecoProcedimentoPlano(@PathVariable Long id,
+            @PathVariable Long planoId) {
+        log.info("GET /procedimentos/{}/tabela-preco-plano/{} - buscando tabela de preço do procedimento ID e plano ID",
+                id, planoId);
+        return mapper.toPrecoProcedimentoPlano(service.getById(id), empresaPlanoService.getById(planoId));
     }
 }

@@ -1,58 +1,114 @@
 <div class="mt-4">
 
-  <app-top-bar title="Agenda Diária" [showSearchBar]=false (search)="onSearch($event)" ></app-top-bar>
+  <app-top-bar title="Agenda Diária" [showSearchBar]=false ></app-top-bar>
 
-  <div class="flex justify-end gap-4 mb-6 flex-wrap">
-    <div></div>
+  <div class="bg-base-100 p-4 rounded-md">
 
-    <div class="flex gap-4">
-      <ng-select *ngIf="!this.userService.isMedico()" class="w-72 shadow-md hover:shadow-lg h-8 max-h-8 leading-none tooltip flex text-left"
-                 (change)="selectProfissional($event)" placeholder="Todos os Profissionais - Selecione" data-tip="Filtrar Profissional">
-        <ng-option class="max-h-8" value="0">Todos os Profissionais - Selecione</ng-option>
-        @for(profissional of this.profissionais; track profissional.id) {
-          <ng-option class="max-h-8" value="{{ profissional.id }}">{{ profissional.nome }}</ng-option>
-        }
-        <ng-template ng-notfound-tmp>
-          <span class="text-sm p-6">Nenhum resultado</span>
-        </ng-template>
-      </ng-select>
+    <div class="flex justify-between gap-4 mb-2 flex-wrap">
+      <div>
+        <div class="inline-flex rounded-lg border border-base-300 p-1">
+          <button
+            (click)="alternarModoVisualizacao('tudo')"
+            class="btn btn-sm"
+            [class]="modoVisualizacao === 'tudo'
+          ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+          : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-gray-50'">
+            Tudo
+          </button>
+          <button
+            (click)="alternarModoVisualizacao('agendamentos')"
+            class="btn btn-sm"
+            [class]="modoVisualizacao === 'agendamentos'
+          ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+          : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-gray-50'">
+            Agendamentos
+          </button>
+          <button
+            (click)="alternarModoVisualizacao('disponibilidades')"
+            class="btn btn-sm"
+            [class]="modoVisualizacao === 'disponibilidades'
+          ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+          : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-gray-50'">
+            Disponibilidades
+          </button>
+        </div>
+      </div>
 
-      <ng-select class="w-72 shadow-md hover:shadow-lg h-8 max-h-8 leading-none tooltip flex text-left"
-                 (change)="selectPaciente($event)" placeholder="Todos os Pacientes - Selecione" data-tip="Filtrar Paciente">
-        <ng-option class="max-h-8" value="0">Todos os Pacientes - Selecione</ng-option>
-        @for(paciente of this.pacientes; track paciente.id) {
-          <ng-option class="max-h-8" value="{{ paciente.id }}">{{ paciente.nome }}</ng-option>
-        }
-        <ng-template ng-notfound-tmp>
-          <span class="text-sm p-6">Nenhum resultado</span>
-        </ng-template>
-      </ng-select>
+      <div>
+        <ng-select *ngIf="!this.userService.isMedico()" class="w-72 hover:shadow-lg h-8 max-h-8 leading-none tooltip flex text-left"
+                   (change)="selectProfissional($event)" placeholder="Todos os Profissionais" data-tip="Filtrar Profissional">
+          <ng-option class="max-h-8" value="0">Todos os Profissionais</ng-option>
+          @for(profissional of this.profissionais; track profissional.id) {
+            <ng-option class="max-h-8" value="{{ profissional.id }}">{{ profissional.nome }}</ng-option>
+          }
+          <ng-template ng-notfound-tmp>
+            <span class="text-sm p-6">Nenhum resultado</span>
+          </ng-template>
+        </ng-select>
+      </div>
+
+      <div>
+        <ng-select class="w-72 shadow-md hover:shadow-lg h-8 max-h-8 leading-none tooltip flex text-left"
+                   (change)="selectPaciente($event)" placeholder="Todos os Pacientes" data-tip="Filtrar Paciente">
+          <ng-option class="max-h-8" value="0">Todos os Pacientes</ng-option>
+          @for(paciente of this.pacientes; track paciente.id) {
+            <ng-option class="max-h-8" value="{{ paciente.id }}">{{ paciente.nome }}</ng-option>
+          }
+          <ng-template ng-notfound-tmp>
+            <span class="text-sm p-6">Nenhum resultado</span>
+          </ng-template>
+        </ng-select>
+      </div>
     </div>
-  </div>
 
-<app-calendario
-  class="z-10"
-  [events]="eventosExibicao"
-  [isLoading]="isLoading"
-  (detalhesAgendamento)="detalhesAgendamento($event)"
-  (diaClicado)="diaClicado($event)"
-  (horarioClicado)="horarioClicado($event)"
-  (dataAlterada)="dataAlterada($event)"
-  (recarrega)="carregarAgendamentos()">
-</app-calendario>
+    <app-calendario
+      class="z-10"
+      [events]="eventosExibicao"
+      [isLoading]="isLoading"
+      (detalhesAgendamento)="detalhesAgendamento($event)"
+      (detalhesDisponibilidade)="detalhesDisponibilidade($event)"
+      (diaClicado)="diaClicado($event)"
+      (horarioClicado)="horarioClicado($event)"
+      (dataAlterada)="dataAlterada($event)"
+      (recarrega)="carregarAgendamentos()">
+    </app-calendario>
+  </div>
 
 @if (exibeForm) {
   <app-agendamento-form
     [agendamentoDetalhes]="agendamentoDetalhes"
     [dataAgendamento]="dataAgendamento"
     [pacienteId]="pacienteId"
+    [profissionalId]="profissionalFiltro !== 0 ? profissionalFiltro : null"
     (save)="salvar($event)"
     (cancel)="fecharForm()">
   </app-agendamento-form>
 }
 
+@if (exibeFormDisponibilidade) {
+  <app-disponibilidade-form
+    [disponibilidadeDetalhes]="disponibilidadeDetalhes"
+    [profissionalId]="profissionalFiltro !== 0 ? profissionalFiltro : null"
+    (save)="salvarDisponibilidade($event)"
+    (cancel)="fecharFormDisponibilidade()">
+  </app-disponibilidade-form>
+}
+
+  @if (exibeFormHonorarios) {
+  <app-honorarios-form
+    [profissionalId]="profissionalFiltro !== 0 ? profissionalFiltro : null"
+    (cancel)="fecharFormHonorarios()">
+  </app-honorarios-form>
+}
+
 @if (mostraFab()) {
-  <app-fab (clicked)="onAddNovo()" class="fixed bottom-6 right-6 z-50"></app-fab>
+  <app-fab [tituloBotao1]="'Criar Agendamento'" [iconeBotao1]="'calendar-plus'"
+           (clickedBotao1)="addNovo()"
+           [tituloBotao2]="'Criar Disponibilidade'" [iconeBotao2]="'calendar-check'"
+           (clickedBotao2)="addDisponibilidade()"
+           [tituloBotao3]="'Gerar Honorários'" [iconeBotao3]="'dollar-sign'"
+           (clickedBotao3)="gerarHonorarios()"
+           class="fixed bottom-6 right-6 z-50"></app-fab>
 }
 
 </div>

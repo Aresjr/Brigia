@@ -2,19 +2,18 @@ package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.AtendimentoRequest;
-import br.com.nemeia.brigia.dto.request.ProcedimentoAtendimentoRequest;
 import br.com.nemeia.brigia.mapper.AtendimentoMapper;
 import br.com.nemeia.brigia.model.*;
 import br.com.nemeia.brigia.repository.*;
-import jakarta.validation.Valid;
-import java.math.BigDecimal;
+import br.com.nemeia.brigia.utils.DbUtil;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,26 +22,22 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
 
     private final ProfissionalService profissionalService;
     private final AgendamentoService agendamentoService;
-    private final ProcedimentoService procedimentoService;
-    private final PrecoProcedimentoService precoProcedimentoService;
-    private final ContaReceberService contaReceberService;
+    private final PacienteService pacienteService;
     private final AtendimentoMapper mapper;
 
     public AtendimentoService(AtendimentoRepository repository, AtendimentoMapper mapper,
             ProfissionalService profissionalService, AgendamentoService agendamentoService,
-            ProcedimentoService procedimentoService, PrecoProcedimentoService precoProcedimentoService,
-            ContaReceberService contaReceberService) {
+                              PacienteService pacienteService) {
         super(repository);
         this.mapper = mapper;
         this.profissionalService = profissionalService;
         this.agendamentoService = agendamentoService;
-        this.procedimentoService = procedimentoService;
-        this.precoProcedimentoService = precoProcedimentoService;
-        this.contaReceberService = contaReceberService;
+        this.pacienteService = pacienteService;
     }
 
     public Page<Atendimento> getPaged(int page, int size) {
-        return repository.findAllByUnidadeIdIs(PageRequest.of(page, size), SecurityHolder.getLoggedUserUnidadeId());
+        Pageable pageable = PageRequest.of(page, size, DbUtil.DEFAULT_SORT);
+        return repository.findAllByUnidadeIdIs(pageable, SecurityHolder.getLoggedUserUnidadeId());
     }
 
     @Transactional
@@ -52,47 +47,13 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         Agendamento agendamento = agendamentoService.getById(request.agendamentoId());
 
         setEntidades(atendimento, agendamento);
-        setProcedimentos(atendimento, request.procedimentos(), agendamento.getConvenio());
 
         atendimento.setData(LocalDate.now());
         atendimento.setHoraFim(LocalTime.now());
 
         Atendimento atendimentoNovo = repository.save(atendimento);
         agendamentoService.updateStatus(agendamento, StatusAgendamento.FINALIZADO);
-
         return atendimentoNovo;
-    }
-
-    private void setProcedimentos(Atendimento atendimento, List<ProcedimentoAtendimentoRequest> procedimentos,
-            Convenio convenio) {
-        List<AtendimentoProcedimento> pa = new ArrayList<>();
-        List<BigDecimal> valoresLancados = new ArrayList<>();
-        procedimentos.forEach(par -> {
-            Procedimento procedimento = procedimentoService.getById(par.procedimentoId());
-            var precoProcedimento = precoProcedimentoService.getPreco(procedimento, convenio);
-            valoresLancados.add(precoProcedimento.multiply(BigDecimal.valueOf(par.quantidade())));
-            pa.add(new AtendimentoProcedimento(atendimento, procedimento, par.quantidade(), precoProcedimento));
-        });
-        atendimento.getProcedimentos().addAll(pa);
-        atendimento.setValorAgendamento(atendimento.getAgendamento().getValor());
-        atendimento.setValorDescontoAgendamento(atendimento.getAgendamento().getDesconto());
-        atendimento.setValorLancado(valoresLancados.stream().reduce(BigDecimal.ZERO, BigDecimal::add));
-    }
-
-    @Transactional
-    public Atendimento update(@Valid AtendimentoRequest request, Long id) {
-        Atendimento original = getById(id);
-        Atendimento atendimentoUpdate = mapper.toEntity(request);
-
-        Agendamento agendamento = agendamentoService.getById(request.agendamentoId());
-        setEntidades(atendimentoUpdate, agendamento);
-
-        atendimentoUpdate.setId(original.getId());
-        atendimentoUpdate.setUnidade(original.getUnidade());
-        atendimentoUpdate.setPaciente(original.getPaciente());
-        atendimentoUpdate.setProfissional(original.getProfissional());
-        atendimentoUpdate.setAgendamento(original.getAgendamento());
-        return repository.save(atendimentoUpdate);
     }
 
     private void setEntidades(Atendimento atendimento, Agendamento agendamento) {
@@ -125,20 +86,36 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         Atendimento atendimento = getById(id);
 
         Agendamento agendamento = agendamentoService.getById(atendimento.getAgendamento().getId());
-
-        setProcedimentos(atendimento, request.procedimentos(), agendamento.getConvenio());
+        setValoresDescritivos(atendimento, request);
 
         atendimento.setData(LocalDate.now());
         atendimento.setHoraFim(LocalTime.now());
         atendimento.setStatus(StatusAtendimento.FINALIZADO);
-
         atendimento = repository.save(atendimento);
 
-        agendamentoService.updateStatus(agendamento, StatusAgendamento.FINALIZADO);
-
-        contaReceberService.createContaReceber(atendimento);
+        finalizaAgendamento(agendamento);
+        atualizaDataUltimaConsultaPaciente(agendamento);
 
         return atendimento;
+    }
+
+    private void finalizaAgendamento(Agendamento agendamento) {
+      agendamentoService.updateStatus(agendamento, StatusAgendamento.FINALIZADO);
+    }
+
+    private void atualizaDataUltimaConsultaPaciente(Agendamento agendamento) {
+      agendamento.getPaciente().setUltimaConsulta(LocalDateTime.now());
+      pacienteService.update(agendamento.getPaciente());
+    }
+
+    private void setValoresDescritivos(Atendimento atendimento, AtendimentoRequest request) {
+      atendimento.setAnamnese(request.anamnese());
+      atendimento.setExameFisico(request.exameFisico());
+      atendimento.setDiagnostico(request.diagnostico());
+      atendimento.setEvolucaoClinica(request.evolucaoClinica());
+      atendimento.setExamesSolicitados(request.examesSolicitados());
+      atendimento.setPrescricoes(request.prescricoes());
+      atendimento.setObservacoes(request.observacoes());
     }
 
     @Override

@@ -77,7 +77,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
   }
 
   verHistorico(id: number) {
-    this.toastr.warning('Histórico de Paciente será implementado em breve.');
+    this.toastr.info('Histórico de Paciente será implementado em breve.');
   }
 
   mostraFab() {

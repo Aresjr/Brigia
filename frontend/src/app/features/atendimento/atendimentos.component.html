@@ -92,8 +92,10 @@
   @if (mostrarFormularioNovo) {
     <app-atendimento-form
       [atendimento]="itemEdicao"
+      [atendimentoDetalhes]="atendimentoDetalhes"
       [agendamentoId]="agendamentoId"
-      (save)="salvarNovoAtendimento($event)"
+      [atendimentoId]="atendimentoId"
+      (save)="salvarAtendimento($event)"
       (cancel)="cancelarNovo()"
     ></app-atendimento-form>
   }

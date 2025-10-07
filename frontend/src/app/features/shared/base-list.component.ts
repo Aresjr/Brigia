@@ -26,7 +26,6 @@ export abstract class BaseListComponent<T extends Entidade> implements OnInit {
   mostrarDetalhes = false;
   mostrarFormularioNovo = false;
   isLoading = false;
-  erroCarregar = false;
   nomeEntidade = '';
   exibeConfirmExclusao = false;
   idExclusao: number = 0;
@@ -38,27 +37,17 @@ export abstract class BaseListComponent<T extends Entidade> implements OnInit {
     this.carregarRegistros();
   }
 
-  ngOnChanges(): void {
-    console.log('ngOnChanges');
-    if (this.erroCarregar) {
-      this.carregarRegistros();
-    }
-  }
-
-  carregarRegistros(): void {
+  carregarRegistros() {
     this.isLoading = true;
-    this.service.listar(true).subscribe({
+    return this.service.listar(true).subscribe({
       next: (response) => {
         this.itensInternos = response.items;
         this.itensExibicao = [...this.itensInternos];
         this.atualizarPaginacao();
         this.isLoading = false;
-        this.erroCarregar = false;
       },
       error: () => {
         this.isLoading = false;
-        this.toastr.error('Erro ao carregar');
-        this.erroCarregar = true;
       }
     });
   }

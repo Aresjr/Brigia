@@ -1,0 +1,118 @@
+<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm">
+  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[52rem]" (click)="$event.stopPropagation()">
+
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold">Gerar Honorários</h2>
+      <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="fechar()" title="Fechar">
+        <lucide-icon name="x" class="inline w-5 h-5"/>
+      </button>
+    </div>
+
+    <form [formGroup]="form" class="space-y-4">
+      <div class="flex gap-4">
+        <div class="flex-1">
+          <label class="label-campo" for="profissionalId">
+            Profissional <span aria-hidden="true" class="text-error">*</span>
+          </label>
+          <ng-select
+            formControlName="profissionalId"
+            class="campo-select"
+            placeholder="Selecione um profissional"
+            labelForId="profissionalId"
+            [items]="profissionais"
+            bindValue="id"
+            bindLabel="nome">
+          </ng-select>
+        </div>
+
+        <div class="w-40">
+          <label class="label-campo" for="data">
+            Data <span aria-hidden="true" class="text-error">*</span>
+          </label>
+          <input
+            type="date"
+            id="data"
+            formControlName="data"
+            class="campo"
+            required>
+        </div>
+      </div>
+
+      <div *ngIf="isLoading" class="flex justify-center items-center py-8">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+
+      <div *ngIf="!isLoading && agendamentos.length === 0 && form.get('profissionalId')?.value" class="text-center py-8 text-neutral">
+        Nenhum agendamento encontrado para esta data.
+      </div>
+
+      <div *ngIf="!isLoading && agendamentos.length > 0">
+        <h3 class="text-base font-semibold mb-2">Agendamentos</h3>
+
+        <div class="border border-base-300 rounded-lg divide-y divide-base-300">
+          <div *ngFor="let agendamento of agendamentos" class="hover:bg-base-200 transition-colors">
+            <!-- Item principal -->
+            <div
+              class="flex justify-between items-center p-3 cursor-pointer"
+              (click)="toggleAgendamento(agendamento.id)">
+              <div class="flex items-center gap-2">
+                <lucide-icon
+                  [name]="isExpandido(agendamento.id) ? 'chevron-down' : 'chevron-right'"
+                  class="w-4 h-4 text-neutral">
+                </lucide-icon>
+                <span class="font-medium">{{ agendamento.paciente.nome }}</span>
+              </div>
+              <span class="font-semibold text-primary">
+                {{ calcularValorAgendamento(agendamento) | currency:'BRL':'symbol':'1.2-2' }}
+              </span>
+            </div>
+
+            <!-- Procedimentos expandidos -->
+            <div *ngIf="isExpandido(agendamento.id)" class="bg-base-200/50 px-6 py-2">
+              <div class="space-y-1">
+                <!-- Procedimento principal -->
+                <div *ngIf="agendamento.procedimento" class="flex justify-between text-sm py-1">
+                  <span class="text-neutral">{{ agendamento.procedimento.nome }}</span>
+                  <span>{{ agendamento.valor | currency:'BRL':'symbol':'1.2-2' }}</span>
+                </div>
+
+                <!-- Procedimentos adicionais -->
+                <div *ngFor="let proc of agendamento.procedimentos" class="flex justify-between text-sm py-1">
+                  <span class="text-neutral">
+                    {{ proc.procedimento.nome }}
+                    <span class="text-xs">({{ proc.quantidade }}x)</span>
+                  </span>
+                  <span>
+                    {{ ( (proc.procedimento.valorPadrao || 0) * proc.quantidade) | currency:'BRL':'symbol':'1.2-2' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Valor total -->
+        <div class="flex justify-between items-center mt-4 p-4 bg-primary/10 rounded-lg">
+          <span class="text-lg font-semibold">Valor Total</span>
+          <span class="text-xl font-bold text-primary">
+            {{ valorTotal | currency:'BRL':'symbol':'1.2-2' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="flex justify-between mt-6">
+        <button type="button" class="btn btn-sm" (click)="fechar()">
+          Fechar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary btn-sm"
+          [disabled]="!form.valid || agendamentos.length === 0"
+          (click)="gerar()">
+          Gerar
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>

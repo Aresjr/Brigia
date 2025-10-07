@@ -3,6 +3,8 @@ package br.com.nemeia.brigia.service;
 import br.com.nemeia.brigia.utils.DbUtil;
 import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
+import br.com.nemeia.brigia.dto.request.ProcedimentoAgendamentoRequest;
+import br.com.nemeia.brigia.exception.DisponibilidadeNaoEncontradaException;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.AgendamentoMapper;
 import br.com.nemeia.brigia.model.*;
@@ -19,6 +21,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -35,6 +40,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     private final ConvenioService convenioService;
     private final UnidadeService unidadeService;
     private final EmailService emailService;
+    private final DisponibilidadeService disponibilidadeService;
 
     @Value("${app.base-url}")
     private String baseUrl;
@@ -43,7 +49,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             PacienteService pacienteService, ProfissionalService profissionalService,
             EspecialidadeService especialidadeService, ProcedimentoService procedimentoService,
             EmpresaService empresaService, ConvenioService convenioService, UnidadeService unidadeService,
-            EmailService emailService) {
+            EmailService emailService, DisponibilidadeService disponibilidadeService) {
         super(repository);
         this.mapper = mapper;
         this.pacienteService = pacienteService;
@@ -54,6 +60,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         this.convenioService = convenioService;
         this.emailService = emailService;
         this.unidadeService = unidadeService;
+        this.disponibilidadeService = disponibilidadeService;
     }
 
     @Cacheable(value = "agendamentos", key = "#userId + '-' + #mes + '-' + #ano")
@@ -82,9 +89,24 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     public Agendamento createAgendamento(AgendamentoRequest request) {
         Agendamento agendamento = mapper.toEntity(request);
         setEntidades(request, agendamento);
+
+        // Validar disponibilidade do profissional, exceto se for encaixe
+        validarDisponibilidadeProfissional(request, null);
+
         agendamento.setStatus(StatusAgendamento.AGENDADO);
         agendamento.setUnidade(unidadeService.getById(SecurityHolder.getLoggedUserUnidadeId()));
+
+        // Salvar agendamento primeiro para obter o ID
+        var listaProcedimentos = request.procedimentos();
+        agendamento.setProcedimentos(null);
         Agendamento agendamentoNovo = repository.save(agendamento);
+
+        // Processar lista de procedimentos após o agendamento ter sido salvo
+        if (listaProcedimentos != null && !listaProcedimentos.isEmpty()) {
+            processarProcedimentos(agendamentoNovo, listaProcedimentos);
+            // Salvar novamente para persistir os procedimentos
+            agendamentoNovo = repository.save(agendamentoNovo);
+        }
 
         sendEmail(agendamentoNovo, "Agendamento Realizado!", "agendamento-cadastrado");
 
@@ -94,10 +116,20 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     @CacheEvict(value = "agendamentos", allEntries = true)
     public Agendamento editAgendamento(Long id, AgendamentoRequest request) {
         Agendamento original = getById(id);
-        boolean deveMandarEmail = deveMandarEmail(original, request);
+        boolean deveMandarEmail = deveMandarEmail(original, request); //TODO - verificar porque está mandando email na edição
+
+        // Validar disponibilidade do profissional, exceto se for encaixe
+        validarDisponibilidadeProfissional(request, id);
 
         Agendamento agendamentoUpdate = mapper.updateEntity(original, request);
         setEntidades(request, agendamentoUpdate);
+
+        // Remover procedimentos antigos e adicionar novos
+        agendamentoUpdate.getProcedimentos().clear();
+        if (request.procedimentos() != null && !request.procedimentos().isEmpty()) {
+            processarProcedimentos(agendamentoUpdate, request.procedimentos());
+        }
+
         Agendamento agendamentoAtualizado = repository.save(agendamentoUpdate);
 
         if (deveMandarEmail) {
@@ -162,6 +194,57 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     public Agendamento getByToken(String token) {
         return repository.findOneByToken(token)
                 .orElseThrow(() -> new NotFoundException(getNomeEntidade() + " não encontrado com token:" + token));
+    }
+
+    private void validarDisponibilidadeProfissional(AgendamentoRequest request, Long agendamentoId) {
+        // Se for encaixe, não precisa validar disponibilidade
+        if (Boolean.TRUE.equals(request.encaixe())) {
+            return;
+        }
+
+        // Validar se há disponibilidade cadastrada para o profissional no horário solicitado
+        disponibilidadeService.findByProfissionalAndDiaAndHora(
+                request.profissionalId(),
+                request.data(),
+                request.hora().plusMinutes(request.duracao())
+        ).orElseThrow(() -> new DisponibilidadeNaoEncontradaException(
+                "Não há disponibilidade cadastrada para o profissional no horário selecionado. " +
+                "Troque o horário ou marque como encaixe."
+        ));
+
+        // Validar se não há conflito com outros agendamentos do mesmo profissional
+        LocalTime horaFim = request.hora().plusMinutes(request.duracao());
+        Long idParaVerificar = agendamentoId != null ? agendamentoId : -1L;
+
+        List<Agendamento> agendamentosConflitantes = repository.findAgendamentosConflitantes(
+                request.profissionalId(),
+                request.data(),
+                request.hora(),
+                horaFim,
+                idParaVerificar
+        );
+
+        if (!agendamentosConflitantes.isEmpty()) {
+            throw new DisponibilidadeNaoEncontradaException(
+                    "Já existe um agendamento para o profissional neste horário. " +
+                    "Troque o horário ou marque como encaixe."
+            );
+        }
+    }
+
+    private void processarProcedimentos(Agendamento agendamento, List<ProcedimentoAgendamentoRequest> procedimentosRequest) {
+        if (agendamento.getProcedimentos() == null) {
+          agendamento.setProcedimentos(new ArrayList<>());
+        }
+        for (ProcedimentoAgendamentoRequest procReq : procedimentosRequest) {
+            Procedimento procedimento = procedimentoService.getById(procReq.procedimentoId());
+            AgendamentoProcedimento agendamentoProcedimento = new AgendamentoProcedimento(
+                    agendamento,
+                    procedimento,
+                    procReq.quantidade()
+            );
+            agendamento.getProcedimentos().add(agendamentoProcedimento);
+        }
     }
 
     @Override

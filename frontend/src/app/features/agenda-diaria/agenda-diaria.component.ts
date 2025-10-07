@@ -19,6 +19,10 @@ import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } fro
 import { Subscription, interval } from 'rxjs';
 import { PacienteService } from '../pacientes/paciente.service';
 import { Paciente } from '../pacientes/paciente.interface';
+import { DisponibilidadeFormComponent } from '../disponibilidade/disponibilidade-form.component';
+import { DisponibilidadeRequest } from '../disponibilidade/disponibilidade.interface';
+import { DisponibilidadeService } from '../disponibilidade/disponibilidade.service';
+import { HonorariosFormComponent } from '../honorarios/honorarios-form.component';
 
 @Component({
   selector: 'app-agenda-diaria',
@@ -31,7 +35,9 @@ import { Paciente } from '../pacientes/paciente.interface';
     NgIf,
     NgNotFoundTemplateDirective,
     NgOptionComponent,
-    NgSelectComponent
+    NgSelectComponent,
+    DisponibilidadeFormComponent,
+    HonorariosFormComponent
   ],
   templateUrl: './agenda-diaria.component.html'
 })
@@ -43,17 +49,22 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   profissionais: Profissional[] = [];
   pacientes: Paciente[] = [];
   exibeForm: boolean = false;
+  exibeFormDisponibilidade: boolean = false;
+  exibeFormHonorarios: boolean = false;
+  disponibilidadeDetalhes: any = null;
   pacienteId: number | null = null;
   isLoading: boolean = false;
   dataExibicao: Date = new Date();
   profissionalFiltro: number = 0;
   pacienteFiltro: number = 0;
   private subscription!: Subscription;
+  modoVisualizacao: 'tudo' | 'agendamentos' | 'disponibilidades' = 'tudo';
 
   constructor(private router: Router, private toastr: ToastrService,
               private agendamentoService: AgendamentoService,
               private profissionalService: ProfissionalService,
               private pacienteService: PacienteService,
+              private disponibilidadeService: DisponibilidadeService,
               protected userService: UserService) {
     const navigation = this.router.getCurrentNavigation();
     const pacienteId = navigation?.extras.state?.['pacienteId'];
@@ -64,7 +75,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     this.carregarDados();
 
     if (this.pacienteId) {
-      this.onAddNovo();
+      this.addNovo();
     }
 
     this.router.events
@@ -78,12 +89,6 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     this.subscription = interval(1000 * 60).subscribe(() => {
       this.carregarAgendamentos();
     });
-  }
-
-  ngOnChanges(): void {
-    if (this.isLoading) {
-      this.carregarDados();
-    }
   }
 
   carregarDados() {
@@ -100,14 +105,27 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     const ano = this.dataExibicao.getFullYear();
     const mes = this.dataExibicao.getMonth() + 1;
 
-    this.agendamentoService.listarPorData(ano, mes).subscribe({
-      next: value => {
-        const agendamentos = value.items;
-        this.eventosInternos = agendamentos.map(a => EventoFactory.fromApi(a));
+    const agendamentos$ = this.agendamentoService.listarPorData(ano, mes);
+    const disponibilidades$ = this.disponibilidadeService.listarPorData(ano, mes);
 
-        this.filtrarRegistros();
+    agendamentos$.subscribe({
+      next: agendamentosResponse => {
+        const eventosAgendamentos = agendamentosResponse.items.map(a => EventoFactory.fromAgendamento(a));
 
-        this.isLoading = false;
+        disponibilidades$.subscribe({
+          next: disponibilidadesResponse => {
+            const eventosDisponibilidades = disponibilidadesResponse.items.map(d => EventoFactory.fromDisponibilidade(d));
+            this.eventosInternos = [...eventosDisponibilidades, ...eventosAgendamentos];
+
+            this.filtrarRegistros();
+            this.isLoading = false;
+          },
+          error: () => {
+            this.eventosInternos = eventosAgendamentos;
+            this.filtrarRegistros();
+            this.isLoading = false;
+          }
+        });
       },
       error: () => {
         this.isLoading = false;
@@ -131,7 +149,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     });
   }
 
-  onAddNovo() {
+  addNovo() {
     this.dataAgendamento = null;
     this.agendamentoDetalhes = null;
     this.exibeForm = true;
@@ -185,11 +203,6 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSearch($event: any): void {
-    const searchTerm = $event.toLowerCase(); //TODO - implementar
-    console.log(searchTerm);
-  }
-
   selectProfissional(profissionalId: number) {
     this.profissionalFiltro = profissionalId;
     this.filtrarProfissional();
@@ -201,23 +214,37 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   }
 
   filtrarRegistros() {
-    this.filtrarProfissional();
+    let eventosFiltrados = [...this.eventosInternos];
+
+    // Filtrar por modo de visualização
+    if (this.modoVisualizacao === 'agendamentos') {
+      // Mostrar apenas agendamentos (itens com paciente)
+      eventosFiltrados = eventosFiltrados.filter(item => item.meta?.paciente);
+    } else if (this.modoVisualizacao === 'disponibilidades') {
+      // Mostrar apenas disponibilidades (itens sem paciente)
+      eventosFiltrados = eventosFiltrados.filter(item => !item.meta?.paciente);
+    }
+    // Se for 'tudo', não filtra por tipo
+
+    // Filtrar por profissional
+    if (this.profissionalFiltro && this.profissionalFiltro != 0) {
+      eventosFiltrados = eventosFiltrados.filter(item => item.meta?.profissional.id == this.profissionalFiltro);
+    }
+
+    // Filtrar por paciente (apenas agendamentos têm paciente)
+    if (this.pacienteFiltro && this.pacienteFiltro != 0) {
+      eventosFiltrados = eventosFiltrados.filter(item => item.meta?.paciente?.id == this.pacienteFiltro);
+    }
+
+    this.eventosExibicao = eventosFiltrados;
   }
 
   filtrarProfissional() {
-    if (this.profissionalFiltro && this.profissionalFiltro != 0) {
-      this.eventosExibicao = this.eventosInternos.filter(item => item.meta?.profissional.id == this.profissionalFiltro);
-    } else {
-      this.eventosExibicao = [...this.eventosInternos];
-    }
+    this.filtrarRegistros();
   }
 
   filtrarPaciente() {
-    if (this.pacienteFiltro && this.pacienteFiltro != 0) {
-      this.eventosExibicao = this.eventosInternos.filter(item => item.meta?.paciente.id == this.pacienteFiltro);
-    } else {
-      this.eventosExibicao = [...this.eventosInternos];
-    }
+    this.filtrarRegistros();
   }
 
   mostraFab() {
@@ -236,5 +263,54 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  alternarModoVisualizacao(modo: 'tudo' | 'agendamentos' | 'disponibilidades') {
+    this.modoVisualizacao = modo;
+    this.filtrarRegistros();
+  }
+
+  addDisponibilidade() {
+    this.exibeFormDisponibilidade = true;
+  }
+
+  fecharFormDisponibilidade() {
+    this.disponibilidadeDetalhes = null;
+    this.exibeFormDisponibilidade = false;
+  }
+
+  gerarHonorarios() {
+    this.exibeFormHonorarios = true;
+  }
+
+  fecharFormHonorarios() {
+    this.exibeFormHonorarios = false;
+  }
+
+  salvarDisponibilidade(disponibilidade: Partial<DisponibilidadeRequest>) {
+    if (this.disponibilidadeDetalhes) {
+      // Atualizar disponibilidade existente
+      this.disponibilidadeService.atualizar(this.disponibilidadeDetalhes.id, disponibilidade).subscribe({
+        next: () => {
+          this.toastr.success('Disponibilidade atualizada');
+          this.carregarAgendamentos();
+          this.fecharFormDisponibilidade();
+        }
+      });
+    } else {
+      // Criar nova disponibilidade
+      this.disponibilidadeService.criar(disponibilidade).subscribe({
+        next: () => {
+          this.toastr.success('Disponibilidade criada');
+          this.carregarAgendamentos();
+          this.fecharFormDisponibilidade();
+        }
+      });
+    }
+  }
+
+  detalhesDisponibilidade(disponibilidade: any) {
+    this.disponibilidadeDetalhes = disponibilidade;
+    this.exibeFormDisponibilidade = true;
   }
 }

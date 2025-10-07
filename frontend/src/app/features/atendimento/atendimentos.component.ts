@@ -35,6 +35,7 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
   override nomeEntidade = 'Atendimento';
   agendamentoId: number;
   atendimentoId: number;
+  atendimentoDetalhes: Atendimento | null = null;
 
   constructor(private atendimentoService: AtendimentoService, protected override toastr: ToastrService,
               private router: Router) {
@@ -59,35 +60,28 @@ export class AtendimentosComponent extends BaseListComponent<Atendimento> implem
       atendimento.paciente.nome.toLowerCase().includes(searchTerm.toLowerCase());
   }
 
-  salvarNovoAtendimento(atendimento: Partial<AtendimentoRequest>) {
-    if (this.itemEdicao) {
-      const id = this.itemEdicao.id;
-      this.atendimentoService.atualizar(id, atendimento).subscribe({
+  override selecionar(atendimento: Atendimento) {
+    this.atendimentoDetalhes = atendimento;
+    this.mostrarFormularioNovo = true;
+  }
+
+  salvarAtendimento(atendimento: Partial<AtendimentoRequest>) {
+    this.atendimentoService.finalizarAtendimento(this.atendimentoId, atendimento)
+      .subscribe({
         next: () => {
-          this.toastr.success('Registro atualizado');
+          this.toastr.success(`Atendimento Finalizado`);
           this.carregarRegistros();
           this.mostrarFormularioNovo = false;
           this.itemEdicao = null;
+          this.atendimentoDetalhes = null;
         }
       });
-    } else if (this.atendimentoId != null) {
-      this.atendimentoService.finalizarAtendimento(this.atendimentoId, atendimento)
-        .subscribe({
-          next: () => {
-            this.toastr.success(`${this.nomeEntidade} cadastrado`);
-            this.carregarRegistros();
-            this.mostrarFormularioNovo = false;
-          }
-        });
-    } else {
-      this.atendimentoService.criar(atendimento).subscribe({
-        next: () => {
-          this.toastr.success(`${this.nomeEntidade} cadastrado`);
-          this.carregarRegistros();
-          this.mostrarFormularioNovo = false;
-        }
-      });
-    }
+  }
+
+  override cancelarNovo() {
+    this.mostrarFormularioNovo = false;
+    this.itemEdicao = null;
+    this.atendimentoDetalhes = null;
   }
 
   novoAgendamento() {

@@ -35,6 +35,27 @@
           </p>
         </div>
 
+        <div>
+          <p class="text-sm" title="Valor Repasse (Particular)">Valor Repasse</p>
+          <p class="mt-1 text-base font-medium">
+            R$ {{ procedimento.valorRepasse || '-' }}
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm" title="Duração em Minutos">Duração</p>
+          <p class="mt-1 text-base font-medium">
+            {{ procedimento.duracao || '-' }} min
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm">Tipo</p>
+          <p class="mt-1 text-base font-medium">
+            {{ TIPO_AGENDAMENTO[procedimento.tipo].descricao }}
+          </p>
+        </div>
+
         <div class="bg-primary/10 text-primary rounded-lg overflow-hidden">
           <div
             class="p-3 flex items-center justify-between cursor-pointer hover:bg-primary/20 text-sm font-semibold tracking-wide"
@@ -63,6 +84,39 @@
             @else {
               <div class="p-4 text-sm italic text-gray-500">
                 Não há preços cadastrados para convênios para este procedimento.
+              </div>
+            }
+          }
+        </div>
+
+        <div class="bg-primary/10 text-primary rounded-lg overflow-hidden">
+          <div
+            class="p-3 flex items-center justify-between cursor-pointer hover:bg-primary/20 text-sm font-semibold tracking-wide"
+            (click)="toggleTabelaPlanos()">
+            <span>Preço Planos Empresariais</span>
+            <lucide-icon
+              [name]="mostraTabelaPlanos ? 'chevron-down' : 'chevron-right'"
+              class="w-4 h-4"/>
+          </div>
+
+          @if (mostraTabelaPlanos) {
+            @if (procedimento.precosPlanos && procedimento.precosPlanos.length > 0) {
+              <table class="min-w-full text-sm">
+                <tbody class="divide-y divide-primary/20">
+                  @for (precoPlano of procedimento.precosPlanos; track precoPlano.id) {
+                    <tr class="hover:bg-primary/10">
+                      <td class="px-6 py-3">{{ precoPlano.plano.nome }}</td>
+                      <td class="px-6 py-3 w-28 text-right font-medium text-primary">
+                        R$ {{ precoPlano.preco | number:'1.2-2':'pt-BR' }}
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            }
+            @else {
+              <div class="p-4 text-sm italic text-gray-500">
+                Não há preços cadastrados para planos empresariais para este procedimento.
               </div>
             }
           }

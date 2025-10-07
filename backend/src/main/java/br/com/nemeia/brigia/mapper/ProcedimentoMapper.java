@@ -3,20 +3,29 @@ package br.com.nemeia.brigia.mapper;
 import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
 import br.com.nemeia.brigia.dto.response.*;
 import br.com.nemeia.brigia.exception.NotFoundException;
-import br.com.nemeia.brigia.model.Convenio;
-import br.com.nemeia.brigia.model.PrecoProcedimento;
-import br.com.nemeia.brigia.model.Procedimento;
+import br.com.nemeia.brigia.model.*;
+import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
-@AllArgsConstructor
 @Component
-public class ProcedimentoMapper {
+public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoRequest, ProcedimentoResponse> {
 
+    private final ObjectMapper objectMapper;
     private final EspecialidadeMapper especialidadeMapper;
     private final ConvenioMapper convenioMapper;
+    private final EmpresaPlanoMapper empresaPlanoMapper;
+
+    public ProcedimentoMapper(ObjectMapper objectMapper, EspecialidadeMapper especialidadeMapper,
+            ConvenioMapper convenioMapper, EmpresaPlanoMapper empresaPlanoMapper) {
+        super(objectMapper, Procedimento.class, ProcedimentoResponse.class);
+        this.objectMapper = objectMapper;
+        this.especialidadeMapper = especialidadeMapper;
+        this.convenioMapper = convenioMapper;
+        this.empresaPlanoMapper = empresaPlanoMapper;
+    }
 
     public ProcedimentoResponse toResponse(Procedimento procedimento) {
         if (procedimento == null) {
@@ -26,18 +35,18 @@ public class ProcedimentoMapper {
         List<PrecoProcedimentoResponse> precosResponse = procedimento.getPrecos().stream().map(this::toResponse)
                 .toList();
 
+        List<ProcedimentoPlanoResponse> precosPlanos = new ArrayList<>();
+        if (procedimento.getPrecosPlanos() != null) {
+            precosPlanos = procedimento.getPrecosPlanos().stream()
+                    .map(this::toProcedimentoPlanoResponse)
+                    .toList();
+        }
+
         return new ProcedimentoResponse(procedimento.getId(), procedimento.getNome(), procedimento.getCodigo(),
-                procedimento.getValorPadrao(), especialidadeMapper.toResponse(procedimento.getEspecialidade()),
-                procedimento.getObservacoes(), procedimento.getCriadoEm(), precosResponse, procedimento.getExcluido());
-    }
-
-    public PagedResponse<ProcedimentoResponse> toPagedResponse(Page<Procedimento> paged) {
-        List<ProcedimentoResponse> responses = paged.getContent().stream().map(this::toResponse).toList();
-        return new PagedResponse<>(responses, paged.getNumber(), paged.getTotalPages(), paged.getTotalElements());
-    }
-
-    public Procedimento toEntity(ProcedimentoRequest request) {
-        return new Procedimento(request.codigo(), request.nome(), request.observacoes(), request.valorPadrao());
+                procedimento.getObservacoes(), procedimento.getValorPadrao(), procedimento.getValorRepasse(),
+                procedimento.getDuracao(), procedimento.getTipo(),
+                especialidadeMapper.toResponse(procedimento.getEspecialidade()), procedimento.getCriadoEm(),
+                precosResponse, precosPlanos, procedimento.getExcluido());
     }
 
     public PrecoProcedimentoResponse toPrecoProcedimento(Procedimento procedimento, Convenio convenio) {
@@ -48,10 +57,26 @@ public class ProcedimentoMapper {
                                 convenio.getId()))));
     }
 
+    public ProcedimentoPlanoResponse toPrecoProcedimentoPlano(Procedimento procedimento, EmpresaPlano plano) {
+        return toProcedimentoPlanoResponse(procedimento.getPrecosPlanos().stream()
+                .filter(preco -> plano.getId().equals(preco.getPlano().getId())).findFirst()
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Preço não encontrado para procedimento %s e plano %s", procedimento.getId(),
+                                plano.getId()))));
+    }
+
     private PrecoProcedimentoResponse toResponse(PrecoProcedimento precoProcedimento) {
         return new PrecoProcedimentoResponse(precoProcedimento.getId(), precoProcedimento.getPreco(),
                 precoProcedimento.getRepasse(), convenioMapper.toResponse(precoProcedimento.getConvenio()),
                 precoProcedimento.getCriadoEm(), "", // TODO - colocar nome do usuário
                 precoProcedimento.getAtualizadoEm(), "");
+    }
+
+    private ProcedimentoPlanoResponse toProcedimentoPlanoResponse(ProcedimentoPlano procedimentoPlano) {
+        return new ProcedimentoPlanoResponse(
+                procedimentoPlano.getId(),
+                empresaPlanoMapper.toResponse(procedimentoPlano.getPlano()),
+                procedimentoPlano.getPreco(),
+                procedimentoPlano.getRepasse());
     }
 }

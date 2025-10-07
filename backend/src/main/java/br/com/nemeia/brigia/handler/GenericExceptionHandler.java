@@ -1,6 +1,7 @@
 package br.com.nemeia.brigia.handler;
 
 import br.com.nemeia.brigia.dto.response.ErrorResponse;
+import br.com.nemeia.brigia.exception.DisponibilidadeNaoEncontradaException;
 import br.com.nemeia.brigia.exception.InvalidCredentialsException;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.exception.ValorRecebidoUltrapassadoException;
@@ -36,8 +37,8 @@ public class GenericExceptionHandler extends BaseExceptionHandler {
         return buildErrorResponse(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
-    @ExceptionHandler(ValorRecebidoUltrapassadoException.class)
-    public ResponseEntity<ErrorResponse> handleBadRequestException(NullPointerException ex,
+    @ExceptionHandler({ValorRecebidoUltrapassadoException.class, DisponibilidadeNaoEncontradaException.class})
+    public ResponseEntity<ErrorResponse> handleBadRequestException(RuntimeException ex,
             HttpServletRequest request) {
         log.error("Mapped BadRequest: {}", ex.getMessage());
         return buildErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST, request);

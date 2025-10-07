@@ -37,11 +37,6 @@
               <button type="button" class="inline -ml-8" (click)="abrirDatePicker(profissional)">
                 <lucide-icon name="calendar" class="inline h-4"/>
               </button>
-              @if (form.get('dataNascimento')?.touched) {
-                <div *ngIf="isInvalid('dataNascimento')" class="text-error text-sm">
-                  Obrigatório
-                </div>
-              }
             </label>
           </div>
         </div>
@@ -79,7 +74,12 @@
 
         <div>
           <label class="label-campo">Email</label>
-          <input type="email" formControlName="email" class="campo">
+          <input type="email" formControlName="email" class="campo" [ngClass]="classesCampo('email')">
+          @if (form.get('email')?.touched) {
+            <div *ngIf="isInvalid('email')" class="text-error text-sm">
+              Obrigatório
+            </div>
+          }
         </div>
 
         <div>

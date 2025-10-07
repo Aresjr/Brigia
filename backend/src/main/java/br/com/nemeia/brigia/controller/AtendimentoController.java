@@ -35,14 +35,6 @@ public class AtendimentoController {
         return mapper.toResponse(service.createAtendimento(request));
     }
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('MEDICO') or hasAuthority('ADMIN')")
-    public AtendimentoResponse updateAtendimento(@Valid @RequestBody AtendimentoRequest request,
-            @PathVariable Long id) {
-        log.info("PUT /atendimentos - atualizando atendimento ID {}", id);
-        return mapper.toResponse(service.update(request, id));
-    }
-
     @PostMapping("/iniciar-atendimento/{agendamentoId}")
     @PreAuthorize("hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public AtendimentoResponse iniciarAtendimento(@PathVariable Long agendamentoId) {

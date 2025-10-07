@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Injectable } from '@angular/core';
 import { Entidade, EntidadeRequest, PagedResponse } from '../shared/entidade.interface';
 import { AuthService } from '../auth/auth.service';
+import { Agendamento } from '../agenda-diaria/agendamento.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -30,11 +31,10 @@ export class BaseService<Entid extends Entidade, Request extends EntidadeRequest
     this.cache$ = this.backend.get<PagedResponse<Entid>>(`${this.path}?mostrarExcluidos=${mostrarExcluidos}&size=9999`).pipe(
       shareReplay(1),
       catchError((e) => {
-        this.toastr.error('Erro ao carregar os registros. Por favor, tente novamente.');
-        this.limparCache();
         return throwError(() => e);
       })
     );
+
     return this.cache$;
   }
 
@@ -43,7 +43,7 @@ export class BaseService<Entid extends Entidade, Request extends EntidadeRequest
     return this.backend.post<Request, Entid>(this.path, registro).pipe(
       catchError((e) => {
         const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
-        this.toastr.error(errorMessage, 'Erro ao salvar');
+        this.toastr.error(errorMessage);
         return throwError(() => e);
       })
     );
@@ -77,6 +77,14 @@ export class BaseService<Entid extends Entidade, Request extends EntidadeRequest
       catchError((e) => {
         const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
         this.toastr.error(errorMessage, 'Erro ao restaurar. Por favor, tente novamente.');
+        return throwError(() => e);
+      })
+    );
+  }
+
+  getById(id: number): Observable<Entid> {
+    return this.backend.get<Entid>(`${this.path}/${id}`).pipe(
+      catchError((e) => {
         return throwError(() => e);
       })
     );

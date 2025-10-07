@@ -1,9 +1,23 @@
-<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm" (click)="fechar()">
+<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm">
   <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[62rem]"
        (click)="$event.stopPropagation()" >
 
     <div class="flex justify-between items-center">
-      <h2 class="text-lg font-semibold">{{ titulo }}</h2>
+      <div class="flex items-center gap-4 justify-between">
+        <h2 class="text-lg font-semibold">{{ titulo }}</h2>
+        <div *ngIf="atendimentoDetalhes" class="badge font-semibold p-3 text-base-100"
+             [ngClass]="'bg-['+ StatusAtendimento[atendimentoDetalhes.status].cor +']'">
+          {{ StatusAtendimento[atendimentoDetalhes.status].descricao }}
+        </div>
+        <div *ngIf="atendimentoDetalhes && atendimentoDetalhes.status == 2">
+          <div class="font-semibold text-lg">
+            {{ atendimentoDetalhes.data | date:'dd/MM/yyyy' }}
+          </div>
+        </div>
+        <div *ngIf="atendimentoDetalhes && atendimentoDetalhes.status == 2">
+          {{ atendimentoDetalhes.horaInicio }} - {{ atendimentoDetalhes.horaFim }}
+        </div>
+      </div>
 
       <div>
         <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="fechar()" title="Fechar">
@@ -12,77 +26,185 @@
       </div>
     </div>
 
-    <!-- TODO - Colocar informações do Paciente -->
-
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-2">
-
-      <div class="tabs tabs-bordered min-w-max">
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento"
-               aria-label="Anamnese" checked="checked" />
-        <div class="tab-content border-base-300 w-[53rem]">
-          <textarea id="anamnese" formControlName="anamnese" rows="7" emptyToNull class="campo-aba"></textarea>
+    <!-- Informações do Paciente -->
+    <div *ngIf="agendamento" class="my-4 mx-0 p-4 bg-base-200 rounded-lg">
+      <div class="grid grid-cols-4 gap-2">
+        <div>
+          <p class="text-xs text-neutral font-medium">Paciente</p>
+          <p class="font-semibold">{{ agendamento.paciente.nome }}</p>
         </div>
-
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento"
-               aria-label="Exame Físico" />
-        <div class="tab-content border-base-300 w-[53rem]">
-          <textarea id="exameFisico" formControlName="exameFisico" rows="7" emptyToNull class="campo-aba"></textarea>
+        <div>
+          <p class="text-xs text-neutral font-medium">Data de Nascimento</p>
+          <p class="font-semibold">{{ agendamento.paciente.dataNascimento | date:'dd/MM/yyyy' }}</p>
         </div>
-
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento"
-               aria-label="Diagnóstico" />
-        <div class="tab-content border-base-300 w-[53rem]">
-          <textarea id="diagnostico" formControlName="diagnostico" rows="7" emptyToNull class="campo-aba"></textarea>
+        <div>
+          <p class="text-xs text-neutral font-medium">Convênio</p>
+          <p class="font-semibold">{{ agendamento.convenio?.nome || 'Particular' }}</p>
         </div>
-
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Evolução Clínica" />
-        <div class="tab-content border-base-300 w-[53rem]">
-          <textarea id="evolucaoClinica" formControlName="evolucaoClinica" rows="7" emptyToNull class="campo-aba"></textarea>
+        <div>
+          <p class="text-xs text-neutral font-medium">Última Consulta</p>
+          <p class="font-semibold">{{ agendamento.paciente.ultimaConsulta | date:'dd/MM/yyyy' }}</p>
         </div>
+      </div>
+    </div>
 
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Exames Solicitados" />
-        <div class="tab-content border-base-300 w-[53rem]">
-          <textarea id="examesSolicitados" formControlName="examesSolicitados" rows="7" emptyToNull class="campo-aba"></textarea>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-2" [ngClass]="{ 'visualizacao': readonly }">
+
+      <div class="inline-flex rounded-lg border border-base-300 p-1 mb-1">
+        <button type="button"
+          (click)="selecionarAba('anamnese')"
+          class="btn btn-sm"
+          [class]="abaAtiva === 'anamnese'
+            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+          Anamnese
+        </button>
+        <button type="button"
+          (click)="selecionarAba('exameFisico')"
+          class="btn btn-sm"
+          [class]="abaAtiva === 'exameFisico'
+            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+          Exame Físico
+        </button>
+        <button type="button"
+          (click)="selecionarAba('diagnostico')"
+          class="btn btn-sm"
+          [class]="abaAtiva === 'diagnostico'
+            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+          Diagnóstico
+        </button>
+        <button type="button"
+          (click)="selecionarAba('evolucaoClinica')"
+          class="btn btn-sm"
+          [class]="abaAtiva === 'evolucaoClinica'
+            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+          Evolução Clínica
+        </button>
+        <button type="button"
+          (click)="selecionarAba('examesSolicitados')"
+          class="btn btn-sm"
+          [class]="abaAtiva === 'examesSolicitados'
+            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+          Exames Solicitados
+        </button>
+        <button type="button"
+          (click)="selecionarAba('prescricoes')"
+          class="btn btn-sm"
+          [class]="abaAtiva === 'prescricoes'
+            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+          Prescrições
+        </button>
+        <button type="button"
+          (click)="selecionarAba('observacoes')"
+          class="btn btn-sm"
+          [class]="abaAtiva === 'observacoes'
+            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
+            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+          Observações
+        </button>
+      </div>
+
+      <div>
+        <div *ngIf="abaAtiva === 'anamnese'" class="quill-editor w-full border-0">
+          <quill-editor
+            formControlName="anamnese"
+            class="w-full"
+            [modules]="readonly ? {} : quillModules"
+            [styles]="{ height: '200px' }"
+            [readOnly]="readonly"
+            placeholder="">
+          </quill-editor>
         </div>
-
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Prescrições" />
-        <div class="tab-content border-base-300 w-[53rem]">
-          <textarea id="prescricoes" formControlName="prescricoes" rows="7" emptyToNull class="campo-aba"></textarea>
+        <div *ngIf="abaAtiva === 'exameFisico'" class="quill-editor w-full border-0">
+          <quill-editor
+            formControlName="exameFisico"
+            class="w-full"
+            [modules]="readonly ? {} : quillModules"
+            [styles]="{ height: '200px' }"
+            [readOnly]="readonly"
+            placeholder="">
+          </quill-editor>
         </div>
-
-        <input type="radio" name="atendimento_tabs" class="tab-atendimento" aria-label="Observações" />
-        <div class="tab-content border-base-300 w-[53rem]">
-          <textarea id="observacoes" formControlName="observacoes" rows="7" emptyToNull class="campo-aba"></textarea>
+        <div *ngIf="abaAtiva === 'diagnostico'" class="quill-editor w-full border-0">
+          <quill-editor
+            formControlName="diagnostico"
+            class="w-full"
+            [modules]="readonly ? {} : quillModules"
+            [styles]="{ height: '200px' }"
+            [readOnly]="readonly"
+            placeholder="">
+          </quill-editor>
+        </div>
+        <div *ngIf="abaAtiva === 'evolucaoClinica'" class="quill-editor w-full border-0">
+          <quill-editor
+            formControlName="evolucaoClinica"
+            class="w-full"
+            [modules]="readonly ? {} : quillModules"
+            [styles]="{ height: '200px' }"
+            [readOnly]="readonly"
+            placeholder="">
+          </quill-editor>
+        </div>
+        <div *ngIf="abaAtiva === 'examesSolicitados'" class="quill-editor w-full border-0">
+          <quill-editor
+            formControlName="examesSolicitados"
+            class="w-full"
+            [modules]="readonly ? {} : quillModules"
+            [styles]="{ height: '200px' }"
+            [readOnly]="readonly"
+            placeholder="">
+          </quill-editor>
+        </div>
+        <div *ngIf="abaAtiva === 'prescricoes'" class="quill-editor w-full border-0">
+          <quill-editor
+            formControlName="prescricoes"
+            class="w-full"
+            [modules]="readonly ? {} : quillModules"
+            [styles]="{ height: '200px' }"
+            [readOnly]="readonly"
+            placeholder="">
+          </quill-editor>
+        </div>
+        <div *ngIf="abaAtiva === 'observacoes'" class="quill-editor w-full border-0">
+          <quill-editor
+            formControlName="observacoes"
+            class="w-full"
+            [modules]="readonly ? {} : quillModules"
+            [styles]="{ height: '200px' }"
+            [readOnly]="readonly"
+            placeholder="">
+          </quill-editor>
         </div>
       </div>
 
       <div class="flex mt-2">
         <div class="w-full">
           <div class="flex justify-between items-center mb-2">
-            <h3 class="text-lg font-medium">Procedimentos Lançados</h3>
-            <button type="button" class="btn btn-primary btn-xs" (click)="adicionarProcedimento()">
-              <i-lucide name="plus" class="w-4 h-4"></i-lucide>
-              Adicionar Procedimento
-            </button>
+            <h3 class="text-lg font-medium">Procedimentos Adicionais</h3>
           </div>
 
           <div class="rounded-t-lg">
-            <div class="grid grid-cols-[6rem_1fr_2rem] gap-3 p-3 font-medium">
-              <div>Quantidade</div>
+            <div class="grid grid-cols-[3rem_1fr] gap-3 p-3 font-medium">
+              <div>Qtd.</div>
               <div>Procedimento</div>
-              <div></div>
             </div>
           </div>
 
           <div class="space-y-1" formArrayName="procedimentos">
             <div *ngFor="let procedimento of procedimentosLancados.controls; let i = index" [formGroupName]="i"
-                 class="grid grid-cols-[6rem_1fr_2rem] gap-3 p-1.5 items-center hover:bg-base-200 rounded-lg">
+                 class="grid grid-cols-[3rem_1fr] gap-3 items-center hover:bg-base-200 rounded-lg">
 
-              <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2">
+              <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2" readonly>
 
               <ng-select [id]="'procedimento_' + i"  class="campo-select mt-0"
                          formControlName="procedimentoId"
-                         placeholder="Selecione um procedimento">
+                         placeholder="Selecione um procedimento"
+                         [readonly]="true">
                 @for (procedimento of procedimentos; track procedimento.id) {
                   <ng-option [value]="procedimento.id">{{procedimento.nome}}</ng-option>
                 }
@@ -90,10 +212,6 @@
                   <span class="text-sm p-6">Nenhum resultado</span>
                 </ng-template>
               </ng-select>
-
-              <button type="button" class="btn btn-ghost btn-circle btn-sm" (click)="removerProcedimento(i)" title="Excluir lançamento">
-                <lucide-icon name="trash" class="h-5 text-error"></lucide-icon>
-              </button>
             </div>
           </div>
         </div>
@@ -103,9 +221,14 @@
         <button type="button" class="btn btn-sm" (click)="fechar()" >
           Fechar
         </button>
-        <button type="submit" class="btn btn-success btn-sm" >
-          Salvar
-        </button>
+        <div>
+          <button type="button" class="btn btn-primary btn-sm" *ngIf="podeEditar()" (click)="habilitarEdicao()">
+            Continuar Atendimento
+          </button>
+          <button type="submit" class="btn btn-success btn-sm" *ngIf="modoSalvar">
+            Finalizar Atendimento
+          </button>
+        </div>
       </div>
     </form>
 

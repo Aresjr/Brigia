@@ -5,37 +5,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "atendimento_procedimento")
-public class AtendimentoProcedimento {
+@Table(name = "agendamento_procedimento")
+public class AgendamentoProcedimento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "atendimento_id")
-    private Atendimento atendimento;
+    @JoinColumn(name = "agendamento_id")
+    private Agendamento agendamento;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "procedimento_id")
     private Procedimento procedimento;
 
     @Column(name = "quantidade", nullable = false)
-    private Long quantidade;
+    private Integer quantidade;
 
-    @Column(name = "valor")
-    private BigDecimal valor;
-
-    public AtendimentoProcedimento(Atendimento atendimento, Procedimento procedimento, Long quantidade,
-            BigDecimal valor) {
-        this.atendimento = atendimento;
+    public AgendamentoProcedimento(Agendamento agendamento, Procedimento procedimento, Integer quantidade) {
+        this.agendamento = agendamento;
         this.procedimento = procedimento;
         this.quantidade = quantidade;
-        this.valor = valor;
     }
 }
