@@ -3,12 +3,15 @@
        (click)="$event.stopPropagation()" >
 
     <div class="flex justify-between items-center">
-      <h2 class="text-lg font-semibold">{{ titulo }}</h2>
+      <div class="flex items-center gap-4 justify-between">
+        <h2 class="text-lg font-semibold">{{ titulo }}</h2>
+        <div *ngIf="atendimentoDetalhes" class="badge font-semibold p-3 text-base-100"
+             [ngClass]="'bg-['+ StatusAtendimento[atendimentoDetalhes.status].cor +']'">
+          {{ StatusAtendimento[atendimentoDetalhes.status].descricao }}
+        </div>
+      </div>
 
       <div>
-        <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" title="Editar" (click)="habilitarEdicao()" *ngIf="podeEditar()">
-          <lucide-icon name="pencil" class="inline w-5 h-5"/>
-        </button>
         <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="fechar()" title="Fechar">
           <lucide-icon name="x" class="inline w-5 h-5"/>
         </button>
@@ -206,9 +209,14 @@
         <button type="button" class="btn btn-sm" (click)="fechar()" >
           Fechar
         </button>
-        <button type="submit" class="btn btn-success btn-sm" *ngIf="modoSalvar">
-          Salvar
-        </button>
+        <div>
+          <button type="button" class="btn btn-primary btn-sm" *ngIf="podeEditar()" (click)="habilitarEdicao()">
+            Continuar Atendimento
+          </button>
+          <button type="submit" class="btn btn-success btn-sm" *ngIf="modoSalvar">
+            Salvar
+          </button>
+        </div>
       </div>
     </form>
 

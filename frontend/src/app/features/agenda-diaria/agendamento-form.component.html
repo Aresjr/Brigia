@@ -295,7 +295,8 @@
                 </ng-template>
               </ng-select>
 
-              <input [id]="'valor_' + i" type="text" formControlName="valor" class="campo mt-0 p-2" placeholder="R$ 0,00" mask="separator.2" thousandSeparator="." separatorLimit="9999999" [dropSpecialCharacters]="false" prefix="R$ " readonly>
+              <input [id]="'valor_' + i" type="hidden" formControlName="valor" class="hidden" readonly>
+              <input [id]="'valor_exibicao_' + i" type="text" formControlName="valorExibicao" class="campo mt-0 p-2" placeholder="R$ 0,00" mask="separator.2" thousandSeparator="." separatorLimit="9999999" [dropSpecialCharacters]="false" prefix="R$ " readonly>
 
               @if (modoSalvar) {
                 <button type="button" class="btn btn-ghost btn-circle btn-sm" (click)="removerProcedimento(i)" title="Excluir procedimento">
@@ -305,6 +306,14 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- Valor total -->
+      <div class="flex justify-between items-center mt-4 p-4 bg-primary/10 rounded-lg">
+        <span class="text-lg font-semibold">Valor Total</span>
+        <span class="text-xl font-bold text-primary">
+          {{ valorTotalAgendamento | currency:'BRL':'symbol':'1.2-2' }}
+        </span>
       </div>
 
       <div class="flex justify-between mt-6">

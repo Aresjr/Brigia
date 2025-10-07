@@ -17,7 +17,6 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { DetalhesAgendamentoComponent } from './pages/detalhes-agendamento/detalhes-agendamento.component';
 import { UsuariosComponent } from './features/usuarios/usuarios.component';
 import { CadastrarSenhaComponent } from './features/auth/cadastrar-senha/cadastrar-senha.component';
-import { OrcamentosComponent } from './features/orcamentos/orcamentos.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -138,16 +137,6 @@ export const routes: Routes = [
         data: {
           roles: [Role.ADMIN],
           title: 'Usuários'
-        },
-      },
-      {
-        path: 'orcamentos',
-        component: OrcamentosComponent,
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
-        data: {
-          roles: [Role.ADMIN, Role.FATURAMENTO],
-          title: 'Orçamentos',
         },
       },
     ],
