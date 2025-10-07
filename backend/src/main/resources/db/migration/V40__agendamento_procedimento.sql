@@ -1,4 +1,4 @@
-CREATE TABLE agendamento_procedimento (
+CREATE TABLE IF NOT EXISTS agendamento_procedimento (
     id BIGSERIAL PRIMARY KEY,
     agendamento_id BIGINT NOT NULL,
     procedimento_id BIGINT NOT NULL,
