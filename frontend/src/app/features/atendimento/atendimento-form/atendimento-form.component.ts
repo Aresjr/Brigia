@@ -12,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AgendamentoService } from '../../agenda-diaria/agendamento.service';
 import { Agendamento } from '../../agenda-diaria/agendamento.interface';
 import { QuillModule } from 'ngx-quill';
-import { StatusAgendamento, StatusAtendimento } from '../../../core/constans';
+import { StatusAtendimento } from '../../../core/constans';
 
 @Component({
   selector: 'app-atendimento-form',
@@ -163,7 +163,7 @@ export class AtendimentoFormComponent extends FormComponent<Atendimento, Atendim
   habilitarEdicao() {
     this.readonly = false;
     this.modoSalvar = true;
-    this.titulo = 'Editar Atendimento';
+    this.titulo = 'Continuar Atendimento';
     this.form.enable();
   }
 
@@ -175,6 +175,5 @@ export class AtendimentoFormComponent extends FormComponent<Atendimento, Atendim
     this.abaAtiva = aba;
   }
 
-  protected readonly StatusAgendamento = StatusAgendamento;
   protected readonly StatusAtendimento = StatusAtendimento;
 }

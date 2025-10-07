@@ -8,6 +8,7 @@ import br.com.nemeia.brigia.repository.*;
 import br.com.nemeia.brigia.utils.DbUtil;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.springframework.data.domain.Page;
@@ -21,14 +22,17 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
 
     private final ProfissionalService profissionalService;
     private final AgendamentoService agendamentoService;
+    private final PacienteService pacienteService;
     private final AtendimentoMapper mapper;
 
     public AtendimentoService(AtendimentoRepository repository, AtendimentoMapper mapper,
-            ProfissionalService profissionalService, AgendamentoService agendamentoService) {
+            ProfissionalService profissionalService, AgendamentoService agendamentoService,
+                              PacienteService pacienteService) {
         super(repository);
         this.mapper = mapper;
         this.profissionalService = profissionalService;
         this.agendamentoService = agendamentoService;
+        this.pacienteService = pacienteService;
     }
 
     public Page<Atendimento> getPaged(int page, int size) {
@@ -89,8 +93,19 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         atendimento.setStatus(StatusAtendimento.FINALIZADO);
         atendimento = repository.save(atendimento);
 
-        agendamentoService.updateStatus(agendamento, StatusAgendamento.FINALIZADO);
+        finalizaAgendamento(agendamento);
+        atualizaDataUltimaConsultaPaciente(agendamento);
+
         return atendimento;
+    }
+
+    private void finalizaAgendamento(Agendamento agendamento) {
+      agendamentoService.updateStatus(agendamento, StatusAgendamento.FINALIZADO);
+    }
+
+    private void atualizaDataUltimaConsultaPaciente(Agendamento agendamento) {
+      agendamento.getPaciente().setUltimaConsulta(LocalDateTime.now());
+      pacienteService.update(agendamento.getPaciente());
     }
 
     private void setValoresDescritivos(Atendimento atendimento, AtendimentoRequest request) {

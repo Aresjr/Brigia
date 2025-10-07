@@ -1,4 +1,4 @@
-<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm" (click)="fechar()">
+<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm">
   <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[58rem]"
     (click)="$event.stopPropagation()" >
 
@@ -226,7 +226,7 @@
             <input type="text" formControlName="valor" min="1" max="99999" id="valor"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker="," required
-                   class="campo border-0" [readOnly]="!this.valorEditavel">
+                   class="campo border-0" [readOnly]="!this.valorEditavel" (change)="alterouValor($event)">
           </label>
           <label *ngIf="isInvalid('valor')" class="text-error text-sm">
             Obrigatório
@@ -237,11 +237,12 @@
           <label class="label-campo" for="desconto">
             Desconto
           </label>
-          <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('desconto', !this.valorEditavel)">
+          <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('desconto')">
             R$
             <input type="text" formControlName="desconto" min="1" max="99999" id="desconto"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
-                   mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0">
+                   mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0"
+                    (change)="alterouDesconto($event)">
           </label>
         </div>
 
@@ -271,17 +272,25 @@
           </div>
 
           <div class="rounded-t-lg">
-            <div class="grid grid-cols-[6rem_1fr_8rem_1rem] gap-3 p-3 font-medium text-sm">
-              <div>Quantidade</div>
-              <div>Procedimento</div>
-              <div>Valor</div>
-              <div></div>
-            </div>
+
+            @if(procedimentosLancados.controls.length > 0) {
+              <div class="grid grid-cols-[6rem_1fr_8rem_1rem] gap-3 p-3 font-medium text-sm">
+                <div>Quantidade</div>
+                <div>Procedimento</div>
+                <div>Valor</div>
+                <div></div>
+              </div>
+            } @else {
+              <div class="px-6 py-0">
+                Nenhum procedimento adicional
+              </div>
+            }
+
           </div>
 
           <div class="space-y-1" formArrayName="procedimentos">
             <div *ngFor="let procedimento of procedimentosLancados.controls; let i = index" [formGroupName]="i"
-                 class="grid grid-cols-[6rem_1fr_8rem_2rem] gap-3 p-1.5 items-center hover:bg-base-200 rounded-lg">
+                 class="grid grid-cols-[6rem_1fr_8rem_2rem] gap-3 px-1.5 items-center hover:bg-base-200 rounded-lg">
 
               <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2">
 
@@ -309,7 +318,7 @@
       </div>
 
       <!-- Valor total -->
-      <div class="flex justify-between items-center mt-4 p-4 bg-primary/10 rounded-lg">
+      <div class="flex justify-between items-center mt-6 p-4 bg-primary/10 rounded-lg">
         <span class="text-lg font-semibold">Valor Total</span>
         <span class="text-xl font-bold text-primary">
           {{ valorTotalAgendamento | currency:'BRL':'symbol':'1.2-2' }}

@@ -155,6 +155,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         }
       }
       this.isLoading = false;
+      this.calcularValorTotal();
     });
   }
 
@@ -424,7 +425,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     const procedimento = this.fb.group({
       quantidade: [1, [Validators.required, Validators.min(1)]],
       procedimentoId: [null, Validators.required],
-      valor: [null]
+      valor: [null],
+      valorExibicao: [null],
     });
 
     this.procedimentosLancados.push(procedimento);
@@ -485,6 +487,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
   calcularValorTotal() {
     let total = this.form.get('valor')?.value || 0;
+    const desconto = this.form.get('desconto')?.value || 0;
 
     this.procedimentosLancados.controls.forEach(control => {
       const quantidade = control.get('quantidade')?.value || 0;
@@ -492,7 +495,15 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       total += quantidade * valor;
     });
 
-    this.valorTotalAgendamento = total;
+    this.valorTotalAgendamento = total - desconto;
+  }
+
+  alterouValor($event: Event) {
+    this.calcularValorTotal();
+  }
+
+  alterouDesconto($event: Event) {
+    this.calcularValorTotal();
   }
 
   protected readonly ColorUtils = ColorUtils;

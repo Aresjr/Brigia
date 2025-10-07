@@ -9,6 +9,14 @@
              [ngClass]="'bg-['+ StatusAtendimento[atendimentoDetalhes.status].cor +']'">
           {{ StatusAtendimento[atendimentoDetalhes.status].descricao }}
         </div>
+        <div *ngIf="atendimentoDetalhes && atendimentoDetalhes.status == 2">
+          <div class="font-semibold text-lg">
+            {{ atendimentoDetalhes.data | date:'dd/MM/yyyy' }}
+          </div>
+        </div>
+        <div *ngIf="atendimentoDetalhes && atendimentoDetalhes.status == 2">
+          {{ atendimentoDetalhes.horaInicio }} - {{ atendimentoDetalhes.horaFim }}
+        </div>
       </div>
 
       <div>
@@ -19,8 +27,8 @@
     </div>
 
     <!-- Informações do Paciente -->
-    <div *ngIf="agendamento" class="mt-4 p-4 bg-base-200 rounded-lg">
-      <div class="grid grid-cols-3 gap-4">
+    <div *ngIf="agendamento" class="my-4 mx-0 p-4 bg-base-200 rounded-lg">
+      <div class="grid grid-cols-4 gap-2">
         <div>
           <p class="text-xs text-neutral font-medium">Paciente</p>
           <p class="font-semibold">{{ agendamento.paciente.nome }}</p>
@@ -32,6 +40,10 @@
         <div>
           <p class="text-xs text-neutral font-medium">Convênio</p>
           <p class="font-semibold">{{ agendamento.convenio?.nome || 'Particular' }}</p>
+        </div>
+        <div>
+          <p class="text-xs text-neutral font-medium">Última Consulta</p>
+          <p class="font-semibold">{{ agendamento.paciente.ultimaConsulta | date:'dd/MM/yyyy' }}</p>
         </div>
       </div>
     </div>
@@ -98,7 +110,7 @@
       </div>
 
       <div>
-        <div *ngIf="abaAtiva === 'anamnese'" class="quill-editor w-full">
+        <div *ngIf="abaAtiva === 'anamnese'" class="quill-editor w-full border-0">
           <quill-editor
             formControlName="anamnese"
             class="w-full"
@@ -108,7 +120,7 @@
             placeholder="">
           </quill-editor>
         </div>
-        <div *ngIf="abaAtiva === 'exameFisico'" class="quill-editor">
+        <div *ngIf="abaAtiva === 'exameFisico'" class="quill-editor w-full border-0">
           <quill-editor
             formControlName="exameFisico"
             class="w-full"
@@ -118,7 +130,7 @@
             placeholder="">
           </quill-editor>
         </div>
-        <div *ngIf="abaAtiva === 'diagnostico'" class="quill-editor">
+        <div *ngIf="abaAtiva === 'diagnostico'" class="quill-editor w-full border-0">
           <quill-editor
             formControlName="diagnostico"
             class="w-full"
@@ -128,7 +140,7 @@
             placeholder="">
           </quill-editor>
         </div>
-        <div *ngIf="abaAtiva === 'evolucaoClinica'" class="quill-editor">
+        <div *ngIf="abaAtiva === 'evolucaoClinica'" class="quill-editor w-full border-0">
           <quill-editor
             formControlName="evolucaoClinica"
             class="w-full"
@@ -138,7 +150,7 @@
             placeholder="">
           </quill-editor>
         </div>
-        <div *ngIf="abaAtiva === 'examesSolicitados'" class="quill-editor">
+        <div *ngIf="abaAtiva === 'examesSolicitados'" class="quill-editor w-full border-0">
           <quill-editor
             formControlName="examesSolicitados"
             class="w-full"
@@ -148,7 +160,7 @@
             placeholder="">
           </quill-editor>
         </div>
-        <div *ngIf="abaAtiva === 'prescricoes'" class="quill-editor">
+        <div *ngIf="abaAtiva === 'prescricoes'" class="quill-editor w-full border-0">
           <quill-editor
             formControlName="prescricoes"
             class="w-full"
@@ -158,7 +170,7 @@
             placeholder="">
           </quill-editor>
         </div>
-        <div *ngIf="abaAtiva === 'observacoes'" class="quill-editor">
+        <div *ngIf="abaAtiva === 'observacoes'" class="quill-editor w-full border-0">
           <quill-editor
             formControlName="observacoes"
             class="w-full"
@@ -173,7 +185,7 @@
       <div class="flex mt-2">
         <div class="w-full">
           <div class="flex justify-between items-center mb-2">
-            <h3 class="text-lg font-medium">Procedimentos</h3>
+            <h3 class="text-lg font-medium">Procedimentos Adicionais</h3>
           </div>
 
           <div class="rounded-t-lg">
@@ -214,7 +226,7 @@
             Continuar Atendimento
           </button>
           <button type="submit" class="btn btn-success btn-sm" *ngIf="modoSalvar">
-            Salvar
+            Finalizar Atendimento
           </button>
         </div>
       </div>
