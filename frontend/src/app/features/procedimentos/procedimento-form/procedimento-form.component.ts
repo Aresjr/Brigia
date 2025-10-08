@@ -18,8 +18,8 @@ import { FormComponent } from '../../shared/form.component';
 import { forkJoin, map, Observable, tap } from 'rxjs';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
-import { TIPO_AGENDAMENTO } from '../../../core/constans';
 import { EmpresaService } from '../../empresa/empresa.service';
+import { TIPO_AGENDAMENTO } from '../../agenda-diaria/agendamento.interface';
 
 @Component({
   selector: 'app-procedimento-form',

@@ -19,14 +19,18 @@ import { ToastrService } from 'ngx-toastr';
 import { Procedimento } from '../procedimentos/procedimento.interface';
 import { ProcedimentoService } from '../procedimentos/procedimento.service';
 import { FormComponent } from '../shared/form.component';
-import { Agendamento, AgendamentoRequest, podeEditarAgendamento } from './agendamento.interface';
+import {
+  Agendamento,
+  AgendamentoRequest, podeAbrirAtendimento,
+  podeEditarAgendamento,
+  StatusAgendamento,
+  TIPO_AGENDAMENTO
+} from './agendamento.interface';
 import { IForm } from '../shared/form.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
 import {
-  FORMAS_PAGAMENTO,
-  STATUS_ABRIR_ATENDIMENTO, StatusAgendamento,
-  TIPO_AGENDAMENTO
+  FORMAS_PAGAMENTO
 } from '../../core/constans';
 import { forkJoin, map, Observable, tap } from 'rxjs';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
@@ -348,10 +352,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   podeAbrirAtendimento(agendamento: Agendamento | null): boolean {
-    if (agendamento == null) {
-      return false;
-    }
-    if (!STATUS_ABRIR_ATENDIMENTO.includes(agendamento.status)) {
+    if (agendamento == null || !podeAbrirAtendimento(agendamento)) {
       return false;
     }
     return this.userService.isMedico();

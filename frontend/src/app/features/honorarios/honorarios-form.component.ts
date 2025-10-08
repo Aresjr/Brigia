@@ -6,7 +6,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { Profissional } from '../profissionais/profissional.interface';
 import { ProfissionalService } from '../profissionais/profissional.service';
 import { AgendamentoService } from '../agenda-diaria/agendamento.service';
-import { Agendamento } from '../agenda-diaria/agendamento.interface';
+import { Agendamento, StatusAgendamentoEnum } from '../agenda-diaria/agendamento.interface';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -87,7 +87,8 @@ export class HonorariosFormComponent implements OnInit {
         this.agendamentos = response.items.filter(ag => {
           const agData = new Date(ag.data);
           return ag.profissional.id === profissionalId &&
-                 agData.toDateString() === dataObj.toDateString();
+                 agData.toDateString() === dataObj.toDateString()
+                  && ag.status == StatusAgendamentoEnum.Finalizado;
         });
         this.isLoading = false;
       },

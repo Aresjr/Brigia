@@ -1,7 +1,6 @@
 import { CalendarEvent } from 'angular-calendar';
-import { Agendamento } from '../features/agenda-diaria/agendamento.interface';
+import { Agendamento, StatusAgendamento } from '../features/agenda-diaria/agendamento.interface';
 import { Disponibilidade } from '../features/disponibilidade/disponibilidade.interface';
-import { StatusAgendamento } from './constans';
 
 export class EventoFactory {
   static fromAgendamento(agendamento: Agendamento): CalendarEvent {

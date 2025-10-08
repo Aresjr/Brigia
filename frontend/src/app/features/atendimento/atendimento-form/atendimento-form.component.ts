@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
-import { Atendimento, AtendimentoRequest } from '../atendimento.interface';
+import { Atendimento, AtendimentoRequest, StatusAtendimento } from '../atendimento.interface';
 import { FormComponent } from '../../shared/form.component';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
@@ -12,7 +12,6 @@ import { ToastrService } from 'ngx-toastr';
 import { AgendamentoService } from '../../agenda-diaria/agendamento.service';
 import { Agendamento } from '../../agenda-diaria/agendamento.interface';
 import { QuillModule } from 'ngx-quill';
-import { StatusAtendimento } from '../../../core/constans';
 
 @Component({
   selector: 'app-atendimento-form',

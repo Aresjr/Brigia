@@ -4,7 +4,7 @@ import { Procedimento } from '../procedimento.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../core/user.service';
-import { TIPO_AGENDAMENTO } from '../../../core/constans';
+import { TIPO_AGENDAMENTO } from '../../agenda-diaria/agendamento.interface';
 
 @Component({
   selector: 'app-procedimento-detalhes',
