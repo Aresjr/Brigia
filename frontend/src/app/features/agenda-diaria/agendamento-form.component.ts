@@ -28,7 +28,7 @@ import {
 } from './agendamento.interface';
 import { IForm } from '../shared/form.interface';
 import { LucideAngularModule } from 'lucide-angular';
-import { autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
+import { abrirDatePicker, autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
 import {
   FORMAS_PAGAMENTO
 } from '../../core/constans';
@@ -110,6 +110,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       observacoes: [null],
       precoAlterado: [false],
       encaixe: [false],
+      pago: [true],
     };
     this.form = this.fb.group({
       ...form,
@@ -511,4 +512,5 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
   protected readonly ColorUtils = ColorUtils;
   protected readonly StatusAgendamento = StatusAgendamento;
+  protected readonly abrirDatePicker = abrirDatePicker;
 }

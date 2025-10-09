@@ -28,6 +28,7 @@ export interface Agendamento extends Entidade {
     status: StatusAgendamentoEnum;
     observacoes?: string;
     encaixe: boolean;
+    pago: boolean;
 }
 
 export function podeEditarAgendamento(agendamento: Agendamento): boolean {
@@ -66,6 +67,7 @@ export interface AgendamentoRequest extends EntidadeRequest {
     observacoes: string | null;
     precoAlterado: boolean;
     encaixe: boolean;
+    pago: boolean;
     procedimentos: ProcedimentoAgendamentoRequest[];
 }
 

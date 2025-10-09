@@ -82,6 +82,9 @@ public class Agendamento extends BaseModel {
     @Column(name = "encaixe", nullable = false)
     private Boolean encaixe = false;
 
+    @Column(name = "pago", nullable = false)
+    private Boolean pago = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "atendimento_id")
     private Atendimento atendimento;

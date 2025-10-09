@@ -41,6 +41,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     private final UnidadeService unidadeService;
     private final EmailService emailService;
     private final DisponibilidadeService disponibilidadeService;
+    private final ContaReceberService contaReceberService;
 
     @Value("${app.base-url}")
     private String baseUrl;
@@ -49,7 +50,8 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             PacienteService pacienteService, ProfissionalService profissionalService,
             EspecialidadeService especialidadeService, ProcedimentoService procedimentoService,
             EmpresaService empresaService, ConvenioService convenioService, UnidadeService unidadeService,
-            EmailService emailService, DisponibilidadeService disponibilidadeService) {
+            EmailService emailService, DisponibilidadeService disponibilidadeService,
+            ContaReceberService contaReceberService) {
         super(repository);
         this.mapper = mapper;
         this.pacienteService = pacienteService;
@@ -61,6 +63,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         this.emailService = emailService;
         this.unidadeService = unidadeService;
         this.disponibilidadeService = disponibilidadeService;
+        this.contaReceberService = contaReceberService;
     }
 
     @Cacheable(value = "agendamentos", key = "#userId + '-' + #mes + '-' + #ano")
@@ -108,6 +111,11 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             agendamentoNovo = repository.save(agendamentoNovo);
         }
 
+        // Criar conta a receber se pago=true
+        if (Boolean.TRUE.equals(request.pago())) {
+            contaReceberService.createContaReceberFromAgendamento(agendamentoNovo);
+        }
+
         sendEmail(agendamentoNovo, "Agendamento Realizado!", "agendamento-cadastrado");
 
         return agendamentoNovo;
@@ -131,6 +139,11 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         }
 
         Agendamento agendamentoAtualizado = repository.save(agendamentoUpdate);
+
+        // Criar conta a receber se pago=true e não estava pago antes
+        if (Boolean.TRUE.equals(request.pago()) && !Boolean.TRUE.equals(original.getPago())) {
+            contaReceberService.createContaReceberFromAgendamento(agendamentoAtualizado);
+        }
 
         if (deveMandarEmail) {
             sendEmail(agendamentoAtualizado, "Agendamento Atualizado!", "agendamento-atualizado");
