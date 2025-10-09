@@ -6,7 +6,7 @@ import {
   Procedimento,
   ProcedimentoRequest
 } from './procedimento.interface';
-import { BaseService } from './base.service';
+import { BaseService } from '../shared/base.service';
 
 @Injectable({
   providedIn: 'root'

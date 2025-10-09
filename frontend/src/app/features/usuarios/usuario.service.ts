@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Usuario, UsuarioRequest } from './usuario.interface';
-import { BaseService } from '../procedimentos/base.service';
+import { BaseService } from '../shared/base.service';
 import { catchError, Observable, throwError } from 'rxjs';
 
 @Injectable({

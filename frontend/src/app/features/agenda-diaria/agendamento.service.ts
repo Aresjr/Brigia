@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BaseService } from '../procedimentos/base.service';
+import { BaseService } from '../shared/base.service';
 import { Agendamento, AgendamentoDetalhes, AgendamentoRequest } from './agendamento.interface';
 import { catchError, Observable, shareReplay, throwError } from 'rxjs';
 import { PagedResponse } from '../shared/entidade.interface';

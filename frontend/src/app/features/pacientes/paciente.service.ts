@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BaseService } from '../procedimentos/base.service';
+import { BaseService } from '../shared/base.service';
 import { Paciente, PacienteRequest } from './paciente.interface';
 
 @Injectable({

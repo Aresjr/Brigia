@@ -1,0 +1,45 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Honorários</h1>
+    <button class="btn btn-primary btn-sm" (click)="abrirFormulario()">
+      <lucide-icon name="plus" class="w-4 h-4 mr-2"></lucide-icon>
+      Gerar Honorário
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="flex justify-center items-center py-12">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+  </div>
+
+  <div *ngIf="!isLoading && honorarios.length === 0" class="text-center py-12 text-neutral">
+    Nenhum honorário encontrado.
+  </div>
+
+  <div *ngIf="!isLoading && honorarios.length > 0" class="overflow-x-auto">
+    <table class="table w-full">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Profissional</th>
+          <th>Quantidade de Atendimentos</th>
+          <th class="text-right">Valor Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let honorario of honorarios" class="hover:bg-base-200">
+          <td>{{ honorario.data | date:'dd/MM/yyyy' }}</td>
+          <td>{{ honorario.profissional.nome }}</td>
+          <td>{{ honorario.quantidadeAtendimentos }}</td>
+          <td class="text-right font-semibold">
+            {{ honorario.valorTotal | currency:'BRL':'symbol':'1.2-2' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<app-honorarios-form
+  *ngIf="mostrarFormulario"
+  (cancel)="fecharFormulario()">
+</app-honorarios-form>

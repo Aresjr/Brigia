@@ -80,6 +80,7 @@ export class MainLayoutComponent {
       hasSubmenu: true,
       children: [
         { label: 'Contas a Receber', icon: 'banknote-arrow-up', route: '/contas-receber', roles: [Role.FATURAMENTO, Role.ADMIN] },
+        { label: 'Honorários', icon: 'hand-coins', route: '/honorarios', roles: [Role.FATURAMENTO, Role.ADMIN] },
       ], roles: [Role.FATURAMENTO, Role.ADMIN]
     }
   ];

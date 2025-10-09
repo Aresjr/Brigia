@@ -6,8 +6,9 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { Profissional } from '../profissionais/profissional.interface';
 import { ProfissionalService } from '../profissionais/profissional.service';
 import { AgendamentoService } from '../agenda-diaria/agendamento.service';
-import { Agendamento, StatusAgendamentoEnum } from '../agenda-diaria/agendamento.interface';
+import { Agendamento } from '../agenda-diaria/agendamento.interface';
 import { ToastrService } from 'ngx-toastr';
+import { HonorarioService } from './honorario.service';
 
 @Component({
   selector: 'app-honorarios-form',
@@ -36,6 +37,7 @@ export class HonorariosFormComponent implements OnInit {
     private profissionalService: ProfissionalService,
     private agendamentoService: AgendamentoService,
     private toastr: ToastrService,
+    private honorarioService: HonorarioService
   ) {
     this.hoje = new Date().toISOString().split('T')[0];
     this.form = this.fb.group({
@@ -87,8 +89,7 @@ export class HonorariosFormComponent implements OnInit {
         this.agendamentos = response.items.filter(ag => {
           const agData = new Date(ag.data);
           return ag.profissional.id === profissionalId &&
-                 agData.toDateString() === dataObj.toDateString()
-                  && ag.status == StatusAgendamentoEnum.Finalizado;
+                 agData.toDateString() === dataObj.toDateString();
         });
         this.isLoading = false;
       },
@@ -140,7 +141,21 @@ export class HonorariosFormComponent implements OnInit {
       this.toastr.warning('Verifique as informações preenchidas');
       return;
     }
-    // TODO: Implementar geração de honorários
-    console.log('Gerar honorários', this.form.value);
+
+    if (this.agendamentos.length === 0) {
+      this.toastr.warning('Não há atendimentos para gerar honorário');
+      return;
+    }
+
+    this.isLoading = true;
+    this.honorarioService.criar(this.form.value).subscribe({
+      next: () => {
+        this.toastr.success('Honorário gerado com sucesso');
+        this.fechar();
+      },
+      error: () => {
+        this.isLoading = false;
+      }
+    });
   }
 }

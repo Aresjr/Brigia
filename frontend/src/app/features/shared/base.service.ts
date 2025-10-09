@@ -2,9 +2,8 @@ import { catchError, Observable, shareReplay, throwError } from 'rxjs';
 import { BackendService } from '../../core/backend/backend.service';
 import { ToastrService } from 'ngx-toastr';
 import { Injectable } from '@angular/core';
-import { Entidade, EntidadeRequest, PagedResponse } from '../shared/entidade.interface';
+import { Entidade, EntidadeRequest, PagedResponse } from './entidade.interface';
 import { AuthService } from '../auth/auth.service';
-import { Agendamento } from '../agenda-diaria/agendamento.interface';
 
 @Injectable({
   providedIn: 'root'
