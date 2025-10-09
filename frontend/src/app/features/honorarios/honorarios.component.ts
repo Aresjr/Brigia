@@ -8,6 +8,8 @@ import { BaseListComponent } from '../shared/base-list.component';
 import { ToastrService } from 'ngx-toastr';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { FabComponent } from '../shared/fab/fab.component';
+import { PaginationComponent } from '../shared/pagination/pagination.component';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-honorarios',
@@ -18,10 +20,13 @@ import { FabComponent } from '../shared/fab/fab.component';
     LucideAngularModule,
     HonorariosFormComponent,
     TopBarComponent,
-    FabComponent
+    FabComponent,
+    PaginationComponent,
+    ConfirmDialogComponent
   ]
 })
 export class HonorariosComponent extends BaseListComponent<Honorario> implements OnInit {
+  override nomeEntidade = 'Honorário';
 
   constructor(
     private honorarioService: HonorarioService,

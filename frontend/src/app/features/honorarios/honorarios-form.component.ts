@@ -9,6 +9,7 @@ import { AgendamentoService } from '../agenda-diaria/agendamento.service';
 import { Agendamento } from '../agenda-diaria/agendamento.interface';
 import { ToastrService } from 'ngx-toastr';
 import { HonorarioService } from './honorario.service';
+import { Honorario } from './honorario.interface';
 
 @Component({
   selector: 'app-honorarios-form',
@@ -23,6 +24,7 @@ import { HonorarioService } from './honorario.service';
 })
 export class HonorariosFormComponent implements OnInit {
   @Input() profissionalId: number | null = null;
+  @Input() honorario: Honorario | null = null; // Modo detalhes
   @Output() cancel = new EventEmitter<void>();
 
   form: FormGroup;
@@ -31,6 +33,7 @@ export class HonorariosFormComponent implements OnInit {
   agendamentosExpandidos: Set<number> = new Set();
   isLoading: boolean = false;
   hoje: string;
+  modoDetalhes: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -47,20 +50,32 @@ export class HonorariosFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.carregarProfissionais();
-
-    // Watch form changes
-    this.form.get('profissionalId')?.valueChanges.subscribe(() => {
+    // Verificar se está em modo detalhes
+    if (this.honorario) {
+      this.modoDetalhes = true;
+      this.form.patchValue({
+        profissionalId: this.honorario.profissional.id,
+        data: this.honorario.data
+      });
+      this.form.disable();
+      this.carregarProfissionais();
       this.carregarAgendamentos();
-    });
+    } else {
+      this.carregarProfissionais();
 
-    this.form.get('data')?.valueChanges.subscribe(() => {
-      this.carregarAgendamentos();
-    });
+      // Watch form changes
+      this.form.get('profissionalId')?.valueChanges.subscribe(() => {
+        this.carregarAgendamentos();
+      });
 
-    // Set initial profissional
-    if (this.profissionalId) {
-      this.form.patchValue({ profissionalId: this.profissionalId });
+      this.form.get('data')?.valueChanges.subscribe(() => {
+        this.carregarAgendamentos();
+      });
+
+      // Set initial profissional
+      if (this.profissionalId) {
+        this.form.patchValue({ profissionalId: this.profissionalId });
+      }
     }
   }
 

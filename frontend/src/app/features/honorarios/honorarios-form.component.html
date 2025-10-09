@@ -2,7 +2,7 @@
   <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[52rem]" (click)="$event.stopPropagation()">
 
     <div class="flex justify-between items-center mb-4">
-      <h2 class="text-lg font-semibold">Gerar Honorários</h2>
+      <h2 class="text-lg font-semibold">{{ modoDetalhes ? 'Detalhes do Honorário' : 'Gerar Honorários' }}</h2>
       <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="fechar()" title="Fechar">
         <lucide-icon name="x" class="inline w-5 h-5"/>
       </button>
@@ -100,11 +100,12 @@
         </div>
       </div>
 
-      <div class="flex justify-between mt-6">
+      <div class="flex mt-6" [class.justify-between]="!modoDetalhes" [class.justify-end]="modoDetalhes">
         <button type="button" class="btn btn-sm" (click)="fechar()">
           Fechar
         </button>
         <button
+          *ngIf="!modoDetalhes"
           type="button"
           class="btn btn-primary btn-sm"
           [disabled]="!form.valid || agendamentos.length === 0"
