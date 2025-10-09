@@ -55,7 +55,8 @@ public class ContaReceberService {
         }
         contaReceber.setValorRecebido(contaReceber.getValorRecebido().add(valorRecebido));
         boolean pagoTotalmente = contaReceber.getValorRecebido().equals(contaReceber.getValorTotal());
-        contaReceber.setStatus(pagoTotalmente ? StatusContaReceber.PAGO : StatusContaReceber.PARCIAL);
+        var status = pagoTotalmente ? StatusContaReceber.PAGO : StatusContaReceber.PARCIAL;
+        contaReceber.setStatus(status);
         repository.save(contaReceber);
         return contaReceber;
     }
