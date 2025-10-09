@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,6 +27,12 @@ public class AgendamentoProcedimento {
 
     @Column(name = "quantidade", nullable = false)
     private Integer quantidade;
+
+    @Column(name = "valor")
+    private BigDecimal valor;
+
+    @Column(name = "valor_repasse")
+    private BigDecimal valorRepasse;
 
     public AgendamentoProcedimento(Agendamento agendamento, Procedimento procedimento, Integer quantidade) {
         this.agendamento = agendamento;

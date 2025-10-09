@@ -111,11 +111,16 @@ export class HonorariosFormComponent implements OnInit {
   }
 
   calcularValorAgendamento(agendamento: Agendamento): number {
-    let total = agendamento.valor || 0;
+    // Usar o valor de repasse do procedimento principal
+    let total = 0;
+    if (agendamento.procedimento) {
+      total = agendamento.procedimento.valorRepasse || 0;
+    }
 
+    // Somar os valores de repasse dos procedimentos secundários
     if (agendamento.procedimentos && agendamento.procedimentos.length > 0) {
       agendamento.procedimentos.forEach(proc => {
-        total += (proc.procedimento.valorPadrao || 0) * proc.quantidade;
+        total += (proc.valorRepasse || 0) * proc.quantidade;
       });
     }
 

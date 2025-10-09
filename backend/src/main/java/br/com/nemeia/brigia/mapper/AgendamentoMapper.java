@@ -60,7 +60,9 @@ public class AgendamentoMapper {
         return new ProcedimentoAgendamentoResponse(
                 ap.getId(),
                 procedimentoMapper.toResponse(ap.getProcedimento()),
-                ap.getQuantidade()
+                ap.getQuantidade(),
+                ap.getValor(),
+                ap.getValorRepasse()
         );
     }
 

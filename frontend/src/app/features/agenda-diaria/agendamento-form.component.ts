@@ -181,8 +181,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
           const procedimento = this.fb.group({
             quantidade: [proc.quantidade, [Validators.required, Validators.min(1)]],
             procedimentoId: [proc.procedimento.id, Validators.required],
-            valor: [proc.procedimento.valorPadrao],
-            valorExibicao: [proc.procedimento.valorPadrao]
+            valor: [proc.valor || proc.procedimento.valorPadrao],
+            valorExibicao: [proc.valor || proc.procedimento.valorPadrao]
           });
           this.procedimentosLancados.push(procedimento);
         });

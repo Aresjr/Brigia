@@ -77,6 +77,8 @@ export interface ProcedimentoAgendamentoRequest {
 export interface ProcedimentoAgendamento {
     procedimento: Procedimento;
     quantidade: number;
+    valor: number | null;
+    valorRepasse: number | null;
 }
 
 export enum StatusAgendamentoEnum {

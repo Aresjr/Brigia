@@ -243,7 +243,52 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
                     procedimento,
                     procReq.quantidade()
             );
+
+            // Calcular valor e valor de repasse usando a mesma regra do frontend
+            calcularValoresProcedimento(agendamentoProcedimento, agendamento);
+
             agendamento.getProcedimentos().add(agendamentoProcedimento);
+        }
+    }
+
+    private void calcularValoresProcedimento(AgendamentoProcedimento agendamentoProcedimento, Agendamento agendamento) {
+        Procedimento procedimento = agendamentoProcedimento.getProcedimento();
+        Convenio convenio = agendamento.getConvenio();
+        Empresa empresa = agendamento.getEmpresa();
+
+        // Prioridade: Convênio > Plano Empresarial > Valor Padrão
+        if (convenio != null && procedimento.getPrecos() != null) {
+            // Buscar preço por convênio
+            var precoConvenio = procedimento.getPrecos().stream()
+                    .filter(preco -> preco.getConvenio() != null && preco.getConvenio().getId().equals(convenio.getId()))
+                    .findFirst();
+
+            if (precoConvenio.isPresent()) {
+                agendamentoProcedimento.setValor(precoConvenio.get().getPreco());
+                agendamentoProcedimento.setValorRepasse(precoConvenio.get().getRepasse());
+            } else {
+                // Se não encontrar preço específico, usar valor padrão
+                agendamentoProcedimento.setValor(procedimento.getValorPadrao());
+                agendamentoProcedimento.setValorRepasse(procedimento.getValorRepasse());
+            }
+        } else if (empresa != null && empresa.getPlano() != null && procedimento.getPrecosPlanos() != null) {
+            // Buscar preço por plano empresarial
+            var precoPlano = procedimento.getPrecosPlanos().stream()
+                    .filter(pp -> pp.getPlano().getId().equals(empresa.getPlano().getId()))
+                    .findFirst();
+
+            if (precoPlano.isPresent()) {
+                agendamentoProcedimento.setValor(precoPlano.get().getPreco());
+                agendamentoProcedimento.setValorRepasse(precoPlano.get().getRepasse());
+            } else {
+                // Se não encontrar preço específico, usar valor padrão
+                agendamentoProcedimento.setValor(procedimento.getValorPadrao());
+                agendamentoProcedimento.setValorRepasse(procedimento.getValorRepasse());
+            }
+        } else {
+            // Usar valor padrão
+            agendamentoProcedimento.setValor(procedimento.getValorPadrao());
+            agendamentoProcedimento.setValorRepasse(procedimento.getValorRepasse());
         }
     }
 
