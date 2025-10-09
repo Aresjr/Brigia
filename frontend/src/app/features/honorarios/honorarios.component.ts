@@ -4,6 +4,10 @@ import { LucideAngularModule } from 'lucide-angular';
 import { Honorario } from './honorario.interface';
 import { HonorarioService } from './honorario.service';
 import { HonorariosFormComponent } from './honorarios-form.component';
+import { BaseListComponent } from '../shared/base-list.component';
+import { ToastrService } from 'ngx-toastr';
+import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
+import { FabComponent } from '../shared/fab/fab.component';
 
 @Component({
   selector: 'app-honorarios',
@@ -12,41 +16,21 @@ import { HonorariosFormComponent } from './honorarios-form.component';
   imports: [
     CommonModule,
     LucideAngularModule,
-    HonorariosFormComponent
+    HonorariosFormComponent,
+    TopBarComponent,
+    FabComponent
   ]
 })
-export class HonorariosComponent implements OnInit {
-  honorarios: Honorario[] = [];
-  isLoading: boolean = false;
-  mostrarFormulario: boolean = false;
+export class HonorariosComponent extends BaseListComponent<Honorario> implements OnInit {
 
   constructor(
-    private honorarioService: HonorarioService
-  ) {}
-
-  ngOnInit() {
-    this.carregarHonorarios();
+    private honorarioService: HonorarioService,
+    protected override toastr: ToastrService
+  ) {
+    super(honorarioService, toastr);
   }
 
-  carregarHonorarios() {
-    this.isLoading = true;
-    this.honorarioService.listar().subscribe({
-      next: (response) => {
-        this.honorarios = response.items;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      }
-    });
-  }
-
-  abrirFormulario() {
-    this.mostrarFormulario = true;
-  }
-
-  fecharFormulario() {
-    this.mostrarFormulario = false;
-    this.carregarHonorarios();
+  override searchTermFilter(honorario: Honorario, searchTerm: string): boolean | undefined {
+    return honorario.profissional.nome.toLowerCase().includes(searchTerm.toLowerCase());
   }
 }
