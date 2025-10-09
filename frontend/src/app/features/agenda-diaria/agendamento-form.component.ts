@@ -435,6 +435,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
   removerProcedimento(index: number) {
     this.procedimentosLancados.removeAt(index);
+    this.calcularValorTotal();
   }
 
   calcularValorProcedimento(index: number | null) {
@@ -481,7 +482,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         }
       });
     } else {
-      procedimentoControl.patchValue({ valor: procedimento?.valorPadrao || null });
+      const valor = procedimento?.valorPadrao || 0;
+      procedimentoControl.patchValue({ valor: valor, valorExibicao: valor });
       this.calcularValorTotal();
     }
   }

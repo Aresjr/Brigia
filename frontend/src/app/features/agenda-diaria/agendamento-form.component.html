@@ -292,7 +292,7 @@
             <div *ngFor="let procedimento of procedimentosLancados.controls; let i = index" [formGroupName]="i"
                  class="grid grid-cols-[6rem_1fr_8rem_2rem] gap-3 px-1.5 items-center hover:bg-base-200 rounded-lg">
 
-              <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2">
+              <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2" (change)="calcularValorTotal()" >
 
               <ng-select [id]="'procedimento_' + i"  class="campo-select mt-0"
                          formControlName="procedimentoId"

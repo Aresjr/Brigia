@@ -47,7 +47,7 @@
       </div>
 
       <div *ngIf="!isLoading && agendamentos.length > 0">
-        <h3 class="text-base font-semibold mb-2">Agendamentos</h3>
+        <h3 class="text-base font-semibold mb-2">Atendimentos</h3>
 
         <div class="border border-base-300 rounded-lg divide-y divide-base-300">
           <div *ngFor="let agendamento of agendamentos" class="hover:bg-base-200 transition-colors">
@@ -73,7 +73,7 @@
                 <!-- Procedimento principal -->
                 <div *ngIf="agendamento.procedimento" class="flex justify-between text-sm py-1">
                   <span class="text-neutral">{{ agendamento.procedimento.nome }}</span>
-                  <span>{{ agendamento.valor | currency:'BRL':'symbol':'1.2-2' }}</span>
+                  <span>{{ agendamento.procedimento.valorRepasse | currency:'BRL':'symbol':'1.2-2' }}</span>
                 </div>
 
                 <!-- Procedimentos adicionais -->
@@ -83,7 +83,7 @@
                     <span class="text-xs">({{ proc.quantidade }}x)</span>
                   </span>
                   <span>
-                    {{ ( (proc.procedimento.valorPadrao || 0) * proc.quantidade) | currency:'BRL':'symbol':'1.2-2' }}
+                    {{ ( (proc.valorRepasse || 0) * proc.quantidade) | currency:'BRL':'symbol':'1.2-2' }}
                   </span>
                 </div>
               </div>
