@@ -4,7 +4,9 @@
       "Bash(./mvnw:*)",
       "Bash(timeout 180 ./mvnw test:*)",
       "Bash(cat:*)",
-      "Bash(timeout 120 ./mvnw test:*)"
+      "Bash(timeout 120 ./mvnw test:*)",
+      "Bash(timeout 120 ./mvnw verify:*)",
+      "Bash(timeout:*)"
     ],
     "deny": [],
     "ask": []
