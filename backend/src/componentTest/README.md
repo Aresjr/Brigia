@@ -47,13 +47,63 @@ ou
 
 ## Testes Disponíveis
 
-### ContaReceberServiceIntegrationTest
+### ContaReceberServiceIntegrationTest (6 testes)
 Testa o serviço de Contas a Receber com banco de dados real (PostgreSQL via Testcontainers):
 - Salvamento de contas a receber
 - Listagem paginada
 - Criação a partir de agendamento
 - Registro de recebimentos parciais e totais
 - Validação de que não há erro de stream ao paginar
+
+### AgendamentoServiceIntegrationTest (6 testes)
+Testa o serviço de Agendamentos com validação de disponibilidade:
+- Criação de agendamento com validação de disponibilidade
+- Criação de agendamento com encaixe (sem validação)
+- Criação de agendamento com lista de procedimentos
+- Listagem paginada por data
+- Edição de agendamento existente
+- Busca por token público
+
+### PacienteServiceIntegrationTest (8 testes)
+Testa operações CRUD de Pacientes:
+- Criação de paciente
+- Criação com convênio e empresa
+- Busca por ID
+- Validação de exceção quando não encontrado
+- Listagem paginada
+- Edição de paciente
+- Contagem por status (excluído/ativo)
+- Listagem de aniversariantes do dia
+
+### AtendimentoServiceIntegrationTest (6 testes)
+Testa o workflow completo de atendimentos:
+- Iniciar atendimento a partir de agendamento
+- Finalizar atendimento com dados clínicos
+- Criar atendimento em operação única
+- Listagem paginada
+- Busca por ID
+- Validação de manutenção de valores do agendamento
+
+### ProfissionalServiceIntegrationTest (8 testes)
+Testa operações CRUD de Profissionais:
+- Criação de profissional
+- Criação com especialidades associadas
+- Busca por ID
+- Busca por usuário ID
+- Validação de exceção quando não encontrado
+- Listagem paginada
+- Edição mantendo usuário e unidade
+- Listagem de aniversariantes do dia
+
+### EmpresaConvenioServiceIntegrationTest (7 testes)
+Testa operações de Empresas e Convênios:
+- Criação de empresa
+- Criação de empresa com plano empresarial
+- Listagem paginada de empresas
+- Criação de convênio
+- Edição de convênio
+- Listagem paginada de convênios
+- Exclusão lógica e restauração de empresa
 
 ## GitHub Actions
 

@@ -185,6 +185,7 @@ class AtendimentoServiceIntegrationTest {
         agendamento.setDesconto(new BigDecimal("22.00"));
         agendamento.setFormaPagamento(FormaPagamento.CARTAO_DEBITO);
         agendamento.setStatus(StatusAgendamento.AGENDADO);
+        agendamento.setTipoAgendamento(TipoAgendamento.CONSULTA);
         agendamento.setEncaixe(false);
         agendamento.setPago(false);
         agendamento.setUnidade(unidade);

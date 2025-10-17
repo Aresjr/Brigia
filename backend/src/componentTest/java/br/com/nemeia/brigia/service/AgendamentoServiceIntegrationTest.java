@@ -222,7 +222,7 @@ class AgendamentoServiceIntegrationTest {
                 LocalTime.of(10, 0),
                 especialidade.getId(),
                 profissional.getId(),
-                null, // tipoAgendamento
+                TipoAgendamento.CONSULTA, // tipoAgendamento
                 procedimento.getId(),
                 empresa.getId(),
                 convenio.getId(),
@@ -261,7 +261,7 @@ class AgendamentoServiceIntegrationTest {
                 LocalTime.of(20, 0), // Fora do horário de disponibilidade
                 especialidade.getId(),
                 profissional.getId(),
-                null, // tipoAgendamento
+                TipoAgendamento.CONSULTA, // tipoAgendamento
                 procedimento.getId(),
                 null, // empresaId
                 null, // convenioId
@@ -303,7 +303,7 @@ class AgendamentoServiceIntegrationTest {
                 LocalTime.of(14, 0),
                 especialidade.getId(),
                 profissional.getId(),
-                null, // tipoAgendamento
+                TipoAgendamento.PROCEDIMENTO, // tipoAgendamento
                 null, // procedimentoId
                 null, // empresaId
                 null, // convenioId
@@ -352,6 +352,7 @@ class AgendamentoServiceIntegrationTest {
             agendamento.setDesconto(BigDecimal.ZERO);
             agendamento.setFormaPagamento(FormaPagamento.PIX);
             agendamento.setStatus(StatusAgendamento.AGENDADO);
+            agendamento.setTipoAgendamento(TipoAgendamento.CONSULTA);
             agendamento.setEncaixe(false);
             agendamento.setPago(false);
             agendamento.setUnidade(unidade);
@@ -396,6 +397,7 @@ class AgendamentoServiceIntegrationTest {
         agendamento.setDesconto(BigDecimal.ZERO);
         agendamento.setFormaPagamento(FormaPagamento.PIX);
         agendamento.setStatus(StatusAgendamento.AGENDADO);
+        agendamento.setTipoAgendamento(TipoAgendamento.CONSULTA);
         agendamento.setEncaixe(false);
         agendamento.setPago(false);
         agendamento.setUnidade(unidade);
@@ -410,7 +412,7 @@ class AgendamentoServiceIntegrationTest {
                 LocalTime.of(11, 0), // Muda horário
                 especialidade.getId(),
                 profissional.getId(),
-                null, // tipoAgendamento
+                TipoAgendamento.CONSULTA, // tipoAgendamento
                 procedimento.getId(),
                 null, // empresaId
                 null, // convenioId
@@ -452,6 +454,7 @@ class AgendamentoServiceIntegrationTest {
         agendamento.setDesconto(BigDecimal.ZERO);
         agendamento.setFormaPagamento(FormaPagamento.PIX);
         agendamento.setStatus(StatusAgendamento.AGENDADO);
+        agendamento.setTipoAgendamento(TipoAgendamento.CONSULTA);
         agendamento.setEncaixe(true);
         agendamento.setPago(false);
         agendamento.setUnidade(unidade);

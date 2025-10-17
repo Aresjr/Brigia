@@ -339,12 +339,12 @@ class PacienteServiceIntegrationTest {
     @DisplayName("Deve listar aniversariantes do dia")
     @Transactional
     void testGetAniversariantes() {
-        // Arrange - Cria paciente com aniversário hoje
+        // Arrange - Cria paciente com aniversário hoje (data exata)
         LocalDate hoje = LocalDate.now();
         Paciente pacienteAniversariante = new Paciente();
         pacienteAniversariante.setNome("Aniversariante Teste");
         pacienteAniversariante.setCpf("33333333333");
-        pacienteAniversariante.setDataNascimento(hoje.minusYears(30)); // 30 anos atrás
+        pacienteAniversariante.setDataNascimento(hoje); // Data exata de hoje (mesmo ano)
         pacienteAniversariante.setSexo('M');
         pacienteAniversariante.setCelular("47933333333");
         pacienteAniversariante.setUnidade(unidade);
@@ -356,7 +356,7 @@ class PacienteServiceIntegrationTest {
         Paciente pacienteNormal = new Paciente();
         pacienteNormal.setNome("Paciente Normal");
         pacienteNormal.setCpf("44444444444");
-        pacienteNormal.setDataNascimento(hoje.minusDays(10).minusYears(25));
+        pacienteNormal.setDataNascimento(hoje.minusDays(10)); // Data diferente
         pacienteNormal.setSexo('F');
         pacienteNormal.setCelular("47944444444");
         pacienteNormal.setUnidade(unidade);
