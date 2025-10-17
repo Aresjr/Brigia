@@ -44,8 +44,7 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
                 data,
                 data
         ).stream()
-        .filter(ag -> ag.getProfissional().getId().equals(request.profissionalId())
-                && ag.getStatus() == StatusAgendamento.FINALIZADO)
+        .filter(ag -> ag.getProfissional().getId().equals(request.profissionalId()))
         .toList();
 
         // Calcular valor total baseado nos valores de repasse
