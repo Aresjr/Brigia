@@ -284,19 +284,28 @@ class ContaReceberServiceIntegrationTest {
     @Transactional
     void testCreateContaReceberFromAgendamento() {
         // Arrange
-        Agendamento agendamento = new Agendamento();
-        agendamento.setPaciente(paciente);
-        agendamento.setProfissional(profissional);
-        agendamento.setEmpresa(empresa);
-        agendamento.setConvenio(convenio);
-        agendamento.setData(LocalDate.now());
-        agendamento.setValor(new BigDecimal("200.00"));
-        agendamento.setDesconto(new BigDecimal("20.00"));
-        agendamento.setFormaPagamento(FormaPagamento.PIX);
-        agendamento.setPago(false);
+        Agendamento agendamentoNovo = new Agendamento();
+        agendamentoNovo.setPaciente(paciente);
+        agendamentoNovo.setProfissional(profissional);
+        agendamentoNovo.setEmpresa(empresa);
+        agendamentoNovo.setConvenio(convenio);
+        agendamentoNovo.setData(LocalDate.now());
+        agendamentoNovo.setHora(LocalTime.of(14, 0));
+        agendamentoNovo.setDuracao(60);
+        agendamentoNovo.setValor(new BigDecimal("200.00"));
+        agendamentoNovo.setDesconto(new BigDecimal("20.00"));
+        agendamentoNovo.setFormaPagamento(FormaPagamento.PIX);
+        agendamentoNovo.setStatus(StatusAgendamento.AGENDADO);
+        agendamentoNovo.setTipoAgendamento(TipoAgendamento.CONSULTA);
+        agendamentoNovo.setEncaixe(false);
+        agendamentoNovo.setPago(false);
+        agendamentoNovo.setUnidade(unidade);
+        agendamentoNovo.setCriadoEm(LocalDateTime.now());
+        agendamentoNovo.setExcluido(false);
+        agendamentoNovo = agendamentoRepository.save(agendamentoNovo);
 
         // Act
-        contaReceberService.createContaReceberFromAgendamento(agendamento);
+        contaReceberService.createContaReceberFromAgendamento(agendamentoNovo);
 
         // Assert
         Page<ContaReceber> page = contaReceberService.getPaged(0, 10);

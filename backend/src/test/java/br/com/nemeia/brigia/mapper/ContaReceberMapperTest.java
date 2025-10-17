@@ -72,13 +72,15 @@ class ContaReceberMapperTest {
         profissional1.setNome("Dr. Carlos");
         contaReceber1.setProfissional(profissional1);
 
-        Atendimento atendimento1 = new Atendimento();
-        atendimento1.setId(1L);
-        atendimento1.setData(LocalDate.of(2025, 10, 15));
         Convenio convenio1 = new Convenio();
         convenio1.setNome("Convênio X");
-        atendimento1.setConvenio(convenio1);
-        contaReceber1.setAtendimento(atendimento1);
+        contaReceber1.setConvenio(convenio1);
+        contaReceber1.setDataAgendamento(LocalDate.of(2025, 10, 15));
+
+        Agendamento agendamento1 = new Agendamento();
+        agendamento1.setId(1L);
+        agendamento1.setData(LocalDate.of(2025, 10, 15));
+        contaReceber1.setAgendamento(agendamento1);
 
         // Setup ContaReceber 2
         contaReceber2 = new ContaReceber();
@@ -105,11 +107,13 @@ class ContaReceberMapperTest {
         profissional2.setNome("Dra. Ana");
         contaReceber2.setProfissional(profissional2);
 
-        Atendimento atendimento2 = new Atendimento();
-        atendimento2.setId(2L);
-        atendimento2.setData(LocalDate.of(2025, 10, 16));
-        atendimento2.setConvenio(null);
-        contaReceber2.setAtendimento(atendimento2);
+        contaReceber2.setConvenio(null);
+        contaReceber2.setDataAgendamento(LocalDate.of(2025, 10, 16));
+
+        Agendamento agendamento2 = new Agendamento();
+        agendamento2.setId(2L);
+        agendamento2.setData(LocalDate.of(2025, 10, 16));
+        contaReceber2.setAgendamento(agendamento2);
     }
 
     @Test
@@ -215,7 +219,8 @@ class ContaReceberMapperTest {
         assertEquals(FormaPagamento.PIX, contaReceber.getFormaPagamento());
         assertEquals(StatusContaReceber.ABERTO, contaReceber.getStatus());
         assertEquals(BigDecimal.ZERO, contaReceber.getValorRecebido());
-        assertNull(contaReceber.getAtendimento());
+        assertNotNull(contaReceber.getAgendamento());
+        assertEquals(agendamento, contaReceber.getAgendamento());
     }
 
     @Test
