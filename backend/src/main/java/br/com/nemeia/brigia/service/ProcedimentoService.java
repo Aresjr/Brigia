@@ -57,12 +57,8 @@ public class ProcedimentoService {
         if (request.precosPlanos() != null) {
             request.precosPlanos().forEach(precoPlano -> {
                 EmpresaPlano plano = empresaPlanoService.getById(precoPlano.planoId());
-                ProcedimentoPlano procedimentoPlano = new ProcedimentoPlano(
-                    procedimentoNovo,
-                    plano,
-                    precoPlano.preco(),
-                    precoPlano.repasse()
-                );
+                ProcedimentoPlano procedimentoPlano = new ProcedimentoPlano(procedimentoNovo, plano, precoPlano.preco(),
+                        precoPlano.repasse());
                 procedimentoNovo.getPrecosPlanos().add(procedimentoPlano);
             });
             repository.save(procedimentoNovo);
@@ -83,7 +79,8 @@ public class ProcedimentoService {
         if (existing.getPrecosPlanos() != null) {
             existing.getPrecosPlanos().clear();
         }
-        procedimento.setPrecosPlanos(existing.getPrecosPlanos() != null ? existing.getPrecosPlanos() : new java.util.ArrayList<>());
+        procedimento.setPrecosPlanos(
+                existing.getPrecosPlanos() != null ? existing.getPrecosPlanos() : new java.util.ArrayList<>());
 
         Procedimento procedimentoAtualizado = repository.save(procedimento);
 
@@ -99,12 +96,8 @@ public class ProcedimentoService {
         if (request.precosPlanos() != null) {
             request.precosPlanos().forEach(precoPlano -> {
                 EmpresaPlano plano = empresaPlanoService.getById(precoPlano.planoId());
-                ProcedimentoPlano procedimentoPlano = new ProcedimentoPlano(
-                    procedimentoAtualizado,
-                    plano,
-                    precoPlano.preco(),
-                    precoPlano.repasse()
-                );
+                ProcedimentoPlano procedimentoPlano = new ProcedimentoPlano(procedimentoAtualizado, plano,
+                        precoPlano.preco(), precoPlano.repasse());
                 procedimentoAtualizado.getPrecosPlanos().add(procedimentoPlano);
             });
             repository.save(procedimentoAtualizado);

@@ -27,7 +27,7 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
 
     public AtendimentoService(AtendimentoRepository repository, AtendimentoMapper mapper,
             ProfissionalService profissionalService, AgendamentoService agendamentoService,
-                              PacienteService pacienteService) {
+            PacienteService pacienteService) {
         super(repository);
         this.mapper = mapper;
         this.profissionalService = profissionalService;
@@ -100,22 +100,22 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
     }
 
     private void finalizaAgendamento(Agendamento agendamento) {
-      agendamentoService.updateStatus(agendamento, StatusAgendamento.FINALIZADO);
+        agendamentoService.updateStatus(agendamento, StatusAgendamento.FINALIZADO);
     }
 
     private void atualizaDataUltimaConsultaPaciente(Agendamento agendamento) {
-      agendamento.getPaciente().setUltimaConsulta(LocalDateTime.now());
-      pacienteService.update(agendamento.getPaciente());
+        agendamento.getPaciente().setUltimaConsulta(LocalDateTime.now());
+        pacienteService.update(agendamento.getPaciente());
     }
 
     private void setValoresDescritivos(Atendimento atendimento, AtendimentoRequest request) {
-      atendimento.setAnamnese(request.anamnese());
-      atendimento.setExameFisico(request.exameFisico());
-      atendimento.setDiagnostico(request.diagnostico());
-      atendimento.setEvolucaoClinica(request.evolucaoClinica());
-      atendimento.setExamesSolicitados(request.examesSolicitados());
-      atendimento.setPrescricoes(request.prescricoes());
-      atendimento.setObservacoes(request.observacoes());
+        atendimento.setAnamnese(request.anamnese());
+        atendimento.setExameFisico(request.exameFisico());
+        atendimento.setDiagnostico(request.diagnostico());
+        atendimento.setEvolucaoClinica(request.evolucaoClinica());
+        atendimento.setExamesSolicitados(request.examesSolicitados());
+        atendimento.setPrescricoes(request.prescricoes());
+        atendimento.setObservacoes(request.observacoes());
     }
 
     @Override

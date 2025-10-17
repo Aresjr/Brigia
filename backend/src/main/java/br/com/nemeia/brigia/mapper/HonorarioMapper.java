@@ -21,16 +21,9 @@ public class HonorarioMapper {
             return null;
         }
 
-        return new HonorarioResponse(
-                honorario.getId(),
-                profissionalMapper.toResponse(honorario.getProfissional()),
-                honorario.getData(),
-                honorario.getValorTotal(),
-                honorario.getQuantidadeAtendimentos(),
-                unidadeMapper.toResponse(honorario.getUnidade()),
-                honorario.getCriadoEm(),
-                honorario.getExcluido()
-        );
+        return new HonorarioResponse(honorario.getId(), profissionalMapper.toResponse(honorario.getProfissional()),
+                honorario.getData(), honorario.getValorTotal(), honorario.getQuantidadeAtendimentos(),
+                unidadeMapper.toResponse(honorario.getUnidade()), honorario.getCriadoEm(), honorario.getExcluido());
     }
 
     public PagedResponse<HonorarioResponse> toPagedResponse(Page<Honorario> paged) {

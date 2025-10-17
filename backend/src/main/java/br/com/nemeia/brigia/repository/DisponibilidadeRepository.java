@@ -15,10 +15,8 @@ public interface DisponibilidadeRepository extends BaseRepository<Disponibilidad
     Page<Disponibilidade> findAllByDateRange(Pageable pageable, @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
 
-    @Query("SELECT d FROM Disponibilidade d WHERE d.profissional.id = :profissionalId AND d.dia = :dia " +
-           "AND d.horaInicial <= :hora AND d.horaFinal >= :hora AND (d.excluido IS NULL OR d.excluido = false)")
-    java.util.Optional<Disponibilidade> findByProfissionalAndDiaAndHora(
-            @Param("profissionalId") Long profissionalId,
-            @Param("dia") LocalDate dia,
-            @Param("hora") java.time.LocalTime hora);
+    @Query("SELECT d FROM Disponibilidade d WHERE d.profissional.id = :profissionalId AND d.dia = :dia "
+            + "AND d.horaInicial <= :hora AND d.horaFinal >= :hora AND (d.excluido IS NULL OR d.excluido = false)")
+    java.util.Optional<Disponibilidade> findByProfissionalAndDiaAndHora(@Param("profissionalId") Long profissionalId,
+            @Param("dia") LocalDate dia, @Param("hora") java.time.LocalTime hora);
 }

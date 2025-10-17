@@ -124,7 +124,8 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     @CacheEvict(value = "agendamentos", allEntries = true)
     public Agendamento editAgendamento(Long id, AgendamentoRequest request) {
         Agendamento original = getById(id);
-        boolean deveMandarEmail = deveMandarEmail(original, request); //TODO - verificar porque está mandando email na edição
+        boolean deveMandarEmail = deveMandarEmail(original, request); // TODO - verificar porque está mandando email na
+                                                                      // edição
 
         // Validar disponibilidade do profissional, exceto se for encaixe
         validarDisponibilidadeProfissional(request, id);
@@ -215,47 +216,38 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             return;
         }
 
-        // Validar se há disponibilidade cadastrada para o profissional no horário solicitado
-        disponibilidadeService.findByProfissionalAndDiaAndHora(
-                request.profissionalId(),
-                request.data(),
-                request.hora().plusMinutes(request.duracao())
-        ).orElseThrow(() -> new DisponibilidadeNaoEncontradaException(
-                "Não há disponibilidade cadastrada para o profissional no horário selecionado. " +
-                "Troque o horário ou marque como encaixe."
-        ));
+        // Validar se há disponibilidade cadastrada para o profissional no horário
+        // solicitado
+        disponibilidadeService
+                .findByProfissionalAndDiaAndHora(request.profissionalId(), request.data(),
+                        request.hora().plusMinutes(request.duracao()))
+                .orElseThrow(() -> new DisponibilidadeNaoEncontradaException(
+                        "Não há disponibilidade cadastrada para o profissional no horário selecionado. "
+                                + "Troque o horário ou marque como encaixe."));
 
         // Validar se não há conflito com outros agendamentos do mesmo profissional
         LocalTime horaFim = request.hora().plusMinutes(request.duracao());
         Long idParaVerificar = agendamentoId != null ? agendamentoId : -1L;
 
-        List<Agendamento> agendamentosConflitantes = repository.findAgendamentosConflitantes(
-                request.profissionalId(),
-                request.data(),
-                request.hora(),
-                horaFim,
-                idParaVerificar
-        );
+        List<Agendamento> agendamentosConflitantes = repository.findAgendamentosConflitantes(request.profissionalId(),
+                request.data(), request.hora(), horaFim, idParaVerificar);
 
         if (!agendamentosConflitantes.isEmpty()) {
             throw new DisponibilidadeNaoEncontradaException(
-                    "Já existe um agendamento para o profissional neste horário. " +
-                    "Troque o horário ou marque como encaixe."
-            );
+                    "Já existe um agendamento para o profissional neste horário. "
+                            + "Troque o horário ou marque como encaixe.");
         }
     }
 
-    private void processarProcedimentos(Agendamento agendamento, List<ProcedimentoAgendamentoRequest> procedimentosRequest) {
+    private void processarProcedimentos(Agendamento agendamento,
+            List<ProcedimentoAgendamentoRequest> procedimentosRequest) {
         if (agendamento.getProcedimentos() == null) {
-          agendamento.setProcedimentos(new ArrayList<>());
+            agendamento.setProcedimentos(new ArrayList<>());
         }
         for (ProcedimentoAgendamentoRequest procReq : procedimentosRequest) {
             Procedimento procedimento = procedimentoService.getById(procReq.procedimentoId());
-            AgendamentoProcedimento agendamentoProcedimento = new AgendamentoProcedimento(
-                    agendamento,
-                    procedimento,
-                    procReq.quantidade()
-            );
+            AgendamentoProcedimento agendamentoProcedimento = new AgendamentoProcedimento(agendamento, procedimento,
+                    procReq.quantidade());
 
             // Calcular valor e valor de repasse usando a mesma regra do frontend
             calcularValoresProcedimento(agendamentoProcedimento, agendamento);
@@ -272,8 +264,8 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         // Prioridade: Convênio > Plano Empresarial > Valor Padrão
         if (convenio != null && procedimento.getPrecos() != null) {
             // Buscar preço por convênio
-            var precoConvenio = procedimento.getPrecos().stream()
-                    .filter(preco -> preco.getConvenio() != null && preco.getConvenio().getId().equals(convenio.getId()))
+            var precoConvenio = procedimento.getPrecos().stream().filter(
+                    preco -> preco.getConvenio() != null && preco.getConvenio().getId().equals(convenio.getId()))
                     .findFirst();
 
             if (precoConvenio.isPresent()) {
@@ -287,8 +279,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         } else if (empresa != null && empresa.getPlano() != null && procedimento.getPrecosPlanos() != null) {
             // Buscar preço por plano empresarial
             var precoPlano = procedimento.getPrecosPlanos().stream()
-                    .filter(pp -> pp.getPlano().getId().equals(empresa.getPlano().getId()))
-                    .findFirst();
+                    .filter(pp -> pp.getPlano().getId().equals(empresa.getPlano().getId())).findFirst();
 
             if (precoPlano.isPresent()) {
                 agendamentoProcedimento.setValor(precoPlano.get().getPreco());

@@ -350,6 +350,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       precoAlterado: false
     });
     this.valorAntesEdicao = null;
+    this.calcularValorTotal();
   }
 
   podeAbrirAtendimento(agendamento: Agendamento | null): boolean {

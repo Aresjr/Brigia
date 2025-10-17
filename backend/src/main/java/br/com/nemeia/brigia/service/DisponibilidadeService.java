@@ -62,7 +62,8 @@ public class DisponibilidadeService extends BaseService<Disponibilidade, Disponi
         return repository.findAllByDateRange(pageable, startDate, endDate);
     }
 
-    public Optional<Disponibilidade> findByProfissionalAndDiaAndHora(Long profissionalId, LocalDate dia, LocalTime hora) {
+    public Optional<Disponibilidade> findByProfissionalAndDiaAndHora(Long profissionalId, LocalDate dia,
+            LocalTime hora) {
         return repository.findByProfissionalAndDiaAndHora(profissionalId, dia, hora);
     }
 

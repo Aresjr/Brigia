@@ -38,8 +38,7 @@ public class GenericExceptionHandler extends BaseExceptionHandler {
     }
 
     @ExceptionHandler({ValorRecebidoUltrapassadoException.class, DisponibilidadeNaoEncontradaException.class})
-    public ResponseEntity<ErrorResponse> handleBadRequestException(RuntimeException ex,
-            HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleBadRequestException(RuntimeException ex, HttpServletRequest request) {
         log.error("Mapped BadRequest: {}", ex.getMessage());
         return buildErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST, request);
     }
