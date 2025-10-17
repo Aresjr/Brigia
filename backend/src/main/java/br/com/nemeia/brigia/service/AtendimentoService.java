@@ -49,7 +49,9 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         setEntidades(atendimento, agendamento);
 
         atendimento.setData(LocalDate.now());
+        atendimento.setHoraInicio(LocalTime.now());
         atendimento.setHoraFim(LocalTime.now());
+        atendimento.setStatus(StatusAtendimento.FINALIZADO);
 
         Atendimento atendimentoNovo = repository.save(atendimento);
         agendamentoService.updateStatus(agendamento, StatusAgendamento.FINALIZADO);
