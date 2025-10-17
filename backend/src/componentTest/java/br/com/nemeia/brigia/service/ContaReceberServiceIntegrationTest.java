@@ -60,6 +60,9 @@ class ContaReceberServiceIntegrationTest {
     private AtendimentoRepository atendimentoRepository;
 
     @Autowired
+    private AgendamentoRepository agendamentoRepository;
+
+    @Autowired
     private UnidadeRepository unidadeRepository;
 
     @Autowired
@@ -75,6 +78,7 @@ class ContaReceberServiceIntegrationTest {
     private Convenio convenio;
     private Especialidade especialidade;
     private Atendimento atendimento;
+    private Agendamento agendamento;
 
     @BeforeEach
     @Transactional
@@ -171,6 +175,27 @@ class ContaReceberServiceIntegrationTest {
         atendimento.setCriadoEm(LocalDateTime.now());
         atendimento.setExcluido(false);
         atendimento = atendimentoRepository.save(atendimento);
+
+        // Cria agendamento para os testes
+        agendamento = new Agendamento();
+        agendamento.setPaciente(paciente);
+        agendamento.setProfissional(profissional);
+        agendamento.setEmpresa(empresa);
+        agendamento.setConvenio(convenio);
+        agendamento.setData(LocalDate.now());
+        agendamento.setHora(LocalTime.of(10, 0));
+        agendamento.setDuracao(60);
+        agendamento.setValor(new BigDecimal("150.00"));
+        agendamento.setDesconto(new BigDecimal("15.00"));
+        agendamento.setFormaPagamento(FormaPagamento.DINHEIRO);
+        agendamento.setStatus(StatusAgendamento.AGENDADO);
+        agendamento.setTipoAgendamento(TipoAgendamento.CONSULTA);
+        agendamento.setEncaixe(false);
+        agendamento.setPago(false);
+        agendamento.setUnidade(unidade);
+        agendamento.setCriadoEm(LocalDateTime.now());
+        agendamento.setExcluido(false);
+        agendamento = agendamentoRepository.save(agendamento);
     }
 
     @Test
@@ -182,9 +207,11 @@ class ContaReceberServiceIntegrationTest {
         ContaReceber contaReceber = new ContaReceber();
         contaReceber.setPaciente(paciente);
         contaReceber.setEmpresa(empresa);
-        contaReceber.setAtendimento(atendimento);
+        contaReceber.setAgendamento(agendamento);
         contaReceber.setProfissional(profissional);
-        contaReceber.setValorAtendimento(new BigDecimal("150.00"));
+        contaReceber.setConvenio(convenio);
+        contaReceber.setDataAgendamento(LocalDate.now());
+        contaReceber.setValorAgendamento(new BigDecimal("150.00"));
         contaReceber.setValorDesconto(new BigDecimal("15.00"));
         contaReceber.setValorTotalLancado(new BigDecimal("50.00"));
         contaReceber.setValorRecebido(BigDecimal.ZERO);
@@ -201,7 +228,7 @@ class ContaReceberServiceIntegrationTest {
         assertNotNull(saved.getId());
         assertEquals("João da Silva", saved.getPaciente().getNome());
         assertEquals("Dr. Carlos Santos", saved.getProfissional().getNome());
-        assertEquals(new BigDecimal("150.00"), saved.getValorAtendimento());
+        assertEquals(new BigDecimal("150.00"), saved.getValorAgendamento());
         assertEquals(new BigDecimal("185.00"), saved.getValorTotal()); // 150 + 50 - 15
         assertEquals(StatusContaReceber.ABERTO, saved.getStatus());
         assertFalse(saved.isFaturado());
@@ -217,9 +244,11 @@ class ContaReceberServiceIntegrationTest {
             ContaReceber contaReceber = new ContaReceber();
             contaReceber.setPaciente(paciente);
             contaReceber.setEmpresa(empresa);
-            contaReceber.setAtendimento(atendimento);
+            contaReceber.setAgendamento(agendamento);
             contaReceber.setProfissional(profissional);
-            contaReceber.setValorAtendimento(new BigDecimal("100.00").add(new BigDecimal(i * 10)));
+            contaReceber.setConvenio(convenio);
+            contaReceber.setDataAgendamento(LocalDate.now());
+            contaReceber.setValorAgendamento(new BigDecimal("100.00").add(new BigDecimal(i * 10)));
             contaReceber.setValorDesconto(new BigDecimal("10.00"));
             contaReceber.setValorTotalLancado(new BigDecimal("20.00"));
             contaReceber.setValorRecebido(BigDecimal.ZERO);
@@ -245,7 +274,7 @@ class ContaReceberServiceIntegrationTest {
             assertNotNull(conta.getId());
             assertNotNull(conta.getPaciente());
             assertNotNull(conta.getProfissional());
-            assertNotNull(conta.getValorAtendimento());
+            assertNotNull(conta.getValorAgendamento());
         });
     }
 
@@ -259,6 +288,8 @@ class ContaReceberServiceIntegrationTest {
         agendamento.setPaciente(paciente);
         agendamento.setProfissional(profissional);
         agendamento.setEmpresa(empresa);
+        agendamento.setConvenio(convenio);
+        agendamento.setData(LocalDate.now());
         agendamento.setValor(new BigDecimal("200.00"));
         agendamento.setDesconto(new BigDecimal("20.00"));
         agendamento.setFormaPagamento(FormaPagamento.PIX);
@@ -272,12 +303,15 @@ class ContaReceberServiceIntegrationTest {
         assertEquals(1, page.getTotalElements());
 
         ContaReceber created = page.getContent().get(0);
-        assertEquals(new BigDecimal("200.00"), created.getValorAtendimento());
+        assertEquals(new BigDecimal("200.00"), created.getValorAgendamento());
         assertEquals(new BigDecimal("20.00"), created.getValorDesconto());
         assertEquals(BigDecimal.ZERO, created.getValorTotalLancado());
         assertEquals(FormaPagamento.PIX, created.getFormaPagamento());
         assertEquals(StatusContaReceber.ABERTO, created.getStatus());
         assertEquals(BigDecimal.ZERO, created.getValorRecebido());
+        // Verifica os novos campos
+        assertEquals(convenio.getId(), created.getConvenio().getId());
+        assertEquals(LocalDate.now(), created.getDataAgendamento());
     }
 
     @Test
@@ -289,9 +323,11 @@ class ContaReceberServiceIntegrationTest {
         ContaReceber contaReceber = new ContaReceber();
         contaReceber.setPaciente(paciente);
         contaReceber.setEmpresa(empresa);
-        contaReceber.setAtendimento(atendimento);
+        contaReceber.setAgendamento(agendamento);
         contaReceber.setProfissional(profissional);
-        contaReceber.setValorAtendimento(new BigDecimal("300.00"));
+        contaReceber.setConvenio(convenio);
+        contaReceber.setDataAgendamento(LocalDate.now());
+        contaReceber.setValorAgendamento(new BigDecimal("300.00"));
         contaReceber.setValorDesconto(new BigDecimal("30.00"));
         contaReceber.setValorTotalLancado(new BigDecimal("60.00"));
         contaReceber.setValorRecebido(BigDecimal.ZERO);
@@ -322,9 +358,11 @@ class ContaReceberServiceIntegrationTest {
         ContaReceber contaReceber = new ContaReceber();
         contaReceber.setPaciente(paciente);
         contaReceber.setEmpresa(empresa);
-        contaReceber.setAtendimento(atendimento);
+        contaReceber.setAgendamento(agendamento);
         contaReceber.setProfissional(profissional);
-        contaReceber.setValorAtendimento(new BigDecimal("200.00"));
+        contaReceber.setConvenio(convenio);
+        contaReceber.setDataAgendamento(LocalDate.now());
+        contaReceber.setValorAgendamento(new BigDecimal("200.00"));
         contaReceber.setValorDesconto(new BigDecimal("20.00"));
         contaReceber.setValorTotalLancado(new BigDecimal("30.00"));
         contaReceber.setValorRecebido(BigDecimal.ZERO);
@@ -358,9 +396,11 @@ class ContaReceberServiceIntegrationTest {
             ContaReceber contaReceber = new ContaReceber();
             contaReceber.setPaciente(paciente);
             contaReceber.setEmpresa(empresa);
-            contaReceber.setAtendimento(atendimento);
+            contaReceber.setAgendamento(agendamento);
             contaReceber.setProfissional(profissional);
-            contaReceber.setValorAtendimento(new BigDecimal("100.00"));
+            contaReceber.setConvenio(convenio);
+            contaReceber.setDataAgendamento(LocalDate.now());
+            contaReceber.setValorAgendamento(new BigDecimal("100.00"));
             contaReceber.setValorDesconto(new BigDecimal("10.00"));
             contaReceber.setValorTotalLancado(new BigDecimal("0.00"));
             contaReceber.setValorRecebido(BigDecimal.ZERO);

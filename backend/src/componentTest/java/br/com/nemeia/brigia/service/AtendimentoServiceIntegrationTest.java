@@ -138,9 +138,6 @@ class AtendimentoServiceIntegrationTest {
         usuario.setExcluido(false);
         usuario = usuarioRepository.save(usuario);
 
-        // Configura usuário logado
-        SecurityHolder.setLoggedUserUnidadeId(unidade.getId());
-
         // Cria profissional
         profissional = new Profissional();
         profissional.setNome("Dra. Juliana Souza");
@@ -192,6 +189,10 @@ class AtendimentoServiceIntegrationTest {
         agendamento.setCriadoEm(LocalDateTime.now());
         agendamento.setExcluido(false);
         agendamento = agendamentoRepository.save(agendamento);
+
+        // Configura usuário logado APÓS criar todas as entidades
+        SecurityHolder.setLoggedUserUnidadeId(unidade.getId());
+        SecurityHolder.setLoggedUserId(usuario.getId());
     }
 
     @Test

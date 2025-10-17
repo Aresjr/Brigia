@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Getter
@@ -29,15 +30,22 @@ public class ContaReceber extends BaseModel {
     private Empresa empresa;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "atendimento_id")
-    private Atendimento atendimento;
+    @JoinColumn(name = "agendamento_id")
+    private Agendamento agendamento;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profissional_id")
     private Profissional profissional;
 
-    @Column(name = "valor_atendimento", precision = 10, scale = 2)
-    private BigDecimal valorAtendimento;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "convenio_id")
+    private Convenio convenio;
+
+    @Column(name = "data_agendamento")
+    private LocalDate dataAgendamento;
+
+    @Column(name = "valor_agendamento", precision = 10, scale = 2)
+    private BigDecimal valorAgendamento;
 
     @Column(name = "valor_total_lancado", precision = 10, scale = 2)
     private BigDecimal valorTotalLancado;
@@ -57,7 +65,7 @@ public class ContaReceber extends BaseModel {
     private StatusContaReceber status;
 
     public BigDecimal getValorTotal() {
-        return valorAtendimento.add(valorTotalLancado).subtract(valorDesconto);
+        return valorAgendamento.add(valorTotalLancado).subtract(valorDesconto);
     }
 
     public Boolean isFaturado() {

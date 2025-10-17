@@ -211,21 +211,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     }
 
     private void validarDisponibilidadeProfissional(AgendamentoRequest request, Long agendamentoId) {
-        // Se for encaixe, não precisa validar disponibilidade
-        if (Boolean.TRUE.equals(request.encaixe())) {
-            return;
-        }
-
-        // Validar se há disponibilidade cadastrada para o profissional no horário
-        // solicitado
-        disponibilidadeService
-                .findByProfissionalAndDiaAndHora(request.profissionalId(), request.data(),
-                        request.hora().plusMinutes(request.duracao()))
-                .orElseThrow(() -> new DisponibilidadeNaoEncontradaException(
-                        "Não há disponibilidade cadastrada para o profissional no horário selecionado. "
-                                + "Troque o horário ou marque como encaixe."));
-
-        // Validar se não há conflito com outros agendamentos do mesmo profissional
+        // SEMPRE validar conflito de horário, independente de ser encaixe ou não
         LocalTime horaFim = request.hora().plusMinutes(request.duracao());
         Long idParaVerificar = agendamentoId != null ? agendamentoId : -1L;
 
@@ -234,9 +220,21 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
 
         if (!agendamentosConflitantes.isEmpty()) {
             throw new DisponibilidadeNaoEncontradaException(
-                    "Já existe um agendamento para o profissional neste horário. "
-                            + "Troque o horário ou marque como encaixe.");
+                    "Já existe um agendamento para o profissional neste horário. Escolha outro horário.");
         }
+
+        // Se for encaixe, não precisa validar disponibilidade (pode agendar fora do horário de trabalho)
+        if (Boolean.TRUE.equals(request.encaixe())) {
+            return;
+        }
+
+        // Se não for encaixe, validar se há disponibilidade cadastrada para o profissional no horário solicitado
+        disponibilidadeService
+                .findByProfissionalAndDiaAndHora(request.profissionalId(), request.data(),
+                        request.hora().plusMinutes(request.duracao()))
+                .orElseThrow(() -> new DisponibilidadeNaoEncontradaException(
+                        "Não há disponibilidade cadastrada para o profissional no horário selecionado. "
+                                + "Troque o horário ou marque como encaixe."));
     }
 
     private void processarProcedimentos(Agendamento agendamento,

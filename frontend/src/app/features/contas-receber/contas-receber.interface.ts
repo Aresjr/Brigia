@@ -7,11 +7,11 @@ export interface ContaReceber extends Entidade {
     paciente: Paciente;
     empresa?: Empresa;
     profissional: Profissional;
-    dataAtendimento: Date;
+    dataAgendamento: Date;
     valorAgendamento: number;
-    valorProcedimentosLancados: number;
-    valorTotal: number;
     valorDesconto: number;
+    valorTotalLancado: number;
+    valorTotal: number;
     valorRecebido: number;
     convenio: string;
     formaPagamento: number;

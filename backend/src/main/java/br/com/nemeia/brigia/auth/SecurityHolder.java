@@ -38,6 +38,23 @@ public class SecurityHolder {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
+    public static void setLoggedUserId(Long userId) {
+        Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
+        Long unidadeId = null;
+        List<String> roles = Collections.singletonList("ADMIN");
+
+        if (currentAuth != null && currentAuth.getPrincipal() instanceof UserAuth) {
+            UserAuth currentUserAuth = (UserAuth) currentAuth.getPrincipal();
+            unidadeId = currentUserAuth.getUnidadeId();
+            roles = currentUserAuth.getRoles();
+        }
+
+        UserAuth userAuth = new UserAuth(userId, unidadeId, roles);
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userAuth, null,
+                roles.stream().map(SimpleGrantedAuthority::new).toList());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
     public static void clear() {
         SecurityContextHolder.clearContext();
     }

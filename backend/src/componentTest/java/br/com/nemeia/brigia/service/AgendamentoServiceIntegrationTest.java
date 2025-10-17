@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
 import br.com.nemeia.brigia.dto.request.ProcedimentoAgendamentoRequest;
+import br.com.nemeia.brigia.exception.DisponibilidadeNaoEncontradaException;
 import br.com.nemeia.brigia.model.*;
 import br.com.nemeia.brigia.repository.*;
 import java.math.BigDecimal;
@@ -251,10 +252,11 @@ class AgendamentoServiceIntegrationTest {
 
     @Test
     @Order(2)
-    @DisplayName("Deve criar agendamento com encaixe sem validar disponibilidade")
+    @DisplayName("Deve criar agendamento com encaixe fora da disponibilidade, mas validando conflito de horário")
     @Transactional
     void testCreateAgendamentoComEncaixe() {
-        // Arrange - horário fora da disponibilidade cadastrada
+        // Arrange - horário fora da disponibilidade cadastrada (20h, disponibilidade vai até 18h)
+        // mas SEM conflito com outro agendamento
         AgendamentoRequest request = new AgendamentoRequest(
                 paciente.getId(),
                 LocalDate.now().plusDays(1),
@@ -275,7 +277,7 @@ class AgendamentoServiceIntegrationTest {
                 false, // pago
                 null); // procedimentos
 
-        // Act & Assert - não deve lançar exceção
+        // Act & Assert - não deve lançar exceção (encaixe permite fora da disponibilidade)
         assertDoesNotThrow(() -> {
             Agendamento saved = agendamentoService.createAgendamento(request);
             assertNotNull(saved.getId());
@@ -286,6 +288,63 @@ class AgendamentoServiceIntegrationTest {
 
     @Test
     @Order(3)
+    @DisplayName("Deve impedir encaixe no mesmo horário de outro agendamento")
+    @Transactional
+    void testEncaixeNaoPermiteConflitoDeHorario() {
+        // Arrange - Cria um agendamento primeiro
+        LocalDate proximaSegunda = LocalDate.now().with(DayOfWeek.MONDAY);
+        if (proximaSegunda.isBefore(LocalDate.now()) || proximaSegunda.isEqual(LocalDate.now())) {
+            proximaSegunda = proximaSegunda.plusWeeks(1);
+        }
+
+        Agendamento agendamentoExistente = new Agendamento();
+        agendamentoExistente.setPaciente(paciente);
+        agendamentoExistente.setProfissional(profissional);
+        agendamentoExistente.setEspecialidade(especialidade);
+        agendamentoExistente.setData(proximaSegunda);
+        agendamentoExistente.setHora(LocalTime.of(10, 0));
+        agendamentoExistente.setDuracao(60);
+        agendamentoExistente.setValor(new BigDecimal("180.00"));
+        agendamentoExistente.setDesconto(BigDecimal.ZERO);
+        agendamentoExistente.setFormaPagamento(FormaPagamento.PIX);
+        agendamentoExistente.setStatus(StatusAgendamento.AGENDADO);
+        agendamentoExistente.setTipoAgendamento(TipoAgendamento.CONSULTA);
+        agendamentoExistente.setEncaixe(false);
+        agendamentoExistente.setPago(false);
+        agendamentoExistente.setUnidade(unidade);
+        agendamentoExistente.setCriadoEm(LocalDateTime.now());
+        agendamentoExistente.setExcluido(false);
+        agendamentoRepository.save(agendamentoExistente);
+
+        // Tenta criar um encaixe no MESMO horário
+        AgendamentoRequest request = new AgendamentoRequest(
+                paciente.getId(),
+                proximaSegunda,
+                LocalTime.of(10, 0), // MESMO horário do agendamento existente
+                especialidade.getId(),
+                profissional.getId(),
+                TipoAgendamento.CONSULTA,
+                procedimento.getId(),
+                null,
+                null,
+                FormaPagamento.DINHEIRO,
+                new BigDecimal("180.00"),
+                new BigDecimal("0.00"),
+                60,
+                "Tentativa de encaixe no mesmo horário",
+                false,
+                true, // encaixe = true
+                false,
+                null);
+
+        // Act & Assert - deve lançar exceção mesmo sendo encaixe
+        assertThrows(DisponibilidadeNaoEncontradaException.class, () -> {
+            agendamentoService.createAgendamento(request);
+        });
+    }
+
+    @Test
+    @Order(4)
     @DisplayName("Deve criar agendamento com procedimentos")
     @Transactional
     void testCreateAgendamentoComProcedimentos() {
@@ -329,7 +388,7 @@ class AgendamentoServiceIntegrationTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     @DisplayName("Deve listar agendamentos paginados por data")
     @Transactional
     void testGetByDate() {
@@ -376,7 +435,7 @@ class AgendamentoServiceIntegrationTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     @DisplayName("Deve editar um agendamento existente")
     @Transactional
     void testEditAgendamento() {
@@ -439,7 +498,7 @@ class AgendamentoServiceIntegrationTest {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     @DisplayName("Deve buscar agendamento por token")
     @Transactional
     void testGetByToken() {

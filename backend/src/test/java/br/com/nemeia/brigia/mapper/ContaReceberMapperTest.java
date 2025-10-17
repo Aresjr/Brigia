@@ -50,7 +50,7 @@ class ContaReceberMapperTest {
         // Setup ContaReceber 1
         contaReceber1 = new ContaReceber();
         contaReceber1.setId(1L);
-        contaReceber1.setValorAtendimento(new BigDecimal("100.00"));
+        contaReceber1.setValorAgendamento(new BigDecimal("100.00"));
         contaReceber1.setValorDesconto(new BigDecimal("10.00"));
         contaReceber1.setValorTotalLancado(new BigDecimal("50.00"));
         contaReceber1.setValorRecebido(new BigDecimal("50.00"));
@@ -83,7 +83,7 @@ class ContaReceberMapperTest {
         // Setup ContaReceber 2
         contaReceber2 = new ContaReceber();
         contaReceber2.setId(2L);
-        contaReceber2.setValorAtendimento(new BigDecimal("200.00"));
+        contaReceber2.setValorAgendamento(new BigDecimal("200.00"));
         contaReceber2.setValorDesconto(new BigDecimal("0.00"));
         contaReceber2.setValorTotalLancado(new BigDecimal("0.00"));
         contaReceber2.setValorRecebido(new BigDecimal("200.00"));
@@ -209,7 +209,7 @@ class ContaReceberMapperTest {
         assertEquals(paciente, contaReceber.getPaciente());
         assertEquals(empresa, contaReceber.getEmpresa());
         assertEquals(profissional, contaReceber.getProfissional());
-        assertEquals(new BigDecimal("150.00"), contaReceber.getValorAtendimento());
+        assertEquals(new BigDecimal("150.00"), contaReceber.getValorAgendamento());
         assertEquals(new BigDecimal("15.00"), contaReceber.getValorDesconto());
         assertEquals(BigDecimal.ZERO, contaReceber.getValorTotalLancado());
         assertEquals(FormaPagamento.PIX, contaReceber.getFormaPagamento());
