@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Especialidade, EspecialidadeRequest } from './especialidade.interface';
-import { BaseService } from '../procedimentos/base.service';
+import { BaseService } from '../shared/base.service';
 
 @Injectable({
   providedIn: 'root'

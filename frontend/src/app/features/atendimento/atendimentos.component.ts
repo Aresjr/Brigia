@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AtendimentoService } from './atendimento.service';
-import { Atendimento, AtendimentoRequest } from './atendimento.interface';
+import { Atendimento, AtendimentoRequest, StatusAtendimento } from './atendimento.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -12,7 +12,6 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { Router } from '@angular/router';
 import { FabComponent } from '../shared/fab/fab.component';
-import { StatusAtendimento } from '../../core/constans';
 import { LoadingSpinnerComponent } from '../shared/loading/loading-spinner.component';
 
 @Component({

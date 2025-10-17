@@ -19,14 +19,18 @@ import { ToastrService } from 'ngx-toastr';
 import { Procedimento } from '../procedimentos/procedimento.interface';
 import { ProcedimentoService } from '../procedimentos/procedimento.service';
 import { FormComponent } from '../shared/form.component';
-import { Agendamento, AgendamentoRequest, podeEditarAgendamento } from './agendamento.interface';
+import {
+  Agendamento,
+  AgendamentoRequest, podeAbrirAtendimento,
+  podeEditarAgendamento,
+  StatusAgendamento,
+  TIPO_AGENDAMENTO
+} from './agendamento.interface';
 import { IForm } from '../shared/form.interface';
 import { LucideAngularModule } from 'lucide-angular';
-import { autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
+import { abrirDatePicker, autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
 import {
-  FORMAS_PAGAMENTO,
-  STATUS_ABRIR_ATENDIMENTO, StatusAgendamento,
-  TIPO_AGENDAMENTO
+  FORMAS_PAGAMENTO
 } from '../../core/constans';
 import { forkJoin, map, Observable, tap } from 'rxjs';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
@@ -106,6 +110,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       observacoes: [null],
       precoAlterado: [false],
       encaixe: [false],
+      pago: [true],
     };
     this.form = this.fb.group({
       ...form,
@@ -177,8 +182,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
           const procedimento = this.fb.group({
             quantidade: [proc.quantidade, [Validators.required, Validators.min(1)]],
             procedimentoId: [proc.procedimento.id, Validators.required],
-            valor: [proc.procedimento.valorPadrao],
-            valorExibicao: [proc.procedimento.valorPadrao]
+            valor: [proc.valor || proc.procedimento.valorPadrao],
+            valorExibicao: [proc.valor || proc.procedimento.valorPadrao]
           });
           this.procedimentosLancados.push(procedimento);
         });
@@ -348,10 +353,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   podeAbrirAtendimento(agendamento: Agendamento | null): boolean {
-    if (agendamento == null) {
-      return false;
-    }
-    if (!STATUS_ABRIR_ATENDIMENTO.includes(agendamento.status)) {
+    if (agendamento == null || !podeAbrirAtendimento(agendamento)) {
       return false;
     }
     return this.userService.isMedico();
@@ -434,6 +436,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
   removerProcedimento(index: number) {
     this.procedimentosLancados.removeAt(index);
+    this.calcularValorTotal();
   }
 
   calcularValorProcedimento(index: number | null) {
@@ -480,7 +483,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         }
       });
     } else {
-      procedimentoControl.patchValue({ valor: procedimento?.valorPadrao || null });
+      const valor = procedimento?.valorPadrao || 0;
+      procedimentoControl.patchValue({ valor: valor, valorExibicao: valor });
       this.calcularValorTotal();
     }
   }
@@ -508,4 +512,5 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
   protected readonly ColorUtils = ColorUtils;
   protected readonly StatusAgendamento = StatusAgendamento;
+  protected readonly abrirDatePicker = abrirDatePicker;
 }

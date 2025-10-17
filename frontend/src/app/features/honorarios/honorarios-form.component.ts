@@ -8,6 +8,8 @@ import { ProfissionalService } from '../profissionais/profissional.service';
 import { AgendamentoService } from '../agenda-diaria/agendamento.service';
 import { Agendamento } from '../agenda-diaria/agendamento.interface';
 import { ToastrService } from 'ngx-toastr';
+import { HonorarioService } from './honorario.service';
+import { Honorario } from './honorario.interface';
 
 @Component({
   selector: 'app-honorarios-form',
@@ -22,6 +24,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class HonorariosFormComponent implements OnInit {
   @Input() profissionalId: number | null = null;
+  @Input() honorario: Honorario | null = null; // Modo detalhes
   @Output() cancel = new EventEmitter<void>();
 
   form: FormGroup;
@@ -30,12 +33,14 @@ export class HonorariosFormComponent implements OnInit {
   agendamentosExpandidos: Set<number> = new Set();
   isLoading: boolean = false;
   hoje: string;
+  modoDetalhes: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private profissionalService: ProfissionalService,
     private agendamentoService: AgendamentoService,
     private toastr: ToastrService,
+    private honorarioService: HonorarioService
   ) {
     this.hoje = new Date().toISOString().split('T')[0];
     this.form = this.fb.group({
@@ -45,20 +50,32 @@ export class HonorariosFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.carregarProfissionais();
-
-    // Watch form changes
-    this.form.get('profissionalId')?.valueChanges.subscribe(() => {
+    // Verificar se está em modo detalhes
+    if (this.honorario) {
+      this.modoDetalhes = true;
+      this.form.patchValue({
+        profissionalId: this.honorario.profissional.id,
+        data: this.honorario.data
+      });
+      this.form.disable();
+      this.carregarProfissionais();
       this.carregarAgendamentos();
-    });
+    } else {
+      this.carregarProfissionais();
 
-    this.form.get('data')?.valueChanges.subscribe(() => {
-      this.carregarAgendamentos();
-    });
+      // Watch form changes
+      this.form.get('profissionalId')?.valueChanges.subscribe(() => {
+        this.carregarAgendamentos();
+      });
 
-    // Set initial profissional
-    if (this.profissionalId) {
-      this.form.patchValue({ profissionalId: this.profissionalId });
+      this.form.get('data')?.valueChanges.subscribe(() => {
+        this.carregarAgendamentos();
+      });
+
+      // Set initial profissional
+      if (this.profissionalId) {
+        this.form.patchValue({ profissionalId: this.profissionalId });
+      }
     }
   }
 
@@ -110,11 +127,16 @@ export class HonorariosFormComponent implements OnInit {
   }
 
   calcularValorAgendamento(agendamento: Agendamento): number {
-    let total = agendamento.valor || 0;
+    // Usar o valor de repasse do procedimento principal
+    let total = 0;
+    if (agendamento.procedimento) {
+      total = agendamento.procedimento.valorRepasse || 0;
+    }
 
+    // Somar os valores de repasse dos procedimentos secundários
     if (agendamento.procedimentos && agendamento.procedimentos.length > 0) {
       agendamento.procedimentos.forEach(proc => {
-        total += (proc.procedimento.valorPadrao || 0) * proc.quantidade;
+        total += (proc.valorRepasse || 0) * proc.quantidade;
       });
     }
 
@@ -134,7 +156,21 @@ export class HonorariosFormComponent implements OnInit {
       this.toastr.warning('Verifique as informações preenchidas');
       return;
     }
-    // TODO: Implementar geração de honorários
-    console.log('Gerar honorários', this.form.value);
+
+    if (this.agendamentos.length === 0) {
+      this.toastr.warning('Não há atendimentos para gerar honorário');
+      return;
+    }
+
+    this.isLoading = true;
+    this.honorarioService.criar(this.form.value).subscribe({
+      next: () => {
+        this.toastr.success('Honorário gerado com sucesso');
+        this.fechar();
+      },
+      error: () => {
+        this.isLoading = false;
+      }
+    });
   }
 }

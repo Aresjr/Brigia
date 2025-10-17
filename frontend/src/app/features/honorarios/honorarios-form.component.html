@@ -2,7 +2,7 @@
   <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[52rem]" (click)="$event.stopPropagation()">
 
     <div class="flex justify-between items-center mb-4">
-      <h2 class="text-lg font-semibold">Gerar Honorários</h2>
+      <h2 class="text-lg font-semibold">{{ modoDetalhes ? 'Detalhes do Honorário' : 'Gerar Honorários' }}</h2>
       <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="fechar()" title="Fechar">
         <lucide-icon name="x" class="inline w-5 h-5"/>
       </button>
@@ -47,7 +47,7 @@
       </div>
 
       <div *ngIf="!isLoading && agendamentos.length > 0">
-        <h3 class="text-base font-semibold mb-2">Agendamentos</h3>
+        <h3 class="text-base font-semibold mb-2">Atendimentos</h3>
 
         <div class="border border-base-300 rounded-lg divide-y divide-base-300">
           <div *ngFor="let agendamento of agendamentos" class="hover:bg-base-200 transition-colors">
@@ -73,7 +73,7 @@
                 <!-- Procedimento principal -->
                 <div *ngIf="agendamento.procedimento" class="flex justify-between text-sm py-1">
                   <span class="text-neutral">{{ agendamento.procedimento.nome }}</span>
-                  <span>{{ agendamento.valor | currency:'BRL':'symbol':'1.2-2' }}</span>
+                  <span>{{ agendamento.procedimento.valorRepasse | currency:'BRL':'symbol':'1.2-2' }}</span>
                 </div>
 
                 <!-- Procedimentos adicionais -->
@@ -83,7 +83,7 @@
                     <span class="text-xs">({{ proc.quantidade }}x)</span>
                   </span>
                   <span>
-                    {{ ( (proc.procedimento.valorPadrao || 0) * proc.quantidade) | currency:'BRL':'symbol':'1.2-2' }}
+                    {{ ( (proc.valorRepasse || 0) * proc.quantidade) | currency:'BRL':'symbol':'1.2-2' }}
                   </span>
                 </div>
               </div>
@@ -100,11 +100,12 @@
         </div>
       </div>
 
-      <div class="flex justify-between mt-6">
+      <div class="flex mt-6" [class.justify-between]="!modoDetalhes" [class.justify-end]="modoDetalhes">
         <button type="button" class="btn btn-sm" (click)="fechar()">
           Fechar
         </button>
         <button
+          *ngIf="!modoDetalhes"
           type="button"
           class="btn btn-primary btn-sm"
           [disabled]="!form.valid || agendamentos.length === 0"

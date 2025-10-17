@@ -6,7 +6,6 @@ import { Procedimento } from '../procedimentos/procedimento.interface';
 import { Convenio } from '../convenio/convenio.interface';
 import { Empresa } from '../empresa/empresa.interface';
 import { Unidade } from '../unidade/unidade.interface';
-import { AGENDAMENTO_PODE_EDITAR } from '../../core/constans';
 
 export interface Agendamento extends Entidade {
     descricao: string | null;
@@ -26,13 +25,18 @@ export interface Agendamento extends Entidade {
     formaPagamento: number;
     valor: number;
     valorTotal: number;
-    status: number;
+    status: StatusAgendamentoEnum;
     observacoes?: string;
     encaixe: boolean;
+    pago: boolean;
 }
 
 export function podeEditarAgendamento(agendamento: Agendamento): boolean {
-  return AGENDAMENTO_PODE_EDITAR.includes(agendamento.status);
+  return [StatusAgendamentoEnum.Agendado, StatusAgendamentoEnum.Confirmado].includes(agendamento.status);
+}
+
+export function podeAbrirAtendimento(agendamento: Agendamento): boolean {
+  return [StatusAgendamentoEnum.Agendado, StatusAgendamentoEnum.Confirmado].includes(agendamento.status);
 }
 
 export interface AgendamentoDetalhes {
@@ -63,6 +67,7 @@ export interface AgendamentoRequest extends EntidadeRequest {
     observacoes: string | null;
     precoAlterado: boolean;
     encaixe: boolean;
+    pago: boolean;
     procedimentos: ProcedimentoAgendamentoRequest[];
 }
 
@@ -74,4 +79,37 @@ export interface ProcedimentoAgendamentoRequest {
 export interface ProcedimentoAgendamento {
     procedimento: Procedimento;
     quantidade: number;
+    valor: number | null;
+    valorRepasse: number | null;
 }
+
+export enum StatusAgendamentoEnum {
+  Agendado = 0,
+  Confirmado = 1,
+  EmAtendimento = 2,
+  Cancelado = 3,
+  NaoCompareceu = 4,
+  Reagendado = 5,
+  Finalizado = 6,
+  CanceladoPeloUsuario = 7,
+}
+
+export const StatusAgendamento: Record<StatusAgendamentoEnum, { descricao: string; cor: string }> = {
+  [StatusAgendamentoEnum.Agendado]: { descricao: 'Agendado', cor: '#60a5fa' },
+  [StatusAgendamentoEnum.Confirmado]: { descricao: 'Confirmado', cor: '#2563EB' },
+  [StatusAgendamentoEnum.EmAtendimento]: { descricao: 'Em Atendimento', cor: '#A78BFA' },
+  [StatusAgendamentoEnum.Cancelado]: { descricao: 'Cancelado', cor: '#EF4444' },
+  [StatusAgendamentoEnum.NaoCompareceu]: { descricao: 'Não Compareceu', cor: '#F59E0B' },
+  [StatusAgendamentoEnum.Reagendado]: { descricao: 'Reagendado', cor: '#F59E0B' },
+  [StatusAgendamentoEnum.Finalizado]: { descricao: 'Finalizado', cor: '#14B8A6' },
+  [StatusAgendamentoEnum.CanceladoPeloUsuario]: { descricao: 'Cancelado Pelo Usuário', cor: '#EF4444' },
+};
+
+export const TIPO_AGENDAMENTO = [
+  { valor: 0, descricao: 'Consulta' },
+  { valor: 1, descricao: 'Exame' },
+  { valor: 2, descricao: 'ASO' },
+  { valor: 3, descricao: 'Procedimento' },
+  { valor: 4, descricao: 'Sessão' },
+  { valor: 5, descricao: 'Retorno' }
+];

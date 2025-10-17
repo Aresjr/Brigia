@@ -56,70 +56,77 @@
           </p>
         </div>
 
-        <div class="bg-primary/10 text-primary rounded-lg overflow-hidden">
-          <div
-            class="p-3 flex items-center justify-between cursor-pointer hover:bg-primary/20 text-sm font-semibold tracking-wide"
-            (click)="toggleTabelaConvenio()">
-            <span>Preço Convênios</span>
-            <lucide-icon
-              [name]="mostraTabelaConvenio ? 'chevron-down' : 'chevron-right'"
-              class="w-4 h-4"/>
-          </div>
-
-          @if (mostraTabelaConvenio) {
-            @if (procedimento.precosProcedimento && procedimento.precosProcedimento.length > 0) {
-              <table class="min-w-full text-sm">
-                <tbody class="divide-y divide-primary/20">
-                  @for (precoConvenio of procedimento.precosProcedimento; track precoConvenio.id) {
-                    <tr class="hover:bg-primary/10">
-                      <td class="px-6 py-3">{{ precoConvenio.convenio.nome }}</td>
-                      <td class="px-6 py-3 w-28 text-right font-medium text-primary">
-                        R$ {{ precoConvenio.preco | number:'1.2-2':'pt-BR' }}
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            }
-            @else {
-              <div class="p-4 text-sm italic text-gray-500">
-                Não há preços cadastrados para convênios para este procedimento.
+        <div>
+          <p class="text-sm mb-2">Tabela de Preços</p>
+          <div class="border border-base-300 rounded-lg divide-y divide-base-300">
+            <div class="hover:bg-base-200 transition-colors">
+              <div
+                class="flex justify-between items-center p-3 cursor-pointer"
+                (click)="toggleTabelaConvenio()">
+                <div class="flex items-center gap-2">
+                  <lucide-icon
+                    [name]="mostraTabelaConvenio ? 'chevron-down' : 'chevron-right'"
+                    class="w-4 h-4 text-neutral">
+                  </lucide-icon>
+                  <span class="font-medium">Preço Convênios</span>
+                </div>
               </div>
-            }
-          }
-        </div>
 
-        <div class="bg-primary/10 text-primary rounded-lg overflow-hidden">
-          <div
-            class="p-3 flex items-center justify-between cursor-pointer hover:bg-primary/20 text-sm font-semibold tracking-wide"
-            (click)="toggleTabelaPlanos()">
-            <span>Preço Planos Empresariais</span>
-            <lucide-icon
-              [name]="mostraTabelaPlanos ? 'chevron-down' : 'chevron-right'"
-              class="w-4 h-4"/>
-          </div>
-
-          @if (mostraTabelaPlanos) {
-            @if (procedimento.precosPlanos && procedimento.precosPlanos.length > 0) {
-              <table class="min-w-full text-sm">
-                <tbody class="divide-y divide-primary/20">
-                  @for (precoPlano of procedimento.precosPlanos; track precoPlano.id) {
-                    <tr class="hover:bg-primary/10">
-                      <td class="px-6 py-3">{{ precoPlano.plano.nome }}</td>
-                      <td class="px-6 py-3 w-28 text-right font-medium text-primary">
-                        R$ {{ precoPlano.preco | number:'1.2-2':'pt-BR' }}
-                      </td>
-                    </tr>
+              @if (mostraTabelaConvenio) {
+                <div class="bg-base-200/50 px-6 py-2">
+                  @if (procedimento.precosProcedimento && procedimento.precosProcedimento.length > 0) {
+                    <div class="space-y-1">
+                      @for (precoConvenio of procedimento.precosProcedimento; track precoConvenio.id) {
+                        <div class="flex justify-between text-sm py-1">
+                          <span class="text-neutral">{{ precoConvenio.convenio.nome }}</span>
+                          <span>R$ {{ precoConvenio.preco | number:'1.2-2':'pt-BR' }}</span>
+                        </div>
+                      }
+                    </div>
                   }
-                </tbody>
-              </table>
-            }
-            @else {
-              <div class="p-4 text-sm italic text-gray-500">
-                Não há preços cadastrados para planos empresariais para este procedimento.
+                  @else {
+                    <div class="text-sm text-neutral py-1">
+                      Não há preços cadastrados para convênios para este procedimento.
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="hover:bg-base-200 transition-colors">
+              <div
+                class="flex justify-between items-center p-3 cursor-pointer"
+                (click)="toggleTabelaPlanos()">
+                <div class="flex items-center gap-2">
+                  <lucide-icon
+                    [name]="mostraTabelaPlanos ? 'chevron-down' : 'chevron-right'"
+                    class="w-4 h-4 text-neutral">
+                  </lucide-icon>
+                  <span class="font-medium">Preço Planos Empresariais</span>
+                </div>
               </div>
-            }
-          }
+
+              @if (mostraTabelaPlanos) {
+                <div class="bg-base-200/50 px-6 py-2">
+                  @if (procedimento.precosPlanos && procedimento.precosPlanos.length > 0) {
+                    <div class="space-y-1">
+                      @for (precoPlano of procedimento.precosPlanos; track precoPlano.id) {
+                        <div class="flex justify-between text-sm py-1">
+                          <span class="text-neutral">{{ precoPlano.plano.nome }}</span>
+                          <span>R$ {{ precoPlano.preco | number:'1.2-2':'pt-BR' }}</span>
+                        </div>
+                      }
+                    </div>
+                  }
+                  @else {
+                    <div class="text-sm text-neutral py-1">
+                      Não há preços cadastrados para planos empresariais para este procedimento.
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
         </div>
 
         <div class="flex justify-between mt-2">

@@ -41,6 +41,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     private final UnidadeService unidadeService;
     private final EmailService emailService;
     private final DisponibilidadeService disponibilidadeService;
+    private final ContaReceberService contaReceberService;
 
     @Value("${app.base-url}")
     private String baseUrl;
@@ -49,7 +50,8 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             PacienteService pacienteService, ProfissionalService profissionalService,
             EspecialidadeService especialidadeService, ProcedimentoService procedimentoService,
             EmpresaService empresaService, ConvenioService convenioService, UnidadeService unidadeService,
-            EmailService emailService, DisponibilidadeService disponibilidadeService) {
+            EmailService emailService, DisponibilidadeService disponibilidadeService,
+            ContaReceberService contaReceberService) {
         super(repository);
         this.mapper = mapper;
         this.pacienteService = pacienteService;
@@ -61,6 +63,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         this.emailService = emailService;
         this.unidadeService = unidadeService;
         this.disponibilidadeService = disponibilidadeService;
+        this.contaReceberService = contaReceberService;
     }
 
     @Cacheable(value = "agendamentos", key = "#userId + '-' + #mes + '-' + #ano")
@@ -108,6 +111,11 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             agendamentoNovo = repository.save(agendamentoNovo);
         }
 
+        // Criar conta a receber se pago=true
+        if (Boolean.TRUE.equals(request.pago())) {
+            contaReceberService.createContaReceberFromAgendamento(agendamentoNovo);
+        }
+
         sendEmail(agendamentoNovo, "Agendamento Realizado!", "agendamento-cadastrado");
 
         return agendamentoNovo;
@@ -131,6 +139,11 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         }
 
         Agendamento agendamentoAtualizado = repository.save(agendamentoUpdate);
+
+        // Criar conta a receber se pago=true e não estava pago antes
+        if (Boolean.TRUE.equals(request.pago()) && !Boolean.TRUE.equals(original.getPago())) {
+            contaReceberService.createContaReceberFromAgendamento(agendamentoAtualizado);
+        }
 
         if (deveMandarEmail) {
             sendEmail(agendamentoAtualizado, "Agendamento Atualizado!", "agendamento-atualizado");
@@ -243,7 +256,52 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
                     procedimento,
                     procReq.quantidade()
             );
+
+            // Calcular valor e valor de repasse usando a mesma regra do frontend
+            calcularValoresProcedimento(agendamentoProcedimento, agendamento);
+
             agendamento.getProcedimentos().add(agendamentoProcedimento);
+        }
+    }
+
+    private void calcularValoresProcedimento(AgendamentoProcedimento agendamentoProcedimento, Agendamento agendamento) {
+        Procedimento procedimento = agendamentoProcedimento.getProcedimento();
+        Convenio convenio = agendamento.getConvenio();
+        Empresa empresa = agendamento.getEmpresa();
+
+        // Prioridade: Convênio > Plano Empresarial > Valor Padrão
+        if (convenio != null && procedimento.getPrecos() != null) {
+            // Buscar preço por convênio
+            var precoConvenio = procedimento.getPrecos().stream()
+                    .filter(preco -> preco.getConvenio() != null && preco.getConvenio().getId().equals(convenio.getId()))
+                    .findFirst();
+
+            if (precoConvenio.isPresent()) {
+                agendamentoProcedimento.setValor(precoConvenio.get().getPreco());
+                agendamentoProcedimento.setValorRepasse(precoConvenio.get().getRepasse());
+            } else {
+                // Se não encontrar preço específico, usar valor padrão
+                agendamentoProcedimento.setValor(procedimento.getValorPadrao());
+                agendamentoProcedimento.setValorRepasse(procedimento.getValorRepasse());
+            }
+        } else if (empresa != null && empresa.getPlano() != null && procedimento.getPrecosPlanos() != null) {
+            // Buscar preço por plano empresarial
+            var precoPlano = procedimento.getPrecosPlanos().stream()
+                    .filter(pp -> pp.getPlano().getId().equals(empresa.getPlano().getId()))
+                    .findFirst();
+
+            if (precoPlano.isPresent()) {
+                agendamentoProcedimento.setValor(precoPlano.get().getPreco());
+                agendamentoProcedimento.setValorRepasse(precoPlano.get().getRepasse());
+            } else {
+                // Se não encontrar preço específico, usar valor padrão
+                agendamentoProcedimento.setValor(procedimento.getValorPadrao());
+                agendamentoProcedimento.setValorRepasse(procedimento.getValorRepasse());
+            }
+        } else {
+            // Usar valor padrão
+            agendamentoProcedimento.setValor(procedimento.getValorPadrao());
+            agendamentoProcedimento.setValorRepasse(procedimento.getValorRepasse());
         }
     }
 

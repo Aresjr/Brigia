@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Entidade, EntidadeRequest } from './entidade.interface';
-import { BaseService } from '../procedimentos/base.service';
+import { BaseService } from './base.service';
 import { ToastrService } from 'ngx-toastr';
 
 type SortDirection = 'asc' | 'desc' | null;

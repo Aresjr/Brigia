@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Atendimento, AtendimentoRequest } from './atendimento.interface';
-import { BaseService } from '../procedimentos/base.service';
+import { BaseService } from '../shared/base.service';
 import { catchError, Observable, throwError } from 'rxjs';
 
 @Injectable({

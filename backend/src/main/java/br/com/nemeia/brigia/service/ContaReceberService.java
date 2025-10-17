@@ -7,7 +7,7 @@ import br.com.nemeia.brigia.utils.DbUtil;
 import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ContaReceberMapper;
-import br.com.nemeia.brigia.model.Atendimento;
+import br.com.nemeia.brigia.model.Agendamento;
 import br.com.nemeia.brigia.model.ContaReceber;
 import br.com.nemeia.brigia.repository.ContaReceberRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +42,8 @@ public class ContaReceberService {
     }
 
     @Transactional
-    public void createContaReceber(Atendimento atendimento) {
-        ContaReceber contaReceber = mapper.fromAtendimento(atendimento);
+    public void createContaReceberFromAgendamento(Agendamento agendamento) {
+        ContaReceber contaReceber = mapper.fromAgendamento(agendamento);
         repository.save(contaReceber);
     }
 
@@ -55,7 +55,8 @@ public class ContaReceberService {
         }
         contaReceber.setValorRecebido(contaReceber.getValorRecebido().add(valorRecebido));
         boolean pagoTotalmente = contaReceber.getValorRecebido().equals(contaReceber.getValorTotal());
-        contaReceber.setStatus(pagoTotalmente ? StatusContaReceber.PAGO : StatusContaReceber.PARCIAL);
+        var status = pagoTotalmente ? StatusContaReceber.PAGO : StatusContaReceber.PARCIAL;
+        contaReceber.setStatus(status);
         repository.save(contaReceber);
         return contaReceber;
     }

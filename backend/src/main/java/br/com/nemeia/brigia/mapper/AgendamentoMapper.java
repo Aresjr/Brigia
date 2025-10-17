@@ -52,7 +52,7 @@ public class AgendamentoMapper {
                 procedimentoMapper.toResponse(agendamento.getProcedimento()), agendamento.getStatus(),
                 agendamento.getTipoAgendamento(), agendamento.getFormaPagamento(), agendamento.getValor(),
                 agendamento.getDesconto(), agendamento.getObservacoes(), agendamento.getDuracao(),
-                agendamento.getEncaixe(), procedimentos, BigDecimal.ZERO,
+                agendamento.getEncaixe(), agendamento.getPago(), procedimentos, BigDecimal.ZERO,
           agendamento.getCriadoEm(), agendamento.getExcluido());
     }
 
@@ -60,7 +60,9 @@ public class AgendamentoMapper {
         return new ProcedimentoAgendamentoResponse(
                 ap.getId(),
                 procedimentoMapper.toResponse(ap.getProcedimento()),
-                ap.getQuantidade()
+                ap.getQuantidade(),
+                ap.getValor(),
+                ap.getValorRepasse()
         );
     }
 
@@ -98,6 +100,7 @@ public class AgendamentoMapper {
         original.setObservacoes(request.observacoes());
         original.setPrecoAlterado(request.precoAlterado());
         original.setEncaixe(request.encaixe() != null ? request.encaixe() : false);
+        original.setPago(request.pago() != null ? request.pago() : false);
         return original;
     }
 }

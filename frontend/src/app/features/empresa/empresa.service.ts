@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Empresa, EmpresaRequest, EmpresaPlano } from './empresa.interface';
-import { BaseService } from '../procedimentos/base.service';
+import { BaseService } from '../shared/base.service';
 import { Observable } from 'rxjs';
 import { PagedResponse } from '../shared/entidade.interface';
 

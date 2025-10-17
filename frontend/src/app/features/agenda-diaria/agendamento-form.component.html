@@ -27,16 +27,25 @@
 
     <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6" [ngClass]="{ 'visualizacao': !modoSalvar }">
       <div class="flex">
-        <div class="w-[8rem] mr-4" >
+        <div class="w-[7rem] mr-4" >
           <label class="label-campo" for="data">
             Data <span aria-hidden="true" class="text-error">*</span>
-            <input type="date" formControlName="data" required id="data" [min]="hoje"
-                   class="campo" [ngClass]="classesCampo('data')" >
-            <div *ngIf="isInvalid('data')" class="text-error text-sm">
-              Obrigatório
+
+            <div class="relative">
+              <input #dataAgendamento type="date" formControlName="data" required id="data" [min]="hoje"
+                     class="campo" [ngClass]="classesCampo('data')" >
+              <button type="button" class="absolute right-0.5 top-4 -translate-y-1/2" (click)="abrirDatePicker(dataAgendamento)">
+                <lucide-icon name="calendar" class="inline h-4"/>
+              </button>
+              <div *ngIf="isInvalid('data')" class="text-error text-sm">
+                Obrigatório
+              </div>
             </div>
+
+
           </label>
         </div>
+
         <div class="w-[4rem] mr-4 group tooltip text-left" data-tip="Horário inicial do agendamento">
           <label class="label-campo" for="hora">
             Horário <span aria-hidden="true" class="text-error">*</span>
@@ -104,7 +113,7 @@
           </label>
         </div>
 
-        <div class="w-[4rem]">
+        <div class="w-[4rem] tooltip text-left" data-tip="Caso marcado, possibilita cadastrar agendamento no mesmo horário de outros agendamentos">
           <label class="label-campo rounded-lg px-1.5 hover:border hover:border-neutral" for="encaixe">
             Encaixe <br/><input type="checkbox" id="encaixe" formControlName="encaixe" class="campo my-1.5 mx-3 checkbox checkbox-primary" />
           </label>
@@ -248,7 +257,13 @@
 
       }
 
-        <div class="w-[30rem]" >
+        <div class="w-[4rem] mr-4 tooltip text-left" data-tip="Caso marcado, conta a receber será criado como recebido">
+          <label class="label-campo rounded-lg px-1.5 hover:border hover:border-neutral" for="pago">
+            Pago <br/><input type="checkbox" id="pago" formControlName="pago" class="campo my-3 mx-3 checkbox checkbox-primary" />
+          </label>
+        </div>
+
+        <div class="w-[25rem]" >
           <label class="label-campo" for="observacoes">
             Observações
             <textarea id="observacoes" formControlName="observacoes" rows="2" emptyToNull class="campo"
@@ -292,7 +307,7 @@
             <div *ngFor="let procedimento of procedimentosLancados.controls; let i = index" [formGroupName]="i"
                  class="grid grid-cols-[6rem_1fr_8rem_2rem] gap-3 px-1.5 items-center hover:bg-base-200 rounded-lg">
 
-              <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2">
+              <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2" (change)="calcularValorTotal()" >
 
               <ng-select [id]="'procedimento_' + i"  class="campo-select mt-0"
                          formControlName="procedimentoId"

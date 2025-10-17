@@ -20,6 +20,20 @@
   min-width: 200px;
 }
 
+/* Z-index decrescente baseado na posição left - eventos da esquerda ficam por cima */
+.cal-week-view .cal-time-events .cal-event-container[style*="left: 0%"] { z-index: 7 !important; }
+.cal-week-view .cal-time-events .cal-event-container[style*="left: 14."] { z-index: 6 !important; }
+.cal-week-view .cal-time-events .cal-event-container[style*="left: 28."] { z-index: 5 !important; }
+.cal-week-view .cal-time-events .cal-event-container[style*="left: 33."] { z-index: 5 !important; }
+.cal-week-view .cal-time-events .cal-event-container[style*="left: 42."] { z-index: 4 !important; }
+.cal-week-view .cal-time-events .cal-event-container[style*="left: 57."] { z-index: 3 !important; }
+.cal-week-view .cal-time-events .cal-event-container[style*="left: 66."] { z-index: 2 !important; }
+.cal-week-view .cal-time-events .cal-event-container[style*="left: 71."] { z-index: 2 !important; }
+.cal-week-view .cal-time-events .cal-event-container[style*="left: 85."] { z-index: 1 !important; }
+
+/* Quando hover, aumenta ainda mais o z-index para ficar por cima de tudo */
+.cal-week-view .cal-time-events .cal-event-container:hover { z-index: 100 !important; }
+
 /* bloco de horário (6 AM, 7AM) */
 .cal-month-view, .cal-week-view {
   @apply border border-base-200 rounded-md;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Disponibilidade, DisponibilidadeRequest } from './disponibilidade.interface';
-import { BaseService } from '../procedimentos/base.service';
+import { BaseService } from '../shared/base.service';
 import { catchError, Observable, shareReplay, throwError } from 'rxjs';
 import { PagedResponse } from '../shared/entidade.interface';
 
