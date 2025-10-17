@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(./mvnw:*)"
+      "Bash(./mvnw:*)",
+      "Bash(timeout 180 ./mvnw test:*)",
+      "Bash(cat:*)",
+      "Bash(timeout 120 ./mvnw test:*)"
     ],
     "deny": [],
     "ask": []
