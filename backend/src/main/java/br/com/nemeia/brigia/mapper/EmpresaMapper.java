@@ -15,13 +15,28 @@ import org.springframework.stereotype.Component;
 public class EmpresaMapper {
 
     private final ObjectMapper objectMapper;
+    private final EmpresaPlanoMapper empresaPlanoMapper;
 
     public EmpresaResponse toResponse(Empresa empresa) {
         if (empresa == null) {
             return null;
         }
 
-        return objectMapper.convertValue(empresa, EmpresaResponse.class);
+        return new EmpresaResponse(
+            empresa.getId(),
+            empresa.getNome(),
+            empresa.getObservacao(),
+            empresa.getCodigoBc(),
+            empresa.getValorMinimoMensal(),
+            empresa.getMinimoPorFuncionario(),
+            empresa.getValorMes(),
+            empresa.getFunc(),
+            empresa.getCnpj(),
+            empresa.getEmail(),
+            empresaPlanoMapper.toResponse(empresa.getPlano()),
+            empresa.getCriadoEm(),
+            empresa.getExcluido()
+        );
     }
 
     public PagedResponse<EmpresaResponse> toPagedResponse(Page<Empresa> paged) {
