@@ -34,10 +34,12 @@ import {
 } from '../../core/constans';
 import { forkJoin, map, Observable, tap } from 'rxjs';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
+import { AdminCredentialsDialogComponent } from '../shared/admin-credentials-dialog/admin-credentials-dialog.component';
 import { UserService } from '../../core/user.service';
 import { ColorUtils } from '../../core/color-utils';
 import { Router } from '@angular/router';
 import { AtendimentoService } from '../atendimento/atendimento.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-agendamento-form',
@@ -47,7 +49,7 @@ import { AtendimentoService } from '../atendimento/atendimento.service';
     ReactiveFormsModule, NgClass,
     EmptyToNullDirective, NgxMaskDirective,
     PacienteFormComponent, NgNotFoundTemplateDirective,
-    DatePipe, NgIf, NgFor, LucideAngularModule, ConfirmDialogComponent, CurrencyPipe
+    DatePipe, NgIf, NgFor, LucideAngularModule, ConfirmDialogComponent, AdminCredentialsDialogComponent, CurrencyPipe
   ]
 })
 export class AgendamentoFormComponent extends FormComponent<Agendamento, AgendamentoRequest> implements OnInit {
@@ -79,6 +81,9 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   exibeConfirmCancelamento: boolean = false;
   valorEditavel: boolean = false;
   valorAntesEdicao: number | null = null;
+  descontoEditavel: boolean = false;
+  descontoAntesEdicao: number | null = null;
+  mostrarModalCredenciais: boolean = false;
   valorTotalAgendamento: number = 0;
   isLoading: boolean = false;
 
@@ -90,7 +95,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
               private especialidadeService: EspecialidadeService, private profissionalService: ProfissionalService,
               private empresaService: EmpresaService, private procedimentoService: ProcedimentoService,
               protected userService: UserService, private router: Router,
-              private atendimentoService: AtendimentoService) {
+              private atendimentoService: AtendimentoService, private authService: AuthService) {
     super(fb, toastr);
     this.hoje = new Date().toISOString().split('T')[0];
     const form: IForm<AgendamentoRequest> = {
@@ -350,6 +355,42 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       precoAlterado: false
     });
     this.valorAntesEdicao = null;
+    this.calcularValorTotal();
+  }
+
+  solicitarHabilitacaoDesconto() {
+    this.mostrarModalCredenciais = true;
+  }
+
+  cancelarModalCredenciais() {
+    this.mostrarModalCredenciais = false;
+  }
+
+  validarCredenciaisAdmin(credenciais: { login: string, senha: string }) {
+    this.authService.validarAdmin(credenciais.login, credenciais.senha).subscribe({
+      next: (valido) => {
+        if (valido) {
+          this.descontoAntesEdicao = this.form.value.desconto;
+          this.descontoEditavel = true;
+          this.mostrarModalCredenciais = false;
+          this.form.markAsPristine();
+          this.toastr.success('Desconto habilitado para edição');
+        } else {
+          this.toastr.error('Credenciais inválidas ou usuário não possui permissão de administrador');
+        }
+      },
+      error: () => {
+        this.toastr.error('Erro ao validar credenciais');
+      }
+    });
+  }
+
+  cancelarEdicaoDesconto() {
+    this.descontoEditavel = false;
+    this.form.patchValue({
+      desconto: this.descontoAntesEdicao
+    });
+    this.descontoAntesEdicao = null;
     this.calcularValorTotal();
   }
 

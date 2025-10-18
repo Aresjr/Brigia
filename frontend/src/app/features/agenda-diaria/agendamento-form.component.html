@@ -245,13 +245,19 @@
         <div class="w-[5rem] mr-4" >
           <label class="label-campo" for="desconto">
             Desconto
+            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" (click)="solicitarHabilitacaoDesconto()" *ngIf="this.modoSalvar && !descontoEditavel" title="Editar Desconto">
+              <lucide-icon name="pencil" class="h-3.5"/>
+            </button>
+            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" (click)="cancelarEdicaoDesconto()" *ngIf="this.modoSalvar && descontoEditavel" title="Cancelar Edição de Desconto">
+              <lucide-icon name="x" class="h-3.5"/>
+            </button>
           </label>
-          <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('desconto')">
+          <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('desconto', !this.descontoEditavel)">
             R$
             <input type="text" formControlName="desconto" min="1" max="99999" id="desconto"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0"
-                    (change)="alterouDesconto($event)">
+                   [readOnly]="!this.descontoEditavel" (change)="alterouDesconto($event)">
           </label>
         </div>
 
@@ -370,3 +376,9 @@
   (confirm)="fechar(true)"
   (cancel)="exibeConfirmCancelamento = false">
 </app-confirm-dialog>
+
+<app-admin-credentials-dialog
+  *ngIf="mostrarModalCredenciais"
+  (confirm)="validarCredenciaisAdmin($event)"
+  (cancel)="cancelarModalCredenciais()">
+</app-admin-credentials-dialog>

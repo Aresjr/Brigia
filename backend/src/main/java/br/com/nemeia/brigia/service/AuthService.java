@@ -76,4 +76,33 @@ public class AuthService {
         usuario.setSenha(passwordEncoder.encode(request.senha()));
         usuarioService.save(usuario);
     }
+
+    public boolean validarCredenciaisAdmin(String login, String senha, Long unidadeId) {
+        try {
+            Usuario usuario = usuarioService.getByEmail(login).orElseThrow(InvalidCredentialsException::new);
+
+            // Validar senha
+            if (!passwordEncoder.matches(senha, usuario.getSenha())) {
+                log.error("Senha inválida para o usuário: {}", login);
+                return false;
+            }
+
+            // Validar se é admin
+            if (!usuario.getRoles().contains(br.com.nemeia.brigia.model.RoleUsuario.ADMIN)) {
+                log.error("Usuário {} não possui role ADMIN", login);
+                return false;
+            }
+
+            // Validar se pertence à unidade
+            if (usuario.getUnidade() == null || !usuario.getUnidade().getId().equals(unidadeId)) {
+                log.error("Usuário {} não pertence à unidade {}", login, unidadeId);
+                return false;
+            }
+
+            return true;
+        } catch (Exception e) {
+            log.error("Erro ao validar credenciais admin: ", e);
+            return false;
+        }
+    }
 }
