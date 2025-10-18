@@ -263,13 +263,44 @@
 
       }
 
-        <div class="w-[4rem] mr-4 tooltip text-left" data-tip="Caso marcado, conta a receber será criada como recebida">
-          <label class="label-campo rounded-lg px-1.5 hover:border hover:border-neutral" for="pago">
-            Pago <br/><input type="checkbox" id="pago" formControlName="pago" class="campo my-3 mx-3 checkbox checkbox-primary" />
-          </label>
-        </div>
+      </div>
 
-        <div class="w-[25rem]" >
+      @if (!userService.isMedico()) {
+        <div class="flex mt-2 gap-4">
+          <div>
+            <label class="label-campo mb-2">Tipo de Pagamento</label>
+            <div class="flex gap-4 items-center h-[2.4rem]">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="tipoPagamento" class="radio radio-primary radio-sm"
+                       [checked]="tipoPagamento === 'pago'"
+                       (change)="selecionarTipoPagamento('pago')">
+                <span class="text-sm">Pago</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="tipoPagamento" class="radio radio-primary radio-sm"
+                       [checked]="tipoPagamento === 'parcial'"
+                       (change)="selecionarTipoPagamento('parcial')">
+                <span class="text-sm">Pagto Parcial</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="w-[8rem]" *ngIf="tipoPagamento === 'parcial'">
+            <label class="label-campo" for="quantiaPaga">
+              Quantia Paga
+            </label>
+            <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
+              R$
+              <input type="text" formControlName="quantiaPaga" min="0" id="quantiaPaga"
+                     (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
+                     mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0">
+            </label>
+          </div>
+        </div>
+      }
+
+      <div class="flex mt-2">
+        <div class="w-full" >
           <label class="label-campo" for="observacoes">
             Observações
             <textarea id="observacoes" formControlName="observacoes" rows="2" emptyToNull class="campo"
@@ -277,7 +308,6 @@
             </textarea>
           </label>
         </div>
-
       </div>
 
       <div class="flex mt-4">
