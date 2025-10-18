@@ -544,6 +544,13 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     });
 
     this.valorTotalAgendamento = total - desconto;
+
+    // Atualizar quantiaPaga se a opção "Pago" estiver selecionada
+    if (this.tipoPagamento === 'pago') {
+      this.form.patchValue({
+        quantiaPaga: this.valorTotalAgendamento
+      }, { emitEvent: false });
+    }
   }
 
   alterouValor($event: Event) {
@@ -559,7 +566,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     if (tipo === 'pago') {
       this.form.patchValue({
         pago: true,
-        quantiaPaga: null
+        quantiaPaga: this.valorTotalAgendamento
       });
     } else {
       this.form.patchValue({
