@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AgendamentoService } from '../../agenda-diaria/agendamento.service';
 import { Agendamento } from '../../agenda-diaria/agendamento.interface';
 import { QuillModule } from 'ngx-quill';
+import { AtendimentoService } from '../atendimento.service';
 
 @Component({
   selector: 'app-atendimento-form',
@@ -44,6 +45,10 @@ export class AtendimentoFormComponent extends FormComponent<Atendimento, Atendim
   abaAtiva: string = 'anamnese';
   mostrarDropdownImpressao: boolean = false;
   modoImpressao: 'padrao' | 'alternativo' | null = null;
+  abaPacienteAtiva: 'informacoes' | 'historico' = 'informacoes';
+  atendimentosAnteriores: Atendimento[] = [];
+  atendimentoAnteriorSelecionado: Atendimento | null = null;
+  carregandoAtendimentos: boolean = false;
 
   quillModules = {
     toolbar: [
@@ -59,7 +64,8 @@ export class AtendimentoFormComponent extends FormComponent<Atendimento, Atendim
   constructor(protected override fb: FormBuilder,
               protected override toastr: ToastrService,
               private procedimentoService: ProcedimentoService,
-              private agendamentoService: AgendamentoService) {
+              private agendamentoService: AgendamentoService,
+              private atendimentoService: AtendimentoService) {
     super(fb, toastr);
     this.form = this.fb.group({
       anamnese: [null],
@@ -189,6 +195,50 @@ export class AtendimentoFormComponent extends FormComponent<Atendimento, Atendim
         this.modoImpressao = null;
       }, 100);
     }, 100);
+  }
+
+  selecionarAbaPaciente(aba: 'informacoes' | 'historico') {
+    this.abaPacienteAtiva = aba;
+    if (aba === 'historico' && this.atendimentosAnteriores.length === 0 && this.agendamento?.paciente?.id) {
+      this.carregarAtendimentosAnteriores();
+    }
+  }
+
+  carregarAtendimentosAnteriores() {
+    if (!this.agendamento?.paciente?.id) return;
+
+    this.carregandoAtendimentos = true;
+    this.atendimentoService.getByPaciente(this.agendamento.paciente.id).subscribe({
+      next: (atendimentos) => {
+        // Filtrar apenas atendimentos finalizados e ordenar por data (mais recente primeiro)
+        this.atendimentosAnteriores = atendimentos
+          .filter(a => a.status === 2) // Apenas finalizados
+          .sort((a, b) => new Date(b.dataAtendimento).getTime() - new Date(a.dataAtendimento).getTime());
+        this.carregandoAtendimentos = false;
+      },
+      error: () => {
+        this.carregandoAtendimentos = false;
+      }
+    });
+  }
+
+  visualizarAtendimentoAnterior(atendimento: Atendimento) {
+    this.atendimentoAnteriorSelecionado = atendimento;
+  }
+
+  fecharAtendimentoAnterior() {
+    this.atendimentoAnteriorSelecionado = null;
+  }
+
+  calcularIdade(dataNascimento: string): number {
+    const hoje = new Date();
+    const nascimento = new Date(dataNascimento);
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const mes = hoje.getMonth() - nascimento.getMonth();
+    if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+      idade--;
+    }
+    return idade;
   }
 
   protected readonly StatusAtendimento = StatusAtendimento;
