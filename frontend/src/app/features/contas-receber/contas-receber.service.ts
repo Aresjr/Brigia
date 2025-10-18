@@ -20,4 +20,14 @@ export class ContaReceberService extends BaseService<ContaReceber, null> {
       })
     );
   }
+
+  gerarPDF(ids: number[]): Observable<Blob> {
+    return this.backend.post(`${this.path}/gerar-pdf`, { ids }, { responseType: 'blob' }).pipe(
+      catchError((e) => {
+        const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || 'Erro ao gerar PDF';
+        this.toastr.error(errorMessage);
+        return throwError(() => e);
+      })
+    );
+  }
 }
