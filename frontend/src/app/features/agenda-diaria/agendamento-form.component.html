@@ -188,8 +188,10 @@
         </div>
 
         <div class="w-[30rem]" >
-          <label class="label-campo" for="procedimentoId">Procedimento Principal</label>
-          <ng-select formControlName="procedimentoId" class="campo-select"
+          <label class="label-campo" for="procedimentoId">
+            Procedimento Principal <span aria-hidden="true" class="text-error">*</span>
+          </label>
+          <ng-select formControlName="procedimentoId" class="campo-select" required
                      [ngClass]="classesCampo('procedimentoId')" placeholder="Selecione"
                      (change)="selectProcedimento($event)" (clear)="selectProcedimento(null)"
                      [items]="procedimentosFiltrados" bindValue="id" bindLabel="nome" labelForId="procedimentoId">
@@ -197,6 +199,9 @@
               <span class="text-sm p-6">Nenhum resultado</span>
             </ng-template>
           </ng-select>
+          <div *ngIf="isInvalid('procedimentoId')" class="text-error text-sm">
+            Obrigatório
+          </div>
         </div>
       </div>
 
@@ -219,10 +224,10 @@
             </div>
           </label>
         </div>
-        <div class="w-[6rem] mr-4" >
+        <div class="w-[6rem] mr-4 tooltip text-left" data-tip="Somente com permissão de um admin">
           <label class="label-campo" for="valor">
             Valor <span aria-hidden="true" class="text-error">*</span>
-            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" (click)="editaValor()" *ngIf="this.modoSalvar && !valorEditavel" title="Editar Valor">
+            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" (click)="solicitarHabilitacaoValor()" *ngIf="this.modoSalvar && !valorEditavel" title="Editar Valor">
               <lucide-icon name="pencil" class="h-3.5"/>
             </button>
             <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" (click)="cancelarEdicaoValor()" *ngIf="this.modoSalvar && valorEditavel" title="Cancelar Edição de Valor">
@@ -283,11 +288,12 @@
           <label class="label-campo" for="quantiaPaga">
             Quantia Paga
           </label>
-          <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
+          <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="{'bg-base-200': tipoPagamento === 'pago'}">
             R$
             <input type="text" formControlName="quantiaPaga" min="0" id="quantiaPaga"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
-                   mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0">
+                   mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0"
+                   [readOnly]="tipoPagamento === 'pago'">
           </label>
         </div>
 

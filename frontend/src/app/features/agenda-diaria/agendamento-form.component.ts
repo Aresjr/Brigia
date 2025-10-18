@@ -85,6 +85,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   descontoEditavel: boolean = false;
   descontoAntesEdicao: number | null = null;
   mostrarModalCredenciais: boolean = false;
+  campoParaEditar: 'valor' | 'desconto' | null = null;
   valorTotalAgendamento: number = 0;
   isLoading: boolean = false;
   tipoPagamento: 'pago' | 'parcial' = 'pago';
@@ -110,7 +111,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       tipoAgendamento: [null, {nonNullable: true}],
       profissionalId: [null, {nonNullable: true}],
       especialidadeId: [null, {nonNullable: true}],
-      procedimentoId: [null],
+      procedimentoId: [null, {nonNullable: true}],
       convenioId: [null],
       empresaId: [null],
       formaPagamento: [null],
@@ -423,6 +424,11 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     });
   }
 
+  solicitarHabilitacaoValor() {
+    this.campoParaEditar = 'valor';
+    this.mostrarModalCredenciais = true;
+  }
+
   editaValor() {
     this.valorAntesEdicao = this.form.value.valor;
     this.valorEditavel = true;
@@ -443,22 +449,34 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   solicitarHabilitacaoDesconto() {
+    this.campoParaEditar = 'desconto';
     this.mostrarModalCredenciais = true;
   }
 
   cancelarModalCredenciais() {
     this.mostrarModalCredenciais = false;
+    this.campoParaEditar = null;
   }
 
   validarCredenciaisAdmin(credenciais: { login: string, senha: string }) {
     this.authService.validarAdmin(credenciais.login, credenciais.senha).subscribe({
       next: (valido) => {
         if (valido) {
-          this.descontoAntesEdicao = this.form.value.desconto;
-          this.descontoEditavel = true;
-          this.mostrarModalCredenciais = false;
-          this.form.markAsPristine();
-          this.toastr.success('Desconto habilitado para edição');
+          if (this.campoParaEditar === 'valor') {
+            this.valorAntesEdicao = this.form.value.valor;
+            this.valorEditavel = true;
+            this.mostrarModalCredenciais = false;
+            this.campoParaEditar = null;
+            this.form.markAsPristine();
+            this.toastr.success('Valor habilitado para edição');
+          } else if (this.campoParaEditar === 'desconto') {
+            this.descontoAntesEdicao = this.form.value.desconto;
+            this.descontoEditavel = true;
+            this.mostrarModalCredenciais = false;
+            this.campoParaEditar = null;
+            this.form.markAsPristine();
+            this.toastr.success('Desconto habilitado para edição');
+          }
         } else {
           this.toastr.error('Credenciais inválidas ou usuário não possui permissão de administrador');
         }
