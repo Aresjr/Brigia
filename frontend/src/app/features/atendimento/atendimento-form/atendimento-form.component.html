@@ -19,8 +19,33 @@
         </div>
       </div>
 
-      <div>
-        <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="fechar()" title="Fechar">
+      <div class="flex gap-2 items-center">
+        <!-- Botão de Impressão -->
+        <div *ngIf="atendimentoDetalhes && atendimentoDetalhes.status == 2" class="dropdown dropdown-end print:hidden">
+          <button tabindex="0" type="button" class="btn btn-sm btn-ghost btn-circle"
+                  (click)="mostrarDropdownImpressao = !mostrarDropdownImpressao"
+                  title="Imprimir">
+            <lucide-icon name="printer" class="inline w-5 h-5"/>
+          </button>
+          @if(mostrarDropdownImpressao) {
+            <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-lg border border-base-300 mt-2">
+              <li>
+                <button type="button" (click)="imprimirAtendimento('padrao')">
+                  <lucide-icon name="file-text" class="inline w-4 h-4"></lucide-icon>
+                  Modo Padrão
+                </button>
+              </li>
+              <li>
+                <button type="button" (click)="imprimirAtendimento('alternativo')">
+                  <lucide-icon name="file-text" class="inline w-4 h-4"></lucide-icon>
+                  Modo Alternativo
+                </button>
+              </li>
+            </ul>
+          }
+        </div>
+
+        <button type="button" class="btn btn-sm btn-ghost btn-circle print:hidden" (click)="fechar()" title="Fechar">
           <lucide-icon name="x" class="inline w-5 h-5"/>
         </button>
       </div>
@@ -232,6 +257,151 @@
       </div>
     </form>
 
+  </div>
+</div>
+
+<!-- Layout de Impressão Modo Padrão -->
+<div *ngIf="modoImpressao === 'padrao'" class="print-content print-modo-padrao">
+  <div class="print-header">
+    <h1>Registro de Atendimento Médico</h1>
+    <p class="print-subtitle">Modo Padrão</p>
+  </div>
+
+  <div class="print-section">
+    <h2>Informações do Paciente</h2>
+    <div class="print-grid">
+      <div class="print-field">
+        <span class="print-label">Nome:</span>
+        <span class="print-value">{{ agendamento?.paciente.nome }}</span>
+      </div>
+      <div class="print-field">
+        <span class="print-label">Data de Nascimento:</span>
+        <span class="print-value">{{ agendamento?.paciente.dataNascimento | date:'dd/MM/yyyy' }}</span>
+      </div>
+      <div class="print-field">
+        <span class="print-label">Convênio:</span>
+        <span class="print-value">{{ agendamento?.convenio?.nome || 'Particular' }}</span>
+      </div>
+      <div class="print-field">
+        <span class="print-label">Data do Atendimento:</span>
+        <span class="print-value">{{ atendimentoDetalhes?.data | date:'dd/MM/yyyy' }}</span>
+      </div>
+      <div class="print-field">
+        <span class="print-label">Horário:</span>
+        <span class="print-value">{{ atendimentoDetalhes?.horaInicio }} - {{ atendimentoDetalhes?.horaFim }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="print-section" *ngIf="form.get('anamnese')?.value">
+    <h2>Anamnese</h2>
+    <div class="print-content-html" [innerHTML]="form.get('anamnese')?.value"></div>
+  </div>
+
+  <div class="print-section" *ngIf="form.get('exameFisico')?.value">
+    <h2>Exame Físico</h2>
+    <div class="print-content-html" [innerHTML]="form.get('exameFisico')?.value"></div>
+  </div>
+
+  <div class="print-section" *ngIf="form.get('diagnostico')?.value">
+    <h2>Diagnóstico</h2>
+    <div class="print-content-html" [innerHTML]="form.get('diagnostico')?.value"></div>
+  </div>
+
+  <div class="print-section" *ngIf="form.get('evolucaoClinica')?.value">
+    <h2>Evolução Clínica</h2>
+    <div class="print-content-html" [innerHTML]="form.get('evolucaoClinica')?.value"></div>
+  </div>
+
+  <div class="print-section" *ngIf="form.get('examesSolicitados')?.value">
+    <h2>Exames Solicitados</h2>
+    <div class="print-content-html" [innerHTML]="form.get('examesSolicitados')?.value"></div>
+  </div>
+
+  <div class="print-section" *ngIf="form.get('prescricoes')?.value">
+    <h2>Prescrições</h2>
+    <div class="print-content-html" [innerHTML]="form.get('prescricoes')?.value"></div>
+  </div>
+
+  <div class="print-section" *ngIf="form.get('observacoes')?.value">
+    <h2>Observações</h2>
+    <div class="print-content-html" [innerHTML]="form.get('observacoes')?.value"></div>
+  </div>
+
+  <div class="print-footer">
+    <p>Documento gerado em {{ 'now' | date:'dd/MM/yyyy HH:mm' }}</p>
+  </div>
+</div>
+
+<!-- Layout de Impressão Modo Alternativo -->
+<div *ngIf="modoImpressao === 'alternativo'" class="print-content print-modo-alternativo">
+  <div class="print-header-alt">
+    <div class="print-header-left">
+      <h1>Atendimento Médico</h1>
+      <p class="print-date">{{ atendimentoDetalhes?.data | date:'dd/MM/yyyy' }} - {{ atendimentoDetalhes?.horaInicio }}</p>
+    </div>
+    <div class="print-header-right">
+      <p class="print-label-alt">Modo Alternativo</p>
+    </div>
+  </div>
+
+  <div class="print-patient-box">
+    <div class="print-patient-row">
+      <div class="print-patient-field">
+        <strong>Paciente:</strong> {{ agendamento?.paciente.nome }}
+      </div>
+      <div class="print-patient-field">
+        <strong>DN:</strong> {{ agendamento?.paciente.dataNascimento | date:'dd/MM/yyyy' }}
+      </div>
+    </div>
+    <div class="print-patient-row">
+      <div class="print-patient-field">
+        <strong>Convênio:</strong> {{ agendamento?.convenio?.nome || 'Particular' }}
+      </div>
+      <div class="print-patient-field">
+        <strong>Horário:</strong> {{ atendimentoDetalhes?.horaInicio }} - {{ atendimentoDetalhes?.horaFim }}
+      </div>
+    </div>
+  </div>
+
+  <div class="print-section-alt" *ngIf="form.get('anamnese')?.value">
+    <h3>Anamnese</h3>
+    <div class="print-content-html-alt" [innerHTML]="form.get('anamnese')?.value"></div>
+  </div>
+
+  <div class="print-section-alt" *ngIf="form.get('exameFisico')?.value">
+    <h3>Exame Físico</h3>
+    <div class="print-content-html-alt" [innerHTML]="form.get('exameFisico')?.value"></div>
+  </div>
+
+  <div class="print-section-alt" *ngIf="form.get('diagnostico')?.value">
+    <h3>Diagnóstico</h3>
+    <div class="print-content-html-alt" [innerHTML]="form.get('diagnostico')?.value"></div>
+  </div>
+
+  <div class="print-section-alt" *ngIf="form.get('evolucaoClinica')?.value">
+    <h3>Evolução Clínica</h3>
+    <div class="print-content-html-alt" [innerHTML]="form.get('evolucaoClinica')?.value"></div>
+  </div>
+
+  <div class="print-section-alt" *ngIf="form.get('examesSolicitados')?.value">
+    <h3>Exames Solicitados</h3>
+    <div class="print-content-html-alt" [innerHTML]="form.get('examesSolicitados')?.value"></div>
+  </div>
+
+  <div class="print-section-alt" *ngIf="form.get('prescricoes')?.value">
+    <h3>Prescrições</h3>
+    <div class="print-content-html-alt" [innerHTML]="form.get('prescricoes')?.value"></div>
+  </div>
+
+  <div class="print-section-alt" *ngIf="form.get('observacoes')?.value">
+    <h3>Observações</h3>
+    <div class="print-content-html-alt" [innerHTML]="form.get('observacoes')?.value"></div>
+  </div>
+
+  <div class="print-footer-alt">
+    <hr/>
+    <p>Gerado em {{ 'now' | date:'dd/MM/yyyy HH:mm' }}</p>
   </div>
 </div>
 

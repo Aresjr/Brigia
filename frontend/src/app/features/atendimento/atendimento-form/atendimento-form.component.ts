@@ -16,6 +16,7 @@ import { QuillModule } from 'ngx-quill';
 @Component({
   selector: 'app-atendimento-form',
   templateUrl: './atendimento-form.component.html',
+  styleUrls: ['./atendimento-form.component.css'],
   standalone: true,
   imports: [
     CommonModule,
@@ -41,6 +42,8 @@ export class AtendimentoFormComponent extends FormComponent<Atendimento, Atendim
   readonly: boolean = false;
   modoSalvar: boolean = true;
   abaAtiva: string = 'anamnese';
+  mostrarDropdownImpressao: boolean = false;
+  modoImpressao: 'padrao' | 'alternativo' | null = null;
 
   quillModules = {
     toolbar: [
@@ -172,6 +175,20 @@ export class AtendimentoFormComponent extends FormComponent<Atendimento, Atendim
 
   selecionarAba(aba: string) {
     this.abaAtiva = aba;
+  }
+
+  imprimirAtendimento(modo: 'padrao' | 'alternativo') {
+    this.modoImpressao = modo;
+    this.mostrarDropdownImpressao = false;
+
+    // Aguardar o Angular atualizar a view com o conteúdo de impressão
+    setTimeout(() => {
+      window.print();
+      // Limpar o modo após a impressão
+      setTimeout(() => {
+        this.modoImpressao = null;
+      }, 100);
+    }, 100);
   }
 
   protected readonly StatusAtendimento = StatusAtendimento;
