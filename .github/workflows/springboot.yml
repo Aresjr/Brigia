@@ -65,10 +65,16 @@ jobs:
         run: mvn clean compile
 
       - name: Executar Testes Unitários
-        run: mvn test -Dspring.profiles.active=test -Dspring.config.location=classpath:/application-test.yml
+        run: mvn test -Dspring.profiles.active=test
+        env:
+          SPRING_FLYWAY_ENABLED: false
+          SPRING_JPA_HIBERNATE_DDL_AUTO: create
 
       - name: Executar Testes de Componente
-        run: mvn verify -Dspring.profiles.active=test -Dspring.config.location=classpath:/application-test.yml
+        run: mvn verify -Dspring.profiles.active=test
+        env:
+          SPRING_FLYWAY_ENABLED: false
+          SPRING_JPA_HIBERNATE_DDL_AUTO: create
 
       - name: Publicar Resultados dos Testes
         uses: dorny/test-reporter@v1
