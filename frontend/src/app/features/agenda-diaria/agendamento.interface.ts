@@ -68,6 +68,7 @@ export interface AgendamentoRequest extends EntidadeRequest {
     precoAlterado: boolean;
     encaixe: boolean;
     pago: boolean;
+    quantiaPaga: number | null;
     procedimentos: ProcedimentoAgendamentoRequest[];
 }
 

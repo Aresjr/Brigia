@@ -86,6 +86,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   mostrarModalCredenciais: boolean = false;
   valorTotalAgendamento: number = 0;
   isLoading: boolean = false;
+  tipoPagamento: 'pago' | 'parcial' = 'pago';
 
   protected readonly autoResize = autoResize;
   protected readonly limitLength = limitLength;
@@ -116,6 +117,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       precoAlterado: [false],
       encaixe: [false],
       pago: [true],
+      quantiaPaga: [null],
     };
     this.form = this.fb.group({
       ...form,
@@ -550,6 +552,21 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
   alterouDesconto($event: Event) {
     this.calcularValorTotal();
+  }
+
+  selecionarTipoPagamento(tipo: 'pago' | 'parcial') {
+    this.tipoPagamento = tipo;
+    if (tipo === 'pago') {
+      this.form.patchValue({
+        pago: true,
+        quantiaPaga: null
+      });
+    } else {
+      this.form.patchValue({
+        pago: false,
+        quantiaPaga: 0
+      });
+    }
   }
 
   protected readonly ColorUtils = ColorUtils;

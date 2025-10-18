@@ -56,13 +56,34 @@ public class ContaReceberMapper extends BaseMapper<ContaReceber, Void, ContaRece
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         contaReceber.setValorProcedimentosAdicionais(valorProcedimentos);
         contaReceber.setFormaPagamento(agendamento.getFormaPagamento());
-        var statusContaReceber = agendamento.getPago() ? StatusContaReceber.PAGO : StatusContaReceber.ABERTO;
-        contaReceber.setStatus(statusContaReceber);
-        var valorRecebido = agendamento.getPago()
-                ? agendamento.getValor()
-                        .subtract(Optional.ofNullable(agendamento.getDesconto()).orElse(BigDecimal.ZERO))
-                : BigDecimal.ZERO;
+
+        // Calcular valor total
+        BigDecimal valorTotal = agendamento.getValor()
+                .add(valorProcedimentos)
+                .subtract(Optional.ofNullable(agendamento.getDesconto()).orElse(BigDecimal.ZERO));
+
+        // Determinar valor recebido baseado no tipo de pagamento
+        BigDecimal valorRecebido;
+        StatusContaReceber statusContaReceber;
+
+        if (agendamento.getPago()) {
+            // Pagamento total
+            valorRecebido = valorTotal;
+            statusContaReceber = StatusContaReceber.PAGO;
+        } else if (agendamento.getQuantiaPaga() != null && agendamento.getQuantiaPaga().compareTo(BigDecimal.ZERO) > 0) {
+            // Pagamento parcial
+            valorRecebido = agendamento.getQuantiaPaga();
+            statusContaReceber = valorRecebido.compareTo(valorTotal) >= 0
+                    ? StatusContaReceber.PAGO
+                    : StatusContaReceber.PARCIAL;
+        } else {
+            // Não pago
+            valorRecebido = BigDecimal.ZERO;
+            statusContaReceber = StatusContaReceber.ABERTO;
+        }
+
         contaReceber.setValorRecebido(valorRecebido);
+        contaReceber.setStatus(statusContaReceber);
 
         return contaReceber;
     }
