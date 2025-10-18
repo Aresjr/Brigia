@@ -65,10 +65,10 @@ jobs:
         run: mvn clean compile
 
       - name: Executar Testes Unitários
-        run: mvn test -Dspring.profiles.active=test
+        run: mvn test -Dspring.profiles.active=test -Dspring.config.location=classpath:/application-test.yml
 
       - name: Executar Testes de Componente
-        run: mvn verify -Dspring.profiles.active=test
+        run: mvn verify -Dspring.profiles.active=test -Dspring.config.location=classpath:/application-test.yml
 
       - name: Publicar Resultados dos Testes
         uses: dorny/test-reporter@v1
