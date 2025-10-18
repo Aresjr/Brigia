@@ -65,7 +65,7 @@ jobs:
         run: mvn clean compile
 
       - name: Executar Testes Unitários
-        run: mvn test
+        run: mvn test -Dspring.profiles.active=test
 
       - name: Executar Testes de Componente
         run: mvn verify -Dspring.profiles.active=test
