@@ -34,6 +34,9 @@
 /* Quando hover, aumenta ainda mais o z-index para ficar por cima de tudo */
 .cal-week-view .cal-time-events .cal-event-container:hover { z-index: 100 !important; }
 
+/* Marcador de horário atual - acima dos cards do calendário mas abaixo dos modais */
+.cal-current-time-marker { z-index: 40 !important; }
+
 /* bloco de horário (6 AM, 7AM) */
 .cal-month-view, .cal-week-view {
   @apply border border-base-200 rounded-md;

@@ -37,9 +37,7 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
 
         List<ProcedimentoPlanoResponse> precosPlanos = new ArrayList<>();
         if (procedimento.getPrecosPlanos() != null) {
-            precosPlanos = procedimento.getPrecosPlanos().stream()
-                    .map(this::toProcedimentoPlanoResponse)
-                    .toList();
+            precosPlanos = procedimento.getPrecosPlanos().stream().map(this::toProcedimentoPlanoResponse).toList();
         }
 
         return new ProcedimentoResponse(procedimento.getId(), procedimento.getNome(), procedimento.getCodigo(),
@@ -58,11 +56,12 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
     }
 
     public ProcedimentoPlanoResponse toPrecoProcedimentoPlano(Procedimento procedimento, EmpresaPlano plano) {
-        return toProcedimentoPlanoResponse(procedimento.getPrecosPlanos().stream()
-                .filter(preco -> plano.getId().equals(preco.getPlano().getId())).findFirst()
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Preço não encontrado para procedimento %s e plano %s", procedimento.getId(),
-                                plano.getId()))));
+        return toProcedimentoPlanoResponse(
+                procedimento.getPrecosPlanos().stream().filter(preco -> plano.getId().equals(preco.getPlano().getId()))
+                        .findFirst()
+                        .orElseThrow(() -> new NotFoundException(
+                                String.format("Preço não encontrado para procedimento %s e plano %s",
+                                        procedimento.getId(), plano.getId()))));
     }
 
     private PrecoProcedimentoResponse toResponse(PrecoProcedimento precoProcedimento) {
@@ -73,10 +72,8 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
     }
 
     private ProcedimentoPlanoResponse toProcedimentoPlanoResponse(ProcedimentoPlano procedimentoPlano) {
-        return new ProcedimentoPlanoResponse(
-                procedimentoPlano.getId(),
-                empresaPlanoMapper.toResponse(procedimentoPlano.getPlano()),
-                procedimentoPlano.getPreco(),
+        return new ProcedimentoPlanoResponse(procedimentoPlano.getId(),
+                empresaPlanoMapper.toResponse(procedimentoPlano.getPlano()), procedimentoPlano.getPreco(),
                 procedimentoPlano.getRepasse());
     }
 }

@@ -37,7 +37,8 @@ public class Honorario extends BaseModel {
     @JoinColumn(name = "unidade_id", nullable = false)
     private Unidade unidade;
 
-    public Honorario(Profissional profissional, LocalDate data, BigDecimal valorTotal, Integer quantidadeAtendimentos, Unidade unidade) {
+    public Honorario(Profissional profissional, LocalDate data, BigDecimal valorTotal, Integer quantidadeAtendimentos,
+            Unidade unidade) {
         this.profissional = profissional;
         this.data = data;
         this.valorTotal = valorTotal;

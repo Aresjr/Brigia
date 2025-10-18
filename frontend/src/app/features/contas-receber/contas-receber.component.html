@@ -111,8 +111,8 @@
           <lucide-icon *ngIf="getSortIcon('profissional')" [name]="getSortIcon('profissional')" class="icone-ordenacao"/>
           Profissional
         </div>
-        <div (click)="ordenar('dataAtendimento')" class="cabecalho-listagem rounded-tr-lg">
-          <lucide-icon *ngIf="getSortIcon('dataAtendimento')" [name]="getSortIcon('dataAtendimento')" class="icone-ordenacao"/>
+        <div (click)="ordenar('dataAgendamento')" class="cabecalho-listagem rounded-tr-lg">
+          <lucide-icon *ngIf="getSortIcon('dataAgendamento')" [name]="getSortIcon('dataAgendamento')" class="icone-ordenacao"/>
           Data Atendimento
         </div>
       </div>
@@ -128,7 +128,7 @@
             <div class="celula-listagem">{{contaReceber.paciente.nome}}</div>
             <div class="celula-listagem">{{contaReceber.empresa?.nome}}</div>
             <div class="celula-listagem">{{contaReceber.profissional.nome}}</div>
-            <div class="celula-listagem">{{contaReceber.dataAtendimento | date:'dd/MM/yyyy'}}</div>
+            <div class="celula-listagem">{{contaReceber.dataAgendamento | date:'dd/MM/yyyy'}}</div>
           </div>
         }
       </div>

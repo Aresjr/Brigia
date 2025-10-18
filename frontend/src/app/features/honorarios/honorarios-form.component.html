@@ -8,7 +8,7 @@
       </button>
     </div>
 
-    <form [formGroup]="form" class="space-y-4">
+    <form [formGroup]="form" class="space-y-4" [ngClass]="{ 'visualizacao': modoDetalhes }">
       <div class="flex gap-4">
         <div class="flex-1">
           <label class="label-campo" for="profissionalId">
@@ -28,13 +28,13 @@
         <div class="w-40">
           <label class="label-campo" for="data">
             Data <span aria-hidden="true" class="text-error">*</span>
+            <div class="relative">
+              <input #data type="date" id="data" formControlName="data" class="campo" required>
+              <button type="button" class="absolute right-0.5 top-4 -translate-y-1/2" (click)="abrirDatePicker(data)">
+                <lucide-icon name="calendar" class="inline h-4"/>
+              </button>
+            </div>
           </label>
-          <input
-            type="date"
-            id="data"
-            formControlName="data"
-            class="campo"
-            required>
         </div>
       </div>
 

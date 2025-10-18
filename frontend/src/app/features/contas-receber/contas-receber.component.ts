@@ -131,10 +131,10 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
       const dataFim = this.form.get('dataFim')?.value;
 
       if (dataInicio && dataFim) {
-        const dataAtendimento = new Date(item.dataAtendimento);
+        const dataAgendamento = new Date(item.dataAgendamento);
         const inicio = new Date(dataInicio + 'T00:00:00');
         const fim = new Date(dataFim + 'T23:59:59');
-        matchData = dataAtendimento >= inicio && dataAtendimento <= fim;
+        matchData = dataAgendamento >= inicio && dataAgendamento <= fim;
       }
 
       return matchProfissional && matchPaciente && matchStatus && matchEmpresa && matchData;

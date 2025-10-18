@@ -13,6 +13,36 @@ jobs:
       run:
         working-directory: backend
 
+    # Adiciona o container PostgreSQL que ficará disponível no job
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: testdb
+        # Garante que o container só inicia quando o banco estiver pronto
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      # Variáveis que o Spring usará para se conectar ao banco
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_NAME: testdb
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/testdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_FLYWAY_ENABLED: true
+
     steps:
       - name: Checkout do código
         uses: actions/checkout@v3
@@ -32,4 +62,20 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Build com Maven
-        run: mvn clean package -DskipTests
+        run: mvn clean compile
+
+      - name: Executar Testes Unitários
+        run: mvn test -Dspring.profiles.active=test
+        env:
+          SPRING_FLYWAY_ENABLED: false
+          SPRING_JPA_HIBERNATE_DDL_AUTO: create
+
+      - name: Executar Testes de Componente
+        run: mvn verify -Dspring.profiles.active=test
+        env:
+          SPRING_FLYWAY_ENABLED: false
+          SPRING_JPA_HIBERNATE_DDL_AUTO: create
+          MAIL_API_KEY: FAKE
+          MAIL_DOMAIN: FAKE
+          MAIL_FROM_NAME: FAKE
+          MAIL_FROM_EMAIL: FAKE

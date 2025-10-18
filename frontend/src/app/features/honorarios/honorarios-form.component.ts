@@ -10,6 +10,7 @@ import { Agendamento } from '../agenda-diaria/agendamento.interface';
 import { ToastrService } from 'ngx-toastr';
 import { HonorarioService } from './honorario.service';
 import { Honorario } from './honorario.interface';
+import { abrirDatePicker } from '../../core/util-methods';
 
 @Component({
   selector: 'app-honorarios-form',
@@ -173,4 +174,6 @@ export class HonorariosFormComponent implements OnInit {
       }
     });
   }
+
+  protected readonly abrirDatePicker = abrirDatePicker;
 }

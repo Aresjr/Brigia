@@ -21,10 +21,8 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
     private final UnidadeService unidadeService;
     private final AgendamentoRepository agendamentoRepository;
 
-    public HonorarioService(HonorarioRepository repository,
-                           ProfissionalService profissionalService,
-                           UnidadeService unidadeService,
-                           AgendamentoRepository agendamentoRepository) {
+    public HonorarioService(HonorarioRepository repository, ProfissionalService profissionalService,
+            UnidadeService unidadeService, AgendamentoRepository agendamentoRepository) {
         super(repository);
         this.profissionalService = profissionalService;
         this.unidadeService = unidadeService;
@@ -38,25 +36,14 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
         Unidade unidade = unidadeService.getById(SecurityHolder.getLoggedUserUnidadeId());
 
         // Buscar agendamentos finalizados do profissional na data
-        List<Agendamento> agendamentos = agendamentoRepository.findAllByDate(
-                null,
-                SecurityHolder.getLoggedUserUnidadeId(),
-                data,
-                data
-        ).stream()
-        .filter(ag -> ag.getProfissional().getId().equals(request.profissionalId()))
-        .toList();
+        List<Agendamento> agendamentos = agendamentoRepository
+                .findAllByDate(null, SecurityHolder.getLoggedUserUnidadeId(), data, data).stream()
+                .filter(ag -> ag.getProfissional().getId().equals(request.profissionalId())).toList();
 
         // Calcular valor total baseado nos valores de repasse
         BigDecimal valorTotal = calcularValorTotal(agendamentos);
 
-        Honorario honorario = new Honorario(
-                profissional,
-                data,
-                valorTotal,
-                agendamentos.size(),
-                unidade
-        );
+        Honorario honorario = new Honorario(profissional, data, valorTotal, agendamentos.size(), unidade);
 
         return repository.save(honorario);
     }

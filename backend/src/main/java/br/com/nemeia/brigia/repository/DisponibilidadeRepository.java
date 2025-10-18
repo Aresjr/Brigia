@@ -15,10 +15,15 @@ public interface DisponibilidadeRepository extends BaseRepository<Disponibilidad
     Page<Disponibilidade> findAllByDateRange(Pageable pageable, @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
 
-    @Query("SELECT d FROM Disponibilidade d WHERE d.profissional.id = :profissionalId AND d.dia = :dia " +
-           "AND d.horaInicial <= :hora AND d.horaFinal >= :hora AND (d.excluido IS NULL OR d.excluido = false)")
-    java.util.Optional<Disponibilidade> findByProfissionalAndDiaAndHora(
-            @Param("profissionalId") Long profissionalId,
-            @Param("dia") LocalDate dia,
-            @Param("hora") java.time.LocalTime hora);
+    @Query("SELECT d FROM Disponibilidade d WHERE d.profissional.id = :profissionalId AND d.dia = :dia "
+            + "AND d.horaInicial <= :hora AND d.horaFinal >= :hora AND (d.excluido IS NULL OR d.excluido = false)")
+    java.util.Optional<Disponibilidade> findByProfissionalAndDiaAndHora(@Param("profissionalId") Long profissionalId,
+            @Param("dia") LocalDate dia, @Param("hora") java.time.LocalTime hora);
+
+    @Query("SELECT d FROM Disponibilidade d WHERE d.profissional.id = :profissionalId AND d.dia = :dia "
+            + "AND (d.excluido IS NULL OR d.excluido = false) "
+            + "AND ((d.horaInicial < :horaFinal AND d.horaFinal > :horaInicial))")
+    java.util.List<Disponibilidade> findConflitosHorario(@Param("profissionalId") Long profissionalId,
+            @Param("dia") LocalDate dia, @Param("horaInicial") java.time.LocalTime horaInicial,
+            @Param("horaFinal") java.time.LocalTime horaFinal);
 }

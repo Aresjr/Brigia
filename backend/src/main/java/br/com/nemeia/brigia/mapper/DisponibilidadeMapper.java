@@ -7,7 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DisponibilidadeMapper extends BaseMapper<Disponibilidade, DisponibilidadeRequest, DisponibilidadeResponse> {
+public class DisponibilidadeMapper
+        extends
+            BaseMapper<Disponibilidade, DisponibilidadeRequest, DisponibilidadeResponse> {
 
     private final ProfissionalMapper profissionalMapper;
 
@@ -22,13 +24,9 @@ public class DisponibilidadeMapper extends BaseMapper<Disponibilidade, Disponibi
             return null;
         }
 
-        return new DisponibilidadeResponse(
-                disponibilidade.getId(),
-                profissionalMapper.toResponse(disponibilidade.getProfissional()),
-                disponibilidade.getDia(),
-                disponibilidade.getHoraInicial(),
-                disponibilidade.getHoraFinal(),
-                disponibilidade.getCriadoEm(),
+        return new DisponibilidadeResponse(disponibilidade.getId(),
+                profissionalMapper.toResponse(disponibilidade.getProfissional()), disponibilidade.getDia(),
+                disponibilidade.getHoraInicial(), disponibilidade.getHoraFinal(), disponibilidade.getCriadoEm(),
                 disponibilidade.getExcluido());
     }
 

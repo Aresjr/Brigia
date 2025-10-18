@@ -18,7 +18,7 @@
       <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
     </div>
 
-    <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6">
+    <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6" [ngClass]="{ 'visualizacao': readonly }">
 
       <div class="mb-4">
         <label class="label-campo" for="profissionalId">

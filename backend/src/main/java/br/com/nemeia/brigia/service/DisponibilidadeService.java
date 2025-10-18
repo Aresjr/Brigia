@@ -1,6 +1,7 @@
 package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.dto.request.DisponibilidadeRequest;
+import br.com.nemeia.brigia.exception.ConflitoBlocoHorarioException;
 import br.com.nemeia.brigia.mapper.DisponibilidadeMapper;
 import br.com.nemeia.brigia.model.Disponibilidade;
 import br.com.nemeia.brigia.model.Profissional;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,6 +38,10 @@ public class DisponibilidadeService extends BaseService<Disponibilidade, Disponi
         Disponibilidade disponibilidade = mapper.toEntity(request);
         Profissional profissional = profissionalService.getById(request.profissionalId());
         disponibilidade.setProfissional(profissional);
+
+        // Verifica se há conflito de horário
+        verificarConflitoHorario(request.profissionalId(), request.dia(), request.horaInicial(), request.horaFinal(), null);
+
         return repository.save(disponibilidade);
     }
 
@@ -43,6 +49,10 @@ public class DisponibilidadeService extends BaseService<Disponibilidade, Disponi
         Disponibilidade disponibilidade = getById(id);
         Profissional profissional = profissionalService.getById(request.profissionalId());
         disponibilidade.setProfissional(profissional);
+
+        // Verifica se há conflito de horário (exclui a própria disponibilidade da verificação)
+        verificarConflitoHorario(request.profissionalId(), request.dia(), request.horaInicial(), request.horaFinal(), id);
+
         disponibilidade = mapper.updateEntity(disponibilidade, request);
         return repository.save(disponibilidade);
     }
@@ -62,12 +72,28 @@ public class DisponibilidadeService extends BaseService<Disponibilidade, Disponi
         return repository.findAllByDateRange(pageable, startDate, endDate);
     }
 
-    public Optional<Disponibilidade> findByProfissionalAndDiaAndHora(Long profissionalId, LocalDate dia, LocalTime hora) {
+    public Optional<Disponibilidade> findByProfissionalAndDiaAndHora(Long profissionalId, LocalDate dia,
+            LocalTime hora) {
         return repository.findByProfissionalAndDiaAndHora(profissionalId, dia, hora);
     }
 
     @Override
     String getNomeEntidade() {
         return "Disponibilidade";
+    }
+
+    private void verificarConflitoHorario(Long profissionalId, LocalDate dia, LocalTime horaInicial, LocalTime horaFinal, Long idDisponibilidadeAtual) {
+        List<Disponibilidade> conflitos = repository.findConflitosHorario(profissionalId, dia, horaInicial, horaFinal);
+
+        // Se está editando, remove a própria disponibilidade da lista de conflitos
+        if (idDisponibilidadeAtual != null) {
+            conflitos = conflitos.stream()
+                    .filter(d -> !d.getId().equals(idDisponibilidadeAtual))
+                    .toList();
+        }
+
+        if (!conflitos.isEmpty()) {
+            throw new ConflitoBlocoHorarioException();
+        }
     }
 }

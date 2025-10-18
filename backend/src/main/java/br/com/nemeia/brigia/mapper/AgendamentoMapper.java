@@ -36,8 +36,7 @@ public class AgendamentoMapper {
 
         List<ProcedimentoAgendamentoResponse> procedimentos = new ArrayList<>();
         if (agendamento.getProcedimentos() != null) {
-            procedimentos = agendamento.getProcedimentos().stream()
-                    .map(this::toProcedimentoAgendamentoResponse)
+            procedimentos = agendamento.getProcedimentos().stream().map(this::toProcedimentoAgendamentoResponse)
                     .toList();
         }
 
@@ -53,17 +52,12 @@ public class AgendamentoMapper {
                 agendamento.getTipoAgendamento(), agendamento.getFormaPagamento(), agendamento.getValor(),
                 agendamento.getDesconto(), agendamento.getObservacoes(), agendamento.getDuracao(),
                 agendamento.getEncaixe(), agendamento.getPago(), procedimentos, BigDecimal.ZERO,
-          agendamento.getCriadoEm(), agendamento.getExcluido());
+                agendamento.getCriadoEm(), agendamento.getExcluido());
     }
 
     private ProcedimentoAgendamentoResponse toProcedimentoAgendamentoResponse(AgendamentoProcedimento ap) {
-        return new ProcedimentoAgendamentoResponse(
-                ap.getId(),
-                procedimentoMapper.toResponse(ap.getProcedimento()),
-                ap.getQuantidade(),
-                ap.getValor(),
-                ap.getValorRepasse()
-        );
+        return new ProcedimentoAgendamentoResponse(ap.getId(), procedimentoMapper.toResponse(ap.getProcedimento()),
+                ap.getQuantidade(), ap.getValor(), ap.getValorRepasse());
     }
 
     public AgendamentoDetalhesResponse toDetalhesResponse(Agendamento agendamento) {

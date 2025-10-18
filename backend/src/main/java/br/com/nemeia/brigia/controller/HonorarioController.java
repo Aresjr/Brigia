@@ -21,8 +21,7 @@ public class HonorarioController {
     private final HonorarioMapper mapper;
 
     @GetMapping
-    public ResponseEntity<PagedResponse<HonorarioResponse>> getAll(
-            @RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<PagedResponse<HonorarioResponse>> getAll(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "50") int size,
             @RequestParam(defaultValue = "false") Boolean mostrarExcluidos) {
         Page<Honorario> paged = service.getPaged(page, size, mostrarExcluidos);

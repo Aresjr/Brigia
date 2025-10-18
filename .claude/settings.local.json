@@ -1,7 +1,15 @@
 {
   "permissions": {
     "allow": [
-      "Bash(./mvnw:*)"
+      "Bash(./mvnw:*)",
+      "Bash(timeout 180 ./mvnw test:*)",
+      "Bash(cat:*)",
+      "Bash(timeout 120 ./mvnw test:*)",
+      "Bash(timeout 120 ./mvnw verify:*)",
+      "Bash(timeout:*)",
+      "Bash(../mvnw.cmd:*)",
+      "Bash(mvn failsafe:integration-test:*)",
+      "Bash(bash mvnw failsafe:integration-test failsafe:verify -Dtest=none)"
     ],
     "deny": [],
     "ask": []

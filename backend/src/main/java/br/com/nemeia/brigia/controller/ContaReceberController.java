@@ -1,8 +1,6 @@
 package br.com.nemeia.brigia.controller;
 
-import br.com.nemeia.brigia.dto.request.PacienteRequest;
 import br.com.nemeia.brigia.dto.request.RecebimentoRequest;
-import br.com.nemeia.brigia.dto.response.AtendimentoResponse;
 import br.com.nemeia.brigia.dto.response.ContaReceberResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.mapper.ContaReceberMapper;
