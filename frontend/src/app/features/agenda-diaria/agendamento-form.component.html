@@ -380,6 +380,9 @@
           <button type="button" class="btn btn-primary btn-sm" *ngIf="podeAbrirAtendimento(agendamentoDetalhes)" (click)="abrirAtendimento(agendamentoDetalhes)" >
             Abrir Atendimento
           </button>
+          <button type="button" class="btn btn-ghost btn-sm" *ngIf="modoSalvar" (click)="salvarRascunho()" title="Salvar as informações preenchidas como rascunho">
+            Salvar Rascunho
+          </button>
           <button type="submit" class="btn btn-success btn-sm" *ngIf="modoSalvar" >
             Salvar
           </button>

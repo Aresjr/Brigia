@@ -40,6 +40,7 @@ import { ColorUtils } from '../../core/color-utils';
 import { Router } from '@angular/router';
 import { AtendimentoService } from '../atendimento/atendimento.service';
 import { AuthService } from '../auth/auth.service';
+import { AgendamentoRascunhoService } from './agendamento-rascunho.service';
 
 @Component({
   selector: 'app-agendamento-form',
@@ -87,6 +88,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   valorTotalAgendamento: number = 0;
   isLoading: boolean = false;
   tipoPagamento: 'pago' | 'parcial' = 'pago';
+  rascunhoCarregado: boolean = false;
 
   protected readonly autoResize = autoResize;
   protected readonly limitLength = limitLength;
@@ -96,7 +98,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
               private especialidadeService: EspecialidadeService, private profissionalService: ProfissionalService,
               private empresaService: EmpresaService, private procedimentoService: ProcedimentoService,
               protected userService: UserService, private router: Router,
-              private atendimentoService: AtendimentoService, private authService: AuthService) {
+              private atendimentoService: AtendimentoService, private authService: AuthService,
+              private rascunhoService: AgendamentoRascunhoService) {
     super(fb, toastr);
     this.hoje = new Date().toISOString().split('T')[0];
     const form: IForm<AgendamentoRequest> = {
@@ -159,16 +162,86 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         this.carregaDadosAgendamento();
         this.form.disable();
       } else {
-        if (this.pacienteId) {
-          this.selectPaciente(this.pacienteId);
-        }
-        if (this.profissionalId) {
-          this.selectProfissional(this.profissionalId);
+        // Tentar carregar rascunho
+        const rascunho = this.rascunhoService.carregarRascunho();
+        if (rascunho && !this.pacienteId && !this.profissionalId) {
+          this.carregarDadosRascunho(rascunho);
+          this.rascunhoCarregado = true;
+          this.toastr.info('Rascunho carregado');
+        } else {
+          if (this.pacienteId) {
+            this.selectPaciente(this.pacienteId);
+          }
+          if (this.profissionalId) {
+            this.selectProfissional(this.profissionalId);
+          }
         }
       }
       this.isLoading = false;
       this.calcularValorTotal();
     });
+  }
+
+  carregarDadosRascunho(rascunho: any) {
+    this.form.patchValue({
+      pacienteId: rascunho.pacienteId,
+      profissionalId: rascunho.profissionalId,
+      empresaId: rascunho.empresaId,
+      especialidadeId: rascunho.especialidadeId,
+      convenioId: rascunho.convenioId,
+      data: rascunho.data,
+      hora: rascunho.horaInicio,
+      duracao: rascunho.duracao,
+      tipoAgendamento: rascunho.tipoAgendamento,
+      procedimentoId: rascunho.procedimentoId,
+      formaPagamento: rascunho.formaPagamento,
+      valor: rascunho.valor,
+      desconto: rascunho.desconto,
+      observacoes: rascunho.observacoes,
+      pago: rascunho.pago,
+      quantiaPaga: rascunho.quantiaPaga,
+      encaixe: rascunho.encaixe
+    });
+
+    // Atualizar seleções
+    if (rascunho.pacienteId) {
+      this.selectPaciente(rascunho.pacienteId);
+    }
+    if (rascunho.profissionalId) {
+      this.selectProfissional(rascunho.profissionalId);
+    }
+    if (rascunho.empresaId) {
+      const empresa = this.empresas.find(e => e.id === rascunho.empresaId);
+      this.selectEmpresa(empresa || null);
+    }
+    if (rascunho.convenioId) {
+      const convenio = this.convenios.find(c => c.id === rascunho.convenioId);
+      this.selectConvenio(convenio || null);
+    }
+    if (rascunho.procedimentoId) {
+      const procedimento = this.procedimentos.find(p => p.id === rascunho.procedimentoId);
+      this.selectProcedimento(procedimento || null);
+    }
+    if (rascunho.tipoAgendamento) {
+      const tipo = this.tipoAgendamento.find(t => t.valor === rascunho.tipoAgendamento);
+      this.selectTipo(tipo || null);
+    }
+
+    // Carregar procedimentos
+    if (rascunho.procedimentos && rascunho.procedimentos.length > 0) {
+      rascunho.procedimentos.forEach((proc: any) => {
+        const procedimento = this.fb.group({
+          quantidade: [proc.quantidade, [Validators.required, Validators.min(1)]],
+          procedimentoId: [proc.procedimentoId, Validators.required],
+          valor: [proc.valor],
+          valorExibicao: [proc.valor]
+        });
+        this.procedimentosLancados.push(procedimento);
+      });
+    }
+
+    // Atualizar tipo de pagamento
+    this.tipoPagamento = rascunho.pago ? 'pago' : 'parcial';
   }
 
   carregaDadosAgendamento() {
@@ -244,10 +317,19 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   fechar(confirmou: boolean = false) {
-    if (!confirmou && this.form.dirty) {
+    if (!confirmou && this.form.dirty && !this.rascunhoCarregado) {
       this.exibeConfirmCancelamento = true;
       return;
     }
+    this.cancel.emit();
+  }
+
+  salvarRascunho() {
+    const formValue = this.form.getRawValue();
+    this.rascunhoService.salvarRascunho(formValue);
+    this.rascunhoCarregado = true;
+    this.form.markAsPristine();
+    this.toastr.success('Rascunho salvo com sucesso');
     this.cancel.emit();
   }
 
@@ -454,6 +536,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   override onSubmit() {
     if (this.formValido()) {
       this.form.get('pacienteId')?.enable();
+      // Limpar rascunho ao salvar definitivamente
+      this.rascunhoService.limparRascunho();
       this.save.emit(this.form.value);
     } else {
       Object.keys(this.form.controls).forEach(field => {
