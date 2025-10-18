@@ -10,6 +10,7 @@ import br.com.nemeia.brigia.utils.DbUtil;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -118,6 +119,10 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         atendimento.setExamesSolicitados(request.examesSolicitados());
         atendimento.setPrescricoes(request.prescricoes());
         atendimento.setObservacoes(request.observacoes());
+    }
+
+    public List<Atendimento> getByPacienteId(Long pacienteId) {
+        return repository.findAllByPacienteIdAndUnidadeId(pacienteId, SecurityHolder.getLoggedUserUnidadeId());
     }
 
     @Override

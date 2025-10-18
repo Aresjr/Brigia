@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/atendimentos")
 @RequiredArgsConstructor
@@ -48,5 +50,14 @@ public class AtendimentoController {
             @Valid @RequestBody AtendimentoRequest request) {
         log.info("POST /agendamentos/finalizar-atendimento/{}", id);
         return mapper.toResponse(service.finalizarAtendimento(id, request));
+    }
+
+    @GetMapping("/paciente/{pacienteId}")
+    @PreAuthorize("hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    public List<AtendimentoResponse> getAtendimentosByPaciente(@PathVariable Long pacienteId) {
+        log.info("GET /atendimentos/paciente/{}", pacienteId);
+        return service.getByPacienteId(pacienteId).stream()
+                .map(mapper::toResponse)
+                .toList();
     }
 }

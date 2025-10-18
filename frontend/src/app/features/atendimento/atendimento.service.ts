@@ -31,4 +31,14 @@ export class AtendimentoService extends BaseService<Atendimento, AtendimentoRequ
       })
     );
   }
+
+  getByPaciente(pacienteId: number): Observable<Atendimento[]> {
+    return this.backend.get<Atendimento[]>(`${this.path}/paciente/${pacienteId}`).pipe(
+      catchError((e) => {
+        const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
+        this.toastr.error(errorMessage, 'Erro ao buscar atendimentos do paciente.');
+        return throwError(() => e);
+      })
+    );
+  }
 }

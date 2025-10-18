@@ -18,6 +18,7 @@ import { DetalhesAgendamentoComponent } from './pages/detalhes-agendamento/detal
 import { UsuariosComponent } from './features/usuarios/usuarios.component';
 import { CadastrarSenhaComponent } from './features/auth/cadastrar-senha/cadastrar-senha.component';
 import { HonorariosComponent } from './features/honorarios/honorarios.component';
+import { ProntuarioEletronicoComponent } from './features/prontuario-eletronico/prontuario-eletronico.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -68,6 +69,16 @@ export const routes: Routes = [
         data: {
           roles: [Role.ADMIN, Role.MEDICO],
           title: 'Atendimentos'
+        },
+      },
+      {
+        path: 'prontuario-eletronico',
+        component: ProntuarioEletronicoComponent,
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        data: {
+          roles: [Role.ADMIN, Role.MEDICO],
+          title: 'Prontuário Eletrônico'
         },
       },
       {
