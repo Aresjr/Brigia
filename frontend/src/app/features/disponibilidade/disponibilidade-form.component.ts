@@ -51,7 +51,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
       profissionalId: [null, Validators.required],
       dia: [null, Validators.required],
       horaInicial: [null, Validators.required],
-      horaFinal: [null, Validators.required]
+      horaFinal: [null, Validators.required],
+      valorAdicional: [null]
     };
     this.form = this.fb.group(form);
   }
@@ -83,7 +84,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
             profissionalId: this.disponibilidadeDetalhes.profissional.id,
             dia: this.disponibilidadeDetalhes.dia,
             horaInicial: this.disponibilidadeDetalhes.horaInicial,
-            horaFinal: this.disponibilidadeDetalhes.horaFinal
+            horaFinal: this.disponibilidadeDetalhes.horaFinal,
+            valorAdicional: this.disponibilidadeDetalhes.valorAdicional
           });
           // Desabilitar formulário para modo readonly
           this.form.disable();

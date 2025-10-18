@@ -67,6 +67,18 @@
 
       </div>
 
+      <div class="mb-4">
+        <label class="label-campo flex items-center gap-2" for="valorAdicional">
+          Valor Adicional
+          <span class="tooltip tooltip-right" data-tip="Valor adicional para ser pago ao médico (Transporte, Almoço, etc)">
+            <lucide-icon name="info" class="inline w-4 h-4 text-info cursor-help"/>
+          </span>
+          <input type="number" formControlName="valorAdicional" id="valorAdicional"
+                 step="0.01" min="0" placeholder="R$ 0,00"
+                 emptyToNull class="campo" [ngClass]="classesCampo('valorAdicional')">
+        </label>
+      </div>
+
       <div class="flex justify-between mt-6">
         <button type="button" class="btn btn-sm" (click)="fechar()" >
           Fechar

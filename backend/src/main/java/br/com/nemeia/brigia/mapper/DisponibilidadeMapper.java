@@ -26,7 +26,8 @@ public class DisponibilidadeMapper
 
         return new DisponibilidadeResponse(disponibilidade.getId(),
                 profissionalMapper.toResponse(disponibilidade.getProfissional()), disponibilidade.getDia(),
-                disponibilidade.getHoraInicial(), disponibilidade.getHoraFinal(), disponibilidade.getCriadoEm(),
+                disponibilidade.getHoraInicial(), disponibilidade.getHoraFinal(),
+                disponibilidade.getValorAdicional(), disponibilidade.getCriadoEm(),
                 disponibilidade.getExcluido());
     }
 
@@ -34,6 +35,7 @@ public class DisponibilidadeMapper
         original.setDia(request.dia());
         original.setHoraInicial(request.horaInicial());
         original.setHoraFinal(request.horaFinal());
+        original.setValorAdicional(request.valorAdicional());
         return original;
     }
 }

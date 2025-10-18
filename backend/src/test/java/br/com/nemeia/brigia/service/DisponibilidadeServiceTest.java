@@ -50,7 +50,8 @@ class DisponibilidadeServiceTest {
                 1L, // profissionalId - assumindo que existe
                 dia,
                 horaInicial1,
-                horaFinal1
+                horaFinal1,
+                null
         );
 
         try {
@@ -69,7 +70,8 @@ class DisponibilidadeServiceTest {
                 1L,
                 dia,
                 horaInicial2,
-                horaFinal2
+                horaFinal2,
+                null
         );
 
         assertThrows(ConflitoBlocoHorarioException.class, () -> {
@@ -88,7 +90,8 @@ class DisponibilidadeServiceTest {
                 1L,
                 dia,
                 horaInicial1,
-                horaFinal1
+                horaFinal1,
+                null
         );
 
         try {
@@ -105,7 +108,8 @@ class DisponibilidadeServiceTest {
                 1L,
                 dia,
                 horaInicial2,
-                horaFinal2
+                horaFinal2,
+                null
         );
 
         assertThrows(ConflitoBlocoHorarioException.class, () -> {
@@ -124,7 +128,8 @@ class DisponibilidadeServiceTest {
                 1L,
                 dia,
                 horaInicial1,
-                horaFinal1
+                horaFinal1,
+                null
         );
 
         try {
@@ -141,7 +146,8 @@ class DisponibilidadeServiceTest {
                 1L,
                 dia,
                 horaInicial2,
-                horaFinal2
+                horaFinal2,
+                null
         );
 
         // Assert - Não deve lançar exceção
@@ -161,7 +167,8 @@ class DisponibilidadeServiceTest {
                 1L,
                 dia,
                 horaInicial,
-                horaFinal
+                horaFinal,
+                null
         );
 
         Disponibilidade disponibilidadeCriada;
@@ -176,7 +183,8 @@ class DisponibilidadeServiceTest {
                 1L,
                 dia,
                 horaInicial,
-                horaFinal
+                horaFinal,
+                null
         );
 
         // Assert - Não deve lançar exceção
@@ -194,14 +202,16 @@ class DisponibilidadeServiceTest {
                 1L,
                 dia,
                 LocalTime.of(8, 0),
-                LocalTime.of(12, 0)
+                LocalTime.of(12, 0),
+                null
         );
 
         DisponibilidadeRequest request2 = new DisponibilidadeRequest(
                 1L,
                 dia,
                 LocalTime.of(14, 0),
-                LocalTime.of(18, 0)
+                LocalTime.of(18, 0),
+                null
         );
 
         Disponibilidade disponibilidade1;
@@ -219,7 +229,8 @@ class DisponibilidadeServiceTest {
                 1L,
                 dia,
                 LocalTime.of(10, 0), // Conflita com a primeira disponibilidade
-                LocalTime.of(16, 0)
+                LocalTime.of(16, 0),
+                null
         );
 
         assertThrows(ConflitoBlocoHorarioException.class, () -> {

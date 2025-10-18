@@ -47,8 +47,8 @@ public class ContaReceber extends BaseModel {
     @Column(name = "valor_agendamento", precision = 10, scale = 2)
     private BigDecimal valorAgendamento;
 
-    @Column(name = "valor_total_lancado", precision = 10, scale = 2)
-    private BigDecimal valorTotalLancado;
+    @Column(name = "valor_procedimentos_adicionais", precision = 10, scale = 2)
+    private BigDecimal valorProcedimentosAdicionais;
 
     @Column(name = "valor_desconto", precision = 10, scale = 2)
     private BigDecimal valorDesconto;
@@ -65,7 +65,7 @@ public class ContaReceber extends BaseModel {
     private StatusContaReceber status;
 
     public BigDecimal getValorTotal() {
-        return valorAgendamento.add(valorTotalLancado).subtract(valorDesconto);
+        return valorAgendamento.add(valorProcedimentosAdicionais).subtract(valorDesconto);
     }
 
     public Boolean isFaturado() {

@@ -213,7 +213,7 @@ class ContaReceberServiceIntegrationTest {
         contaReceber.setDataAgendamento(LocalDate.now());
         contaReceber.setValorAgendamento(new BigDecimal("150.00"));
         contaReceber.setValorDesconto(new BigDecimal("15.00"));
-        contaReceber.setValorTotalLancado(new BigDecimal("50.00"));
+        contaReceber.setValorProcedimentosAdicionais(new BigDecimal("50.00"));
         contaReceber.setValorRecebido(BigDecimal.ZERO);
         contaReceber.setFormaPagamento(FormaPagamento.DINHEIRO);
         contaReceber.setStatus(StatusContaReceber.ABERTO);
@@ -250,7 +250,7 @@ class ContaReceberServiceIntegrationTest {
             contaReceber.setDataAgendamento(LocalDate.now());
             contaReceber.setValorAgendamento(new BigDecimal("100.00").add(new BigDecimal(i * 10)));
             contaReceber.setValorDesconto(new BigDecimal("10.00"));
-            contaReceber.setValorTotalLancado(new BigDecimal("20.00"));
+            contaReceber.setValorProcedimentosAdicionais(new BigDecimal("20.00"));
             contaReceber.setValorRecebido(BigDecimal.ZERO);
             contaReceber.setFormaPagamento(FormaPagamento.values()[i % FormaPagamento.values().length]);
             contaReceber.setStatus(StatusContaReceber.ABERTO);
@@ -314,7 +314,7 @@ class ContaReceberServiceIntegrationTest {
         ContaReceber created = page.getContent().get(0);
         assertEquals(new BigDecimal("200.00"), created.getValorAgendamento());
         assertEquals(new BigDecimal("20.00"), created.getValorDesconto());
-        assertEquals(BigDecimal.ZERO, created.getValorTotalLancado());
+        assertEquals(BigDecimal.ZERO, created.getValorProcedimentosAdicionais());
         assertEquals(FormaPagamento.PIX, created.getFormaPagamento());
         assertEquals(StatusContaReceber.ABERTO, created.getStatus());
         assertEquals(BigDecimal.ZERO, created.getValorRecebido());
@@ -338,7 +338,7 @@ class ContaReceberServiceIntegrationTest {
         contaReceber.setDataAgendamento(LocalDate.now());
         contaReceber.setValorAgendamento(new BigDecimal("300.00"));
         contaReceber.setValorDesconto(new BigDecimal("30.00"));
-        contaReceber.setValorTotalLancado(new BigDecimal("60.00"));
+        contaReceber.setValorProcedimentosAdicionais(new BigDecimal("60.00"));
         contaReceber.setValorRecebido(BigDecimal.ZERO);
         contaReceber.setFormaPagamento(FormaPagamento.CARTAO_CREDITO);
         contaReceber.setStatus(StatusContaReceber.ABERTO);
@@ -373,7 +373,7 @@ class ContaReceberServiceIntegrationTest {
         contaReceber.setDataAgendamento(LocalDate.now());
         contaReceber.setValorAgendamento(new BigDecimal("200.00"));
         contaReceber.setValorDesconto(new BigDecimal("20.00"));
-        contaReceber.setValorTotalLancado(new BigDecimal("30.00"));
+        contaReceber.setValorProcedimentosAdicionais(new BigDecimal("30.00"));
         contaReceber.setValorRecebido(BigDecimal.ZERO);
         contaReceber.setFormaPagamento(FormaPagamento.PIX);
         contaReceber.setStatus(StatusContaReceber.ABERTO);
@@ -411,7 +411,7 @@ class ContaReceberServiceIntegrationTest {
             contaReceber.setDataAgendamento(LocalDate.now());
             contaReceber.setValorAgendamento(new BigDecimal("100.00"));
             contaReceber.setValorDesconto(new BigDecimal("10.00"));
-            contaReceber.setValorTotalLancado(new BigDecimal("0.00"));
+            contaReceber.setValorProcedimentosAdicionais(new BigDecimal("0.00"));
             contaReceber.setValorRecebido(BigDecimal.ZERO);
             contaReceber.setFormaPagamento(FormaPagamento.DINHEIRO);
             contaReceber.setStatus(StatusContaReceber.ABERTO);

@@ -186,7 +186,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         if (email != null) {
             Map<String, Object> variables = getVariaveisEmail(agendamento);
             try {
-                emailService.sendEmail(email, status, template, variables);
+                //emailService.sendEmail(email, status, template, variables);
             } catch (Exception e) {
                 log.error("Não foi possível enviar email: {}", e.getLocalizedMessage());
             }

@@ -28,4 +28,7 @@ public class Disponibilidade extends BaseModel {
 
     @Column(name = "hora_final", nullable = false)
     private LocalTime horaFinal;
+
+    @Column(name = "valor_adicional", precision = 10, scale = 2)
+    private java.math.BigDecimal valorAdicional;
 }
