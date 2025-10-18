@@ -1,6 +1,6 @@
 -- Adicionar coluna unidade_id na tabela preco_procedimento
 ALTER TABLE preco_procedimento
-ADD COLUMN unidade_id BIGINT;
+ADD COLUMN IF NOT EXISTS unidade_id BIGINT;
 
 -- Atualizar registros existentes com a primeira unidade (Itapoá)
 UPDATE preco_procedimento
