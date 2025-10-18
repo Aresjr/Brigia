@@ -242,13 +242,13 @@
           </label>
         </div>
 
-        <div class="w-[5rem] mr-4" >
+        <div class="w-[6rem] mr-4 tooltip text-left" data-tip="Somente com permissão de um admin">
           <label class="label-campo" for="desconto">
             Desconto
-            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" (click)="solicitarHabilitacaoDesconto()" *ngIf="this.modoSalvar && !descontoEditavel" title="Editar Desconto">
+            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-1 -mt-0.5" (click)="solicitarHabilitacaoDesconto()" *ngIf="this.modoSalvar && !descontoEditavel" title="Editar Desconto">
               <lucide-icon name="pencil" class="h-3.5"/>
             </button>
-            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" (click)="cancelarEdicaoDesconto()" *ngIf="this.modoSalvar && descontoEditavel" title="Cancelar Edição de Desconto">
+            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-1 -mt-0.5" (click)="cancelarEdicaoDesconto()" *ngIf="this.modoSalvar && descontoEditavel" title="Cancelar Edição de Desconto">
               <lucide-icon name="x" class="h-3.5"/>
             </button>
           </label>
@@ -261,14 +261,8 @@
           </label>
         </div>
 
-      }
-
-      </div>
-
-      @if (!userService.isMedico()) {
-        <div class="flex mt-2 gap-4">
-          <div>
-            <label class="label-campo mb-2">Tipo de Pagamento</label>
+        <div class="w-[11rem] mr-4">
+            <label class="label-campo mb-2">Pagamento</label>
             <div class="flex gap-4 items-center h-[2.4rem]">
               <label class="flex items-center gap-2 cursor-pointer">
                 <input type="radio" name="tipoPagamento" class="radio radio-primary radio-sm"
@@ -280,24 +274,26 @@
                 <input type="radio" name="tipoPagamento" class="radio radio-primary radio-sm"
                        [checked]="tipoPagamento === 'parcial'"
                        (change)="selecionarTipoPagamento('parcial')">
-                <span class="text-sm">Pagto Parcial</span>
+                <span class="text-sm">Parcial</span>
               </label>
             </div>
-          </div>
-
-          <div class="w-[8rem]" *ngIf="tipoPagamento === 'parcial'">
-            <label class="label-campo" for="quantiaPaga">
-              Quantia Paga
-            </label>
-            <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
-              R$
-              <input type="text" formControlName="quantiaPaga" min="0" id="quantiaPaga"
-                     (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
-                     mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0">
-            </label>
-          </div>
         </div>
+
+        <div class="w-[7rem]" *ngIf="tipoPagamento === 'parcial'">
+          <label class="label-campo" for="quantiaPaga">
+            Quantia Paga
+          </label>
+          <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
+            R$
+            <input type="text" formControlName="quantiaPaga" min="0" id="quantiaPaga"
+                   (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
+                   mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0">
+          </label>
+        </div>
+
       }
+
+      </div>
 
       <div class="flex mt-2">
         <div class="w-full" >
