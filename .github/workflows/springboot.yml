@@ -79,12 +79,3 @@ jobs:
           MAIL_DOMAIN: FAKE
           MAIL_FROM_NAME: FAKE
           MAIL_FROM_EMAIL: FAKE
-
-      - name: Publicar Resultados dos Testes
-        uses: dorny/test-reporter@v1
-        if: always()
-        with:
-          name: Resultados dos Testes
-          path: backend/target/surefire-reports/*.xml,backend/target/failsafe-reports/*.xml
-          reporter: java-junit
-          fail-on-error: false
