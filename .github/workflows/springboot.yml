@@ -75,6 +75,10 @@ jobs:
         env:
           SPRING_FLYWAY_ENABLED: false
           SPRING_JPA_HIBERNATE_DDL_AUTO: create
+          MAIL_API_KEY: FAKE
+          MAIL_DOMAIN: FAKE
+          MAIL_FROM_NAME: FAKE
+          MAIL_FROM_EMAIL: FAKE
 
       - name: Publicar Resultados dos Testes
         uses: dorny/test-reporter@v1
