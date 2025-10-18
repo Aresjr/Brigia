@@ -21,14 +21,14 @@
           <lucide-icon *ngIf="getSortIcon('profissional')" [name]="getSortIcon('profissional')" class="icone-ordenacao"/>
           Profissional
         </div>
-        <div class="cabecalho-listagem text-center">
+        <div class="cabecalho-listagem">
           Atendimentos
         </div>
-        <div (click)="ordenar('valorAdicional')" class="cabecalho-listagem text-right">
+        <div (click)="ordenar('valorAdicional')" class="cabecalho-listagem">
           <lucide-icon *ngIf="getSortIcon('valorAdicional')" [name]="getSortIcon('valorAdicional')" class="icone-ordenacao"/>
-          Valor Adicional
+          Adicional
         </div>
-        <div (click)="ordenar('valorTotal')" class="cabecalho-listagem text-right">
+        <div (click)="ordenar('valorTotal')" class="cabecalho-listagem">
           <lucide-icon *ngIf="getSortIcon('valorTotal')" [name]="getSortIcon('valorTotal')" class="icone-ordenacao"/>
           Valor Total
         </div>
