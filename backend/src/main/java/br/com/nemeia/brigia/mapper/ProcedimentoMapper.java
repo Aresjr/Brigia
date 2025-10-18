@@ -16,14 +16,16 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
     private final ObjectMapper objectMapper;
     private final EspecialidadeMapper especialidadeMapper;
     private final ConvenioMapper convenioMapper;
+    private final UnidadeMapper unidadeMapper;
     private final EmpresaPlanoMapper empresaPlanoMapper;
 
     public ProcedimentoMapper(ObjectMapper objectMapper, EspecialidadeMapper especialidadeMapper,
-            ConvenioMapper convenioMapper, EmpresaPlanoMapper empresaPlanoMapper) {
+            ConvenioMapper convenioMapper, UnidadeMapper unidadeMapper, EmpresaPlanoMapper empresaPlanoMapper) {
         super(objectMapper, Procedimento.class, ProcedimentoResponse.class);
         this.objectMapper = objectMapper;
         this.especialidadeMapper = especialidadeMapper;
         this.convenioMapper = convenioMapper;
+        this.unidadeMapper = unidadeMapper;
         this.empresaPlanoMapper = empresaPlanoMapper;
     }
 
@@ -67,6 +69,7 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
     private PrecoProcedimentoResponse toResponse(PrecoProcedimento precoProcedimento) {
         return new PrecoProcedimentoResponse(precoProcedimento.getId(), precoProcedimento.getPreco(),
                 precoProcedimento.getRepasse(), convenioMapper.toResponse(precoProcedimento.getConvenio()),
+                unidadeMapper.toResponse(precoProcedimento.getUnidade()),
                 precoProcedimento.getCriadoEm(), "", // TODO - colocar nome do usuário
                 precoProcedimento.getAtualizadoEm(), "");
     }

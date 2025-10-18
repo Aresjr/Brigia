@@ -7,6 +7,7 @@ export interface Honorario extends Entidade {
   data: string;
   valorTotal: number;
   quantidadeAtendimentos: number;
+  valorAdicional?: number;
   unidade: Unidade;
 }
 

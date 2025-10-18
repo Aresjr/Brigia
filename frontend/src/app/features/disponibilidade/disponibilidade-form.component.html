@@ -37,7 +37,22 @@
         </label>
       </div>
 
-      <div class="flex gap-4 mb-4">
+      <div class="mb-4">
+        <label class="label-campo flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" class="checkbox checkbox-primary"
+                 [(ngModel)]="agendaSemanal"
+                 [ngModelOptions]="{standalone: true}"
+                 (change)="toggleAgendaSemanal()"
+                 [disabled]="readonly">
+          <span>Agenda Semanal</span>
+          <span class="tooltip tooltip-right text-xs" data-tip="Criar agenda recorrente para todos os dias da semana selecionados">
+            <lucide-icon name="info" class="inline w-4 h-4 text-info cursor-help"/>
+          </span>
+        </label>
+      </div>
+
+      <!-- Modo Dia Específico -->
+      <div *ngIf="!agendaSemanal" class="flex gap-4 mb-4">
         <label class="label-campo" for="dia">
           Dia <span aria-hidden="true" class="text-error">*</span>
           <input type="date" formControlName="dia" required id="dia" [min]="hoje"
@@ -64,7 +79,33 @@
             Obrigatório
           </div>
         </label>
+      </div>
 
+      <!-- Modo Agenda Semanal -->
+      <div *ngIf="agendaSemanal" class="mb-4">
+        <h3 class="text-sm font-medium mb-3">Selecione os dias da semana e horários:</h3>
+        <div class="space-y-3" formArrayName="horariosSemana">
+          <div *ngFor="let horario of horariosSemana.controls; let i = index"
+               [formGroupName]="i"
+               class="border border-base-300 rounded-lg p-3">
+            <div class="flex items-center gap-3">
+              <label class="flex items-center gap-2 cursor-pointer flex-1">
+                <input type="checkbox" formControlName="ativo" class="checkbox checkbox-sm">
+                <span class="font-medium">{{ diasSemana[i].nome }}</span>
+              </label>
+
+              <div *ngIf="horario.get('ativo')?.value" class="flex gap-2">
+                <input type="time" formControlName="horaInicial"
+                       class="input input-sm input-bordered w-28"
+                       placeholder="Início">
+                <span class="self-center">até</span>
+                <input type="time" formControlName="horaFinal"
+                       class="input input-sm input-bordered w-28"
+                       placeholder="Fim">
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="mb-4">
@@ -94,7 +135,7 @@
 
 <app-confirm-dialog
   *ngIf="exibeConfirmCancelamento"
-  message="Você já preencheu algumas informações da disponibilidade, deseja realmente sair?"
+  message="Você já preencheu algumas informações da agenda, deseja realmente sair?"
   (confirm)="fechar(true)"
   (cancel)="exibeConfirmCancelamento = false">
 </app-confirm-dialog>

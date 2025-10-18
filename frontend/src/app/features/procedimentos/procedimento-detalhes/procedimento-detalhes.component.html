@@ -76,10 +76,16 @@
                 <div class="bg-base-200/50 px-6 py-2">
                   @if (procedimento.precosProcedimento && procedimento.precosProcedimento.length > 0) {
                     <div class="space-y-1">
+                      <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 pb-1 text-xs font-medium text-neutral">
+                        <span>Convênio</span>
+                        <span class="text-right">Valor</span>
+                        <span class="text-right">Repasse</span>
+                      </div>
                       @for (precoConvenio of procedimento.precosProcedimento; track precoConvenio.id) {
-                        <div class="flex justify-between text-sm py-1">
+                        <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 text-sm py-1">
                           <span class="text-neutral">{{ precoConvenio.convenio.nome }}</span>
-                          <span>R$ {{ precoConvenio.preco | number:'1.2-2':'pt-BR' }}</span>
+                          <span class="text-right">R$ {{ precoConvenio.preco | number:'1.2-2':'pt-BR' }}</span>
+                          <span class="text-right">R$ {{ (precoConvenio.repasse || 0) | number:'1.2-2':'pt-BR' }}</span>
                         </div>
                       }
                     </div>
@@ -110,10 +116,16 @@
                 <div class="bg-base-200/50 px-6 py-2">
                   @if (procedimento.precosPlanos && procedimento.precosPlanos.length > 0) {
                     <div class="space-y-1">
+                      <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 pb-1 text-xs font-medium text-neutral">
+                        <span>Plano</span>
+                        <span class="text-right">Valor</span>
+                        <span class="text-right">Repasse</span>
+                      </div>
                       @for (precoPlano of procedimento.precosPlanos; track precoPlano.id) {
-                        <div class="flex justify-between text-sm py-1">
+                        <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 text-sm py-1">
                           <span class="text-neutral">{{ precoPlano.plano.nome }}</span>
-                          <span>R$ {{ precoPlano.preco | number:'1.2-2':'pt-BR' }}</span>
+                          <span class="text-right">R$ {{ precoPlano.preco | number:'1.2-2':'pt-BR' }}</span>
+                          <span class="text-right">R$ {{ (precoPlano.repasse || 0) | number:'1.2-2':'pt-BR' }}</span>
                         </div>
                       }
                     </div>

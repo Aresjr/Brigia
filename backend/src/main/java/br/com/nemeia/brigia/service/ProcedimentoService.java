@@ -24,6 +24,7 @@ public class ProcedimentoService {
     private final ProcedimentoMapper mapper;
     private final EspecialidadeService especialidadeService;
     private final ConvenioService convenioService;
+    private final UnidadeService unidadeService;
     private final PrecoProcedimentoService precoProcedimentoService;
     private final EmpresaPlanoService empresaPlanoService;
 
@@ -49,7 +50,8 @@ public class ProcedimentoService {
         if (request.precosConvenios() != null) {
             request.precosConvenios().forEach(precoProcedimento -> {
                 Convenio convenio = convenioService.getById(precoProcedimento.convenioId());
-                precoProcedimentoService.save(procedimentoNovo, convenio, precoProcedimento);
+                Unidade unidade = unidadeService.getById(precoProcedimento.unidadeId());
+                precoProcedimentoService.save(procedimentoNovo, convenio, unidade, precoProcedimento);
             });
         }
 
@@ -88,7 +90,8 @@ public class ProcedimentoService {
         if (request.precosConvenios() != null) {
             request.precosConvenios().forEach(precoProcedimento -> {
                 Convenio convenio = convenioService.getById(precoProcedimento.convenioId());
-                precoProcedimentoService.save(procedimentoAtualizado, convenio, precoProcedimento);
+                Unidade unidade = unidadeService.getById(precoProcedimento.unidadeId());
+                precoProcedimentoService.save(procedimentoAtualizado, convenio, unidade, precoProcedimento);
             });
         }
 

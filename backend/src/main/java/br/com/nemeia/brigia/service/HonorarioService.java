@@ -4,6 +4,7 @@ import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.HonorarioRequest;
 import br.com.nemeia.brigia.model.*;
 import br.com.nemeia.brigia.repository.AgendamentoRepository;
+import br.com.nemeia.brigia.repository.DisponibilidadeRepository;
 import br.com.nemeia.brigia.repository.HonorarioRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -20,13 +22,16 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
     private final ProfissionalService profissionalService;
     private final UnidadeService unidadeService;
     private final AgendamentoRepository agendamentoRepository;
+    private final DisponibilidadeRepository disponibilidadeRepository;
 
     public HonorarioService(HonorarioRepository repository, ProfissionalService profissionalService,
-            UnidadeService unidadeService, AgendamentoRepository agendamentoRepository) {
+            UnidadeService unidadeService, AgendamentoRepository agendamentoRepository,
+            DisponibilidadeRepository disponibilidadeRepository) {
         super(repository);
         this.profissionalService = profissionalService;
         this.unidadeService = unidadeService;
         this.agendamentoRepository = agendamentoRepository;
+        this.disponibilidadeRepository = disponibilidadeRepository;
     }
 
     @Transactional
@@ -41,9 +46,15 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
                 .filter(ag -> ag.getProfissional().getId().equals(request.profissionalId())).toList();
 
         // Calcular valor total baseado nos valores de repasse
-        BigDecimal valorTotal = calcularValorTotal(agendamentos);
+        BigDecimal valorRepasse = calcularValorTotal(agendamentos);
 
-        Honorario honorario = new Honorario(profissional, data, valorTotal, agendamentos.size(), unidade);
+        // Buscar valor adicional da disponibilidade
+        BigDecimal valorAdicional = calcularValorAdicional(agendamentos);
+
+        // Somar valor de repasse + valor adicional
+        BigDecimal valorTotal = valorRepasse.add(valorAdicional != null ? valorAdicional : BigDecimal.ZERO);
+
+        Honorario honorario = new Honorario(profissional, data, valorTotal, agendamentos.size(), unidade, valorAdicional);
 
         return repository.save(honorario);
     }
@@ -70,6 +81,22 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
         }
 
         return total;
+    }
+
+    private BigDecimal calcularValorAdicional(List<Agendamento> agendamentos) {
+        BigDecimal totalAdicional = BigDecimal.ZERO;
+
+        for (Agendamento ag : agendamentos) {
+            // Buscar disponibilidade associada ao agendamento
+            Optional<Disponibilidade> disponibilidadeOpt = disponibilidadeRepository
+                    .findByProfissionalAndDiaAndHora(ag.getProfissional().getId(), ag.getData(), ag.getHora());
+
+            if (disponibilidadeOpt.isPresent() && disponibilidadeOpt.get().getValorAdicional() != null) {
+                totalAdicional = totalAdicional.add(disponibilidadeOpt.get().getValorAdicional());
+            }
+        }
+
+        return totalAdicional;
     }
 
     @Override

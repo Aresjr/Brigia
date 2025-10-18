@@ -1,25 +1,22 @@
 import { Entidade, EntidadeRequest } from '../shared/entidade.interface';
 import { Profissional } from '../profissionais/profissional.interface';
 
-export interface Disponibilidade extends Entidade {
+export interface AgendaSemanal extends Entidade {
   profissional: Profissional;
-  dia: string;
+  diaSemana: number; // 0 = Domingo, 1 = Segunda, ... 6 = Sábado
   horaInicial: string;
   horaFinal: string;
-  valorAdicional?: number;
 }
 
-export interface DisponibilidadeRequest extends EntidadeRequest {
+export interface AgendaSemanalRequest extends EntidadeRequest {
   profissionalId: number;
-  dia: string;
+  diaSemana: number;
   horaInicial: string;
   horaFinal: string;
-  valorAdicional?: number;
 }
 
 export interface HorarioSemana {
   diaSemana: number;
   horaInicial: string;
   horaFinal: string;
-  ativo: boolean;
 }

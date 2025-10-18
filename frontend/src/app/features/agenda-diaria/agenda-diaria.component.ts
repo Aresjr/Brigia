@@ -23,6 +23,7 @@ import { DisponibilidadeFormComponent } from '../disponibilidade/disponibilidade
 import { DisponibilidadeRequest } from '../disponibilidade/disponibilidade.interface';
 import { DisponibilidadeService } from '../disponibilidade/disponibilidade.service';
 import { HonorariosFormComponent } from '../honorarios/honorarios-form.component';
+import { AgendaSemanalService } from '../agenda-semanal/agenda-semanal.service';
 
 @Component({
   selector: 'app-agenda-diaria',
@@ -65,6 +66,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
               private profissionalService: ProfissionalService,
               private pacienteService: PacienteService,
               private disponibilidadeService: DisponibilidadeService,
+              private agendaSemanalService: AgendaSemanalService,
               protected userService: UserService) {
     const navigation = this.router.getCurrentNavigation();
     const pacienteId = navigation?.extras.state?.['pacienteId'];
@@ -105,8 +107,16 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     const ano = this.dataExibicao.getFullYear();
     const mes = this.dataExibicao.getMonth() + 1;
 
+    // Calcular intervalo de datas para o mês
+    const primeiroDiaMes = new Date(ano, mes - 1, 1);
+    primeiroDiaMes.setDate(primeiroDiaMes.getDate() - 30); // Buscar 30 dias antes
+
+    const ultimoDiaMes = new Date(ano, mes, 0);
+    ultimoDiaMes.setDate(ultimoDiaMes.getDate() + 30); // Buscar 30 dias depois
+
     const agendamentos$ = this.agendamentoService.listarPorData(ano, mes);
     const disponibilidades$ = this.disponibilidadeService.listarPorData(ano, mes);
+    const agendasSemanais$ = this.agendaSemanalService.listarPorProfissional(this.profissionalFiltro || null);
 
     agendamentos$.subscribe({
       next: agendamentosResponse => {
@@ -115,10 +125,28 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
         disponibilidades$.subscribe({
           next: disponibilidadesResponse => {
             const eventosDisponibilidades = disponibilidadesResponse.items.map(d => EventoFactory.fromDisponibilidade(d));
-            this.eventosInternos = [...eventosDisponibilidades, ...eventosAgendamentos];
 
-            this.filtrarRegistros();
-            this.isLoading = false;
+            // Buscar agendas semanais
+            agendasSemanais$.subscribe({
+              next: agendasSemanais => {
+                // Converter cada agenda semanal em eventos para o período
+                const eventosAgendasSemanais: any[] = [];
+                agendasSemanais.forEach(agendaSemanal => {
+                  const eventos = EventoFactory.fromAgendaSemanal(agendaSemanal, primeiroDiaMes, ultimoDiaMes);
+                  eventosAgendasSemanais.push(...eventos);
+                });
+
+                this.eventosInternos = [...eventosDisponibilidades, ...eventosAgendasSemanais, ...eventosAgendamentos];
+                this.filtrarRegistros();
+                this.isLoading = false;
+              },
+              error: () => {
+                // Continuar sem agendas semanais em caso de erro
+                this.eventosInternos = [...eventosDisponibilidades, ...eventosAgendamentos];
+                this.filtrarRegistros();
+                this.isLoading = false;
+              }
+            });
           },
           error: () => {
             this.eventosInternos = eventosAgendamentos;

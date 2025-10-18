@@ -1,25 +1,28 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { FormBuilder, FormArray, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
+import { NgClass, NgIf, NgFor } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormComponent } from '../shared/form.component';
 import { IForm } from '../shared/form.interface';
-import { Disponibilidade, DisponibilidadeRequest } from './disponibilidade.interface';
+import { Disponibilidade, DisponibilidadeRequest, HorarioSemana } from './disponibilidade.interface';
 import { Profissional } from '../profissionais/profissional.interface';
 import { ProfissionalService } from '../profissionais/profissional.service';
 import { NgSelectComponent, NgNotFoundTemplateDirective } from '@ng-select/ng-select';
 import { forkJoin, map, tap } from 'rxjs';
 import { EmptyToNullDirective } from '../../core/directives/empty-to-null-directive';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
+import { AgendaSemanalService } from '../agenda-semanal/agenda-semanal.service';
 
 @Component({
   selector: 'app-disponibilidade-form',
   templateUrl: './disponibilidade-form.component.html',
   imports: [
     ReactiveFormsModule,
+    FormsModule,
     NgClass,
     NgIf,
+    NgFor,
     LucideAngularModule,
     NgSelectComponent,
     NgNotFoundTemplateDirective,
@@ -32,17 +35,28 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   @Input() profissionalId: number | null = null;
   @Input() disponibilidadeDetalhes: any = null;
 
-  titulo: string = 'Nova Disponibilidade';
+  titulo: string = 'Nova Agenda do Médico';
   hoje: string;
   profissionais: Profissional[] = [];
   isLoading: boolean = false;
   exibeConfirmCancelamento: boolean = false;
   readonly: boolean = false;
+  agendaSemanal: boolean = false;
+  diasSemana = [
+    { valor: 0, nome: 'Domingo' },
+    { valor: 1, nome: 'Segunda-feira' },
+    { valor: 2, nome: 'Terça-feira' },
+    { valor: 3, nome: 'Quarta-feira' },
+    { valor: 4, nome: 'Quinta-feira' },
+    { valor: 5, nome: 'Sexta-feira' },
+    { valor: 6, nome: 'Sábado' }
+  ];
 
   constructor(
     protected override fb: FormBuilder,
     protected override toastr: ToastrService,
-    private profissionalService: ProfissionalService
+    private profissionalService: ProfissionalService,
+    private agendaSemanalService: AgendaSemanalService
   ) {
     super(fb, toastr);
     this.hoje = new Date().toISOString().split('T')[0];
@@ -55,13 +69,50 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
       valorAdicional: [null]
     };
     this.form = this.fb.group(form);
+    this.form.addControl('horariosSemana', this.fb.array([]));
+    this.inicializarHorariosSemana();
+  }
+
+  get horariosSemana(): FormArray {
+    return this.form.get('horariosSemana') as FormArray;
+  }
+
+  inicializarHorariosSemana() {
+    this.diasSemana.forEach((dia) => {
+      this.horariosSemana.push(this.fb.group({
+        diaSemana: [dia.valor],
+        ativo: [false],
+        horaInicial: [''],
+        horaFinal: ['']
+      }));
+    });
+  }
+
+  toggleAgendaSemanal() {
+    this.agendaSemanal = !this.agendaSemanal;
+
+    if (this.agendaSemanal) {
+      // Modo agenda semanal - tornar campos de dia específico opcionais
+      this.form.get('dia')?.clearValidators();
+      this.form.get('horaInicial')?.clearValidators();
+      this.form.get('horaFinal')?.clearValidators();
+    } else {
+      // Modo dia específico - tornar campos obrigatórios
+      this.form.get('dia')?.setValidators(Validators.required);
+      this.form.get('horaInicial')?.setValidators(Validators.required);
+      this.form.get('horaFinal')?.setValidators(Validators.required);
+    }
+
+    this.form.get('dia')?.updateValueAndValidity();
+    this.form.get('horaInicial')?.updateValueAndValidity();
+    this.form.get('horaFinal')?.updateValueAndValidity();
   }
 
   override ngOnInit(): void {
     // Verificar se está em modo readonly (visualizando disponibilidade existente)
     if (this.disponibilidadeDetalhes) {
       this.readonly = true;
-      this.titulo = 'Detalhes da Disponibilidade';
+      this.titulo = 'Detalhes da Agenda do Médico';
     }
 
     let dia = this.hoje;
@@ -132,19 +183,89 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   }
 
   override onSubmit() {
-    if (this.formValido()) {
-      this.save.emit(this.form.value);
+    if (this.agendaSemanal) {
+      // Validar agenda semanal
+      if (!this.formValidoAgendaSemanal()) {
+        return;
+      }
+      this.salvarAgendaSemanal();
     } else {
-      Object.keys(this.form.controls).forEach(field => {
-        const control = this.form.get(field);
-        control?.markAsTouched({ onlySelf: true });
-      });
+      // Validar e salvar disponibilidade normal
+      if (this.formValido()) {
+        this.save.emit(this.form.value);
+      } else {
+        Object.keys(this.form.controls).forEach(field => {
+          const control = this.form.get(field);
+          control?.markAsTouched({ onlySelf: true });
+        });
+      }
     }
+  }
+
+  formValidoAgendaSemanal(): boolean {
+    const profissionalId = this.form.value.profissionalId;
+    if (!profissionalId) {
+      this.toastr.warning('Selecione um profissional');
+      return false;
+    }
+
+    const horariosAtivos = this.horariosSemana.controls.filter(
+      (control: any) => control.value.ativo
+    );
+
+    if (horariosAtivos.length === 0) {
+      this.toastr.warning('Selecione pelo menos um dia da semana');
+      return false;
+    }
+
+    // Validar horários de cada dia ativo
+    for (const control of horariosAtivos) {
+      const horario = control.value;
+      if (!horario.horaInicial || !horario.horaFinal) {
+        this.toastr.warning('Preencha o horário inicial e final para todos os dias selecionados');
+        return false;
+      }
+      if (horario.horaInicial >= horario.horaFinal) {
+        this.toastr.warning('A hora final deve ser maior que a hora inicial');
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  salvarAgendaSemanal() {
+    const profissionalId = this.form.value.profissionalId;
+    const horariosAtivos = this.horariosSemana.controls
+      .filter((control: any) => control.value.ativo)
+      .map((control: any) => control.value);
+
+    // Criar um registro de agenda semanal para cada dia ativo
+    const requests = horariosAtivos.map((horario: any) => {
+      return this.agendaSemanalService.criar({
+        profissionalId: profissionalId,
+        diaSemana: horario.diaSemana,
+        horaInicial: horario.horaInicial,
+        horaFinal: horario.horaFinal
+      });
+    });
+
+    // Executar todas as requisições
+    forkJoin(requests).subscribe({
+      next: () => {
+        this.toastr.success('Agenda semanal criada com sucesso');
+        this.cancel.emit();
+      },
+      error: (error) => {
+        console.error('Erro ao salvar agenda semanal:', error);
+        this.toastr.error('Erro ao salvar agenda semanal');
+      }
+    });
   }
 
   habilitarEdicao() {
     this.readonly = false;
-    this.titulo = 'Editar Disponibilidade';
+    this.titulo = 'Editar Agenda do Médico';
     this.form.enable();
   }
 }

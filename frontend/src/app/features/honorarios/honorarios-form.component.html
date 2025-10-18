@@ -60,7 +60,10 @@
                   [name]="isExpandido(agendamento.id) ? 'chevron-down' : 'chevron-right'"
                   class="w-4 h-4 text-neutral">
                 </lucide-icon>
-                <span class="font-medium">{{ agendamento.paciente.nome }}</span>
+                <div class="flex flex-col">
+                  <span class="font-medium">{{ agendamento.paciente.nome }}</span>
+                  <span *ngIf="agendamento.convenio" class="text-xs text-neutral">{{ agendamento.convenio.nome }}</span>
+                </div>
               </div>
               <span class="font-semibold text-primary">
                 {{ calcularValorAgendamento(agendamento) | currency:'BRL':'symbol':'1.2-2' }}
@@ -91,12 +94,26 @@
           </div>
         </div>
 
-        <!-- Valor total -->
-        <div class="flex justify-between items-center mt-4 p-4 bg-primary/10 rounded-lg">
-          <span class="text-lg font-semibold">Valor Total</span>
-          <span class="text-xl font-bold text-primary">
-            {{ valorTotal | currency:'BRL':'symbol':'1.2-2' }}
-          </span>
+        <!-- Resumo de valores -->
+        <div class="mt-4 space-y-2">
+          <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
+            <span class="font-semibold">Valor Procedimentos</span>
+            <span class="font-semibold">
+              {{ valorTotal | currency:'BRL':'symbol':'1.2-2' }}
+            </span>
+          </div>
+          <div *ngIf="modoDetalhes && valorAdicional > 0" class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
+            <span class="font-semibold">Valor Adicional</span>
+            <span class="font-semibold">
+              {{ valorAdicional | currency:'BRL':'symbol':'1.2-2' }}
+            </span>
+          </div>
+          <div class="flex justify-between items-center p-4 bg-primary/10 rounded-lg">
+            <span class="text-lg font-semibold">Valor Total</span>
+            <span class="text-xl font-bold text-primary">
+              {{ (modoDetalhes ? (valorTotal + valorAdicional) : valorTotal) | currency:'BRL':'symbol':'1.2-2' }}
+            </span>
+          </div>
         </div>
       </div>
 

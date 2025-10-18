@@ -12,7 +12,7 @@
     </div>
   } @else {
     <div class="min-h-[36rem]">
-      <div class="titulo-listagem grid-cols-[150px_1fr_150px_150px_32px]">
+      <div class="titulo-listagem grid-cols-[150px_1fr_150px_150px_150px_32px]">
         <div (click)="ordenar('data')" class="cabecalho-listagem rounded-tl-lg">
           <lucide-icon *ngIf="getSortIcon('data')" [name]="getSortIcon('data')" class="icone-ordenacao"/>
           Data
@@ -24,6 +24,10 @@
         <div class="cabecalho-listagem text-center">
           Atendimentos
         </div>
+        <div (click)="ordenar('valorAdicional')" class="cabecalho-listagem text-right">
+          <lucide-icon *ngIf="getSortIcon('valorAdicional')" [name]="getSortIcon('valorAdicional')" class="icone-ordenacao"/>
+          Valor Adicional
+        </div>
         <div (click)="ordenar('valorTotal')" class="cabecalho-listagem text-right">
           <lucide-icon *ngIf="getSortIcon('valorTotal')" [name]="getSortIcon('valorTotal')" class="icone-ordenacao"/>
           Valor Total
@@ -33,7 +37,7 @@
 
       <div class="itens-listagem">
         @for (honorario of getItensPaginados(); track honorario.id) {
-          <div class="item-listagem grid-cols-[150px_1fr_150px_150px_32px]"
+          <div class="item-listagem grid-cols-[150px_1fr_150px_150px_150px_32px]"
                [class.bg-error]="honorario.excluido"
                [class.bg-opacity-50]="honorario.excluido"
                (click)="selecionar(honorario)">
@@ -45,6 +49,9 @@
             </div>
             <div class="celula-listagem text-center">
               {{ honorario.quantidadeAtendimentos }}
+            </div>
+            <div class="celula-listagem text-right">
+              {{ (honorario.valorAdicional || 0) | currency:'BRL':'symbol':'1.2-2' }}
             </div>
             <div class="celula-listagem text-right font-semibold">
               {{ honorario.valorTotal | currency:'BRL':'symbol':'1.2-2' }}

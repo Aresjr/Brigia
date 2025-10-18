@@ -20,6 +20,10 @@ import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } fro
 import { ToastrService } from 'ngx-toastr';
 import { EmpresaService } from '../../empresa/empresa.service';
 import { TIPO_AGENDAMENTO } from '../../agenda-diaria/agendamento.interface';
+import { UnidadeService } from '../../unidade/unidade.service';
+import { Unidade } from '../../unidade/unidade.interface';
+import { UserService } from '../../../core/user.service';
+import { Role } from '../../../core/constans';
 
 @Component({
   selector: 'app-procedimento-form',
@@ -41,6 +45,8 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
   convenios: Convenio[] = [];
   planos: EmpresaPlano[] = [];
   especialidades: Especialidade[] = [];
+  unidades: Unidade[] = [];
+  unidadesExpandidas: { [key: number]: boolean } = {};
   TIPO_AGENDAMENTO = TIPO_AGENDAMENTO;
 
   constructor(
@@ -48,7 +54,9 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
     protected override toastr: ToastrService,
     private convenioService: ConvenioService,
     private especialidadeService: EspecialidadeService,
-    private empresaService: EmpresaService
+    private empresaService: EmpresaService,
+    private unidadeService: UnidadeService,
+    protected userService: UserService
   ) {
     super(fb, toastr);
     this.form = this.fb.group({
@@ -68,7 +76,8 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
     const chamadas:Observable<any[]>[] = [
       this.loadConvenios(),
       this.loadEspecialidades(),
-      this.loadPlanos()
+      this.loadPlanos(),
+      this.loadUnidades()
     ];
     forkJoin(chamadas).subscribe(() => {
       if (this.registro) {
@@ -78,8 +87,9 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
         });
         this.precosConvenios.controls.forEach(control => {
           const convenioId = control.value.convenioId;
+          const unidadeId = control.value.unidadeId;
           const precoProcedimento = this.registro?.precosProcedimento
-            ?.find(pp => pp.convenio.id === convenioId);
+            ?.find(pp => pp.convenio.id === convenioId && pp.unidade?.id === unidadeId);
 
           if (precoProcedimento) {
             control.patchValue({
@@ -137,17 +147,36 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
       );
   }
 
+  private loadUnidades(): Observable<Unidade[]> {
+    return this.unidadeService.listar()
+      .pipe(
+        map(response => response.items),
+        tap(unidades => {
+          this.unidades = unidades;
+          // Inicializar todas as unidades como expandidas
+          this.unidades.forEach(unidade => {
+            this.unidadesExpandidas[unidade.id] = true;
+          });
+        })
+      );
+  }
+
   private initializePrecosConvenios() {
     const precosArray = this.form.get('precosConvenios') as FormArray;
     precosArray.clear();
 
-    this.convenios.forEach(convenio => {
-      precosArray.push(this.fb.group({
-        convenioId: [convenio.id],
-        nome: [convenio.nome],
-        preco: [0, [Validators.required, Validators.min(0)]],
-        repasse: [0]
-      }));
+    // Para cada unidade, criar um grupo de preços por convênio
+    this.unidades.forEach(unidade => {
+      this.convenios.forEach(convenio => {
+        precosArray.push(this.fb.group({
+          unidadeId: [unidade.id],
+          unidadeNome: [unidade.nome],
+          convenioId: [convenio.id],
+          convenioNome: [convenio.nome],
+          preco: [0, [Validators.required, Validators.min(0)]],
+          repasse: [0]
+        }));
+      });
     });
   }
 
@@ -178,9 +207,9 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
       const formValue = this.form.value;
       const precosConvenios = formValue.precosConvenios.map((p: any) => ({
         convenioId: p.convenioId,
+        unidadeId: p.unidadeId,
         preco: p.preco,
-        repasse: p.repasse,
-        unidade: null
+        repasse: p.repasse
       }));
 
       const precosPlanos = formValue.precosPlanos.map((p: any) => ({
@@ -201,6 +230,24 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
         control?.markAsTouched({ onlySelf: true });
       });
     }
+  }
+
+  toggleUnidade(unidadeId: number) {
+    this.unidadesExpandidas[unidadeId] = !this.unidadesExpandidas[unidadeId];
+  }
+
+  isUnidadeExpandida(unidadeId: number): boolean {
+    return this.unidadesExpandidas[unidadeId] || false;
+  }
+
+  getPrecosPorUnidade(unidadeId: number) {
+    return this.precosConvenios.controls.filter(
+      control => control.value.unidadeId === unidadeId
+    );
+  }
+
+  podeEditarPrecos(): boolean {
+    return this.userService.hasRole(Role.ADMIN) || this.userService.hasRole(Role.FATURAMENTO);
   }
 
   protected readonly limitLength = limitLength;

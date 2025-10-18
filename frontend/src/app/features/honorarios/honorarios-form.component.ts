@@ -148,6 +148,15 @@ export class HonorariosFormComponent implements OnInit {
     return this.agendamentos.reduce((sum, ag) => sum + this.calcularValorAgendamento(ag), 0);
   }
 
+  get valorAdicional(): number {
+    // Se está em modo detalhes, retorna o valor do honorário
+    if (this.modoDetalhes && this.honorario) {
+      return this.honorario.valorAdicional || 0;
+    }
+    // Se está gerando novo honorário, não temos como calcular pois depende do backend
+    return 0;
+  }
+
   fechar() {
     this.cancel.emit();
   }

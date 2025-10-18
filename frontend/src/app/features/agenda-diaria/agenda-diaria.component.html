@@ -29,7 +29,7 @@
             [class]="modoVisualizacao === 'disponibilidades'
           ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
           : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-gray-50'">
-            Disponibilidades
+            Agenda do Médico
           </button>
         </div>
       </div>
@@ -104,7 +104,7 @@
 @if (mostraFab()) {
   <app-fab [tituloBotao1]="'Criar Agendamento'" [iconeBotao1]="'calendar-plus'"
            (clickedBotao1)="addNovo()"
-           [tituloBotao2]="'Criar Disponibilidade'" [iconeBotao2]="'calendar-check'"
+           [tituloBotao2]="'Criar Agenda do Médico'" [iconeBotao2]="'calendar-check'"
            (clickedBotao2)="addDisponibilidade()"
            [tituloBotao3]="'Gerar Honorários'" [iconeBotao3]="'dollar-sign'"
            (clickedBotao3)="gerarHonorarios()"
