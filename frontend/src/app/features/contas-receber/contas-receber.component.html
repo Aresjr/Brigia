@@ -65,7 +65,7 @@
         </div>
         <div class="max-w-64 px-6 py-2.5">
           <label class="label-campo">
-            Data do Atendimento
+            Data do Agendamento
             <div class="flex items-center gap-2">
               <div class="tooltip text-left" data-tip="Data Início">
                 <input #dataInicio type="date" class="campo w-[8.5rem]" formControlName="dataInicio" />
@@ -148,7 +148,7 @@
         </div>
         <div (click)="ordenar('dataAgendamento')" class="cabecalho-listagem rounded-tr-lg">
           <lucide-icon *ngIf="getSortIcon('dataAgendamento')" [name]="getSortIcon('dataAgendamento')" class="icone-ordenacao"/>
-          Data Atendimento
+          Data Agendamento
         </div>
       </div>
 
