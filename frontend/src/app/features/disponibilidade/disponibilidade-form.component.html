@@ -1,5 +1,5 @@
  <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm" (click)="fechar()">
-  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[25rem]"
+  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[29rem]"
     (click)="$event.stopPropagation()" >
 
     <div class="flex justify-between items-center">
@@ -37,17 +37,14 @@
         </label>
       </div>
 
-      <div class="mb-4">
+      <div class="mb-4 tooltip" data-tip="Criar agenda recorrente para todos os dias da semana selecionados">
         <label class="label-campo flex items-center gap-2 cursor-pointer">
           <input type="checkbox" class="checkbox checkbox-primary"
                  [(ngModel)]="agendaSemanal"
                  [ngModelOptions]="{standalone: true}"
-                 (change)="toggleAgendaSemanal()"
+                 (click)="toggleAgendaSemanal()"
                  [disabled]="readonly">
           <span>Agenda Semanal</span>
-          <span class="tooltip tooltip-right text-xs" data-tip="Criar agenda recorrente para todos os dias da semana selecionados">
-            <lucide-icon name="info" class="inline w-4 h-4 text-info cursor-help"/>
-          </span>
         </label>
       </div>
 
@@ -84,7 +81,7 @@
       <!-- Modo Agenda Semanal -->
       <div *ngIf="agendaSemanal" class="mb-4">
         <h3 class="text-sm font-medium mb-3">Selecione os dias da semana e horários:</h3>
-        <div class="space-y-3" formArrayName="horariosSemana">
+        <div class="space-y-2" formArrayName="horariosSemana">
           <div *ngFor="let horario of horariosSemana.controls; let i = index"
                [formGroupName]="i"
                class="border border-base-300 rounded-lg p-3">
@@ -108,7 +105,7 @@
         </div>
       </div>
 
-      <div class="mb-4">
+      <div class="mb-4 tooltip" data-tip="Valor adicional do dia (ex: transporte, alimentação, etc)">
         <label class="label-campo flex items-center gap-2" for="valorAdicional">
           Valor Adicional
           <span class="tooltip tooltip-right" data-tip="Valor adicional para ser pago ao médico (Transporte, Almoço, etc)">
@@ -116,7 +113,7 @@
           </span>
           <input type="number" formControlName="valorAdicional" id="valorAdicional"
                  step="0.01" min="0" placeholder="R$ 0,00"
-                 emptyToNull class="campo" [ngClass]="classesCampo('valorAdicional')">
+                 emptyToNull class="campo max-w-24" [ngClass]="classesCampo('valorAdicional')">
         </label>
       </div>
 
