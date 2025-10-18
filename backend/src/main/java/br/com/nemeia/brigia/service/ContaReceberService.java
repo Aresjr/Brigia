@@ -74,6 +74,38 @@ public class ContaReceberService {
         return contaReceber;
     }
 
+    @Transactional
+    public ContaReceber atualizarDesconto(Long id, BigDecimal desconto) {
+        log.info("Atualizando desconto da conta a receber ID: {} para: {}", id, desconto);
+        ContaReceber contaReceber = getById(id);
+
+        // Validar que o desconto não seja maior que o valor sem desconto
+        BigDecimal valorSemDesconto = contaReceber.getValorAgendamento()
+                .add(contaReceber.getValorProcedimentosAdicionais());
+
+        if (BigDecimals.gt(desconto, valorSemDesconto)) {
+            throw new IllegalArgumentException("O desconto não pode ser maior que o valor total");
+        }
+
+        // Atualizar o desconto
+        contaReceber.setValorDesconto(desconto);
+
+        // Recalcular o status baseado no novo valor total
+        BigDecimal novoValorTotal = contaReceber.getValorTotal();
+        BigDecimal valorRecebido = contaReceber.getValorRecebido();
+
+        if (valorRecebido.compareTo(BigDecimal.ZERO) == 0) {
+            contaReceber.setStatus(StatusContaReceber.ABERTO);
+        } else if (valorRecebido.compareTo(novoValorTotal) >= 0) {
+            contaReceber.setStatus(StatusContaReceber.PAGO);
+        } else {
+            contaReceber.setStatus(StatusContaReceber.PARCIAL);
+        }
+
+        repository.save(contaReceber);
+        return contaReceber;
+    }
+
     @Transactional(readOnly = true)
     public byte[] gerarPDF(List<Long> ids) {
         log.info("Gerando PDF para contas a receber: {}", ids);

@@ -43,4 +43,17 @@ export class ContaReceberService extends BaseService<ContaReceber, null> {
       })
     );
   }
+
+  atualizarDesconto(id: number, desconto: number): Observable<ContaReceber> {
+    this.limparCache();
+    return this.http.patch<ContaReceber>(`${environment.apiUrl}${this.path}/${id}/desconto`, {desconto}, {
+      withCredentials: true
+    }).pipe(
+      catchError((e) => {
+        const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || '';
+        this.toastr.error(errorMessage, 'Erro ao atualizar desconto.');
+        return throwError(() => e);
+      })
+    );
+  }
 }

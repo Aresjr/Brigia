@@ -38,8 +38,31 @@
             <div class="flex items-center justify-between px-3 py-2 rounded-lg ">
               <div class="flex items-center gap-2 text-amber-500">
                 <span class="text-sm">Desconto</span>
+                @if (!contaReceber.faturado && !descontoEditavel) {
+                  <button type="button" class="btn btn-xs btn-ghost btn-circle" (click)="habilitarEdicaoDesconto()" title="Editar Desconto">
+                    <lucide-icon name="pencil" class="h-3.5"/>
+                  </button>
+                }
+                @if (descontoEditavel) {
+                  <button type="button" class="btn btn-xs btn-success btn-circle" (click)="salvarDesconto()" title="Salvar">
+                    <lucide-icon name="check" class="h-3.5"/>
+                  </button>
+                  <button type="button" class="btn btn-xs btn-ghost btn-circle" (click)="cancelarEdicaoDesconto()" title="Cancelar">
+                    <lucide-icon name="x" class="h-3.5"/>
+                  </button>
+                }
               </div>
-              <span class="font-semibold text-amber-500">- R$ {{ contaReceber.valorDesconto || 0 | number:'1.2-2':'pt-BR' }}</span>
+              @if (!descontoEditavel) {
+                <span class="font-semibold text-amber-500">- R$ {{ contaReceber.valorDesconto || 0 | number:'1.2-2':'pt-BR' }}</span>
+              } @else {
+                <label class="input input-sm input-bordered flex items-center h-[2rem] w-[8rem]">
+                  R$
+                  <input type="text" [(ngModel)]="descontoTemp" min="0"
+                         maxlength="8" placeholder="00,00"
+                         mask="separator.2" thousandSeparator="" decimalMarker=","
+                         class="campo border-0 text-sm">
+                </label>
+              }
             </div>
 
             <!-- Valor Lançado -->

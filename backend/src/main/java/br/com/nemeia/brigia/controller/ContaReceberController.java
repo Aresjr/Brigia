@@ -1,5 +1,6 @@
 package br.com.nemeia.brigia.controller;
 
+import br.com.nemeia.brigia.dto.request.DescontoRequest;
 import br.com.nemeia.brigia.dto.request.RecebimentoRequest;
 import br.com.nemeia.brigia.dto.response.ContaReceberResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
@@ -63,6 +64,14 @@ public class ContaReceberController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(pdf);
+    }
+
+    @PatchMapping("/{id}/desconto")
+    @PreAuthorize("hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
+    public ContaReceberResponse atualizarDesconto(@PathVariable Long id,
+            @Valid @RequestBody DescontoRequest request) {
+        log.info("PATCH /contas-receber/{}/desconto - atualizando desconto para: {}", id, request.desconto());
+        return mapper.toResponse(service.atualizarDesconto(id, request.desconto()));
     }
 
 }
