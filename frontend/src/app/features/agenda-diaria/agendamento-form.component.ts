@@ -330,7 +330,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     this.rascunhoService.salvarRascunho(formValue);
     this.rascunhoCarregado = true;
     this.form.markAsPristine();
-    this.toastr.success('Rascunho salvo com sucesso');
+    this.toastr.info('Rascunho salvo com sucesso');
     this.cancel.emit();
   }
 
