@@ -183,7 +183,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         if (email != null) {
             Map<String, Object> variables = getVariaveisEmail(agendamento);
             try {
-                //emailService.sendEmail(email, status, template, variables);
+                // emailService.sendEmail(email, status, template, variables);
             } catch (Exception e) {
                 log.error("Não foi possível enviar email: {}", e.getLocalizedMessage());
             }
@@ -220,12 +220,14 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
                     "Já existe um agendamento para o profissional neste horário. Escolha outro horário.");
         }
 
-        // Se for encaixe, não precisa validar disponibilidade (pode agendar fora do horário de trabalho)
+        // Se for encaixe, não precisa validar disponibilidade (pode agendar fora do
+        // horário de trabalho)
         if (Boolean.TRUE.equals(request.encaixe())) {
             return;
         }
 
-        // Se não for encaixe, validar se há disponibilidade cadastrada para o profissional no horário solicitado
+        // Se não for encaixe, validar se há disponibilidade cadastrada para o
+        // profissional no horário solicitado
         disponibilidadeService
                 .findByProfissionalAndDiaAndHora(request.profissionalId(), request.data(),
                         request.hora().plusMinutes(request.duracao()))

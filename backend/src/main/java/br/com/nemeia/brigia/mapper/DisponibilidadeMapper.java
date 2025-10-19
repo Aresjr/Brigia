@@ -26,9 +26,8 @@ public class DisponibilidadeMapper
 
         return new DisponibilidadeResponse(disponibilidade.getId(),
                 profissionalMapper.toResponse(disponibilidade.getProfissional()), disponibilidade.getDia(),
-                disponibilidade.getHoraInicial(), disponibilidade.getHoraFinal(),
-                disponibilidade.getValorAdicional(), disponibilidade.getCriadoEm(),
-                disponibilidade.getExcluido());
+                disponibilidade.getHoraInicial(), disponibilidade.getHoraFinal(), disponibilidade.getValorAdicional(),
+                disponibilidade.getCriadoEm(), disponibilidade.getExcluido());
     }
 
     public Disponibilidade updateEntity(Disponibilidade original, DisponibilidadeRequest request) {

@@ -32,7 +32,8 @@ public class ContaReceberMapper extends BaseMapper<ContaReceber, Void, ContaRece
                 empresaMapper.toResponse(contaReceber.getEmpresa()),
                 profissionalMapper.toResponse(contaReceber.getProfissional()), contaReceber.getDataAgendamento(),
                 contaReceber.getValorAgendamento(), contaReceber.getValorDesconto(),
-                contaReceber.getValorProcedimentosAdicionais(), contaReceber.getValorTotal(), contaReceber.getValorRecebido(),
+                contaReceber.getValorProcedimentosAdicionais(), contaReceber.getValorTotal(),
+                contaReceber.getValorRecebido(),
                 contaReceber.getConvenio() != null ? contaReceber.getConvenio().getNome() : null,
                 contaReceber.getFormaPagamento(), contaReceber.getStatus(), contaReceber.isFaturado());
     }
@@ -58,8 +59,7 @@ public class ContaReceberMapper extends BaseMapper<ContaReceber, Void, ContaRece
         contaReceber.setFormaPagamento(agendamento.getFormaPagamento());
 
         // Calcular valor total
-        BigDecimal valorTotal = agendamento.getValor()
-                .add(valorProcedimentos)
+        BigDecimal valorTotal = agendamento.getValor().add(valorProcedimentos)
                 .subtract(Optional.ofNullable(agendamento.getDesconto()).orElse(BigDecimal.ZERO));
 
         // Determinar valor recebido baseado no tipo de pagamento
@@ -70,7 +70,8 @@ public class ContaReceberMapper extends BaseMapper<ContaReceber, Void, ContaRece
             // Pagamento total
             valorRecebido = valorTotal;
             statusContaReceber = StatusContaReceber.PAGO;
-        } else if (agendamento.getQuantiaPaga() != null && agendamento.getQuantiaPaga().compareTo(BigDecimal.ZERO) > 0) {
+        } else if (agendamento.getQuantiaPaga() != null
+                && agendamento.getQuantiaPaga().compareTo(BigDecimal.ZERO) > 0) {
             // Pagamento parcial
             valorRecebido = agendamento.getQuantiaPaga();
             statusContaReceber = valorRecebido.compareTo(valorTotal) >= 0

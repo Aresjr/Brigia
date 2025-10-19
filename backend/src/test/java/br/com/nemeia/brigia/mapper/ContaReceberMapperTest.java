@@ -128,7 +128,8 @@ class ContaReceberMapperTest {
         when(empresaMapper.toResponse(any(Empresa.class))).thenReturn(null);
         when(profissionalMapper.toResponse(any(Profissional.class))).thenReturn(null);
 
-        // Act & Assert - não deve lançar IllegalStateException: stream has already been operated upon or
+        // Act & Assert - não deve lançar IllegalStateException: stream has already been
+        // operated upon or
         // closed
         assertDoesNotThrow(() -> {
             PagedResponse<ContaReceberResponse> response = contaReceberMapper.toPagedResponse(page);

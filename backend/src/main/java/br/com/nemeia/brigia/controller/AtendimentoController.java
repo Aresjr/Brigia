@@ -56,8 +56,6 @@ public class AtendimentoController {
     @PreAuthorize("hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public List<AtendimentoResponse> getAtendimentosByPaciente(@PathVariable Long pacienteId) {
         log.info("GET /atendimentos/paciente/{}", pacienteId);
-        return service.getByPacienteId(pacienteId).stream()
-                .map(mapper::toResponse)
-                .toList();
+        return service.getByPacienteId(pacienteId).stream().map(mapper::toResponse).toList();
     }
 }

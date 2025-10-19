@@ -46,13 +46,8 @@ class DisponibilidadeServiceTest {
         LocalTime horaFinal1 = LocalTime.of(12, 0);
 
         // Cria a primeira disponibilidade
-        DisponibilidadeRequest request1 = new DisponibilidadeRequest(
-                1L, // profissionalId - assumindo que existe
-                dia,
-                horaInicial1,
-                horaFinal1,
-                null
-        );
+        DisponibilidadeRequest request1 = new DisponibilidadeRequest(1L, // profissionalId - assumindo que existe
+                dia, horaInicial1, horaFinal1, null);
 
         try {
             disponibilidadeService.createDisponibilidade(request1);
@@ -66,13 +61,7 @@ class DisponibilidadeServiceTest {
         LocalTime horaInicial2 = LocalTime.of(8, 0);
         LocalTime horaFinal2 = LocalTime.of(12, 0);
 
-        DisponibilidadeRequest request2 = new DisponibilidadeRequest(
-                1L,
-                dia,
-                horaInicial2,
-                horaFinal2,
-                null
-        );
+        DisponibilidadeRequest request2 = new DisponibilidadeRequest(1L, dia, horaInicial2, horaFinal2, null);
 
         assertThrows(ConflitoBlocoHorarioException.class, () -> {
             disponibilidadeService.createDisponibilidade(request2);
@@ -86,13 +75,7 @@ class DisponibilidadeServiceTest {
         LocalTime horaInicial1 = LocalTime.of(8, 0);
         LocalTime horaFinal1 = LocalTime.of(12, 0);
 
-        DisponibilidadeRequest request1 = new DisponibilidadeRequest(
-                1L,
-                dia,
-                horaInicial1,
-                horaFinal1,
-                null
-        );
+        DisponibilidadeRequest request1 = new DisponibilidadeRequest(1L, dia, horaInicial1, horaFinal1, null);
 
         try {
             disponibilidadeService.createDisponibilidade(request1);
@@ -104,13 +87,7 @@ class DisponibilidadeServiceTest {
         LocalTime horaInicial2 = LocalTime.of(10, 0); // Sobrepõe com a anterior
         LocalTime horaFinal2 = LocalTime.of(14, 0);
 
-        DisponibilidadeRequest request2 = new DisponibilidadeRequest(
-                1L,
-                dia,
-                horaInicial2,
-                horaFinal2,
-                null
-        );
+        DisponibilidadeRequest request2 = new DisponibilidadeRequest(1L, dia, horaInicial2, horaFinal2, null);
 
         assertThrows(ConflitoBlocoHorarioException.class, () -> {
             disponibilidadeService.createDisponibilidade(request2);
@@ -124,13 +101,7 @@ class DisponibilidadeServiceTest {
         LocalTime horaInicial1 = LocalTime.of(8, 0);
         LocalTime horaFinal1 = LocalTime.of(12, 0);
 
-        DisponibilidadeRequest request1 = new DisponibilidadeRequest(
-                1L,
-                dia,
-                horaInicial1,
-                horaFinal1,
-                null
-        );
+        DisponibilidadeRequest request1 = new DisponibilidadeRequest(1L, dia, horaInicial1, horaFinal1, null);
 
         try {
             disponibilidadeService.createDisponibilidade(request1);
@@ -142,13 +113,7 @@ class DisponibilidadeServiceTest {
         LocalTime horaInicial2 = LocalTime.of(14, 0); // Não sobrepõe
         LocalTime horaFinal2 = LocalTime.of(18, 0);
 
-        DisponibilidadeRequest request2 = new DisponibilidadeRequest(
-                1L,
-                dia,
-                horaInicial2,
-                horaFinal2,
-                null
-        );
+        DisponibilidadeRequest request2 = new DisponibilidadeRequest(1L, dia, horaInicial2, horaFinal2, null);
 
         // Assert - Não deve lançar exceção
         assertDoesNotThrow(() -> {
@@ -163,13 +128,7 @@ class DisponibilidadeServiceTest {
         LocalTime horaInicial = LocalTime.of(8, 0);
         LocalTime horaFinal = LocalTime.of(12, 0);
 
-        DisponibilidadeRequest request = new DisponibilidadeRequest(
-                1L,
-                dia,
-                horaInicial,
-                horaFinal,
-                null
-        );
+        DisponibilidadeRequest request = new DisponibilidadeRequest(1L, dia, horaInicial, horaFinal, null);
 
         Disponibilidade disponibilidadeCriada;
         try {
@@ -179,13 +138,7 @@ class DisponibilidadeServiceTest {
         }
 
         // Act - Edita a mesma disponibilidade mantendo o mesmo horário
-        DisponibilidadeRequest requestEdicao = new DisponibilidadeRequest(
-                1L,
-                dia,
-                horaInicial,
-                horaFinal,
-                null
-        );
+        DisponibilidadeRequest requestEdicao = new DisponibilidadeRequest(1L, dia, horaInicial, horaFinal, null);
 
         // Assert - Não deve lançar exceção
         assertDoesNotThrow(() -> {
@@ -198,21 +151,11 @@ class DisponibilidadeServiceTest {
         // Arrange - Cria duas disponibilidades em horários diferentes
         LocalDate dia = LocalDate.of(2025, 10, 20);
 
-        DisponibilidadeRequest request1 = new DisponibilidadeRequest(
-                1L,
-                dia,
-                LocalTime.of(8, 0),
-                LocalTime.of(12, 0),
-                null
-        );
+        DisponibilidadeRequest request1 = new DisponibilidadeRequest(1L, dia, LocalTime.of(8, 0), LocalTime.of(12, 0),
+                null);
 
-        DisponibilidadeRequest request2 = new DisponibilidadeRequest(
-                1L,
-                dia,
-                LocalTime.of(14, 0),
-                LocalTime.of(18, 0),
-                null
-        );
+        DisponibilidadeRequest request2 = new DisponibilidadeRequest(1L, dia, LocalTime.of(14, 0), LocalTime.of(18, 0),
+                null);
 
         Disponibilidade disponibilidade1;
         Disponibilidade disponibilidade2;
@@ -224,14 +167,12 @@ class DisponibilidadeServiceTest {
             return;
         }
 
-        // Act & Assert - Tenta editar a segunda disponibilidade para um horário que conflita com a primeira
-        DisponibilidadeRequest requestEdicao = new DisponibilidadeRequest(
-                1L,
-                dia,
-                LocalTime.of(10, 0), // Conflita com a primeira disponibilidade
-                LocalTime.of(16, 0),
-                null
-        );
+        // Act & Assert - Tenta editar a segunda disponibilidade para um horário que
+        // conflita com a primeira
+        DisponibilidadeRequest requestEdicao = new DisponibilidadeRequest(1L, dia, LocalTime.of(10, 0), // Conflita com
+                                                                                                        // a primeira
+                                                                                                        // disponibilidade
+                LocalTime.of(16, 0), null);
 
         assertThrows(ConflitoBlocoHorarioException.class, () -> {
             disponibilidadeService.editDisponibilidade(disponibilidade2.getId(), requestEdicao);

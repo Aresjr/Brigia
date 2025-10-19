@@ -61,15 +61,12 @@ public class ContaReceberController {
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDispositionFormData("attachment", "contas-receber.pdf");
 
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(pdf);
+        return ResponseEntity.ok().headers(headers).body(pdf);
     }
 
     @PatchMapping("/{id}/desconto")
     @PreAuthorize("hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
-    public ContaReceberResponse atualizarDesconto(@PathVariable Long id,
-            @Valid @RequestBody DescontoRequest request) {
+    public ContaReceberResponse atualizarDesconto(@PathVariable Long id, @Valid @RequestBody DescontoRequest request) {
         log.info("PATCH /contas-receber/{}/desconto - atualizando desconto para: {}", id, request.desconto());
         return mapper.toResponse(service.atualizarDesconto(id, request.desconto()));
     }

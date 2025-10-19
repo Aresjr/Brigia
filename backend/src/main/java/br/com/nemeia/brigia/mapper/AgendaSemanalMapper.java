@@ -7,8 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AgendaSemanalMapper
-        extends BaseMapper<AgendaSemanal, AgendaSemanalRequest, AgendaSemanalResponse> {
+public class AgendaSemanalMapper extends BaseMapper<AgendaSemanal, AgendaSemanalRequest, AgendaSemanalResponse> {
 
     private final ProfissionalMapper profissionalMapper;
 
@@ -23,15 +22,10 @@ public class AgendaSemanalMapper
             return null;
         }
 
-        return new AgendaSemanalResponse(
-                agendaSemanal.getId(),
-                profissionalMapper.toResponse(agendaSemanal.getProfissional()),
-                agendaSemanal.getDiaSemana(),
-                agendaSemanal.getHoraInicial(),
-                agendaSemanal.getHoraFinal(),
-                agendaSemanal.getCriadoEm(),
-                agendaSemanal.getExcluido()
-        );
+        return new AgendaSemanalResponse(agendaSemanal.getId(),
+                profissionalMapper.toResponse(agendaSemanal.getProfissional()), agendaSemanal.getDiaSemana(),
+                agendaSemanal.getHoraInicial(), agendaSemanal.getHoraFinal(), agendaSemanal.getCriadoEm(),
+                agendaSemanal.getExcluido());
     }
 
     public AgendaSemanal updateEntity(AgendaSemanal original, AgendaSemanalRequest request) {

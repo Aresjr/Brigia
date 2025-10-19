@@ -69,8 +69,11 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
     private PrecoProcedimentoResponse toResponse(PrecoProcedimento precoProcedimento) {
         return new PrecoProcedimentoResponse(precoProcedimento.getId(), precoProcedimento.getPreco(),
                 precoProcedimento.getRepasse(), convenioMapper.toResponse(precoProcedimento.getConvenio()),
-                unidadeMapper.toResponse(precoProcedimento.getUnidade()),
-                precoProcedimento.getCriadoEm(), "", // TODO - colocar nome do usuário
+                unidadeMapper.toResponse(precoProcedimento.getUnidade()), precoProcedimento.getCriadoEm(), "", // TODO -
+                                                                                                               // colocar
+                                                                                                               // nome
+                                                                                                               // do
+                                                                                                               // usuário
                 precoProcedimento.getAtualizadoEm(), "");
     }
 

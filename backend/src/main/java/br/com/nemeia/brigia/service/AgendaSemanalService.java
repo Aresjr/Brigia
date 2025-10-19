@@ -19,7 +19,7 @@ public class AgendaSemanalService extends BaseService<AgendaSemanal, AgendaSeman
     private final ProfissionalService profissionalService;
 
     public AgendaSemanalService(AgendaSemanalRepository repository, AgendaSemanalMapper mapper,
-                                ProfissionalService profissionalService) {
+            ProfissionalService profissionalService) {
         super(repository);
         this.repository = repository;
         this.mapper = mapper;

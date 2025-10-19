@@ -27,7 +27,8 @@ public class PrecoProcedimentoService {
                 .orElseThrow(() -> new NotFoundException("Preço Procedimento não encontrada com ID: " + id));
     }
 
-    public PrecoProcedimento save(Procedimento procedimento, Convenio convenio, Unidade unidade, PrecoProcedimentoRequest request) {
+    public PrecoProcedimento save(Procedimento procedimento, Convenio convenio, Unidade unidade,
+            PrecoProcedimentoRequest request) {
         PrecoProcedimento precoProcedimento = mapper.toPrecoProcedimento(procedimento, convenio, unidade, request);
         return repository.save(precoProcedimento);
     }

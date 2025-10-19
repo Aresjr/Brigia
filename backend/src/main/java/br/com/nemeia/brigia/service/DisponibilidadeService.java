@@ -40,7 +40,8 @@ public class DisponibilidadeService extends BaseService<Disponibilidade, Disponi
         disponibilidade.setProfissional(profissional);
 
         // Verifica se há conflito de horário
-        verificarConflitoHorario(request.profissionalId(), request.dia(), request.horaInicial(), request.horaFinal(), null);
+        verificarConflitoHorario(request.profissionalId(), request.dia(), request.horaInicial(), request.horaFinal(),
+                null);
 
         return repository.save(disponibilidade);
     }
@@ -50,8 +51,10 @@ public class DisponibilidadeService extends BaseService<Disponibilidade, Disponi
         Profissional profissional = profissionalService.getById(request.profissionalId());
         disponibilidade.setProfissional(profissional);
 
-        // Verifica se há conflito de horário (exclui a própria disponibilidade da verificação)
-        verificarConflitoHorario(request.profissionalId(), request.dia(), request.horaInicial(), request.horaFinal(), id);
+        // Verifica se há conflito de horário (exclui a própria disponibilidade da
+        // verificação)
+        verificarConflitoHorario(request.profissionalId(), request.dia(), request.horaInicial(), request.horaFinal(),
+                id);
 
         disponibilidade = mapper.updateEntity(disponibilidade, request);
         return repository.save(disponibilidade);
@@ -82,14 +85,13 @@ public class DisponibilidadeService extends BaseService<Disponibilidade, Disponi
         return "Disponibilidade";
     }
 
-    private void verificarConflitoHorario(Long profissionalId, LocalDate dia, LocalTime horaInicial, LocalTime horaFinal, Long idDisponibilidadeAtual) {
+    private void verificarConflitoHorario(Long profissionalId, LocalDate dia, LocalTime horaInicial,
+            LocalTime horaFinal, Long idDisponibilidadeAtual) {
         List<Disponibilidade> conflitos = repository.findConflitosHorario(profissionalId, dia, horaInicial, horaFinal);
 
         // Se está editando, remove a própria disponibilidade da lista de conflitos
         if (idDisponibilidadeAtual != null) {
-            conflitos = conflitos.stream()
-                    .filter(d -> !d.getId().equals(idDisponibilidadeAtual))
-                    .toList();
+            conflitos = conflitos.stream().filter(d -> !d.getId().equals(idDisponibilidadeAtual)).toList();
         }
 
         if (!conflitos.isEmpty()) {

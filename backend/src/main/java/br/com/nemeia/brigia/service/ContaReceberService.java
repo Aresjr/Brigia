@@ -121,32 +121,25 @@ public class ContaReceberService {
             Document document = new Document(pdfDoc);
 
             // Título
-            Paragraph titulo = new Paragraph("Resumo de Contas a Receber")
-                    .setFontSize(18)
-                    .setBold()
+            Paragraph titulo = new Paragraph("Resumo de Contas a Receber").setFontSize(18).setBold()
                     .setTextAlignment(TextAlignment.CENTER);
             document.add(titulo);
 
             // Data de geração
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            Paragraph dataGeracao = new Paragraph("Data: " + LocalDate.now().format(formatter))
-                    .setFontSize(10)
+            Paragraph dataGeracao = new Paragraph("Data: " + LocalDate.now().format(formatter)).setFontSize(10)
                     .setTextAlignment(TextAlignment.RIGHT);
             document.add(dataGeracao);
 
             // Informações do filtro (Empresa ou Paciente)
             ContaReceber primeiraConta = contas.get(0);
             if (primeiraConta.getEmpresa() != null) {
-                Paragraph empresa = new Paragraph("Empresa: " + primeiraConta.getEmpresa().getNome())
-                        .setFontSize(12)
-                        .setBold()
-                        .setMarginTop(10);
+                Paragraph empresa = new Paragraph("Empresa: " + primeiraConta.getEmpresa().getNome()).setFontSize(12)
+                        .setBold().setMarginTop(10);
                 document.add(empresa);
             } else {
-                Paragraph paciente = new Paragraph("Paciente: " + primeiraConta.getPaciente().getNome())
-                        .setFontSize(12)
-                        .setBold()
-                        .setMarginTop(10);
+                Paragraph paciente = new Paragraph("Paciente: " + primeiraConta.getPaciente().getNome()).setFontSize(12)
+                        .setBold().setMarginTop(10);
                 document.add(paciente);
             }
 
@@ -160,10 +153,8 @@ public class ContaReceberService {
             // Cabeçalho da tabela
             String[] headers = {"#", "Paciente", "Data", "Convênio", "Valor Total"};
             for (String header : headers) {
-                Cell cell = new Cell()
-                        .add(new Paragraph(header).setBold())
-                        .setBackgroundColor(ColorConstants.LIGHT_GRAY)
-                        .setTextAlignment(TextAlignment.CENTER);
+                Cell cell = new Cell().add(new Paragraph(header).setBold())
+                        .setBackgroundColor(ColorConstants.LIGHT_GRAY).setTextAlignment(TextAlignment.CENTER);
                 table.addHeaderCell(cell);
             }
 
@@ -175,23 +166,19 @@ public class ContaReceberService {
                 table.addCell(new Cell().add(new Paragraph(String.valueOf(contador++))));
                 table.addCell(new Cell().add(new Paragraph(conta.getPaciente().getNome())));
                 table.addCell(new Cell().add(new Paragraph(conta.getDataAgendamento().format(formatter))));
-                table.addCell(new Cell().add(new Paragraph(conta.getConvenio() != null ? conta.getConvenio().getNome() : "N/A")));
                 table.addCell(new Cell()
-                        .add(new Paragraph(String.format("R$ %.2f", conta.getValorTotal())))
+                        .add(new Paragraph(conta.getConvenio() != null ? conta.getConvenio().getNome() : "N/A")));
+                table.addCell(new Cell().add(new Paragraph(String.format("R$ %.2f", conta.getValorTotal())))
                         .setTextAlignment(TextAlignment.RIGHT));
 
                 totalGeral = totalGeral.add(conta.getValorTotal());
             }
 
             // Linha de total
-            table.addCell(new Cell(1, 4)
-                    .add(new Paragraph("TOTAL").setBold())
-                    .setTextAlignment(TextAlignment.RIGHT)
+            table.addCell(new Cell(1, 4).add(new Paragraph("TOTAL").setBold()).setTextAlignment(TextAlignment.RIGHT)
                     .setBackgroundColor(ColorConstants.LIGHT_GRAY));
-            table.addCell(new Cell()
-                    .add(new Paragraph(String.format("R$ %.2f", totalGeral)).setBold())
-                    .setTextAlignment(TextAlignment.RIGHT)
-                    .setBackgroundColor(ColorConstants.LIGHT_GRAY));
+            table.addCell(new Cell().add(new Paragraph(String.format("R$ %.2f", totalGeral)).setBold())
+                    .setTextAlignment(TextAlignment.RIGHT).setBackgroundColor(ColorConstants.LIGHT_GRAY));
 
             document.add(table);
 

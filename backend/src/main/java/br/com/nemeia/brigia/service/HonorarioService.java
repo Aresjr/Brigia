@@ -54,7 +54,8 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
         // Somar valor de repasse + valor adicional
         BigDecimal valorTotal = valorRepasse.add(valorAdicional != null ? valorAdicional : BigDecimal.ZERO);
 
-        Honorario honorario = new Honorario(profissional, data, valorTotal, agendamentos.size(), unidade, valorAdicional);
+        Honorario honorario = new Honorario(profissional, data, valorTotal, agendamentos.size(), unidade,
+                valorAdicional);
 
         return repository.save(honorario);
     }

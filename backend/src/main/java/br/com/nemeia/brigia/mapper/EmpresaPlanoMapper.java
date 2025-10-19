@@ -21,12 +21,7 @@ public class EmpresaPlanoMapper {
             return null;
         }
 
-        return new EmpresaPlanoResponse(
-            plano.getId(),
-            plano.getNome(),
-            plano.getDescricao(),
-            plano.getCorFundo()
-        );
+        return new EmpresaPlanoResponse(plano.getId(), plano.getNome(), plano.getDescricao(), plano.getCorFundo());
     }
 
     public PagedResponse<EmpresaPlanoResponse> toPagedResponse(Page<EmpresaPlano> paged) {

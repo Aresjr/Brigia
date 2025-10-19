@@ -6,7 +6,5 @@ import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 
 public record DescontoRequest(
-        @NotNull(message = "Desconto é obrigatório")
-        @PositiveOrZero(message = "Desconto deve ser maior ou igual a zero")
-        BigDecimal desconto) {
+        @NotNull(message = "Desconto é obrigatório") @PositiveOrZero(message = "Desconto deve ser maior ou igual a zero") BigDecimal desconto) {
 }

@@ -24,12 +24,9 @@ public class AgendaSemanalController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
-    public List<AgendaSemanalResponse> getAllAgendasSemanais(
-            @RequestParam(required = false) Long profissionalId) {
+    public List<AgendaSemanalResponse> getAllAgendasSemanais(@RequestParam(required = false) Long profissionalId) {
         log.info("GET /agendas-semanais - profissionalId: {}", profissionalId);
-        return service.findByProfissionalId(profissionalId).stream()
-                .map(mapper::toResponse)
-                .toList();
+        return service.findByProfissionalId(profissionalId).stream().map(mapper::toResponse).toList();
     }
 
     @PostMapping
@@ -42,7 +39,7 @@ public class AgendaSemanalController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public AgendaSemanalResponse updateAgendaSemanal(@Valid @RequestBody AgendaSemanalRequest request,
-                                                      @PathVariable Long id) {
+            @PathVariable Long id) {
         log.info("PUT /agendas-semanais - atualizando agenda semanal ID {}", id);
         return mapper.toResponse(service.editAgendaSemanal(id, request));
     }

@@ -8,5 +8,6 @@ import java.time.LocalDateTime;
 
 public record HonorarioResponse(Long id, ProfissionalResponse profissional,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate data, BigDecimal valorTotal,
-        Integer quantidadeAtendimentos, BigDecimal valorAdicional, UnidadeResponse unidade, LocalDateTime criadoEm, Boolean excluido) {
+        Integer quantidadeAtendimentos, BigDecimal valorAdicional, UnidadeResponse unidade, LocalDateTime criadoEm,
+        Boolean excluido) {
 }
