@@ -257,6 +257,9 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         empresaId: this.agendamentoDetalhes.empresa?.id,
       });
 
+      // Definir tipo de pagamento
+      this.tipoPagamento = this.agendamentoDetalhes.pago ? 'pago' : 'parcial';
+
       // Carregar procedimentos
       if (this.agendamentoDetalhes.procedimentos && this.agendamentoDetalhes.procedimentos.length > 0) {
         this.agendamentoDetalhes.procedimentos.forEach(proc => {

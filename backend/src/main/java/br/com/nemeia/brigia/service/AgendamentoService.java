@@ -88,7 +88,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     }
 
     @Transactional
-    @CacheEvict(value = "agendamentos", allEntries = true)
+    @CacheEvict(value = {"agendamentos", "contasReceber"}, allEntries = true)
     public Agendamento createAgendamento(AgendamentoRequest request) {
         Agendamento agendamento = mapper.toEntity(request);
         setEntidades(request, agendamento);
@@ -118,7 +118,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         return agendamentoNovo;
     }
 
-    @CacheEvict(value = "agendamentos", allEntries = true)
+    @CacheEvict(value = {"agendamentos", "contasReceber"}, allEntries = true)
     public Agendamento editAgendamento(Long id, AgendamentoRequest request) {
         Agendamento original = getById(id);
         boolean deveMandarEmail = deveMandarEmail(original, request); // TODO - verificar porque está mandando email na

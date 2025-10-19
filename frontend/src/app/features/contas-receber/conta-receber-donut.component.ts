@@ -67,7 +67,7 @@ export class ContaReceberDonutComponent {
         }
       },
       labels: ["Recebido", "A Receber", "Desconto"],
-      colors: ["#22c55e", "#FFCA28", '#3986ff'],
+      colors: ["#22c55e", "#D1D5DB", '#3986ff'],
       legend: { show: false },
       fill: { type: "solid" },
       plotOptions: {
@@ -79,12 +79,14 @@ export class ContaReceberDonutComponent {
               value: {
                 formatter: (val: number) => {
                   return `R$ ${val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                }
+                },
+                showPercentage: false
               },
               total: {
                 show: true,
                 label: "Total",
-                formatter: (val: number) => `R$ ${(valorTotal + valorDesconto).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                formatter: (val: number) => `R$ ${(valorTotal + valorDesconto).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+                showPercentage: false
               }
             }
           }

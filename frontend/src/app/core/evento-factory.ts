@@ -34,7 +34,7 @@ export class EventoFactory {
       <br/>
       DISPONÍVEL
       `,
-      color: { primary: '#10b981', secondary: '#10b981' },
+      color: { primary: '#A78BFA', secondary: '#A78BFA' },
       meta: disponibilidade
     };
   }

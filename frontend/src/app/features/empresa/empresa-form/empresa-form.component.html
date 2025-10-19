@@ -38,7 +38,7 @@
         <div class="flex gap-3">
           <div class="w-full">
             <label class="label-campo">Valor Mín. Mensal</label>
-            <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('valorMinimoMensal', this.isDetalhes)">
+            <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="[classesCampo('valorMinimoMensal', this.isDetalhes), {'!bg-base-100': isDetalhes}]">
               R$ <input type="text" formControlName="valorMinimoMensal" class="campo border-0" mask="separator.2"
                      thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
             </label>
@@ -46,7 +46,7 @@
 
           <div class="w-full">
             <label class="label-campo">Mín. por Funcionário</label>
-            <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('minimoPorFuncionario', this.isDetalhes)">
+            <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="[classesCampo('minimoPorFuncionario', this.isDetalhes), {'!bg-base-100': isDetalhes}]">
               R$ <input type="text" formControlName="minimoPorFuncionario" class="campo border-0" mask="separator.2"
                      thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
             </label>
@@ -54,7 +54,7 @@
 
           <div class="w-full">
             <label class="label-campo">Valor Mês</label>
-            <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('valorMes', this.isDetalhes)">
+            <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="[classesCampo('valorMes', this.isDetalhes), {'!bg-base-100': isDetalhes}]">
               R$ <input type="text" formControlName="valorMes" class="campo border-0" mask="separator.2"
                         thousandSeparator="" decimalMarker="," placeholder="00,00" emptyToNull maxlength="8">
             </label>

@@ -24,6 +24,7 @@ import { DisponibilidadeRequest } from '../disponibilidade/disponibilidade.inter
 import { DisponibilidadeService } from '../disponibilidade/disponibilidade.service';
 import { HonorariosFormComponent } from '../honorarios/honorarios-form.component';
 import { AgendaSemanalService } from '../agenda-semanal/agenda-semanal.service';
+import { ContaReceberService } from '../contas-receber/contas-receber.service';
 
 @Component({
   selector: 'app-agenda-diaria',
@@ -67,6 +68,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
               private pacienteService: PacienteService,
               private disponibilidadeService: DisponibilidadeService,
               private agendaSemanalService: AgendaSemanalService,
+              private contaReceberService: ContaReceberService,
               protected userService: UserService) {
     const navigation = this.router.getCurrentNavigation();
     const pacienteId = navigation?.extras.state?.['pacienteId'];
@@ -193,6 +195,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
       this.agendamentoService.atualizar(this.agendamentoDetalhes.id, agendamento).subscribe({
         next: () => {
           this.toastr.success('Agendamento atualizado');
+          this.contaReceberService.limparCache();
           this.carregarAgendamentos();
           this.exibeForm = false;
           this.agendamentoDetalhes = null;
@@ -202,6 +205,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
       this.agendamentoService.criar(agendamento).subscribe({
         next: () => {
           this.toastr.success(`Agendamento realizado`);
+          this.contaReceberService.limparCache();
           this.carregarAgendamentos();
           this.fecharForm();
         }

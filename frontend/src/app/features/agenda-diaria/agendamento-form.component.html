@@ -240,7 +240,7 @@
             <input type="text" formControlName="valor" min="1" max="99999" id="valor"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker="," required
-                   class="campo border-0" [readOnly]="!this.valorEditavel" (change)="alterouValor($event)">
+                   class="campo border-0" (change)="alterouValor($event)">
           </label>
           <label *ngIf="isInvalid('valor')" class="text-error text-sm">
             Obrigatório
@@ -269,15 +269,17 @@
         <div class="w-[11rem] mr-4">
             <label class="label-campo mb-2">Pagamento</label>
             <div class="flex gap-4 items-center h-[2.4rem]">
-              <label class="flex items-center gap-2 cursor-pointer">
+              <label class="flex items-center gap-2" [ngClass]="{'cursor-pointer': modoSalvar}">
                 <input type="radio" name="tipoPagamento" class="radio radio-primary radio-sm"
                        [checked]="tipoPagamento === 'pago'"
+                       [disabled]="!modoSalvar"
                        (change)="selecionarTipoPagamento('pago')">
                 <span class="text-sm">Pago</span>
               </label>
-              <label class="flex items-center gap-2 cursor-pointer">
+              <label class="flex items-center gap-2" [ngClass]="{'cursor-pointer': modoSalvar}">
                 <input type="radio" name="tipoPagamento" class="radio radio-primary radio-sm"
                        [checked]="tipoPagamento === 'parcial'"
+                       [disabled]="!modoSalvar"
                        (change)="selecionarTipoPagamento('parcial')">
                 <span class="text-sm">Parcial</span>
               </label>
@@ -288,7 +290,7 @@
           <label class="label-campo" for="quantiaPaga">
             Quantia Paga
           </label>
-          <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="{'bg-base-200': tipoPagamento === 'pago'}">
+          <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="{'bg-base-200': tipoPagamento === 'pago' && modoSalvar, '!bg-base-100': !modoSalvar}">
             R$
             <input type="text" formControlName="quantiaPaga" min="0" id="quantiaPaga"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
