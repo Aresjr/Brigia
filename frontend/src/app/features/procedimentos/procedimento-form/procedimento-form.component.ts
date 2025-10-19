@@ -47,6 +47,8 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
   especialidades: Especialidade[] = [];
   unidades: Unidade[] = [];
   unidadesExpandidas: { [key: number]: boolean } = {};
+  conveniosExpandidosPorUnidade: { [key: number]: boolean } = {};
+  planosExpandidosPorUnidade: { [key: number]: boolean } = {};
   TIPO_AGENDAMENTO = TIPO_AGENDAMENTO;
 
   constructor(
@@ -80,6 +82,10 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
       this.loadUnidades()
     ];
     forkJoin(chamadas).subscribe(() => {
+      // Inicializar os preços DEPOIS que tudo foi carregado
+      this.initializePrecosConvenios();
+      this.initializePrecosPlanos();
+
       if (this.registro) {
         this.form.patchValue(this.registro);
         this.form.patchValue({
@@ -131,7 +137,6 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
         map(response => response.items),
         tap(convenios => {
           this.convenios = convenios;
-          this.initializePrecosConvenios();
         })
       );
   }
@@ -142,7 +147,6 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
         map(response => response.items),
         tap(planos => {
           this.planos = planos;
-          this.initializePrecosPlanos();
         })
       );
   }
@@ -153,9 +157,11 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
         map(response => response.items),
         tap(unidades => {
           this.unidades = unidades;
-          // Inicializar todas as unidades como expandidas
+          // Inicializar todas as unidades como recolhidas
           this.unidades.forEach(unidade => {
-            this.unidadesExpandidas[unidade.id] = true;
+            this.unidadesExpandidas[unidade.id] = false;
+            this.conveniosExpandidosPorUnidade[unidade.id] = false;
+            this.planosExpandidosPorUnidade[unidade.id] = false;
           });
         })
       );
@@ -248,6 +254,22 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
 
   podeEditarPrecos(): boolean {
     return this.userService.hasRole(Role.ADMIN) || this.userService.hasRole(Role.FATURAMENTO);
+  }
+
+  toggleConvenios(unidadeId: number) {
+    this.conveniosExpandidosPorUnidade[unidadeId] = !this.conveniosExpandidosPorUnidade[unidadeId];
+  }
+
+  isConveniosExpandido(unidadeId: number): boolean {
+    return this.conveniosExpandidosPorUnidade[unidadeId] || false;
+  }
+
+  togglePlanos(unidadeId: number) {
+    this.planosExpandidosPorUnidade[unidadeId] = !this.planosExpandidosPorUnidade[unidadeId];
+  }
+
+  isPlanosExpandido(unidadeId: number): boolean {
+    return this.planosExpandidosPorUnidade[unidadeId] || false;
   }
 
   protected readonly limitLength = limitLength;

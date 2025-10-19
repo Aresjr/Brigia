@@ -80,16 +80,17 @@
           </textarea>
         </div>
 
+        <!-- Lista de Unidades Collapsible -->
         <div class="mt-6" *ngIf="podeEditarPrecos()">
           <div class="flex justify-between items-center mb-2">
-            <h3 class="text-lg font-medium">Valores por Convênio</h3>
+            <h3 class="text-lg font-medium">Preços por Unidade</h3>
           </div>
 
-          <!-- Lista de Unidades Collapsible -->
-          <div class="space-y-2" formArrayName="precosConvenios">
+          <div class="space-y-2">
             <div *ngFor="let unidade of unidades" class="border border-base-300 rounded-lg">
               <!-- Header da Unidade (Collapsible) -->
-              <div class="flex items-center justify-between p-3 cursor-pointer bg-base-200 rounded-t-lg hover:bg-base-300"
+              <div class="flex items-center justify-between p-3 cursor-pointer bg-base-200 hover:bg-base-300"
+                   [ngClass]="{'rounded-t-lg': isUnidadeExpandida(unidade.id), 'rounded-lg': !isUnidadeExpandida(unidade.id)}"
                    (click)="toggleUnidade(unidade.id)">
                 <h4 class="font-medium">{{ unidade.nome }}</h4>
                 <lucide-icon
@@ -99,64 +100,90 @@
               </div>
 
               <!-- Conteúdo Expandido da Unidade -->
-              <div *ngIf="isUnidadeExpandida(unidade.id)" class="p-3">
-                <!-- Header da Tabela -->
-                <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 pb-2 font-medium text-sm">
-                  <div>Convênio</div>
-                  <div>Valor</div>
-                  <div>Repasse</div>
-                </div>
+              <div *ngIf="isUnidadeExpandida(unidade.id)" class="p-3 space-y-2">
 
-                <!-- Linhas de Preços -->
-                <div class="space-y-1">
-                  <ng-container *ngFor="let preco of getPrecosPorUnidade(unidade.id); let i = index">
-                    <div [formGroupName]="precosConvenios.controls.indexOf(preco)"
-                         class="grid grid-cols-[1fr_8rem_8rem] gap-3 py-1 items-center hover:bg-base-100 rounded-lg">
+                <!-- Seção de Preços por Convênio (Collapsible) -->
+                <div class="border border-base-300 rounded-lg">
+                  <div class="flex items-center justify-between p-2 cursor-pointer bg-base-100 hover:bg-base-200"
+                       [ngClass]="{'rounded-t-lg': isConveniosExpandido(unidade.id), 'rounded-lg': !isConveniosExpandido(unidade.id)}"
+                       (click)="toggleConvenios(unidade.id)">
+                    <h5 class="font-medium text-sm">Preços por Convênio</h5>
+                    <lucide-icon
+                      [name]="isConveniosExpandido(unidade.id) ? 'chevron-down' : 'chevron-right'"
+                      class="inline w-4 h-4">
+                    </lucide-icon>
+                  </div>
 
-                      <div class="text-sm">{{preco.get('convenioNome')?.value}}</div>
-
-                      <input type="text" formControlName="preco" required
-                             mask="separator.2" thousandSeparator="" decimalMarker=","
-                             class="campo mt-0 p-1 text-right" min="0" max="99999" step="1">
-
-                      <input type="number" formControlName="repasse"
-                             mask="separator.2" thousandSeparator="" decimalMarker=","
-                             class="campo mt-0 p-1 text-right" min="0" max="99999" step="1">
+                  <div *ngIf="isConveniosExpandido(unidade.id)" class="p-2" formArrayName="precosConvenios">
+                    <!-- Header da Tabela -->
+                    <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 pb-2 font-medium text-xs">
+                      <div>Convênio</div>
+                      <div>Valor</div>
+                      <div>Repasse</div>
                     </div>
-                  </ng-container>
+
+                    <!-- Linhas de Preços -->
+                    <div class="space-y-1">
+                      <ng-container *ngFor="let preco of getPrecosPorUnidade(unidade.id); let i = index">
+                        <div [formGroupName]="precosConvenios.controls.indexOf(preco)"
+                             class="grid grid-cols-[1fr_8rem_8rem] gap-3 py-1 items-center hover:bg-base-100 rounded-lg">
+
+                          <div class="text-sm">{{preco.get('convenioNome')?.value}}</div>
+
+                          <input type="text" formControlName="preco" required
+                                 mask="separator.2" thousandSeparator="" decimalMarker=","
+                                 class="campo mt-0 p-1 text-right" min="0" max="99999" step="1">
+
+                          <input type="number" formControlName="repasse"
+                                 mask="separator.2" thousandSeparator="" decimalMarker=","
+                                 class="campo mt-0 p-1 text-right" min="0" max="99999" step="1">
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
                 </div>
+
+                <!-- Seção de Preços por Plano Empresarial (Collapsible) -->
+                <div class="border border-base-300 rounded-lg">
+                  <div class="flex items-center justify-between p-2 cursor-pointer bg-base-100 hover:bg-base-200"
+                       [ngClass]="{'rounded-t-lg': isPlanosExpandido(unidade.id), 'rounded-lg': !isPlanosExpandido(unidade.id)}"
+                       (click)="togglePlanos(unidade.id)">
+                    <h5 class="font-medium text-sm">Preços por Plano Empresarial</h5>
+                    <lucide-icon
+                      [name]="isPlanosExpandido(unidade.id) ? 'chevron-down' : 'chevron-right'"
+                      class="inline w-4 h-4">
+                    </lucide-icon>
+                  </div>
+
+                  <div *ngIf="isPlanosExpandido(unidade.id)" class="p-2" formArrayName="precosPlanos">
+                    <!-- Header da Tabela -->
+                    <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 pb-2 font-medium text-xs">
+                      <div>Plano</div>
+                      <div>Valor</div>
+                      <div>Repasse</div>
+                    </div>
+
+                    <!-- Linhas de Preços -->
+                    <div class="space-y-1">
+                      <div *ngFor="let preco of precosPlanos.controls; let i = index" [formGroupName]="i"
+                           class="grid grid-cols-[1fr_8rem_8rem] gap-3 py-1 items-center hover:bg-base-200 rounded-lg">
+
+                        <div class="text-sm">{{preco.get('nome')?.value}}</div>
+
+                        <input type="text" [id]="'preco_plano_' + i" formControlName="preco" required
+                               mask="separator.2" thousandSeparator="" decimalMarker=","
+                               class="campo mt-0 p-1 text-right" min="0" max="99999" step="1"
+                               [ngClass]="classesCampo('preco_plano_' + i)" >
+
+                        <input [id]="'repasse_plano_' + i" type="number" formControlName="repasse"
+                               mask="separator.2" thousandSeparator="" decimalMarker=","
+                               class="campo mt-0 p-1 text-right" min="0" max="99999" step="1">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-6">
-          <div class="flex justify-between items-center mb-2">
-            <h3 class="text-lg font-medium">Valores por Plano Empresarial</h3>
-          </div>
-
-          <div class="rounded-t-lg">
-            <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 p-3 font-medium">
-              <div>Plano</div>
-              <div>Valor</div>
-              <div>Repasse</div>
-            </div>
-          </div>
-
-          <div class="space-y-1" formArrayName="precosPlanos">
-            <div *ngFor="let preco of precosPlanos.controls; let i = index" [formGroupName]="i"
-                 class="grid grid-cols-[1fr_8rem_8rem] gap-3 px-3 py-1 items-center hover:bg-base-200 rounded-lg">
-
-              <div class="text-sm">{{preco.get('nome')?.value}}</div>
-
-              <input type="text" [id]="'preco_plano_' + i" formControlName="preco" required
-                     mask="separator.2" thousandSeparator="" decimalMarker=","
-                     class="campo mt-0 p-1 text-right" min="0" max="99999" step="1"
-                     [ngClass]="classesCampo('preco_plano_' + i)" >
-
-              <input [id]="'repasse_plano_' + i" type="number" formControlName="repasse"
-                     mask="separator.2" thousandSeparator="" decimalMarker=","
-                     class="campo mt-0 p-1 text-right" min="0" max="99999" step="1">
             </div>
           </div>
         </div>

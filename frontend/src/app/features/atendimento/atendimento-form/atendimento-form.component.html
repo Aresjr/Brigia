@@ -150,61 +150,61 @@
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-2" [ngClass]="{ 'visualizacao': readonly }">
 
-      <div class="inline-flex rounded-lg border border-base-300 p-1 mb-1">
+      <div class="flex border-b border-base-300 mb-2">
         <button type="button"
           (click)="selecionarAba('anamnese')"
-          class="btn btn-sm"
+          class="px-4 py-2 text-sm font-medium transition-colors"
           [class]="abaAtiva === 'anamnese'
-            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
-            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+            ? 'border-b-2 border-primary text-primary'
+            : 'text-neutral hover:text-base-content'">
           Anamnese
         </button>
         <button type="button"
           (click)="selecionarAba('exameFisico')"
-          class="btn btn-sm"
+          class="px-4 py-2 text-sm font-medium transition-colors"
           [class]="abaAtiva === 'exameFisico'
-            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
-            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+            ? 'border-b-2 border-primary text-primary'
+            : 'text-neutral hover:text-base-content'">
           Exame Físico
         </button>
         <button type="button"
           (click)="selecionarAba('diagnostico')"
-          class="btn btn-sm"
+          class="px-4 py-2 text-sm font-medium transition-colors"
           [class]="abaAtiva === 'diagnostico'
-            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
-            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+            ? 'border-b-2 border-primary text-primary'
+            : 'text-neutral hover:text-base-content'">
           Diagnóstico
         </button>
         <button type="button"
           (click)="selecionarAba('evolucaoClinica')"
-          class="btn btn-sm"
+          class="px-4 py-2 text-sm font-medium transition-colors"
           [class]="abaAtiva === 'evolucaoClinica'
-            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
-            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+            ? 'border-b-2 border-primary text-primary'
+            : 'text-neutral hover:text-base-content'">
           Evolução Clínica
         </button>
         <button type="button"
           (click)="selecionarAba('examesSolicitados')"
-          class="btn btn-sm"
+          class="px-4 py-2 text-sm font-medium transition-colors"
           [class]="abaAtiva === 'examesSolicitados'
-            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
-            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+            ? 'border-b-2 border-primary text-primary'
+            : 'text-neutral hover:text-base-content'">
           Exames Solicitados
         </button>
         <button type="button"
           (click)="selecionarAba('prescricoes')"
-          class="btn btn-sm"
+          class="px-4 py-2 text-sm font-medium transition-colors"
           [class]="abaAtiva === 'prescricoes'
-            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
-            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+            ? 'border-b-2 border-primary text-primary'
+            : 'text-neutral hover:text-base-content'">
           Prescrições
         </button>
         <button type="button"
           (click)="selecionarAba('observacoes')"
-          class="btn btn-sm"
+          class="px-4 py-2 text-sm font-medium transition-colors"
           [class]="abaAtiva === 'observacoes'
-            ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
-            : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-base-300'">
+            ? 'border-b-2 border-primary text-primary'
+            : 'text-neutral hover:text-base-content'">
           Observações
         </button>
       </div>

@@ -67,7 +67,7 @@ export class ContaReceberDonutComponent {
         }
       },
       labels: ["Recebido", "A Receber", "Desconto"],
-      colors: ["#22c55e", "#D1D5DB", '#3986ff'],
+      colors: ["#22c55e", "#D1D5DB", '#f59e0b'],
       legend: { show: false },
       fill: { type: "solid" },
       plotOptions: {
