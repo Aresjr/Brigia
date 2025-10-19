@@ -111,10 +111,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             agendamentoNovo = repository.save(agendamentoNovo);
         }
 
-        // Criar conta a receber se pago=true
-        if (Boolean.TRUE.equals(request.pago())) {
-            contaReceberService.createContaReceberFromAgendamento(agendamentoNovo);
-        }
+        contaReceberService.createContaReceberFromAgendamento(agendamentoNovo);
 
         sendEmail(agendamentoNovo, "Agendamento Realizado!", "agendamento-cadastrado");
 
