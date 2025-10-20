@@ -88,8 +88,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
     });
   }
 
-  toggleAgendaSemanal() {
-    this.agendaSemanal = !this.agendaSemanal;
+  setTipoAgenda(semanal: boolean) {
+    this.agendaSemanal = semanal;
 
     if (this.agendaSemanal) {
       // Modo agenda semanal - tornar campos de dia específico opcionais
@@ -106,6 +106,10 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
     this.form.get('dia')?.updateValueAndValidity();
     this.form.get('horaInicial')?.updateValueAndValidity();
     this.form.get('horaFinal')?.updateValueAndValidity();
+  }
+
+  toggleAgendaSemanal() {
+    this.setTipoAgenda(!this.agendaSemanal);
   }
 
   override ngOnInit(): void {
@@ -236,6 +240,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
 
   salvarAgendaSemanal() {
     const profissionalId = this.form.value.profissionalId;
+    const valorAdicional = this.form.value.valorAdicional;
     const horariosAtivos = this.horariosSemana.controls
       .filter((control: any) => control.value.ativo)
       .map((control: any) => control.value);
@@ -246,7 +251,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
         profissionalId: profissionalId,
         diaSemana: horario.diaSemana,
         horaInicial: horario.horaInicial,
-        horaFinal: horario.horaFinal
+        horaFinal: horario.horaFinal,
+        valorAdicional: valorAdicional
       });
     });
 

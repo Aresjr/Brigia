@@ -4,6 +4,7 @@ import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.HonorarioRequest;
 import br.com.nemeia.brigia.model.*;
 import br.com.nemeia.brigia.repository.AgendamentoRepository;
+import br.com.nemeia.brigia.repository.AgendaSemanalRepository;
 import br.com.nemeia.brigia.repository.DisponibilidadeRepository;
 import br.com.nemeia.brigia.repository.HonorarioRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -23,15 +24,18 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
     private final UnidadeService unidadeService;
     private final AgendamentoRepository agendamentoRepository;
     private final DisponibilidadeRepository disponibilidadeRepository;
+    private final AgendaSemanalRepository agendaSemanalRepository;
 
     public HonorarioService(HonorarioRepository repository, ProfissionalService profissionalService,
             UnidadeService unidadeService, AgendamentoRepository agendamentoRepository,
-            DisponibilidadeRepository disponibilidadeRepository) {
+            DisponibilidadeRepository disponibilidadeRepository,
+            AgendaSemanalRepository agendaSemanalRepository) {
         super(repository);
         this.profissionalService = profissionalService;
         this.unidadeService = unidadeService;
         this.agendamentoRepository = agendamentoRepository;
         this.disponibilidadeRepository = disponibilidadeRepository;
+        this.agendaSemanalRepository = agendaSemanalRepository;
     }
 
     @Transactional
@@ -85,19 +89,39 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
     }
 
     private BigDecimal calcularValorAdicional(List<Agendamento> agendamentos) {
-        BigDecimal totalAdicional = BigDecimal.ZERO;
+        if (agendamentos.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
 
-        for (Agendamento ag : agendamentos) {
-            // Buscar disponibilidade associada ao agendamento
-            Optional<Disponibilidade> disponibilidadeOpt = disponibilidadeRepository
-                    .findByProfissionalAndDiaAndHora(ag.getProfissional().getId(), ag.getData(), ag.getHora());
+        // Pegar o primeiro agendamento para obter profissional e data
+        Agendamento primeiroAgendamento = agendamentos.get(0);
+        Long profissionalId = primeiroAgendamento.getProfissional().getId();
+        LocalDate data = primeiroAgendamento.getData();
 
-            if (disponibilidadeOpt.isPresent() && disponibilidadeOpt.get().getValorAdicional() != null) {
-                totalAdicional = totalAdicional.add(disponibilidadeOpt.get().getValorAdicional());
+        // Primeiro, tentar buscar valor adicional da disponibilidade diária
+        Optional<Disponibilidade> disponibilidadeOpt = disponibilidadeRepository
+                .findByProfissionalAndDiaAndHora(profissionalId, data, primeiroAgendamento.getHora());
+
+        if (disponibilidadeOpt.isPresent() && disponibilidadeOpt.get().getValorAdicional() != null) {
+            return disponibilidadeOpt.get().getValorAdicional();
+        }
+
+        // Se não encontrou na disponibilidade diária, buscar na agenda semanal
+        Integer diaSemana = data.getDayOfWeek().getValue() % 7; // Converter para 0=Domingo, 6=Sábado
+        List<AgendaSemanal> agendasSemanais = agendaSemanalRepository
+                .findByProfissionalIdAndDiaSemana(profissionalId, diaSemana);
+
+        // Buscar agenda semanal que corresponde ao horário do agendamento
+        for (AgendaSemanal agenda : agendasSemanais) {
+            if (primeiroAgendamento.getHora().compareTo(agenda.getHoraInicial()) >= 0 &&
+                primeiroAgendamento.getHora().compareTo(agenda.getHoraFinal()) < 0) {
+                if (agenda.getValorAdicional() != null) {
+                    return agenda.getValorAdicional();
+                }
             }
         }
 
-        return totalAdicional;
+        return BigDecimal.ZERO;
     }
 
     @Override

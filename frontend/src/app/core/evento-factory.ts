@@ -30,9 +30,9 @@ export class EventoFactory {
       end: data.end,
       title: `${disponibilidade.profissional.nome}
       <br/>
-      ${disponibilidade.horaInicial} - ${disponibilidade.horaFinal}
-      <br/>
       DISPONÍVEL
+      <br/>
+      ${disponibilidade.horaInicial} - ${disponibilidade.horaFinal}
       `,
       color: { primary: '#A78BFA', secondary: '#A78BFA' },
       meta: disponibilidade
@@ -91,11 +91,11 @@ export class EventoFactory {
           end: end,
           title: `${agendaSemanal.profissional.nome}
           <br/>
-          ${agendaSemanal.horaInicial} - ${agendaSemanal.horaFinal}
-          <br/>
           DISPONÍVEL (SEMANAL)
+          <br/>
+          ${agendaSemanal.horaInicial} - ${agendaSemanal.horaFinal}
           `,
-          color: { primary: '#10b981', secondary: '#10b981' },
+          color: { primary: '#A78BFA', secondary: '#A78BFA' },
           meta: {
             ...agendaSemanal,
             dia: dataAtual.toISOString().split('T')[0] // Adicionar data específica ao meta

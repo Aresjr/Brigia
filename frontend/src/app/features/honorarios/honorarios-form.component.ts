@@ -11,6 +11,8 @@ import { ToastrService } from 'ngx-toastr';
 import { HonorarioService } from './honorario.service';
 import { Honorario } from './honorario.interface';
 import { abrirDatePicker } from '../../core/util-methods';
+import { DisponibilidadeService } from '../disponibilidade/disponibilidade.service';
+import { AgendaSemanalService } from '../agenda-semanal/agenda-semanal.service';
 
 @Component({
   selector: 'app-honorarios-form',
@@ -35,13 +37,16 @@ export class HonorariosFormComponent implements OnInit {
   isLoading: boolean = false;
   hoje: string;
   modoDetalhes: boolean = false;
+  valorAdicionalCalculado: number = 0;
 
   constructor(
     private fb: FormBuilder,
     private profissionalService: ProfissionalService,
     private agendamentoService: AgendamentoService,
     private toastr: ToastrService,
-    private honorarioService: HonorarioService
+    private honorarioService: HonorarioService,
+    private disponibilidadeService: DisponibilidadeService,
+    private agendaSemanalService: AgendaSemanalService
   ) {
     this.hoje = new Date().toISOString().split('T')[0];
     this.form = this.fb.group({
@@ -94,6 +99,7 @@ export class HonorariosFormComponent implements OnInit {
 
     if (!profissionalId || !data) {
       this.agendamentos = [];
+      this.valorAdicionalCalculado = 0;
       return;
     }
 
@@ -107,10 +113,60 @@ export class HonorariosFormComponent implements OnInit {
           return ag.profissional.id === profissionalId &&
                  agData.toDateString() === dataObj.toDateString();
         });
+
+        // Buscar valor adicional
+        if (this.agendamentos.length > 0) {
+          this.buscarValorAdicional(profissionalId, data, this.agendamentos[0].hora);
+        } else {
+          this.valorAdicionalCalculado = 0;
+        }
+
         this.isLoading = false;
       },
       error: () => {
         this.isLoading = false;
+      }
+    });
+  }
+
+  buscarValorAdicional(profissionalId: number, data: string, hora: string) {
+    // Primeiro, buscar na disponibilidade diária
+    this.disponibilidadeService.listar().subscribe({
+      next: (response) => {
+        const disponibilidade = response.items.find(d =>
+          d.profissional.id === profissionalId &&
+          d.dia === data &&
+          d.horaInicial <= hora &&
+          d.horaFinal > hora
+        );
+
+        if (disponibilidade?.valorAdicional) {
+          this.valorAdicionalCalculado = disponibilidade.valorAdicional;
+        } else {
+          // Se não encontrou na disponibilidade, buscar na agenda semanal
+          this.buscarValorAdicionalAgendaSemanal(profissionalId, data, hora);
+        }
+      }
+    });
+  }
+
+  buscarValorAdicionalAgendaSemanal(profissionalId: number, data: string, hora: string) {
+    const dataObj = new Date(data);
+    const diaSemana = dataObj.getDay(); // 0=Domingo, 6=Sábado
+
+    this.agendaSemanalService.listar(profissionalId).subscribe({
+      next: (response) => {
+        const agendaSemanal = response.find(a =>
+          a.diaSemana === diaSemana &&
+          a.horaInicial <= hora &&
+          a.horaFinal > hora
+        );
+
+        if (agendaSemanal?.valorAdicional) {
+          this.valorAdicionalCalculado = agendaSemanal.valorAdicional;
+        } else {
+          this.valorAdicionalCalculado = 0;
+        }
       }
     });
   }
@@ -153,8 +209,8 @@ export class HonorariosFormComponent implements OnInit {
     if (this.modoDetalhes && this.honorario) {
       return this.honorario.valorAdicional || 0;
     }
-    // Se está gerando novo honorário, não temos como calcular pois depende do backend
-    return 0;
+    // Se está gerando novo honorário, retorna o valor calculado
+    return this.valorAdicionalCalculado;
   }
 
   fechar() {

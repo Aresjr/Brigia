@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalTime;
 
 @Getter
@@ -29,4 +30,7 @@ public class AgendaSemanal extends BaseModel {
 
     @Column(name = "hora_final", nullable = false)
     private LocalTime horaFinal;
+
+    @Column(name = "valor_adicional")
+    private BigDecimal valorAdicional;
 }

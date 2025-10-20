@@ -6,6 +6,7 @@ export interface AgendaSemanal extends Entidade {
   diaSemana: number; // 0 = Domingo, 1 = Segunda, ... 6 = Sábado
   horaInicial: string;
   horaFinal: string;
+  valorAdicional?: number;
 }
 
 export interface AgendaSemanalRequest extends EntidadeRequest {
@@ -13,6 +14,7 @@ export interface AgendaSemanalRequest extends EntidadeRequest {
   diaSemana: number;
   horaInicial: string;
   horaFinal: string;
+  valorAdicional?: number;
 }
 
 export interface HorarioSemana {

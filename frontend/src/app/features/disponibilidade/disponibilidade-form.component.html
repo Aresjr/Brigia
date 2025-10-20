@@ -37,15 +37,23 @@
         </label>
       </div>
 
-      <div class="mb-4 tooltip" data-tip="Criar agenda recorrente para todos os dias da semana selecionados">
-        <label class="label-campo flex items-center gap-2 cursor-pointer">
-          <input type="checkbox" class="checkbox checkbox-primary"
-                 [(ngModel)]="agendaSemanal"
-                 [ngModelOptions]="{standalone: true}"
-                 (click)="toggleAgendaSemanal()"
-                 [disabled]="readonly">
-          <span>Agenda Semanal</span>
-        </label>
+      <!-- Toggle Agenda Semanal / Diária (somente no modo cadastro) -->
+      <div *ngIf="!disponibilidadeDetalhes" class="mb-4">
+        <label class="label-campo mb-2">Tipo de Agenda</label>
+        <div class="flex gap-4 items-center">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="tipoAgenda" class="radio radio-primary radio-sm"
+                   [checked]="!agendaSemanal"
+                   (change)="setTipoAgenda(false)">
+            <span class="text-sm">Agenda Diária</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="tipoAgenda" class="radio radio-primary radio-sm"
+                   [checked]="agendaSemanal"
+                   (change)="setTipoAgenda(true)">
+            <span class="text-sm">Agenda Semanal</span>
+          </label>
+        </div>
       </div>
 
       <!-- Modo Dia Específico -->
