@@ -1,9 +1,3 @@
-import { FormBuilder } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
-import { ProfissionalService } from '../features/profissionais/profissional.service';
-import { AgendaSemanalService } from '../features/agenda-semanal/agenda-semanal.service';
-import { DisponibilidadeService } from '../features/disponibilidade/disponibilidade.service';
-
 export enum Role {
   ADMIN = 'ADMIN',
   RECEPCIONISTA = 'RECEPCIONISTA',

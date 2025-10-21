@@ -143,23 +143,17 @@ export class HonorariosFormComponent implements OnInit {
         const valorDiario = disponibilidades.reduce((sum, d) => sum + (d.valorAdicional || 0), 0);
 
         // Buscar também na agenda semanal e somar
-        const dataObj = new Date(data);
+        // IMPORTANTE: Adicionar 'T00:00:00' para evitar problemas de timezone
+        const dataObj = new Date(data + 'T00:00:00');
         const diaSemana = dataObj.getDay(); // 0=Domingo, 6=Sábado
-
-        console.log('before this.agendaSemanalService.listarPorProfissional');
 
         this.agendaSemanalService.listarPorProfissional(profissionalId).subscribe({
           next: (responseAgenda) => {
-
-            console.log('responseAgenda', responseAgenda);
 
             // Somar TODAS as agendas semanais do dia
             const valorSemanal = responseAgenda
               .filter(a => a.diaSemana === diaSemana)
               .reduce((sum, a) => sum + (a.valorAdicional || 0), 0);
-
-            console.log('diaSemana', diaSemana);
-            console.log('valorSemanal', valorSemanal);
 
             // Total = disponibilidades diárias + agendas semanais
             this.valorAdicionalCalculado = valorDiario + valorSemanal;
@@ -172,7 +166,7 @@ export class HonorariosFormComponent implements OnInit {
       },
       error: () => {
         // Se erro ao buscar disponibilidades, tentar apenas agenda semanal
-        const dataObj = new Date(data);
+        const dataObj = new Date(data + 'T00:00:00');
         const diaSemana = dataObj.getDay();
 
         this.agendaSemanalService.listarPorProfissional(profissionalId).subscribe({

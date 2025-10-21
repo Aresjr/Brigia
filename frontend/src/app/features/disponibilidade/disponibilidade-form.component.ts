@@ -89,8 +89,6 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   setTipoAgenda(semanal: boolean) {
     this.agendaSemanal = semanal;
 
-    console.log('this.agendaSemanal', this.agendaSemanal);
-
     if (this.agendaSemanal) {
       // Modo agenda semanal - tornar campos de dia específico opcionais
       this.form.get('dia')?.clearValidators();
@@ -218,8 +216,6 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
 
   override onSubmit() {
 
-    console.log('onSubmit disponibilidade');
-
     if (this.agendaSemanal) {
       // Validar agenda semanal
       if (!this.formValidoAgendaSemanal()) {
@@ -244,7 +240,6 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   salvarDisponibilidade(disponibilidade: Partial<DisponibilidadeRequest>) {
     if (this.disponibilidadeDetalhes) {
       // Atualizar disponibilidade existente
-      console.log('salvarDisponibilidade');
       this.disponibilidadeService.atualizar(this.disponibilidadeDetalhes.id, disponibilidade).subscribe({
         next: () => {
           this.toastr.success('Disponibilidade atualizada');

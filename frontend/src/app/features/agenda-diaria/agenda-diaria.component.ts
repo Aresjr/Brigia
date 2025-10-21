@@ -192,7 +192,6 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
 
   salvar(agendamento: Partial<AgendamentoRequest>) {
     if (this.agendamentoDetalhes) {
-      console.log('salvar this.agendamentoService.atualizar');
       this.agendamentoService.atualizar(this.agendamentoDetalhes.id, agendamento).subscribe({
         next: () => {
           this.toastr.success('Agendamento atualizado');
