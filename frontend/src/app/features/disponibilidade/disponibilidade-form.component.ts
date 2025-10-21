@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormArray, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
 import { NgClass, NgIf, NgFor } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
@@ -36,6 +36,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   @Input() dataDisponibilidade: Date | null = null;
   @Input() profissionalId: number | null = null;
   @Input() disponibilidadeDetalhes: any = null;
+  @Output() saved = new EventEmitter<void>();
 
   titulo: string = 'Nova Agenda do Médico';
   hoje: string;
@@ -216,6 +217,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
 
   override onSubmit() {
 
+    console.log('onSubmit disponibilidade');
+
     if (this.agendaSemanal) {
       // Validar agenda semanal
       if (!this.formValidoAgendaSemanal()) {
@@ -225,13 +228,36 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
     } else {
       // Validar e salvar disponibilidade normal
       if (this.formValido()) {
-        this.save.emit(this.form.value);
+
+        this.salvarDisponibilidade(this.form.value);
+
       } else {
         Object.keys(this.form.controls).forEach(field => {
           const control = this.form.get(field);
           control?.markAsTouched({ onlySelf: true });
         });
       }
+    }
+  }
+
+  salvarDisponibilidade(disponibilidade: Partial<DisponibilidadeRequest>) {
+    if (this.disponibilidadeDetalhes) {
+      // Atualizar disponibilidade existente
+      console.log('salvarDisponibilidade');
+      this.disponibilidadeService.atualizar(this.disponibilidadeDetalhes.id, disponibilidade).subscribe({
+        next: () => {
+          this.toastr.success('Disponibilidade atualizada');
+          this.saved.emit();
+        }
+      });
+    } else {
+      // Criar nova disponibilidade
+      this.disponibilidadeService.criar(disponibilidade).subscribe({
+        next: () => {
+          this.toastr.success('Disponibilidade criada');
+          this.saved.emit();
+        }
+      });
     }
   }
 
@@ -289,6 +315,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
     forkJoin(requests).subscribe({
       next: () => {
         this.toastr.success('Agenda semanal criada com sucesso');
+        this.saved.emit();
       },
       error: (error) => {
         console.error('Erro ao salvar agenda semanal:', error);

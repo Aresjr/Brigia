@@ -89,7 +89,7 @@
   <app-disponibilidade-form
     [disponibilidadeDetalhes]="disponibilidadeDetalhes"
     [profissionalId]="profissionalFiltro !== 0 ? profissionalFiltro : null"
-    (save)="salvarDisponibilidade($event)"
+    (saved)="exibeFormDisponibilidade = false; carregarAgendamentos();"
     (cancel)="fecharFormDisponibilidade()">
   </app-disponibilidade-form>
 }

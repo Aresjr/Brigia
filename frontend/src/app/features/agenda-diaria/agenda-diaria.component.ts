@@ -320,29 +320,6 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     this.exibeFormHonorarios = false;
   }
 
-  salvarDisponibilidade(disponibilidade: Partial<DisponibilidadeRequest>) {
-    if (this.disponibilidadeDetalhes) {
-      // Atualizar disponibilidade existente
-      console.log('salvarDisponibilidade');
-      this.disponibilidadeService.atualizar(this.disponibilidadeDetalhes.id, disponibilidade).subscribe({
-        next: () => {
-          this.toastr.success('Disponibilidade atualizada');
-          this.carregarAgendamentos();
-          this.fecharFormDisponibilidade();
-        }
-      });
-    } else {
-      // Criar nova disponibilidade
-      this.disponibilidadeService.criar(disponibilidade).subscribe({
-        next: () => {
-          this.toastr.success('Disponibilidade criada');
-          this.carregarAgendamentos();
-          this.fecharFormDisponibilidade();
-        }
-      });
-    }
-  }
-
   detalhesDisponibilidade(disponibilidade: any) {
     this.disponibilidadeDetalhes = disponibilidade;
     this.exibeFormDisponibilidade = true;
