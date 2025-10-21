@@ -121,8 +121,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     @CacheEvict(value = {"agendamentos", "contasReceber"}, allEntries = true)
     public Agendamento editAgendamento(Long id, AgendamentoRequest request) {
         Agendamento original = getById(id);
-        boolean deveMandarEmail = deveMandarEmail(original, request); // TODO - verificar porque está mandando email na
-                                                                      // edição
+        boolean deveMandarEmail = deveMandarEmail(original, request);
 
         // Validar disponibilidade do profissional, exceto se for encaixe
         validarDisponibilidadeProfissional(request, id);

@@ -90,6 +90,7 @@
     [disponibilidadeDetalhes]="disponibilidadeDetalhes"
     [profissionalId]="profissionalFiltro !== 0 ? profissionalFiltro : null"
     (saved)="exibeFormDisponibilidade = false; carregarAgendamentos();"
+    (deleted)="exibeFormDisponibilidade = false; carregarAgendamentos();"
     (cancel)="fecharFormDisponibilidade()">
   </app-disponibilidade-form>
 }

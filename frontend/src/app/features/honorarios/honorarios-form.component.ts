@@ -130,11 +130,11 @@ export class HonorariosFormComponent implements OnInit {
   }
 
   buscarValorAdicional(profissionalId: number, data: string, hora: string) {
-    // Primeiro, buscar na disponibilidade diária
+    // Buscar na disponibilidade diária
     this.disponibilidadeService.listar().subscribe({
-      next: (response) => {
+      next: (responseDisp) => {
         // Filtrar TODAS as disponibilidades do dia para o profissional
-        const disponibilidades = response.items.filter(d =>
+        const disponibilidades = responseDisp.items.filter(d =>
           d.profissional.id === profissionalId &&
           d.dia === data
         );
@@ -142,33 +142,51 @@ export class HonorariosFormComponent implements OnInit {
         // Somar todos os valores adicionais das disponibilidades do dia
         const valorDiario = disponibilidades.reduce((sum, d) => sum + (d.valorAdicional || 0), 0);
 
-        if (valorDiario > 0) {
-          this.valorAdicionalCalculado = valorDiario;
-        } else {
-          // Se não encontrou na disponibilidade, buscar na agenda semanal
-          this.buscarValorAdicionalAgendaSemanal(profissionalId, data, hora);
-        }
-      }
-    });
-  }
+        // Buscar também na agenda semanal e somar
+        const dataObj = new Date(data);
+        const diaSemana = dataObj.getDay(); // 0=Domingo, 6=Sábado
 
-  buscarValorAdicionalAgendaSemanal(profissionalId: number, data: string, hora: string) {
-    const dataObj = new Date(data);
-    const diaSemana = dataObj.getDay(); // 0=Domingo, 6=Sábado
+        console.log('before this.agendaSemanalService.listarPorProfissional');
 
-    this.agendaSemanalService.listarPorProfissional(profissionalId).subscribe({
-      next: (response) => {
-        const agendaSemanal = response.find(a =>
-          a.diaSemana === diaSemana &&
-          a.horaInicial <= hora &&
-          a.horaFinal > hora
-        );
+        this.agendaSemanalService.listarPorProfissional(profissionalId).subscribe({
+          next: (responseAgenda) => {
 
-        if (agendaSemanal?.valorAdicional) {
-          this.valorAdicionalCalculado = agendaSemanal.valorAdicional;
-        } else {
-          this.valorAdicionalCalculado = 0;
-        }
+            console.log('responseAgenda', responseAgenda);
+
+            // Somar TODAS as agendas semanais do dia
+            const valorSemanal = responseAgenda
+              .filter(a => a.diaSemana === diaSemana)
+              .reduce((sum, a) => sum + (a.valorAdicional || 0), 0);
+
+            console.log('diaSemana', diaSemana);
+            console.log('valorSemanal', valorSemanal);
+
+            // Total = disponibilidades diárias + agendas semanais
+            this.valorAdicionalCalculado = valorDiario + valorSemanal;
+          },
+          error: () => {
+            // Se erro ao buscar agenda semanal, usar apenas valor diário
+            this.valorAdicionalCalculado = valorDiario;
+          }
+        });
+      },
+      error: () => {
+        // Se erro ao buscar disponibilidades, tentar apenas agenda semanal
+        const dataObj = new Date(data);
+        const diaSemana = dataObj.getDay();
+
+        this.agendaSemanalService.listarPorProfissional(profissionalId).subscribe({
+          next: (responseAgenda) => {
+            const valorSemanal = responseAgenda
+              .filter(a => a.diaSemana === diaSemana)
+              .reduce((sum, a) => sum + (a.valorAdicional || 0), 0);
+
+            this.valorAdicionalCalculado = valorSemanal;
+          },
+          error: () => {
+            this.valorAdicionalCalculado = 0;
+          }
+        });
       }
     });
   }

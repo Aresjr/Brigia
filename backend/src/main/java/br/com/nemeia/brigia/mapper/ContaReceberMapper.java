@@ -52,9 +52,9 @@ public class ContaReceberMapper extends BaseMapper<ContaReceber, Void, ContaRece
         contaReceber.setDataAgendamento(agendamento.getData());
         contaReceber.setValorAgendamento(agendamento.getValor());
         contaReceber.setValorDesconto(agendamento.getDesconto() != null ? agendamento.getDesconto() : BigDecimal.ZERO);
-        var valorProcedimentos = agendamento.getProcedimentos().stream()
+        var valorProcedimentos = agendamento.getProcedimentos() != null ? agendamento.getProcedimentos().stream()
                 .map(proc -> proc.getValor() != null ? proc.getValor() : BigDecimal.ZERO)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(BigDecimal.ZERO, BigDecimal::add) : BigDecimal.ZERO;
         contaReceber.setValorProcedimentosAdicionais(valorProcedimentos);
         contaReceber.setFormaPagamento(agendamento.getFormaPagamento());
 

@@ -37,6 +37,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   @Input() profissionalId: number | null = null;
   @Input() disponibilidadeDetalhes: any = null;
   @Output() saved = new EventEmitter<void>();
+  @Output() deleted = new EventEmitter<void>();
 
   titulo: string = 'Nova Agenda do Médico';
   hoje: string;
@@ -356,6 +357,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
         next: () => {
           this.toastr.success('Agenda semanal excluída com sucesso');
           this.exibeConfirmExclusao = false;
+          this.deleted.emit();
         },
         error: () => {
           this.toastr.error('Erro ao excluir agenda semanal');
@@ -372,6 +374,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
         error: () => {
           this.toastr.error('Erro ao excluir agenda');
           this.exibeConfirmExclusao = false;
+          this.deleted.emit();
         }
       });
     }
