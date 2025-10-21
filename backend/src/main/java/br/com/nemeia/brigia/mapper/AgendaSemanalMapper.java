@@ -24,8 +24,8 @@ public class AgendaSemanalMapper extends BaseMapper<AgendaSemanal, AgendaSemanal
 
         return new AgendaSemanalResponse(agendaSemanal.getId(),
                 profissionalMapper.toResponse(agendaSemanal.getProfissional()), agendaSemanal.getDiaSemana(),
-                agendaSemanal.getHoraInicial(), agendaSemanal.getHoraFinal(), agendaSemanal.getCriadoEm(),
-                agendaSemanal.getExcluido());
+                agendaSemanal.getHoraInicial(), agendaSemanal.getHoraFinal(), agendaSemanal.getValorAdicional(),
+                agendaSemanal.getCriadoEm(), agendaSemanal.getExcluido());
     }
 
     public AgendaSemanal updateEntity(AgendaSemanal original, AgendaSemanalRequest request) {

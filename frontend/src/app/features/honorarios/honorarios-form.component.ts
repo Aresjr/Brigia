@@ -154,7 +154,7 @@ export class HonorariosFormComponent implements OnInit {
     const dataObj = new Date(data);
     const diaSemana = dataObj.getDay(); // 0=Domingo, 6=Sábado
 
-    this.agendaSemanalService.listar(profissionalId).subscribe({
+    this.agendaSemanalService.listarPorProfissional(profissionalId).subscribe({
       next: (response) => {
         const agendaSemanal = response.find(a =>
           a.diaSemana === diaSemana &&
