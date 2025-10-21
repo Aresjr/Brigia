@@ -133,15 +133,17 @@ export class HonorariosFormComponent implements OnInit {
     // Primeiro, buscar na disponibilidade diária
     this.disponibilidadeService.listar().subscribe({
       next: (response) => {
-        const disponibilidade = response.items.find(d =>
+        // Filtrar TODAS as disponibilidades do dia para o profissional
+        const disponibilidades = response.items.filter(d =>
           d.profissional.id === profissionalId &&
-          d.dia === data &&
-          d.horaInicial <= hora &&
-          d.horaFinal > hora
+          d.dia === data
         );
 
-        if (disponibilidade?.valorAdicional) {
-          this.valorAdicionalCalculado = disponibilidade.valorAdicional;
+        // Somar todos os valores adicionais das disponibilidades do dia
+        const valorDiario = disponibilidades.reduce((sum, d) => sum + (d.valorAdicional || 0), 0);
+
+        if (valorDiario > 0) {
+          this.valorAdicionalCalculado = valorDiario;
         } else {
           // Se não encontrou na disponibilidade, buscar na agenda semanal
           this.buscarValorAdicionalAgendaSemanal(profissionalId, data, hora);

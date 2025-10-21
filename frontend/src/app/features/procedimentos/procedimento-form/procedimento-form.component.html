@@ -165,20 +165,21 @@
 
                     <!-- Linhas de Preços -->
                     <div class="space-y-1">
-                      <div *ngFor="let preco of precosPlanos.controls; let i = index" [formGroupName]="i"
-                           class="grid grid-cols-[1fr_8rem_8rem] gap-3 py-1 items-center hover:bg-base-200 rounded-lg">
+                      <ng-container *ngFor="let preco of getPrecosPlanosPorUnidade(unidade.id); let i = index">
+                        <div [formGroupName]="precosPlanos.controls.indexOf(preco)"
+                             class="grid grid-cols-[1fr_8rem_8rem] gap-3 py-1 items-center hover:bg-base-100 rounded-lg">
 
-                        <div class="text-sm">{{preco.get('nome')?.value}}</div>
+                          <div class="text-sm">{{preco.get('nome')?.value}}</div>
 
-                        <input type="text" [id]="'preco_plano_' + i" formControlName="preco" required
-                               mask="separator.2" thousandSeparator="" decimalMarker=","
-                               class="campo mt-0 p-1 text-right" min="0" max="99999" step="1"
-                               [ngClass]="classesCampo('preco_plano_' + i)" >
+                          <input type="text" formControlName="preco" required
+                                 mask="separator.2" thousandSeparator="" decimalMarker=","
+                                 class="campo mt-0 p-1 text-right" min="0" max="99999" step="1">
 
-                        <input [id]="'repasse_plano_' + i" type="number" formControlName="repasse"
-                               mask="separator.2" thousandSeparator="" decimalMarker=","
-                               class="campo mt-0 p-1 text-right" min="0" max="99999" step="1">
-                      </div>
+                          <input type="number" formControlName="repasse"
+                                 mask="separator.2" thousandSeparator="" decimalMarker=","
+                                 class="campo mt-0 p-1 text-right" min="0" max="99999" step="1">
+                        </div>
+                      </ng-container>
                     </div>
                   </div>
                 </div>

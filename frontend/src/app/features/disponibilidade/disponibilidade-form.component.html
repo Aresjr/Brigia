@@ -8,6 +8,9 @@
         <button *ngIf="readonly" type="button" class="btn btn-sm btn-ghost btn-circle" title="Editar" (click)="habilitarEdicao()">
           <lucide-icon name="pencil" class="inline w-5 h-5"/>
         </button>
+        <button *ngIf="readonly" type="button" class="btn btn-sm btn-ghost btn-circle text-error" title="Excluir" (click)="solicitarExclusao()">
+          <lucide-icon name="trash-2" class="inline w-5 h-5"/>
+        </button>
         <button type="button" class="btn btn-sm btn-ghost btn-circle" title="Fechar" (click)="fechar()">
           <lucide-icon name="x" class="inline w-5 h-5"/>
         </button>
@@ -113,7 +116,7 @@
         </div>
       </div>
 
-      <div class="mb-4 tooltip" data-tip="Valor adicional do dia (ex: transporte, alimentação, etc)">
+      <div class="mb-4 tooltip text-left" data-tip="Valor adicional do dia (ex: transporte, alimentação, etc)">
         <label class="label-campo" for="valorAdicional">
           Valor Adicional
         </label>
@@ -143,4 +146,11 @@
   message="Você já preencheu algumas informações da agenda, deseja realmente sair?"
   (confirm)="fechar(true)"
   (cancel)="exibeConfirmCancelamento = false">
+</app-confirm-dialog>
+
+<app-confirm-dialog
+  *ngIf="exibeConfirmExclusao"
+  message="Deseja realmente excluir esta agenda do médico?"
+  (confirm)="confirmarExclusao()"
+  (cancel)="cancelarExclusao()">
 </app-confirm-dialog>

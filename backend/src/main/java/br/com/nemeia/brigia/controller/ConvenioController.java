@@ -47,7 +47,7 @@ public class ConvenioController {
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteConvenio(@PathVariable Long id) {
         log.info("DELETE /convenios - excluindo convênio ID {}", id);
-        service.delete(id);
+        service.delete(id, false);
         return ResponseEntity.noContent().build();
     }
 

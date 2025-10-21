@@ -36,4 +36,5 @@ export interface PrecoProcedimentoPlano {
     preco: number;
     repasse: number;
     plano: EmpresaPlano;
+    unidade: Unidade | null;
 }

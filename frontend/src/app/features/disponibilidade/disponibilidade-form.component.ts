@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
 import { NgClass, NgIf, NgFor } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
@@ -13,6 +13,7 @@ import { forkJoin, map, tap } from 'rxjs';
 import { EmptyToNullDirective } from '../../core/directives/empty-to-null-directive';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { AgendaSemanalService } from '../agenda-semanal/agenda-semanal.service';
+import { DisponibilidadeService } from './disponibilidade.service';
 
 @Component({
   selector: 'app-disponibilidade-form',
@@ -40,6 +41,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   profissionais: Profissional[] = [];
   isLoading: boolean = false;
   exibeConfirmCancelamento: boolean = false;
+  exibeConfirmExclusao: boolean = false;
   readonly: boolean = false;
   agendaSemanal: boolean = false;
   diasSemana = [
@@ -56,7 +58,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
     protected override fb: FormBuilder,
     protected override toastr: ToastrService,
     private profissionalService: ProfissionalService,
-    private agendaSemanalService: AgendaSemanalService
+    private agendaSemanalService: AgendaSemanalService,
+    private disponibilidadeService: DisponibilidadeService
   ) {
     super(fb, toastr);
     this.hoje = new Date().toISOString().split('T')[0];
@@ -260,7 +263,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
     forkJoin(requests).subscribe({
       next: () => {
         this.toastr.success('Agenda semanal criada com sucesso');
-        this.cancel.emit();
+        this.save.emit({} as any); // Emitir save para recarregar o calendário
       },
       error: (error) => {
         console.error('Erro ao salvar agenda semanal:', error);
@@ -273,5 +276,31 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
     this.readonly = false;
     this.titulo = 'Editar Agenda do Médico';
     this.form.enable();
+  }
+
+  solicitarExclusao() {
+    this.exibeConfirmExclusao = true;
+  }
+
+  confirmarExclusao() {
+    if (!this.disponibilidadeDetalhes) {
+      return;
+    }
+
+    this.disponibilidadeService.excluir(this.disponibilidadeDetalhes.id).subscribe({
+      next: () => {
+        this.toastr.success('Agenda excluída com sucesso');
+        this.exibeConfirmExclusao = false;
+        this.save.emit({} as any); // Emitir save para recarregar o calendário
+      },
+      error: () => {
+        this.toastr.error('Erro ao excluir agenda');
+        this.exibeConfirmExclusao = false;
+      }
+    });
+  }
+
+  cancelarExclusao() {
+    this.exibeConfirmExclusao = false;
   }
 }

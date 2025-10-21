@@ -61,7 +61,7 @@ public class UsuarioController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.info("DELETE /usuarios - excluindo convênio ID {}", id);
-        service.delete(id);
+        service.delete(id, false);
         return ResponseEntity.noContent().build();
     }
 

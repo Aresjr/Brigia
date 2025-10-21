@@ -53,7 +53,7 @@ public class AgendamentoController {
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteAgendamento(@PathVariable Long id) {
         log.info("DELETE /agendamentos - excluindo convênio ID {}", id);
-        service.delete(id);
+        service.delete(id, false);
         return ResponseEntity.noContent().build();
     }
 

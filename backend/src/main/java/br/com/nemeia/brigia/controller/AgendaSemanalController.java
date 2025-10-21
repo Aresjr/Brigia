@@ -48,7 +48,7 @@ public class AgendaSemanalController {
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteAgendaSemanal(@PathVariable Long id) {
         log.info("DELETE /agendas-semanais - excluindo agenda semanal ID {}", id);
-        service.delete(id);
+        service.delete(id, true);
         return ResponseEntity.noContent().build();
     }
 

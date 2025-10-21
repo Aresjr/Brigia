@@ -93,24 +93,26 @@
         </div>
 
         <!-- Resumo de valores -->
-        <div class="mt-4 space-y-2">
-          <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
-            <span class="font-semibold">Valor Atendimentos</span>
-            <span class="font-semibold">
-              {{ valorTotal | currency:'BRL':'symbol':'1.2-2' }}
-            </span>
-          </div>
-          <div *ngIf="valorAdicional > 0" class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
-            <span class="font-semibold">Valor Adicional</span>
-            <span class="font-semibold">
-              {{ valorAdicional | currency:'BRL':'symbol':'1.2-2' }}
-            </span>
-          </div>
-          <div class="flex justify-between items-center p-4 bg-primary/10 rounded-lg">
-            <span class="text-lg font-semibold">Valor Total</span>
-            <span class="text-xl font-bold text-primary">
-              {{ (valorTotal + valorAdicional) | currency:'BRL':'symbol':'1.2-2' }}
-            </span>
+        <div class="mt-4">
+          <div class="p-4 bg-primary/10 rounded-lg space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="font-semibold">Valor Atendimentos</span>
+              <span class="font-semibold">
+                {{ valorTotal | currency:'BRL':'symbol':'1.2-2' }}
+              </span>
+            </div>
+            <div *ngIf="valorAdicional > 0" class="flex justify-between items-center">
+              <span class="font-semibold">Valor Adicional</span>
+              <span class="font-semibold">
+                {{ valorAdicional | currency:'BRL':'symbol':'1.2-2' }}
+              </span>
+            </div>
+            <div class="border-t border-primary/20 pt-3 flex justify-between items-center">
+              <span class="text-lg font-semibold">Valor Total</span>
+              <span class="text-xl font-bold text-primary">
+                {{ (valorTotal + valorAdicional) | currency:'BRL':'symbol':'1.2-2' }}
+              </span>
+            </div>
           </div>
         </div>
       </div>

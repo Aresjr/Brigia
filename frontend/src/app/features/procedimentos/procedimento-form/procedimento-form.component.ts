@@ -107,8 +107,9 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
 
         this.precosPlanos.controls.forEach(control => {
           const planoId = control.value.planoId;
+          const unidadeId = control.value.unidadeId;
           const precoPlano = this.registro?.precosPlanos
-            ?.find(pp => pp.plano.id === planoId);
+            ?.find(pp => pp.plano.id === planoId && pp.unidade?.id === unidadeId);
 
           if (precoPlano) {
             control.patchValue({
@@ -190,13 +191,18 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
     const precosArray = this.form.get('precosPlanos') as FormArray;
     precosArray.clear();
 
-    this.planos.forEach(plano => {
-      precosArray.push(this.fb.group({
-        planoId: [plano.id],
-        nome: [plano.nome],
-        preco: [0, [Validators.required, Validators.min(0)]],
-        repasse: [0]
-      }));
+    // Para cada unidade, criar um grupo de preços por plano
+    this.unidades.forEach(unidade => {
+      this.planos.forEach(plano => {
+        precosArray.push(this.fb.group({
+          unidadeId: [unidade.id],
+          unidadeNome: [unidade.nome],
+          planoId: [plano.id],
+          nome: [plano.nome],
+          preco: [0, [Validators.required, Validators.min(0)]],
+          repasse: [0]
+        }));
+      });
     });
   }
 
@@ -220,6 +226,7 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
 
       const precosPlanos = formValue.precosPlanos.map((p: any) => ({
         planoId: p.planoId,
+        unidadeId: p.unidadeId,
         preco: p.preco,
         repasse: p.repasse
       }));
@@ -248,6 +255,12 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
 
   getPrecosPorUnidade(unidadeId: number) {
     return this.precosConvenios.controls.filter(
+      control => control.value.unidadeId === unidadeId
+    );
+  }
+
+  getPrecosPlanosPorUnidade(unidadeId: number) {
+    return this.precosPlanos.controls.filter(
       control => control.value.unidadeId === unidadeId
     );
   }

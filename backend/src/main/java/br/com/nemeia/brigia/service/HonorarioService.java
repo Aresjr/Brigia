@@ -2,6 +2,7 @@ package br.com.nemeia.brigia.service;
 
 import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.HonorarioRequest;
+import br.com.nemeia.brigia.exception.HonorarioJaExistenteException;
 import br.com.nemeia.brigia.model.*;
 import br.com.nemeia.brigia.repository.AgendamentoRepository;
 import br.com.nemeia.brigia.repository.AgendaSemanalRepository;
@@ -44,6 +45,13 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
         LocalDate data = request.data();
         Unidade unidade = unidadeService.getById(SecurityHolder.getLoggedUserUnidadeId());
 
+        // Validar se já existe honorário para o profissional na data
+        Optional<Honorario> honorarioExistente = repository.findByProfissionalAndData(
+                request.profissionalId(), data);
+        if (honorarioExistente.isPresent()) {
+            throw new HonorarioJaExistenteException();
+        }
+
         // Buscar agendamentos finalizados do profissional na data
         List<Agendamento> agendamentos = agendamentoRepository
                 .findAllByDate(null, SecurityHolder.getLoggedUserUnidadeId(), data, data).stream()
@@ -53,7 +61,7 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
         BigDecimal valorRepasse = calcularValorTotal(agendamentos);
 
         // Buscar valor adicional da disponibilidade
-        BigDecimal valorAdicional = calcularValorAdicional(agendamentos);
+        BigDecimal valorAdicional = calcularValorAdicional(request.profissionalId(), request.data());
 
         // Somar valor de repasse + valor adicional
         BigDecimal valorTotal = valorRepasse.add(valorAdicional != null ? valorAdicional : BigDecimal.ZERO);
@@ -88,22 +96,21 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
         return total;
     }
 
-    private BigDecimal calcularValorAdicional(List<Agendamento> agendamentos) {
-        if (agendamentos.isEmpty()) {
-            return BigDecimal.ZERO;
-        }
+    private BigDecimal calcularValorAdicional(Long profissionalId, LocalDate data) {
 
-        // Pegar o primeiro agendamento para obter profissional e data
-        Agendamento primeiroAgendamento = agendamentos.get(0);
-        Long profissionalId = primeiroAgendamento.getProfissional().getId();
-        LocalDate data = primeiroAgendamento.getData();
+        // Buscar TODAS as disponibilidades do dia para o profissional
+        List<Disponibilidade> disponibilidades = disponibilidadeRepository
+                .findConflitosHorario(profissionalId, data,
+                    java.time.LocalTime.MIN, java.time.LocalTime.MAX);
 
-        // Primeiro, tentar buscar valor adicional da disponibilidade diária
-        Optional<Disponibilidade> disponibilidadeOpt = disponibilidadeRepository
-                .findByProfissionalAndDiaAndHora(profissionalId, data, primeiroAgendamento.getHora());
+        // Somar todos os valores adicionais das disponibilidades do dia
+        BigDecimal valorDiario = disponibilidades.stream()
+                .map(Disponibilidade::getValorAdicional)
+                .filter(valor -> valor != null)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        if (disponibilidadeOpt.isPresent() && disponibilidadeOpt.get().getValorAdicional() != null) {
-            return disponibilidadeOpt.get().getValorAdicional();
+        if (valorDiario.compareTo(BigDecimal.ZERO) > 0) {
+            return valorDiario;
         }
 
         // Se não encontrou na disponibilidade diária, buscar na agenda semanal
@@ -111,17 +118,13 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
         List<AgendaSemanal> agendasSemanais = agendaSemanalRepository
                 .findByProfissionalIdAndDiaSemana(profissionalId, diaSemana);
 
-        // Buscar agenda semanal que corresponde ao horário do agendamento
-        for (AgendaSemanal agenda : agendasSemanais) {
-            if (primeiroAgendamento.getHora().compareTo(agenda.getHoraInicial()) >= 0 &&
-                primeiroAgendamento.getHora().compareTo(agenda.getHoraFinal()) < 0) {
-                if (agenda.getValorAdicional() != null) {
-                    return agenda.getValorAdicional();
-                }
-            }
-        }
+        // Somar todos os valores adicionais das agendas semanais
+        BigDecimal valorSemanal = agendasSemanais.stream()
+                .map(AgendaSemanal::getValorAdicional)
+                .filter(valor -> valor != null)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        return BigDecimal.ZERO;
+        return valorSemanal;
     }
 
     @Override

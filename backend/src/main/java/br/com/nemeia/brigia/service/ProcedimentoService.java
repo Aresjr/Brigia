@@ -59,8 +59,11 @@ public class ProcedimentoService {
         if (request.precosPlanos() != null) {
             request.precosPlanos().forEach(precoPlano -> {
                 EmpresaPlano plano = empresaPlanoService.getById(precoPlano.planoId());
-                ProcedimentoPlano procedimentoPlano = new ProcedimentoPlano(procedimentoNovo, plano, precoPlano.preco(),
-                        precoPlano.repasse());
+                Unidade unidade = precoPlano.unidadeId() != null
+                    ? unidadeService.getById(precoPlano.unidadeId())
+                    : null;
+                ProcedimentoPlano procedimentoPlano = new ProcedimentoPlano(procedimentoNovo, plano, unidade,
+                        precoPlano.preco(), precoPlano.repasse());
                 procedimentoNovo.getPrecosPlanos().add(procedimentoPlano);
             });
             repository.save(procedimentoNovo);
@@ -99,7 +102,10 @@ public class ProcedimentoService {
         if (request.precosPlanos() != null) {
             request.precosPlanos().forEach(precoPlano -> {
                 EmpresaPlano plano = empresaPlanoService.getById(precoPlano.planoId());
-                ProcedimentoPlano procedimentoPlano = new ProcedimentoPlano(procedimentoAtualizado, plano,
+                Unidade unidade = precoPlano.unidadeId() != null
+                    ? unidadeService.getById(precoPlano.unidadeId())
+                    : null;
+                ProcedimentoPlano procedimentoPlano = new ProcedimentoPlano(procedimentoAtualizado, plano, unidade,
                         precoPlano.preco(), precoPlano.repasse());
                 procedimentoAtualizado.getPrecosPlanos().add(procedimentoPlano);
             });
