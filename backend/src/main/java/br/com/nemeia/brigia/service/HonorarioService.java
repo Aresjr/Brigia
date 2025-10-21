@@ -29,8 +29,7 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
 
     public HonorarioService(HonorarioRepository repository, ProfissionalService profissionalService,
             UnidadeService unidadeService, AgendamentoRepository agendamentoRepository,
-            DisponibilidadeRepository disponibilidadeRepository,
-            AgendaSemanalRepository agendaSemanalRepository) {
+            DisponibilidadeRepository disponibilidadeRepository, AgendaSemanalRepository agendaSemanalRepository) {
         super(repository);
         this.profissionalService = profissionalService;
         this.unidadeService = unidadeService;
@@ -46,8 +45,7 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
         Unidade unidade = unidadeService.getById(SecurityHolder.getLoggedUserUnidadeId());
 
         // Validar se já existe honorário para o profissional na data
-        Optional<Honorario> honorarioExistente = repository.findByProfissionalAndData(
-                request.profissionalId(), data);
+        Optional<Honorario> honorarioExistente = repository.findByProfissionalAndData(request.profissionalId(), data);
         if (honorarioExistente.isPresent()) {
             throw new HonorarioJaExistenteException();
         }
@@ -99,15 +97,12 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
     private BigDecimal calcularValorAdicional(Long profissionalId, LocalDate data) {
 
         // Buscar TODAS as disponibilidades do dia para o profissional
-        List<Disponibilidade> disponibilidades = disponibilidadeRepository
-                .findConflitosHorario(profissionalId, data,
-                    java.time.LocalTime.MIN, java.time.LocalTime.MAX);
+        List<Disponibilidade> disponibilidades = disponibilidadeRepository.findDisponibilidadesDia(profissionalId,
+                data);
 
         // Somar todos os valores adicionais das disponibilidades do dia
-        BigDecimal valorDiario = disponibilidades.stream()
-                .map(Disponibilidade::getValorAdicional)
-                .filter(valor -> valor != null)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal valorDiario = disponibilidades.stream().map(Disponibilidade::getValorAdicional)
+                .filter(valor -> valor != null).reduce(BigDecimal.ZERO, BigDecimal::add);
 
         if (valorDiario.compareTo(BigDecimal.ZERO) > 0) {
             return valorDiario;
@@ -115,14 +110,12 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
 
         // Se não encontrou na disponibilidade diária, buscar na agenda semanal
         Integer diaSemana = data.getDayOfWeek().getValue() % 7; // Converter para 0=Domingo, 6=Sábado
-        List<AgendaSemanal> agendasSemanais = agendaSemanalRepository
-                .findByProfissionalIdAndDiaSemana(profissionalId, diaSemana);
+        List<AgendaSemanal> agendasSemanais = agendaSemanalRepository.findByProfissionalIdAndDiaSemana(profissionalId,
+                diaSemana);
 
         // Somar todos os valores adicionais das agendas semanais
-        BigDecimal valorSemanal = agendasSemanais.stream()
-                .map(AgendaSemanal::getValorAdicional)
-                .filter(valor -> valor != null)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal valorSemanal = agendasSemanais.stream().map(AgendaSemanal::getValorAdicional)
+                .filter(valor -> valor != null).reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return valorSemanal;
     }

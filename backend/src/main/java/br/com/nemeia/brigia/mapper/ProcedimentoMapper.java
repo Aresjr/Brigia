@@ -80,8 +80,7 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
     private ProcedimentoPlanoResponse toProcedimentoPlanoResponse(ProcedimentoPlano procedimentoPlano) {
         return new ProcedimentoPlanoResponse(procedimentoPlano.getId(),
                 empresaPlanoMapper.toResponse(procedimentoPlano.getPlano()),
-                unidadeMapper.toResponse(procedimentoPlano.getUnidade()),
-                procedimentoPlano.getPreco(),
+                unidadeMapper.toResponse(procedimentoPlano.getUnidade()), procedimentoPlano.getPreco(),
                 procedimentoPlano.getRepasse());
     }
 }

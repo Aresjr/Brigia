@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface HonorarioRepository extends BaseRepository<Honorario> {
 
-    @Query("SELECT h FROM Honorario h WHERE h.profissional.id = :profissionalId " +
-           "AND h.data = :data AND (h.excluido IS NULL OR h.excluido = false)")
+    @Query("SELECT h FROM Honorario h WHERE h.profissional.id = :profissionalId "
+            + "AND h.data = :data AND (h.excluido IS NULL OR h.excluido = false)")
     Optional<Honorario> findByProfissionalAndData(@Param("profissionalId") Long profissionalId,
-                                                    @Param("data") LocalDate data);
+            @Param("data") LocalDate data);
 }

@@ -38,7 +38,8 @@ public class ProcedimentoPlano {
     @Column
     private BigDecimal repasse;
 
-    public ProcedimentoPlano(Procedimento procedimento, EmpresaPlano plano, Unidade unidade, BigDecimal preco, BigDecimal repasse) {
+    public ProcedimentoPlano(Procedimento procedimento, EmpresaPlano plano, Unidade unidade, BigDecimal preco,
+            BigDecimal repasse) {
         this.procedimento = procedimento;
         this.plano = plano;
         this.unidade = unidade;

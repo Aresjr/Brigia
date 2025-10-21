@@ -60,8 +60,8 @@ public class ProcedimentoService {
             request.precosPlanos().forEach(precoPlano -> {
                 EmpresaPlano plano = empresaPlanoService.getById(precoPlano.planoId());
                 Unidade unidade = precoPlano.unidadeId() != null
-                    ? unidadeService.getById(precoPlano.unidadeId())
-                    : null;
+                        ? unidadeService.getById(precoPlano.unidadeId())
+                        : null;
                 ProcedimentoPlano procedimentoPlano = new ProcedimentoPlano(procedimentoNovo, plano, unidade,
                         precoPlano.preco(), precoPlano.repasse());
                 procedimentoNovo.getPrecosPlanos().add(procedimentoPlano);
@@ -103,8 +103,8 @@ public class ProcedimentoService {
             request.precosPlanos().forEach(precoPlano -> {
                 EmpresaPlano plano = empresaPlanoService.getById(precoPlano.planoId());
                 Unidade unidade = precoPlano.unidadeId() != null
-                    ? unidadeService.getById(precoPlano.unidadeId())
-                    : null;
+                        ? unidadeService.getById(precoPlano.unidadeId())
+                        : null;
                 ProcedimentoPlano procedimentoPlano = new ProcedimentoPlano(procedimentoAtualizado, plano, unidade,
                         precoPlano.preco(), precoPlano.repasse());
                 procedimentoAtualizado.getPrecosPlanos().add(procedimentoPlano);

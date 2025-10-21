@@ -35,18 +35,18 @@ public abstract class BaseService<T extends BaseModel, R extends BaseRepository<
     }
 
     public void delete(Long id, Boolean realDeletion) {
-      if (realDeletion) {
-        T entity = getById(id);
-        repository.delete(entity);
-      } else {
-        T entity = getById(id);
-        entity.setExcluido(true);
-        entity.setExcluidoEm(LocalDateTime.now());
+        if (realDeletion) {
+            T entity = getById(id);
+            repository.delete(entity);
+        } else {
+            T entity = getById(id);
+            entity.setExcluido(true);
+            entity.setExcluidoEm(LocalDateTime.now());
 
-        Long userId = SecurityHolder.getLoggedUserId();
-        entity.setExcluidoPor(userId);
-        repository.save(entity);
-      }
+            Long userId = SecurityHolder.getLoggedUserId();
+            entity.setExcluidoPor(userId);
+            repository.save(entity);
+        }
     }
 
     public void restore(Long id) {
