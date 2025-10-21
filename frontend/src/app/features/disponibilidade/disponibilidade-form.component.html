@@ -5,11 +5,8 @@
     <div class="flex justify-between items-center">
       <h2 class="text-lg font-semibold">{{ titulo }}</h2>
       <div class="flex gap-2">
-        <button *ngIf="readonly" type="button" class="btn btn-sm btn-ghost btn-circle" title="Editar" (click)="habilitarEdicao()">
+        <button *ngIf="readonly && !agendaSemanal" type="button" class="btn btn-sm btn-ghost btn-circle" title="Editar" (click)="habilitarEdicao()">
           <lucide-icon name="pencil" class="inline w-5 h-5"/>
-        </button>
-        <button *ngIf="readonly" type="button" class="btn btn-sm btn-ghost btn-circle text-error" title="Excluir" (click)="solicitarExclusao()">
-          <lucide-icon name="trash-2" class="inline w-5 h-5"/>
         </button>
         <button type="button" class="btn btn-sm btn-ghost btn-circle" title="Fechar" (click)="fechar()">
           <lucide-icon name="x" class="inline w-5 h-5"/>
@@ -131,6 +128,9 @@
       <div class="flex justify-between mt-6">
         <button type="button" class="btn btn-sm" (click)="fechar()" >
           Fechar
+        </button>
+        <button type="button" *ngIf="readonly" class="btn btn-error btn-sm" (click)="solicitarExclusao()">
+          Excluir
         </button>
         <button *ngIf="!readonly" type="submit" class="btn btn-success btn-sm">
           Salvar

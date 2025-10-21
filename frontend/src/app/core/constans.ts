@@ -1,3 +1,9 @@
+import { FormBuilder } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { ProfissionalService } from '../features/profissionais/profissional.service';
+import { AgendaSemanalService } from '../features/agenda-semanal/agenda-semanal.service';
+import { DisponibilidadeService } from '../features/disponibilidade/disponibilidade.service';
+
 export enum Role {
   ADMIN = 'ADMIN',
   RECEPCIONISTA = 'RECEPCIONISTA',
@@ -55,3 +61,13 @@ export const StatusContaReceber: Record<number, { descricao: string; cor: string
   2: { descricao: 'Atrasado', cor: '#EF4444' },
   3: { descricao: 'Parcial', cor: '#A78BFA' }
 }
+
+export const DiasSemana = [
+  { valor: 0, nome: 'Domingo' },
+  { valor: 1, nome: 'Segunda-feira' },
+  { valor: 2, nome: 'Terça-feira' },
+  { valor: 3, nome: 'Quarta-feira' },
+  { valor: 4, nome: 'Quinta-feira' },
+  { valor: 5, nome: 'Sexta-feira' },
+  { valor: 6, nome: 'Sábado' }
+];

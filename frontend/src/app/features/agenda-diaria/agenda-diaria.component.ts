@@ -90,7 +90,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.subscription = interval(1000 * 60).subscribe(() => {
+    this.subscription = interval(1000 * 60 * 10).subscribe(() => {
       this.carregarAgendamentos();
     });
   }
@@ -192,6 +192,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
 
   salvar(agendamento: Partial<AgendamentoRequest>) {
     if (this.agendamentoDetalhes) {
+      console.log('salvar this.agendamentoService.atualizar');
       this.agendamentoService.atualizar(this.agendamentoDetalhes.id, agendamento).subscribe({
         next: () => {
           this.toastr.success('Agendamento atualizado');
@@ -322,6 +323,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   salvarDisponibilidade(disponibilidade: Partial<DisponibilidadeRequest>) {
     if (this.disponibilidadeDetalhes) {
       // Atualizar disponibilidade existente
+      console.log('salvarDisponibilidade');
       this.disponibilidadeService.atualizar(this.disponibilidadeDetalhes.id, disponibilidade).subscribe({
         next: () => {
           this.toastr.success('Disponibilidade atualizada');

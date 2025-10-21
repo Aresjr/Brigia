@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormArray, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormArray, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
 import { NgClass, NgIf, NgFor } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormComponent } from '../shared/form.component';
 import { IForm } from '../shared/form.interface';
-import { Disponibilidade, DisponibilidadeRequest, HorarioSemana } from './disponibilidade.interface';
+import { Disponibilidade, DisponibilidadeRequest } from './disponibilidade.interface';
 import { Profissional } from '../profissionais/profissional.interface';
 import { ProfissionalService } from '../profissionais/profissional.service';
 import { NgSelectComponent, NgNotFoundTemplateDirective } from '@ng-select/ng-select';
@@ -14,6 +14,7 @@ import { EmptyToNullDirective } from '../../core/directives/empty-to-null-direct
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { AgendaSemanalService } from '../agenda-semanal/agenda-semanal.service';
 import { DisponibilidadeService } from './disponibilidade.service';
+import { DiasSemana } from '../../core/constans';
 
 @Component({
   selector: 'app-disponibilidade-form',
@@ -44,15 +45,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   exibeConfirmExclusao: boolean = false;
   readonly: boolean = false;
   agendaSemanal: boolean = false;
-  diasSemana = [
-    { valor: 0, nome: 'Domingo' },
-    { valor: 1, nome: 'Segunda-feira' },
-    { valor: 2, nome: 'Terça-feira' },
-    { valor: 3, nome: 'Quarta-feira' },
-    { valor: 4, nome: 'Quinta-feira' },
-    { valor: 5, nome: 'Sexta-feira' },
-    { valor: 6, nome: 'Sábado' }
-  ];
+  diasSemana = DiasSemana;
 
   constructor(
     protected override fb: FormBuilder,
@@ -94,6 +87,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   setTipoAgenda(semanal: boolean) {
     this.agendaSemanal = semanal;
 
+    console.log('this.agendaSemanal', this.agendaSemanal);
+
     if (this.agendaSemanal) {
       // Modo agenda semanal - tornar campos de dia específico opcionais
       this.form.get('dia')?.clearValidators();
@@ -120,6 +115,13 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
     if (this.disponibilidadeDetalhes) {
       this.readonly = true;
       this.titulo = 'Detalhes da Agenda do Médico';
+
+      // Verificar se é agenda semanal
+      const isAgendaSemanal = 'diaSemana' in this.disponibilidadeDetalhes;
+      if (isAgendaSemanal) {
+        this.agendaSemanal = true;
+        this.setTipoAgenda(true);
+      }
     }
 
     let dia = this.hoje;
@@ -137,14 +139,37 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
     ]).subscribe(() => {
       setTimeout(()=>{
         if (this.disponibilidadeDetalhes) {
-          // Preencher form com dados da disponibilidade
-          this.form.patchValue({
-            profissionalId: this.disponibilidadeDetalhes.profissional.id,
-            dia: this.disponibilidadeDetalhes.dia,
-            horaInicial: this.disponibilidadeDetalhes.horaInicial,
-            horaFinal: this.disponibilidadeDetalhes.horaFinal,
-            valorAdicional: this.disponibilidadeDetalhes.valorAdicional
-          });
+          // Verificar se é agenda semanal ou disponibilidade diária
+          const isAgendaSemanal = 'diaSemana' in this.disponibilidadeDetalhes;
+
+          if (isAgendaSemanal) {
+            // Preencher form com dados da agenda semanal
+            this.form.patchValue({
+              profissionalId: this.disponibilidadeDetalhes.profissional.id,
+              valorAdicional: this.disponibilidadeDetalhes.valorAdicional
+            });
+
+            // Marcar o dia da semana específico como ativo e preencher horários
+            const diaSemana = this.disponibilidadeDetalhes.diaSemana;
+            const horarioControl = this.horariosSemana.at(diaSemana);
+            if (horarioControl) {
+              horarioControl.patchValue({
+                ativo: true,
+                horaInicial: this.disponibilidadeDetalhes.horaInicial,
+                horaFinal: this.disponibilidadeDetalhes.horaFinal
+              });
+            }
+          } else {
+            // Preencher form com dados da disponibilidade diária
+            this.form.patchValue({
+              profissionalId: this.disponibilidadeDetalhes.profissional.id,
+              dia: this.disponibilidadeDetalhes.dia,
+              horaInicial: this.disponibilidadeDetalhes.horaInicial,
+              horaFinal: this.disponibilidadeDetalhes.horaFinal,
+              valorAdicional: this.disponibilidadeDetalhes.valorAdicional
+            });
+          }
+
           // Desabilitar formulário para modo readonly
           this.form.disable();
         } else {
@@ -190,6 +215,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   }
 
   override onSubmit() {
+
     if (this.agendaSemanal) {
       // Validar agenda semanal
       if (!this.formValidoAgendaSemanal()) {
@@ -263,7 +289,6 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
     forkJoin(requests).subscribe({
       next: () => {
         this.toastr.success('Agenda semanal criada com sucesso');
-        this.save.emit({} as any); // Emitir save para recarregar o calendário
       },
       error: (error) => {
         console.error('Erro ao salvar agenda semanal:', error);
@@ -273,6 +298,13 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   }
 
   habilitarEdicao() {
+    // Não permitir edição de agenda semanal
+    const isAgendaSemanal = 'diaSemana' in this.disponibilidadeDetalhes;
+    if (isAgendaSemanal) {
+      this.toastr.warning('Não é possível editar agenda semanal. Exclua e crie uma nova se necessário.');
+      return;
+    }
+
     this.readonly = false;
     this.titulo = 'Editar Agenda do Médico';
     this.form.enable();
@@ -283,21 +315,39 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   }
 
   confirmarExclusao() {
+
     if (!this.disponibilidadeDetalhes) {
       return;
     }
 
-    this.disponibilidadeService.excluir(this.disponibilidadeDetalhes.id).subscribe({
-      next: () => {
-        this.toastr.success('Agenda excluída com sucesso');
-        this.exibeConfirmExclusao = false;
-        this.save.emit({} as any); // Emitir save para recarregar o calendário
-      },
-      error: () => {
-        this.toastr.error('Erro ao excluir agenda');
-        this.exibeConfirmExclusao = false;
-      }
-    });
+    // Verificar se é agenda semanal (tem diaSemana) ou disponibilidade diária (tem dia)
+    const isAgendaSemanal = 'diaSemana' in this.disponibilidadeDetalhes;
+
+    if (isAgendaSemanal) {
+      // Excluir agenda semanal
+      this.agendaSemanalService.excluir(this.disponibilidadeDetalhes.id).subscribe({
+        next: () => {
+          this.toastr.success('Agenda semanal excluída com sucesso');
+          this.exibeConfirmExclusao = false;
+        },
+        error: () => {
+          this.toastr.error('Erro ao excluir agenda semanal');
+          this.exibeConfirmExclusao = false;
+        }
+      });
+    } else {
+      // Excluir disponibilidade diária
+      this.disponibilidadeService.excluir(this.disponibilidadeDetalhes.id).subscribe({
+        next: () => {
+          this.toastr.success('Agenda diária excluída com sucesso');
+          this.exibeConfirmExclusao = false;
+        },
+        error: () => {
+          this.toastr.error('Erro ao excluir agenda');
+          this.exibeConfirmExclusao = false;
+        }
+      });
+    }
   }
 
   cancelarExclusao() {
