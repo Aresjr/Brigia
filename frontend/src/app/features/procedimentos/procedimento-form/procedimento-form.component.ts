@@ -63,6 +63,7 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
     super(fb, toastr);
     this.form = this.fb.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
+      codigo: [null],
       observacoes: [null],
       especialidadeId: [null, [Validators.required]],
       valorPadrao: [0, [Validators.required, Validators.min(0)]],

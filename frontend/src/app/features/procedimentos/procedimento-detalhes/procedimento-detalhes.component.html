@@ -16,44 +16,53 @@
             {{ procedimento.nome }}
           </p>
         </div>
-        <div>
-          <p class="text-sm">Código</p>
-          <p class="mt-1 text-base font-medium">
-            {{ procedimento.codigo }}
-          </p>
-        </div>
-        <div>
-          <p class="text-sm">Especialidade</p>
-          <p class="mt-1 text-base font-medium">
-            {{ procedimento.especialidade.nome }}
-          </p>
-        </div>
-        <div>
-          <p class="text-sm">Preço Padrão (Particular)</p>
-          <p class="mt-1 text-base font-medium">
-            R$ {{ procedimento.valorPadrao || '-' }}
-          </p>
+
+        <!-- Especialidade e Código na mesma linha -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm">Especialidade</p>
+            <p class="mt-1 text-base font-medium">
+              {{ procedimento.especialidade.nome }}
+            </p>
+          </div>
+          <div>
+            <p class="text-sm">Código</p>
+            <p class="mt-1 text-base font-medium">
+              {{ procedimento.codigo }}
+            </p>
+          </div>
         </div>
 
-        <div>
-          <p class="text-sm" title="Valor Repasse (Particular)">Valor Repasse</p>
-          <p class="mt-1 text-base font-medium">
-            R$ {{ procedimento.valorRepasse || '-' }}
-          </p>
+        <!-- Preço Padrão e Valor Repasse na mesma linha -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm">Preço Padrão (Particular)</p>
+            <p class="mt-1 text-base font-medium">
+              R$ {{ procedimento.valorPadrao || '-' }}
+            </p>
+          </div>
+          <div>
+            <p class="text-sm" title="Valor Repasse (Particular)">Valor Repasse</p>
+            <p class="mt-1 text-base font-medium">
+              R$ {{ procedimento.valorRepasse || '-' }}
+            </p>
+          </div>
         </div>
 
-        <div>
-          <p class="text-sm" title="Duração em Minutos">Duração</p>
-          <p class="mt-1 text-base font-medium">
-            {{ procedimento.duracao || '-' }} min
-          </p>
-        </div>
-
-        <div>
-          <p class="text-sm">Tipo</p>
-          <p class="mt-1 text-base font-medium">
-            {{ TIPO_AGENDAMENTO[procedimento.tipo].descricao }}
-          </p>
+        <!-- Tipo e Duração na mesma linha -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm">Tipo</p>
+            <p class="mt-1 text-base font-medium">
+              {{ TIPO_AGENDAMENTO[procedimento.tipo].descricao }}
+            </p>
+          </div>
+          <div>
+            <p class="text-sm" title="Duração em Minutos">Duração</p>
+            <p class="mt-1 text-base font-medium">
+              {{ procedimento.duracao || '-' }} min
+            </p>
+          </div>
         </div>
 
         <!-- Lista de Unidades Collapsible -->
@@ -129,14 +138,14 @@
 
                       @if (isPlanosExpandido(unidade.id)) {
                         <div class="p-2">
-                          @if (procedimento.precosPlanos && procedimento.precosPlanos.length > 0) {
+                          @if (getPrecosPlanosPorUnidade(unidade.id).length > 0) {
                             <div class="space-y-1">
                               <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 pb-1 text-xs font-medium text-neutral">
                                 <span>Plano</span>
                                 <span class="text-right">Valor</span>
                                 <span class="text-right">Repasse</span>
                               </div>
-                              @for (precoPlano of procedimento.precosPlanos; track precoPlano.id) {
+                              @for (precoPlano of getPrecosPlanosPorUnidade(unidade.id); track precoPlano.id) {
                                 <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 text-sm py-1">
                                   <span class="text-neutral">{{ precoPlano.plano.nome }}</span>
                                   <span class="text-right">R$ {{ precoPlano.preco | number:'1.2-2':'pt-BR' }}</span>
@@ -146,7 +155,7 @@
                             </div>
                           } @else {
                             <div class="text-sm text-neutral py-1">
-                              Não há preços cadastrados para planos empresariais.
+                              Não há preços cadastrados para planos empresariais nesta unidade.
                             </div>
                           }
                         </div>

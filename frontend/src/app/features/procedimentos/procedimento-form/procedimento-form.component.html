@@ -17,18 +17,9 @@
                  class="campo">
         </div>
 
+        <!-- Especialidade e Código na mesma linha -->
         <div class="flex space-x-4">
-          <div class="w-[10rem]">
-            <label class="label-campo">Tipo</label>
-            <ng-select formControlName="tipo" class="campo-select" required placeholder="Selecione"
-                       [ngClass]="classesCampo('tipo')" labelForId="tipo">
-              @for(tipo of TIPO_AGENDAMENTO; track tipo.valor) {
-                <ng-option [value]="tipo.valor">{{ tipo.descricao }}</ng-option>
-              }
-            </ng-select>
-          </div>
-
-          <div class="w-[22rem]">
+          <div class="flex-1">
             <label class="label-campo">Especialidade</label>
             <ng-select formControlName="especialidadeId" class="campo-select" required placeholder="Selecione"
                        [ngClass]="classesCampo('especialidadeId')" labelForId="especialidadeId">
@@ -40,11 +31,18 @@
               </ng-template>
             </ng-select>
           </div>
+
+          <div class="flex-1">
+            <label class="label-campo">Código</label>
+            <input type="text" formControlName="codigo" emptyToNull
+                   class="campo" placeholder="Código do procedimento">
+          </div>
         </div>
 
+        <!-- Preço Padrão e Valor Repasse na mesma linha -->
         <div class="flex space-x-4">
-          <div class="w-24 tooltip text-left" data-tip="Valor (Particular)">
-            <label class="label-campo">Valor</label>
+          <div class="flex-1 tooltip text-left" data-tip="Valor (Particular)">
+            <label class="label-campo">Preço Padrão (Particular)</label>
             <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
               R$ <input type="text" formControlName="valorPadrao" min="1" max="99999" id="valor"
                         (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
@@ -56,8 +54,8 @@
             </div>
           </div>
 
-          <div class="w-24 tooltip text-left" data-tip="Valor Repasse (Particular)">
-            <label class="label-campo">Repasse</label>
+          <div class="flex-1 tooltip text-left" data-tip="Valor Repasse (Particular)">
+            <label class="label-campo">Valor Repasse</label>
             <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
               R$ <input type="text" formControlName="valorRepasse" min="0" max="99999"
                         emptyToNull maxlength="8" placeholder="00,00"
@@ -65,13 +63,25 @@
                         class="campo border-0">
             </label>
           </div>
+        </div>
 
-          <div class="w-24 tooltip text-left" data-tip="Duração em Minutos">
+        <!-- Tipo e Duração na mesma linha -->
+        <div class="flex space-x-4">
+          <div class="flex-1">
+            <label class="label-campo">Tipo</label>
+            <ng-select formControlName="tipo" class="campo-select" required placeholder="Selecione"
+                       [ngClass]="classesCampo('tipo')" labelForId="tipo">
+              @for(tipo of TIPO_AGENDAMENTO; track tipo.valor) {
+                <ng-option [value]="tipo.valor">{{ tipo.descricao }}</ng-option>
+              }
+            </ng-select>
+          </div>
+
+          <div class="flex-1 tooltip text-left" data-tip="Duração em Minutos">
             <label class="label-campo">Duração</label>
             <input type="number" formControlName="duracao" min="1" max="999"
                    class="campo" placeholder="min">
           </div>
-
         </div>
 
         <div>

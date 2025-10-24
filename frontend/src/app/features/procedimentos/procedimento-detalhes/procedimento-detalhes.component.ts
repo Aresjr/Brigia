@@ -32,19 +32,23 @@ export class ProcedimentoDetalhesComponent implements OnInit {
   extrairUnidades() {
     if (!this.procedimento) return;
 
-    // Extrair unidades únicas dos preços de convênio
-    const unidadesSet = new Set<number>();
+    // Extrair unidades únicas dos preços de convênio e planos
+    const unidadesMap = new Map<number, Unidade>();
+
     this.procedimento.precosProcedimento?.forEach(preco => {
       if (preco.unidade) {
-        unidadesSet.add(preco.unidade.id);
+        unidadesMap.set(preco.unidade.id, preco.unidade);
+      }
+    });
+
+    this.procedimento.precosPlanos?.forEach(preco => {
+      if (preco.unidade) {
+        unidadesMap.set(preco.unidade.id, preco.unidade);
       }
     });
 
     // Converter para array de unidades
-    this.unidades = Array.from(unidadesSet).map(unidadeId => {
-      const precoComUnidade = this.procedimento?.precosProcedimento?.find(p => p.unidade?.id === unidadeId);
-      return precoComUnidade!.unidade!;
-    });
+    this.unidades = Array.from(unidadesMap.values());
 
     // Inicializar estados de expansão
     this.unidades.forEach(unidade => {
@@ -89,6 +93,13 @@ export class ProcedimentoDetalhesComponent implements OnInit {
   getPrecosPorUnidade(unidadeId: number): PrecoProcedimentoConvenio[] {
     if (!this.procedimento?.precosProcedimento) return [];
     return this.procedimento.precosProcedimento.filter(
+      preco => preco.unidade?.id === unidadeId
+    );
+  }
+
+  getPrecosPlanosPorUnidade(unidadeId: number) {
+    if (!this.procedimento?.precosPlanos) return [];
+    return this.procedimento.precosPlanos.filter(
       preco => preco.unidade?.id === unidadeId
     );
   }
