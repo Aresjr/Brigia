@@ -416,6 +416,7 @@
 
 <app-admin-credentials-dialog
   *ngIf="mostrarModalCredenciais"
+  [mensagem]="mensagemModalCredenciais"
   (confirm)="validarCredenciaisAdmin($event)"
   (cancel)="cancelarModalCredenciais()">
 </app-admin-credentials-dialog>

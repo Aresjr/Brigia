@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
@@ -11,6 +11,7 @@ import { LucideAngularModule } from 'lucide-angular';
   styleUrls: ['./admin-credentials-dialog.component.css']
 })
 export class AdminCredentialsDialogComponent {
+  @Input() mensagem: string = 'Você precisa de aprovação de uma conta admin para realizar esta ação.';
   @Output() confirm = new EventEmitter<{ login: string, senha: string }>();
   @Output() cancel = new EventEmitter<void>();
 

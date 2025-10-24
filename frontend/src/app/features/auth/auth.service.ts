@@ -56,7 +56,7 @@ export class AuthService {
 
   validarAdmin(login: string, senha: string): Observable<boolean> {
     const payload: ValidarAdminRequest = { login, senha };
-    return this.http.post<boolean>(`${environment.apiUrl}/auth/validar-admin`, payload, {
+    return this.http.post<boolean>(`${environment.apiUrl}/admin/validar-credenciais`, payload, {
       withCredentials: true,
     });
   }

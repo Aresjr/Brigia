@@ -1,9 +1,7 @@
 package br.com.nemeia.brigia.controller;
 
-import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.CadastrarSenhaRequest;
 import br.com.nemeia.brigia.dto.request.LoginRequest;
-import br.com.nemeia.brigia.dto.request.ValidarAdminRequest;
 import br.com.nemeia.brigia.dto.response.LoginResponse;
 import br.com.nemeia.brigia.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -39,12 +37,5 @@ public class AuthController {
             throws BadRequestException {
         authService.cadastrarSenha(request);
         return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/validar-admin")
-    public ResponseEntity<Boolean> validarAdmin(@RequestBody ValidarAdminRequest request) {
-        Long unidadeId = SecurityHolder.getLoggedUserUnidadeId();
-        boolean valido = authService.validarCredenciaisAdmin(request.login(), request.senha(), unidadeId);
-        return ResponseEntity.ok(valido);
     }
 }

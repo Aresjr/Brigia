@@ -86,10 +86,13 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   descontoAntesEdicao: number | null = null;
   mostrarModalCredenciais: boolean = false;
   campoParaEditar: 'valor' | 'desconto' | null = null;
+  mensagemModalCredenciais: string = '';
   valorTotalAgendamento: number = 0;
   isLoading: boolean = false;
   tipoPagamento: 'pago' | 'parcial' = 'pago';
   rascunhoCarregado: boolean = false;
+  permissaoAdminValorConcedida: boolean = false;
+  permissaoAdminDescontoConcedida: boolean = false;
 
   protected readonly autoResize = autoResize;
   protected readonly limitLength = limitLength;
@@ -428,8 +431,13 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   solicitarHabilitacaoValor() {
-    this.campoParaEditar = 'valor';
-    this.mostrarModalCredenciais = true;
+    if (this.permissaoAdminValorConcedida) {
+      this.editaValor();
+    } else {
+      this.campoParaEditar = 'valor';
+      this.mensagemModalCredenciais = 'Você precisa de aprovação de uma conta admin para editar o valor.';
+      this.mostrarModalCredenciais = true;
+    }
   }
 
   editaValor() {
@@ -452,8 +460,19 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   solicitarHabilitacaoDesconto() {
-    this.campoParaEditar = 'desconto';
-    this.mostrarModalCredenciais = true;
+    if (this.permissaoAdminDescontoConcedida) {
+      this.editaDesconto();
+    } else {
+      this.campoParaEditar = 'desconto';
+      this.mensagemModalCredenciais = 'Você precisa de aprovação de uma conta admin para editar o desconto.';
+      this.mostrarModalCredenciais = true;
+    }
+  }
+
+  editaDesconto() {
+    this.descontoAntesEdicao = this.form.value.desconto;
+    this.descontoEditavel = true;
+    this.form.markAsPristine();
   }
 
   cancelarModalCredenciais() {
@@ -466,18 +485,16 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       next: (valido) => {
         if (valido) {
           if (this.campoParaEditar === 'valor') {
-            this.valorAntesEdicao = this.form.value.valor;
-            this.valorEditavel = true;
+            this.permissaoAdminValorConcedida = true;
+            this.editaValor();
             this.mostrarModalCredenciais = false;
             this.campoParaEditar = null;
-            this.form.markAsPristine();
             this.toastr.success('Valor habilitado para edição');
           } else if (this.campoParaEditar === 'desconto') {
-            this.descontoAntesEdicao = this.form.value.desconto;
-            this.descontoEditavel = true;
+            this.permissaoAdminDescontoConcedida = true;
+            this.editaDesconto();
             this.mostrarModalCredenciais = false;
             this.campoParaEditar = null;
-            this.form.markAsPristine();
             this.toastr.success('Desconto habilitado para edição');
           }
         } else {

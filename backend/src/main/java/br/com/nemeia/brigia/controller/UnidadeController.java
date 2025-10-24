@@ -19,7 +19,7 @@ public class UnidadeController {
     private final UnidadeMapper mapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('RECEPCIONISTA') or hasAuthority('FATURAMENTO')")
     public PagedResponse<UnidadeResponse> getAll(@RequestParam(defaultValue = "false") Boolean mostrarExcluidos,
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
         log.info("GET /unidades - page: {}, size: {}", page, size);
