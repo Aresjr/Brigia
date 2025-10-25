@@ -16,116 +16,156 @@
             {{ procedimento.nome }}
           </p>
         </div>
-        <div>
-          <p class="text-sm">Código</p>
-          <p class="mt-1 text-base font-medium">
-            {{ procedimento.codigo }}
-          </p>
-        </div>
-        <div>
-          <p class="text-sm">Especialidade</p>
-          <p class="mt-1 text-base font-medium">
-            {{ procedimento.especialidade.nome }}
-          </p>
-        </div>
-        <div>
-          <p class="text-sm">Preço Padrão (Particular)</p>
-          <p class="mt-1 text-base font-medium">
-            R$ {{ procedimento.valorPadrao || '-' }}
-          </p>
+
+        <!-- Especialidade e Código na mesma linha -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm">Especialidade</p>
+            <p class="mt-1 text-base font-medium">
+              {{ procedimento.especialidade.nome }}
+            </p>
+          </div>
+          <div>
+            <p class="text-sm">Código</p>
+            <p class="mt-1 text-base font-medium">
+              {{ procedimento.codigo }}
+            </p>
+          </div>
         </div>
 
-        <div>
-          <p class="text-sm" title="Valor Repasse (Particular)">Valor Repasse</p>
-          <p class="mt-1 text-base font-medium">
-            R$ {{ procedimento.valorRepasse || '-' }}
-          </p>
+        <!-- Preço Padrão e Valor Repasse na mesma linha -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm">Preço Padrão (Particular)</p>
+            <p class="mt-1 text-base font-medium">
+              R$ {{ procedimento.valorPadrao || '-' }}
+            </p>
+          </div>
+          <div>
+            <p class="text-sm" title="Valor Repasse (Particular)">Valor Repasse</p>
+            <p class="mt-1 text-base font-medium">
+              R$ {{ procedimento.valorRepasse || '-' }}
+            </p>
+          </div>
         </div>
 
-        <div>
-          <p class="text-sm" title="Duração em Minutos">Duração</p>
-          <p class="mt-1 text-base font-medium">
-            {{ procedimento.duracao || '-' }} min
-          </p>
+        <!-- Tipo e Duração na mesma linha -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm">Tipo</p>
+            <p class="mt-1 text-base font-medium">
+              {{ TIPO_AGENDAMENTO[procedimento.tipo].descricao }}
+            </p>
+          </div>
+          <div>
+            <p class="text-sm" title="Duração em Minutos">Duração</p>
+            <p class="mt-1 text-base font-medium">
+              {{ procedimento.duracao || '-' }} min
+            </p>
+          </div>
         </div>
 
+        <!-- Lista de Unidades Collapsible -->
         <div>
-          <p class="text-sm">Tipo</p>
-          <p class="mt-1 text-base font-medium">
-            {{ TIPO_AGENDAMENTO[procedimento.tipo].descricao }}
-          </p>
-        </div>
-
-        <div>
-          <p class="text-sm mb-2">Tabela de Preços</p>
-          <div class="border border-base-300 rounded-lg divide-y divide-base-300">
-            <div class="hover:bg-base-200 transition-colors">
-              <div
-                class="flex justify-between items-center p-3 cursor-pointer"
-                (click)="toggleTabelaConvenio()">
-                <div class="flex items-center gap-2">
+          <p class="text-sm mb-2">Tabela de Preço</p>
+          <div class="space-y-2">
+            @for (unidade of unidades; track unidade.id) {
+              <div class="border border-base-300 rounded-lg">
+                <!-- Header da Unidade (Collapsible) -->
+                <div class="flex items-center justify-between p-3 cursor-pointer bg-base-200 hover:bg-base-300"
+                     [ngClass]="{'rounded-t-lg': isUnidadeExpandida(unidade.id), 'rounded-lg': !isUnidadeExpandida(unidade.id)}"
+                     (click)="toggleUnidade(unidade.id)">
+                  <h4 class="font-medium">{{ unidade.nome }}</h4>
                   <lucide-icon
-                    [name]="mostraTabelaConvenio ? 'chevron-down' : 'chevron-right'"
-                    class="w-4 h-4 text-neutral">
+                    [name]="isUnidadeExpandida(unidade.id) ? 'chevron-down' : 'chevron-right'"
+                    class="inline w-5 h-5">
                   </lucide-icon>
-                  <span class="font-medium">Preço Convênios</span>
                 </div>
-              </div>
 
-              @if (mostraTabelaConvenio) {
-                <div class="bg-base-200/50 px-6 py-2">
-                  @if (procedimento.precosProcedimento && procedimento.precosProcedimento.length > 0) {
-                    <div class="space-y-1">
-                      @for (precoConvenio of procedimento.precosProcedimento; track precoConvenio.id) {
-                        <div class="flex justify-between text-sm py-1">
-                          <span class="text-neutral">{{ precoConvenio.convenio.nome }}</span>
-                          <span>R$ {{ precoConvenio.preco | number:'1.2-2':'pt-BR' }}</span>
+                <!-- Conteúdo Expandido da Unidade -->
+                @if (isUnidadeExpandida(unidade.id)) {
+                  <div class="p-3 space-y-2">
+
+                    <!-- Seção de Preços por Convênio (Collapsible) -->
+                    <div class="border border-base-300 rounded-lg">
+                      <div class="flex items-center justify-between p-2 cursor-pointer bg-base-100 hover:bg-base-200"
+                           [ngClass]="{'rounded-t-lg': isConveniosExpandido(unidade.id), 'rounded-lg': !isConveniosExpandido(unidade.id)}"
+                           (click)="toggleConvenios(unidade.id)">
+                        <h5 class="font-medium text-sm">Preços por Convênio</h5>
+                        <lucide-icon
+                          [name]="isConveniosExpandido(unidade.id) ? 'chevron-down' : 'chevron-right'"
+                          class="inline w-4 h-4">
+                        </lucide-icon>
+                      </div>
+
+                      @if (isConveniosExpandido(unidade.id)) {
+                        <div class="p-2">
+                          @if (getPrecosPorUnidade(unidade.id).length > 0) {
+                            <div class="space-y-1">
+                              <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 pb-1 text-xs font-medium text-neutral">
+                                <span>Convênio</span>
+                                <span class="text-right">Valor</span>
+                                <span class="text-right">Repasse</span>
+                              </div>
+                              @for (precoConvenio of getPrecosPorUnidade(unidade.id); track precoConvenio.id) {
+                                <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 text-sm py-1">
+                                  <span class="text-neutral">{{ precoConvenio.convenio.nome }}</span>
+                                  <span class="text-right">R$ {{ precoConvenio.preco | number:'1.2-2':'pt-BR' }}</span>
+                                  <span class="text-right">R$ {{ (precoConvenio.repasse || 0) | number:'1.2-2':'pt-BR' }}</span>
+                                </div>
+                              }
+                            </div>
+                          } @else {
+                            <div class="text-sm text-neutral py-1">
+                              Não há preços cadastrados para convênios nesta unidade.
+                            </div>
+                          }
                         </div>
                       }
                     </div>
-                  }
-                  @else {
-                    <div class="text-sm text-neutral py-1">
-                      Não há preços cadastrados para convênios para este procedimento.
-                    </div>
-                  }
-                </div>
-              }
-            </div>
 
-            <div class="hover:bg-base-200 transition-colors">
-              <div
-                class="flex justify-between items-center p-3 cursor-pointer"
-                (click)="toggleTabelaPlanos()">
-                <div class="flex items-center gap-2">
-                  <lucide-icon
-                    [name]="mostraTabelaPlanos ? 'chevron-down' : 'chevron-right'"
-                    class="w-4 h-4 text-neutral">
-                  </lucide-icon>
-                  <span class="font-medium">Preço Planos Empresariais</span>
-                </div>
-              </div>
+                    <!-- Seção de Preços por Plano Empresarial (Collapsible) -->
+                    <div class="border border-base-300 rounded-lg">
+                      <div class="flex items-center justify-between p-2 cursor-pointer bg-base-100 hover:bg-base-200"
+                           [ngClass]="{'rounded-t-lg': isPlanosExpandido(unidade.id), 'rounded-lg': !isPlanosExpandido(unidade.id)}"
+                           (click)="togglePlanos(unidade.id)">
+                        <h5 class="font-medium text-sm">Preços por Plano Empresarial</h5>
+                        <lucide-icon
+                          [name]="isPlanosExpandido(unidade.id) ? 'chevron-down' : 'chevron-right'"
+                          class="inline w-4 h-4">
+                        </lucide-icon>
+                      </div>
 
-              @if (mostraTabelaPlanos) {
-                <div class="bg-base-200/50 px-6 py-2">
-                  @if (procedimento.precosPlanos && procedimento.precosPlanos.length > 0) {
-                    <div class="space-y-1">
-                      @for (precoPlano of procedimento.precosPlanos; track precoPlano.id) {
-                        <div class="flex justify-between text-sm py-1">
-                          <span class="text-neutral">{{ precoPlano.plano.nome }}</span>
-                          <span>R$ {{ precoPlano.preco | number:'1.2-2':'pt-BR' }}</span>
+                      @if (isPlanosExpandido(unidade.id)) {
+                        <div class="p-2">
+                          @if (getPrecosPlanosPorUnidade(unidade.id).length > 0) {
+                            <div class="space-y-1">
+                              <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 pb-1 text-xs font-medium text-neutral">
+                                <span>Plano</span>
+                                <span class="text-right">Valor</span>
+                                <span class="text-right">Repasse</span>
+                              </div>
+                              @for (precoPlano of getPrecosPlanosPorUnidade(unidade.id); track precoPlano.id) {
+                                <div class="grid grid-cols-[1fr_8rem_8rem] gap-3 text-sm py-1">
+                                  <span class="text-neutral">{{ precoPlano.plano.nome }}</span>
+                                  <span class="text-right">R$ {{ precoPlano.preco | number:'1.2-2':'pt-BR' }}</span>
+                                  <span class="text-right">R$ {{ (precoPlano.repasse || 0) | number:'1.2-2':'pt-BR' }}</span>
+                                </div>
+                              }
+                            </div>
+                          } @else {
+                            <div class="text-sm text-neutral py-1">
+                              Não há preços cadastrados para planos empresariais nesta unidade.
+                            </div>
+                          }
                         </div>
                       }
                     </div>
-                  }
-                  @else {
-                    <div class="text-sm text-neutral py-1">
-                      Não há preços cadastrados para planos empresariais para este procedimento.
-                    </div>
-                  }
-                </div>
-              }
-            </div>
+
+                  </div>
+                }
+              </div>
+            }
           </div>
         </div>
 

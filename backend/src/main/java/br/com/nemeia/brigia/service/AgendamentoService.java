@@ -88,7 +88,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     }
 
     @Transactional
-    @CacheEvict(value = "agendamentos", allEntries = true)
+    @CacheEvict(value = {"agendamentos", "contasReceber"}, allEntries = true)
     public Agendamento createAgendamento(AgendamentoRequest request) {
         Agendamento agendamento = mapper.toEntity(request);
         setEntidades(request, agendamento);
@@ -111,21 +111,17 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             agendamentoNovo = repository.save(agendamentoNovo);
         }
 
-        // Criar conta a receber se pago=true
-        if (Boolean.TRUE.equals(request.pago())) {
-            contaReceberService.createContaReceberFromAgendamento(agendamentoNovo);
-        }
+        contaReceberService.createContaReceberFromAgendamento(agendamentoNovo);
 
         sendEmail(agendamentoNovo, "Agendamento Realizado!", "agendamento-cadastrado");
 
         return agendamentoNovo;
     }
 
-    @CacheEvict(value = "agendamentos", allEntries = true)
+    @CacheEvict(value = {"agendamentos", "contasReceber"}, allEntries = true)
     public Agendamento editAgendamento(Long id, AgendamentoRequest request) {
         Agendamento original = getById(id);
-        boolean deveMandarEmail = deveMandarEmail(original, request); // TODO - verificar porque está mandando email na
-                                                                      // edição
+        boolean deveMandarEmail = deveMandarEmail(original, request);
 
         // Validar disponibilidade do profissional, exceto se for encaixe
         validarDisponibilidadeProfissional(request, id);
@@ -186,7 +182,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         if (email != null) {
             Map<String, Object> variables = getVariaveisEmail(agendamento);
             try {
-                emailService.sendEmail(email, status, template, variables);
+                // emailService.sendEmail(email, status, template, variables);
             } catch (Exception e) {
                 log.error("Não foi possível enviar email: {}", e.getLocalizedMessage());
             }
@@ -223,12 +219,14 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
                     "Já existe um agendamento para o profissional neste horário. Escolha outro horário.");
         }
 
-        // Se for encaixe, não precisa validar disponibilidade (pode agendar fora do horário de trabalho)
+        // Se for encaixe, não precisa validar disponibilidade (pode agendar fora do
+        // horário de trabalho)
         if (Boolean.TRUE.equals(request.encaixe())) {
             return;
         }
 
-        // Se não for encaixe, validar se há disponibilidade cadastrada para o profissional no horário solicitado
+        // Se não for encaixe, validar se há disponibilidade cadastrada para o
+        // profissional no horário solicitado
         disponibilidadeService
                 .findByProfissionalAndDiaAndHora(request.profissionalId(), request.data(),
                         request.hora().plusMinutes(request.duracao()))

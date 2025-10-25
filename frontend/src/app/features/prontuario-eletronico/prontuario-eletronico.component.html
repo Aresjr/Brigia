@@ -1,0 +1,273 @@
+<div class="container mx-auto p-6">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold">Prontuário Eletrônico</h1>
+    <p class="text-sm text-neutral mt-1">Consulte o histórico de atendimentos dos pacientes</p>
+  </div>
+
+  <!-- Seleção de Paciente -->
+  <div class="card bg-base-100 shadow-md mb-6">
+    <div class="card-body">
+      <h2 class="card-title text-lg mb-4">
+        <lucide-icon name="search" class="w-5 h-5"></lucide-icon>
+        Selecionar Paciente
+      </h2>
+
+      <div class="relative">
+        <label class="input input-bordered flex items-center gap-2">
+          <lucide-icon name="user" class="w-4 h-4 text-neutral"></lucide-icon>
+          <input
+            type="text"
+            class="grow"
+            placeholder="Buscar por nome ou CPF..."
+            [(ngModel)]="buscaPaciente"
+            [disabled]="pacienteSelecionado !== null"
+          />
+          @if (pacienteSelecionado) {
+            <button type="button" class="btn btn-ghost btn-xs btn-circle" (click)="limparSelecao()" title="Limpar seleção">
+              <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
+            </button>
+          }
+        </label>
+
+        <!-- Dropdown de resultados -->
+        @if (buscaPaciente && !pacienteSelecionado && pacientesFiltrados.length > 0) {
+          <div class="absolute z-10 w-full mt-2 bg-base-100 shadow-lg rounded-lg border border-base-300 max-h-60 overflow-y-auto">
+            @for (paciente of pacientesFiltrados; track paciente.id) {
+              <div
+                class="p-3 hover:bg-base-200 cursor-pointer border-b border-base-300 last:border-b-0"
+                (click)="selecionarPaciente(paciente)"
+              >
+                <div class="font-semibold">{{ paciente.nome }}</div>
+                <div class="text-sm text-neutral">
+                  CPF: {{ paciente.cpf || 'Não informado' }} | Tel: {{ paciente.celular || 'Não informado' }}
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        @if (buscaPaciente && !pacienteSelecionado && pacientesFiltrados.length === 0) {
+          <div class="absolute z-10 w-full mt-2 bg-base-100 shadow-lg rounded-lg border border-base-300 p-4 text-center text-neutral">
+            Nenhum paciente encontrado
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Detalhes do Paciente Selecionado -->
+  @if (pacienteSelecionado) {
+    <div class="card bg-base-100 shadow-md mb-6">
+      <div class="card-body">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="card-title text-lg">
+            <lucide-icon name="user-circle" class="w-5 h-5"></lucide-icon>
+            Dados do Paciente
+          </h2>
+          @if (!exibirHistorico) {
+            <button type="button" class="btn btn-primary btn-sm" (click)="carregarHistorico()">
+              <lucide-icon name="file-text" class="w-4 h-4"></lucide-icon>
+              Ver Histórico de Atendimentos
+            </button>
+          }
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <span class="text-sm text-neutral">Nome Completo</span>
+            <p class="font-semibold">{{ pacienteSelecionado.nome }}</p>
+          </div>
+          <div>
+            <span class="text-sm text-neutral">CPF</span>
+            <p class="font-semibold">{{ pacienteSelecionado.cpf || '-' }}</p>
+          </div>
+          <div>
+            <span class="text-sm text-neutral">Data de Nascimento</span>
+            <p class="font-semibold">
+              {{ pacienteSelecionado.dataNascimento | date:'dd/MM/yyyy' }}
+              <span class="text-sm text-neutral ml-2">({{ calcularIdade(pacienteSelecionado.dataNascimento) }} anos)</span>
+            </p>
+          </div>
+          <div>
+            <span class="text-sm text-neutral">Celular</span>
+            <p class="font-semibold">{{ pacienteSelecionado.celular || '-' }}</p>
+          </div>
+          <div>
+            <span class="text-sm text-neutral">Email</span>
+            <p class="font-semibold">{{ pacienteSelecionado.email || '-' }}</p>
+          </div>
+          <div>
+            <span class="text-sm text-neutral">Sexo</span>
+            <p class="font-semibold">{{ pacienteSelecionado.sexo === 'M' ? 'Masculino' : 'Feminino' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Histórico de Atendimentos -->
+  @if (exibirHistorico) {
+    <div class="card bg-base-100 shadow-md">
+      <div class="card-body">
+        <h2 class="card-title text-lg mb-4">
+          <lucide-icon name="history" class="w-5 h-5"></lucide-icon>
+          Histórico de Atendimentos
+        </h2>
+
+        @if (carregandoAtendimentos) {
+          <div class="flex justify-center items-center py-8">
+            <span class="loading loading-spinner loading-lg"></span>
+          </div>
+        } @else if (atendimentos.length === 0) {
+          <div class="text-center py-8 text-neutral">
+            <lucide-icon name="inbox" class="w-12 h-12 mx-auto mb-2 opacity-50"></lucide-icon>
+            <p>Nenhum atendimento encontrado para este paciente</p>
+          </div>
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="table table-zebra">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Profissional</th>
+                  <th>Tipo</th>
+                  <th class="text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (atendimento of atendimentos; track atendimento.id) {
+                  <tr class="hover">
+                    <td>{{ atendimento.dataAtendimento | date:'dd/MM/yyyy HH:mm' }}</td>
+                    <td>{{ atendimento.profissional.nome || '-' }}</td>
+                    <td>
+                      <span class="badge badge-primary badge-sm">
+                        {{ atendimento.tipoAtendimento || 'Consulta' }}
+                      </span>
+                    </td>
+                    <td class="text-right">
+                      <button
+                        type="button"
+                        class="btn btn-ghost btn-sm"
+                        (click)="selecionarAtendimento(atendimento)"
+                        title="Ver detalhes"
+                      >
+                        <lucide-icon name="eye" class="w-4 h-4"></lucide-icon>
+                        Ver Detalhes
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Modal de Detalhes do Atendimento -->
+@if (atendimentoSelecionado) {
+  <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50" (click)="fecharAtendimento()">
+    <div class="bg-base-100 rounded-lg shadow-xl w-[90vw] max-w-4xl max-h-[90vh] overflow-hidden" (click)="$event.stopPropagation()">
+
+      <!-- Header -->
+      <div class="flex justify-between items-center p-6 border-b border-base-300">
+        <div>
+          <h2 class="text-xl font-semibold">Detalhes do Atendimento</h2>
+          <p class="text-sm text-neutral mt-1">{{ atendimentoSelecionado.dataAtendimento | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+        <button type="button" class="btn btn-ghost btn-circle btn-sm" (click)="fecharAtendimento()">
+          <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
+        </button>
+      </div>
+
+      <!-- Tabs -->
+      <div role="tablist" class="tabs tabs-bordered px-6 pt-4">
+        <input type="radio" name="atendimento_tabs" role="tab" class="tab" aria-label="Informações Gerais" checked />
+        <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <span class="text-sm text-neutral">Profissional</span>
+              <p class="font-semibold">{{ atendimentoSelecionado.profissional.nome || '-' }}</p>
+            </div>
+            <div>
+              <span class="text-sm text-neutral">Data do Atendimento</span>
+              <p class="font-semibold">{{ atendimentoSelecionado.dataAtendimento | date:'dd/MM/yyyy HH:mm' }}</p>
+            </div>
+            <div>
+              <span class="text-sm text-neutral">Tipo de Atendimento</span>
+              <p class="font-semibold">{{ atendimentoSelecionado.tipoAtendimento || 'Consulta' }}</p>
+            </div>
+            <div>
+              <span class="text-sm text-neutral">Status</span>
+              <p class="font-semibold">{{ atendimentoSelecionado.status || '-' }}</p>
+            </div>
+          </div>
+        </div>
+
+        <input type="radio" name="atendimento_tabs" role="tab" class="tab" aria-label="Anamnese" />
+        <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
+          @if (atendimentoSelecionado.anamnese) {
+            <div class="prose max-w-none">
+              <div [innerHTML]="atendimentoSelecionado.anamnese"></div>
+            </div>
+          } @else {
+            <p class="text-neutral text-center py-8">Nenhuma anamnese registrada</p>
+          }
+        </div>
+
+        <input type="radio" name="atendimento_tabs" role="tab" class="tab" aria-label="Exame Clínico" />
+        <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
+          @if (atendimentoSelecionado.exameClinico) {
+            <div class="prose max-w-none">
+              <div [innerHTML]="atendimentoSelecionado.exameClinico"></div>
+            </div>
+          } @else {
+            <p class="text-neutral text-center py-8">Nenhum exame clínico registrado</p>
+          }
+        </div>
+
+        <input type="radio" name="atendimento_tabs" role="tab" class="tab" aria-label="Diagnóstico" />
+        <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
+          @if (atendimentoSelecionado.diagnostico) {
+            <div class="prose max-w-none">
+              <div [innerHTML]="atendimentoSelecionado.diagnostico"></div>
+            </div>
+          } @else {
+            <p class="text-neutral text-center py-8">Nenhum diagnóstico registrado</p>
+          }
+        </div>
+
+        <input type="radio" name="atendimento_tabs" role="tab" class="tab" aria-label="Conduta" />
+        <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
+          @if (atendimentoSelecionado.conduta) {
+            <div class="prose max-w-none">
+              <div [innerHTML]="atendimentoSelecionado.conduta"></div>
+            </div>
+          } @else {
+            <p class="text-neutral text-center py-8">Nenhuma conduta registrada</p>
+          }
+        </div>
+
+        <input type="radio" name="atendimento_tabs" role="tab" class="tab" aria-label="Observações" />
+        <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
+          @if (atendimentoSelecionado.observacoes) {
+            <div class="prose max-w-none">
+              <div [innerHTML]="atendimentoSelecionado.observacoes"></div>
+            </div>
+          } @else {
+            <p class="text-neutral text-center py-8">Nenhuma observação registrada</p>
+          }
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="flex justify-end gap-2 p-6 border-t border-base-300">
+        <button type="button" class="btn btn-ghost" (click)="fecharAtendimento()">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+}

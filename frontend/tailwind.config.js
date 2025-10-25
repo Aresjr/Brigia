@@ -44,7 +44,7 @@ module.exports = {
       {
         brigida: {
           "primary": "#2563eb",
-          "secondary": "#A78BFA",
+          "secondary": "#a78bfa",
           "secondary-content": "#ffffff",
           "accent": "#60a5fa",
           "neutral": "#6b7280",

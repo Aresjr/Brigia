@@ -65,7 +65,7 @@
         </div>
         <div class="max-w-64 px-6 py-2.5">
           <label class="label-campo">
-            Data do Atendimento
+            Data do Agendamento
             <div class="flex items-center gap-2">
               <div class="tooltip text-left" data-tip="Data Início">
                 <input #dataInicio type="date" class="campo w-[8.5rem]" formControlName="dataInicio" />
@@ -93,9 +93,44 @@
     </div>
   } @else {
 
+    <!-- Dropdown de Ações -->
+    @if(algumSelecionado()) {
+      <div class="mb-3 flex items-center gap-3 px-2">
+        <span class="text-sm font-medium">{{ itensSelecionados.size }} item(ns) selecionado(s)</span>
+        <div class="dropdown">
+          <button tabindex="0" class="btn btn-sm btn-primary" (click)="mostrarDropdownAcoes = !mostrarDropdownAcoes">
+            Ações
+            <lucide-icon name="chevron-down" class="inline w-4 h-4 ml-1"></lucide-icon>
+          </button>
+          @if(mostrarDropdownAcoes) {
+            <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-lg border border-base-300">
+              <li>
+                <button
+                  [disabled]="!podeGerarPDF()"
+                  [class.disabled]="!podeGerarPDF()"
+                  [class.tooltip]="!podeGerarPDF()"
+                  [attr.data-tip]="!podeGerarPDF() ? 'Selecione uma empresa ou paciente no filtro' : ''"
+                  (click)="gerarPDF()">
+                  <lucide-icon name="file-text" class="inline w-4 h-4"></lucide-icon>
+                  Gerar PDF
+                </button>
+              </li>
+            </ul>
+          }
+        </div>
+      </div>
+    }
+
     <div class="min-h-[36rem]">
-      <div class="titulo-listagem grid-cols-[1fr_1fr_1fr_1fr_1fr]">
-        <div (click)="ordenar('status')" class="cabecalho-listagem rounded-tl-lg">
+      <div class="titulo-listagem grid-cols-[3rem_1fr_1fr_1fr_1fr_1fr]">
+        <div class="cabecalho-listagem rounded-tl-lg flex items-center justify-center">
+          <input
+            type="checkbox"
+            class="checkbox checkbox-sm"
+            [checked]="todosSelecionados()"
+            (change)="toggleSelecaoTodos($event)">
+        </div>
+        <div (click)="ordenar('status')" class="cabecalho-listagem">
           <lucide-icon *ngIf="getSortIcon('status')" [name]="getSortIcon('status')" class="icone-ordenacao"/>
           Status
         </div>
@@ -113,22 +148,29 @@
         </div>
         <div (click)="ordenar('dataAgendamento')" class="cabecalho-listagem rounded-tr-lg">
           <lucide-icon *ngIf="getSortIcon('dataAgendamento')" [name]="getSortIcon('dataAgendamento')" class="icone-ordenacao"/>
-          Data Atendimento
+          Data Agendamento
         </div>
       </div>
 
       <div class="itens-listagem">
         @for (contaReceber of getItensPaginados(); track contaReceber.id) {
-          <div class="item-listagem grid-cols-[1fr_1fr_1fr_1fr_1fr]" (click)="selecionar(contaReceber)">
-            <div class="celula-listagem flex items-center px-4 py-1.5">
+          <div class="item-listagem grid-cols-[3rem_1fr_1fr_1fr_1fr_1fr]">
+            <div class="celula-listagem flex items-center justify-center">
+              <input
+                type="checkbox"
+                class="checkbox checkbox-sm"
+                [checked]="isSelecionado(contaReceber.id)"
+                (click)="toggleSelecao(contaReceber.id, $event)">
+            </div>
+            <div class="celula-listagem flex items-center px-4 py-1.5" (click)="selecionar(contaReceber)">
               <div class="badge text-base-100" [ngClass]="'bg-['+ StatusContaReceber[contaReceber.status].cor +']'">
                 {{ StatusContaReceber[contaReceber.status].descricao }}
               </div>
             </div>
-            <div class="celula-listagem">{{contaReceber.paciente.nome}}</div>
-            <div class="celula-listagem">{{contaReceber.empresa?.nome}}</div>
-            <div class="celula-listagem">{{contaReceber.profissional.nome}}</div>
-            <div class="celula-listagem">{{contaReceber.dataAgendamento | date:'dd/MM/yyyy'}}</div>
+            <div class="celula-listagem" (click)="selecionar(contaReceber)">{{contaReceber.paciente.nome}}</div>
+            <div class="celula-listagem" (click)="selecionar(contaReceber)">{{contaReceber.empresa?.nome}}</div>
+            <div class="celula-listagem" (click)="selecionar(contaReceber)">{{contaReceber.profissional.nome}}</div>
+            <div class="celula-listagem" (click)="selecionar(contaReceber)">{{contaReceber.dataAgendamento | date:'dd/MM/yyyy'}}</div>
           </div>
         }
       </div>

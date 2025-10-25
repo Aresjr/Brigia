@@ -6,6 +6,7 @@ export interface Disponibilidade extends Entidade {
   dia: string;
   horaInicial: string;
   horaFinal: string;
+  valorAdicional?: number;
 }
 
 export interface DisponibilidadeRequest extends EntidadeRequest {
@@ -13,4 +14,12 @@ export interface DisponibilidadeRequest extends EntidadeRequest {
   dia: string;
   horaInicial: string;
   horaFinal: string;
+  valorAdicional?: number;
+}
+
+export interface HorarioSemana {
+  diaSemana: number;
+  horaInicial: string;
+  horaFinal: string;
+  ativo: boolean;
 }

@@ -46,7 +46,7 @@ export const FORMAS_PAGAMENTO = [
   { valor: 1, descricao: 'Cartão de Crédito' },
   { valor: 2, descricao: 'Cartão de Débito' },
   { valor: 3, descricao: 'Pix' },
-  { valor: 4, descricao: 'Boleto' },
+  //{ valor: 4, descricao: 'Boleto' },
 ];
 
 export const StatusContaReceber: Record<number, { descricao: string; cor: string }> = {
@@ -55,3 +55,13 @@ export const StatusContaReceber: Record<number, { descricao: string; cor: string
   2: { descricao: 'Atrasado', cor: '#EF4444' },
   3: { descricao: 'Parcial', cor: '#A78BFA' }
 }
+
+export const DiasSemana = [
+  { valor: 0, nome: 'Domingo' },
+  { valor: 1, nome: 'Segunda-feira' },
+  { valor: 2, nome: 'Terça-feira' },
+  { valor: 3, nome: 'Quarta-feira' },
+  { valor: 4, nome: 'Quinta-feira' },
+  { valor: 5, nome: 'Sexta-feira' },
+  { valor: 6, nome: 'Sábado' }
+];

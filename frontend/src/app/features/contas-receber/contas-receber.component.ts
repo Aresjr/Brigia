@@ -44,6 +44,9 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
   pacientes: Paciente[] = [];
   profissionais: Profissional[] = [];
   empresas: Empresa[] = [];
+  itensSelecionados: Set<number> = new Set();
+  mostrarDropdownAcoes: boolean = false;
+
   form = new FormGroup({
     status: new FormControl<number | null>(null),
     paciente: new FormControl<number | null>(null),
@@ -153,7 +156,84 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
     }
   }
 
-  protected readonly StatusContaReceber = StatusContaReceber;
+  toggleSelecao(id: number, event: Event) {
+    event.stopPropagation();
+    if (this.itensSelecionados.has(id)) {
+      this.itensSelecionados.delete(id);
+    } else {
+      this.itensSelecionados.add(id);
+    }
+  }
 
+  toggleSelecaoTodos(event: Event) {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      this.getItensPaginados().forEach(item => this.itensSelecionados.add(item.id));
+    } else {
+      this.getItensPaginados().forEach(item => this.itensSelecionados.delete(item.id));
+    }
+  }
+
+  isSelecionado(id: number): boolean {
+    return this.itensSelecionados.has(id);
+  }
+
+  todosSelecionados(): boolean {
+    const itensPaginados = this.getItensPaginados();
+    return itensPaginados.length > 0 && itensPaginados.every(item => this.itensSelecionados.has(item.id));
+  }
+
+  algumSelecionado(): boolean {
+    return this.itensSelecionados.size > 0;
+  }
+
+  podeGerarPDF(): boolean {
+    const empresaSelecionada = this.form.get('empresa')?.value;
+    const pacienteSelecionado = this.form.get('paciente')?.value;
+    return this.algumSelecionado() &&
+           ((empresaSelecionada != null && empresaSelecionada != 0) ||
+            (pacienteSelecionado != null && pacienteSelecionado != 0));
+  }
+
+  gerarPDF() {
+    if (!this.podeGerarPDF()) {
+      this.toastr.warning('Selecione uma empresa ou paciente no filtro para gerar o PDF');
+      return;
+    }
+
+    const ids = Array.from(this.itensSelecionados);
+    this.contasReceberService.gerarPDF(ids).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+
+        const empresaSelecionada = this.form.get('empresa')?.value;
+        const pacienteSelecionado = this.form.get('paciente')?.value;
+        let nomeArquivo = 'contas-receber';
+
+        if (empresaSelecionada && empresaSelecionada != 0) {
+          const empresa = this.empresas.find(e => e.id == empresaSelecionada);
+          nomeArquivo = `contas-receber-${empresa?.nome.toLowerCase().replace(/\s+/g, '-')}`;
+        } else if (pacienteSelecionado && pacienteSelecionado != 0) {
+          const paciente = this.pacientes.find(p => p.id == pacienteSelecionado);
+          nomeArquivo = `contas-receber-${paciente?.nome.toLowerCase().replace(/\s+/g, '-')}`;
+        }
+
+        link.download = `${nomeArquivo}.pdf`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+
+        this.toastr.success('PDF gerado com sucesso');
+        this.itensSelecionados.clear();
+        this.mostrarDropdownAcoes = false;
+      },
+      error: () => {
+        this.toastr.error('Erro ao gerar PDF');
+      }
+    });
+  }
+
+  protected readonly StatusContaReceber = StatusContaReceber;
   protected readonly abrirDatePicker = abrirDatePicker;
 }

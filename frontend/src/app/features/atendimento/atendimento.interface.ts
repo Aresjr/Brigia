@@ -11,12 +11,19 @@ export interface Atendimento extends Entidade {
     paciente: Paciente;
     profissional: Profissional;
     data: Date;
+    dataAtendimento: string;
     horaInicio: Date;
     horaFim: Date;
     agendamento: Agendamento;
     convenio: Convenio;
     empresa: Empresa;
     especialidade: Especialidade;
+    tipoAtendimento?: string;
+    anamnese?: string;
+    exameClinico?: string;
+    diagnostico?: string;
+    conduta?: string;
+    observacoes?: string;
 }
 
 export interface AtendimentoRequest extends EntidadeRequest {

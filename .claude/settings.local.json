@@ -9,7 +9,9 @@
       "Bash(timeout:*)",
       "Bash(../mvnw.cmd:*)",
       "Bash(mvn failsafe:integration-test:*)",
-      "Bash(bash mvnw failsafe:integration-test failsafe:verify -Dtest=none)"
+      "Bash(bash mvnw failsafe:integration-test failsafe:verify -Dtest=none)",
+      "Bash(find:*)",
+      "Bash(npm run build)"
     ],
     "deny": [],
     "ask": []

@@ -22,21 +22,10 @@ public class EmpresaMapper {
             return null;
         }
 
-        return new EmpresaResponse(
-            empresa.getId(),
-            empresa.getNome(),
-            empresa.getObservacao(),
-            empresa.getCodigoBc(),
-            empresa.getValorMinimoMensal(),
-            empresa.getMinimoPorFuncionario(),
-            empresa.getValorMes(),
-            empresa.getFunc(),
-            empresa.getCnpj(),
-            empresa.getEmail(),
-            empresaPlanoMapper.toResponse(empresa.getPlano()),
-            empresa.getCriadoEm(),
-            empresa.getExcluido()
-        );
+        return new EmpresaResponse(empresa.getId(), empresa.getNome(), empresa.getObservacao(), empresa.getCodigoBc(),
+                empresa.getValorMinimoMensal(), empresa.getMinimoPorFuncionario(), empresa.getValorMes(),
+                empresa.getFunc(), empresa.getCnpj(), empresa.getEmail(),
+                empresaPlanoMapper.toResponse(empresa.getPlano()), empresa.getCriadoEm(), empresa.getExcluido());
     }
 
     public PagedResponse<EmpresaResponse> toPagedResponse(Page<Empresa> paged) {

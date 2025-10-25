@@ -7,6 +7,5 @@ import java.util.List;
 
 public record ProcedimentoResponse(Long id, String nome, String codigo, String observacoes, BigDecimal valorPadrao,
         BigDecimal valorRepasse, Integer duracao, TipoAgendamento tipo, EspecialidadeResponse especialidade,
-        LocalDateTime criadoEm, List<PrecoProcedimentoResponse> precosProcedimento,
-        List<ProcedimentoPlanoResponse> precosPlanos, Boolean excluido) {
+        LocalDateTime criadoEm, Boolean excluido) {
 }

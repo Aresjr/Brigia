@@ -1,11 +1,11 @@
  <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm" (click)="fechar()">
-  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[25rem]"
+  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[29rem]"
     (click)="$event.stopPropagation()" >
 
     <div class="flex justify-between items-center">
       <h2 class="text-lg font-semibold">{{ titulo }}</h2>
       <div class="flex gap-2">
-        <button *ngIf="readonly" type="button" class="btn btn-sm btn-ghost btn-circle" title="Editar" (click)="habilitarEdicao()">
+        <button *ngIf="readonly && !agendaSemanal" type="button" class="btn btn-sm btn-ghost btn-circle" title="Editar" (click)="habilitarEdicao()">
           <lucide-icon name="pencil" class="inline w-5 h-5"/>
         </button>
         <button type="button" class="btn btn-sm btn-ghost btn-circle" title="Fechar" (click)="fechar()">
@@ -37,7 +37,27 @@
         </label>
       </div>
 
-      <div class="flex gap-4 mb-4">
+      <!-- Toggle Agenda Semanal / Diária (somente no modo cadastro) -->
+      <div *ngIf="!disponibilidadeDetalhes" class="mb-4">
+        <label class="label-campo mb-2">Tipo de Agenda</label>
+        <div class="flex gap-4 items-center">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="tipoAgenda" class="radio radio-primary radio-sm"
+                   [checked]="!agendaSemanal"
+                   (change)="setTipoAgenda(false)">
+            <span class="text-sm">Agenda Diária</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="tipoAgenda" class="radio radio-primary radio-sm"
+                   [checked]="agendaSemanal"
+                   (change)="setTipoAgenda(true)">
+            <span class="text-sm">Agenda Semanal</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Modo Dia Específico -->
+      <div *ngIf="!agendaSemanal" class="flex gap-4 mb-4">
         <label class="label-campo" for="dia">
           Dia <span aria-hidden="true" class="text-error">*</span>
           <input type="date" formControlName="dia" required id="dia" [min]="hoje"
@@ -64,12 +84,53 @@
             Obrigatório
           </div>
         </label>
+      </div>
 
+      <!-- Modo Agenda Semanal -->
+      <div *ngIf="agendaSemanal" class="mb-4">
+        <h3 class="text-sm font-medium mb-3">Selecione os dias da semana e horários:</h3>
+        <div class="space-y-2" formArrayName="horariosSemana">
+          <div *ngFor="let horario of horariosSemana.controls; let i = index"
+               [formGroupName]="i"
+               class="border border-base-300 rounded-lg p-3">
+            <div class="flex items-center gap-3">
+              <label class="flex items-center gap-2 cursor-pointer flex-1">
+                <input type="checkbox" formControlName="ativo" class="checkbox checkbox-sm">
+                <span class="font-medium">{{ diasSemana[i].nome }}</span>
+              </label>
+
+              <div *ngIf="horario.get('ativo')?.value" class="flex gap-2">
+                <input type="time" formControlName="horaInicial"
+                       class="input input-sm input-bordered w-28"
+                       placeholder="Início">
+                <span class="self-center">até</span>
+                <input type="time" formControlName="horaFinal"
+                       class="input input-sm input-bordered w-28"
+                       placeholder="Fim">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-4 tooltip text-left" data-tip="Valor adicional do dia (ex: transporte, alimentação, etc)">
+        <label class="label-campo" for="valorAdicional">
+          Valor Adicional
+        </label>
+        <label class="input input-sm input-bordered flex items-center h-[2.4rem] max-w-32" [ngClass]="classesCampo('valorAdicional')">
+          R$
+          <input type="text" formControlName="valorAdicional" min="0" id="valorAdicional"
+                 emptyToNull maxlength="8" placeholder="00,00"
+                 mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0">
+        </label>
       </div>
 
       <div class="flex justify-between mt-6">
         <button type="button" class="btn btn-sm" (click)="fechar()" >
           Fechar
+        </button>
+        <button type="button" *ngIf="readonly" class="btn btn-error btn-sm" (click)="solicitarExclusao()">
+          Excluir
         </button>
         <button *ngIf="!readonly" type="submit" class="btn btn-success btn-sm">
           Salvar
@@ -82,7 +143,14 @@
 
 <app-confirm-dialog
   *ngIf="exibeConfirmCancelamento"
-  message="Você já preencheu algumas informações da disponibilidade, deseja realmente sair?"
+  message="Você já preencheu algumas informações da agenda, deseja realmente sair?"
   (confirm)="fechar(true)"
   (cancel)="exibeConfirmCancelamento = false">
+</app-confirm-dialog>
+
+<app-confirm-dialog
+  *ngIf="exibeConfirmExclusao"
+  message="Deseja realmente excluir esta agenda do médico?"
+  (confirm)="confirmarExclusao()"
+  (cancel)="cancelarExclusao()">
 </app-confirm-dialog>

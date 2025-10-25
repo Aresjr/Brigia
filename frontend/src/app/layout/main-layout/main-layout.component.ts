@@ -61,6 +61,7 @@ export class MainLayoutComponent {
     { label: 'Pacientes', icon: 'users', route: '/pacientes', roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.MEDICO] },
     { label: 'Agenda Diária', icon: 'calendar', route: '/agenda-diaria', roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.MEDICO] },
     { label: 'Atendimentos', icon: 'stethoscope', route: '/atendimentos', roles: [Role.ADMIN, Role.MEDICO] },
+    { label: 'Prontuário Eletrônico', icon: 'file-heart', route: '/prontuario-eletronico', roles: [Role.ADMIN, Role.MEDICO] },
     {
       label: 'Cadastros',
       icon: 'user-plus',

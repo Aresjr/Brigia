@@ -49,7 +49,7 @@ public class DisponibilidadeController {
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteDisponibilidade(@PathVariable Long id) {
         log.info("DELETE /disponibilidades - excluindo disponibilidade ID {}", id);
-        service.delete(id);
+        service.delete(id, true);
         return ResponseEntity.noContent().build();
     }
 

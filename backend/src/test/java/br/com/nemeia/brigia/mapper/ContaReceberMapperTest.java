@@ -52,7 +52,7 @@ class ContaReceberMapperTest {
         contaReceber1.setId(1L);
         contaReceber1.setValorAgendamento(new BigDecimal("100.00"));
         contaReceber1.setValorDesconto(new BigDecimal("10.00"));
-        contaReceber1.setValorTotalLancado(new BigDecimal("50.00"));
+        contaReceber1.setValorProcedimentosAdicionais(new BigDecimal("50.00"));
         contaReceber1.setValorRecebido(new BigDecimal("50.00"));
         contaReceber1.setFormaPagamento(FormaPagamento.DINHEIRO);
         contaReceber1.setStatus(StatusContaReceber.PARCIAL);
@@ -87,7 +87,7 @@ class ContaReceberMapperTest {
         contaReceber2.setId(2L);
         contaReceber2.setValorAgendamento(new BigDecimal("200.00"));
         contaReceber2.setValorDesconto(new BigDecimal("0.00"));
-        contaReceber2.setValorTotalLancado(new BigDecimal("0.00"));
+        contaReceber2.setValorProcedimentosAdicionais(new BigDecimal("0.00"));
         contaReceber2.setValorRecebido(new BigDecimal("200.00"));
         contaReceber2.setFormaPagamento(FormaPagamento.CARTAO_CREDITO);
         contaReceber2.setStatus(StatusContaReceber.PAGO);
@@ -128,7 +128,8 @@ class ContaReceberMapperTest {
         when(empresaMapper.toResponse(any(Empresa.class))).thenReturn(null);
         when(profissionalMapper.toResponse(any(Profissional.class))).thenReturn(null);
 
-        // Act & Assert - não deve lançar IllegalStateException: stream has already been operated upon or
+        // Act & Assert - não deve lançar IllegalStateException: stream has already been
+        // operated upon or
         // closed
         assertDoesNotThrow(() -> {
             PagedResponse<ContaReceberResponse> response = contaReceberMapper.toPagedResponse(page);
@@ -215,7 +216,7 @@ class ContaReceberMapperTest {
         assertEquals(profissional, contaReceber.getProfissional());
         assertEquals(new BigDecimal("150.00"), contaReceber.getValorAgendamento());
         assertEquals(new BigDecimal("15.00"), contaReceber.getValorDesconto());
-        assertEquals(BigDecimal.ZERO, contaReceber.getValorTotalLancado());
+        assertEquals(BigDecimal.ZERO, contaReceber.getValorProcedimentosAdicionais());
         assertEquals(FormaPagamento.PIX, contaReceber.getFormaPagamento());
         assertEquals(StatusContaReceber.ABERTO, contaReceber.getStatus());
         assertEquals(BigDecimal.ZERO, contaReceber.getValorRecebido());

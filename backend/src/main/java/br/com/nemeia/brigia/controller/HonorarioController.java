@@ -42,7 +42,7 @@ public class HonorarioController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
+        service.delete(id, true);
         return ResponseEntity.noContent().build();
     }
 

@@ -1,6 +1,7 @@
 import { CalendarEvent } from 'angular-calendar';
 import { Agendamento, StatusAgendamento } from '../features/agenda-diaria/agendamento.interface';
 import { Disponibilidade } from '../features/disponibilidade/disponibilidade.interface';
+import { AgendaSemanal } from '../features/agenda-semanal/agenda-semanal.interface';
 
 export class EventoFactory {
   static fromAgendamento(agendamento: Agendamento): CalendarEvent {
@@ -29,11 +30,11 @@ export class EventoFactory {
       end: data.end,
       title: `${disponibilidade.profissional.nome}
       <br/>
-      ${disponibilidade.horaInicial} - ${disponibilidade.horaFinal}
-      <br/>
       DISPONÍVEL
+      <br/>
+      ${disponibilidade.horaInicial} - ${disponibilidade.horaFinal}
       `,
-      color: { primary: '#10b981', secondary: '#10b981' },
+      color: { primary: '#A78BFA', secondary: '#A78BFA' },
       meta: disponibilidade
     };
   }
@@ -59,6 +60,54 @@ export class EventoFactory {
     end.setHours(hFinal, mFinal, 0, 0);
 
     return { start, end };
+  }
+
+  /**
+   * Converte um registro de AgendaSemanal em eventos do calendário para um período específico
+   * @param agendaSemanal - Registro da agenda semanal
+   * @param dataInicio - Data inicial do período
+   * @param dataFim - Data final do período
+   * @returns Array de eventos do calendário para cada ocorrência no período
+   */
+  static fromAgendaSemanal(agendaSemanal: AgendaSemanal, dataInicio: Date, dataFim: Date): CalendarEvent[] {
+    const eventos: CalendarEvent[] = [];
+    const dataAtual = new Date(dataInicio);
+
+    // Iterar por cada dia no período
+    while (dataAtual <= dataFim) {
+      // Verificar se o dia da semana corresponde ao dia da agenda semanal
+      if (dataAtual.getDay() === agendaSemanal.diaSemana) {
+        const [hInicial, mInicial] = agendaSemanal.horaInicial.split(':').map(Number);
+        const [hFinal, mFinal] = agendaSemanal.horaFinal.split(':').map(Number);
+
+        const start = new Date(dataAtual);
+        start.setHours(hInicial, mInicial, 0, 0);
+
+        const end = new Date(dataAtual);
+        end.setHours(hFinal, mFinal, 0, 0);
+
+        eventos.push({
+          start: start,
+          end: end,
+          title: `${agendaSemanal.profissional.nome}
+          <br/>
+          DISPONÍVEL (SEMANAL)
+          <br/>
+          ${agendaSemanal.horaInicial} - ${agendaSemanal.horaFinal}
+          `,
+          color: { primary: '#A78BFA', secondary: '#A78BFA' },
+          meta: {
+            ...agendaSemanal,
+            dia: dataAtual.toISOString().split('T')[0] // Adicionar data específica ao meta
+          }
+        });
+      }
+
+      // Avançar para o próximo dia
+      dataAtual.setDate(dataAtual.getDate() + 1);
+    }
+
+    return eventos;
   }
 
 }

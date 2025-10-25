@@ -85,6 +85,9 @@ public class Agendamento extends BaseModel {
     @Column(name = "pago", nullable = false)
     private Boolean pago = false;
 
+    @Column(name = "quantia_paga")
+    private BigDecimal quantiaPaga;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "atendimento_id")
     private Atendimento atendimento;

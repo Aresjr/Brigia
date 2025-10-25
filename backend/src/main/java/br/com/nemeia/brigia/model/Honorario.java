@@ -33,16 +33,20 @@ public class Honorario extends BaseModel {
     @Column(name = "quantidade_atendimentos", nullable = false)
     private Integer quantidadeAtendimentos;
 
+    @Column(name = "valor_adicional", precision = 10, scale = 2)
+    private BigDecimal valorAdicional;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unidade_id", nullable = false)
     private Unidade unidade;
 
     public Honorario(Profissional profissional, LocalDate data, BigDecimal valorTotal, Integer quantidadeAtendimentos,
-            Unidade unidade) {
+            Unidade unidade, BigDecimal valorAdicional) {
         this.profissional = profissional;
         this.data = data;
         this.valorTotal = valorTotal;
         this.quantidadeAtendimentos = quantidadeAtendimentos;
         this.unidade = unidade;
+        this.valorAdicional = valorAdicional;
     }
 }

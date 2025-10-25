@@ -88,4 +88,20 @@ public class ProcedimentoController {
                 id, planoId);
         return mapper.toPrecoProcedimentoPlano(service.getById(id), empresaPlanoService.getById(planoId));
     }
+
+    @GetMapping("/{id}/precos-convenio")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
+    public java.util.List<PrecoProcedimentoResponse> getPrecosConvenio(@PathVariable Long id) {
+        log.info("GET /procedimentos/{}/precos-convenio - buscando todos os preços por convênio do procedimento ID",
+                id);
+        return mapper.toPrecosProcedimentoResponse(service.getById(id));
+    }
+
+    @GetMapping("/{id}/precos-plano")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
+    public java.util.List<br.com.nemeia.brigia.dto.response.ProcedimentoPlanoResponse> getPrecosPlano(
+            @PathVariable Long id) {
+        log.info("GET /procedimentos/{}/precos-plano - buscando todos os preços por plano do procedimento ID", id);
+        return mapper.toPrecosPlanosResponse(service.getById(id));
+    }
 }

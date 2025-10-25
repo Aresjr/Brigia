@@ -9,27 +9,27 @@
         <div class="inline-flex rounded-lg border border-base-300 p-1">
           <button
             (click)="alternarModoVisualizacao('tudo')"
-            class="btn btn-sm"
+            class="btn btn-xs px-4 py-1 rounded-md transition-all duration-200"
             [class]="modoVisualizacao === 'tudo'
-          ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
-          : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-gray-50'">
+          ? 'btn-primary text-white font-medium'
+          : 'btn-ghost text-gray-600 hover:bg-gray-50'">
             Tudo
           </button>
           <button
             (click)="alternarModoVisualizacao('agendamentos')"
-            class="btn btn-sm"
+            class="btn btn-xs px-4 py-1 rounded-md transition-all duration-200"
             [class]="modoVisualizacao === 'agendamentos'
-          ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
-          : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-gray-50'">
+          ? 'btn-primary text-white font-medium'
+          : 'btn-ghost text-gray-600 hover:bg-gray-50'">
             Agendamentos
           </button>
           <button
             (click)="alternarModoVisualizacao('disponibilidades')"
-            class="btn btn-sm"
+            class="btn btn-xs px-4 py-1 rounded-md transition-all duration-200"
             [class]="modoVisualizacao === 'disponibilidades'
-          ? 'btn-primary text-white px-4 py-2 rounded-md transition-all duration-200 font-medium'
-          : 'btn-ghost text-gray-600 px-4 py-2 rounded-md transition-all duration-200 hover:bg-gray-50'">
-            Disponibilidades
+          ? 'btn-primary text-white font-medium'
+          : 'btn-ghost text-gray-600 hover:bg-gray-50'">
+            Agenda do Médico
           </button>
         </div>
       </div>
@@ -89,7 +89,8 @@
   <app-disponibilidade-form
     [disponibilidadeDetalhes]="disponibilidadeDetalhes"
     [profissionalId]="profissionalFiltro !== 0 ? profissionalFiltro : null"
-    (save)="salvarDisponibilidade($event)"
+    (saved)="exibeFormDisponibilidade = false; carregarAgendamentos();"
+    (deleted)="exibeFormDisponibilidade = false; carregarAgendamentos();"
     (cancel)="fecharFormDisponibilidade()">
   </app-disponibilidade-form>
 }
@@ -104,7 +105,7 @@
 @if (mostraFab()) {
   <app-fab [tituloBotao1]="'Criar Agendamento'" [iconeBotao1]="'calendar-plus'"
            (clickedBotao1)="addNovo()"
-           [tituloBotao2]="'Criar Disponibilidade'" [iconeBotao2]="'calendar-check'"
+           [tituloBotao2]="'Criar Agenda do Médico'" [iconeBotao2]="'calendar-check'"
            (clickedBotao2)="addDisponibilidade()"
            [tituloBotao3]="'Gerar Honorários'" [iconeBotao3]="'dollar-sign'"
            (clickedBotao3)="gerarHonorarios()"

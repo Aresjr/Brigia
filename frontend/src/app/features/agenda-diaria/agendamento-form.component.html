@@ -188,8 +188,10 @@
         </div>
 
         <div class="w-[30rem]" >
-          <label class="label-campo" for="procedimentoId">Procedimento Principal</label>
-          <ng-select formControlName="procedimentoId" class="campo-select"
+          <label class="label-campo" for="procedimentoId">
+            Procedimento Principal <span aria-hidden="true" class="text-error">*</span>
+          </label>
+          <ng-select formControlName="procedimentoId" class="campo-select" required
                      [ngClass]="classesCampo('procedimentoId')" placeholder="Selecione"
                      (change)="selectProcedimento($event)" (clear)="selectProcedimento(null)"
                      [items]="procedimentosFiltrados" bindValue="id" bindLabel="nome" labelForId="procedimentoId">
@@ -197,6 +199,9 @@
               <span class="text-sm p-6">Nenhum resultado</span>
             </ng-template>
           </ng-select>
+          <div *ngIf="isInvalid('procedimentoId')" class="text-error text-sm">
+            Obrigatório
+          </div>
         </div>
       </div>
 
@@ -219,10 +224,10 @@
             </div>
           </label>
         </div>
-        <div class="w-[6rem] mr-4" >
+        <div class="w-[6rem] mr-4 tooltip text-left" data-tip="Somente com permissão de um admin">
           <label class="label-campo" for="valor">
             Valor <span aria-hidden="true" class="text-error">*</span>
-            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" (click)="editaValor()" *ngIf="this.modoSalvar && !valorEditavel" title="Editar Valor">
+            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" (click)="solicitarHabilitacaoValor()" *ngIf="this.modoSalvar && !valorEditavel" title="Editar Valor">
               <lucide-icon name="pencil" class="h-3.5"/>
             </button>
             <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-7 -mt-0.5" (click)="cancelarEdicaoValor()" *ngIf="this.modoSalvar && valorEditavel" title="Cancelar Edição de Valor">
@@ -235,35 +240,71 @@
             <input type="text" formControlName="valor" min="1" max="99999" id="valor"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker="," required
-                   class="campo border-0" [readOnly]="!this.valorEditavel" (change)="alterouValor($event)">
+                   class="campo border-0" (change)="alterouValor($event)">
           </label>
           <label *ngIf="isInvalid('valor')" class="text-error text-sm">
             Obrigatório
           </label>
         </div>
 
-        <div class="w-[5rem] mr-4" >
+        <div class="w-[6rem] mr-4 tooltip text-left" data-tip="Somente com permissão de um admin">
           <label class="label-campo" for="desconto">
             Desconto
+            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-1 -mt-0.5" (click)="solicitarHabilitacaoDesconto()" *ngIf="this.modoSalvar && !descontoEditavel" title="Editar Desconto">
+              <lucide-icon name="pencil" class="h-3.5"/>
+            </button>
+            <button type="button" class="btn btn-xs btn-ghost btn-circle absolute ml-1 -mt-0.5" (click)="cancelarEdicaoDesconto()" *ngIf="this.modoSalvar && descontoEditavel" title="Cancelar Edição de Desconto">
+              <lucide-icon name="x" class="h-3.5"/>
+            </button>
           </label>
-          <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('desconto')">
+          <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('desconto', !this.descontoEditavel)">
             R$
             <input type="text" formControlName="desconto" min="1" max="99999" id="desconto"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0"
-                    (change)="alterouDesconto($event)">
+                   [readOnly]="!this.descontoEditavel" (change)="alterouDesconto($event)">
+          </label>
+        </div>
+
+        <div class="w-[11rem] mr-4">
+            <label class="label-campo mb-2">Pagamento</label>
+            <div class="flex gap-4 items-center h-[2.4rem]">
+              <label class="flex items-center gap-2" [ngClass]="{'cursor-pointer': modoSalvar}">
+                <input type="radio" name="tipoPagamento" class="radio radio-primary radio-sm"
+                       [checked]="tipoPagamento === 'pago'"
+                       [disabled]="!modoSalvar"
+                       (change)="selecionarTipoPagamento('pago')">
+                <span class="text-sm">Pago</span>
+              </label>
+              <label class="flex items-center gap-2" [ngClass]="{'cursor-pointer': modoSalvar}">
+                <input type="radio" name="tipoPagamento" class="radio radio-primary radio-sm"
+                       [checked]="tipoPagamento === 'parcial'"
+                       [disabled]="!modoSalvar"
+                       (change)="selecionarTipoPagamento('parcial')">
+                <span class="text-sm">Parcial</span>
+              </label>
+            </div>
+        </div>
+
+        <div class="w-[8rem]">
+          <label class="label-campo" for="quantiaPaga">
+            Quantia Paga
+          </label>
+          <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="{'bg-base-200': tipoPagamento === 'pago' && modoSalvar, '!bg-base-100': !modoSalvar}">
+            R$
+            <input type="text" formControlName="quantiaPaga" min="0" id="quantiaPaga"
+                   (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
+                   mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0"
+                   [readOnly]="tipoPagamento === 'pago'">
           </label>
         </div>
 
       }
 
-        <div class="w-[4rem] mr-4 tooltip text-left" data-tip="Caso marcado, conta a receber será criada como recebida">
-          <label class="label-campo rounded-lg px-1.5 hover:border hover:border-neutral" for="pago">
-            Pago <br/><input type="checkbox" id="pago" formControlName="pago" class="campo my-3 mx-3 checkbox checkbox-primary" />
-          </label>
-        </div>
+      </div>
 
-        <div class="w-[25rem]" >
+      <div class="flex mt-2">
+        <div class="w-full" >
           <label class="label-campo" for="observacoes">
             Observações
             <textarea id="observacoes" formControlName="observacoes" rows="2" emptyToNull class="campo"
@@ -271,7 +312,6 @@
             </textarea>
           </label>
         </div>
-
       </div>
 
       <div class="flex mt-4">
@@ -279,7 +319,7 @@
           <div class="flex justify-start items-center mb-2 gap-4">
             <h3 class="text-base font-medium">Procedimentos Adicionais</h3>
             @if (modoSalvar) {
-              <button type="button" class="btn btn-primary btn-sm" (click)="adicionarProcedimento()">
+              <button type="button" class="btn btn-primary btn-xs" (click)="adicionarProcedimento()">
                 <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
                 Adicionar
               </button>
@@ -348,6 +388,9 @@
           <button type="button" class="btn btn-primary btn-sm" *ngIf="podeAbrirAtendimento(agendamentoDetalhes)" (click)="abrirAtendimento(agendamentoDetalhes)" >
             Abrir Atendimento
           </button>
+          <button type="button" class="btn btn-ghost btn-sm hidden" *ngIf="modoSalvar" (click)="salvarRascunho()" title="Salvar as informações preenchidas como rascunho">
+            Salvar Rascunho
+          </button>
           <button type="submit" class="btn btn-success btn-sm" *ngIf="modoSalvar" >
             Salvar
           </button>
@@ -370,3 +413,10 @@
   (confirm)="fechar(true)"
   (cancel)="exibeConfirmCancelamento = false">
 </app-confirm-dialog>
+
+<app-admin-credentials-dialog
+  *ngIf="mostrarModalCredenciais"
+  [mensagem]="mensagemModalCredenciais"
+  (confirm)="validarCredenciaisAdmin($event)"
+  (cancel)="cancelarModalCredenciais()">
+</app-admin-credentials-dialog>

@@ -9,8 +9,6 @@ export interface Procedimento extends Entidade {
     especialidade: Especialidade;
     valorPadrao: number;
     observacoes: string | null;
-    precosProcedimento: PrecoProcedimentoConvenio[];
-    precosPlanos: PrecoProcedimentoPlano[];
     valorRepasse: number;
     duracao: number;
     tipo: number;
@@ -36,4 +34,5 @@ export interface PrecoProcedimentoPlano {
     preco: number;
     repasse: number;
     plano: EmpresaPlano;
+    unidade: Unidade | null;
 }

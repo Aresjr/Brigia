@@ -6,6 +6,7 @@ import br.com.nemeia.brigia.mapper.PrecoProcedimentoMapper;
 import br.com.nemeia.brigia.model.Convenio;
 import br.com.nemeia.brigia.model.PrecoProcedimento;
 import br.com.nemeia.brigia.model.Procedimento;
+import br.com.nemeia.brigia.model.Unidade;
 import br.com.nemeia.brigia.repository.PrecoProcedimentoRepository;
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -26,8 +27,9 @@ public class PrecoProcedimentoService {
                 .orElseThrow(() -> new NotFoundException("Preço Procedimento não encontrada com ID: " + id));
     }
 
-    public PrecoProcedimento save(Procedimento procedimento, Convenio convenio, PrecoProcedimentoRequest request) {
-        PrecoProcedimento precoProcedimento = mapper.toPrecoProcedimento(procedimento, convenio, request);
+    public PrecoProcedimento save(Procedimento procedimento, Convenio convenio, Unidade unidade,
+            PrecoProcedimentoRequest request) {
+        PrecoProcedimento precoProcedimento = mapper.toPrecoProcedimento(procedimento, convenio, unidade, request);
         return repository.save(precoProcedimento);
     }
 

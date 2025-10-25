@@ -22,6 +22,11 @@ export interface CadastrarSenhaRequest {
   senha: string;
 }
 
+export interface ValidarAdminRequest {
+  login: string;
+  senha: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -47,5 +52,12 @@ export class AuthService {
   cadastrarSenha(token: string, senha: string): Observable<void> {
     const payload: CadastrarSenhaRequest = { token, senha };
     return this.http.post<void>(`${environment.apiUrl}/auth/cadastrar-senha`, payload);
+  }
+
+  validarAdmin(login: string, senha: string): Observable<boolean> {
+    const payload: ValidarAdminRequest = { login, senha };
+    return this.http.post<boolean>(`${environment.apiUrl}/admin/validar-credenciais`, payload, {
+      withCredentials: true,
+    });
   }
 }

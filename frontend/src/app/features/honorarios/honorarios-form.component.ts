@@ -11,6 +11,8 @@ import { ToastrService } from 'ngx-toastr';
 import { HonorarioService } from './honorario.service';
 import { Honorario } from './honorario.interface';
 import { abrirDatePicker } from '../../core/util-methods';
+import { DisponibilidadeService } from '../disponibilidade/disponibilidade.service';
+import { AgendaSemanalService } from '../agenda-semanal/agenda-semanal.service';
 
 @Component({
   selector: 'app-honorarios-form',
@@ -35,13 +37,16 @@ export class HonorariosFormComponent implements OnInit {
   isLoading: boolean = false;
   hoje: string;
   modoDetalhes: boolean = false;
+  valorAdicionalCalculado: number = 0;
 
   constructor(
     private fb: FormBuilder,
     private profissionalService: ProfissionalService,
     private agendamentoService: AgendamentoService,
     private toastr: ToastrService,
-    private honorarioService: HonorarioService
+    private honorarioService: HonorarioService,
+    private disponibilidadeService: DisponibilidadeService,
+    private agendaSemanalService: AgendaSemanalService
   ) {
     this.hoje = new Date().toISOString().split('T')[0];
     this.form = this.fb.group({
@@ -94,6 +99,7 @@ export class HonorariosFormComponent implements OnInit {
 
     if (!profissionalId || !data) {
       this.agendamentos = [];
+      this.valorAdicionalCalculado = 0;
       return;
     }
 
@@ -107,10 +113,74 @@ export class HonorariosFormComponent implements OnInit {
           return ag.profissional.id === profissionalId &&
                  agData.toDateString() === dataObj.toDateString();
         });
+
+        // Buscar valor adicional
+        if (this.agendamentos.length > 0) {
+          this.buscarValorAdicional(profissionalId, data, this.agendamentos[0].hora);
+        } else {
+          this.valorAdicionalCalculado = 0;
+        }
+
         this.isLoading = false;
       },
       error: () => {
         this.isLoading = false;
+      }
+    });
+  }
+
+  buscarValorAdicional(profissionalId: number, data: string, hora: string) {
+    // Buscar na disponibilidade diária
+    this.disponibilidadeService.listar().subscribe({
+      next: (responseDisp) => {
+        // Filtrar TODAS as disponibilidades do dia para o profissional
+        const disponibilidades = responseDisp.items.filter(d =>
+          d.profissional.id === profissionalId &&
+          d.dia === data
+        );
+
+        // Somar todos os valores adicionais das disponibilidades do dia
+        const valorDiario = disponibilidades.reduce((sum, d) => sum + (d.valorAdicional || 0), 0);
+
+        // Buscar também na agenda semanal e somar
+        // IMPORTANTE: Adicionar 'T00:00:00' para evitar problemas de timezone
+        const dataObj = new Date(data + 'T00:00:00');
+        const diaSemana = dataObj.getDay(); // 0=Domingo, 6=Sábado
+
+        this.agendaSemanalService.listarPorProfissional(profissionalId).subscribe({
+          next: (responseAgenda) => {
+
+            // Somar TODAS as agendas semanais do dia
+            const valorSemanal = responseAgenda
+              .filter(a => a.diaSemana === diaSemana)
+              .reduce((sum, a) => sum + (a.valorAdicional || 0), 0);
+
+            // Total = disponibilidades diárias + agendas semanais
+            this.valorAdicionalCalculado = valorDiario + valorSemanal;
+          },
+          error: () => {
+            // Se erro ao buscar agenda semanal, usar apenas valor diário
+            this.valorAdicionalCalculado = valorDiario;
+          }
+        });
+      },
+      error: () => {
+        // Se erro ao buscar disponibilidades, tentar apenas agenda semanal
+        const dataObj = new Date(data + 'T00:00:00');
+        const diaSemana = dataObj.getDay();
+
+        this.agendaSemanalService.listarPorProfissional(profissionalId).subscribe({
+          next: (responseAgenda) => {
+            const valorSemanal = responseAgenda
+              .filter(a => a.diaSemana === diaSemana)
+              .reduce((sum, a) => sum + (a.valorAdicional || 0), 0);
+
+            this.valorAdicionalCalculado = valorSemanal;
+          },
+          error: () => {
+            this.valorAdicionalCalculado = 0;
+          }
+        });
       }
     });
   }
@@ -146,6 +216,15 @@ export class HonorariosFormComponent implements OnInit {
 
   get valorTotal(): number {
     return this.agendamentos.reduce((sum, ag) => sum + this.calcularValorAgendamento(ag), 0);
+  }
+
+  get valorAdicional(): number {
+    // Se está em modo detalhes, retorna o valor do honorário
+    if (this.modoDetalhes && this.honorario) {
+      return this.honorario.valorAdicional || 0;
+    }
+    // Se está gerando novo honorário, retorna o valor calculado
+    return this.valorAdicionalCalculado;
   }
 
   fechar() {
