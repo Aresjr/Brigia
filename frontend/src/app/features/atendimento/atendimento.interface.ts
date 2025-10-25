@@ -11,7 +11,6 @@ export interface Atendimento extends Entidade {
     paciente: Paciente;
     profissional: Profissional;
     data: Date;
-    dataAtendimento: string;
     horaInicio: Date;
     horaFim: Date;
     agendamento: Agendamento;

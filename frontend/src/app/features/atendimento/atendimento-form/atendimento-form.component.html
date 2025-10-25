@@ -117,31 +117,80 @@
               <p>Nenhum atendimento anterior encontrado</p>
             </div>
           } @else {
-            <div class="overflow-x-auto max-h-48">
-              <table class="table table-xs table-zebra">
-                <thead>
-                  <tr>
-                    <th>Data</th>
-                    <th>Profissional</th>
-                    <th>Tipo</th>
-                    <th class="text-right">Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (atendimento of atendimentosAnteriores; track atendimento.id) {
-                    <tr class="hover">
-                      <td>{{ atendimento.dataAtendimento | date:'dd/MM/yyyy HH:mm' }}</td>
-                      <td>{{ atendimento.profissional.nome || '-' }}</td>
-                      <td>{{ atendimento.tipoAtendimento || 'Consulta' }}</td>
-                      <td class="text-right">
-                        <button type="button" class="btn btn-ghost btn-xs" (click)="visualizarAtendimentoAnterior(atendimento)" title="Ver detalhes">
-                          <lucide-icon name="eye" class="w-3 h-3"></lucide-icon>
-                        </button>
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
+            <div class="overflow-y-auto max-h-96 pr-2">
+              <!-- Timeline de Atendimentos -->
+              <div class="relative">
+                @for (atendimento of atendimentosAnteriores; track atendimento.id; let isLast = $last) {
+                  <div class="flex gap-4 mb-6">
+                    <!-- Linha do tempo -->
+                    <div class="flex flex-col items-center">
+                      <div class="w-3 h-3 rounded-full bg-primary flex-shrink-0 mt-1"></div>
+                      @if (!isLast) {
+                        <div class="w-0.5 h-full bg-base-300 flex-grow min-h-[2rem]"></div>
+                      }
+                    </div>
+
+                    <!-- Conteúdo do atendimento -->
+                    <div class="flex-1 pb-4">
+                      <!-- Cabeçalho -->
+                      <div class="mb-3">
+                        <div class="flex items-center justify-between mb-1">
+                          <div class="flex items-center gap-2">
+                            <lucide-icon name="user-round" class="inline w-3 h-3 text-neutral"></lucide-icon>
+                            <span class="font-semibold text-sm">{{ atendimento.profissional.nome }}</span>
+                            @if (atendimento.tipoAtendimento) {
+                              <span class="text-xs text-neutral">• {{ atendimento.tipoAtendimento }}</span>
+                            }
+                            <span class="text-xs text-neutral">{{ atendimento.data | date:'dd/MM/yyyy' }}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Detalhes do atendimento -->
+                      <div class="bg-base-100 rounded-lg border border-base-300 p-3 space-y-3 text-xs">
+                        @if (atendimento.anamnese) {
+                          <div>
+                            <p class="font-semibold text-neutral mb-1">Anamnese</p>
+                            <div class="prose prose-sm max-w-none text-xs" [innerHTML]="atendimento.anamnese"></div>
+                          </div>
+                        }
+
+                        @if (atendimento.exameClinico) {
+                          <div>
+                            <p class="font-semibold text-neutral mb-1">Exame Clínico</p>
+                            <div class="prose prose-sm max-w-none text-xs" [innerHTML]="atendimento.exameClinico"></div>
+                          </div>
+                        }
+
+                        @if (atendimento.diagnostico) {
+                          <div>
+                            <p class="font-semibold text-neutral mb-1">Diagnóstico</p>
+                            <div class="prose prose-sm max-w-none text-xs" [innerHTML]="atendimento.diagnostico"></div>
+                          </div>
+                        }
+
+                        @if (atendimento.conduta) {
+                          <div>
+                            <p class="font-semibold text-neutral mb-1">Conduta</p>
+                            <div class="prose prose-sm max-w-none text-xs" [innerHTML]="atendimento.conduta"></div>
+                          </div>
+                        }
+
+                        @if (atendimento.observacoes) {
+                          <div>
+                            <p class="font-semibold text-neutral mb-1">Observações</p>
+                            <div class="prose prose-sm max-w-none text-xs" [innerHTML]="atendimento.observacoes"></div>
+                          </div>
+                        }
+
+                        @if (!atendimento.anamnese && !atendimento.exameClinico && !atendimento.diagnostico && !atendimento.conduta && !atendimento.observacoes) {
+                          <p class="text-neutral italic text-center py-2">Nenhum detalhe registrado</p>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
             </div>
           }
         }
@@ -480,115 +529,6 @@
   </div>
 </div>
 
-<!-- Modal de Visualização de Atendimento Anterior -->
-@if (atendimentoAnteriorSelecionado) {
-  <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50" (click)="fecharAtendimentoAnterior()">
-    <div class="bg-base-100 rounded-lg shadow-xl w-[90vw] max-w-4xl max-h-[90vh] overflow-hidden" (click)="$event.stopPropagation()">
-
-      <!-- Header -->
-      <div class="flex justify-between items-center p-6 border-b border-base-300">
-        <div>
-          <h2 class="text-xl font-semibold">Atendimento Anterior</h2>
-          <p class="text-sm text-neutral mt-1">{{ atendimentoAnteriorSelecionado.dataAtendimento | date:'dd/MM/yyyy HH:mm' }}</p>
-        </div>
-        <button type="button" class="btn btn-ghost btn-circle btn-sm" (click)="fecharAtendimentoAnterior()">
-          <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
-        </button>
-      </div>
-
-      <!-- Tabs -->
-      <div role="tablist" class="tabs tabs-bordered px-6 pt-4">
-        <input type="radio" name="atendimento_anterior_tabs" role="tab" class="tab" aria-label="Informações Gerais" checked />
-        <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <span class="text-sm text-neutral">Profissional</span>
-              <p class="font-semibold">{{ atendimentoAnteriorSelecionado.profissional.nome || '-' }}</p>
-            </div>
-            <div>
-              <span class="text-sm text-neutral">Data do Atendimento</span>
-              <p class="font-semibold">{{ atendimentoAnteriorSelecionado.dataAtendimento | date:'dd/MM/yyyy HH:mm' }}</p>
-            </div>
-            <div>
-              <span class="text-sm text-neutral">Tipo de Atendimento</span>
-              <p class="font-semibold">{{ atendimentoAnteriorSelecionado.tipoAtendimento || 'Consulta' }}</p>
-            </div>
-            <div>
-              <span class="text-sm text-neutral">Status</span>
-              <p class="font-semibold">
-                <span class="badge badge-sm" [ngClass]="'bg-[' + StatusAtendimento[atendimentoAnteriorSelecionado.status].cor + ']'">
-                  {{ StatusAtendimento[atendimentoAnteriorSelecionado.status].descricao }}
-                </span>
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <input type="radio" name="atendimento_anterior_tabs" role="tab" class="tab" aria-label="Anamnese" />
-        <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
-          @if (atendimentoAnteriorSelecionado.anamnese) {
-            <div class="prose max-w-none">
-              <div [innerHTML]="atendimentoAnteriorSelecionado.anamnese"></div>
-            </div>
-          } @else {
-            <p class="text-neutral text-center py-8">Nenhuma anamnese registrada</p>
-          }
-        </div>
-
-        <input type="radio" name="atendimento_anterior_tabs" role="tab" class="tab" aria-label="Exame Clínico" />
-        <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
-          @if (atendimentoAnteriorSelecionado.exameClinico) {
-            <div class="prose max-w-none">
-              <div [innerHTML]="atendimentoAnteriorSelecionado.exameClinico"></div>
-            </div>
-          } @else {
-            <p class="text-neutral text-center py-8">Nenhum exame clínico registrado</p>
-          }
-        </div>
-
-        <input type="radio" name="atendimento_anterior_tabs" role="tab" class="tab" aria-label="Diagnóstico" />
-        <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
-          @if (atendimentoAnteriorSelecionado.diagnostico) {
-            <div class="prose max-w-none">
-              <div [innerHTML]="atendimentoAnteriorSelecionado.diagnostico"></div>
-            </div>
-          } @else {
-            <p class="text-neutral text-center py-8">Nenhum diagnóstico registrado</p>
-          }
-        </div>
-
-        <input type="radio" name="atendimento_anterior_tabs" role="tab" class="tab" aria-label="Conduta" />
-        <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
-          @if (atendimentoAnteriorSelecionado.conduta) {
-            <div class="prose max-w-none">
-              <div [innerHTML]="atendimentoAnteriorSelecionado.conduta"></div>
-            </div>
-          } @else {
-            <p class="text-neutral text-center py-8">Nenhuma conduta registrada</p>
-          }
-        </div>
-
-        <input type="radio" name="atendimento_anterior_tabs" role="tab" class="tab" aria-label="Observações" />
-        <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
-          @if (atendimentoAnteriorSelecionado.observacoes) {
-            <div class="prose max-w-none">
-              <div [innerHTML]="atendimentoAnteriorSelecionado.observacoes"></div>
-            </div>
-          } @else {
-            <p class="text-neutral text-center py-8">Nenhuma observação registrada</p>
-          }
-        </div>
-      </div>
-
-      <!-- Footer -->
-      <div class="flex justify-end gap-2 p-6 border-t border-base-300">
-        <button type="button" class="btn btn-ghost" (click)="fecharAtendimentoAnterior()">
-          Fechar
-        </button>
-      </div>
-    </div>
-  </div>
-}
 
 <app-confirm-dialog
   *ngIf="exibeConfirmCancelamento"

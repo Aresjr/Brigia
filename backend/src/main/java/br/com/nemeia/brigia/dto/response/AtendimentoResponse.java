@@ -14,5 +14,4 @@ public record AtendimentoResponse(Long id, PacienteResponse paciente, Profission
         AgendamentoResponse agendamento, ConvenioResponse convenio, StatusAtendimento status, EmpresaResponse empresa,
         EspecialidadeResponse especialidade, FormaPagamento formaPagamento, String observacoes, String anamnese,
         String exameFisico, String diagnostico, String evolucaoClinica, String examesSolicitados, String prescricoes) {
-    // TODO - adicionar lista de procedimentos lançados
 }

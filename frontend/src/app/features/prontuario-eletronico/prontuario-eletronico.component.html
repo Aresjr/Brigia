@@ -137,7 +137,7 @@
               <tbody>
                 @for (atendimento of atendimentos; track atendimento.id) {
                   <tr class="hover">
-                    <td>{{ atendimento.dataAtendimento | date:'dd/MM/yyyy HH:mm' }}</td>
+                    <td>{{ atendimento.data | date:'dd/MM/yyyy HH:mm' }}</td>
                     <td>{{ atendimento.profissional.nome || '-' }}</td>
                     <td>
                       <span class="badge badge-primary badge-sm">
@@ -175,7 +175,7 @@
       <div class="flex justify-between items-center p-6 border-b border-base-300">
         <div>
           <h2 class="text-xl font-semibold">Detalhes do Atendimento</h2>
-          <p class="text-sm text-neutral mt-1">{{ atendimentoSelecionado.dataAtendimento | date:'dd/MM/yyyy HH:mm' }}</p>
+          <p class="text-sm text-neutral mt-1">{{ atendimentoSelecionado.data | date:'dd/MM/yyyy HH:mm' }}</p>
         </div>
         <button type="button" class="btn btn-ghost btn-circle btn-sm" (click)="fecharAtendimento()">
           <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
@@ -193,7 +193,7 @@
             </div>
             <div>
               <span class="text-sm text-neutral">Data do Atendimento</span>
-              <p class="font-semibold">{{ atendimentoSelecionado.dataAtendimento | date:'dd/MM/yyyy HH:mm' }}</p>
+              <p class="font-semibold">{{ atendimentoSelecionado.data | date:'dd/MM/yyyy HH:mm' }}</p>
             </div>
             <div>
               <span class="text-sm text-neutral">Tipo de Atendimento</span>
@@ -201,7 +201,11 @@
             </div>
             <div>
               <span class="text-sm text-neutral">Status</span>
-              <p class="font-semibold">{{ atendimentoSelecionado.status || '-' }}</p>
+              <p class="font-semibold">
+                <span class="badge badge-sm" [ngClass]="'bg-[' + StatusAtendimento[atendimentoSelecionado.status].cor + ']'">
+                  {{ StatusAtendimento[atendimentoSelecionado.status].descricao }}
+                </span>
+              </p>
             </div>
           </div>
         </div>
