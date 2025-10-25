@@ -11,7 +11,9 @@
       "Bash(mvn failsafe:integration-test:*)",
       "Bash(bash mvnw failsafe:integration-test failsafe:verify -Dtest=none)",
       "Bash(find:*)",
-      "Bash(npm run build)"
+      "Bash(npm run build)",
+      "Bash(../mvnw clean package:*)",
+      "Bash(..mvnw.cmd clean package -DskipTests)"
     ],
     "deny": [],
     "ask": []
