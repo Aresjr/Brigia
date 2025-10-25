@@ -9,7 +9,7 @@
         <div class="inline-flex rounded-lg border border-base-300 p-1">
           <button
             (click)="alternarModoVisualizacao('tudo')"
-            class="btn btn-xs px-4 py-1 rounded-md transition-all duration-200"
+            class="btn btn-xs px-2 py-1 rounded-md transition-all duration-200"
             [class]="modoVisualizacao === 'tudo'
           ? 'btn-primary text-white font-medium'
           : 'btn-ghost text-gray-600 hover:bg-gray-50'">
@@ -17,7 +17,7 @@
           </button>
           <button
             (click)="alternarModoVisualizacao('agendamentos')"
-            class="btn btn-xs px-4 py-1 rounded-md transition-all duration-200"
+            class="btn btn-xs px-2 py-1 rounded-md transition-all duration-200"
             [class]="modoVisualizacao === 'agendamentos'
           ? 'btn-primary text-white font-medium'
           : 'btn-ghost text-gray-600 hover:bg-gray-50'">
@@ -25,11 +25,19 @@
           </button>
           <button
             (click)="alternarModoVisualizacao('disponibilidades')"
-            class="btn btn-xs px-4 py-1 rounded-md transition-all duration-200"
+            class="btn btn-xs px-2 py-1 rounded-md transition-all duration-200"
             [class]="modoVisualizacao === 'disponibilidades'
           ? 'btn-primary text-white font-medium'
           : 'btn-ghost text-gray-600 hover:bg-gray-50'">
             Agenda do Médico
+          </button>
+          <button
+            (click)="alternarModoVisualizacao('filaEspera')"
+            class="btn btn-xs px-2 py-1 rounded-md transition-all duration-200"
+            [class]="modoVisualizacao === 'filaEspera'
+          ? 'btn-primary text-white font-medium'
+          : 'btn-ghost text-gray-600 hover:bg-gray-50'">
+            Fila de Espera
           </button>
         </div>
       </div>
@@ -61,17 +69,25 @@
       </div>
     </div>
 
-    <app-calendario
-      class="z-10"
-      [events]="eventosExibicao"
-      [isLoading]="isLoading"
-      (detalhesAgendamento)="detalhesAgendamento($event)"
-      (detalhesDisponibilidade)="detalhesDisponibilidade($event)"
-      (diaClicado)="diaClicado($event)"
-      (horarioClicado)="horarioClicado($event)"
-      (dataAlterada)="dataAlterada($event)"
-      (recarrega)="carregarAgendamentos()">
-    </app-calendario>
+    @if (modoVisualizacao === 'filaEspera') {
+      <app-fila-espera-lista
+        [isLoading]="isLoading"
+        [filaEspera]="filaEsperaLista"
+        (recarrega)="carregarFilaEspera()">
+      </app-fila-espera-lista>
+    } @else {
+      <app-calendario
+        class="z-10"
+        [events]="eventosExibicao"
+        [isLoading]="isLoading"
+        (detalhesAgendamento)="detalhesAgendamento($event)"
+        (detalhesDisponibilidade)="detalhesDisponibilidade($event)"
+        (diaClicado)="diaClicado($event)"
+        (horarioClicado)="horarioClicado($event)"
+        (dataAlterada)="dataAlterada($event)"
+        (recarrega)="carregarAgendamentos()">
+      </app-calendario>
+    }
   </div>
 
 @if (exibeForm) {

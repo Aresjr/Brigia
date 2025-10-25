@@ -25,6 +25,9 @@ import { DisponibilidadeService } from '../disponibilidade/disponibilidade.servi
 import { HonorariosFormComponent } from '../honorarios/honorarios-form.component';
 import { AgendaSemanalService } from '../agenda-semanal/agenda-semanal.service';
 import { ContaReceberService } from '../contas-receber/contas-receber.service';
+import { FilaEsperaService } from '../fila-espera/fila-espera.service';
+import { FilaEspera } from '../fila-espera/fila-espera.interface';
+import { FilaEsperaListaComponent } from '../fila-espera/fila-espera-lista.component';
 
 @Component({
   selector: 'app-agenda-diaria',
@@ -39,7 +42,8 @@ import { ContaReceberService } from '../contas-receber/contas-receber.service';
     NgOptionComponent,
     NgSelectComponent,
     DisponibilidadeFormComponent,
-    HonorariosFormComponent
+    HonorariosFormComponent,
+    FilaEsperaListaComponent
   ],
   templateUrl: './agenda-diaria.component.html'
 })
@@ -60,7 +64,8 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   profissionalFiltro: number = 0;
   pacienteFiltro: number = 0;
   private subscription!: Subscription;
-  modoVisualizacao: 'tudo' | 'agendamentos' | 'disponibilidades' = 'tudo';
+  modoVisualizacao: 'tudo' | 'agendamentos' | 'disponibilidades' | 'filaEspera' = 'tudo';
+  filaEsperaLista: FilaEspera[] = [];
 
   constructor(private router: Router, private toastr: ToastrService,
               private agendamentoService: AgendamentoService,
@@ -69,6 +74,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
               private disponibilidadeService: DisponibilidadeService,
               private agendaSemanalService: AgendaSemanalService,
               private contaReceberService: ContaReceberService,
+              private filaEsperaService: FilaEsperaService,
               protected userService: UserService) {
     const navigation = this.router.getCurrentNavigation();
     const pacienteId = navigation?.extras.state?.['pacienteId'];
@@ -297,9 +303,13 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     }
   }
 
-  alternarModoVisualizacao(modo: 'tudo' | 'agendamentos' | 'disponibilidades') {
+  alternarModoVisualizacao(modo: 'tudo' | 'agendamentos' | 'disponibilidades' | 'filaEspera') {
     this.modoVisualizacao = modo;
-    this.filtrarRegistros();
+    if (modo === 'filaEspera') {
+      this.carregarFilaEspera();
+    } else {
+      this.filtrarRegistros();
+    }
   }
 
   addDisponibilidade() {
@@ -322,5 +332,19 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   detalhesDisponibilidade(disponibilidade: any) {
     this.disponibilidadeDetalhes = disponibilidade;
     this.exibeFormDisponibilidade = true;
+  }
+
+  carregarFilaEspera() {
+    this.isLoading = true;
+    this.filaEsperaService.listar(false, true).subscribe({
+      next: response => {
+        this.filaEsperaLista = response.items;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        this.toastr.error('Erro ao carregar fila de espera');
+      }
+    });
   }
 }
