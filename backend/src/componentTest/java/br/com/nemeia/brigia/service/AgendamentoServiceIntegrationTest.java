@@ -235,6 +235,7 @@ class AgendamentoServiceIntegrationTest {
                 false,
                 false,
                 false,
+                null,
                 null);
 
         // Act
@@ -275,6 +276,7 @@ class AgendamentoServiceIntegrationTest {
                 false, // precoAlterado
                 true, // encaixe = true
                 false, // pago
+                null, // quantiaPaga
                 null); // procedimentos
 
         // Act & Assert - não deve lançar exceção (encaixe permite fora da disponibilidade)
@@ -335,6 +337,7 @@ class AgendamentoServiceIntegrationTest {
                 false,
                 true, // encaixe = true
                 false,
+                null,
                 null);
 
         // Act & Assert - deve lançar exceção mesmo sendo encaixe
@@ -374,6 +377,7 @@ class AgendamentoServiceIntegrationTest {
                 false, // precoAlterado
                 false, // encaixe
                 false, // pago
+                null, // quantiaPaga
                 List.of(procReq));
 
         // Act
@@ -483,6 +487,7 @@ class AgendamentoServiceIntegrationTest {
                 false, // precoAlterado
                 false, // encaixe
                 false, // pago
+                null, // quantiaPaga
                 null); // procedimentos
 
         // Act
