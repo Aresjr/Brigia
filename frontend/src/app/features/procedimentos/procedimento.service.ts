@@ -22,4 +22,12 @@ export class ProcedimentoService extends BaseService<Procedimento, ProcedimentoR
   obterPrecoProcedimentoPlano(idProcedimento: number, idPlano: number): Observable<PrecoProcedimentoPlano> {
     return this.backend.get<PrecoProcedimentoPlano>(`${this.path}/${idProcedimento}/tabela-preco-plano/${idPlano}`);
   }
+
+  obterPrecosProcedimento(idProcedimento: number): Observable<PrecoProcedimentoConvenio[]> {
+    return this.backend.get<PrecoProcedimentoConvenio[]>(`${this.path}/${idProcedimento}/precos-convenio`);
+  }
+
+  obterPrecosPlanos(idProcedimento: number): Observable<PrecoProcedimentoPlano[]> {
+    return this.backend.get<PrecoProcedimentoPlano[]>(`${this.path}/${idProcedimento}/precos-plano`);
+  }
 }

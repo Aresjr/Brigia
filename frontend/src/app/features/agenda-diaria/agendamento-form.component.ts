@@ -367,7 +367,6 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   selectProcedimento(procedimento: Procedimento | null) {
-    this.procedimentoSelecionado = procedimento;
     this.calcularValorProcedimento(null);
   }
 
@@ -607,13 +606,15 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
   calcularValorProcedimento(index: number | null) {
     const procedimentoPrincipal = (index == null);
-    if (procedimentoPrincipal && !this.procedimentoSelecionado) {
+    const procedimentoPrincipalSelecionado = this.form.get('procedimentoId')?.value;
+    if (procedimentoPrincipal && !procedimentoPrincipalSelecionado) {
       this.form.patchValue({ valor: null });
       return;
     }
 
     const procedimentoControl = procedimentoPrincipal ? this.form : this.procedimentosLancados.at(index);
-    const procedimentoId = procedimentoPrincipal ? this.procedimentoSelecionado?.id : procedimentoControl.get('procedimentoId')?.value;
+    const procedimentoId = procedimentoPrincipal ? procedimentoPrincipalSelecionado : procedimentoControl.get('procedimentoId')?.value;
+
     if (!procedimentoId) {
       return;
     }

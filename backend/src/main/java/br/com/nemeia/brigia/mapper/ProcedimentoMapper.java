@@ -1,11 +1,10 @@
 package br.com.nemeia.brigia.mapper;
 
+import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.ProcedimentoRequest;
 import br.com.nemeia.brigia.dto.response.*;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.model.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
@@ -34,24 +33,19 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
             return null;
         }
 
-        List<PrecoProcedimentoResponse> precosResponse = procedimento.getPrecos().stream().map(this::toResponse)
-                .toList();
-
-        List<ProcedimentoPlanoResponse> precosPlanos = new ArrayList<>();
-        if (procedimento.getPrecosPlanos() != null) {
-            precosPlanos = procedimento.getPrecosPlanos().stream().map(this::toProcedimentoPlanoResponse).toList();
-        }
-
         return new ProcedimentoResponse(procedimento.getId(), procedimento.getNome(), procedimento.getCodigo(),
                 procedimento.getObservacoes(), procedimento.getValorPadrao(), procedimento.getValorRepasse(),
                 procedimento.getDuracao(), procedimento.getTipo(),
                 especialidadeMapper.toResponse(procedimento.getEspecialidade()), procedimento.getCriadoEm(),
-                precosResponse, precosPlanos, procedimento.getExcluido());
+                procedimento.getExcluido());
     }
 
     public PrecoProcedimentoResponse toPrecoProcedimento(Procedimento procedimento, Convenio convenio) {
+        Long unidadeId = SecurityHolder.getLoggedUserUnidadeId();
         return toResponse(procedimento.getPrecos().stream()
-                .filter(preco -> convenio.getId().equals(preco.getConvenio().getId())).findFirst()
+                .filter(preco -> preco.getUnidade().getId().equals(unidadeId)
+                        && convenio.getId().equals(preco.getConvenio().getId()))
+                .findFirst()
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Preço não encontrado para procedimento %s e convênio %s", procedimento.getId(),
                                 convenio.getId()))));
@@ -69,11 +63,7 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
     private PrecoProcedimentoResponse toResponse(PrecoProcedimento precoProcedimento) {
         return new PrecoProcedimentoResponse(precoProcedimento.getId(), precoProcedimento.getPreco(),
                 precoProcedimento.getRepasse(), convenioMapper.toResponse(precoProcedimento.getConvenio()),
-                unidadeMapper.toResponse(precoProcedimento.getUnidade()), precoProcedimento.getCriadoEm(), "", // TODO -
-                                                                                                               // colocar
-                                                                                                               // nome
-                                                                                                               // do
-                                                                                                               // usuário
+                unidadeMapper.toResponse(precoProcedimento.getUnidade()), precoProcedimento.getCriadoEm(), "",
                 precoProcedimento.getAtualizadoEm(), "");
     }
 
@@ -82,5 +72,20 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
                 empresaPlanoMapper.toResponse(procedimentoPlano.getPlano()),
                 unidadeMapper.toResponse(procedimentoPlano.getUnidade()), procedimentoPlano.getPreco(),
                 procedimentoPlano.getRepasse());
+    }
+
+    public java.util.List<PrecoProcedimentoResponse> toPrecosProcedimentoResponse(Procedimento procedimento) {
+        if (procedimento == null || procedimento.getPrecos() == null) {
+            return java.util.Collections.emptyList();
+        }
+        return procedimento.getPrecos().stream().map(this::toResponse).collect(java.util.stream.Collectors.toList());
+    }
+
+    public java.util.List<ProcedimentoPlanoResponse> toPrecosPlanosResponse(Procedimento procedimento) {
+        if (procedimento == null || procedimento.getPrecosPlanos() == null) {
+            return java.util.Collections.emptyList();
+        }
+        return procedimento.getPrecosPlanos().stream().map(this::toProcedimentoPlanoResponse)
+                .collect(java.util.stream.Collectors.toList());
     }
 }

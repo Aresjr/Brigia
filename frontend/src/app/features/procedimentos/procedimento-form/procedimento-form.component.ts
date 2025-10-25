@@ -4,7 +4,9 @@ import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { LucideAngularModule } from 'lucide-angular';
 import {
   Procedimento,
-  ProcedimentoRequest
+  ProcedimentoRequest,
+  PrecoProcedimentoConvenio,
+  PrecoProcedimentoPlano
 } from '../procedimento.interface';
 import { EmptyToNullDirective } from '../../../core/directives/empty-to-null-directive';
 import { ConvenioService } from '../../convenio/convenio.service';
@@ -24,6 +26,7 @@ import { UnidadeService } from '../../unidade/unidade.service';
 import { Unidade } from '../../unidade/unidade.interface';
 import { UserService } from '../../../core/user.service';
 import { Role } from '../../../core/constans';
+import { ProcedimentoService } from '../procedimento.service';
 
 @Component({
   selector: 'app-procedimento-form',
@@ -49,6 +52,8 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
   unidadesExpandidas: { [key: number]: boolean } = {};
   conveniosExpandidosPorUnidade: { [key: number]: boolean } = {};
   planosExpandidosPorUnidade: { [key: number]: boolean } = {};
+  precosProcedimentoCarregados: PrecoProcedimentoConvenio[] = [];
+  precosPlanosCarregados: PrecoProcedimentoPlano[] = [];
   TIPO_AGENDAMENTO = TIPO_AGENDAMENTO;
 
   constructor(
@@ -58,7 +63,8 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
     private especialidadeService: EspecialidadeService,
     private empresaService: EmpresaService,
     private unidadeService: UnidadeService,
-    protected userService: UserService
+    protected userService: UserService,
+    private procedimentoService: ProcedimentoService
   ) {
     super(fb, toastr);
     this.form = this.fb.group({
@@ -82,20 +88,45 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
       this.loadPlanos(),
       this.loadUnidades()
     ];
+
     forkJoin(chamadas).subscribe(() => {
-      // Inicializar os preços DEPOIS que tudo foi carregado
-      this.initializePrecosConvenios();
-      this.initializePrecosPlanos();
+      // Se estiver editando, carregar os preços do procedimento
+      if (this.registro?.id) {
+        this.carregarPrecos(this.registro.id);
+      } else {
+        // Se for novo, inicializar os preços vazios
+        this.initializePrecosConvenios();
+        this.initializePrecosPlanos();
+      }
 
       if (this.registro) {
         this.form.patchValue(this.registro);
         this.form.patchValue({
           especialidadeId: this.registro.especialidade.id
         });
-        this.precosConvenios.controls.forEach(control => {
+      }
+    });
+  }
+
+  carregarPrecos(idProcedimento: number) {
+    forkJoin({
+      precosProcedimento: this.procedimentoService.obterPrecosProcedimento(idProcedimento),
+      precosPlanos: this.procedimentoService.obterPrecosPlanos(idProcedimento)
+    }).subscribe({
+      next: (result) => {
+        this.precosProcedimentoCarregados = result.precosProcedimento;
+        this.precosPlanosCarregados = result.precosPlanos;
+
+        // Inicializar os preços DEPOIS que tudo foi carregado
+        this.initializePrecosConvenios();
+        this.initializePrecosPlanos();
+
+        // Preencher os valores dos preços
+        const precosConveniosArray = this.form.get('precosConvenios') as FormArray;
+        precosConveniosArray.controls.forEach(control => {
           const convenioId = control.value.convenioId;
           const unidadeId = control.value.unidadeId;
-          const precoProcedimento = this.registro?.precosProcedimento
+          const precoProcedimento = this.precosProcedimentoCarregados
             ?.find(pp => pp.convenio.id === convenioId && pp.unidade?.id === unidadeId);
 
           if (precoProcedimento) {
@@ -106,10 +137,11 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
           }
         });
 
-        this.precosPlanos.controls.forEach(control => {
+        const precosPlanosArray = this.form.get('precosPlanos') as FormArray;
+        precosPlanosArray.controls.forEach(control => {
           const planoId = control.value.planoId;
           const unidadeId = control.value.unidadeId;
-          const precoPlano = this.registro?.precosPlanos
+          const precoPlano = this.precosPlanosCarregados
             ?.find(pp => pp.plano.id === planoId && pp.unidade?.id === unidadeId);
 
           if (precoPlano) {
@@ -119,6 +151,11 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
             });
           }
         });
+      },
+      error: (error) => {
+        console.error('Erro ao carregar preços:', error);
+        this.initializePrecosConvenios();
+        this.initializePrecosPlanos();
       }
     });
   }
