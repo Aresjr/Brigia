@@ -70,6 +70,7 @@ export interface AgendamentoRequest extends EntidadeRequest {
     pago: boolean;
     quantiaPaga: number | null;
     procedimentos: ProcedimentoAgendamentoRequest[];
+    filaEspera: boolean;
 }
 
 export interface ProcedimentoAgendamentoRequest {

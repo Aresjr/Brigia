@@ -41,6 +41,8 @@ import { Router } from '@angular/router';
 import { AtendimentoService } from '../atendimento/atendimento.service';
 import { AuthService } from '../auth/auth.service';
 import { AgendamentoRascunhoService } from './agendamento-rascunho.service';
+import { FilaEsperaService } from '../fila-espera/fila-espera.service';
+import { FilaEsperaRequest } from '../fila-espera/fila-espera.interface';
 
 @Component({
   selector: 'app-agendamento-form',
@@ -103,7 +105,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
               private empresaService: EmpresaService, private procedimentoService: ProcedimentoService,
               protected userService: UserService, private router: Router,
               private atendimentoService: AtendimentoService, private authService: AuthService,
-              private rascunhoService: AgendamentoRascunhoService) {
+              private rascunhoService: AgendamentoRascunhoService, private filaEsperaService: FilaEsperaService) {
     super(fb, toastr);
     this.hoje = new Date().toISOString().split('T')[0];
     const form: IForm<AgendamentoRequest> = {
@@ -125,6 +127,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       encaixe: [false],
       pago: [true],
       quantiaPaga: [null],
+      filaEspera: [false],
     };
     this.form = this.fb.group({
       ...form,
@@ -571,17 +574,60 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   override onSubmit() {
-    if (this.formValido()) {
-      this.form.get('pacienteId')?.enable();
-      // Limpar rascunho ao salvar definitivamente
-      this.rascunhoService.limparRascunho();
-      this.save.emit(this.form.value);
+    const filaEspera = this.form.get('filaEspera')?.value;
+
+    if (filaEspera) {
+      // Salvar na fila de espera
+      this.salvarFilaEspera();
     } else {
-      Object.keys(this.form.controls).forEach(field => {
-        const control = this.form.get(field);
-        control?.markAsTouched({ onlySelf: true });
-      });
+      // Salvar agendamento normal
+      if (this.formValido()) {
+        this.form.get('pacienteId')?.enable();
+        // Limpar rascunho ao salvar definitivamente
+        this.rascunhoService.limparRascunho();
+        this.save.emit(this.form.value);
+      } else {
+        Object.keys(this.form.controls).forEach(field => {
+          const control = this.form.get(field);
+          control?.markAsTouched({ onlySelf: true });
+        });
+      }
     }
+  }
+
+  salvarFilaEspera() {
+    const pacienteId = this.form.get('pacienteId')?.value;
+    const especialidadeId = this.form.get('especialidadeId')?.value;
+    const observacoes = this.form.get('observacoes')?.value;
+
+    if (!pacienteId) {
+      this.toastr.error('Selecione um paciente');
+      return;
+    }
+
+    if (!especialidadeId) {
+      this.toastr.error('Selecione uma especialidade');
+      return;
+    }
+
+    const filaEsperaRequest: FilaEsperaRequest = {
+      pacienteId: pacienteId,
+      especialidadeId: especialidadeId,
+      observacoes: observacoes
+    };
+
+    this.isLoading = true;
+    this.filaEsperaService.criar(filaEsperaRequest).subscribe({
+      next: () => {
+        this.toastr.success('Paciente adicionado à fila de espera');
+        this.rascunhoService.limparRascunho();
+        this.cancel.emit();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      }
+    });
   }
 
   get procedimentosLancados() {

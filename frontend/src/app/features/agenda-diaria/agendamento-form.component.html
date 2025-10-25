@@ -113,7 +113,7 @@
           </label>
         </div>
 
-        <div class="w-[4rem] tooltip text-left" data-tip="Caso marcado, possibilita cadastrar agendamento fora do horário disponível do médico">
+        <div class="w-[5rem] tooltip text-left" data-tip="Caso marcado, possibilita cadastrar agendamento fora do horário disponível do médico">
           <label class="label-campo rounded-lg px-1.5 hover:border hover:border-neutral" for="encaixe">
             Encaixe <br/><input type="checkbox" id="encaixe" formControlName="encaixe" class="campo my-1.5 mx-3 checkbox checkbox-primary" />
           </label>
@@ -296,6 +296,12 @@
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0"
                    [readOnly]="tipoPagamento === 'pago'">
+          </label>
+        </div>
+
+        <div class="w-[8rem] ml-4 tooltip text-left" data-tip="Caso marcado, salvará o paciente na fila de espera ao invés de criar um agendamento">
+          <label class="label-campo rounded-lg px-1.5 hover:border hover:border-neutral" for="filaEspera">
+            Fila de Espera <br/><input type="checkbox" id="filaEspera" formControlName="filaEspera" class="campo my-1.5 mx-8 checkbox checkbox-primary" />
           </label>
         </div>
 
