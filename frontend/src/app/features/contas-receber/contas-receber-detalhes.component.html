@@ -138,7 +138,7 @@
         </button>
         <div class="flex justify-end gap-3">
           @if (!contaReceber.faturado) {
-            <button type="button" class="btn bg-amber-500 hover:bg-amber-600 text-white btn-sm" (click)="confirmacaoCobranca()">
+            <button type="button" class="hidden btn bg-amber-500 hover:bg-amber-600 text-white btn-sm" (click)="confirmacaoCobranca()">
               Realizar Cobrança
             </button>
             <button type="button" class="btn btn-success btn-sm" (click)="exibeAdicionarValor = true">
