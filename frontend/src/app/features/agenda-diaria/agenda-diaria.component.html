@@ -5,7 +5,8 @@
   <div class="bg-base-100 p-4 rounded-md">
 
     <div class="flex justify-between gap-4 mb-2 flex-wrap">
-      <div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-gray-700">Visão</label>
         <div class="inline-flex rounded-lg border border-base-300 p-1">
           <button
             (click)="alternarModoVisualizacao('tudo')"
@@ -42,9 +43,10 @@
         </div>
       </div>
 
-      <div>
-        <ng-select *ngIf="!this.userService.isMedico()" class="w-72 hover:shadow-lg h-8 max-h-8 leading-none tooltip flex text-left"
-                   (change)="selectProfissional($event)" placeholder="Todos os Profissionais" data-tip="Filtrar Profissional">
+      <div *ngIf="!this.userService.isMedico()" class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-gray-700">Profissional</label>
+        <ng-select class="w-72 hover:shadow-lg h-8 max-h-8 leading-none flex text-left"
+                   (change)="selectProfissional($event)" placeholder="Todos os Profissionais">
           <ng-option class="max-h-8" value="0">Todos os Profissionais</ng-option>
           @for(profissional of this.profissionais; track profissional.id) {
             <ng-option class="max-h-8" value="{{ profissional.id }}">{{ profissional.nome }}</ng-option>
@@ -55,9 +57,10 @@
         </ng-select>
       </div>
 
-      <div>
-        <ng-select class="w-72 shadow-md hover:shadow-lg h-8 max-h-8 leading-none tooltip flex text-left"
-                   (change)="selectPaciente($event)" placeholder="Todos os Pacientes" data-tip="Filtrar Paciente">
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-gray-700">Paciente</label>
+        <ng-select class="w-72 shadow-md hover:shadow-lg h-8 max-h-8 leading-none flex text-left"
+                   (change)="selectPaciente($event)" placeholder="Todos os Pacientes">
           <ng-option class="max-h-8" value="0">Todos os Pacientes</ng-option>
           @for(paciente of this.pacientes; track paciente.id) {
             <ng-option class="max-h-8" value="{{ paciente.id }}">{{ paciente.nome }}</ng-option>
@@ -73,7 +76,8 @@
       <app-fila-espera-lista
         [isLoading]="isLoading"
         [filaEspera]="filaEsperaLista"
-        (recarrega)="carregarFilaEspera()">
+        (recarrega)="carregarFilaEspera()"
+        (criarAgendamento)="criarAgendamentoDeFilaEspera($event)">
       </app-fila-espera-lista>
     } @else {
       <app-calendario
@@ -96,6 +100,7 @@
     [dataAgendamento]="dataAgendamento"
     [pacienteId]="pacienteId"
     [profissionalId]="profissionalFiltro !== 0 ? profissionalFiltro : null"
+    [filaEspera]="filaEsperaSelecionada"
     (save)="salvar($event)"
     (cancel)="fecharForm()">
   </app-agendamento-form>

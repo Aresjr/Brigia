@@ -20,7 +20,6 @@ import { Subscription, interval } from 'rxjs';
 import { PacienteService } from '../pacientes/paciente.service';
 import { Paciente } from '../pacientes/paciente.interface';
 import { DisponibilidadeFormComponent } from '../disponibilidade/disponibilidade-form.component';
-import { DisponibilidadeRequest } from '../disponibilidade/disponibilidade.interface';
 import { DisponibilidadeService } from '../disponibilidade/disponibilidade.service';
 import { HonorariosFormComponent } from '../honorarios/honorarios-form.component';
 import { AgendaSemanalService } from '../agenda-semanal/agenda-semanal.service';
@@ -66,6 +65,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   private subscription!: Subscription;
   modoVisualizacao: 'tudo' | 'agendamentos' | 'disponibilidades' | 'filaEspera' = 'tudo';
   filaEsperaLista: FilaEspera[] = [];
+  filaEsperaSelecionada: FilaEspera | null = null;
 
   constructor(private router: Router, private toastr: ToastrService,
               private agendamentoService: AgendamentoService,
@@ -188,11 +188,21 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   addNovo() {
     this.dataAgendamento = null;
     this.agendamentoDetalhes = null;
+    this.filaEsperaSelecionada = null;
+    this.exibeForm = true;
+  }
+
+  criarAgendamentoDeFilaEspera(filaEspera: FilaEspera) {
+    this.filaEsperaSelecionada = filaEspera;
+    this.dataAgendamento = null;
+    this.agendamentoDetalhes = null;
+    this.pacienteId = filaEspera.paciente.id;
     this.exibeForm = true;
   }
 
   fecharForm() {
     this.agendamentoDetalhes = null;
+    this.filaEsperaSelecionada = null;
     this.exibeForm = false;
   }
 

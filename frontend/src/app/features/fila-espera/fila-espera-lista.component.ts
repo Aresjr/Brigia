@@ -16,6 +16,7 @@ export class FilaEsperaListaComponent {
   @Output() recarrega = new EventEmitter<void>();
   @Output() editar = new EventEmitter<FilaEspera>();
   @Output() remover = new EventEmitter<FilaEspera>();
+  @Output() criarAgendamento = new EventEmitter<FilaEspera>();
 
   onEditar(item: FilaEspera) {
     this.editar.emit(item);
@@ -23,6 +24,10 @@ export class FilaEsperaListaComponent {
 
   onRemover(item: FilaEspera) {
     this.remover.emit(item);
+  }
+
+  onCriarAgendamento(item: FilaEspera) {
+    this.criarAgendamento.emit(item);
   }
 
   recarregar() {

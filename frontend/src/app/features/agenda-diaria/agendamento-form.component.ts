@@ -42,7 +42,7 @@ import { AtendimentoService } from '../atendimento/atendimento.service';
 import { AuthService } from '../auth/auth.service';
 import { AgendamentoRascunhoService } from './agendamento-rascunho.service';
 import { FilaEsperaService } from '../fila-espera/fila-espera.service';
-import { FilaEsperaRequest } from '../fila-espera/fila-espera.interface';
+import { FilaEspera, FilaEsperaRequest } from '../fila-espera/fila-espera.interface';
 
 @Component({
   selector: 'app-agendamento-form',
@@ -60,6 +60,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   @Input() dataAgendamento: Date | null = null;
   @Input() pacienteId!: number | null;
   @Input() profissionalId: number | null = null;
+  @Input() filaEspera: FilaEspera | null = null;
 
   titulo: string = 'Novo Agendamento';
   hoje: string;
@@ -168,6 +169,9 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       if (this.agendamentoDetalhes) {
         this.carregaDadosAgendamento();
         this.form.disable();
+      } else if (this.filaEspera) {
+        // Preencher com dados da fila de espera
+        this.carregarDadosFilaEspera(this.filaEspera);
       } else {
         // Tentar carregar rascunho
         const rascunho = this.rascunhoService.carregarRascunho();
@@ -249,6 +253,52 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
     // Atualizar tipo de pagamento
     this.tipoPagamento = rascunho.pago ? 'pago' : 'parcial';
+  }
+
+  carregarDadosFilaEspera(filaEspera: FilaEspera) {
+    // Preencher os campos disponíveis da fila de espera
+    this.form.patchValue({
+      pacienteId: filaEspera.paciente.id,
+      especialidadeId: filaEspera.especialidade.id,
+      profissionalId: filaEspera.profissional?.id || null,
+      convenioId: filaEspera.convenio?.id || null,
+      empresaId: filaEspera.empresa?.id || null,
+      procedimentoId: filaEspera.procedimento?.id || null,
+      tipoAgendamento: filaEspera.tipoAgendamento || null,
+      formaPagamento: filaEspera.formaPagamento || null,
+      valor: filaEspera.valor || null,
+      desconto: filaEspera.desconto || null,
+      duracao: filaEspera.duracao || null,
+      observacoes: filaEspera.observacoes || null
+    });
+
+    // Atualizar seleções
+    this.selectPaciente(filaEspera.paciente.id);
+
+    if (filaEspera.profissional?.id) {
+      this.selectProfissional(filaEspera.profissional.id);
+    }
+
+    if (filaEspera.empresa) {
+      this.selectEmpresa(filaEspera.empresa);
+    }
+
+    if (filaEspera.convenio) {
+      this.selectConvenio(filaEspera.convenio);
+    }
+
+    if (filaEspera.procedimento) {
+      this.selectProcedimento(filaEspera.procedimento);
+    }
+
+    if (filaEspera.tipoAgendamento !== null && filaEspera.tipoAgendamento !== undefined) {
+      const tipo = this.tipoAgendamento.find(t => t.valor === filaEspera.tipoAgendamento);
+      if (tipo) {
+        this.selectTipo(tipo);
+      }
+    }
+
+    this.toastr.info('Dados da fila de espera carregados');
   }
 
   carregaDadosAgendamento() {
@@ -613,7 +663,17 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     const filaEsperaRequest: FilaEsperaRequest = {
       pacienteId: pacienteId,
       especialidadeId: especialidadeId,
-      observacoes: observacoes
+      observacoes: observacoes,
+      // Campos opcionais do agendamento
+      convenioId: this.form.get('convenioId')?.value,
+      empresaId: this.form.get('empresaId')?.value,
+      profissionalId: this.form.get('profissionalId')?.value,
+      procedimentoId: this.form.get('procedimentoId')?.value,
+      tipoAgendamento: this.form.get('tipoAgendamento')?.value,
+      formaPagamento: this.form.get('formaPagamento')?.value,
+      valor: this.form.get('valor')?.value,
+      desconto: this.form.get('desconto')?.value,
+      duracao: this.form.get('duracao')?.value
     };
 
     this.isLoading = true;

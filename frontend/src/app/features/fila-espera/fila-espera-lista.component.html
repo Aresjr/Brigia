@@ -60,13 +60,32 @@
                   <span class="text-sm">{{ item.criadoEm | date: 'dd/MM/yyyy HH:mm' }}</span>
                 </td>
                 <td>
-                  <div class="flex gap-2 justify-center">
-                    <button class="btn btn-sm btn-ghost" (click)="onEditar(item)">
-                      <lucide-icon name="edit" [size]="16"></lucide-icon>
-                    </button>
-                    <button class="btn btn-sm btn-ghost text-error" (click)="onRemover(item)">
-                      <lucide-icon name="trash-2" [size]="16"></lucide-icon>
-                    </button>
+                  <div class="flex justify-center">
+                    <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
+                      <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
+                        <lucide-icon name="ellipsis-vertical" [size]="20" />
+                      </label>
+                      <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-52 z-[1] font-semibold">
+                        <li>
+                          <a (click)="onCriarAgendamento(item)"
+                             class="text-sm text-primary hover:bg-primary/10">
+                            Criar Agendamento
+                          </a>
+                        </li>
+                        <li>
+                          <a (click)="onEditar(item)"
+                             class="text-sm text-neutral hover:bg-base-200">
+                            Editar
+                          </a>
+                        </li>
+                        <li>
+                          <a (click)="onRemover(item)"
+                             class="text-error hover:bg-error/50">
+                            Excluir
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </td>
               </tr>
