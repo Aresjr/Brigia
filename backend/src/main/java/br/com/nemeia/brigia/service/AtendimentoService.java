@@ -115,7 +115,7 @@ public class AtendimentoService extends BaseService<Atendimento, AtendimentoRepo
         atendimento.setAnamnese(request.anamnese());
         atendimento.setExameFisico(request.exameFisico());
         atendimento.setDiagnostico(request.diagnostico());
-        atendimento.setEvolucaoClinica(request.evolucaoClinica());
+        atendimento.setSinaisVitais(request.sinaisVitais());
         atendimento.setExamesSolicitados(request.examesSolicitados());
         atendimento.setPrescricoes(request.prescricoes());
         atendimento.setObservacoes(request.observacoes());

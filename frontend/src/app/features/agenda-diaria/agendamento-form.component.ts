@@ -75,7 +75,6 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   procedimentosFiltrados: Procedimento[] = [];
   pacienteSelecionado?: Paciente | null;
   empresaSelecionada?: Empresa | null;
-  procedimentoSelecionado?: Procedimento | null;
   convenioSelecionado?: Convenio | null;
   mostrarFormularioNovoPaciente: boolean = false;
   showTooltip: boolean = false;
@@ -256,49 +255,58 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   carregarDadosFilaEspera(filaEspera: FilaEspera) {
+    // Definir horário atual se não tiver no formulário
+    const horaAtual = this.form.get('hora')?.value;
+    if (!horaAtual) {
+      const agora = new Date();
+      const horas = String(agora.getHours()).padStart(2, '0');
+      const minutos = String(agora.getMinutes()).padStart(2, '0');
+      this.form.patchValue({ hora: `${horas}:${minutos}` });
+    }
+
     // Preencher os campos disponíveis da fila de espera
-    this.form.patchValue({
-      pacienteId: filaEspera.paciente.id,
-      especialidadeId: filaEspera.especialidade.id,
-      profissionalId: filaEspera.profissional?.id || null,
-      convenioId: filaEspera.convenio?.id || null,
-      empresaId: filaEspera.empresa?.id || null,
-      procedimentoId: filaEspera.procedimento?.id || null,
-      tipoAgendamento: filaEspera.tipoAgendamento || null,
-      formaPagamento: filaEspera.formaPagamento || null,
-      valor: filaEspera.valor || null,
-      desconto: filaEspera.desconto || null,
-      duracao: filaEspera.duracao || null,
-      observacoes: filaEspera.observacoes || null
-    });
+    setTimeout(() => {
+      this.form.patchValue({
+        pacienteId: filaEspera.paciente.id,
+        especialidadeId: filaEspera.especialidade.id,
+        profissionalId: filaEspera.profissional?.id || null,
+        convenioId: filaEspera.convenio?.id || null,
+        empresaId: filaEspera.empresa?.id || null,
+        procedimentoId: filaEspera.procedimento?.id || null,
+        tipoAgendamento: filaEspera.tipoAgendamento ?? null,
+        formaPagamento: filaEspera.formaPagamento ?? null,
+        valor: filaEspera.valor || null,
+        desconto: filaEspera.desconto || null,
+        duracao: filaEspera.duracao || null,
+        observacoes: filaEspera.observacoes || null
+      });
 
-    // Atualizar seleções
-    this.selectPaciente(filaEspera.paciente.id);
+      // Atualizar seleções
+      this.selectPaciente(filaEspera.paciente.id);
 
-    if (filaEspera.profissional?.id) {
-      this.selectProfissional(filaEspera.profissional.id);
-    }
-
-    if (filaEspera.empresa) {
-      this.selectEmpresa(filaEspera.empresa);
-    }
-
-    if (filaEspera.convenio) {
-      this.selectConvenio(filaEspera.convenio);
-    }
-
-    if (filaEspera.procedimento) {
-      this.selectProcedimento(filaEspera.procedimento);
-    }
-
-    if (filaEspera.tipoAgendamento !== null && filaEspera.tipoAgendamento !== undefined) {
-      const tipo = this.tipoAgendamento.find(t => t.valor === filaEspera.tipoAgendamento);
-      if (tipo) {
-        this.selectTipo(tipo);
+      if (filaEspera.profissional?.id) {
+        this.selectProfissional(filaEspera.profissional.id);
       }
-    }
 
-    this.toastr.info('Dados da fila de espera carregados');
+      if (filaEspera.empresa) {
+        this.selectEmpresa(filaEspera.empresa);
+      }
+
+      if (filaEspera.convenio) {
+        this.selectConvenio(filaEspera.convenio);
+      }
+
+      if (filaEspera.procedimento) {
+        this.selectProcedimento(filaEspera.procedimento);
+      }
+
+      if (filaEspera.tipoAgendamento !== null && filaEspera.tipoAgendamento !== undefined) {
+        const tipo = this.tipoAgendamento.find(t => t.valor === filaEspera.tipoAgendamento);
+        if (tipo) {
+          this.selectTipo(tipo);
+        }
+      }
+    }, 100);
   }
 
   carregaDadosAgendamento() {
@@ -421,6 +429,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
   selectProcedimento(procedimento: Procedimento | null) {
     this.calcularValorProcedimento(null);
+    this.calcularDuracaoTotal();
   }
 
   selectProfissional(id: number | null) {
@@ -708,6 +717,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   removerProcedimento(index: number) {
     this.procedimentosLancados.removeAt(index);
     this.calcularValorTotal();
+    this.calcularDuracaoTotal();
   }
 
   calcularValorProcedimento(index: number | null) {
@@ -778,6 +788,44 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     if (this.tipoPagamento === 'pago') {
       this.form.patchValue({
         quantiaPaga: this.valorTotalAgendamento
+      }, { emitEvent: false });
+    }
+  }
+
+  calcularDuracaoTotal() {
+    // Só atualiza se o campo duração ainda não foi preenchido pelo usuário
+    const duracaoAtual = this.form.get('duracao')?.value;
+    if (duracaoAtual !== null && duracaoAtual !== undefined && duracaoAtual !== '') {
+      return; // Não sobrescrever se já foi preenchido
+    }
+
+    let duracaoTotal = 0;
+
+    // Adicionar duração do procedimento principal
+    const procedimentoPrincipalId = this.form.get('procedimentoId')?.value;
+    if (procedimentoPrincipalId) {
+      const procedimentoPrincipal = this.procedimentos.find(p => p.id === procedimentoPrincipalId);
+      if (procedimentoPrincipal?.duracao) {
+        duracaoTotal += procedimentoPrincipal.duracao;
+      }
+    }
+
+    // Adicionar duração dos procedimentos adicionais
+    this.procedimentosLancados.controls.forEach(control => {
+      const procedimentoId = control.get('procedimentoId')?.value;
+      if (procedimentoId) {
+        const procedimento = this.procedimentos.find(p => p.id === procedimentoId);
+        if (procedimento?.duracao) {
+          const quantidade = control.get('quantidade')?.value || 1;
+          duracaoTotal += procedimento.duracao * quantidade;
+        }
+      }
+    });
+
+    // Atualizar o campo duração se houver valor calculado
+    if (duracaoTotal > 0) {
+      this.form.patchValue({
+        duracao: duracaoTotal
       }, { emitEvent: false });
     }
   }

@@ -1,10 +1,10 @@
 <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm">
-  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[62rem]"
+  <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[66rem]"
        (click)="$event.stopPropagation()" >
 
     <div class="flex justify-between items-center">
       <div class="flex items-center gap-4 justify-between">
-        <h2 class="text-lg font-semibold">{{ titulo }}</h2>
+        <h2 class="text-lg font-semibold">Atendimento{{ agendamento?.paciente?.nome ? ' - ' + agendamento?.paciente?.nome : '' }}</h2>
         <div *ngIf="atendimentoDetalhes" class="badge font-semibold p-3 text-base-100"
              [ngClass]="'bg-['+ StatusAtendimento[atendimentoDetalhes.status].cor +']'">
           {{ StatusAtendimento[atendimentoDetalhes.status].descricao }}
@@ -150,7 +150,7 @@
                       <div class="bg-base-100 rounded-lg border border-base-300 p-3 space-y-3 text-xs">
                         @if (atendimento.anamnese) {
                           <div>
-                            <p class="font-semibold text-neutral mb-1">Anamnese</p>
+                            <p class="font-semibold text-neutral mb-1">Anamnese / Evolução Clínica</p>
                             <div class="prose prose-sm max-w-none text-xs" [innerHTML]="atendimento.anamnese"></div>
                           </div>
                         }
@@ -206,7 +206,7 @@
           [class]="abaAtiva === 'anamnese'
             ? 'border-b-2 border-primary text-primary'
             : 'text-neutral hover:text-base-content'">
-          Anamnese
+          Anamnese / Evolução Clínica
         </button>
         <button type="button"
           (click)="selecionarAba('exameFisico')"
@@ -225,12 +225,12 @@
           Diagnóstico
         </button>
         <button type="button"
-          (click)="selecionarAba('evolucaoClinica')"
+          (click)="selecionarAba('sinaisVitais')"
           class="px-4 py-2 text-sm font-medium transition-colors"
-          [class]="abaAtiva === 'evolucaoClinica'
+          [class]="abaAtiva === 'sinaisVitais'
             ? 'border-b-2 border-primary text-primary'
             : 'text-neutral hover:text-base-content'">
-          Evolução Clínica
+          Sinais Vitais
         </button>
         <button type="button"
           (click)="selecionarAba('examesSolicitados')"
@@ -238,7 +238,7 @@
           [class]="abaAtiva === 'examesSolicitados'
             ? 'border-b-2 border-primary text-primary'
             : 'text-neutral hover:text-base-content'">
-          Exames Solicitados
+          Pedidos de Exames
         </button>
         <button type="button"
           (click)="selecionarAba('prescricoes')"
@@ -289,9 +289,9 @@
             placeholder="">
           </quill-editor>
         </div>
-        <div *ngIf="abaAtiva === 'evolucaoClinica'" class="quill-editor w-full border-0">
+        <div *ngIf="abaAtiva === 'sinaisVitais'" class="quill-editor w-full border-0">
           <quill-editor
-            formControlName="evolucaoClinica"
+            formControlName="sinaisVitais"
             class="w-full"
             [modules]="readonly ? {} : quillModules"
             [styles]="{ height: '200px' }"
@@ -337,32 +337,38 @@
             <h3 class="text-lg font-medium">Procedimentos Adicionais</h3>
           </div>
 
-          <div class="rounded-t-lg">
-            <div class="grid grid-cols-[3rem_1fr] gap-3 p-3 font-medium">
-              <div>Qtd.</div>
-              <div>Procedimento</div>
+          @if (procedimentosLancados.length === 0) {
+            <div class="text-center py-8 bg-base-200 rounded-lg">
+              <p class="text-gray-500">Não há procedimentos adicionais</p>
             </div>
-          </div>
-
-          <div class="space-y-1" formArrayName="procedimentos">
-            <div *ngFor="let procedimento of procedimentosLancados.controls; let i = index" [formGroupName]="i"
-                 class="grid grid-cols-[3rem_1fr] gap-3 items-center hover:bg-base-200 rounded-lg">
-
-              <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2" readonly>
-
-              <ng-select [id]="'procedimento_' + i"  class="campo-select mt-0"
-                         formControlName="procedimentoId"
-                         placeholder="Selecione um procedimento"
-                         [readonly]="true">
-                @for (procedimento of procedimentos; track procedimento.id) {
-                  <ng-option [value]="procedimento.id">{{procedimento.nome}}</ng-option>
-                }
-                <ng-template ng-notfound-tmp>
-                  <span class="text-sm p-6">Nenhum resultado</span>
-                </ng-template>
-              </ng-select>
+          } @else {
+            <div class="rounded-t-lg">
+              <div class="grid grid-cols-[3rem_1fr] gap-3 p-3 font-medium">
+                <div>Qtd.</div>
+                <div>Procedimento</div>
+              </div>
             </div>
-          </div>
+
+            <div class="space-y-1" formArrayName="procedimentos">
+              <div *ngFor="let procedimento of procedimentosLancados.controls; let i = index" [formGroupName]="i"
+                   class="grid grid-cols-[3rem_1fr] gap-3 items-center hover:bg-base-200 rounded-lg">
+
+                <input [id]="'quantidade_' + i" type="number" min="1" formControlName="quantidade" class="campo mt-0 p-2" readonly>
+
+                <ng-select [id]="'procedimento_' + i"  class="campo-select mt-0"
+                           formControlName="procedimentoId"
+                           placeholder="Selecione um procedimento"
+                           [readonly]="true">
+                  @for (procedimento of procedimentos; track procedimento.id) {
+                    <ng-option [value]="procedimento.id">{{procedimento.nome}}</ng-option>
+                  }
+                  <ng-template ng-notfound-tmp>
+                    <span class="text-sm p-6">Nenhum resultado</span>
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+          }
         </div>
       </div>
 
@@ -418,7 +424,7 @@
   </div>
 
   <div class="print-section" *ngIf="form.get('anamnese')?.value">
-    <h2>Anamnese</h2>
+    <h2>Anamnese / Evolução Clínica</h2>
     <div class="print-content-html" [innerHTML]="form.get('anamnese')?.value"></div>
   </div>
 
@@ -432,13 +438,13 @@
     <div class="print-content-html" [innerHTML]="form.get('diagnostico')?.value"></div>
   </div>
 
-  <div class="print-section" *ngIf="form.get('evolucaoClinica')?.value">
-    <h2>Evolução Clínica</h2>
-    <div class="print-content-html" [innerHTML]="form.get('evolucaoClinica')?.value"></div>
+  <div class="print-section" *ngIf="form.get('sinaisVitais')?.value">
+    <h2>Sinais Vitais</h2>
+    <div class="print-content-html" [innerHTML]="form.get('sinaisVitais')?.value"></div>
   </div>
 
   <div class="print-section" *ngIf="form.get('examesSolicitados')?.value">
-    <h2>Exames Solicitados</h2>
+    <h2>Pedidos de Exames</h2>
     <div class="print-content-html" [innerHTML]="form.get('examesSolicitados')?.value"></div>
   </div>
 
@@ -489,7 +495,7 @@
   </div>
 
   <div class="print-section-alt" *ngIf="form.get('anamnese')?.value">
-    <h3>Anamnese</h3>
+    <h3>Anamnese / Evolução Clínica</h3>
     <div class="print-content-html-alt" [innerHTML]="form.get('anamnese')?.value"></div>
   </div>
 
@@ -503,13 +509,13 @@
     <div class="print-content-html-alt" [innerHTML]="form.get('diagnostico')?.value"></div>
   </div>
 
-  <div class="print-section-alt" *ngIf="form.get('evolucaoClinica')?.value">
-    <h3>Evolução Clínica</h3>
-    <div class="print-content-html-alt" [innerHTML]="form.get('evolucaoClinica')?.value"></div>
+  <div class="print-section-alt" *ngIf="form.get('sinaisVitais')?.value">
+    <h3>Sinais Vitais</h3>
+    <div class="print-content-html-alt" [innerHTML]="form.get('sinaisVitais')?.value"></div>
   </div>
 
   <div class="print-section-alt" *ngIf="form.get('examesSolicitados')?.value">
-    <h3>Exames Solicitados</h3>
+    <h3>Pedidos de Exames</h3>
     <div class="print-content-html-alt" [innerHTML]="form.get('examesSolicitados')?.value"></div>
   </div>
 

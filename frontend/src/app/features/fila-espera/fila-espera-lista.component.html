@@ -9,7 +9,7 @@
         <p class="text-gray-500 text-lg">Nenhum paciente na fila de espera</p>
       </div>
     } @else {
-      <div class="overflow-x-auto">
+      <div class="overflow-visible">
         <table class="table table-zebra w-full">
           <thead>
             <tr>
@@ -70,12 +70,6 @@
                           <a (click)="onCriarAgendamento(item)"
                              class="text-sm text-primary hover:bg-primary/10">
                             Criar Agendamento
-                          </a>
-                        </li>
-                        <li>
-                          <a (click)="onEditar(item)"
-                             class="text-sm text-neutral hover:bg-base-200">
-                            Editar
                           </a>
                         </li>
                         <li>

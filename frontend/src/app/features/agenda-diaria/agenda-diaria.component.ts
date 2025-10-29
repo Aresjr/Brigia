@@ -27,6 +27,7 @@ import { ContaReceberService } from '../contas-receber/contas-receber.service';
 import { FilaEsperaService } from '../fila-espera/fila-espera.service';
 import { FilaEspera } from '../fila-espera/fila-espera.interface';
 import { FilaEsperaListaComponent } from '../fila-espera/fila-espera-lista.component';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-agenda-diaria',
@@ -42,7 +43,8 @@ import { FilaEsperaListaComponent } from '../fila-espera/fila-espera-lista.compo
     NgSelectComponent,
     DisponibilidadeFormComponent,
     HonorariosFormComponent,
-    FilaEsperaListaComponent
+    FilaEsperaListaComponent,
+    ConfirmDialogComponent
   ],
   templateUrl: './agenda-diaria.component.html'
 })
@@ -66,6 +68,8 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   modoVisualizacao: 'tudo' | 'agendamentos' | 'disponibilidades' | 'filaEspera' = 'tudo';
   filaEsperaLista: FilaEspera[] = [];
   filaEsperaSelecionada: FilaEspera | null = null;
+  exibeConfirmExclusaoFilaEspera: boolean = false;
+  filaEsperaParaExcluir: FilaEspera | null = null;
 
   constructor(private router: Router, private toastr: ToastrService,
               private agendamentoService: AgendamentoService,
@@ -200,10 +204,37 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     this.exibeForm = true;
   }
 
+  removerFilaEspera(filaEspera: FilaEspera) {
+    this.filaEsperaParaExcluir = filaEspera;
+    this.exibeConfirmExclusaoFilaEspera = true;
+  }
+
+  confirmarExclusaoFilaEspera() {
+    if (this.filaEsperaParaExcluir) {
+      this.filaEsperaService.excluir(this.filaEsperaParaExcluir.id).subscribe({
+        next: () => {
+          this.toastr.success('Paciente removido da fila de espera');
+          this.carregarFilaEspera();
+          this.cancelarExclusaoFilaEspera();
+        },
+        error: () => {
+          this.cancelarExclusaoFilaEspera();
+        }
+      });
+    }
+  }
+
+  cancelarExclusaoFilaEspera() {
+    this.exibeConfirmExclusaoFilaEspera = false;
+    this.filaEsperaParaExcluir = null;
+  }
+
   fecharForm() {
     this.agendamentoDetalhes = null;
     this.filaEsperaSelecionada = null;
     this.exibeForm = false;
+    // Atualizar lista da fila de espera caso tenha sido adicionado um novo registro
+    this.carregarFilaEspera();
   }
 
   salvar(agendamento: Partial<AgendamentoRequest>) {

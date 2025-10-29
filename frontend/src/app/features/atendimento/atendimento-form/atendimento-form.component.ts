@@ -70,7 +70,7 @@ export class AtendimentoFormComponent extends FormComponent<Atendimento, Atendim
       anamnese: [null],
       exameFisico: [null],
       diagnostico: [null],
-      evolucaoClinica: [null],
+      sinaisVitais: [null],
       examesSolicitados: [null],
       prescricoes: [null],
       observacoes: [null],

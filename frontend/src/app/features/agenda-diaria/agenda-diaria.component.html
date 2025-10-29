@@ -77,7 +77,8 @@
         [isLoading]="isLoading"
         [filaEspera]="filaEsperaLista"
         (recarrega)="carregarFilaEspera()"
-        (criarAgendamento)="criarAgendamentoDeFilaEspera($event)">
+        (criarAgendamento)="criarAgendamentoDeFilaEspera($event)"
+        (remover)="removerFilaEspera($event)">
       </app-fila-espera-lista>
     } @else {
       <app-calendario
@@ -132,5 +133,12 @@
            (clickedBotao3)="gerarHonorarios()"
            class="fixed bottom-6 right-6 z-50"></app-fab>
 }
+
+<app-confirm-dialog
+  *ngIf="exibeConfirmExclusaoFilaEspera"
+  message="Deseja realmente excluir este paciente da fila de espera?"
+  (confirm)="confirmarExclusaoFilaEspera()"
+  (cancel)="cancelarExclusaoFilaEspera()"
+></app-confirm-dialog>
 
 </div>
