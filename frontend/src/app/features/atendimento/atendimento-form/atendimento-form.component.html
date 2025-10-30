@@ -1,4 +1,4 @@
-<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm">
+<div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 text-sm print:hidden">
   <div class="bg-base-100 rounded-lg shadow-lg p-6 w-[66rem]"
        (click)="$event.stopPropagation()" >
 
@@ -155,10 +155,10 @@
                           </div>
                         }
 
-                        @if (atendimento.exameClinico) {
+                        @if (atendimento.exameFisico) {
                           <div>
-                            <p class="font-semibold text-neutral mb-1">Exame Clínico</p>
-                            <div class="prose prose-sm max-w-none text-xs" [innerHTML]="atendimento.exameClinico"></div>
+                            <p class="font-semibold text-neutral mb-1">Exame Físico</p>
+                            <div class="prose prose-sm max-w-none text-xs" [innerHTML]="atendimento.exameFisico"></div>
                           </div>
                         }
 
@@ -169,10 +169,24 @@
                           </div>
                         }
 
-                        @if (atendimento.conduta) {
+                        @if (atendimento.sinaisVitais) {
                           <div>
-                            <p class="font-semibold text-neutral mb-1">Conduta</p>
-                            <div class="prose prose-sm max-w-none text-xs" [innerHTML]="atendimento.conduta"></div>
+                            <p class="font-semibold text-neutral mb-1">Sinais Vitais</p>
+                            <div class="prose prose-sm max-w-none text-xs" [innerHTML]="atendimento.sinaisVitais"></div>
+                          </div>
+                        }
+
+                        @if (atendimento.examesSolicitados) {
+                          <div>
+                            <p class="font-semibold text-neutral mb-1">Pedidos de Exames</p>
+                            <div class="prose prose-sm max-w-none text-xs" [innerHTML]="atendimento.examesSolicitados"></div>
+                          </div>
+                        }
+
+                        @if (atendimento.prescricoes) {
+                          <div>
+                            <p class="font-semibold text-neutral mb-1">Prescrições</p>
+                            <div class="prose prose-sm max-w-none text-xs" [innerHTML]="atendimento.prescricoes"></div>
                           </div>
                         }
 
@@ -183,7 +197,7 @@
                           </div>
                         }
 
-                        @if (!atendimento.anamnese && !atendimento.exameClinico && !atendimento.diagnostico && !atendimento.conduta && !atendimento.observacoes) {
+                        @if (!atendimento.anamnese && !atendimento.exameFisico && !atendimento.diagnostico && !atendimento.sinaisVitais && !atendimento.examesSolicitados && !atendimento.prescricoes && !atendimento.observacoes) {
                           <p class="text-neutral italic text-center py-2">Nenhum detalhe registrado</p>
                         }
                       </div>

@@ -254,6 +254,16 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
           this.toastr.success(`Agendamento realizado`);
           this.contaReceberService.limparCache();
           this.carregarAgendamentos();
+
+          // Se foi criado a partir da fila de espera, marcar como excluído
+          if (this.filaEsperaSelecionada) {
+            this.filaEsperaService.excluir(this.filaEsperaSelecionada.id).subscribe({
+              next: () => {
+                this.carregarFilaEspera();
+              }
+            });
+          }
+
           this.fecharForm();
         }
       });
