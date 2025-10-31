@@ -47,6 +47,7 @@ export const FORMAS_PAGAMENTO = [
   { valor: 2, descricao: 'Cartão de Débito' },
   { valor: 3, descricao: 'Pix' },
   //{ valor: 4, descricao: 'Boleto' },
+  { valor: 5, descricao: 'Faturado' },
 ];
 
 export const StatusContaReceber: Record<number, { descricao: string; cor: string }> = {

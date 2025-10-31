@@ -37,6 +37,7 @@ export class ProfissionalFormComponent extends FormComponent<Profissional, Profi
       sexo: [null],
       celular: [null],
       crm: [null],
+      valorHora: [null],
       especialidades: [null, Validators.required]
     });
   }

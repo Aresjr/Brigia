@@ -88,6 +88,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   campoParaEditar: 'valor' | 'desconto' | null = null;
   mensagemModalCredenciais: string = '';
   valorTotalAgendamento: number = 0;
+  quantiaFaltante: number = 0;
   isLoading: boolean = false;
   tipoPagamento: 'pago' | 'parcial' = 'pago';
   rascunhoCarregado: boolean = false;
@@ -674,14 +675,23 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         quantiaPaga: this.valorTotalAgendamento
       }, { emitEvent: false });
     }
+
+    this.calcularQuantiaFaltante();
+  }
+
+  calcularQuantiaFaltante() {
+    const quantiaPaga = this.form.get('quantiaPaga')?.value || 0;
+    this.quantiaFaltante = Math.max(0, this.valorTotalAgendamento - quantiaPaga);
   }
 
   alterouValor($event: Event) {
     this.calcularValorTotal();
+    this.calcularQuantiaFaltante();
   }
 
   alterouDesconto($event: Event) {
     this.calcularValorTotal();
+    this.calcularQuantiaFaltante();
   }
 
   selecionarTipoPagamento(tipo: 'pago' | 'parcial') {

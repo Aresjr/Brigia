@@ -286,16 +286,27 @@
             </div>
         </div>
 
-        <div class="w-[8rem]">
+        <div class="w-[8rem] mr-4">
           <label class="label-campo" for="quantiaPaga">
             Quantia Paga
           </label>
           <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="{'bg-base-200': tipoPagamento === 'pago' && modoSalvar, '!bg-base-100': !modoSalvar}">
             R$
             <input type="text" formControlName="quantiaPaga" min="0" id="quantiaPaga"
-                   (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
+                   (input)="limitLength($event); calcularQuantiaFaltante()" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0"
                    [readOnly]="tipoPagamento === 'pago'">
+          </label>
+        </div>
+
+        <div class="w-[8rem]">
+          <label class="label-campo" for="quantiaFaltante">
+            Quantia Faltante
+          </label>
+          <label class="input input-sm input-bordered flex items-center h-[2.4rem] bg-base-200">
+            R$
+            <input type="text" [value]="quantiaFaltante | currency:'BRL':'':'1.2-2'" id="quantiaFaltante"
+                   class="campo border-0 bg-base-200" readonly>
           </label>
         </div>
 

@@ -33,6 +33,8 @@ interface MenuItem {
   templateUrl: './main-layout.component.html'
 })
 export class MainLayoutComponent {
+  appVersion = environment.version;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
