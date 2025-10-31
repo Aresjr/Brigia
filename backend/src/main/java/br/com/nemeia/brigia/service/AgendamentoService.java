@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -126,6 +127,9 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         // Validar disponibilidade do profissional, exceto se for encaixe
         validarDisponibilidadeProfissional(request, id);
 
+        // Excluir conta a receber existente antes de atualizar o agendamento
+        contaReceberService.deleteContaReceberByAgendamento(id);
+
         Agendamento agendamentoUpdate = mapper.updateEntity(original, request);
         setEntidades(request, agendamentoUpdate);
 
@@ -137,8 +141,8 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
 
         Agendamento agendamentoAtualizado = repository.save(agendamentoUpdate);
 
-        // Criar conta a receber se pago=true e não estava pago antes
-        if (Boolean.TRUE.equals(request.pago()) && !Boolean.TRUE.equals(original.getPago())) {
+        // Criar conta a receber se pago=true ou pagamento parcial
+        if (Boolean.TRUE.equals(request.pago()) || (request.quantiaPaga() != null && request.quantiaPaga().compareTo(BigDecimal.ZERO) > 0)) {
             contaReceberService.createContaReceberFromAgendamento(agendamentoAtualizado);
         }
 

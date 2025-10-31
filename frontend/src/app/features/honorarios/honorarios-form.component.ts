@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { Profissional } from '../profissionais/profissional.interface';
@@ -13,6 +13,7 @@ import { Honorario } from './honorario.interface';
 import { abrirDatePicker } from '../../core/util-methods';
 import { DisponibilidadeService } from '../disponibilidade/disponibilidade.service';
 import { AgendaSemanalService } from '../agenda-semanal/agenda-semanal.service';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-honorarios-form',
@@ -21,8 +22,10 @@ import { AgendaSemanalService } from '../agenda-semanal/agenda-semanal.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     LucideAngularModule,
-    NgSelectComponent
+    NgSelectComponent,
+    NgxMaskDirective
   ]
 })
 export class HonorariosFormComponent implements OnInit {
@@ -38,6 +41,10 @@ export class HonorariosFormComponent implements OnInit {
   hoje: string;
   modoDetalhes: boolean = false;
   valorAdicionalCalculado: number = 0;
+  valorHoraCalculado: number = 0;
+  valorHoraEditavel: boolean = false;
+  valorHoraAntesEdicao: number = 0;
+  profissionalSelecionado: Profissional | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -70,7 +77,8 @@ export class HonorariosFormComponent implements OnInit {
       this.carregarProfissionais();
 
       // Watch form changes
-      this.form.get('profissionalId')?.valueChanges.subscribe(() => {
+      this.form.get('profissionalId')?.valueChanges.subscribe((profissionalId) => {
+        this.profissionalSelecionado = this.profissionais.find(p => p.id === profissionalId) || null;
         this.carregarAgendamentos();
       });
 
@@ -89,6 +97,11 @@ export class HonorariosFormComponent implements OnInit {
     this.profissionalService.listar().subscribe({
       next: (response) => {
         this.profissionais = response.items;
+        // Atualizar profissional selecionado se já tiver um ID
+        const profissionalId = this.form.get('profissionalId')?.value;
+        if (profissionalId) {
+          this.profissionalSelecionado = this.profissionais.find(p => p.id === profissionalId) || null;
+        }
       }
     });
   }
@@ -120,6 +133,9 @@ export class HonorariosFormComponent implements OnInit {
         } else {
           this.valorAdicionalCalculado = 0;
         }
+
+        // Calcular valor por hora
+        this.calcularValorHora();
 
         this.isLoading = false;
       },
@@ -227,6 +243,50 @@ export class HonorariosFormComponent implements OnInit {
     return this.valorAdicionalCalculado;
   }
 
+  get totalHorasTrabalhadas(): number {
+    if (this.agendamentos.length === 0) return 0;
+
+    let totalMinutos = 0;
+    this.agendamentos.forEach(ag => {
+      totalMinutos += ag.duracao || 0;
+    });
+
+    return totalMinutos / 60; // Converter minutos em horas
+  }
+
+  calcularValorHora() {
+    if (!this.profissionalSelecionado?.valorHora) {
+      this.valorHoraCalculado = 0;
+      return;
+    }
+
+    const horas = this.totalHorasTrabalhadas;
+    this.valorHoraCalculado = horas * this.profissionalSelecionado.valorHora;
+    this.valorHoraAntesEdicao = this.valorHoraCalculado;
+  }
+
+  editarValorHora() {
+    this.valorHoraEditavel = true;
+  }
+
+  cancelarEdicaoValorHora() {
+    this.valorHoraEditavel = false;
+    this.valorHoraCalculado = this.valorHoraAntesEdicao;
+  }
+
+  get valorTotalFinal(): number {
+    let total = this.valorTotal + this.valorAdicional;
+
+    // Adicionar valor por hora se existir
+    if (this.profissionalSelecionado?.valorHora && !this.modoDetalhes) {
+      total += this.valorHoraCalculado;
+    } else if (this.modoDetalhes && this.honorario?.valorHora) {
+      total += this.honorario.valorHora;
+    }
+
+    return total;
+  }
+
   fechar() {
     this.cancel.emit();
   }
@@ -242,8 +302,13 @@ export class HonorariosFormComponent implements OnInit {
       return;
     }
 
+    const request = {
+      ...this.form.value,
+      valorHora: this.profissionalSelecionado?.valorHora ? this.valorHoraCalculado : null
+    };
+
     this.isLoading = true;
-    this.honorarioService.criar(this.form.value).subscribe({
+    this.honorarioService.criar(request).subscribe({
       next: () => {
         this.toastr.success('Honorário gerado com sucesso');
         this.fechar();

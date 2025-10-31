@@ -235,12 +235,13 @@
             </button>
           </label>
 
-          <label class="input input-sm input-bordered flex items-center h-[2.4rem] bg-base-100" [ngClass]="classesCampo('valor', !this.valorEditavel)">
+          <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('valor', !this.valorEditavel)">
             R$
             <input type="text" formControlName="valor" min="1" max="99999" id="valor"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker="," required
-                   class="campo border-0" (change)="alterouValor($event)">
+                   class="campo border-0"
+                   (change)="alterouValor($event)">
           </label>
           <label *ngIf="isInvalid('valor')" class="text-error text-sm">
             Obrigatório

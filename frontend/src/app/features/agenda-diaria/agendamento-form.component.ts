@@ -167,6 +167,10 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         this.carregaDadosAgendamento();
         this.form.disable();
       } else {
+        // Desabilitar campos valor e desconto por padrão em novo agendamento
+        this.form.get('valor')?.disable();
+        this.form.get('desconto')?.disable();
+
         // Tentar carregar rascunho
         const rascunho = this.rascunhoService.carregarRascunho();
         if (rascunho && !this.pacienteId && !this.profissionalId) {
@@ -344,6 +348,15 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   onEdit() {
     this.form.enable();
     this.form.get('pacienteId')?.disable();
+
+    // Manter campos valor e desconto desabilitados até autorização admin
+    if (!this.valorEditavel) {
+      this.form.get('valor')?.disable();
+    }
+    if (!this.descontoEditavel) {
+      this.form.get('desconto')?.disable();
+    }
+
     this.modoSalvar = true;
   }
 
@@ -443,6 +456,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   editaValor() {
     this.valorAntesEdicao = this.form.value.valor;
     this.valorEditavel = true;
+    this.form.get('valor')?.enable();
     this.form.patchValue({
       precoAlterado: true
     });
@@ -451,6 +465,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
   cancelarEdicaoValor() {
     this.valorEditavel = false;
+    this.form.get('valor')?.disable();
     this.form.patchValue({
       valor: this.valorAntesEdicao,
       precoAlterado: false
@@ -472,6 +487,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   editaDesconto() {
     this.descontoAntesEdicao = this.form.value.desconto;
     this.descontoEditavel = true;
+    this.form.get('desconto')?.enable();
     this.form.markAsPristine();
   }
 
@@ -509,6 +525,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
   cancelarEdicaoDesconto() {
     this.descontoEditavel = false;
+    this.form.get('desconto')?.disable();
     this.form.patchValue({
       desconto: this.descontoAntesEdicao
     });

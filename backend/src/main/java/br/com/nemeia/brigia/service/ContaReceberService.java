@@ -61,6 +61,15 @@ public class ContaReceberService {
     }
 
     @Transactional
+    public void deleteContaReceberByAgendamento(Long agendamentoId) {
+        log.info("Buscando conta a receber para agendamento ID: {}", agendamentoId);
+        repository.findByAgendamentoId(agendamentoId).ifPresent(contaReceber -> {
+            log.info("Excluindo conta a receber ID: {} do agendamento ID: {}", contaReceber.getId(), agendamentoId);
+            repository.delete(contaReceber);
+        });
+    }
+
+    @Transactional
     public ContaReceber registrarRecebimento(Long id, BigDecimal valorRecebido) {
         ContaReceber contaReceber = getById(id);
         if (BigDecimals.gt(valorRecebido, contaReceber.getValorTotal())) {
