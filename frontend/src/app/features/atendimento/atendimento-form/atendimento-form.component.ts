@@ -47,7 +47,6 @@ export class AtendimentoFormComponent extends FormComponent<Atendimento, Atendim
   modoImpressao: 'padrao' | 'alternativo' | null = null;
   abaPacienteAtiva: 'informacoes' | 'historico' = 'informacoes';
   atendimentosAnteriores: Atendimento[] = [];
-  atendimentoAnteriorSelecionado: Atendimento | null = null;
   carregandoAtendimentos: boolean = false;
 
   quillModules = {
@@ -71,7 +70,7 @@ export class AtendimentoFormComponent extends FormComponent<Atendimento, Atendim
       anamnese: [null],
       exameFisico: [null],
       diagnostico: [null],
-      evolucaoClinica: [null],
+      sinaisVitais: [null],
       examesSolicitados: [null],
       prescricoes: [null],
       observacoes: [null],
@@ -213,21 +212,13 @@ export class AtendimentoFormComponent extends FormComponent<Atendimento, Atendim
         // Filtrar apenas atendimentos finalizados e ordenar por data (mais recente primeiro)
         this.atendimentosAnteriores = atendimentos
           .filter(a => a.status === 2) // Apenas finalizados
-          .sort((a, b) => new Date(b.dataAtendimento).getTime() - new Date(a.dataAtendimento).getTime());
+          .sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
         this.carregandoAtendimentos = false;
       },
       error: () => {
         this.carregandoAtendimentos = false;
       }
     });
-  }
-
-  visualizarAtendimentoAnterior(atendimento: Atendimento) {
-    this.atendimentoAnteriorSelecionado = atendimento;
-  }
-
-  fecharAtendimentoAnterior() {
-    this.atendimentoAnteriorSelecionado = null;
   }
 
   calcularIdade(dataNascimento: string): number {

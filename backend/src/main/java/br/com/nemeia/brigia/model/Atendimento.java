@@ -65,8 +65,8 @@ public class Atendimento extends BaseModel {
     @Column(name = "diagnostico", columnDefinition = "TEXT")
     private String diagnostico;
 
-    @Column(name = "evolucao_clinica", columnDefinition = "TEXT")
-    private String evolucaoClinica;
+    @Column(name = "sinais_vitais", columnDefinition = "TEXT")
+    private String sinaisVitais;
 
     @Column(name = "exames_solicitados", columnDefinition = "TEXT")
     private String examesSolicitados;

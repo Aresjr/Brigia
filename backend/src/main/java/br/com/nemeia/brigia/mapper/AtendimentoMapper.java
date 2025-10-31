@@ -35,7 +35,7 @@ public class AtendimentoMapper {
                 empresaMapper.toResponse(atendimento.getEmpresa()),
                 especialidadeMapper.toResponse(atendimento.getEspecialidade()), atendimento.getFormaPagamento(),
                 atendimento.getObservacoes(), atendimento.getAnamnese(), atendimento.getExameFisico(),
-                atendimento.getDiagnostico(), atendimento.getEvolucaoClinica(), atendimento.getExamesSolicitados(),
+                atendimento.getDiagnostico(), atendimento.getSinaisVitais(), atendimento.getExamesSolicitados(),
                 atendimento.getPrescricoes());
     }
 
