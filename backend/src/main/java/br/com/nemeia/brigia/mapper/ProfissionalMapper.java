@@ -24,7 +24,8 @@ public class ProfissionalMapper {
         return new ProfissionalResponse(profissional.getId(), profissional.getNome(), profissional.getEmail(),
                 profissional.getCpf(), profissional.getDataNascimento(), profissional.getSexo(),
                 profissional.getCelular(), profissional.getUrlImagem(), profissional.getCrm(),
-                getEspecialidades(profissional), profissional.getCriadoEm(), profissional.getExcluido());
+                profissional.getValorHora(), getEspecialidades(profissional), profissional.getCriadoEm(),
+                profissional.getExcluido());
     }
 
     public Profissional toEntity(ProfissionalRequest request) {

@@ -1,6 +1,7 @@
 package br.com.nemeia.brigia.model;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.*;
@@ -40,6 +41,9 @@ public class Profissional extends BaseModel {
 
     @Column(name = "crm", length = 7, unique = true)
     private String crm;
+
+    @Column(name = "valor_hora", precision = 10, scale = 2)
+    private BigDecimal valorHora;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
