@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './features/auth/login/login.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
-import { IndexComponent } from './features/index/index.component';
 import { PacientesComponent } from './features/pacientes/pacientes.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { ProfissionaisComponent } from './features/profissionais/profissionais.component';
@@ -33,13 +32,8 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: IndexComponent,
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
-        data: {
-          roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.FATURAMENTO, Role.MEDICO],
-          title: 'Página Inicial'
-        },
+        redirectTo: 'agenda-diaria',
+        pathMatch: 'full'
       },
       {
         path: 'pacientes',

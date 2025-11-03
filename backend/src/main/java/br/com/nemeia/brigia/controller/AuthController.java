@@ -33,7 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/cadastrar-senha")
-    public ResponseEntity<Void> cadastrarSenha(@RequestBody CadastrarSenhaRequest request, HttpServletResponse response)
+    public ResponseEntity<Void> cadastrarSenha(@RequestBody CadastrarSenhaRequest request)
             throws BadRequestException {
         authService.cadastrarSenha(request);
         return ResponseEntity.noContent().build();

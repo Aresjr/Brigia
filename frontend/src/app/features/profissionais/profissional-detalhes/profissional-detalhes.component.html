@@ -3,58 +3,75 @@
   <div class="p-4">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold">Detalhes do Profissional</h2>
-      <button type="button" (click)="fechar()" class="btn btn-sm btn-ghost" title="Fechar">
-        <lucide-icon name="x" class="right-0 inline w-6 h-6"/>
-      </button>
+      <div>
+        <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" (click)="editar()" title="Editar">
+          <lucide-icon name="pencil" class="inline w-5 h-5"/>
+        </button>
+        <button type="button" (click)="fechar()" class="btn btn-sm btn-ghost" title="Fechar">
+          <lucide-icon name="x" class="right-0 inline w-6 h-6"/>
+        </button>
+      </div>
     </div>
 
     @if (profissional) {
       <div class="space-y-4">
-        <div class="border-b pb-2">
-          <p class="text-sm">Nome</p>
-          <p class="font-medium">{{profissional.nome}}</p>
+        <div>
+          <label class="label-campo">Nome</label>
+          <div class="campo bg-base-100">{{profissional.nome}}</div>
         </div>
 
-        <div class="border-b pb-2">
-          <p class="text-sm">CPF</p>
-          <p class="font-medium">{{profissional.cpf | cpf}}</p>
+        <div class="flex space-x-4">
+          <div class="w-52">
+            <label class="label-campo">CPF</label>
+            <div class="campo bg-base-100">{{profissional.cpf | cpf}}</div>
+          </div>
+          <div class="w-56">
+            <label class="label-campo">Data Nascimento</label>
+            <div class="campo bg-base-100">{{profissional.dataNascimento | date:'dd/MM/yyyy'}}</div>
+          </div>
         </div>
 
-        <div class="border-b pb-2">
-          <p class="text-sm">Data de Nascimento</p>
-          <p class="font-medium">{{profissional.dataNascimento | date:'dd/MM/yyyy'}}</p>
+        <div class="flex space-x-4">
+          <div class="w-52">
+            <label class="label-campo">Sexo</label>
+            <div class="campo bg-base-100">{{profissional.sexo | sexo}}</div>
+          </div>
+          <div class="w-56">
+            <label class="label-campo">Celular</label>
+            <div class="campo bg-base-100">{{profissional.celular | celular}}</div>
+          </div>
         </div>
 
-        <div class="border-b pb-2">
-          <p class="text-sm">Sexo</p>
-          <p class="font-medium">{{profissional.sexo | sexo}}</p>
+        <div class="flex space-x-4">
+          <div class="w-52">
+            <label class="label-campo">CRM</label>
+            <div class="campo bg-base-100">{{profissional.crm || '-'}}</div>
+          </div>
+          <div class="w-56">
+            <label class="label-campo">Valor Hora</label>
+            <div class="campo bg-base-100">{{profissional.valorHora ? (profissional.valorHora | currency:'BRL':'symbol':'1.2-2') : '-'}}</div>
+          </div>
         </div>
 
-        <div class="border-b pb-2">
-          <p class="text-sm">Celular</p>
-          <p class="font-medium">{{profissional.celular | celular}}</p>
+        <div>
+          <label class="label-campo">Email</label>
+          <div class="campo bg-base-100">{{profissional.email || '-'}}</div>
         </div>
 
-        <div class="border-b pb-2">
-          <p class="text-sm">CRM</p>
-          <p class="font-medium">{{profissional.crm}}</p>
-        </div>
-
-        <div class="border-b pb-2">
-          <p class="text-sm">Email</p>
-          <p class="font-medium">{{profissional.email || '-'}}</p>
-        </div>
-
-        <div class="border-b pb-2">
-          <p class="text-sm">Especialidades</p>
-          <p class="font-semibold mt-2">
+        <div>
+          <label class="label-campo">Especialidades</label>
+          <div class="mt-2">
             @for (especialidade of profissional.especialidades; track especialidade.id) {
               <div class="badge m-1 p-4 bg-primary/20 text-primary">{{especialidade.nome}}</div>
             }
-          </p>
+          </div>
         </div>
 
-
+        <div class="flex justify-between space-x-3 mt-6">
+          <button type="button" (click)="fechar()" class="btn btn-sm">
+            Fechar
+          </button>
+        </div>
       </div>
     }
   </div>

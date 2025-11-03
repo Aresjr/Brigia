@@ -3,10 +3,13 @@ package br.com.nemeia.brigia.service;
 import br.com.nemeia.brigia.utils.DbUtil;
 import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.ProfissionalRequest;
+import br.com.nemeia.brigia.dto.request.UsuarioRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ProfissionalMapper;
 import br.com.nemeia.brigia.model.Especialidade;
 import br.com.nemeia.brigia.model.Profissional;
+import br.com.nemeia.brigia.model.RoleUsuario;
+import br.com.nemeia.brigia.model.Usuario;
 import br.com.nemeia.brigia.repository.ProfissionalRepository;
 import java.time.LocalDate;
 import java.util.List;
@@ -25,6 +28,7 @@ public class ProfissionalService {
     private final ProfissionalRepository repository;
     private final ProfissionalMapper mapper;
     private final EspecialidadeService especialidadeService;
+    private final UsuarioService usuarioService;
 
     public Page<Profissional> getPaged(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, DbUtil.DEFAULT_SORT);
@@ -52,6 +56,31 @@ public class ProfissionalService {
             List<Especialidade> especialidades = request.especialidades().stream().map(especialidadeService::getById)
                     .toList();
             profissional.setEspecialidades(especialidades);
+        }
+
+        // Criar usuário automaticamente para o profissional
+        if (profissional.getEmail() != null && !profissional.getEmail().isEmpty()) {
+            // Verificar se já existe usuário com o email
+            var usuarioExistente = usuarioService.getByEmail(profissional.getEmail());
+            if (usuarioExistente.isEmpty()) {
+                try {
+                    UsuarioRequest usuarioRequest = new UsuarioRequest(
+                        profissional.getEmail(),
+                        profissional.getNome(),
+                        null,
+                        RoleUsuario.MEDICO,
+                        SecurityHolder.getLoggedUserUnidadeId()
+                    );
+                    Usuario usuario = usuarioService.create(usuarioRequest);
+                    profissional.setUsuario(usuario);
+                    log.info("Usuário criado automaticamente para o profissional: {}", profissional.getNome());
+                } catch (Exception e) {
+                    log.warn("Erro ao criar usuário para o profissional: {}", e.getMessage());
+                }
+            } else {
+                log.info("Usuário já existe para o email: {}", profissional.getEmail());
+                profissional.setUsuario(usuarioExistente.get());
+            }
         }
 
         return saveProfissional(profissional);

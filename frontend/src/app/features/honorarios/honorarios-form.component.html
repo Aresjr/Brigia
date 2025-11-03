@@ -107,7 +107,7 @@
                 {{ valorAdicional | currency:'BRL':'symbol':'1.2-2' }}
               </span>
             </div>
-            <div *ngIf="profissionalSelecionado?.valorHora && !modoDetalhes" class="flex justify-between items-center">
+            <div *ngIf="profissionalSelecionado && profissionalSelecionado?.valorHora && !modoDetalhes" class="flex justify-between items-center">
               <div class="flex items-center gap-2">
                 <span class="font-semibold">Valor por Hora</span>
                 <span class="text-xs text-neutral">({{ totalHorasTrabalhadas | number:'1.1-1' }}h x {{ profissionalSelecionado.valorHora | currency:'BRL':'symbol':'1.2-2' }})</span>

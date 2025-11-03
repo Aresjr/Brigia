@@ -5,7 +5,7 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@a
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { LucideAngularModule } from 'lucide-angular';
-import { Home, User, Calendar, LogIn, UserPlus, Stethoscope, ChevronRight, MessageSquare, DollarSign,
+import { Home, User, Calendar, LogIn, UserPlus, Stethoscope, ChevronRight, MessageSquare, DollarSign, ChevronUp,
   MessageCircle, CircleUser, ChevronFirst, Users, Search, ClipboardList, Building, ChevronDown, BanknoteArrowUp,
   ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon, Plus, ChevronLeft, HeartHandshake, Receipt, Mail, Lock, Building2,
   Microscope, Menu, EllipsisVertical, X, Pencil, Trash, BriefcaseMedical, ReceiptText, RefreshCw, Calculator,
@@ -52,7 +52,7 @@ export const appConfig: ApplicationConfig = {
         Building, ChevronDown, ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon, Plus, ChevronLeft, CalendarPlus,
         HeartHandshake, Receipt, Mail, Lock, Building2, Microscope, Menu, EllipsisVertical, X, Pencil, Trash,
         BriefcaseMedical, ReceiptText, RefreshCw, Calculator, DollarSign, HandCoins, FileHeart, Check, Printer,
-        History, Eye, FileText
+        History, Eye, FileText, ChevronUp
        }),
       CalendarModule.forRoot({
           provide: DateAdapter,

@@ -124,8 +124,15 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         Agendamento original = getById(id);
         boolean deveMandarEmail = deveMandarEmail(original, request);
 
-        // Validar disponibilidade do profissional, exceto se for encaixe
-        validarDisponibilidadeProfissional(request, id);
+        // Verificar se houve mudança no profissional, data ou hora
+        boolean horarioMudou = !original.getData().equals(request.data())
+                || !original.getHora().equals(request.hora())
+                || !original.getProfissional().getId().equals(request.profissionalId());
+
+        // Validar disponibilidade do profissional apenas se o horário mudou
+        if (horarioMudou) {
+            validarDisponibilidadeProfissional(request, id);
+        }
 
         // Excluir conta a receber existente antes de atualizar o agendamento
         contaReceberService.deleteContaReceberByAgendamento(id);
