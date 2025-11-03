@@ -16,10 +16,10 @@
 
     @if (mostrarFiltros) {
       <form [formGroup]="form" class="flex flex-wrap gap-2 mb-2">
-          <div class="w-64 px-6 py-2.5">
-            <label class="label-campo tooltip text-left" data-tip="Filtrar Status">
+          <div class="min-w-80 px-6 py-2.5">
+            <label class="label-campo tooltip text-left w-full" data-tip="Filtrar Status">
               Status
-              <ng-select formControlName="status" class="campo-select" placeholder="Todos">
+              <ng-select formControlName="status" class="campo-select w-full" placeholder="Todos">
                 <ng-option class="max-h-8" value="">Todos</ng-option>
                 @for (status of StatusContaReceber | keyvalue; track status) {
                   <ng-option class="max-h-8" value="{{ status.key }}">{{ status.value.descricao }}</ng-option>
@@ -30,10 +30,10 @@
               </ng-select>
             </label>
           </div>
-          <div class="w-64 px-6 py-2.5">
-            <label class="label-campo tooltip text-left" data-tip="Filtrar Paciente">
+          <div class="min-w-80 px-6 py-2.5">
+            <label class="label-campo tooltip text-left w-full" data-tip="Filtrar Paciente">
               Paciente
-              <ng-select formControlName="paciente" class="campo-select" placeholder="Todos">
+              <ng-select formControlName="paciente" class="campo-select w-full" placeholder="Todos">
                 <ng-option class="max-h-8" value="">Todos</ng-option>
                 @for (paciente of pacientes; track paciente.id) {
                   <ng-option class="max-h-8" value="{{ paciente.id }}">{{ paciente.nome }}</ng-option>
@@ -44,10 +44,10 @@
               </ng-select>
             </label>
           </div>
-          <div class="w-64 px-6 py-2.5">
-            <label class="label-campo tooltip text-left" data-tip="Filtrar Empresa">
+          <div class="min-w-80 px-6 py-2.5">
+            <label class="label-campo tooltip text-left w-full" data-tip="Filtrar Empresa">
               Empresa
-              <ng-select formControlName="empresa" class="campo-select" placeholder="Todos">
+              <ng-select formControlName="empresa" class="campo-select w-full" placeholder="Todos">
                 <ng-option class="max-h-8" value="">Todos</ng-option>
                 @for (empresa of empresas; track empresa.id) {
                   <ng-option class="max-h-8" value="{{ empresa.id }}">{{ empresa.nome }}</ng-option>
@@ -58,10 +58,10 @@
               </ng-select>
             </label>
           </div>
-          <div class="w-64 px-6 py-2.5">
-            <label class="label-campo tooltip text-left" data-tip="Filtrar Profissional">
+          <div class="min-w-80 px-6 py-2.5">
+            <label class="label-campo tooltip text-left w-full" data-tip="Filtrar Profissional">
               Profissional
-              <ng-select formControlName="profissional" class="campo-select" placeholder="Todos">
+              <ng-select formControlName="profissional" class="campo-select w-full" placeholder="Todos">
                 <ng-option class="max-h-8" value="">Todos</ng-option>
                 @for (profissional of profissionais; track profissional.id) {
                   <ng-option class="max-h-8" value="{{ profissional.id }}">{{ profissional.nome }}</ng-option>
@@ -72,10 +72,10 @@
               </ng-select>
             </label>
           </div>
-          <div class="w-64 px-6 py-2.5">
-            <label class="label-campo tooltip text-left" data-tip="Filtrar Forma de Pagamento">
+          <div class="min-w-80 px-6 py-2.5">
+            <label class="label-campo tooltip text-left w-full" data-tip="Filtrar Forma de Pagamento">
               Forma de Pagamento
-              <ng-select formControlName="formaPagamento" class="campo-select" placeholder="Todos">
+              <ng-select formControlName="formaPagamento" class="campo-select w-full" placeholder="Todos">
                 <ng-option class="max-h-8" value="">Todos</ng-option>
                 @for (formaPagamento of formasPagamento; track formaPagamento.valor) {
                   <ng-option class="max-h-8" value="{{ formaPagamento.valor }}">{{ formaPagamento.descricao }}</ng-option>
@@ -86,12 +86,12 @@
               </ng-select>
             </label>
           </div>
-          <div class="w-72 px-6 py-2.5">
-            <label class="label-campo">
+          <div class="min-w-96 px-6 py-2.5">
+            <label class="label-campo w-full">
               Data do Agendamento
               <div class="flex items-center gap-2">
                 <div class="tooltip text-left" data-tip="Data Início">
-                  <input #dataInicio type="date" class="campo w-[8.5rem]" formControlName="dataInicio" />
+                  <input #dataInicio type="date" class="campo w-[9.5rem]" formControlName="dataInicio" />
                   <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2" (click)="abrirDatePicker(dataInicio)">
                     <lucide-icon name="calendar" class="inline h-4"/>
                   </button>
@@ -99,7 +99,7 @@
                 <span class="text-sm">-</span>
                 <div class="tooltip text-left" data-tip="Data Fim">
                   <div class="relative">
-                    <input #dataFim type="date" class="campo w-[8.5rem]" formControlName="dataFim" />
+                    <input #dataFim type="date" class="campo w-[9.5rem]" formControlName="dataFim" />
                     <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2" (click)="abrirDatePicker(dataFim)">
                       <lucide-icon name="calendar" class="inline h-4"/>
                     </button>

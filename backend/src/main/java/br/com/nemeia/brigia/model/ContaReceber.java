@@ -64,6 +64,9 @@ public class ContaReceber extends BaseModel {
     @Column(name = "status")
     private StatusContaReceber status;
 
+    @Column(name = "atualizado_manual")
+    private Boolean atualizadoManual = false;
+
     public BigDecimal getValorTotal() {
         return valorAgendamento.add(valorProcedimentosAdicionais).subtract(valorDesconto);
     }

@@ -593,7 +593,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       this.form.get('pacienteId')?.enable();
       // Limpar rascunho ao salvar definitivamente
       this.rascunhoService.limparRascunho();
-      this.save.emit(this.form.value);
+      // Usar getRawValue() para incluir campos desabilitados (valor, desconto)
+      this.save.emit(this.form.getRawValue());
     } else {
       Object.keys(this.form.controls).forEach(field => {
         const control = this.form.get(field);

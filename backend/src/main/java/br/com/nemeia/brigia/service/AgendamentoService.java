@@ -134,9 +134,6 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             validarDisponibilidadeProfissional(request, id);
         }
 
-        // Excluir conta a receber existente antes de atualizar o agendamento
-        contaReceberService.deleteContaReceberByAgendamento(id);
-
         Agendamento agendamentoUpdate = mapper.updateEntity(original, request);
         setEntidades(request, agendamentoUpdate);
 
@@ -148,10 +145,8 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
 
         Agendamento agendamentoAtualizado = repository.save(agendamentoUpdate);
 
-        // Criar conta a receber se pago=true ou pagamento parcial
-        if (Boolean.TRUE.equals(request.pago()) || (request.quantiaPaga() != null && request.quantiaPaga().compareTo(BigDecimal.ZERO) > 0)) {
-            contaReceberService.createContaReceberFromAgendamento(agendamentoAtualizado);
-        }
+        // Sincronizar Conta a Receber com lógica dos 3 cenários
+        contaReceberService.sincronizarContaReceberComAgendamento(id, agendamentoAtualizado, request.pago(), request.quantiaPaga());
 
         if (deveMandarEmail) {
             sendEmail(agendamentoAtualizado, "Agendamento Atualizado!", "agendamento-atualizado");
