@@ -8,7 +8,10 @@ import br.com.nemeia.brigia.repository.AgendaSemanalRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -49,6 +52,16 @@ public class AgendaSemanalService extends BaseService<AgendaSemanal, AgendaSeman
 
     public List<AgendaSemanal> findByProfissionalIdAndDiaSemana(Long profissionalId, Integer diaSemana) {
         return repository.findByProfissionalIdAndDiaSemana(profissionalId, diaSemana);
+    }
+
+    public Optional<AgendaSemanal> findByProfissionalAndDiaAndHora(Long profissionalId, LocalDate dia,
+            LocalTime hora) {
+        // Converte LocalDate para dia da semana (DayOfWeek.getValue() retorna 1-7, sendo 1 = Segunda)
+        // Mas precisamos ajustar para 0 = Domingo, 1 = Segunda, ... 6 = Sábado
+        int diaSemanaJava = dia.getDayOfWeek().getValue(); // 1 = Segunda, 7 = Domingo
+        int diaSemana = (diaSemanaJava == 7) ? 0 : diaSemanaJava; // Converte para 0 = Domingo
+
+        return repository.findByProfissionalAndDiaSemanaAndHora(profissionalId, diaSemana, hora);
     }
 
     @Override

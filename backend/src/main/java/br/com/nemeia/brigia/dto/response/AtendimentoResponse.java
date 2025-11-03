@@ -13,6 +13,5 @@ public record AtendimentoResponse(Long id, PacienteResponse paciente, Profission
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm") LocalTime horaFim,
         AgendamentoResponse agendamento, ConvenioResponse convenio, StatusAtendimento status, EmpresaResponse empresa,
         EspecialidadeResponse especialidade, FormaPagamento formaPagamento, String observacoes, String anamnese,
-        String exameFisico, String diagnostico, String evolucaoClinica, String examesSolicitados, String prescricoes) {
-    // TODO - adicionar lista de procedimentos lançados
+        String exameFisico, String diagnostico, String sinaisVitais, String examesSolicitados, String prescricoes) {
 }

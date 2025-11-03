@@ -42,6 +42,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     private final UnidadeService unidadeService;
     private final EmailService emailService;
     private final DisponibilidadeService disponibilidadeService;
+    private final AgendaSemanalService agendaSemanalService;
     private final ContaReceberService contaReceberService;
 
     @Value("${app.base-url}")
@@ -52,7 +53,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             EspecialidadeService especialidadeService, ProcedimentoService procedimentoService,
             EmpresaService empresaService, ConvenioService convenioService, UnidadeService unidadeService,
             EmailService emailService, DisponibilidadeService disponibilidadeService,
-            ContaReceberService contaReceberService) {
+            AgendaSemanalService agendaSemanalService, ContaReceberService contaReceberService) {
         super(repository);
         this.mapper = mapper;
         this.pacienteService = pacienteService;
@@ -64,6 +65,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         this.emailService = emailService;
         this.unidadeService = unidadeService;
         this.disponibilidadeService = disponibilidadeService;
+        this.agendaSemanalService = agendaSemanalService;
         this.contaReceberService = contaReceberService;
     }
 
@@ -188,7 +190,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         if (email != null) {
             Map<String, Object> variables = getVariaveisEmail(agendamento);
             try {
-                // emailService.sendEmail(email, status, template, variables);
+               emailService.sendEmail(email, status, template, variables);
             } catch (Exception e) {
                 log.error("Não foi possível enviar email: {}", e.getLocalizedMessage());
             }
@@ -233,12 +235,24 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
 
         // Se não for encaixe, validar se há disponibilidade cadastrada para o
         // profissional no horário solicitado
-        disponibilidadeService
+        // Primeiro verifica na disponibilidade específica (data específica)
+        boolean temDisponibilidadeEspecifica = disponibilidadeService
                 .findByProfissionalAndDiaAndHora(request.profissionalId(), request.data(),
                         request.hora().plusMinutes(request.duracao()))
-                .orElseThrow(() -> new DisponibilidadeNaoEncontradaException(
-                        "Não há disponibilidade cadastrada para o profissional no horário selecionado. "
-                                + "Troque o horário ou marque como encaixe."));
+                .isPresent();
+
+        // Se não encontrou disponibilidade específica, verifica na agenda semanal (recorrente)
+        boolean temAgendaSemanal = agendaSemanalService
+                .findByProfissionalAndDiaAndHora(request.profissionalId(), request.data(),
+                        request.hora().plusMinutes(request.duracao()))
+                .isPresent();
+
+        // Se não tem disponibilidade em nenhuma das duas, lança exceção
+        if (!temDisponibilidadeEspecifica && !temAgendaSemanal) {
+            throw new DisponibilidadeNaoEncontradaException(
+                    "Não há disponibilidade cadastrada para o profissional no horário selecionado. "
+                            + "Troque o horário ou marque como encaixe.");
+        }
     }
 
     private void processarProcedimentos(Agendamento agendamento,

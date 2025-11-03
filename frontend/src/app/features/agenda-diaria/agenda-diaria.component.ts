@@ -20,11 +20,14 @@ import { Subscription, interval } from 'rxjs';
 import { PacienteService } from '../pacientes/paciente.service';
 import { Paciente } from '../pacientes/paciente.interface';
 import { DisponibilidadeFormComponent } from '../disponibilidade/disponibilidade-form.component';
-import { DisponibilidadeRequest } from '../disponibilidade/disponibilidade.interface';
 import { DisponibilidadeService } from '../disponibilidade/disponibilidade.service';
 import { HonorariosFormComponent } from '../honorarios/honorarios-form.component';
 import { AgendaSemanalService } from '../agenda-semanal/agenda-semanal.service';
 import { ContaReceberService } from '../contas-receber/contas-receber.service';
+import { FilaEsperaService } from '../fila-espera/fila-espera.service';
+import { FilaEspera } from '../fila-espera/fila-espera.interface';
+import { FilaEsperaListaComponent } from '../fila-espera/fila-espera-lista.component';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-agenda-diaria',
@@ -39,7 +42,9 @@ import { ContaReceberService } from '../contas-receber/contas-receber.service';
     NgOptionComponent,
     NgSelectComponent,
     DisponibilidadeFormComponent,
-    HonorariosFormComponent
+    HonorariosFormComponent,
+    FilaEsperaListaComponent,
+    ConfirmDialogComponent
   ],
   templateUrl: './agenda-diaria.component.html'
 })
@@ -60,7 +65,11 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   profissionalFiltro: number = 0;
   pacienteFiltro: number = 0;
   private subscription!: Subscription;
-  modoVisualizacao: 'tudo' | 'agendamentos' | 'disponibilidades' = 'tudo';
+  modoVisualizacao: 'tudo' | 'agendamentos' | 'disponibilidades' | 'filaEspera' = 'tudo';
+  filaEsperaLista: FilaEspera[] = [];
+  filaEsperaSelecionada: FilaEspera | null = null;
+  exibeConfirmExclusaoFilaEspera: boolean = false;
+  filaEsperaParaExcluir: FilaEspera | null = null;
 
   constructor(private router: Router, private toastr: ToastrService,
               private agendamentoService: AgendamentoService,
@@ -69,6 +78,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
               private disponibilidadeService: DisponibilidadeService,
               private agendaSemanalService: AgendaSemanalService,
               private contaReceberService: ContaReceberService,
+              private filaEsperaService: FilaEsperaService,
               protected userService: UserService) {
     const navigation = this.router.getCurrentNavigation();
     const pacienteId = navigation?.extras.state?.['pacienteId'];
@@ -182,12 +192,49 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   addNovo() {
     this.dataAgendamento = null;
     this.agendamentoDetalhes = null;
+    this.filaEsperaSelecionada = null;
     this.exibeForm = true;
+  }
+
+  criarAgendamentoDeFilaEspera(filaEspera: FilaEspera) {
+    this.filaEsperaSelecionada = filaEspera;
+    this.dataAgendamento = null;
+    this.agendamentoDetalhes = null;
+    this.pacienteId = filaEspera.paciente.id;
+    this.exibeForm = true;
+  }
+
+  removerFilaEspera(filaEspera: FilaEspera) {
+    this.filaEsperaParaExcluir = filaEspera;
+    this.exibeConfirmExclusaoFilaEspera = true;
+  }
+
+  confirmarExclusaoFilaEspera() {
+    if (this.filaEsperaParaExcluir) {
+      this.filaEsperaService.excluir(this.filaEsperaParaExcluir.id).subscribe({
+        next: () => {
+          this.toastr.success('Paciente removido da fila de espera');
+          this.carregarFilaEspera();
+          this.cancelarExclusaoFilaEspera();
+        },
+        error: () => {
+          this.cancelarExclusaoFilaEspera();
+        }
+      });
+    }
+  }
+
+  cancelarExclusaoFilaEspera() {
+    this.exibeConfirmExclusaoFilaEspera = false;
+    this.filaEsperaParaExcluir = null;
   }
 
   fecharForm() {
     this.agendamentoDetalhes = null;
+    this.filaEsperaSelecionada = null;
     this.exibeForm = false;
+    // Atualizar lista da fila de espera caso tenha sido adicionado um novo registro
+    this.carregarFilaEspera();
   }
 
   salvar(agendamento: Partial<AgendamentoRequest>) {
@@ -207,6 +254,16 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
           this.toastr.success(`Agendamento realizado`);
           this.contaReceberService.limparCache();
           this.carregarAgendamentos();
+
+          // Se foi criado a partir da fila de espera, marcar como excluído
+          if (this.filaEsperaSelecionada) {
+            this.filaEsperaService.excluir(this.filaEsperaSelecionada.id).subscribe({
+              next: () => {
+                this.carregarFilaEspera();
+              }
+            });
+          }
+
           this.fecharForm();
         }
       });
@@ -297,9 +354,13 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     }
   }
 
-  alternarModoVisualizacao(modo: 'tudo' | 'agendamentos' | 'disponibilidades') {
+  alternarModoVisualizacao(modo: 'tudo' | 'agendamentos' | 'disponibilidades' | 'filaEspera') {
     this.modoVisualizacao = modo;
-    this.filtrarRegistros();
+    if (modo === 'filaEspera') {
+      this.carregarFilaEspera();
+    } else {
+      this.filtrarRegistros();
+    }
   }
 
   addDisponibilidade() {
@@ -322,5 +383,19 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   detalhesDisponibilidade(disponibilidade: any) {
     this.disponibilidadeDetalhes = disponibilidade;
     this.exibeFormDisponibilidade = true;
+  }
+
+  carregarFilaEspera() {
+    this.isLoading = true;
+    this.filaEsperaService.listar(false, true).subscribe({
+      next: response => {
+        this.filaEsperaLista = response.items;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        this.toastr.error('Erro ao carregar fila de espera');
+      }
+    });
   }
 }

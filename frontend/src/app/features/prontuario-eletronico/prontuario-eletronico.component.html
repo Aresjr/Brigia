@@ -61,7 +61,7 @@
       <div class="card-body">
         <div class="flex justify-between items-center mb-4">
           <h2 class="card-title text-lg">
-            <lucide-icon name="user-circle" class="w-5 h-5"></lucide-icon>
+            <lucide-icon name="user-round" class="w-5 h-5"></lucide-icon>
             Dados do Paciente
           </h2>
           @if (!exibirHistorico) {
@@ -137,7 +137,7 @@
               <tbody>
                 @for (atendimento of atendimentos; track atendimento.id) {
                   <tr class="hover">
-                    <td>{{ atendimento.dataAtendimento | date:'dd/MM/yyyy HH:mm' }}</td>
+                    <td>{{ atendimento.data | date:'dd/MM/yyyy HH:mm' }}</td>
                     <td>{{ atendimento.profissional.nome || '-' }}</td>
                     <td>
                       <span class="badge badge-primary badge-sm">
@@ -169,62 +169,65 @@
 <!-- Modal de Detalhes do Atendimento -->
 @if (atendimentoSelecionado) {
   <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50" (click)="fecharAtendimento()">
-    <div class="bg-base-100 rounded-lg shadow-xl w-[90vw] max-w-4xl max-h-[90vh] overflow-hidden" (click)="$event.stopPropagation()">
+    <div class="bg-base-100 rounded-lg shadow-xl w-[66rem] max-h-[90vh] overflow-hidden" (click)="$event.stopPropagation()">
 
       <!-- Header -->
       <div class="flex justify-between items-center p-6 border-b border-base-300">
         <div>
           <h2 class="text-xl font-semibold">Detalhes do Atendimento</h2>
-          <p class="text-sm text-neutral mt-1">{{ atendimentoSelecionado.dataAtendimento | date:'dd/MM/yyyy HH:mm' }}</p>
         </div>
         <button type="button" class="btn btn-ghost btn-circle btn-sm" (click)="fecharAtendimento()">
           <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
         </button>
       </div>
 
-      <!-- Tabs -->
-      <div role="tablist" class="tabs tabs-bordered px-6 pt-4">
-        <input type="radio" name="atendimento_tabs" role="tab" class="tab" aria-label="Informações Gerais" checked />
-        <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <span class="text-sm text-neutral">Profissional</span>
-              <p class="font-semibold">{{ atendimentoSelecionado.profissional.nome || '-' }}</p>
-            </div>
-            <div>
-              <span class="text-sm text-neutral">Data do Atendimento</span>
-              <p class="font-semibold">{{ atendimentoSelecionado.dataAtendimento | date:'dd/MM/yyyy HH:mm' }}</p>
-            </div>
-            <div>
-              <span class="text-sm text-neutral">Tipo de Atendimento</span>
-              <p class="font-semibold">{{ atendimentoSelecionado.tipoAtendimento || 'Consulta' }}</p>
-            </div>
-            <div>
-              <span class="text-sm text-neutral">Status</span>
-              <p class="font-semibold">{{ atendimentoSelecionado.status || '-' }}</p>
-            </div>
+      <!-- Informações Gerais -->
+      <div class="px-6 py-4 bg-base-200">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div>
+            <span class="text-sm text-neutral">Profissional</span>
+            <p class="font-semibold">{{ atendimentoSelecionado.profissional.nome || '-' }}</p>
+          </div>
+          <div>
+            <span class="text-sm text-neutral">Data do Atendimento</span>
+            <p class="font-semibold">{{ atendimentoSelecionado.data | date:'dd/MM/yyyy HH:mm' }}</p>
+          </div>
+          <div>
+            <span class="text-sm text-neutral">Tipo de Atendimento</span>
+            <p class="font-semibold">{{ atendimentoSelecionado.tipoAtendimento || 'Consulta' }}</p>
+          </div>
+          <div>
+            <span class="text-sm text-neutral">Status</span>
+            <p class="font-semibold">
+              <span class="badge badge-sm" [ngClass]="'bg-[' + StatusAtendimento[atendimentoSelecionado.status].cor + ']'">
+                {{ StatusAtendimento[atendimentoSelecionado.status].descricao }}
+              </span>
+            </p>
           </div>
         </div>
+      </div>
 
-        <input type="radio" name="atendimento_tabs" role="tab" class="tab" aria-label="Anamnese" />
+      <!-- Tabs -->
+      <div role="tablist" class="tabs tabs-bordered px-6 pt-4">
+        <input type="radio" name="atendimento_tabs" role="tab" class="tab" aria-label="Anamnese / Evolução Clínica" checked />
         <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
           @if (atendimentoSelecionado.anamnese) {
             <div class="prose max-w-none">
               <div [innerHTML]="atendimentoSelecionado.anamnese"></div>
             </div>
           } @else {
-            <p class="text-neutral text-center py-8">Nenhuma anamnese registrada</p>
+            <p class="text-neutral text-center py-8">Nenhuma anamnese / evolução clínica registrada</p>
           }
         </div>
 
-        <input type="radio" name="atendimento_tabs" role="tab" class="tab" aria-label="Exame Clínico" />
+        <input type="radio" name="atendimento_tabs" role="tab" class="tab" aria-label="Exame Físico" />
         <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
-          @if (atendimentoSelecionado.exameClinico) {
+          @if (atendimentoSelecionado.exameFisico) {
             <div class="prose max-w-none">
-              <div [innerHTML]="atendimentoSelecionado.exameClinico"></div>
+              <div [innerHTML]="atendimentoSelecionado.exameFisico"></div>
             </div>
           } @else {
-            <p class="text-neutral text-center py-8">Nenhum exame clínico registrado</p>
+            <p class="text-neutral text-center py-8">Nenhum exame físico registrado</p>
           }
         </div>
 
@@ -239,14 +242,36 @@
           }
         </div>
 
-        <input type="radio" name="atendimento_tabs" role="tab" class="tab" aria-label="Conduta" />
+        <input type="radio" name="atendimento_tabs" role="tab" class="tab" aria-label="Sinais Vitais" />
         <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
-          @if (atendimentoSelecionado.conduta) {
+          @if (atendimentoSelecionado.sinaisVitais) {
             <div class="prose max-w-none">
-              <div [innerHTML]="atendimentoSelecionado.conduta"></div>
+              <div [innerHTML]="atendimentoSelecionado.sinaisVitais"></div>
             </div>
           } @else {
-            <p class="text-neutral text-center py-8">Nenhuma conduta registrada</p>
+            <p class="text-neutral text-center py-8">Nenhum sinal vital registrado</p>
+          }
+        </div>
+
+        <input type="radio" name="atendimento_tabs" role="tab" class="tab" aria-label="Pedidos de Exames" />
+        <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
+          @if (atendimentoSelecionado.examesSolicitados) {
+            <div class="prose max-w-none">
+              <div [innerHTML]="atendimentoSelecionado.examesSolicitados"></div>
+            </div>
+          } @else {
+            <p class="text-neutral text-center py-8">Nenhum pedido de exame registrado</p>
+          }
+        </div>
+
+        <input type="radio" name="atendimento_tabs" role="tab" class="tab" aria-label="Prescrições" />
+        <div role="tabpanel" class="tab-content py-6 overflow-y-auto max-h-[60vh]">
+          @if (atendimentoSelecionado.prescricoes) {
+            <div class="prose max-w-none">
+              <div [innerHTML]="atendimentoSelecionado.prescricoes"></div>
+            </div>
+          } @else {
+            <p class="text-neutral text-center py-8">Nenhuma prescrição registrada</p>
           }
         </div>
 

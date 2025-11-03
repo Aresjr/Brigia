@@ -231,7 +231,7 @@ class AtendimentoServiceIntegrationTest {
                 null, // horaInicio
                 "Paciente relatou dores nas costas", // anamnese
                 "Lombalgia", // diagnostico
-                "Melhora após sessão de fisioterapia", // evolucaoClinica
+                "Melhora após sessão de fisioterapia", // sinaisVitais
                 "Postura inadequada, tensão muscular", // exameFisico
                 "Ressonância magnética da coluna lombar", // examesSolicitados
                 "Analgésicos e relaxantes musculares conforme necessário", // prescricoes
@@ -270,7 +270,7 @@ class AtendimentoServiceIntegrationTest {
                 null, // horaInicio
                 "Paciente com queixa de dores no ombro", // anamnese
                 "Tendinite no ombro direito", // diagnostico
-                "Aplicação de gelo e ultrassom terapêutico", // evolucaoClinica
+                "Aplicação de gelo e ultrassom terapêutico", // sinaisVitais
                 "Movimento limitado, sensibilidade à palpação", // exameFisico
                 "Ultrassom do ombro direito", // examesSolicitados
                 "Anti-inflamatórios e fisioterapia", // prescricoes

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Paciente } from '../pacientes/paciente.interface';
 import { PacienteService } from '../pacientes/paciente.service';
-import { Atendimento } from '../atendimento/atendimento.interface';
+import { Atendimento, StatusAtendimento } from '../atendimento/atendimento.interface';
 import { AtendimentoService } from '../atendimento/atendimento.service';
 
 @Component({
@@ -35,8 +35,8 @@ export class ProntuarioEletronicoComponent implements OnInit {
   carregarPacientes(): void {
     this.carregandoPacientes = true;
     this.pacienteService.listar().subscribe({
-      next: (response: any) => {
-        this.pacientes = response.content;
+      next: (response) => {
+        this.pacientes = response.items;
         this.carregandoPacientes = false;
       },
       error: () => {
@@ -46,6 +46,9 @@ export class ProntuarioEletronicoComponent implements OnInit {
   }
 
   get pacientesFiltrados(): Paciente[] {
+    if (!this.pacientes || !Array.isArray(this.pacientes)) {
+      return [];
+    }
     if (!this.buscaPaciente) {
       return this.pacientes;
     }
@@ -79,7 +82,7 @@ export class ProntuarioEletronicoComponent implements OnInit {
     this.atendimentoService.getByPaciente(this.pacienteSelecionado.id).subscribe({
       next: (atendimentos) => {
         this.atendimentos = atendimentos.sort((a, b) =>
-          new Date(b.dataAtendimento).getTime() - new Date(a.dataAtendimento).getTime()
+          new Date(b.data).getTime() - new Date(a.data).getTime()
         );
         this.carregandoAtendimentos = false;
       },
@@ -107,4 +110,6 @@ export class ProntuarioEletronicoComponent implements OnInit {
     }
     return idade;
   }
+
+  protected readonly StatusAtendimento = StatusAtendimento;
 }

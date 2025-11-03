@@ -25,24 +25,26 @@
           <p class="font-medium">{{paciente.nomeSocial || '-'}}</p>
         </div>
 
-        <div class="border-b pb-2">
-          <p class="text-sm">CPF</p>
-          <p class="font-medium">{{paciente.cpf | cpf}}</p>
+        <div class="grid grid-cols-2 gap-4 border-b pb-2">
+          <div>
+            <p class="text-sm">CPF</p>
+            <p class="font-medium">{{paciente.cpf | cpf}}</p>
+          </div>
+          <div>
+            <p class="text-sm">Data de Nascimento</p>
+            <p class="font-medium">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</p>
+          </div>
         </div>
 
-        <div class="border-b pb-2">
-          <p class="text-sm">Data de Nascimento</p>
-          <p class="font-medium">{{paciente.dataNascimento | date:'dd/MM/yyyy'}}</p>
-        </div>
-
-        <div class="border-b pb-2">
-          <p class="text-sm">Sexo</p>
-          <p class="font-medium">{{paciente.sexo | sexo}}</p>
-        </div>
-
-        <div class="border-b pb-2">
-          <p class="text-sm">Celular</p>
-          <p class="font-medium">{{paciente.celular | celular}}</p>
+        <div class="grid grid-cols-2 gap-4 border-b pb-2">
+          <div>
+            <p class="text-sm">Sexo</p>
+            <p class="font-medium">{{paciente.sexo | sexo}}</p>
+          </div>
+          <div>
+            <p class="text-sm">Celular</p>
+            <p class="font-medium">{{paciente.celular | celular}}</p>
+          </div>
         </div>
 
         <div class="border-b pb-2">
@@ -60,14 +62,20 @@
           </p>
         </div>
 
-        <div class="border-b pb-2">
-          <p class="text-sm">Convênio</p>
-          <p class="font-medium">{{paciente.convenio?.nome}}</p>
+        <div class="grid grid-cols-2 gap-4 border-b pb-2">
+          <div>
+            <p class="text-sm">Convênio</p>
+            <p class="font-medium">{{paciente.convenio?.nome || '-'}}</p>
+          </div>
+          <div>
+            <p class="text-sm">Email</p>
+            <p class="font-medium">{{paciente.email || '-'}}</p>
+          </div>
         </div>
 
         <div class="border-b pb-2">
           <p class="text-sm">Empresa</p>
-          <p class="font-medium">{{paciente.empresa?.nome}}</p>
+          <p class="font-medium">{{paciente.empresa?.nome || '-'}}</p>
         </div>
 
         @if (paciente.ultimaConsulta) {
@@ -83,11 +91,6 @@
             <p class="font-medium">{{paciente.proximaConsulta | date:'dd/MM/yyyy'}}</p>
           </div>
         }
-
-        <div class="border-b pb-2">
-          <p class="text-sm">Email</p>
-          <p class="font-medium">{{paciente.email || '-'}}</p>
-        </div>
 
       </div>
 
