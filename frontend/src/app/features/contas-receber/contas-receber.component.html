@@ -15,12 +15,12 @@
     </div>
 
     @if (mostrarFiltros) {
-      <form [formGroup]="form" class="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr] mb-2">
-          <div class="max-w-64 px-6 py-2.5">
+      <form [formGroup]="form" class="flex flex-wrap gap-2 mb-2">
+          <div class="w-64 px-6 py-2.5">
             <label class="label-campo tooltip text-left" data-tip="Filtrar Status">
               Status
-              <ng-select formControlName="status" class="campo-select w-[18rem]" placeholder="Todos">
-                <ng-option class="max-h-8" value="0">Todos</ng-option>
+              <ng-select formControlName="status" class="campo-select" placeholder="Todos">
+                <ng-option class="max-h-8" value="">Todos</ng-option>
                 @for (status of StatusContaReceber | keyvalue; track status) {
                   <ng-option class="max-h-8" value="{{ status.key }}">{{ status.value.descricao }}</ng-option>
                 }
@@ -30,11 +30,11 @@
               </ng-select>
             </label>
           </div>
-          <div class="max-w-64 px-6 py-2.5">
+          <div class="w-64 px-6 py-2.5">
             <label class="label-campo tooltip text-left" data-tip="Filtrar Paciente">
               Paciente
-              <ng-select formControlName="paciente" class="campo-select w-[18rem]" placeholder="Todos">
-                <ng-option class="max-h-8" value="0">Todos</ng-option>
+              <ng-select formControlName="paciente" class="campo-select" placeholder="Todos">
+                <ng-option class="max-h-8" value="">Todos</ng-option>
                 @for (paciente of pacientes; track paciente.id) {
                   <ng-option class="max-h-8" value="{{ paciente.id }}">{{ paciente.nome }}</ng-option>
                 }
@@ -44,11 +44,11 @@
               </ng-select>
             </label>
           </div>
-          <div class="max-w-64 px-6 py-2.5">
+          <div class="w-64 px-6 py-2.5">
             <label class="label-campo tooltip text-left" data-tip="Filtrar Empresa">
               Empresa
-              <ng-select formControlName="empresa" class="campo-select w-[18rem]" placeholder="Todos">
-                <ng-option class="max-h-8" value="0">Todos</ng-option>
+              <ng-select formControlName="empresa" class="campo-select" placeholder="Todos">
+                <ng-option class="max-h-8" value="">Todos</ng-option>
                 @for (empresa of empresas; track empresa.id) {
                   <ng-option class="max-h-8" value="{{ empresa.id }}">{{ empresa.nome }}</ng-option>
                 }
@@ -58,11 +58,11 @@
               </ng-select>
             </label>
           </div>
-          <div class="max-w-64 px-6 py-2.5">
+          <div class="w-64 px-6 py-2.5">
             <label class="label-campo tooltip text-left" data-tip="Filtrar Profissional">
               Profissional
-              <ng-select formControlName="profissional" class="campo-select w-[18rem]" placeholder="Todos">
-                <ng-option class="max-h-8" value="0">Todos</ng-option>
+              <ng-select formControlName="profissional" class="campo-select" placeholder="Todos">
+                <ng-option class="max-h-8" value="">Todos</ng-option>
                 @for (profissional of profissionais; track profissional.id) {
                   <ng-option class="max-h-8" value="{{ profissional.id }}">{{ profissional.nome }}</ng-option>
                 }
@@ -72,11 +72,11 @@
               </ng-select>
             </label>
           </div>
-          <div class="max-w-64 px-6 py-2.5">
+          <div class="w-64 px-6 py-2.5">
             <label class="label-campo tooltip text-left" data-tip="Filtrar Forma de Pagamento">
               Forma de Pagamento
-              <ng-select formControlName="formaPagamento" class="campo-select w-[18rem]" placeholder="Todos">
-                <ng-option class="max-h-8" value="0">Todos</ng-option>
+              <ng-select formControlName="formaPagamento" class="campo-select" placeholder="Todos">
+                <ng-option class="max-h-8" value="">Todos</ng-option>
                 @for (formaPagamento of formasPagamento; track formaPagamento.valor) {
                   <ng-option class="max-h-8" value="{{ formaPagamento.valor }}">{{ formaPagamento.descricao }}</ng-option>
                 }
@@ -86,7 +86,7 @@
               </ng-select>
             </label>
           </div>
-          <div class="max-w-64 px-6 py-2.5">
+          <div class="w-72 px-6 py-2.5">
             <label class="label-campo">
               Data do Agendamento
               <div class="flex items-center gap-2">
@@ -154,27 +154,27 @@
             [checked]="todosSelecionados()"
             (change)="toggleSelecaoTodos($event)">
         </div>
-        <div (click)="ordenar('status')" class="cabecalho-listagem">
+        <div (click)="ordenar('status')" class="cabecalho-listagem whitespace-nowrap">
           <lucide-icon *ngIf="getSortIcon('status')" [name]="getSortIcon('status')" class="icone-ordenacao"/>
           Status
         </div>
-        <div (click)="ordenar('paciente')" class="cabecalho-listagem">
+        <div (click)="ordenar('paciente')" class="cabecalho-listagem whitespace-nowrap">
           <lucide-icon *ngIf="getSortIcon('paciente')" [name]="getSortIcon('paciente')" class="icone-ordenacao"/>
           Paciente
         </div>
-        <div (click)="ordenar('empresa')" class="cabecalho-listagem">
+        <div (click)="ordenar('empresa')" class="cabecalho-listagem whitespace-nowrap">
           <lucide-icon *ngIf="getSortIcon('empresa')" [name]="getSortIcon('empresa')" class="icone-ordenacao"/>
           Empresa
         </div>
-        <div (click)="ordenar('profissional')" class="cabecalho-listagem">
+        <div (click)="ordenar('profissional')" class="cabecalho-listagem whitespace-nowrap">
           <lucide-icon *ngIf="getSortIcon('profissional')" [name]="getSortIcon('profissional')" class="icone-ordenacao"/>
           Profissional
         </div>
-        <div (click)="ordenar('formaPagamento')" class="cabecalho-listagem">
+        <div (click)="ordenar('formaPagamento')" class="cabecalho-listagem whitespace-nowrap">
           <lucide-icon *ngIf="getSortIcon('formaPagamento')" [name]="getSortIcon('formaPagamento')" class="icone-ordenacao"/>
           Forma de Pagamento
         </div>
-        <div (click)="ordenar('dataAgendamento')" class="cabecalho-listagem rounded-tr-lg">
+        <div (click)="ordenar('dataAgendamento')" class="cabecalho-listagem rounded-tr-lg whitespace-nowrap">
           <lucide-icon *ngIf="getSortIcon('dataAgendamento')" [name]="getSortIcon('dataAgendamento')" class="icone-ordenacao"/>
           Data Agendamento
         </div>

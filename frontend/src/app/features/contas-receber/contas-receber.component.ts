@@ -129,11 +129,11 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
     const formaPagamentoSelecionada = this.form.get('formaPagamento')?.value;
     let matchData = true;
     this.itensExibicao = this.itensInternos.filter(item => {
-      const matchStatus = statusSelecionado == null || statusSelecionado == 0 || item.status == statusSelecionado;
-      const matchEmpresa = item.empresa == undefined || empresaSelecionada == undefined || empresaSelecionada == 0 || item.empresa.id == empresaSelecionada;
-      const matchPaciente = pacienteSelecionado == undefined || pacienteSelecionado == 0 || item.paciente.id == pacienteSelecionado;
-      const matchProfissional = profissionalSelecionado == undefined || profissionalSelecionado == 0 || item.profissional.id == profissionalSelecionado;
-      const matchFormaPagamento = formaPagamentoSelecionada == undefined || formaPagamentoSelecionada == 0 || item.formaPagamento == formaPagamentoSelecionada;
+      const matchStatus = statusSelecionado == null || item.status == Number(statusSelecionado);
+      const matchEmpresa = item.empresa == undefined || empresaSelecionada == undefined || item.empresa.id == Number(empresaSelecionada);
+      const matchPaciente = pacienteSelecionado == undefined || item.paciente.id == Number(pacienteSelecionado);
+      const matchProfissional = profissionalSelecionado == undefined || item.profissional.id == Number(profissionalSelecionado);
+      const matchFormaPagamento = formaPagamentoSelecionada == undefined || item.formaPagamento == Number(formaPagamentoSelecionada);
 
       const dataInicio = this.form.get('dataInicio')?.value;
       const dataFim = this.form.get('dataFim')?.value;
