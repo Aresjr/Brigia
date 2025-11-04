@@ -13,10 +13,10 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         console.log('intercept', error);
         if (error.status === 401) {
-          this.toastr.error('Sessão expirada, faça login novamente');
           this.router.navigateByUrl('/login');
         } else if (error.status === 403) {
           this.toastr.error('Você não tem permissão');
+          this.router.navigateByUrl('/');
         }
         return throwError(() => error);
       })

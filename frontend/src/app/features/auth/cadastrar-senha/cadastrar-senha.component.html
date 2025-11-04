@@ -20,9 +20,13 @@
                            id="senha"
                            name="senha"
                            [(ngModel)]="senha"
+                           #senhaModel="ngModel"
                            required
                            minlength="6"
                            class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500">
+                    <p class="mt-1 text-sm text-red-600" *ngIf="senhaModel.dirty && senhaModel.errors?.['minlength']">
+                      A senha deve conter pelo menos 6 caracteres.
+                    </p>
                 </div>
                 <button type="submit"
                         [disabled]="!form.valid"

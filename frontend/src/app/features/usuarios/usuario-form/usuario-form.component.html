@@ -43,7 +43,9 @@
               </label>
               <ng-select formControlName="role" class="campo-select" [ngClass]="classesCampo('role')">
                 @for (role of Object.values(Role); track role.toString()) {
-                  <ng-option [value]="role">{{role}}</ng-option>
+                  @if (role != 'MEDICO') {
+                    <ng-option [value]="role">{{role}}</ng-option>
+                  }
                 }
                 <ng-template ng-notfound-tmp>
                   <span class="text-sm p-6">Nenhum resultado</span>
