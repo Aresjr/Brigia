@@ -13,23 +13,26 @@ import java.util.List;
 public interface DisponibilidadeRepository extends BaseRepository<Disponibilidade> {
     Page<Disponibilidade> findAllByExcluidoIsOrExcluidoIsNull(Pageable pageable, Boolean excluido);
 
-    @Query("SELECT d FROM Disponibilidade d WHERE d.dia BETWEEN :startDate AND :endDate")
+    @Query("SELECT d FROM Disponibilidade d WHERE d.dia BETWEEN :startDate AND :endDate "
+            + "AND d.unidade.id = :unidadeId")
     Page<Disponibilidade> findAllByDateRange(Pageable pageable, @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate);
+            @Param("endDate") LocalDate endDate, @Param("unidadeId") Long unidadeId);
 
     @Query("SELECT d FROM Disponibilidade d WHERE d.profissional.id = :profissionalId AND d.dia = :dia "
-            + "AND d.horaInicial <= :hora AND d.horaFinal >= :hora AND (d.excluido IS NULL OR d.excluido = false)")
+            + "AND d.horaInicial <= :hora AND d.horaFinal >= :hora AND d.unidade.id = :unidadeId "
+            + "AND (d.excluido IS NULL OR d.excluido = false)")
     java.util.Optional<Disponibilidade> findByProfissionalAndDiaAndHora(@Param("profissionalId") Long profissionalId,
-            @Param("dia") LocalDate dia, @Param("hora") LocalTime hora);
+            @Param("dia") LocalDate dia, @Param("hora") LocalTime hora, @Param("unidadeId") Long unidadeId);
 
     @Query("SELECT d FROM Disponibilidade d WHERE d.profissional.id = :profissionalId AND d.dia = :dia "
-            + "AND (d.excluido IS NULL OR d.excluido = false) "
+            + "AND d.unidade.id = :unidadeId AND (d.excluido IS NULL OR d.excluido = false) "
             + "AND ((d.horaInicial < :horaFinal AND d.horaFinal > :horaInicial))")
     List<Disponibilidade> findConflitosHorario(@Param("profissionalId") Long profissionalId,
             @Param("dia") LocalDate dia, @Param("horaInicial") LocalTime horaInicial,
-            @Param("horaFinal") LocalTime horaFinal);
+            @Param("horaFinal") LocalTime horaFinal, @Param("unidadeId") Long unidadeId);
 
-    @Query("SELECT d FROM Disponibilidade d WHERE d.profissional.id = :profissionalId AND d.dia = :dia ")
+    @Query("SELECT d FROM Disponibilidade d WHERE d.profissional.id = :profissionalId AND d.dia = :dia "
+            + "AND d.unidade.id = :unidadeId")
     List<Disponibilidade> findDisponibilidadesDia(@Param("profissionalId") Long profissionalId,
-            @Param("dia") LocalDate dia);
+            @Param("dia") LocalDate dia, @Param("unidadeId") Long unidadeId);
 }

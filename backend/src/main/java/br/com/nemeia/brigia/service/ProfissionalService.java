@@ -64,13 +64,8 @@ public class ProfissionalService {
             var usuarioExistente = usuarioService.getByEmail(profissional.getEmail());
             if (usuarioExistente.isEmpty()) {
                 try {
-                    UsuarioRequest usuarioRequest = new UsuarioRequest(
-                        profissional.getEmail(),
-                        profissional.getNome(),
-                        null,
-                        RoleUsuario.MEDICO,
-                        SecurityHolder.getLoggedUserUnidadeId()
-                    );
+                    UsuarioRequest usuarioRequest = new UsuarioRequest(profissional.getEmail(), profissional.getNome(),
+                            null, RoleUsuario.MEDICO, SecurityHolder.getLoggedUserUnidadeId());
                     Usuario usuario = usuarioService.create(usuarioRequest);
                     profissional.setUsuario(usuario);
                     log.info("Usuário criado automaticamente para o profissional: {}", profissional.getNome());

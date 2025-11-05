@@ -63,8 +63,7 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
 
         // Somar valor de repasse + valor adicional + valor hora
         BigDecimal valorHora = request.valorHora();
-        BigDecimal valorTotal = valorRepasse
-                .add(valorAdicional != null ? valorAdicional : BigDecimal.ZERO)
+        BigDecimal valorTotal = valorRepasse.add(valorAdicional != null ? valorAdicional : BigDecimal.ZERO)
                 .add(valorHora != null ? valorHora : BigDecimal.ZERO);
 
         Honorario honorario = new Honorario(profissional, data, valorTotal, agendamentos.size(), unidade,
@@ -100,8 +99,8 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
     private BigDecimal calcularValorAdicional(Long profissionalId, LocalDate data) {
 
         // Buscar TODAS as disponibilidades do dia para o profissional
-        List<Disponibilidade> disponibilidades = disponibilidadeRepository.findDisponibilidadesDia(profissionalId,
-                data);
+        List<Disponibilidade> disponibilidades = disponibilidadeRepository.findDisponibilidadesDia(profissionalId, data,
+                SecurityHolder.getLoggedUserUnidadeId());
 
         // Somar todos os valores adicionais das disponibilidades do dia
         BigDecimal valorDiario = disponibilidades.stream().map(Disponibilidade::getValorAdicional)
@@ -114,7 +113,7 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
         // Se não encontrou na disponibilidade diária, buscar na agenda semanal
         Integer diaSemana = data.getDayOfWeek().getValue() % 7; // Converter para 0=Domingo, 6=Sábado
         List<AgendaSemanal> agendasSemanais = agendaSemanalRepository.findByProfissionalIdAndDiaSemana(profissionalId,
-                diaSemana);
+                diaSemana, SecurityHolder.getLoggedUserUnidadeId());
 
         // Somar todos os valores adicionais das agendas semanais
         BigDecimal valorSemanal = agendasSemanais.stream().map(AgendaSemanal::getValorAdicional)

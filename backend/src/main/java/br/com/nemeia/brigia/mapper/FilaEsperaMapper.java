@@ -16,13 +16,9 @@ public class FilaEsperaMapper extends BaseMapper<FilaEspera, FilaEsperaRequest, 
     private final ProfissionalMapper profissionalMapper;
     private final ProcedimentoMapper procedimentoMapper;
 
-    public FilaEsperaMapper(ObjectMapper objectMapper,
-                           PacienteMapper pacienteMapper,
-                           EspecialidadeMapper especialidadeMapper,
-                           ConvenioMapper convenioMapper,
-                           EmpresaMapper empresaMapper,
-                           ProfissionalMapper profissionalMapper,
-                           ProcedimentoMapper procedimentoMapper) {
+    public FilaEsperaMapper(ObjectMapper objectMapper, PacienteMapper pacienteMapper,
+            EspecialidadeMapper especialidadeMapper, ConvenioMapper convenioMapper, EmpresaMapper empresaMapper,
+            ProfissionalMapper profissionalMapper, ProcedimentoMapper procedimentoMapper) {
         super(objectMapper, FilaEspera.class, FilaEsperaResponse.class);
         this.pacienteMapper = pacienteMapper;
         this.especialidadeMapper = especialidadeMapper;
@@ -37,22 +33,12 @@ public class FilaEsperaMapper extends BaseMapper<FilaEspera, FilaEsperaRequest, 
             return null;
         }
 
-        return new FilaEsperaResponse(
-                filaEspera.getId(),
-                pacienteMapper.toResponse(filaEspera.getPaciente()),
-                especialidadeMapper.toResponse(filaEspera.getEspecialidade()),
-                filaEspera.getObservacoes(),
-                convenioMapper.toResponse(filaEspera.getConvenio()),
-                empresaMapper.toResponse(filaEspera.getEmpresa()),
+        return new FilaEsperaResponse(filaEspera.getId(), pacienteMapper.toResponse(filaEspera.getPaciente()),
+                especialidadeMapper.toResponse(filaEspera.getEspecialidade()), filaEspera.getObservacoes(),
+                convenioMapper.toResponse(filaEspera.getConvenio()), empresaMapper.toResponse(filaEspera.getEmpresa()),
                 profissionalMapper.toResponse(filaEspera.getProfissional()),
-                procedimentoMapper.toResponse(filaEspera.getProcedimento()),
-                filaEspera.getTipoAgendamento(),
-                filaEspera.getFormaPagamento(),
-                filaEspera.getValor(),
-                filaEspera.getDesconto(),
-                filaEspera.getDuracao(),
-                filaEspera.getCriadoEm(),
-                filaEspera.getExcluido()
-        );
+                procedimentoMapper.toResponse(filaEspera.getProcedimento()), filaEspera.getTipoAgendamento(),
+                filaEspera.getFormaPagamento(), filaEspera.getValor(), filaEspera.getDesconto(),
+                filaEspera.getDuracao(), filaEspera.getCriadoEm(), filaEspera.getExcluido());
     }
 }

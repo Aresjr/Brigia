@@ -127,8 +127,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         boolean deveMandarEmail = deveMandarEmail(original, request);
 
         // Verificar se houve mudança no profissional, data ou hora
-        boolean horarioMudou = !original.getData().equals(request.data())
-                || !original.getHora().equals(request.hora())
+        boolean horarioMudou = !original.getData().equals(request.data()) || !original.getHora().equals(request.hora())
                 || !original.getProfissional().getId().equals(request.profissionalId());
 
         // Validar disponibilidade do profissional apenas se o horário mudou
@@ -148,7 +147,8 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         Agendamento agendamentoAtualizado = repository.save(agendamentoUpdate);
 
         // Sincronizar Conta a Receber com lógica dos 3 cenários
-        contaReceberService.sincronizarContaReceberComAgendamento(id, agendamentoAtualizado, request.pago(), request.quantiaPaga());
+        contaReceberService.sincronizarContaReceberComAgendamento(id, agendamentoAtualizado, request.pago(),
+                request.quantiaPaga());
 
         if (deveMandarEmail) {
             sendEmail(agendamentoAtualizado, "Agendamento Atualizado!", "agendamento-atualizado");
@@ -190,7 +190,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         if (email != null) {
             Map<String, Object> variables = getVariaveisEmail(agendamento);
             try {
-               emailService.sendEmail(email, status, template, variables);
+                emailService.sendEmail(email, status, template, variables);
             } catch (Exception e) {
                 log.error("Não foi possível enviar email: {}", e.getLocalizedMessage());
             }
@@ -236,16 +236,13 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         // Se não for encaixe, validar se há disponibilidade cadastrada para o
         // profissional no horário solicitado
         // Primeiro verifica na disponibilidade específica (data específica)
-        boolean temDisponibilidadeEspecifica = disponibilidadeService
-                .findByProfissionalAndDiaAndHora(request.profissionalId(), request.data(),
-                        request.hora().plusMinutes(request.duracao()))
-                .isPresent();
+        boolean temDisponibilidadeEspecifica = disponibilidadeService.findByProfissionalAndDiaAndHora(
+                request.profissionalId(), request.data(), request.hora().plusMinutes(request.duracao())).isPresent();
 
-        // Se não encontrou disponibilidade específica, verifica na agenda semanal (recorrente)
-        boolean temAgendaSemanal = agendaSemanalService
-                .findByProfissionalAndDiaAndHora(request.profissionalId(), request.data(),
-                        request.hora().plusMinutes(request.duracao()))
-                .isPresent();
+        // Se não encontrou disponibilidade específica, verifica na agenda semanal
+        // (recorrente)
+        boolean temAgendaSemanal = agendaSemanalService.findByProfissionalAndDiaAndHora(request.profissionalId(),
+                request.data(), request.hora().plusMinutes(request.duracao())).isPresent();
 
         // Se não tem disponibilidade em nenhuma das duas, lança exceção
         if (!temDisponibilidadeEspecifica && !temAgendaSemanal) {

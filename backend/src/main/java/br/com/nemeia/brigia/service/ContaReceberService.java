@@ -71,7 +71,7 @@ public class ContaReceberService {
 
     @Transactional
     public void sincronizarContaReceberComAgendamento(Long agendamentoId, Agendamento agendamentoAtualizado,
-                                                       Boolean pago, BigDecimal quantiaPaga) {
+            Boolean pago, BigDecimal quantiaPaga) {
         log.info("Sincronizando conta a receber para agendamento ID: {}", agendamentoId);
 
         var contaReceberOptional = repository.findByAgendamentoId(agendamentoId);
@@ -98,14 +98,16 @@ public class ContaReceberService {
 
         // 🟠 Cenário 2: CR foi alterado manualmente
         if (Boolean.TRUE.equals(contaReceber.getAtualizadoManual())) {
-            log.warn("CR ID: {} foi alterado manualmente. Não atualizando automaticamente. " +
-                    "Agendamento ID: {} teve mudança de valor de {} para {}",
+            log.warn(
+                    "CR ID: {} foi alterado manualmente. Não atualizando automaticamente. "
+                            + "Agendamento ID: {} teve mudança de valor de {} para {}",
                     contaReceber.getId(), agendamentoId, valorTotalAnterior, novoValorTotal);
             // TODO: Criar notificação ou flag para revisão manual
             return;
         }
 
-        // 🟢 Cenário 1: CR não foi alterado manualmente - pode atualizar automaticamente
+        // 🟢 Cenário 1: CR não foi alterado manualmente - pode atualizar
+        // automaticamente
         log.info("Atualizando automaticamente CR ID: {} conforme agendamento ID: {}. Valor: {} -> {}",
                 contaReceber.getId(), agendamentoId, valorTotalAnterior, novoValorTotal);
 

@@ -1,5 +1,6 @@
 package br.com.nemeia.brigia.service;
 
+import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.DisponibilidadeRequest;
 import br.com.nemeia.brigia.exception.ConflitoBlocoHorarioException;
 import br.com.nemeia.brigia.mapper.DisponibilidadeMapper;
@@ -72,12 +73,13 @@ public class DisponibilidadeService extends BaseService<Disponibilidade, Disponi
 
         Pageable pageable = PageRequest.of(page, size, DbUtil.DEFAULT_SORT);
 
-        return repository.findAllByDateRange(pageable, startDate, endDate);
+        return repository.findAllByDateRange(pageable, startDate, endDate, SecurityHolder.getLoggedUserUnidadeId());
     }
 
     public Optional<Disponibilidade> findByProfissionalAndDiaAndHora(Long profissionalId, LocalDate dia,
             LocalTime hora) {
-        return repository.findByProfissionalAndDiaAndHora(profissionalId, dia, hora);
+        return repository.findByProfissionalAndDiaAndHora(profissionalId, dia, hora,
+                SecurityHolder.getLoggedUserUnidadeId());
     }
 
     @Override
@@ -87,7 +89,8 @@ public class DisponibilidadeService extends BaseService<Disponibilidade, Disponi
 
     private void verificarConflitoHorario(Long profissionalId, LocalDate dia, LocalTime horaInicial,
             LocalTime horaFinal, Long idDisponibilidadeAtual) {
-        List<Disponibilidade> conflitos = repository.findConflitosHorario(profissionalId, dia, horaInicial, horaFinal);
+        List<Disponibilidade> conflitos = repository.findConflitosHorario(profissionalId, dia, horaInicial, horaFinal,
+                SecurityHolder.getLoggedUserUnidadeId());
 
         // Se está editando, remove a própria disponibilidade da lista de conflitos
         if (idDisponibilidadeAtual != null) {
