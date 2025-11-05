@@ -1,5 +1,6 @@
 package br.com.nemeia.brigia.service;
 
+import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.AgendaSemanalRequest;
 import br.com.nemeia.brigia.mapper.AgendaSemanalMapper;
 import br.com.nemeia.brigia.model.AgendaSemanal;
@@ -47,11 +48,12 @@ public class AgendaSemanalService extends BaseService<AgendaSemanal, AgendaSeman
     }
 
     public List<AgendaSemanal> findByProfissionalId(Long profissionalId) {
-        return repository.findAllByProfissionalId(profissionalId);
+        return repository.findAllByProfissionalId(SecurityHolder.getLoggedUserUnidadeId(), profissionalId);
     }
 
     public List<AgendaSemanal> findByProfissionalIdAndDiaSemana(Long profissionalId, Integer diaSemana) {
-        return repository.findByProfissionalIdAndDiaSemana(profissionalId, diaSemana);
+        return repository.findByProfissionalIdAndDiaSemana(profissionalId, diaSemana,
+                SecurityHolder.getLoggedUserUnidadeId());
     }
 
     public Optional<AgendaSemanal> findByProfissionalAndDiaAndHora(Long profissionalId, LocalDate dia,
@@ -61,7 +63,8 @@ public class AgendaSemanalService extends BaseService<AgendaSemanal, AgendaSeman
         int diaSemanaJava = dia.getDayOfWeek().getValue(); // 1 = Segunda, 7 = Domingo
         int diaSemana = (diaSemanaJava == 7) ? 0 : diaSemanaJava; // Converte para 0 = Domingo
 
-        return repository.findByProfissionalAndDiaSemanaAndHora(profissionalId, diaSemana, hora);
+        return repository.findByProfissionalAndDiaSemanaAndHora(profissionalId, diaSemana, hora,
+                SecurityHolder.getLoggedUserUnidadeId());
     }
 
     @Override

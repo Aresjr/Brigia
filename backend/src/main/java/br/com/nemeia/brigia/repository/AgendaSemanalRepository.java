@@ -11,17 +11,21 @@ import java.util.Optional;
 public interface AgendaSemanalRepository extends BaseRepository<AgendaSemanal> {
 
     @Query("SELECT a FROM AgendaSemanal a WHERE " + "(a.excluido IS NULL OR a.excluido = false) "
+            + "AND a.unidade.id = :unidadeId "
             + "AND (:profissionalId IS NULL OR a.profissional.id = :profissionalId)")
-    List<AgendaSemanal> findAllByProfissionalId(@Param("profissionalId") Long profissionalId);
+    List<AgendaSemanal> findAllByProfissionalId(@Param("unidadeId") Long unidadeId,
+            @Param("profissionalId") Long profissionalId);
 
     @Query("SELECT a FROM AgendaSemanal a WHERE " + "a.profissional.id = :profissionalId "
-            + "AND a.diaSemana = :diaSemana " + "AND (a.excluido IS NULL OR a.excluido = false)")
+            + "AND a.diaSemana = :diaSemana " + "AND a.unidade.id = :unidadeId "
+            + "AND (a.excluido IS NULL OR a.excluido = false)")
     List<AgendaSemanal> findByProfissionalIdAndDiaSemana(@Param("profissionalId") Long profissionalId,
-            @Param("diaSemana") Integer diaSemana);
+            @Param("diaSemana") Integer diaSemana, @Param("unidadeId") Long unidadeId);
 
     @Query("SELECT a FROM AgendaSemanal a WHERE " + "a.profissional.id = :profissionalId "
             + "AND a.diaSemana = :diaSemana " + "AND :hora >= a.horaInicial " + "AND :hora <= a.horaFinal "
-            + "AND (a.excluido IS NULL OR a.excluido = false)")
+            + "AND a.unidade.id = :unidadeId " + "AND (a.excluido IS NULL OR a.excluido = false)")
     Optional<AgendaSemanal> findByProfissionalAndDiaSemanaAndHora(@Param("profissionalId") Long profissionalId,
-            @Param("diaSemana") Integer diaSemana, @Param("hora") LocalTime hora);
+            @Param("diaSemana") Integer diaSemana, @Param("hora") LocalTime hora,
+            @Param("unidadeId") Long unidadeId);
 }
