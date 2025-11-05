@@ -42,6 +42,11 @@ jobs:
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_JPA_HIBERNATE_DDL_AUTO: validate
       SPRING_FLYWAY_ENABLED: true
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      MAIL_API_KEY: FAKE
+      MAIL_DOMAIN: FAKE
+      MAIL_FROM_NAME: FAKE
+      MAIL_FROM_EMAIL: FAKE
 
     steps:
       - name: Checkout do código

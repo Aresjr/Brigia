@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -125,8 +126,15 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         Agendamento original = getById(id);
         boolean deveMandarEmail = deveMandarEmail(original, request);
 
-        // Validar disponibilidade do profissional, exceto se for encaixe
-        validarDisponibilidadeProfissional(request, id);
+        // Verificar se houve mudança no profissional, data ou hora
+        boolean horarioMudou = !original.getData().equals(request.data())
+                || !original.getHora().equals(request.hora())
+                || !original.getProfissional().getId().equals(request.profissionalId());
+
+        // Validar disponibilidade do profissional apenas se o horário mudou
+        if (horarioMudou) {
+            validarDisponibilidadeProfissional(request, id);
+        }
 
         Agendamento agendamentoUpdate = mapper.updateEntity(original, request);
         setEntidades(request, agendamentoUpdate);
@@ -139,10 +147,8 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
 
         Agendamento agendamentoAtualizado = repository.save(agendamentoUpdate);
 
-        // Criar conta a receber se pago=true e não estava pago antes
-        if (Boolean.TRUE.equals(request.pago()) && !Boolean.TRUE.equals(original.getPago())) {
-            contaReceberService.createContaReceberFromAgendamento(agendamentoAtualizado);
-        }
+        // Sincronizar Conta a Receber com lógica dos 3 cenários
+        contaReceberService.sincronizarContaReceberComAgendamento(id, agendamentoAtualizado, request.pago(), request.quantiaPaga());
 
         if (deveMandarEmail) {
             sendEmail(agendamentoAtualizado, "Agendamento Atualizado!", "agendamento-atualizado");

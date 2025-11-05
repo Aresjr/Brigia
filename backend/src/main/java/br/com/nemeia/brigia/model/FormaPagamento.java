@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public enum FormaPagamento {
     DINHEIRO(0, "Dinheiro"), CARTAO_CREDITO(1, "Cartão de Crédito"), CARTAO_DEBITO(2, "Cartão de Débito"), PIX(3,
-            "Pix"), BOLETO(4, "Boleto");
+            "Pix"), BOLETO(4, "Boleto"), FATURADO(5, "Faturado");
 
     private final Integer codigo;
     private final String descricao;

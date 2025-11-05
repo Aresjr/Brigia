@@ -17,7 +17,7 @@ import { PacienteService } from '../pacientes/paciente.service';
 import { EmpresaService } from '../empresa/empresa.service';
 import { Empresa } from '../empresa/empresa.interface';
 import { ContasReceberDetalhesComponent } from './contas-receber-detalhes.component';
-import { StatusContaReceber } from '../../core/constans';
+import { StatusContaReceber, FORMAS_PAGAMENTO } from '../../core/constans';
 import { abrirDatePicker } from '../../core/util-methods';
 import { ToastrService } from 'ngx-toastr';
 
@@ -46,12 +46,15 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
   empresas: Empresa[] = [];
   itensSelecionados: Set<number> = new Set();
   mostrarDropdownAcoes: boolean = false;
+  mostrarFiltros: boolean = false;
+  formasPagamento = FORMAS_PAGAMENTO;
 
   form = new FormGroup({
     status: new FormControl<number | null>(null),
     paciente: new FormControl<number | null>(null),
     empresa: new FormControl<number | null>(null),
     profissional: new FormControl<number | null>(null),
+    formaPagamento: new FormControl<number | null>(null),
     dataInicio: new FormControl<string | null>(null),
     dataFim: new FormControl<string | null>(null)
   });
@@ -123,12 +126,14 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
     const pacienteSelecionado = this.form.get('paciente')?.value;
     const empresaSelecionada = this.form.get('empresa')?.value;
     const profissionalSelecionado = this.form.get('profissional')?.value;
+    const formaPagamentoSelecionada = this.form.get('formaPagamento')?.value;
     let matchData = true;
     this.itensExibicao = this.itensInternos.filter(item => {
-      const matchStatus = statusSelecionado == null || statusSelecionado == 0 || item.status == statusSelecionado;
-      const matchEmpresa = item.empresa == undefined || empresaSelecionada == undefined || empresaSelecionada == 0 || item.empresa.id == empresaSelecionada;
-      const matchPaciente = pacienteSelecionado == undefined || pacienteSelecionado == 0 || item.paciente.id == pacienteSelecionado;
-      const matchProfissional = profissionalSelecionado == undefined || profissionalSelecionado == 0 || item.profissional.id == profissionalSelecionado;
+      const matchStatus = statusSelecionado == null || item.status == Number(statusSelecionado);
+      const matchEmpresa = item.empresa == undefined || empresaSelecionada == undefined || item.empresa.id == Number(empresaSelecionada);
+      const matchPaciente = pacienteSelecionado == undefined || item.paciente.id == Number(pacienteSelecionado);
+      const matchProfissional = profissionalSelecionado == undefined || item.profissional.id == Number(profissionalSelecionado);
+      const matchFormaPagamento = formaPagamentoSelecionada == undefined || item.formaPagamento == Number(formaPagamentoSelecionada);
 
       const dataInicio = this.form.get('dataInicio')?.value;
       const dataFim = this.form.get('dataFim')?.value;
@@ -140,9 +145,18 @@ export class ContaReceberComponent extends BaseListComponent<ContaReceber> imple
         matchData = dataAgendamento >= inicio && dataAgendamento <= fim;
       }
 
-      return matchProfissional && matchPaciente && matchStatus && matchEmpresa && matchData;
+      return matchProfissional && matchPaciente && matchStatus && matchEmpresa && matchFormaPagamento && matchData;
     });
     this.atualizarPaginacao();
+  }
+
+  toggleFiltros() {
+    this.mostrarFiltros = !this.mostrarFiltros;
+  }
+
+  getFormaPagamentoDescricao(formaPagamento: number): string {
+    const forma = this.formasPagamento.find(f => f.valor === formaPagamento);
+    return forma ? forma.descricao : '-';
   }
 
   override searchTermFilter(contaReceber: ContaReceber, searchTerm: string): boolean | undefined {

@@ -33,7 +33,7 @@
             <label class="label-campo">
               Data Nascimento
               <input #profissional type="date" formControlName="dataNascimento" required
-                     class="campo inline w-[8.5rem]" [ngClass]="classesCampo('dataNascimento')" />
+                     class="campo inline" [ngClass]="classesCampo('dataNascimento')" />
               <button type="button" class="inline -ml-8" (click)="abrirDatePicker(profissional)">
                 <lucide-icon name="calendar" class="inline h-4"/>
               </button>
@@ -69,6 +69,18 @@
               <label class="label-campo">CRM</label>
               <input type="text" formControlName="crm" mask="0000000" emptyToNull class="campo">
             </div>
+          </div>
+          <div class="w-56">
+            <label class="label-campo" for="valorHora">
+              Valor Hora
+            </label>
+            <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
+              R$
+              <input type="text" formControlName="valorHora" min="0" id="valorHora"
+                     emptyToNull maxlength="8" placeholder="00,00"
+                     mask="separator.2" thousandSeparator="" decimalMarker=","
+                     class="campo border-0">
+            </label>
           </div>
         </div>
 

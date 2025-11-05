@@ -8,6 +8,7 @@ export interface Profissional extends Entidade {
     sexo: string | null;
     celular: string | null;
     crm: string | null;
+    valorHora: number | null;
     urlImagem: string | null;
     especialidades?: Especialidade[];
 }
@@ -19,6 +20,7 @@ export interface ProfissionalRequest extends EntidadeRequest {
     sexo: string | null;
     celular: string | null;
     crm: string | null;
+    valorHora: number | null;
     urlImagem: string | null;
     especialidades?: Especialidade[];
 }

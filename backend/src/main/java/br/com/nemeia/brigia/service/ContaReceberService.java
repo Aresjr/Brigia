@@ -61,6 +61,95 @@ public class ContaReceberService {
     }
 
     @Transactional
+    public void deleteContaReceberByAgendamento(Long agendamentoId) {
+        log.info("Buscando conta a receber para agendamento ID: {}", agendamentoId);
+        repository.findByAgendamentoId(agendamentoId).ifPresent(contaReceber -> {
+            log.info("Excluindo conta a receber ID: {} do agendamento ID: {}", contaReceber.getId(), agendamentoId);
+            repository.delete(contaReceber);
+        });
+    }
+
+    @Transactional
+    public void sincronizarContaReceberComAgendamento(Long agendamentoId, Agendamento agendamentoAtualizado,
+                                                       Boolean pago, BigDecimal quantiaPaga) {
+        log.info("Sincronizando conta a receber para agendamento ID: {}", agendamentoId);
+
+        var contaReceberOptional = repository.findByAgendamentoId(agendamentoId);
+
+        if (contaReceberOptional.isEmpty()) {
+            // Se não existe CR, criar um novo se o agendamento foi pago
+            if (Boolean.TRUE.equals(pago) || (quantiaPaga != null && quantiaPaga.compareTo(BigDecimal.ZERO) > 0)) {
+                log.info("Criando nova conta a receber para agendamento ID: {}", agendamentoId);
+                createContaReceberFromAgendamento(agendamentoAtualizado);
+            }
+            return;
+        }
+
+        ContaReceber contaReceber = contaReceberOptional.get();
+
+        // 🔵 Cenário 3: CR foi alterado, mas o valor do agendamento não mudou
+        BigDecimal novoValorTotal = calcularValorTotalAgendamento(agendamentoAtualizado);
+        BigDecimal valorTotalAnterior = contaReceber.getValorTotal();
+
+        if (novoValorTotal.compareTo(valorTotalAnterior) == 0) {
+            log.info("Valor do agendamento não mudou. Nada a fazer no CR ID: {}", contaReceber.getId());
+            return;
+        }
+
+        // 🟠 Cenário 2: CR foi alterado manualmente
+        if (Boolean.TRUE.equals(contaReceber.getAtualizadoManual())) {
+            log.warn("CR ID: {} foi alterado manualmente. Não atualizando automaticamente. " +
+                    "Agendamento ID: {} teve mudança de valor de {} para {}",
+                    contaReceber.getId(), agendamentoId, valorTotalAnterior, novoValorTotal);
+            // TODO: Criar notificação ou flag para revisão manual
+            return;
+        }
+
+        // 🟢 Cenário 1: CR não foi alterado manualmente - pode atualizar automaticamente
+        log.info("Atualizando automaticamente CR ID: {} conforme agendamento ID: {}. Valor: {} -> {}",
+                contaReceber.getId(), agendamentoId, valorTotalAnterior, novoValorTotal);
+
+        // Atualizar valores do CR
+        ContaReceber novoContaReceber = mapper.fromAgendamento(agendamentoAtualizado);
+        contaReceber.setValorAgendamento(novoContaReceber.getValorAgendamento());
+        contaReceber.setValorProcedimentosAdicionais(novoContaReceber.getValorProcedimentosAdicionais());
+        contaReceber.setValorDesconto(novoContaReceber.getValorDesconto());
+        contaReceber.setDataAgendamento(novoContaReceber.getDataAgendamento());
+        contaReceber.setProfissional(novoContaReceber.getProfissional());
+        contaReceber.setConvenio(novoContaReceber.getConvenio());
+        contaReceber.setEmpresa(novoContaReceber.getEmpresa());
+        contaReceber.setFormaPagamento(novoContaReceber.getFormaPagamento());
+
+        // Recalcular status baseado no novo valor total
+        BigDecimal valorRecebido = contaReceber.getValorRecebido();
+        if (valorRecebido.compareTo(BigDecimal.ZERO) == 0) {
+            contaReceber.setStatus(StatusContaReceber.ABERTO);
+        } else if (valorRecebido.compareTo(novoValorTotal) >= 0) {
+            contaReceber.setStatus(StatusContaReceber.PAGO);
+        } else {
+            contaReceber.setStatus(StatusContaReceber.PARCIAL);
+        }
+
+        repository.save(contaReceber);
+        log.info("CR ID: {} atualizado com sucesso", contaReceber.getId());
+    }
+
+    private BigDecimal calcularValorTotalAgendamento(Agendamento agendamento) {
+        BigDecimal valorTotal = agendamento.getValor() != null ? agendamento.getValor() : BigDecimal.ZERO;
+        BigDecimal desconto = agendamento.getDesconto() != null ? agendamento.getDesconto() : BigDecimal.ZERO;
+
+        if (agendamento.getProcedimentos() != null) {
+            for (var proc : agendamento.getProcedimentos()) {
+                BigDecimal valorProc = proc.getValor() != null ? proc.getValor() : BigDecimal.ZERO;
+                BigDecimal quantidade = BigDecimal.valueOf(proc.getQuantidade());
+                valorTotal = valorTotal.add(valorProc.multiply(quantidade));
+            }
+        }
+
+        return valorTotal.subtract(desconto);
+    }
+
+    @Transactional
     public ContaReceber registrarRecebimento(Long id, BigDecimal valorRecebido) {
         ContaReceber contaReceber = getById(id);
         if (BigDecimals.gt(valorRecebido, contaReceber.getValorTotal())) {
@@ -70,6 +159,10 @@ public class ContaReceberService {
         boolean pagoTotalmente = contaReceber.getValorRecebido().equals(contaReceber.getValorTotal());
         var status = pagoTotalmente ? StatusContaReceber.PAGO : StatusContaReceber.PARCIAL;
         contaReceber.setStatus(status);
+
+        // Marcar como atualizado manualmente ao registrar recebimento
+        contaReceber.setAtualizadoManual(true);
+
         repository.save(contaReceber);
         return contaReceber;
     }
@@ -89,6 +182,9 @@ public class ContaReceberService {
 
         // Atualizar o desconto
         contaReceber.setValorDesconto(desconto);
+
+        // Marcar como atualizado manualmente ao alterar desconto
+        contaReceber.setAtualizadoManual(true);
 
         // Recalcular o status baseado no novo valor total
         BigDecimal novoValorTotal = contaReceber.getValorTotal();

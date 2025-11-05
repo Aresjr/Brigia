@@ -33,6 +33,8 @@ interface MenuItem {
   templateUrl: './main-layout.component.html'
 })
 export class MainLayoutComponent {
+  appVersion = environment.version;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -57,7 +59,6 @@ export class MainLayoutComponent {
   submenuState: Record<string, boolean> = {};
   searchTerm: string = '';
   menuItems: MenuItem[] = [
-    { label: 'Página Inicial', icon: 'home', route: '/', roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.MEDICO] },
     { label: 'Pacientes', icon: 'users', route: '/pacientes', roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.MEDICO] },
     { label: 'Agenda Diária', icon: 'calendar', route: '/agenda-diaria', roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.MEDICO] },
     { label: 'Atendimentos', icon: 'stethoscope', route: '/atendimentos', roles: [Role.ADMIN, Role.MEDICO] },

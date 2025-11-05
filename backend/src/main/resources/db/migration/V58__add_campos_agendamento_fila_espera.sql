@@ -1,15 +1,15 @@
 -- Adiciona campos do agendamento à tabela fila_espera para facilitar
 -- a conversão de fila de espera para agendamento com dados pré-preenchidos
 
-ALTER TABLE fila_espera ADD COLUMN convenio_id BIGINT;
-ALTER TABLE fila_espera ADD COLUMN empresa_id BIGINT;
-ALTER TABLE fila_espera ADD COLUMN profissional_id BIGINT;
-ALTER TABLE fila_espera ADD COLUMN procedimento_id BIGINT;
-ALTER TABLE fila_espera ADD COLUMN tipo_agendamento SMALLINT;
-ALTER TABLE fila_espera ADD COLUMN forma_pagamento SMALLINT;
-ALTER TABLE fila_espera ADD COLUMN valor NUMERIC(10,2);
-ALTER TABLE fila_espera ADD COLUMN desconto NUMERIC(10,2);
-ALTER TABLE fila_espera ADD COLUMN duracao INTEGER;
+ALTER TABLE fila_espera ADD COLUMN IF NOT EXISTS convenio_id BIGINT;
+ALTER TABLE fila_espera ADD COLUMN IF NOT EXISTS empresa_id BIGINT;
+ALTER TABLE fila_espera ADD COLUMN IF NOT EXISTS profissional_id BIGINT;
+ALTER TABLE fila_espera ADD COLUMN IF NOT EXISTS procedimento_id BIGINT;
+ALTER TABLE fila_espera ADD COLUMN IF NOT EXISTS tipo_agendamento SMALLINT;
+ALTER TABLE fila_espera ADD COLUMN IF NOT EXISTS forma_pagamento SMALLINT;
+ALTER TABLE fila_espera ADD COLUMN IF NOT EXISTS valor NUMERIC(10,2);
+ALTER TABLE fila_espera ADD COLUMN IF NOT EXISTS desconto NUMERIC(10,2);
+ALTER TABLE fila_espera ADD COLUMN IF NOT EXISTS duracao INTEGER;
 
 -- Adiciona constraints de foreign key
 ALTER TABLE fila_espera ADD CONSTRAINT fk_fila_espera_convenio

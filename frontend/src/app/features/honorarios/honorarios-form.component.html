@@ -107,10 +107,44 @@
                 {{ valorAdicional | currency:'BRL':'symbol':'1.2-2' }}
               </span>
             </div>
+            <div *ngIf="profissionalSelecionado && profissionalSelecionado?.valorHora && !modoDetalhes" class="flex justify-between items-center">
+              <div class="flex items-center gap-2">
+                <span class="font-semibold">Valor por Hora</span>
+                <span class="text-xs text-neutral">({{ totalHorasTrabalhadas | number:'1.1-1' }}h x {{ profissionalSelecionado.valorHora | currency:'BRL':'symbol':'1.2-2' }})</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" class="btn btn-xs btn-ghost btn-circle" (click)="editarValorHora()" *ngIf="!valorHoraEditavel" title="Editar Valor por Hora">
+                  <lucide-icon name="pencil" class="h-3.5"/>
+                </button>
+                <button type="button" class="btn btn-xs btn-ghost btn-circle" (click)="cancelarEdicaoValorHora()" *ngIf="valorHoraEditavel" title="Cancelar Edição">
+                  <lucide-icon name="x" class="h-3.5"/>
+                </button>
+                <input
+                  *ngIf="valorHoraEditavel"
+                  type="text"
+                  [(ngModel)]="valorHoraCalculado"
+                  [ngModelOptions]="{standalone: true}"
+                  mask="separator.2"
+                  thousandSeparator=""
+                  decimalMarker=","
+                  prefix="R$ "
+                  class="campo w-32 text-right"
+                />
+                <span *ngIf="!valorHoraEditavel" class="font-semibold">
+                  {{ valorHoraCalculado | currency:'BRL':'symbol':'1.2-2' }}
+                </span>
+              </div>
+            </div>
+            <div *ngIf="profissionalSelecionado?.valorHora && modoDetalhes && honorario && honorario?.valorHora" class="flex justify-between items-center">
+              <span class="font-semibold">Valor por Hora</span>
+              <span class="font-semibold">
+                {{ honorario.valorHora | currency:'BRL':'symbol':'1.2-2' }}
+              </span>
+            </div>
             <div class="border-t border-primary/20 pt-3 flex justify-between items-center">
               <span class="text-lg font-semibold">Valor Total</span>
               <span class="text-xl font-bold text-primary">
-                {{ (valorTotal + valorAdicional) | currency:'BRL':'symbol':'1.2-2' }}
+                {{ valorTotalFinal | currency:'BRL':'symbol':'1.2-2' }}
               </span>
             </div>
           </div>

@@ -8,10 +8,12 @@ export interface Honorario extends Entidade {
   valorTotal: number;
   quantidadeAtendimentos: number;
   valorAdicional?: number;
+  valorHora?: number;
   unidade: Unidade;
 }
 
 export interface HonorarioRequest extends EntidadeRequest {
   profissionalId: number;
   data: string;
+  valorHora?: number;
 }

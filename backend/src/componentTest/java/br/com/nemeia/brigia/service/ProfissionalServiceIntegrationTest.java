@@ -124,7 +124,8 @@ class ProfissionalServiceIntegrationTest {
                 "47999887766",
                 null, // urlImagem
                 "1234567", // CRM
-                Collections.emptyList()); // especialidades
+                new java.math.BigDecimal("0"),
+                List.<Long>of()); // especialidades
 
         // Act
         Profissional saved = profissionalService.createProfissional(request);
@@ -155,6 +156,7 @@ class ProfissionalServiceIntegrationTest {
                 "47988776655",
                 null,
                 "7654321",
+                new java.math.BigDecimal("150.00"),
                 List.of(especialidade1.getId(), especialidade2.getId()));
 
         // Act
@@ -300,6 +302,7 @@ class ProfissionalServiceIntegrationTest {
                 "47944332211", // Muda celular
                 null,
                 "6655443",
+                new java.math.BigDecimal("200.00"),
                 List.of(especialidade1.getId())); // Adiciona especialidade
 
         // Act

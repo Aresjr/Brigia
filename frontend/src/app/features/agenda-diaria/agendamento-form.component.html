@@ -235,12 +235,13 @@
             </button>
           </label>
 
-          <label class="input input-sm input-bordered flex items-center h-[2.4rem] bg-base-100" [ngClass]="classesCampo('valor', !this.valorEditavel)">
+          <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="classesCampo('valor', !this.valorEditavel)">
             R$
             <input type="text" formControlName="valor" min="1" max="99999" id="valor"
                    (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker="," required
-                   class="campo border-0" (change)="alterouValor($event)">
+                   class="campo border-0"
+                   (change)="alterouValor($event)">
           </label>
           <label *ngIf="isInvalid('valor')" class="text-error text-sm">
             Obrigatório
@@ -286,22 +287,27 @@
             </div>
         </div>
 
-        <div class="w-[8rem]">
+        <div class="w-[8rem] mr-4">
           <label class="label-campo" for="quantiaPaga">
             Quantia Paga
           </label>
           <label class="input input-sm input-bordered flex items-center h-[2.4rem]" [ngClass]="{'bg-base-200': tipoPagamento === 'pago' && modoSalvar, '!bg-base-100': !modoSalvar}">
             R$
             <input type="text" formControlName="quantiaPaga" min="0" id="quantiaPaga"
-                   (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
+                   (input)="limitLength($event); calcularQuantiaFaltante()" emptyToNull maxlength="8" placeholder="00,00"
                    mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0"
                    [readOnly]="tipoPagamento === 'pago'">
           </label>
         </div>
 
-        <div class="w-[8rem] ml-4 tooltip text-left" data-tip="Caso marcado, salvará o paciente na fila de espera ao invés de criar um agendamento">
-          <label class="label-campo rounded-lg px-1.5 hover:border hover:border-neutral" for="filaEspera">
-            Fila de Espera <br/><input type="checkbox" id="filaEspera" formControlName="filaEspera" class="campo my-1.5 mx-8 checkbox checkbox-primary" />
+        <div class="w-[8rem]">
+          <label class="label-campo" for="quantiaFaltante">
+            Quantia Faltante
+          </label>
+          <label class="input input-sm input-bordered flex items-center h-[2.4rem] bg-base-200">
+            R$
+            <input type="text" [value]="quantiaFaltante | currency:'BRL':'':'1.2-2'" id="quantiaFaltante"
+                   class="campo border-0 bg-base-200" readonly>
           </label>
         </div>
 

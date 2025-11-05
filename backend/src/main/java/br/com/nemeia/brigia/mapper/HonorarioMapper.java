@@ -23,7 +23,7 @@ public class HonorarioMapper {
 
         return new HonorarioResponse(honorario.getId(), profissionalMapper.toResponse(honorario.getProfissional()),
                 honorario.getData(), honorario.getValorTotal(), honorario.getQuantidadeAtendimentos(),
-                honorario.getValorAdicional(), unidadeMapper.toResponse(honorario.getUnidade()),
+                honorario.getValorAdicional(), honorario.getValorHora(), unidadeMapper.toResponse(honorario.getUnidade()),
                 honorario.getCriadoEm(), honorario.getExcluido());
     }
 
