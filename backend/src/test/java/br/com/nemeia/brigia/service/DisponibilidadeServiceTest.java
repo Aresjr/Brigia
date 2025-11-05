@@ -1,10 +1,11 @@
 package br.com.nemeia.brigia.service;
 
+import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.DisponibilidadeRequest;
 import br.com.nemeia.brigia.exception.ConflitoBlocoHorarioException;
 import br.com.nemeia.brigia.model.Disponibilidade;
-import br.com.nemeia.brigia.model.Profissional;
 import br.com.nemeia.brigia.repository.DisponibilidadeRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +30,17 @@ class DisponibilidadeServiceTest {
     @Autowired
     private DisponibilidadeRepository disponibilidadeRepository;
 
-    private Long profissionalId;
-
     @BeforeEach
     void setUp() {
+        SecurityHolder.setLoggedUserUnidadeId(1L);
         // Busca um profissional existente ou assume que existe pelo menos um
         // Em um cenário real, você poderia criar um profissional de teste aqui
         disponibilidadeRepository.deleteAll();
+    }
+
+    @AfterEach
+    void tearDown() {
+        SecurityHolder.clear();
     }
 
     @Test

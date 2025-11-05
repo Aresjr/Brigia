@@ -23,7 +23,7 @@ public class FilaEsperaController {
     @GetMapping
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public PagedResponse<FilaEsperaResponse> getAll(@RequestParam(defaultValue = "0") int page,
-                                                      @RequestParam(defaultValue = "50") int size) {
+            @RequestParam(defaultValue = "50") int size) {
         log.info("GET /fila-espera - page: {}, size: {}", page, size);
         return mapper.toPagedResponse(service.getPaged(page, size));
     }

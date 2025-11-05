@@ -63,8 +63,7 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
 
         // Somar valor de repasse + valor adicional + valor hora
         BigDecimal valorHora = request.valorHora();
-        BigDecimal valorTotal = valorRepasse
-                .add(valorAdicional != null ? valorAdicional : BigDecimal.ZERO)
+        BigDecimal valorTotal = valorRepasse.add(valorAdicional != null ? valorAdicional : BigDecimal.ZERO)
                 .add(valorHora != null ? valorHora : BigDecimal.ZERO);
 
         Honorario honorario = new Honorario(profissional, data, valorTotal, agendamentos.size(), unidade,
@@ -100,8 +99,8 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
     private BigDecimal calcularValorAdicional(Long profissionalId, LocalDate data) {
 
         // Buscar TODAS as disponibilidades do dia para o profissional
-        List<Disponibilidade> disponibilidades = disponibilidadeRepository.findDisponibilidadesDia(profissionalId,
-                data, SecurityHolder.getLoggedUserUnidadeId());
+        List<Disponibilidade> disponibilidades = disponibilidadeRepository.findDisponibilidadesDia(profissionalId, data,
+                SecurityHolder.getLoggedUserUnidadeId());
 
         // Somar todos os valores adicionais das disponibilidades do dia
         BigDecimal valorDiario = disponibilidades.stream().map(Disponibilidade::getValorAdicional)

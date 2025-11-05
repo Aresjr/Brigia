@@ -56,9 +56,9 @@ public class AgendaSemanalService extends BaseService<AgendaSemanal, AgendaSeman
                 SecurityHolder.getLoggedUserUnidadeId());
     }
 
-    public Optional<AgendaSemanal> findByProfissionalAndDiaAndHora(Long profissionalId, LocalDate dia,
-            LocalTime hora) {
-        // Converte LocalDate para dia da semana (DayOfWeek.getValue() retorna 1-7, sendo 1 = Segunda)
+    public Optional<AgendaSemanal> findByProfissionalAndDiaAndHora(Long profissionalId, LocalDate dia, LocalTime hora) {
+        // Converte LocalDate para dia da semana (DayOfWeek.getValue() retorna 1-7,
+        // sendo 1 = Segunda)
         // Mas precisamos ajustar para 0 = Domingo, 1 = Segunda, ... 6 = Sábado
         int diaSemanaJava = dia.getDayOfWeek().getValue(); // 1 = Segunda, 7 = Domingo
         int diaSemana = (diaSemanaJava == 7) ? 0 : diaSemanaJava; // Converte para 0 = Domingo

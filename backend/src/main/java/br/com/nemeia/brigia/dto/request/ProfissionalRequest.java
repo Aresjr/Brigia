@@ -16,6 +16,5 @@ public record ProfissionalRequest(@NotBlank(message = "Nome é obrigatório") St
         @Pattern(regexp = "^\\d{11}$", message = "Celuar com formato inválido, deve conter 11 dígitos") String celular,
         String urlImagem,
         @Pattern(regexp = "^\\d{7}$", message = "CRM com formato inválido, deve conter 7 dígitos") String crm,
-        @Nullable BigDecimal valorHora,
-        List<Long> especialidades) {
+        @Nullable BigDecimal valorHora, List<Long> especialidades) {
 }

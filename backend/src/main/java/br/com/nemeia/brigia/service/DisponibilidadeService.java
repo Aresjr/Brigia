@@ -73,8 +73,7 @@ public class DisponibilidadeService extends BaseService<Disponibilidade, Disponi
 
         Pageable pageable = PageRequest.of(page, size, DbUtil.DEFAULT_SORT);
 
-        return repository.findAllByDateRange(pageable, startDate, endDate,
-                SecurityHolder.getLoggedUserUnidadeId());
+        return repository.findAllByDateRange(pageable, startDate, endDate, SecurityHolder.getLoggedUserUnidadeId());
     }
 
     public Optional<Disponibilidade> findByProfissionalAndDiaAndHora(Long profissionalId, LocalDate dia,
