@@ -35,7 +35,7 @@ public class ProfissionalMapper {
 
         return new Profissional(request.nome(), request.email(), request.cpf(), request.dataNascimento(),
                 request.sexo() != null ? request.sexo().charAt(0) : null, request.celular(), request.urlImagem(),
-                request.crm());
+                request.crm(), request.valorHora());
     }
 
     public PagedResponse<ProfissionalResponse> toPagedResponse(Page<Profissional> paged) {
