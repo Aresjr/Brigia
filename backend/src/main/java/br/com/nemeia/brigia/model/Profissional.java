@@ -54,7 +54,7 @@ public class Profissional extends BaseModel {
     private List<Especialidade> especialidades;
 
     public Profissional(String nome, String email, String cpf, LocalDate dataNascimento, Character sexo, String celular,
-            String urlImagem, String crm) {
+            String urlImagem, String crm, BigDecimal valorHora) {
         this.nome = nome;
         this.email = email;
         this.cpf = cpf;
@@ -63,5 +63,6 @@ public class Profissional extends BaseModel {
         this.celular = celular;
         this.urlImagem = urlImagem;
         this.crm = crm;
+        this.valorHora = valorHora;
     }
 }
