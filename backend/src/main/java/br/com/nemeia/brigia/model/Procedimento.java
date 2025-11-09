@@ -1,7 +1,6 @@
 package br.com.nemeia.brigia.model;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
 import java.util.List;
 import lombok.*;
 
@@ -26,12 +25,6 @@ public class Procedimento extends BaseModel {
     @Column(name = "observacoes")
     private String observacoes;
 
-    @Column(name = "valor_padrao")
-    private BigDecimal valorPadrao;
-
-    @Column(name = "valor_repasse")
-    private BigDecimal valorRepasse;
-
     @Column(name = "duracao")
     private Integer duracao;
 
@@ -49,11 +42,4 @@ public class Procedimento extends BaseModel {
 
     @OneToMany(mappedBy = "procedimento", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProcedimentoPlano> precosPlanos;
-
-    public Procedimento(String codigo, String nome, String observacoes, BigDecimal valorPadrao) {
-        this.codigo = codigo;
-        this.nome = nome;
-        this.observacoes = observacoes;
-        this.valorPadrao = valorPadrao;
-    }
 }

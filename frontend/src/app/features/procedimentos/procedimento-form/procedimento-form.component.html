@@ -39,32 +39,6 @@
           </div>
         </div>
 
-        <!-- Preço Padrão e Valor Repasse na mesma linha -->
-        <div class="flex space-x-4">
-          <div class="flex-1 tooltip text-left" data-tip="Valor (Particular)">
-            <label class="label-campo">Preço Padrão (Particular)</label>
-            <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
-              R$ <input type="text" formControlName="valorPadrao" min="1" max="99999" id="valor"
-                        (input)="limitLength($event)" emptyToNull maxlength="8" placeholder="00,00"
-                        mask="separator.2" thousandSeparator="" decimalMarker="," required
-                        class="campo border-0" [ngClass]="classesCampo('valor')">
-            </label>
-            <div *ngIf="isInvalid('valor')" class="text-error text-sm">
-              Obrigatório
-            </div>
-          </div>
-
-          <div class="flex-1 tooltip text-left" data-tip="Valor Repasse (Particular)">
-            <label class="label-campo">Valor Repasse</label>
-            <label class="input input-sm input-bordered flex items-center h-[2.4rem]">
-              R$ <input type="text" formControlName="valorRepasse" min="0" max="99999"
-                        emptyToNull maxlength="8" placeholder="00,00"
-                        mask="separator.2" thousandSeparator="" decimalMarker=","
-                        class="campo border-0">
-            </label>
-          </div>
-        </div>
-
         <!-- Tipo e Duração na mesma linha -->
         <div class="flex space-x-4">
           <div class="flex-1">

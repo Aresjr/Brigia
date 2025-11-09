@@ -335,8 +335,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
           const procedimento = this.fb.group({
             quantidade: [proc.quantidade, [Validators.required, Validators.min(1)]],
             procedimentoId: [proc.procedimento.id, Validators.required],
-            valor: [proc.valor || proc.procedimento.valorPadrao],
-            valorExibicao: [proc.valor || proc.procedimento.valorPadrao]
+            valor: [proc.valor ?? 0],
+            valorExibicao: [proc.valor ?? 0]
           });
           this.procedimentosLancados.push(procedimento);
         });
@@ -757,37 +757,32 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     const convenioId = this.form.get('convenioId')?.value;
     const empresaId = this.form.get('empresaId')?.value;
 
-    const procedimento = this.procedimentos.find(p => p.id === procedimentoId);
+    const definirValor = (valor: number | null) => {
+      const valorFinal = valor ?? 0;
+      procedimentoControl.patchValue({ valor: valorFinal, valorExibicao: valorFinal });
+      this.calcularValorTotal();
+    };
 
-    // Prioridade: Convênio > Plano Empresarial > Valor Padrão
+    const aplicarValorParticular = () => {
+      this.procedimentoService.obterPrecoProcedimentoPadrao(procedimentoId).subscribe({
+        next: response => definirValor(response?.preco ?? 0),
+        error: () => definirValor(0)
+      });
+    };
+
+    // Prioridade: Convênio > Plano Empresarial > Valor Particular
     if (convenioId) {
       this.procedimentoService.obterPrecoProcedimentoConvenio(procedimentoId, convenioId).subscribe({
-        next: (response) => {
-          const valor = (response.preco > 0 ? response.preco : (procedimento?.valorPadrao || 0) );
-          procedimentoControl.patchValue({ valor: valor, valorExibicao: valor });
-          this.calcularValorTotal();
-        },
-        error: () => {
-          procedimentoControl.patchValue({ valor: procedimento?.valorPadrao || null });
-          this.calcularValorTotal();
-        }
+        next: (response) => definirValor(response?.preco ?? 0),
+        error: () => aplicarValorParticular()
       });
     } else if (empresaId && this.empresaSelecionada?.plano?.id) {
       this.procedimentoService.obterPrecoProcedimentoPlano(procedimentoId, this.empresaSelecionada.plano.id).subscribe({
-        next: (response) => {
-          const valor = (response.preco > 0 ? response.preco : (procedimento?.valorPadrao || 0) );
-          procedimentoControl.patchValue({ valor: valor, valorExibicao: valor });
-          this.calcularValorTotal();
-        },
-        error: () => {
-          procedimentoControl.patchValue({ valor: procedimento?.valorPadrao || null });
-          this.calcularValorTotal();
-        }
+        next: (response) => definirValor(response?.preco ?? 0),
+        error: () => aplicarValorParticular()
       });
     } else {
-      const valor = procedimento?.valorPadrao || 0;
-      procedimentoControl.patchValue({ valor: valor, valorExibicao: valor });
-      this.calcularValorTotal();
+      aplicarValorParticular();
     }
   }
 

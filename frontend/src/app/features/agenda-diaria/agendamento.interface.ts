@@ -18,6 +18,7 @@ export interface Agendamento extends Entidade {
     especialidade: Especialidade;
     procedimento: Procedimento | null;
     procedimentos: ProcedimentoAgendamento[] | null;
+    valorRepassePrincipal: number | null;
     convenio?: Convenio;
     empresa?: Empresa;
     unidade: Unidade;

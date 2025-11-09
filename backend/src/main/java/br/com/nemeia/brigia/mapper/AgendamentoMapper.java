@@ -5,8 +5,10 @@ import br.com.nemeia.brigia.dto.response.AgendamentoDetalhesResponse;
 import br.com.nemeia.brigia.dto.response.AgendamentoResponse;
 import br.com.nemeia.brigia.dto.response.PagedResponse;
 import br.com.nemeia.brigia.dto.response.ProcedimentoAgendamentoResponse;
+import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.model.Agendamento;
 import br.com.nemeia.brigia.model.AgendamentoProcedimento;
+import br.com.nemeia.brigia.service.ProcedimentoPrecoResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
@@ -28,6 +30,7 @@ public class AgendamentoMapper {
     private final ProcedimentoMapper procedimentoMapper;
     private final EmpresaMapper empresaMapper;
     private final ConvenioMapper convenioMapper;
+    private final ProcedimentoPrecoResolver procedimentoPrecoResolver;
 
     public AgendamentoResponse toResponse(Agendamento agendamento) {
         if (agendamento == null) {
@@ -40,6 +43,8 @@ public class AgendamentoMapper {
                     .toList();
         }
 
+        BigDecimal valorRepassePrincipal = calcularValorRepassePrincipal(agendamento);
+
         return new AgendamentoResponse(agendamento.getId(), pacienteMapper.toResponse(agendamento.getPaciente()),
                 agendamento.getData(), agendamento.getHora(),
                 agendamento.getHora().plusMinutes(agendamento.getDuracao()),
@@ -51,7 +56,7 @@ public class AgendamentoMapper {
                 procedimentoMapper.toResponse(agendamento.getProcedimento()), agendamento.getStatus(),
                 agendamento.getTipoAgendamento(), agendamento.getFormaPagamento(), agendamento.getValor(),
                 agendamento.getDesconto(), agendamento.getObservacoes(), agendamento.getDuracao(),
-                agendamento.getEncaixe(), agendamento.getPago(), procedimentos, BigDecimal.ZERO,
+                agendamento.getEncaixe(), agendamento.getPago(), procedimentos, valorRepassePrincipal, BigDecimal.ZERO,
                 agendamento.getCriadoEm(), agendamento.getExcluido());
     }
 
@@ -96,5 +101,19 @@ public class AgendamentoMapper {
         original.setEncaixe(request.encaixe() != null ? request.encaixe() : false);
         original.setPago(request.pago() != null ? request.pago() : false);
         return original;
+    }
+
+    private BigDecimal calcularValorRepassePrincipal(Agendamento agendamento) {
+        if (agendamento.getProcedimento() == null) {
+            return null;
+        }
+        try {
+            return procedimentoPrecoResolver
+                    .resolve(agendamento.getProcedimento(), agendamento.getConvenio(), agendamento.getEmpresa(),
+                            agendamento.getUnidade())
+                    .repasseOrZero();
+        } catch (NotFoundException e) {
+            return null;
+        }
     }
 }

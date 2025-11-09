@@ -8,8 +8,6 @@ import br.com.nemeia.brigia.model.PrecoProcedimento;
 import br.com.nemeia.brigia.model.Procedimento;
 import br.com.nemeia.brigia.model.Unidade;
 import br.com.nemeia.brigia.repository.PrecoProcedimentoRepository;
-import java.math.BigDecimal;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,16 +29,5 @@ public class PrecoProcedimentoService {
             PrecoProcedimentoRequest request) {
         PrecoProcedimento precoProcedimento = mapper.toPrecoProcedimento(procedimento, convenio, unidade, request);
         return repository.save(precoProcedimento);
-    }
-
-    public BigDecimal getPreco(Procedimento procedimento, Convenio convenio) {
-        return convenio != null
-                ? Optional
-                        .ofNullable(repository.findOneByProcedimentoAndConvenio(procedimento.getId(), convenio.getId())
-                                .map(PrecoProcedimento::getPreco).orElse(procedimento.getValorPadrao()))
-                        .orElseThrow(() -> new NotFoundException(
-                                String.format("Preço não cadastrado para procedimento %s", procedimento.getNome())))
-                : Optional.ofNullable(procedimento.getValorPadrao()).orElseThrow(() -> new NotFoundException(
-                        String.format("Preço não cadastrado para procedimento %s", procedimento.getNome())));
     }
 }

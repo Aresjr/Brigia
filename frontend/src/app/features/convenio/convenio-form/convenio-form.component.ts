@@ -27,7 +27,8 @@ export class ConvenioFormComponent extends FormComponent<Convenio, ConvenioReque
     super(fb, toastr);
     this.form = this.fb.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
-      descricao: [null]
+      descricao: [null],
+      particular: [false]
     });
   }
 }

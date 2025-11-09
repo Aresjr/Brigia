@@ -17,7 +17,7 @@ public class ConvenioMapper {
         }
 
         return new ConvenioResponse(convenio.getId(), convenio.getNome(), convenio.getDescricao(),
-                convenio.getCriadoEm(), convenio.getExcluido());
+                convenio.getParticular(), convenio.getCriadoEm(), convenio.getExcluido());
     }
 
     public PagedResponse<ConvenioResponse> toPagedResponse(Page<Convenio> paged) {
@@ -26,6 +26,6 @@ public class ConvenioMapper {
     }
 
     public Convenio toEntity(ConvenioRequest request) {
-        return new Convenio(request.nome(), request.descricao());
+        return new Convenio(request.nome(), request.descricao(), request.particular());
     }
 }
