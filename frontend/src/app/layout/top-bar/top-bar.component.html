@@ -23,6 +23,21 @@
              class="pl-9 pr-4 py-1 h-9 rounded-full focus:outline-none focus:ring-2 focus:ring-grey-900 focus:border-transparent shadow-md" />
     </div>
 
+    <details class="dropdown dropdown-end">
+      <summary class="btn btn-ghost btn-sm h-9">
+        {{ usuario?.name }}
+        <div class="avatar avatar-online avatar-placeholder">
+          <div class="bg-neutral text-neutral-content w-6 rounded-full">
+            <img *ngIf="usuario?.avatarUrl" [src]="usuario?.avatarUrl" alt="Avatar" />
+            <lucide-icon *ngIf="!usuario?.avatarUrl" name="user" class="inline w-5 h-5"/>
+          </div>
+        </div>
+      </summary>
+      <ul class="menu dropdown-content bg-base-100 rounded-lg p-1 m-0 z-[1001] w-52 shadow-lg hover:shadow-xl font-semibold">
+        <li><a (click)="logout()" class="text-error hover:bg-error/20">Sair</a></li>
+      </ul>
+    </details>
+
     <details class="dropdown dropdown-end mr-3">
       <summary class="btn btn-ghost btn-circle relative" aria-label="Notificações">
         <lucide-icon name="bell" class="w-5 h-5"></lucide-icon>
@@ -73,21 +88,6 @@
           </ul>
         </div>
       </div>
-    </details>
-
-    <details class="dropdown dropdown-end">
-      <summary class="btn btn-ghost btn-sm h-9">
-        {{ usuario?.name }}
-        <div class="avatar avatar-online avatar-placeholder">
-          <div class="bg-neutral text-neutral-content w-6 rounded-full">
-            <img *ngIf="usuario?.avatarUrl" [src]="usuario?.avatarUrl" alt="Avatar" />
-            <lucide-icon *ngIf="!usuario?.avatarUrl" name="user" class="inline w-5 h-5"/>
-          </div>
-        </div>
-      </summary>
-      <ul class="menu dropdown-content bg-base-100 rounded-lg p-1 m-0 z-[1001] w-52 shadow-lg hover:shadow-xl font-semibold">
-        <li><a (click)="logout()" class="text-error hover:bg-error/20">Sair</a></li>
-      </ul>
     </details>
 
   </div>

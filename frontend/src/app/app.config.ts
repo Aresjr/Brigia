@@ -9,7 +9,7 @@ import { Home, User, Calendar, LogIn, UserPlus, Stethoscope, ChevronRight, Messa
   MessageCircle, CircleUser, ChevronFirst, Users, Search, ClipboardList, Building, ChevronDown, BanknoteArrowUp,
   ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon, Plus, ChevronLeft, HeartHandshake, Receipt, Mail, Lock, Building2,
   Microscope, Menu, EllipsisVertical, X, Pencil, Trash, BriefcaseMedical, ReceiptText, RefreshCw, Calculator,
-  CalendarPlus, CalendarCheck, HandCoins, FileHeart, Check, Printer, History, Eye, FileText, Inbox, UserRound
+  CalendarPlus, CalendarCheck, HandCoins, FileHeart, Check, Printer, History, Eye, FileText, Inbox, UserRound, Bell
  } from 'lucide-angular/src/icons';
 import { provideNgxMask } from 'ngx-mask';
 import {
@@ -52,7 +52,7 @@ export const appConfig: ApplicationConfig = {
         Building, ChevronDown, ArrowDownIcon, ArrowUpIcon, ArrowUpDownIcon, Plus, ChevronLeft, CalendarPlus,
         HeartHandshake, Receipt, Mail, Lock, Building2, Microscope, Menu, EllipsisVertical, X, Pencil, Trash,
         BriefcaseMedical, ReceiptText, RefreshCw, Calculator, DollarSign, HandCoins, FileHeart, Check, Printer,
-        History, Eye, FileText, Inbox, UserRound, Trash2, ChevronUp
+        History, Eye, FileText, Inbox, UserRound, Trash2, ChevronUp, Bell
        }),
       CalendarModule.forRoot({
           provide: DateAdapter,
