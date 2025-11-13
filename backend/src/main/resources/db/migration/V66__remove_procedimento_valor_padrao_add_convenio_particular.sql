@@ -1,6 +1,3 @@
 ALTER TABLE convenio ADD COLUMN IF NOT EXISTS particular BOOLEAN NOT NULL DEFAULT FALSE;
 
 UPDATE convenio SET particular = TRUE WHERE UPPER(nome) = 'PARTICULAR';
-
-ALTER TABLE procedimento DROP COLUMN IF EXISTS valor_padrao;
-ALTER TABLE procedimento DROP COLUMN IF EXISTS valor_repasse;
