@@ -72,7 +72,6 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   profissionaisFiltrados: Profissional[] = [];
   empresas: Empresa[] = [];
   procedimentos: Procedimento[] = [];
-  procedimentosFiltrados: Procedimento[] = [];
   pacienteSelecionado?: Paciente | null;
   empresaSelecionada?: Empresa | null;
   convenioSelecionado?: Convenio | null;
@@ -237,10 +236,6 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       const procedimento = this.procedimentos.find(p => p.id === rascunho.procedimentoId);
       this.selectProcedimento(procedimento || null);
     }
-    if (rascunho.tipoAgendamento) {
-      const tipo = this.tipoAgendamento.find(t => t.valor === rascunho.tipoAgendamento);
-      this.selectTipo(tipo || null);
-    }
 
     // Carregar procedimentos
     if (rascunho.procedimentos && rascunho.procedimentos.length > 0) {
@@ -303,13 +298,6 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
       if (filaEspera.procedimento) {
         this.selectProcedimento(filaEspera.procedimento);
-      }
-
-      if (filaEspera.tipoAgendamento !== null && filaEspera.tipoAgendamento !== undefined) {
-        const tipo = this.tipoAgendamento.find(t => t.valor === filaEspera.tipoAgendamento);
-        if (tipo) {
-          this.selectTipo(tipo);
-        }
       }
     }, 100);
   }
@@ -385,7 +373,6 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       map(response => response.items),
       tap(procedimentos => {
         this.procedimentos = procedimentos;
-        this.procedimentosFiltrados = procedimentos;
       }));
   }
 
@@ -460,10 +447,6 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     } else {
       this.especialidadesFiltradas = this.especialidades;
     }
-  }
-
-  selectTipo(tipo: { valor: number, descricao: string } | null) {
-    this.procedimentosFiltrados = tipo ? [...this.procedimentos.filter(p => p.tipo == tipo.valor)] : this.procedimentos;
   }
 
   salvarNovoPaciente(paciente: Partial<Paciente>) {
