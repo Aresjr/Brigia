@@ -11,6 +11,14 @@
         <p>Agendamento não encontrado ou não disponível para visualização</p>
       </div>
 
+    } @else if (agendamentoCancelado) {
+
+      <div class="text-center py-4 w-full bg-base-100 rounded-md">
+        <div class="text-success text-5xl mb-4">✓</div>
+        <h2 class="text-2xl font-semibold mb-2">Agendamento Cancelado</h2>
+        <p class="text-base-content">Seu agendamento foi cancelado com sucesso.</p>
+      </div>
+
     } @else {
 
       <h1 class="text-3xl font-semibold mb-6 text-center">
@@ -48,9 +56,6 @@
         <button class="btn btn-error btn-sm transition-transform duration-200 hover:scale-105" (click)="cancelarAgendamento()">
           Cancelar Agendamento
         </button>
-        <button class="btn btn-primary btn-sm transition-transform duration-200 hover:scale-105" (click)="reagendarAgendamento()">
-          Reagendar
-        </button>
         <button class="btn btn-success btn-sm transition-transform duration-200 hover:scale-105" (click)="confirmarAgendamento()">
           Confirmar Presença
         </button>
@@ -60,3 +65,11 @@
 
   </div>
 </div>
+
+@if (exibeConfirmCancelamento) {
+  <app-confirm-dialog
+    message="Tem certeza que deseja cancelar este agendamento?"
+    (confirm)="confirmarCancelamento()"
+    (cancel)="cancelarConfirmacao()">
+  </app-confirm-dialog>
+}

@@ -120,7 +120,6 @@ public class ContaReceberService {
         contaReceber.setProfissional(novoContaReceber.getProfissional());
         contaReceber.setConvenio(novoContaReceber.getConvenio());
         contaReceber.setEmpresa(novoContaReceber.getEmpresa());
-        contaReceber.setFormaPagamento(novoContaReceber.getFormaPagamento());
 
         // Recalcular status baseado no novo valor total
         BigDecimal valorRecebido = contaReceber.getValorRecebido();

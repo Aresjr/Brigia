@@ -8,6 +8,5 @@ public interface ProcedimentoPlanoRepository extends JpaRepository<ProcedimentoP
     Optional<ProcedimentoPlano> findFirstByProcedimentoIdAndPlanoIdAndUnidadeId(Long procedimentoId, Long planoId,
             Long unidadeId);
 
-    Optional<ProcedimentoPlano> findFirstByProcedimentoIdAndPlanoIdAndUnidadeIsNull(Long procedimentoId,
-            Long planoId);
+    Optional<ProcedimentoPlano> findFirstByProcedimentoIdAndPlanoIdAndUnidadeIsNull(Long procedimentoId, Long planoId);
 }

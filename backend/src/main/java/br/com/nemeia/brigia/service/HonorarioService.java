@@ -102,10 +102,8 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
             return BigDecimal.ZERO;
         }
         try {
-            return procedimentoPrecoResolver
-                    .resolve(agendamento.getProcedimento(), agendamento.getConvenio(), agendamento.getEmpresa(),
-                            agendamento.getUnidade())
-                    .repasseOrZero();
+            return procedimentoPrecoResolver.resolve(agendamento.getProcedimento(), agendamento.getConvenio(),
+                    agendamento.getEmpresa(), agendamento.getUnidade()).repasseOrZero();
         } catch (NotFoundException e) {
             log.warn("Repasse não encontrado para procedimento {} no agendamento {}",
                     agendamento.getProcedimento().getId(), agendamento.getId());

@@ -45,6 +45,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     private final AgendaSemanalService agendaSemanalService;
     private final ContaReceberService contaReceberService;
     private final ProcedimentoPrecoResolver procedimentoPrecoResolver;
+    private final NotificacaoService notificacaoService;
 
     @Value("${app.base-url}")
     private String baseUrl;
@@ -55,7 +56,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             EmpresaService empresaService, ConvenioService convenioService, UnidadeService unidadeService,
             EmailService emailService, DisponibilidadeService disponibilidadeService,
             AgendaSemanalService agendaSemanalService, ContaReceberService contaReceberService,
-            ProcedimentoPrecoResolver procedimentoPrecoResolver) {
+            ProcedimentoPrecoResolver procedimentoPrecoResolver, NotificacaoService notificacaoService) {
         super(repository);
         this.mapper = mapper;
         this.pacienteService = pacienteService;
@@ -70,6 +71,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         this.agendaSemanalService = agendaSemanalService;
         this.contaReceberService = contaReceberService;
         this.procedimentoPrecoResolver = procedimentoPrecoResolver;
+        this.notificacaoService = notificacaoService;
     }
 
     @Cacheable(value = "agendamentos", key = "#userId + '-' + #mes + '-' + #ano")
@@ -94,7 +96,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     }
 
     @Transactional
-    @CacheEvict(value = {"agendamentos", "contasReceber"}, allEntries = true)
+    @CacheEvict(value = {"agendamentos"}, allEntries = true)
     public Agendamento createAgendamento(AgendamentoRequest request) {
         Agendamento agendamento = mapper.toEntity(request);
         setEntidades(request, agendamento);
@@ -124,7 +126,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         return agendamentoNovo;
     }
 
-    @CacheEvict(value = {"agendamentos", "contasReceber"}, allEntries = true)
+    @CacheEvict(value = {"agendamentos"}, allEntries = true)
     public Agendamento editAgendamento(Long id, AgendamentoRequest request) {
         Agendamento original = getById(id);
         boolean deveMandarEmail = deveMandarEmail(original, request);
@@ -190,6 +192,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     @Async
     private void sendEmail(Agendamento agendamento, String status, String template) {
         var email = agendamento.getPaciente().getEmail();
+        //email = "aresnemeia@gmail.com";
         if (email != null) {
             Map<String, Object> variables = getVariaveisEmail(agendamento);
             try {
@@ -215,6 +218,56 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     public Agendamento getByToken(String token) {
         return repository.findOneByToken(token)
                 .orElseThrow(() -> new NotFoundException(getNomeEntidade() + " não encontrado com token:" + token));
+    }
+
+    @Transactional
+    @CacheEvict(value = {"agendamentos"}, allEntries = true)
+    public void cancelarPorToken(String token) {
+        Agendamento agendamento = getByToken(token);
+        
+        // Verificar se o agendamento já foi cancelado ou finalizado
+        if (agendamento.getStatus() == StatusAgendamento.CANCELADO 
+                || agendamento.getStatus() == StatusAgendamento.CANCELADO_USUARIO
+                || agendamento.getStatus() == StatusAgendamento.FINALIZADO) {
+            throw new IllegalStateException("Este agendamento não pode mais ser cancelado.");
+        }
+        
+        // Atualizar status para CANCELADO_USUARIO
+        agendamento.setStatus(StatusAgendamento.CANCELADO_USUARIO);
+        repository.save(agendamento);
+        
+        // Atualizar ou cancelar a conta a receber associada
+        contaReceberService.deleteContaReceberByAgendamento(agendamento.getId());
+        
+        // Criar notificação para a unidade
+        criarNotificacaoCancelamento(agendamento);
+    }
+    
+    @Async
+    private void criarNotificacaoCancelamento(Agendamento agendamento) {
+        String titulo = "Agendamento Cancelado pelo Paciente";
+        String mensagem = String.format(
+            "<strong>%s</strong> cancelou o agendamento.<br/>" +
+            "<strong>Data:</strong> %s às %s<br/>" +
+            "<strong>Profissional:</strong> %s<br/>" +
+            "<strong>Procedimento:</strong> %s",
+            agendamento.getPaciente().getNome(),
+            agendamento.getData().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+            agendamento.getHora().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm")),
+            agendamento.getProfissional().getNome(),
+            agendamento.getProcedimento() != null ? agendamento.getProcedimento().getNome() : "Consulta"
+        );
+        
+        try {
+            notificacaoService.criarNotificacaoParaUnidade(
+                agendamento.getUnidade().getId(),
+                titulo,
+                mensagem,
+                "CANCELAMENTO"
+            );
+        } catch (Exception e) {
+            log.error("Erro ao criar notificação de cancelamento: {}", e.getMessage());
+        }
     }
 
     private void validarDisponibilidadeProfissional(AgendamentoRequest request, Long agendamentoId) {

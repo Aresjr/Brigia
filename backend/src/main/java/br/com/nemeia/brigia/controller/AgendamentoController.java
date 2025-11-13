@@ -77,4 +77,11 @@ public class AgendamentoController {
         log.info("GET /agendamentos/token/{} - buscando agendamento por token", token);
         return mapper.toDetalhesResponse(service.getByToken(token));
     }
+
+    @PatchMapping("/token/{token}/cancelar")
+    public ResponseEntity<Void> cancelarPorToken(@PathVariable String token) {
+        log.info("PATCH /agendamentos/token/{}/cancelar - cancelando agendamento por token", token);
+        service.cancelarPorToken(token);
+        return ResponseEntity.noContent().build();
+    }
 }

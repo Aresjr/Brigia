@@ -1,5 +1,6 @@
 package br.com.nemeia.brigia.model;
 
+import br.com.nemeia.brigia.auth.SecurityHolder;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -30,4 +31,10 @@ public class Notificacao extends BaseModel {
 
     @Column(name = "tipo", length = 50)
     private String tipo;
+
+    @Override
+    @PrePersist
+    protected void onCreate() {
+
+    }
 }

@@ -75,20 +75,15 @@ public class ProcedimentoPrecoResolver {
         Long unidadeId = unidade != null ? unidade.getId() : null;
         ProcedimentoPlano planoEspecifico = null;
         if (unidadeId != null) {
-            planoEspecifico = procedimentoPlanoRepository
-                    .findFirstByProcedimentoIdAndPlanoIdAndUnidadeId(procedimento.getId(), empresa.getPlano().getId(),
-                            unidadeId)
-                    .orElse(null);
+            planoEspecifico = procedimentoPlanoRepository.findFirstByProcedimentoIdAndPlanoIdAndUnidadeId(
+                    procedimento.getId(), empresa.getPlano().getId(), unidadeId).orElse(null);
         }
         if (planoEspecifico == null) {
-            planoEspecifico = procedimentoPlanoRepository
-                    .findFirstByProcedimentoIdAndPlanoIdAndUnidadeIsNull(procedimento.getId(),
-                            empresa.getPlano().getId())
-                    .orElse(null);
+            planoEspecifico = procedimentoPlanoRepository.findFirstByProcedimentoIdAndPlanoIdAndUnidadeIsNull(
+                    procedimento.getId(), empresa.getPlano().getId()).orElse(null);
         }
 
-        return Optional.ofNullable(planoEspecifico)
-                .map(pp -> new ValorProcedimento(pp.getPreco(), pp.getRepasse()));
+        return Optional.ofNullable(planoEspecifico).map(pp -> new ValorProcedimento(pp.getPreco(), pp.getRepasse()));
     }
 
     public record ValorProcedimento(BigDecimal valor, BigDecimal repasse) {
