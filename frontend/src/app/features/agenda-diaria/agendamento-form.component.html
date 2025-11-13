@@ -210,17 +210,14 @@
 
         <div class="w-[11rem] mr-4" >
           <label class="label-campo" for="formaPagamento">
-            Forma de Pagamento <span aria-hidden="true" class="text-error">*</span>
-            <ng-select formControlName="formaPagamento" class="campo-select" required placeholder="Selecione"
+            Forma de Pagamento
+            <ng-select formControlName="formaPagamento" class="campo-select" placeholder="Selecione"
                        [ngClass]="classesCampo('formaPagamento')" bindValue="valor" bindLabel="descricao"
                        [items]="this.formasPagamento" labelForId="formaPagamento">
               <ng-template ng-notfound-tmp>
                 <span class="text-sm p-6">Nenhum resultado</span>
               </ng-template>
             </ng-select>
-            <div *ngIf="isInvalid('formaPagamento')" class="text-error text-sm">
-              Obrigatório
-            </div>
           </label>
         </div>
         <div class="w-[6rem] mr-4 tooltip text-left" data-tip="Somente com permissão de um admin">

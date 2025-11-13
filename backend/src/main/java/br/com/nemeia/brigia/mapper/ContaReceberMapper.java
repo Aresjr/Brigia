@@ -35,7 +35,7 @@ public class ContaReceberMapper extends BaseMapper<ContaReceber, Void, ContaRece
                 contaReceber.getValorProcedimentosAdicionais(), contaReceber.getValorTotal(),
                 contaReceber.getValorRecebido(),
                 contaReceber.getConvenio() != null ? contaReceber.getConvenio().getNome() : null,
-                contaReceber.getFormaPagamento(), contaReceber.getStatus(), contaReceber.isFaturado());
+                contaReceber.getAgendamento().getFormaPagamento(), contaReceber.getStatus(), contaReceber.isFaturado());
     }
 
     public ContaReceber fromAgendamento(Agendamento agendamento) {
@@ -58,7 +58,6 @@ public class ContaReceberMapper extends BaseMapper<ContaReceber, Void, ContaRece
                         .reduce(BigDecimal.ZERO, BigDecimal::add)
                 : BigDecimal.ZERO;
         contaReceber.setValorProcedimentosAdicionais(valorProcedimentos);
-        contaReceber.setFormaPagamento(agendamento.getFormaPagamento());
 
         // Calcular valor total
         BigDecimal valorTotal = agendamento.getValor().add(valorProcedimentos)

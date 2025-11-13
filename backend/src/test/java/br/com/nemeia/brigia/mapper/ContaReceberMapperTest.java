@@ -54,7 +54,6 @@ class ContaReceberMapperTest {
         contaReceber1.setValorDesconto(new BigDecimal("10.00"));
         contaReceber1.setValorProcedimentosAdicionais(new BigDecimal("50.00"));
         contaReceber1.setValorRecebido(new BigDecimal("50.00"));
-        contaReceber1.setFormaPagamento(FormaPagamento.DINHEIRO);
         contaReceber1.setStatus(StatusContaReceber.PARCIAL);
 
         Paciente paciente1 = new Paciente();
@@ -89,7 +88,6 @@ class ContaReceberMapperTest {
         contaReceber2.setValorDesconto(new BigDecimal("0.00"));
         contaReceber2.setValorProcedimentosAdicionais(new BigDecimal("0.00"));
         contaReceber2.setValorRecebido(new BigDecimal("200.00"));
-        contaReceber2.setFormaPagamento(FormaPagamento.CARTAO_CREDITO);
         contaReceber2.setStatus(StatusContaReceber.PAGO);
 
         Paciente paciente2 = new Paciente();
@@ -168,7 +166,6 @@ class ContaReceberMapperTest {
         assertEquals(new BigDecimal("140.00"), response.getValorTotal()); // 100 + 50 - 10
         assertEquals(new BigDecimal("50.00"), response.getValorRecebido());
         assertEquals("Convênio X", response.getConvenio());
-        assertEquals(FormaPagamento.DINHEIRO, response.getFormaPagamento());
         assertEquals(StatusContaReceber.PARCIAL, response.getStatus());
         assertEquals(false, response.getFaturado());
     }
@@ -217,7 +214,7 @@ class ContaReceberMapperTest {
         assertEquals(new BigDecimal("150.00"), contaReceber.getValorAgendamento());
         assertEquals(new BigDecimal("15.00"), contaReceber.getValorDesconto());
         assertEquals(BigDecimal.ZERO, contaReceber.getValorProcedimentosAdicionais());
-        assertEquals(FormaPagamento.PIX, contaReceber.getFormaPagamento());
+        assertEquals(FormaPagamento.PIX, contaReceber.getAgendamento().getFormaPagamento());
         assertEquals(StatusContaReceber.ABERTO, contaReceber.getStatus());
         assertEquals(BigDecimal.ZERO, contaReceber.getValorRecebido());
         assertNotNull(contaReceber.getAgendamento());

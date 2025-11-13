@@ -10,9 +10,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(
-        name = "notificacao_usuario",
-        uniqueConstraints = @UniqueConstraint(name = "uk_notificacao_usuario", columnNames = {"notificacao_id", "usuario_id"}))
+@Table(name = "notificacao_usuario", uniqueConstraints = @UniqueConstraint(name = "uk_notificacao_usuario", columnNames = {
+        "notificacao_id", "usuario_id"}))
 public class NotificacaoUsuario {
 
     @Id

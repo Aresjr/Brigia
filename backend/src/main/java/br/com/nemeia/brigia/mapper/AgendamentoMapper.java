@@ -108,10 +108,8 @@ public class AgendamentoMapper {
             return null;
         }
         try {
-            return procedimentoPrecoResolver
-                    .resolve(agendamento.getProcedimento(), agendamento.getConvenio(), agendamento.getEmpresa(),
-                            agendamento.getUnidade())
-                    .repasseOrZero();
+            return procedimentoPrecoResolver.resolve(agendamento.getProcedimento(), agendamento.getConvenio(),
+                    agendamento.getEmpresa(), agendamento.getUnidade()).repasseOrZero();
         } catch (NotFoundException e) {
             return null;
         }

@@ -94,7 +94,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     }
 
     @Transactional
-    @CacheEvict(value = {"agendamentos", "contasReceber"}, allEntries = true)
+    @CacheEvict(value = {"agendamentos"}, allEntries = true)
     public Agendamento createAgendamento(AgendamentoRequest request) {
         Agendamento agendamento = mapper.toEntity(request);
         setEntidades(request, agendamento);
@@ -124,7 +124,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         return agendamentoNovo;
     }
 
-    @CacheEvict(value = {"agendamentos", "contasReceber"}, allEntries = true)
+    @CacheEvict(value = {"agendamentos"}, allEntries = true)
     public Agendamento editAgendamento(Long id, AgendamentoRequest request) {
         Agendamento original = getById(id);
         boolean deveMandarEmail = deveMandarEmail(original, request);
@@ -190,6 +190,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     @Async
     private void sendEmail(Agendamento agendamento, String status, String template) {
         var email = agendamento.getPaciente().getEmail();
+        //email = "aresnemeia@gmail.com";
         if (email != null) {
             Map<String, Object> variables = getVariaveisEmail(agendamento);
             try {

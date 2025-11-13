@@ -23,7 +23,7 @@ export interface Agendamento extends Entidade {
     empresa?: Empresa;
     unidade: Unidade;
     tipoAgendamento: number | null;
-    formaPagamento: number;
+    formaPagamento: number | null;
     valor: number;
     valorTotal: number;
     status: StatusAgendamentoEnum;

@@ -57,10 +57,6 @@ public class ContaReceber extends BaseModel {
     private BigDecimal valorRecebido;
 
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "forma_pagamento", length = 2)
-    private FormaPagamento formaPagamento;
-
-    @Enumerated(EnumType.ORDINAL)
     @Column(name = "status")
     private StatusContaReceber status;
 
