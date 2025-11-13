@@ -26,6 +26,6 @@ public class ConvenioMapper {
     }
 
     public Convenio toEntity(ConvenioRequest request) {
-        return new Convenio(request.nome(), request.descricao(), request.particular());
+        return new Convenio(request.nome(), request.descricao(), false);
     }
 }
