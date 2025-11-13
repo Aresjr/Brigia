@@ -182,8 +182,6 @@ class AgendamentoServiceIntegrationTest {
         // Cria procedimento
         procedimento = new Procedimento();
         procedimento.setNome("Consulta Psicológica");
-        procedimento.setValorPadrao(new BigDecimal("180.00"));
-        procedimento.setValorRepasse(new BigDecimal("90.00"));
         procedimento.setUnidade(unidade);
         procedimento.setCriadoEm(LocalDateTime.now());
         procedimento.setExcluido(false);
