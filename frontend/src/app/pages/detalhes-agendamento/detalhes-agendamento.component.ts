@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { AgendamentoDetalhes } from '../../features/agenda-diaria/agendamento.interface';
 import { DatePipe, NgIf } from '@angular/common';
 import { AgendamentoService } from '../../features/agenda-diaria/agendamento.service';
 import { LoadingSpinnerComponent } from '../../features/shared/loading/loading-spinner.component';
+import { ConfirmDialogComponent } from '../../features/shared/confirm-dialog/confirm-dialog.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-detalhes-agendamento',
@@ -14,7 +16,8 @@ import { LoadingSpinnerComponent } from '../../features/shared/loading/loading-s
     LucideAngularModule,
     DatePipe,
     NgIf,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    ConfirmDialogComponent
   ],
   templateUrl: './detalhes-agendamento.component.html',
   styleUrl: './detalhes-agendamento.component.scss'
@@ -25,9 +28,13 @@ export class DetalhesAgendamentoComponent implements OnInit {
     agendamento: AgendamentoDetalhes | null = null;
     isLoading: boolean = false;
     agendamentoNaoEncontrado: boolean = false;
+    exibeConfirmCancelamento: boolean = false;
+    agendamentoCancelado: boolean = false;
 
     constructor(private route: ActivatedRoute,
-                private agendamentoService: AgendamentoService) {}
+                private router: Router,
+                private agendamentoService: AgendamentoService,
+                private toastr: ToastrService) {}
 
     ngOnInit(): void {
         this.isLoading = true;
@@ -47,7 +54,29 @@ export class DetalhesAgendamentoComponent implements OnInit {
     }
 
     cancelarAgendamento() {
-      console.log('cancelarAgendamento');
+      this.exibeConfirmCancelamento = true;
+    }
+
+    confirmarCancelamento() {
+      if (this.token) {
+        this.isLoading = true;
+        this.agendamentoService.cancelarPorToken(this.token).subscribe({
+          next: () => {
+            this.toastr.success('Agendamento cancelado com sucesso');
+            this.agendamentoCancelado = true;
+            this.exibeConfirmCancelamento = false;
+            this.isLoading = false;
+          },
+          error: () => {
+            this.exibeConfirmCancelamento = false;
+            this.isLoading = false;
+          }
+        });
+      }
+    }
+
+    cancelarConfirmacao() {
+      this.exibeConfirmCancelamento = false;
     }
 
     reagendarAgendamento() {

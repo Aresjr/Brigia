@@ -33,4 +33,14 @@ export class AgendamentoService extends BaseService<Agendamento, AgendamentoRequ
       })
     );
   }
+
+  cancelarPorToken(token: string): Observable<void> {
+    return this.backend.patch<void>(`${this.path}/token/${token}/cancelar`, null).pipe(
+      catchError((e) => {
+        const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || 'Erro ao cancelar agendamento';
+        this.toastr.error(errorMessage);
+        return throwError(() => e);
+      })
+    );
+  }
 }

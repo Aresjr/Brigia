@@ -218,6 +218,26 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
                 .orElseThrow(() -> new NotFoundException(getNomeEntidade() + " não encontrado com token:" + token));
     }
 
+    @Transactional
+    @CacheEvict(value = {"agendamentos"}, allEntries = true)
+    public void cancelarPorToken(String token) {
+        Agendamento agendamento = getByToken(token);
+        
+        // Verificar se o agendamento já foi cancelado ou finalizado
+        if (agendamento.getStatus() == StatusAgendamento.CANCELADO 
+                || agendamento.getStatus() == StatusAgendamento.CANCELADO_USUARIO
+                || agendamento.getStatus() == StatusAgendamento.FINALIZADO) {
+            throw new IllegalStateException("Este agendamento não pode mais ser cancelado.");
+        }
+        
+        // Atualizar status para CANCELADO_USUARIO
+        agendamento.setStatus(StatusAgendamento.CANCELADO_USUARIO);
+        repository.save(agendamento);
+        
+        // Atualizar ou cancelar a conta a receber associada
+        contaReceberService.deleteContaReceberByAgendamento(agendamento.getId());
+    }
+
     private void validarDisponibilidadeProfissional(AgendamentoRequest request, Long agendamentoId) {
         // SEMPRE validar conflito de horário, independente de ser encaixe ou não
         LocalTime horaFim = request.hora().plusMinutes(request.duracao());
