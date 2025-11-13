@@ -45,6 +45,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     private final AgendaSemanalService agendaSemanalService;
     private final ContaReceberService contaReceberService;
     private final ProcedimentoPrecoResolver procedimentoPrecoResolver;
+    private final NotificacaoService notificacaoService;
 
     @Value("${app.base-url}")
     private String baseUrl;
@@ -55,7 +56,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             EmpresaService empresaService, ConvenioService convenioService, UnidadeService unidadeService,
             EmailService emailService, DisponibilidadeService disponibilidadeService,
             AgendaSemanalService agendaSemanalService, ContaReceberService contaReceberService,
-            ProcedimentoPrecoResolver procedimentoPrecoResolver) {
+            ProcedimentoPrecoResolver procedimentoPrecoResolver, NotificacaoService notificacaoService) {
         super(repository);
         this.mapper = mapper;
         this.pacienteService = pacienteService;
@@ -70,6 +71,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         this.agendaSemanalService = agendaSemanalService;
         this.contaReceberService = contaReceberService;
         this.procedimentoPrecoResolver = procedimentoPrecoResolver;
+        this.notificacaoService = notificacaoService;
     }
 
     @Cacheable(value = "agendamentos", key = "#userId + '-' + #mes + '-' + #ano")
@@ -236,6 +238,36 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         
         // Atualizar ou cancelar a conta a receber associada
         contaReceberService.deleteContaReceberByAgendamento(agendamento.getId());
+        
+        // Criar notificação para a unidade
+        criarNotificacaoCancelamento(agendamento);
+    }
+    
+    @Async
+    private void criarNotificacaoCancelamento(Agendamento agendamento) {
+        String titulo = "Agendamento Cancelado pelo Paciente";
+        String mensagem = String.format(
+            "<strong>%s</strong> cancelou o agendamento.<br/>" +
+            "<strong>Data:</strong> %s às %s<br/>" +
+            "<strong>Profissional:</strong> %s<br/>" +
+            "<strong>Procedimento:</strong> %s",
+            agendamento.getPaciente().getNome(),
+            agendamento.getData().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+            agendamento.getHora().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm")),
+            agendamento.getProfissional().getNome(),
+            agendamento.getProcedimento() != null ? agendamento.getProcedimento().getNome() : "Consulta"
+        );
+        
+        try {
+            notificacaoService.criarNotificacaoParaUnidade(
+                agendamento.getUnidade().getId(),
+                titulo,
+                mensagem,
+                "CANCELAMENTO"
+            );
+        } catch (Exception e) {
+            log.error("Erro ao criar notificação de cancelamento: {}", e.getMessage());
+        }
     }
 
     private void validarDisponibilidadeProfissional(AgendamentoRequest request, Long agendamentoId) {
