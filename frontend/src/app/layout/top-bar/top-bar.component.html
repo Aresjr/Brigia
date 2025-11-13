@@ -4,7 +4,7 @@
   </div>
 
   <!-- Filtros e ações -->
-  <div class="flex">
+  <div class="flex items-center">
     <ng-select *ngIf="!this.userService.isMedico() && showDropdown" class="w-72 mr-4 shadow-md hover:shadow-lg h-8 max-h-8 leading-none"
                (change)="onSelectItem($event)" placeholder="Todos - {{ placeholderDropdown }}">
       <ng-option class="max-h-8" value="0">Todos - {{ placeholderDropdown }}</ng-option>
@@ -36,6 +36,58 @@
       <ul class="menu dropdown-content bg-base-100 rounded-lg p-1 m-0 z-[1001] w-52 shadow-lg hover:shadow-xl font-semibold">
         <li><a (click)="logout()" class="text-error hover:bg-error/20">Sair</a></li>
       </ul>
+    </details>
+
+    <details class="dropdown dropdown-end mr-3">
+      <summary class="btn btn-ghost btn-circle relative" aria-label="Notificações">
+        <lucide-icon name="bell" class="w-5 h-5"></lucide-icon>
+        <span *ngIf="notificacoesNaoLidas > 0" class="badge badge-error badge-xs absolute -top-1 -right-1">
+          {{ notificacoesNaoLidas }}
+        </span>
+      </summary>
+      <div class="dropdown-content z-[1001] w-96 bg-base-100 rounded-xl shadow-lg overflow-hidden">
+        <div class="flex items-center justify-between px-4 py-3 border-b border-base-200">
+          <span class="font-semibold text-sm">Notificações</span>
+          <button class="btn btn-ghost btn-xs text-primary font-semibold" (click)="atualizarNotificacoes($event)">
+            Atualizar
+          </button>
+        </div>
+        <div class="max-h-96 overflow-y-auto">
+          <div *ngIf="carregandoNotificacoes" class="px-4 py-6 flex items-center gap-3 text-sm">
+            <span class="loading loading-spinner loading-sm text-primary"></span>
+            Buscando notificações...
+          </div>
+
+          <div *ngIf="erroNotificacoes && !carregandoNotificacoes" class="px-4 py-6 text-sm text-error">
+            Não foi possível carregar as notificações.
+          </div>
+
+          <div *ngIf="!carregandoNotificacoes && !erroNotificacoes && notificacoes.length === 0" class="px-4 py-6 text-sm text-base-content/70">
+            Nenhuma notificação disponível.
+          </div>
+
+          <ul>
+            <li *ngFor="let notificacao of notificacoes" class="border-b border-base-200 last:border-0">
+              <div class="px-4 py-3 flex flex-col gap-2" [class.bg-base-200]="!notificacao.lida">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex flex-col">
+                    <span class="font-semibold text-base-content">{{ notificacao.titulo }}</span>
+                    <span class="text-xs text-base-content/60">{{ notificacao.dataNotificacao | date: 'short' }}</span>
+                  </div>
+                  <span *ngIf="notificacao.tipo" class="badge badge-sm badge-outline uppercase tracking-wide">{{ notificacao.tipo }}</span>
+                </div>
+                <div class="text-sm text-base-content/80 whitespace-normal break-words" [innerHTML]="notificacao.mensagem"></div>
+                <button
+                  *ngIf="!notificacao.lida"
+                  class="btn btn-link btn-xs text-primary font-semibold self-end -mr-2"
+                  (click)="marcarComoLida(notificacao, $event)">
+                  Marcar como lida
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
     </details>
 
   </div>

@@ -18,6 +18,6 @@ public record AgendamentoResponse(Long id, PacienteResponse paciente,
         ProfissionalResponse profissional, ProcedimentoResponse procedimento, StatusAgendamento status,
         TipoAgendamento tipoAgendamento, FormaPagamento formaPagamento, BigDecimal valor, BigDecimal desconto,
         String observacoes, Integer duracao, Boolean encaixe, Boolean pago,
-        List<ProcedimentoAgendamentoResponse> procedimentos, BigDecimal valorTotal, LocalDateTime criadoEm,
-        Boolean excluido) {
+        List<ProcedimentoAgendamentoResponse> procedimentos, BigDecimal valorRepassePrincipal, BigDecimal valorTotal,
+        LocalDateTime criadoEm, Boolean excluido) {
 }

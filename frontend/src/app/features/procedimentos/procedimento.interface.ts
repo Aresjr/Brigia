@@ -7,18 +7,20 @@ import { EmpresaPlano } from '../empresa/empresa.interface';
 export interface Procedimento extends Entidade {
     codigo: string | null;
     especialidade: Especialidade;
-    valorPadrao: number;
     observacoes: string | null;
-    valorRepasse: number;
-    duracao: number;
-    tipo: number;
+    duracao: number | null;
+    tipo: number | null;
 }
 
 export interface ProcedimentoRequest extends EntidadeRequest {
+    nome: string;
     codigo: string | null;
-    especialidade: Especialidade;
-    valorPadrao: number;
     observacoes: string | null;
+    especialidadeId: number;
+    duracao: number | null;
+    tipo: number | null;
+    precosConvenios: PrecoProcedimentoConvenioRequest[];
+    precosPlanos: PrecoProcedimentoPlanoRequest[];
 }
 
 export interface PrecoProcedimentoConvenio {
@@ -35,4 +37,18 @@ export interface PrecoProcedimentoPlano {
     repasse: number;
     plano: EmpresaPlano;
     unidade: Unidade | null;
+}
+
+export interface PrecoProcedimentoConvenioRequest {
+    convenioId: number;
+    unidadeId: number;
+    preco: number;
+    repasse: number | null;
+}
+
+export interface PrecoProcedimentoPlanoRequest {
+    planoId: number;
+    unidadeId: number | null;
+    preco: number;
+    repasse: number | null;
 }

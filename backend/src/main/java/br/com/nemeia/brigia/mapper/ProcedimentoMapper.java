@@ -34,8 +34,7 @@ public class ProcedimentoMapper extends BaseMapper<Procedimento, ProcedimentoReq
         }
 
         return new ProcedimentoResponse(procedimento.getId(), procedimento.getNome(), procedimento.getCodigo(),
-                procedimento.getObservacoes(), procedimento.getValorPadrao(), procedimento.getValorRepasse(),
-                procedimento.getDuracao(), procedimento.getTipo(),
+                procedimento.getObservacoes(), procedimento.getDuracao(), procedimento.getTipo(),
                 especialidadeMapper.toResponse(procedimento.getEspecialidade()), procedimento.getCriadoEm(),
                 procedimento.getExcluido());
     }

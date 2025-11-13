@@ -74,7 +74,7 @@
                 <!-- Procedimento principal -->
                 <div *ngIf="agendamento.procedimento" class="flex justify-between text-sm py-1">
                   <span class="text-neutral">{{ agendamento.procedimento.nome }}</span>
-                  <span>{{ agendamento.procedimento.valorRepasse | currency:'BRL':'symbol':'1.2-2' }}</span>
+                  <span>{{ (agendamento.valorRepassePrincipal || 0) | currency:'BRL':'symbol':'1.2-2' }}</span>
                 </div>
 
                 <!-- Procedimentos adicionais -->

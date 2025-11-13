@@ -21,8 +21,18 @@ public class Convenio extends BaseModel {
     @Column(name = "descricao")
     private String descricao;
 
+    @Column(name = "particular", nullable = false)
+    private Boolean particular = false;
+
     public Convenio(String nome, String descricao) {
         this.nome = nome;
         this.descricao = descricao;
+        this.particular = false;
+    }
+
+    public Convenio(String nome, String descricao, Boolean particular) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.particular = particular != null ? particular : false;
     }
 }

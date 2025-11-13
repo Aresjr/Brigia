@@ -3,6 +3,7 @@ package br.com.nemeia.brigia.service;
 import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.HonorarioRequest;
 import br.com.nemeia.brigia.exception.HonorarioJaExistenteException;
+import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.model.*;
 import br.com.nemeia.brigia.repository.AgendamentoRepository;
 import br.com.nemeia.brigia.repository.AgendaSemanalRepository;
@@ -26,16 +27,19 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
     private final AgendamentoRepository agendamentoRepository;
     private final DisponibilidadeRepository disponibilidadeRepository;
     private final AgendaSemanalRepository agendaSemanalRepository;
+    private final ProcedimentoPrecoResolver procedimentoPrecoResolver;
 
     public HonorarioService(HonorarioRepository repository, ProfissionalService profissionalService,
             UnidadeService unidadeService, AgendamentoRepository agendamentoRepository,
-            DisponibilidadeRepository disponibilidadeRepository, AgendaSemanalRepository agendaSemanalRepository) {
+            DisponibilidadeRepository disponibilidadeRepository, AgendaSemanalRepository agendaSemanalRepository,
+            ProcedimentoPrecoResolver procedimentoPrecoResolver) {
         super(repository);
         this.profissionalService = profissionalService;
         this.unidadeService = unidadeService;
         this.agendamentoRepository = agendamentoRepository;
         this.disponibilidadeRepository = disponibilidadeRepository;
         this.agendaSemanalRepository = agendaSemanalRepository;
+        this.procedimentoPrecoResolver = procedimentoPrecoResolver;
     }
 
     @Transactional
@@ -76,10 +80,7 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
         BigDecimal total = BigDecimal.ZERO;
 
         for (Agendamento ag : agendamentos) {
-            // Adicionar valor de repasse do procedimento principal
-            if (ag.getProcedimento() != null && ag.getProcedimento().getValorRepasse() != null) {
-                total = total.add(ag.getProcedimento().getValorRepasse());
-            }
+            total = total.add(calcularRepasseProcedimentoPrincipal(ag));
 
             // Adicionar valores de repasse dos procedimentos secundários
             if (ag.getProcedimentos() != null) {
@@ -94,6 +95,22 @@ public class HonorarioService extends BaseService<Honorario, HonorarioRepository
         }
 
         return total;
+    }
+
+    private BigDecimal calcularRepasseProcedimentoPrincipal(Agendamento agendamento) {
+        if (agendamento.getProcedimento() == null) {
+            return BigDecimal.ZERO;
+        }
+        try {
+            return procedimentoPrecoResolver
+                    .resolve(agendamento.getProcedimento(), agendamento.getConvenio(), agendamento.getEmpresa(),
+                            agendamento.getUnidade())
+                    .repasseOrZero();
+        } catch (NotFoundException e) {
+            log.warn("Repasse não encontrado para procedimento {} no agendamento {}",
+                    agendamento.getProcedimento().getId(), agendamento.getId());
+            return BigDecimal.ZERO;
+        }
     }
 
     private BigDecimal calcularValorAdicional(Long profissionalId, LocalDate data) {

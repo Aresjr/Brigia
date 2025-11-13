@@ -33,28 +33,12 @@
           </div>
         </div>
 
-        <!-- Preço Padrão e Valor Repasse na mesma linha -->
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <p class="text-sm">Preço Padrão (Particular)</p>
-            <p class="mt-1 text-base font-medium">
-              R$ {{ procedimento.valorPadrao || '-' }}
-            </p>
-          </div>
-          <div>
-            <p class="text-sm" title="Valor Repasse (Particular)">Valor Repasse</p>
-            <p class="mt-1 text-base font-medium">
-              R$ {{ procedimento.valorRepasse || '-' }}
-            </p>
-          </div>
-        </div>
-
         <!-- Tipo e Duração na mesma linha -->
         <div class="grid grid-cols-2 gap-4">
           <div>
             <p class="text-sm">Tipo</p>
             <p class="mt-1 text-base font-medium">
-              {{ TIPO_AGENDAMENTO[procedimento.tipo].descricao }}
+              {{ procedimento.tipo != null ? TIPO_AGENDAMENTO[procedimento.tipo].descricao : '-' }}
             </p>
           </div>
           <div>

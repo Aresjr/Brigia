@@ -80,6 +80,13 @@ public class ProcedimentoController {
         return mapper.toPrecoProcedimento(service.getById(id), convenioService.getById(convenioId));
     }
 
+    @GetMapping("/{id}/tabela-preco/padrao")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    public PrecoProcedimentoResponse getPrecoProcedimentoPadrao(@PathVariable Long id) {
+        log.info("GET /procedimentos/{}/tabela-preco/padrao - buscando tabela padrão do procedimento ID {}", id, id);
+        return mapper.toPrecoProcedimento(service.getById(id), convenioService.getConvenioParticular());
+    }
+
     @GetMapping("/{id}/tabela-preco-plano/{planoId}")
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public br.com.nemeia.brigia.dto.response.ProcedimentoPlanoResponse getPrecoProcedimentoPlano(@PathVariable Long id,

@@ -72,8 +72,6 @@ export class ProcedimentoFormComponent extends FormComponent<Procedimento, Proce
       codigo: [null],
       observacoes: [null],
       especialidadeId: [null, [Validators.required]],
-      valorPadrao: [0, [Validators.required, Validators.min(0)]],
-      valorRepasse: [0, [Validators.min(0)]],
       duracao: [null, [Validators.min(1), Validators.max(999)]],
       tipo: [null, [Validators.required]],
       precosConvenios: this.fb.array([]),
