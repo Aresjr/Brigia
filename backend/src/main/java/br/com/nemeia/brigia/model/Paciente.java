@@ -17,6 +17,9 @@ public class Paciente extends BaseModel {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "id_externo")
+    private Long idExterno;
+
     @Column(name = "nome", nullable = false)
     private String nome;
 
@@ -32,6 +35,9 @@ public class Paciente extends BaseModel {
     @Column(name = "cpf", unique = true)
     private String cpf;
 
+    @Column(name = "documento", unique = true)
+    private String documento;
+
     @Column(name = "data_nascimento", nullable = false)
     private LocalDate dataNascimento;
 
@@ -40,6 +46,18 @@ public class Paciente extends BaseModel {
 
     @Column(name = "celular", unique = true, length = 11)
     private String celular;
+
+    @Column(name = "celular_2", length = 11)
+    private String celular2;
+
+    @Column(name = "fixo", length = 11)
+    private String fixo;
+
+    @Column(name = "fixo_2", length = 11)
+    private String fixo2;
+
+    @Column(name = "profissao")
+    private String profissao;
 
     @Column(name = "ultima_consulta")
     private LocalDateTime ultimaConsulta;
@@ -78,4 +96,7 @@ public class Paciente extends BaseModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "empresa_id")
     private Empresa empresa;
+
+    @Column(name = "observacoes", columnDefinition = "TEXT")
+    private String observacoes;
 }
