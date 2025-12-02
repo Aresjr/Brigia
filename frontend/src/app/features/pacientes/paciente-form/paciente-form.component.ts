@@ -43,11 +43,13 @@ export class PacienteFormComponent extends FormComponent<Paciente, PacienteReque
       email: [null], cpf: [null],
       dataNascimento: [null, Validators.required],
       nomeSocial: [null], pressaoArterial: [null],
-      sexo: [null], celular: [null], cep: [null],
+      sexo: [null], celular: [null, Validators.required], cep: [null],
       rua: [null], complemento: [null], bairro: [null],
       cidade: [null],
       uf: [null, [Validators.minLength(2), Validators.maxLength(2)]],
-      corIdentificacao: [null], convenioId: [null], empresaId: [null]
+      corIdentificacao: [null], convenioId: [null], empresaId: [null],
+      celular2: [null], fixo: [null], peso: [null], altura: [null],
+      profissao: [null], documento: [null]
     });
   }
 

@@ -28,9 +28,11 @@ public class PacienteMapper extends BaseMapper<Paciente, PacienteRequest, Pacien
         return new PacienteResponse(paciente.getId(), paciente.getNome(), paciente.getNomeSocial(),
                 paciente.getPressaoArterial(), paciente.getEmail(), paciente.getCpf(), paciente.getDataNascimento(),
                 paciente.getUltimaConsulta(), paciente.getProximaConsulta(), paciente.getUrlImagem(),
-                paciente.getSexo(), paciente.getCelular(), paciente.getCorIdentificacao(), paciente.getCep(),
-                paciente.getRua(), paciente.getComplemento(), paciente.getBairro(), paciente.getCidade(),
-                paciente.getUf(), convenioMapper.toResponse(paciente.getConvenio()),
+                paciente.getSexo(), paciente.getCelular(), paciente.getCelular2(), paciente.getFixo(),
+                paciente.getDocumento(), paciente.getProfissao(), paciente.getPeso(), paciente.getAltura(),
+                paciente.getCorIdentificacao(), paciente.getCep(), paciente.getRua(), paciente.getComplemento(),
+                paciente.getBairro(), paciente.getCidade(), paciente.getUf(),
+                convenioMapper.toResponse(paciente.getConvenio()),
                 empresaMapper.toResponse(paciente.getEmpresa()), paciente.getCriadoEm(), paciente.getExcluido());
     }
 }

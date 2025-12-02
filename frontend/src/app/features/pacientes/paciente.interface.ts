@@ -22,6 +22,12 @@ export interface Paciente extends Entidade {
     empresa: Empresa | null;
     nomeSocial: string;
     pressaoArterial: string;
+    celular2: string | null;
+    fixo: string | null;
+    peso: number | null;
+    altura: number | null;
+    profissao: string | null;
+    documento: string | null;
 }
 
 export interface PacienteRequest extends EntidadeRequest {
@@ -42,4 +48,10 @@ export interface PacienteRequest extends EntidadeRequest {
     uf: string | null;
     convenioId: number | null;
     empresaId: number | null;
+    celular2: string | null;
+    fixo: string | null;
+    peso: number | null;
+    altura: number | null;
+    profissao: string | null;
+    documento: string | null;
 }

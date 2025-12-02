@@ -47,6 +47,39 @@
           </div>
         </div>
 
+        <div class="grid grid-cols-2 gap-4 border-b pb-2">
+          <div>
+            <p class="text-sm">Celular 2</p>
+            <p class="font-medium">{{paciente.celular2 ? (paciente.celular2 | celular) : '-'}}</p>
+          </div>
+          <div>
+            <p class="text-sm">Fixo</p>
+            <p class="font-medium">{{paciente.fixo || '-'}}</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 border-b pb-2">
+          <div>
+            <p class="text-sm">Peso (kg)</p>
+            <p class="font-medium">{{paciente.peso || '-'}}</p>
+          </div>
+          <div>
+            <p class="text-sm">Altura (cm)</p>
+            <p class="font-medium">{{paciente.altura || '-'}}</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 border-b pb-2">
+          <div>
+            <p class="text-sm">Profissão</p>
+            <p class="font-medium">{{paciente.profissao || '-'}}</p>
+          </div>
+          <div>
+            <p class="text-sm">Documento (RG)</p>
+            <p class="font-medium">{{paciente.documento || '-'}}</p>
+          </div>
+        </div>
+
         <div class="border-b pb-2">
           <p class="text-sm">Pressão Arterial</p>
           <p class="font-medium">{{paciente.pressaoArterial || '-'}}</p>

@@ -38,7 +38,7 @@ public class Paciente extends BaseModel {
     @Column(name = "documento", unique = true)
     private String documento;
 
-    @Column(name = "data_nascimento", nullable = false)
+    @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
 
     @Column(name = "sexo", length = 1)
@@ -50,14 +50,17 @@ public class Paciente extends BaseModel {
     @Column(name = "celular_2", length = 11)
     private String celular2;
 
-    @Column(name = "fixo", length = 11)
+    @Column(name = "fixo", length = 20)
     private String fixo;
-
-    @Column(name = "fixo_2", length = 11)
-    private String fixo2;
 
     @Column(name = "profissao")
     private String profissao;
+
+    @Column(name = "peso")
+    private String peso;
+
+    @Column(name = "altura")
+    private String altura;
 
     @Column(name = "ultima_consulta")
     private LocalDateTime ultimaConsulta;
