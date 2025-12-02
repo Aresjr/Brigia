@@ -68,8 +68,48 @@
             </div>
           </div>
           <div class="w-60">
-            <label class="label-campo">Celular</label>
-            <input type="tel" formControlName="celular" mask="(00) 00000-0000" emptyToNull class="campo">
+            <label class="label-campo">
+              Celular <span aria-hidden="true" class="text-error">*</span>
+            </label>
+            <input type="tel" formControlName="celular" mask="(00) 00000-0000" emptyToNull class="campo" [ngClass]="classesCampo('celular')">
+            @if (form.get('celular')?.touched) {
+              <div *ngIf="isInvalid('celular')" class="text-error text-sm">
+                Obrigatório
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="flex space-x-4">
+          <div class="w-72">
+            <label class="label-campo">Celular 2</label>
+            <input type="tel" formControlName="celular2" mask="(00) 00000-0000" emptyToNull class="campo">
+          </div>
+          <div class="w-60">
+            <label class="label-campo">Fixo</label>
+            <input type="tel" formControlName="fixo" mask="(00) 0000-0000" emptyToNull class="campo">
+          </div>
+        </div>
+
+        <div class="flex space-x-4">
+          <div class="w-72">
+            <label class="label-campo">Peso (kg)</label>
+            <input type="number" formControlName="peso" emptyToNull class="campo" step="0.1">
+          </div>
+          <div class="w-60">
+            <label class="label-campo">Altura (cm)</label>
+            <input type="number" formControlName="altura" emptyToNull class="campo" step="0.1">
+          </div>
+        </div>
+
+        <div class="flex space-x-4">
+          <div class="w-72">
+            <label class="label-campo">Profissão</label>
+            <input type="text" formControlName="profissao" emptyToNull class="campo">
+          </div>
+          <div class="w-60">
+            <label class="label-campo">Documento</label>
+            <input type="text" formControlName="documento" emptyToNull class="campo">
           </div>
         </div>
 
