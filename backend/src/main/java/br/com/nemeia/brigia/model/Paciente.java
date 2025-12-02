@@ -44,10 +44,10 @@ public class Paciente extends BaseModel {
     @Column(name = "sexo", length = 1)
     private Character sexo;
 
-    @Column(name = "celular", unique = true, length = 11)
+    @Column(name = "celular", unique = true, length = 20)
     private String celular;
 
-    @Column(name = "celular_2", length = 11)
+    @Column(name = "celular_2", length = 20)
     private String celular2;
 
     @Column(name = "fixo", length = 20)
