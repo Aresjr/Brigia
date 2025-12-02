@@ -44,7 +44,7 @@ export class PacientesComponent extends BaseListComponent<Paciente> implements O
   override searchTermFilter(paciente: Paciente, searchTerm: string): boolean | undefined {
     return paciente.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       paciente.cpf?.includes(searchTerm) ||
-      paciente.dataNascimento.includes(searchTerm) ||
+      paciente.dataNascimento?.includes(searchTerm) ||
       paciente.celular?.includes(searchTerm);
   }
 

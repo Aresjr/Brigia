@@ -94,7 +94,7 @@
         <div class="flex space-x-4">
           <div class="w-72">
             <label class="label-campo">Peso (kg)</label>
-            <input type="number" formControlName="peso" emptyToNull class="campo" step="0.1">
+            <input type="number" formControlName="peso" emptyToNull class="campo" step="0.1" pattern="\d*" maxlength="3">
           </div>
           <div class="w-60">
             <label class="label-campo">Altura (cm)</label>
