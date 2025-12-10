@@ -12,7 +12,7 @@
     </div>
   } @else {
     <div class="min-h-[36rem]">
-      <div class="titulo-listagem grid-cols-[1fr_14rem_10rem_10rem_32px]">
+      <div class="titulo-listagem grid-cols-[1fr_14rem_10rem_10rem_10rem_32px]">
         <div (click)="ordenar('nome')" class="cabecalho-listagem rounded-tl-lg">
           <lucide-icon *ngIf="getSortIcon('nome')" [name]="getSortIcon('nome')" class="icone-ordenacao"/>
           Nome
@@ -25,6 +25,10 @@
           <lucide-icon *ngIf="getSortIcon('crm')" [name]="getSortIcon('crm')" class="icone-ordenacao"/>
           CRM
         </div>
+        <div (click)="ordenar('rqe')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('rqe')" [name]="getSortIcon('rqe')" class="icone-ordenacao"/>
+          RQE
+        </div>
         <div (click)="ordenar('celular')" class="cabecalho-listagem">
           <lucide-icon *ngIf="getSortIcon('celular')" [name]="getSortIcon('celular')" class="icone-ordenacao"/>
           Celular
@@ -34,7 +38,7 @@
 
       <div class="itens-listagem">
         @for (profissional of getItensPaginados(); track profissional.id) {
-          <div class="item-listagem grid-cols-[1fr_14rem_10rem_10rem_32px]"
+          <div class="item-listagem grid-cols-[1fr_14rem_10rem_10rem_10rem_32px]"
                [class.bg-error]="profissional.excluido"
                [class.bg-opacity-50]="profissional.excluido"
                (click)="selecionar(profissional)">
@@ -43,6 +47,7 @@
             </div>
             <div class="celula-listagem truncate">{{profissional.email}}</div>
             <div class="celula-listagem">{{profissional.crm}}</div>
+            <div class="celula-listagem">{{profissional.rqe}}</div>
             <div class="celula-listagem">{{profissional.celular | celular}}</div>
             <div class="p-0 text-right">
               <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">

@@ -48,3 +48,20 @@ export function abrirDatePicker(input: HTMLInputElement) {
   }
   input.focus();
 }
+
+// Converte data de yyyy-MM-dd para dd/mm/yyyy
+export function formatDateToBR(date: string | null): string | null {
+  if (!date) return null;
+  const [year, month, day] = date.split('-');
+  return `${day}/${month}/${year}`;
+}
+
+// Converte data de dd/mm/yyyy para yyyy-MM-dd
+export function formatDateFromBR(date: string | null): string | null {
+  if (!date) return null;
+  const parts = date.split('/');
+  if (parts.length !== 3) return null;
+  const [day, month, year] = parts;
+  return `${year}-${month}-${day}`;
+}
+

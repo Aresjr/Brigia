@@ -48,6 +48,13 @@
             <div class="campo bg-base-100">{{profissional.crm || '-'}}</div>
           </div>
           <div class="w-56">
+            <label class="label-campo">RQE</label>
+            <div class="campo bg-base-100">{{profissional.rqe || '-'}}</div>
+          </div>
+        </div>
+
+        <div class="flex space-x-4">
+          <div class="w-52">
             <label class="label-campo">Valor Hora</label>
             <div class="campo bg-base-100">{{profissional.valorHora ? (profissional.valorHora | currency:'BRL':'symbol':'1.2-2') : '-'}}</div>
           </div>

@@ -11,7 +11,7 @@ import { NgNotFoundTemplateDirective, NgOptionComponent, NgSelectComponent } fro
 import { LucideAngularModule } from 'lucide-angular';
 import { FormComponent } from '../../shared/form.component';
 import { ToastrService } from 'ngx-toastr';
-import { abrirDatePicker } from '../../../core/util-methods';
+import { formatDateToBR, formatDateFromBR } from '../../../core/util-methods';
 
 @Component({
   selector: 'app-profissional-form',
@@ -37,6 +37,7 @@ export class ProfissionalFormComponent extends FormComponent<Profissional, Profi
       sexo: [null],
       celular: [null],
       crm: [null],
+      rqe: [null],
       valorHora: [null],
       especialidades: [null, Validators.required]
     });
@@ -44,7 +45,10 @@ export class ProfissionalFormComponent extends FormComponent<Profissional, Profi
 
   override ngOnInit() {
     if (this.profissional) {
-      this.form.patchValue(this.profissional);
+      this.form.patchValue({
+        ...this.profissional,
+        dataNascimento: formatDateToBR(this.profissional.dataNascimento)
+      });
       let esp: number[] = [];
       this.profissional.especialidades?.forEach(e => esp.push(e.id));
       this.form.controls['especialidades'].setValue(esp);
@@ -60,5 +64,30 @@ export class ProfissionalFormComponent extends FormComponent<Profissional, Profi
     });
   }
 
-  protected readonly abrirDatePicker = abrirDatePicker;
+  override onSubmit() {
+    if (this.form.valid) {
+      const formValue = {
+        ...this.form.value,
+        dataNascimento: formatDateFromBR(this.form.value.dataNascimento)
+      };
+      this.save.emit(formValue);
+    } else {
+      console.log('Inválido');
+      console.log(this.form);
+
+      const controls = this.form.controls;
+      for (const name in controls) {
+        if (controls[name].invalid) {
+          console.log(name);
+          console.log(controls[name]);
+        }
+      }
+
+      this.toastr.warning('Verifique os campos preenchidos');
+      Object.keys(this.form.controls).forEach(field => {
+        const control = this.form.get(field);
+        control?.markAsTouched({ onlySelf: true });
+      });
+    }
+  }
 }

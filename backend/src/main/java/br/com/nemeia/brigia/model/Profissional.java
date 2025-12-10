@@ -42,6 +42,9 @@ public class Profissional extends BaseModel {
     @Column(name = "crm", length = 7, unique = true)
     private String crm;
 
+    @Column(name = "rqe", length = 7, unique = true)
+    private String rqe;
+
     @Column(name = "valor_hora", precision = 10, scale = 2)
     private BigDecimal valorHora;
 
@@ -54,7 +57,7 @@ public class Profissional extends BaseModel {
     private List<Especialidade> especialidades;
 
     public Profissional(String nome, String email, String cpf, LocalDate dataNascimento, Character sexo, String celular,
-            String urlImagem, String crm, BigDecimal valorHora) {
+            String urlImagem, String crm, String rqe, BigDecimal valorHora) {
         this.nome = nome;
         this.email = email;
         this.cpf = cpf;
@@ -63,6 +66,7 @@ public class Profissional extends BaseModel {
         this.celular = celular;
         this.urlImagem = urlImagem;
         this.crm = crm;
+        this.rqe = rqe;
         this.valorHora = valorHora;
     }
 }

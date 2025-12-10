@@ -103,6 +103,7 @@ CREATE TABLE public.a_professionals (
   image_url text,
   identification_color text,
   crm text,
+  rqe text,
   specialty text,
   address_cep text,
   address_rua text,

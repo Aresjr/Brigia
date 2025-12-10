@@ -23,7 +23,7 @@ public class ProfissionalMapper {
 
         return new ProfissionalResponse(profissional.getId(), profissional.getNome(), profissional.getEmail(),
                 profissional.getCpf(), profissional.getDataNascimento(), profissional.getSexo(),
-                profissional.getCelular(), profissional.getUrlImagem(), profissional.getCrm(),
+                profissional.getCelular(), profissional.getUrlImagem(), profissional.getCrm(), profissional.getRqe(),
                 profissional.getValorHora(), getEspecialidades(profissional), profissional.getCriadoEm(),
                 profissional.getExcluido());
     }
@@ -35,7 +35,7 @@ public class ProfissionalMapper {
 
         return new Profissional(request.nome(), request.email(), request.cpf(), request.dataNascimento(),
                 request.sexo() != null ? request.sexo().charAt(0) : null, request.celular(), request.urlImagem(),
-                request.crm(), request.valorHora());
+                request.crm(), request.rqe(), request.valorHora());
     }
 
     public PagedResponse<ProfissionalResponse> toPagedResponse(Page<Profissional> paged) {
