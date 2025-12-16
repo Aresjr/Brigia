@@ -11,6 +11,6 @@ export class ProfissionalService extends BaseService<Profissional, ProfissionalR
   override path = '/profissionais';
 
   reenviarConvite(id: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}${this.path}/${id}/reenviar-convite`, {});
+    return this.backend.post<void, void>(`${this.path}/${id}/reenviar-convite`, null);
   }
 }

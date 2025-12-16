@@ -75,13 +75,9 @@ public class UsuarioService extends BaseService<Usuario, UsuarioRepository> {
         }
     }
 
-    public void reenviarConvite(Long id) throws BadRequestException {
+    public void reenviarConvite(Long id) {
         Usuario usuario = getById(id);
-        
-        if (usuario.getSenha() != null) {
-            throw new BadRequestException("Usuário já possui senha cadastrada");
-        }
-        
+
         // Regenerar token e expiração
         usuario.setTokenPublico(java.util.UUID.randomUUID().toString());
         usuario.setTokenExpiracao(LocalDateTime.now());
