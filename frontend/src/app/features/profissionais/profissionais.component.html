@@ -54,11 +54,17 @@
                 <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
                   <lucide-icon name="ellipsis-vertical" class="h-5" />
                 </label>
-                <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-[1] font-semibold">
+                <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-48 z-[1] font-semibold">
                   <li *ngIf="!profissional.excluido">
                     <a (click)="editar(profissional)"
                        class="text-sm text-neutral hover:bg-base-200">
                       Editar
+                    </a>
+                  </li>
+                  <li *ngIf="!profissional.excluido">
+                    <a (click)="reenviarConvite($event, profissional)"
+                       class="text-sm text-neutral hover:bg-base-200">
+                      Reenviar Convite
                     </a>
                   </li>
                   <li *ngIf="!profissional.excluido">

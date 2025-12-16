@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,5 +58,13 @@ public class ProfissionalController {
     public List<ProfissionalResponse> aniversariantes() {
         log.info("GET /profissionais/aniversariantes");
         return service.getAniversariantes().stream().map(mapper::toResponse).toList();
+    }
+
+    @PostMapping("/{id}/reenviar-convite")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
+    public ResponseEntity<Void> reenviarConvite(@PathVariable Long id) throws BadRequestException {
+        log.info("POST /profissionais/{}/reenviar-convite", id);
+        service.reenviarConvite(id);
+        return ResponseEntity.noContent().build();
     }
 }

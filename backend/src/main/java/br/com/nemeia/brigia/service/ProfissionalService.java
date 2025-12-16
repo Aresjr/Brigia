@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -63,15 +64,7 @@ public class ProfissionalService {
             // Verificar se já existe usuário com o email
             var usuarioExistente = usuarioService.getByEmail(profissional.getEmail());
             if (usuarioExistente.isEmpty()) {
-                try {
-                    UsuarioRequest usuarioRequest = new UsuarioRequest(profissional.getEmail(), profissional.getNome(),
-                            null, RoleUsuario.MEDICO, SecurityHolder.getLoggedUserUnidadeId());
-                    Usuario usuario = usuarioService.create(usuarioRequest);
-                    profissional.setUsuario(usuario);
-                    log.info("Usuário criado automaticamente para o profissional: {}", profissional.getNome());
-                } catch (Exception e) {
-                    log.warn("Erro ao criar usuário para o profissional: {}", e.getMessage());
-                }
+                criarUsuarioParaProfissional(profissional);
             } else {
                 log.info("Usuário já existe para o email: {}", profissional.getEmail());
                 profissional.setUsuario(usuarioExistente.get());
@@ -99,5 +92,39 @@ public class ProfissionalService {
         profissionalEdicao.setUnidade(profissional.getUnidade());
         profissionalEdicao.setUsuario(profissional.getUsuario());
         return saveProfissional(profissionalEdicao);
+    }
+
+    public void reenviarConvite(Long id) throws BadRequestException {
+        Profissional profissional = getById(id);
+        
+        if (profissional.getUsuario() == null) {
+            // Criar usuário se não existir
+            if (profissional.getEmail() == null || profissional.getEmail().isEmpty()) {
+                throw new BadRequestException("Profissional não possui email cadastrado para criar usuário");
+            }
+            
+            var usuarioExistente = usuarioService.getByEmail(profissional.getEmail());
+            if (usuarioExistente.isEmpty()) {
+            } else {
+                profissional.setUsuario(usuarioExistente.get());
+                saveProfissional(profissional);
+                usuarioService.reenviarConvite(usuarioExistente.get().getId());
+                log.info("Usuário vinculado e convite reenviado para o profissional: {}", profissional.getNome());
+                return;
+            }
+        } else {
+            usuarioService.reenviarConvite(profissional.getUsuario().getId());
+        }
+        
+        log.info("Convite reenviado para o profissional: {}", profissional.getNome());
+    }
+
+    private void criarUsuarioParaProfissional(Profissional profissional) {
+        UsuarioRequest usuarioRequest = new UsuarioRequest(profissional.getEmail(), profissional.getNome(),
+                null, RoleUsuario.MEDICO, SecurityHolder.getLoggedUserUnidadeId());
+        Usuario usuario = usuarioService.create(usuarioRequest);
+        profissional.setUsuario(usuario);
+        saveProfissional(profissional);
+        log.info("Usuário criado automaticamente para o profissional: {}", profissional.getNome());
     }
 }

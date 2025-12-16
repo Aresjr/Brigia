@@ -42,4 +42,21 @@ export class ProfissionaisComponent extends BaseListComponent<Profissional> impl
       profissional.crm?.includes(searchTerm) ||
       profissional.email?.includes(searchTerm);
   }
+
+  reenviarConvite(event: Event, profissional: Profissional): void {
+    event.stopPropagation();
+    
+    this.profissionalService.reenviarConvite(profissional.id).subscribe({
+      next: () => {
+        this.toastr.success('Convite reenviado com sucesso!');
+      },
+      error: (error) => {
+        if (error.error?.message) {
+          this.toastr.error(error.error.message);
+        } else {
+          this.toastr.error('Erro ao reenviar convite');
+        }
+      }
+    });
+  }
 }

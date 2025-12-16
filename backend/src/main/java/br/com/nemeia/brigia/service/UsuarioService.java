@@ -75,6 +75,18 @@ public class UsuarioService extends BaseService<Usuario, UsuarioRepository> {
         }
     }
 
+    public void reenviarConvite(Long id) {
+        Usuario usuario = getById(id);
+
+        // Regenerar token e expiração
+        usuario.setTokenPublico(java.util.UUID.randomUUID().toString());
+        usuario.setTokenExpiracao(LocalDateTime.now());
+        repository.save(usuario);
+        
+        sendEmail(usuario);
+        log.info("Convite reenviado para o usuário: {}", usuario.getEmail());
+    }
+
     public Usuario edit(Long id, UsuarioRequest request) {
         getById(id);
         Usuario usuario = mapper.toEntity(request);
