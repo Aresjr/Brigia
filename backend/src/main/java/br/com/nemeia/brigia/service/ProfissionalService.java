@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -99,5 +100,16 @@ public class ProfissionalService {
         profissionalEdicao.setUnidade(profissional.getUnidade());
         profissionalEdicao.setUsuario(profissional.getUsuario());
         return saveProfissional(profissionalEdicao);
+    }
+
+    public void reenviarConvite(Long id) throws BadRequestException {
+        Profissional profissional = getById(id);
+        
+        if (profissional.getUsuario() == null) {
+            throw new BadRequestException("Profissional não possui usuário vinculado");
+        }
+        
+        usuarioService.reenviarConvite(profissional.getUsuario().getId());
+        log.info("Convite reenviado para o profissional: {}", profissional.getNome());
     }
 }

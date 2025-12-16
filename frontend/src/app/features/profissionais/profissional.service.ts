@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ProfissionalRequest, Profissional } from './profissional.interface';
 import { BaseService } from '../shared/base.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,4 +9,8 @@ import { BaseService } from '../shared/base.service';
 export class ProfissionalService extends BaseService<Profissional, ProfissionalRequest> {
 
   override path = '/profissionais';
+
+  reenviarConvite(id: number): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}${this.path}/${id}/reenviar-convite`, {});
+  }
 }

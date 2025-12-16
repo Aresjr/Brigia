@@ -73,4 +73,12 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/{id}/reenviar-convite")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Void> reenviarConvite(@PathVariable Long id) throws BadRequestException {
+        log.info("POST /usuarios/{}/reenviar-convite", id);
+        service.reenviarConvite(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

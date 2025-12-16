@@ -62,6 +62,12 @@
                     </a>
                   </li>
                   <li *ngIf="!profissional.excluido">
+                    <a (click)="reenviarConvite($event, profissional)"
+                       class="text-sm text-info hover:bg-info/20">
+                      Reenviar Convite
+                    </a>
+                  </li>
+                  <li *ngIf="!profissional.excluido">
                     <a (click)="perguntaExcluir($event, profissional)"
                        class="text-error hover:bg-error/50">
                       Excluir
