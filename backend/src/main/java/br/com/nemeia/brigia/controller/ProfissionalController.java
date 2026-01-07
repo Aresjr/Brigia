@@ -67,4 +67,19 @@ public class ProfissionalController {
         service.reenviarConvite(id);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
+    public ResponseEntity<Void> deleteProfissional(@PathVariable Long id) {
+        log.info("DELETE /profissionais/{} - deletando profissional", id);
+        service.deleteProfissional(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/restaurar")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
+    public ProfissionalResponse restaurarProfissional(@PathVariable Long id) {
+        log.info("PATCH /profissionais/{}/restaurar - restaurando profissional", id);
+        return mapper.toResponse(service.restaurarProfissional(id));
+    }
 }

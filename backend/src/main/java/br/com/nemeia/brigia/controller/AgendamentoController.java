@@ -30,7 +30,6 @@ public class AgendamentoController {
             @RequestParam(required = false) Integer ano, @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         Long userId = SecurityHolder.getLoggedUserId();
-        log.info("GET /agendamentos - mes: {}, ano: {}, page: {}, size: {}, userId: {}", mes, ano, page, size, userId);
         return mapper.toPagedResponse(service.getByDate(userId, mes, ano, page, size));
     }
 

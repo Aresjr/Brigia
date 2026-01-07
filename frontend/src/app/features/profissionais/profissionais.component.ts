@@ -12,6 +12,7 @@ import { BaseListComponent } from '../shared/base-list.component';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { TopBarComponent } from '../../layout/top-bar/top-bar.component';
 import { FabComponent } from '../shared/fab/fab.component';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-profissionais',
@@ -24,7 +25,8 @@ import { FabComponent } from '../shared/fab/fab.component';
     CelularPipe,
     PaginationComponent,
     TopBarComponent,
-    FabComponent
+    FabComponent,
+    ConfirmDialogComponent
   ],
   templateUrl: './profissionais.component.html',
   standalone: true

@@ -10,4 +10,6 @@ public interface ProfissionalRepository extends BaseRepository<Profissional> {
     List<Profissional> findAllByDataNascimentoIs(LocalDate now);
 
     Optional<Profissional> findOneByUsuarioIdIs(Long usuarioId);
+
+    Optional<Profissional> findAllByUnidadeIdIsAndExcluidoIsNotNull(Long usuarioId);
 }

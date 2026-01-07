@@ -33,7 +33,7 @@ public class ProfissionalService {
 
     public Page<Profissional> getPaged(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, DbUtil.DEFAULT_SORT);
-        return repository.findAllByUnidadeIdIs(pageable, SecurityHolder.getLoggedUserUnidadeId());
+        return repository.findAllByUnidadeIdIsAndExcluidoIsNotNull(pageable, SecurityHolder.getLoggedUserUnidadeId());
     }
 
     public List<Profissional> getAniversariantes() {
@@ -126,5 +126,18 @@ public class ProfissionalService {
         profissional.setUsuario(usuario);
         saveProfissional(profissional);
         log.info("Usuário criado automaticamente para o profissional: {}", profissional.getNome());
+    }
+
+    public void deleteProfissional(Long id) {
+        Profissional profissional = getById(id);
+        profissional.setExcluido(true);
+        repository.save(profissional);
+        log.info("Profissional deletado com ID: {}", id);
+    }
+
+    public Profissional restaurarProfissional(Long id) {
+        Profissional profissional = getById(id);
+        profissional.setExcluido(false);
+        return repository.save(profissional);
     }
 }
