@@ -25,7 +25,6 @@ public class AgendaSemanalController {
     @GetMapping
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public List<AgendaSemanalResponse> getAllAgendasSemanais(@RequestParam(required = false) Long profissionalId) {
-        log.info("GET /agendas-semanais - profissionalId: {}", profissionalId);
         return service.findByProfissionalId(profissionalId).stream().map(mapper::toResponse).toList();
     }
 

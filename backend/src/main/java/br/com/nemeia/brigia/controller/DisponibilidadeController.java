@@ -26,7 +26,6 @@ public class DisponibilidadeController {
             @RequestParam(defaultValue = "false") Boolean mostrarExcluidos, @RequestParam(required = false) Integer mes,
             @RequestParam(required = false) Integer ano, @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
-        log.info("GET /disponibilidades - mes: {}, ano: {}, page: {}, size: {}", mes, ano, page, size);
         return mapper.toPagedResponse(service.getByDate(mes, ano, page, size));
     }
 

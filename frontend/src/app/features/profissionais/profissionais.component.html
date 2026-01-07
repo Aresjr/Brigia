@@ -106,6 +106,13 @@
     ></app-profissional-form>
   }
 
+  <app-confirm-dialog
+    *ngIf="exibeConfirmExclusao"
+    message="Deseja realmente excluir este profissional?"
+    (confirm)="excluir()"
+    (cancel)="fecharConfirmExclusao()"
+  ></app-confirm-dialog>
+
   <app-fab (clicked)="onAddNovo()"></app-fab>
 
 </div>

@@ -31,7 +31,6 @@ public class ContaReceberController {
     @PreAuthorize("hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
     public PagedResponse<ContaReceberResponse> getAllContasReceber(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
-        log.info("GET /contas-receber - page: {}, size: {}", page, size);
         return mapper.toPagedResponse(service.getPaged(page, size));
     }
 

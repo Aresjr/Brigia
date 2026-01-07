@@ -26,7 +26,6 @@ public class NotificacaoController {
     @GetMapping
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
     public List<NotificacaoResponse> listar() {
-        log.info("GET /notificacoes - listando notificações do usuário logado");
         return notificacaoMapper.toResponse(notificacaoService.listarDoUsuarioLogado());
     }
 
