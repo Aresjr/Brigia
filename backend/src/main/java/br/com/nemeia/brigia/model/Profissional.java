@@ -48,7 +48,7 @@ public class Profissional extends BaseModel {
     @Column(name = "valor_hora", precision = 10, scale = 2)
     private BigDecimal valorHora;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 

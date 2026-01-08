@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +31,7 @@ public class ProfissionalService {
     private final ProfissionalMapper mapper;
     private final EspecialidadeService especialidadeService;
     private final UsuarioService usuarioService;
+    private final UnidadeService unidadeService;
 
     public Page<Profissional> getPaged(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, DbUtil.DEFAULT_SORT);
@@ -50,6 +52,7 @@ public class ProfissionalService {
                 .orElseThrow(() -> new NotFoundException("Profissional não encontrado com o usuário ID: " + usuarioId));
     }
 
+    @Transactional
     public Profissional createProfissional(ProfissionalRequest request) {
         Profissional profissional = mapper.toEntity(request);
 
@@ -58,6 +61,8 @@ public class ProfissionalService {
                     .toList();
             profissional.setEspecialidades(especialidades);
         }
+
+        profissional.setUnidade(unidadeService.getById(SecurityHolder.getLoggedUserUnidadeId()));
 
         // Criar usuário automaticamente para o profissional
         if (profissional.getEmail() != null && !profissional.getEmail().isEmpty()) {
@@ -71,10 +76,6 @@ public class ProfissionalService {
             }
         }
 
-        return saveProfissional(profissional);
-    }
-
-    private Profissional saveProfissional(Profissional profissional) {
         return repository.save(profissional);
     }
 
@@ -91,7 +92,7 @@ public class ProfissionalService {
         profissionalEdicao.setId(id);
         profissionalEdicao.setUnidade(profissional.getUnidade());
         profissionalEdicao.setUsuario(profissional.getUsuario());
-        return saveProfissional(profissionalEdicao);
+        return repository.save(profissional);
     }
 
     public void reenviarConvite(Long id) throws BadRequestException {
@@ -105,9 +106,10 @@ public class ProfissionalService {
             
             var usuarioExistente = usuarioService.getByEmail(profissional.getEmail());
             if (usuarioExistente.isEmpty()) {
+                //TODO
             } else {
                 profissional.setUsuario(usuarioExistente.get());
-                saveProfissional(profissional);
+                repository.save(profissional);
                 usuarioService.reenviarConvite(usuarioExistente.get().getId());
                 log.info("Usuário vinculado e convite reenviado para o profissional: {}", profissional.getNome());
                 return;
@@ -124,7 +126,6 @@ public class ProfissionalService {
                 null, RoleUsuario.MEDICO, SecurityHolder.getLoggedUserUnidadeId());
         Usuario usuario = usuarioService.create(usuarioRequest);
         profissional.setUsuario(usuario);
-        saveProfissional(profissional);
         log.info("Usuário criado automaticamente para o profissional: {}", profissional.getNome());
     }
 
