@@ -9,7 +9,6 @@ import br.com.nemeia.brigia.repository.UnidadeRepository;
 import br.com.nemeia.brigia.repository.UsuarioRepository;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -18,29 +17,28 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
 public class UsuarioService extends BaseService<Usuario, UsuarioRepository> {
 
+    private final Integer TEMPO_EXPIRACAO_CONVITE = 24;
+
     private final UsuarioRepository repository;
     private final UsuarioMapper mapper;
     private final UnidadeRepository unidadeRepository;
-    private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
     @Value("${app.base-url}")
     private String baseUrl;
 
     public UsuarioService(UsuarioRepository repository, UsuarioMapper mapper, UnidadeRepository unidadeRepository,
-            PasswordEncoder passwordEncoder, EmailService emailService) {
+            EmailService emailService) {
         super(repository);
         this.repository = repository;
         this.mapper = mapper;
         this.unidadeRepository = unidadeRepository;
-        this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
     }
 
@@ -103,7 +101,7 @@ public class UsuarioService extends BaseService<Usuario, UsuarioRepository> {
         Usuario usuario = repository.findByTokenPublico(token)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado com o token: " + token));
 
-        if (usuario.getTokenExpiracao().plusHours(1).isBefore(LocalDateTime.now())) {
+        if (usuario.getTokenExpiracao().plusHours(TEMPO_EXPIRACAO_CONVITE).isBefore(LocalDateTime.now())) {
             throw new BadRequestException("Token de usuário expirado");
         }
         if (usuario.getSenha() != null) {
