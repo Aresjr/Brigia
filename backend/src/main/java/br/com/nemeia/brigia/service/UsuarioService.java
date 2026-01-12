@@ -25,6 +25,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UsuarioService extends BaseService<Usuario, UsuarioRepository> {
 
+    private final Integer TEMPO_EXPIRACAO_CONVITE = 24;
+
     private final UsuarioRepository repository;
     private final UsuarioMapper mapper;
     private final UnidadeRepository unidadeRepository;
@@ -103,7 +105,7 @@ public class UsuarioService extends BaseService<Usuario, UsuarioRepository> {
         Usuario usuario = repository.findByTokenPublico(token)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado com o token: " + token));
 
-        if (usuario.getTokenExpiracao().plusHours(1).isBefore(LocalDateTime.now())) {
+        if (usuario.getTokenExpiracao().plusHours(TEMPO_EXPIRACAO_CONVITE).isBefore(LocalDateTime.now())) {
             throw new BadRequestException("Token de usuário expirado");
         }
         if (usuario.getSenha() != null) {
