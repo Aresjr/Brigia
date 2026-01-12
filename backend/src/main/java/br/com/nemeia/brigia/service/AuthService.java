@@ -24,7 +24,7 @@ public class AuthService {
     @Value("${env}")
     private String env;
 
-    private final int tokenExpirationTime = 60 * 60 * 16;
+    private final int tokenExpirationTime = 60 * 60 * 86;
 
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
