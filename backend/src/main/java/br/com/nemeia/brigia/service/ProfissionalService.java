@@ -35,7 +35,7 @@ public class ProfissionalService {
 
     public Page<Profissional> getPaged(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, DbUtil.DEFAULT_SORT);
-        return repository.findAllByUnidadeIdIsAndExcluidoIsNotNull(pageable, SecurityHolder.getLoggedUserUnidadeId());
+        return repository.findAll(pageable);
     }
 
     public List<Profissional> getAniversariantes() {
