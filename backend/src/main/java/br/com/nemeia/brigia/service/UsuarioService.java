@@ -16,7 +16,6 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -58,7 +57,6 @@ public class UsuarioService extends BaseService<Usuario, UsuarioRepository> {
         return usuario;
     }
 
-    @Async
     private void sendEmail(Usuario usuario) {
         try {
             Map<String, Object> variables = new HashMap<>();

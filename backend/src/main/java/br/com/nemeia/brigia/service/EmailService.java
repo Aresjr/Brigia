@@ -1,7 +1,6 @@
 package br.com.nemeia.brigia.service;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -22,7 +21,6 @@ public class EmailService {
         this.templateLoader = templateLoader;
     }
 
-    @Async
     public void sendEmail(String to, String subject, String templateName, Map<String, Object> variables)
             throws UnsupportedEncodingException {
         Map<String, Object> variaveis = new HashMap<>(variables);

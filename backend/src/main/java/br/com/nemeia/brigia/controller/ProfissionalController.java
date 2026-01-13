@@ -33,7 +33,7 @@ public class ProfissionalController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
-    public ProfissionalResponse createProfissional(@Valid @RequestBody ProfissionalRequest request) {
+    public ProfissionalResponse createProfissional(@Valid @RequestBody ProfissionalRequest request) throws BadRequestException {
         log.info("POST /profissionais");
         return mapper.toResponse(service.createProfissional(request));
     }

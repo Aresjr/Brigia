@@ -53,7 +53,7 @@ public class ProfissionalService {
     }
 
     @Transactional
-    public Profissional createProfissional(ProfissionalRequest request) {
+    public Profissional createProfissional(ProfissionalRequest request) throws BadRequestException {
         Profissional profissional = mapper.toEntity(request);
 
         if (!request.especialidades().isEmpty()) {
@@ -68,12 +68,11 @@ public class ProfissionalService {
         if (profissional.getEmail() != null && !profissional.getEmail().isEmpty()) {
             // Verificar se já existe usuário com o email
             var usuarioExistente = usuarioService.getByEmail(profissional.getEmail());
-            if (usuarioExistente.isEmpty()) {
-                criarUsuarioParaProfissional(profissional);
-            } else {
-                log.info("Usuário já existe para o email: {}", profissional.getEmail());
-                profissional.setUsuario(usuarioExistente.get());
+            if (usuarioExistente.isPresent()) {
+                throw new BadRequestException(
+                        "Já existe um usuário no sistema cadastrado com o email: " + profissional.getEmail());
             }
+            criarUsuarioParaProfissional(profissional);
         }
 
         return repository.save(profissional);

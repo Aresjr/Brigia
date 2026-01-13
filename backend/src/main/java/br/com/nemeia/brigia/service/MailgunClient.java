@@ -1,6 +1,7 @@
 package br.com.nemeia.brigia.service;
 
 import jakarta.mail.internet.InternetAddress;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @Service
+@Slf4j
 public class MailgunClient {
 
     @Value("${spring.application.name}")
@@ -46,6 +48,8 @@ public class MailgunClient {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() >= 400) {
                 throw new RuntimeException("Erro ao enviar email: " + response.body());
+            } else {
+                log.info("Email enviado com sucesso para {}", to);
             }
         } catch (Exception e) {
             throw new RuntimeException("Falha no envio de email", e);
