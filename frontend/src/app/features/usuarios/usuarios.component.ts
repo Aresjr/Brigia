@@ -37,4 +37,21 @@ export class UsuariosComponent extends BaseListComponent<Usuario> implements OnI
   cadastraUsuarioNovo(usuarioNovo: Partial<UsuarioRequest>) {
     console.log('cadastraUsuarioNovo', usuarioNovo);
   }
+
+  reenviarConvite(event: Event, usuario: Usuario): void {
+    event.stopPropagation();
+
+    this.usuarioService.reenviarConvite(usuario.id).subscribe({
+      next: () => {
+        this.toastr.success('Convite reenviado com sucesso!');
+      },
+      error: (error) => {
+        if (error.error?.message) {
+          this.toastr.error(error.error.message);
+        } else {
+          this.toastr.error('Erro ao reenviar convite');
+        }
+      }
+    });
+  }
 }
