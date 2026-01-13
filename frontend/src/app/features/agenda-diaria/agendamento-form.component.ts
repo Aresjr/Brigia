@@ -621,10 +621,6 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     if (!this.form.valid) {
       return false;
     }
-    if (!isDataNoFuturo(this.form.value.data, this.form.value.hora) && !this.agendamentoDetalhes) {
-      this.toastr.warning('O agendamento deve ser em um horário futuro');
-      return false;
-    }
     if (this.form.value.desconto > this.form.value.valor) {
       this.toastr.warning('O desconto não pode ser maior do que o valor');
       return false;

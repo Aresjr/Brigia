@@ -19,4 +19,8 @@ export class UsuarioService extends BaseService<Usuario, UsuarioRequest> {
     );
   }
 
+  reenviarConvite(id: number): Observable<void> {
+    return this.backend.post<void, void>(`${this.path}/${id}/reenviar-convite`, null);
+  }
+
 }
