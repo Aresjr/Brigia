@@ -12,6 +12,30 @@
       </div>
 
       <div>
+        <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" title="Opções" (click)="onEdit()" *ngIf="podeEditar()">
+            <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
+              <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
+                <lucide-icon name="ellipsis-vertical" class="inline w-5 h-5" />
+              </label>
+              <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-48 z-[1] font-semibold">
+                <li>
+                  <a class="text-sm text-neutral hover:bg-base-200" (click)="marcarNaoCompareceu()">
+                    Não compareceu
+                  </a>
+                </li>
+                <li>
+                  <a class="text-sm text-neutral hover:bg-base-200" (click)="marcarCanceladoPeloUsuario()">
+                    Cancelado Pelo Usuário
+                  </a>
+                </li>
+                <li>
+                  <a class="text-sm text-neutral text-error hover:bg-error/50" (click)="excluirAgendamento()">
+                    Excluir
+                  </a>
+                </li>
+              </ul>
+            </div>
+        </button>
         <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" title="Editar" (click)="onEdit()" *ngIf="podeEditar()">
           <lucide-icon name="pencil" class="inline w-5 h-5"/>
         </button>
@@ -113,7 +137,7 @@
         </div>
 
         <div class="w-[5rem] tooltip text-left" data-tip="Caso marcado, possibilita cadastrar agendamento fora do horário disponível do médico">
-          <label class="label-campo rounded-lg px-1.5 hover:border hover:border-neutral" for="encaixe">
+          <label class="label-campo rounded-lg px-1.5" for="encaixe">
             Encaixe <br/><input type="checkbox" id="encaixe" formControlName="encaixe" class="campo my-1.5 mx-3 checkbox checkbox-primary" />
           </label>
         </div>
@@ -265,7 +289,7 @@
 
         <div class="w-[11rem] mr-4">
             <label class="label-campo mb-2">Pagamento</label>
-            <div class="flex gap-4 items-center h-[2.4rem]">
+            <div class="flex gap-4 items-center h-[1rem]">
               <label class="flex items-center gap-2" [ngClass]="{'cursor-pointer': modoSalvar}">
                 <input type="radio" name="tipoPagamento" class="radio radio-primary radio-sm"
                        [checked]="tipoPagamento === 'pago'"
@@ -298,7 +322,7 @@
 
         <div class="w-[8rem]">
           <label class="label-campo" for="quantiaFaltante">
-            Quantia Faltante
+            Faltante
           </label>
           <label class="input input-sm input-bordered flex items-center h-[2.4rem] bg-base-200">
             R$
@@ -428,3 +452,25 @@
   (confirm)="validarCredenciaisAdmin($event)"
   (cancel)="cancelarModalCredenciais()">
 </app-admin-credentials-dialog>
+
+<app-confirm-dialog
+  *ngIf="exibeConfirmNaoCompareceu"
+  message="Deseja realmente marcar este agendamento como 'Não Compareceu'?"
+  (confirm)="confirmarNaoCompareceu()"
+  (cancel)="cancelarConfirmacao()">
+</app-confirm-dialog>
+
+<app-confirm-dialog
+  *ngIf="exibeConfirmCanceladoPeloUsuario"
+  message="Deseja realmente marcar este agendamento como 'Cancelado Pelo Usuário'?"
+  (confirm)="confirmarCanceladoPeloUsuario()"
+  (cancel)="cancelarConfirmacao()">
+</app-confirm-dialog>
+
+<app-confirm-dialog
+  *ngIf="exibeConfirmExclusao"
+  message="Deseja realmente excluir este agendamento?"
+  (confirm)="confirmarExclusao()"
+  (cancel)="cancelarConfirmacao()">
+</app-confirm-dialog>
+

@@ -324,6 +324,18 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         agendamentoProcedimento.setValorRepasse(valores.repasse());
     }
 
+    public void marcarNaoCompareceu(Long id) {
+        Agendamento agendamento = getById(id);
+        agendamento.setStatus(StatusAgendamento.NAO_COMPARECEU);
+        repository.save(agendamento);
+    }
+
+    public void marcarCanceladoPeloUsuario(Long id) {
+        Agendamento agendamento = getById(id);
+        agendamento.setStatus(StatusAgendamento.CANCELADO_USUARIO);
+        repository.save(agendamento);
+    }
+
     @Override
     String getNomeEntidade() {
         return "Agendamento";

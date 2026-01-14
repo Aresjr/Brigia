@@ -13,12 +13,13 @@ import java.util.Optional;
 
 public interface AgendamentoRepository extends BaseRepository<Agendamento> {
     @Query("SELECT a FROM Agendamento a WHERE a.profissional.id = :profissionalId "
-            + "AND a.data BETWEEN :startDate AND :endDate")
+            + "AND a.data BETWEEN :startDate AND :endDate AND (a.excluido IS NULL OR a.excluido = false)")
     Page<Agendamento> findAllByProfissionalIdAndDateRange(Pageable pageable,
             @Param("profissionalId") Long profissionalId, @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
 
-    @Query("SELECT a FROM Agendamento a WHERE a.unidade.id = :unidadeId AND a.data BETWEEN :startDate AND :endDate")
+    @Query("SELECT a FROM Agendamento a WHERE a.unidade.id = :unidadeId AND a.data BETWEEN :startDate AND :endDate" +
+            " AND (a.excluido IS NULL OR a.excluido = false)")
     Page<Agendamento> findAllByDate(Pageable pageable, @Param("unidadeId") Long unidadeId,
             @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 

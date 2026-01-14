@@ -26,6 +26,7 @@ import {
   StatusAgendamento,
   TIPO_AGENDAMENTO
 } from './agendamento.interface';
+import { AgendamentoService } from './agendamento.service';
 import { IForm } from '../shared/form.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { abrirDatePicker, autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
@@ -95,6 +96,9 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   rascunhoCarregado: boolean = false;
   permissaoAdminValorConcedida: boolean = false;
   permissaoAdminDescontoConcedida: boolean = false;
+  exibeConfirmNaoCompareceu: boolean = false;
+  exibeConfirmExclusao: boolean = false;
+  exibeConfirmCanceladoPeloUsuario: boolean = false;
 
   protected readonly autoResize = autoResize;
   protected readonly limitLength = limitLength;
@@ -105,7 +109,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
               private empresaService: EmpresaService, private procedimentoService: ProcedimentoService,
               protected userService: UserService, private router: Router,
               private atendimentoService: AtendimentoService, private authService: AuthService,
-              private rascunhoService: AgendamentoRascunhoService, private filaEsperaService: FilaEsperaService) {
+              private rascunhoService: AgendamentoRascunhoService, private filaEsperaService: FilaEsperaService,
+              private agendamentoService: AgendamentoService) {
     super(fb, toastr);
     this.hoje = new Date().toISOString().split('T')[0];
     const form: IForm<AgendamentoRequest> = {
@@ -853,6 +858,84 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         quantiaPaga: 0
       });
     }
+  }
+
+  marcarNaoCompareceu() {
+    this.exibeConfirmNaoCompareceu = true;
+  }
+
+  confirmarNaoCompareceu() {
+    if (!this.agendamentoDetalhes?.id) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.agendamentoService.marcarNaoCompareceu(this.agendamentoDetalhes.id).subscribe({
+      next: () => {
+        this.toastr.success('Agendamento marcado como "Não Compareceu"');
+        this.exibeConfirmNaoCompareceu = false;
+        this.cancel.emit();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        this.exibeConfirmNaoCompareceu = false;
+      }
+    });
+  }
+
+  marcarCanceladoPeloUsuario() {
+    this.exibeConfirmCanceladoPeloUsuario = true;
+  }
+
+  confirmarCanceladoPeloUsuario() {
+    if (!this.agendamentoDetalhes?.id) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.agendamentoService.marcarCanceladoPeloUsuario(this.agendamentoDetalhes.id).subscribe({
+      next: () => {
+        this.toastr.success('Agendamento marcado como "Cancelado Pelo Usuário"');
+        this.exibeConfirmCanceladoPeloUsuario = false;
+        this.cancel.emit();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        this.exibeConfirmCanceladoPeloUsuario = false;
+      }
+    });
+  }
+
+  excluirAgendamento() {
+    this.exibeConfirmExclusao = true;
+  }
+
+  confirmarExclusao() {
+    if (!this.agendamentoDetalhes?.id) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.agendamentoService.excluir(this.agendamentoDetalhes.id).subscribe({
+      next: () => {
+        this.toastr.success('Agendamento excluído com sucesso');
+        this.exibeConfirmExclusao = false;
+        this.cancel.emit();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        this.exibeConfirmExclusao = false;
+      }
+    });
+  }
+
+  cancelarConfirmacao() {
+    this.exibeConfirmNaoCompareceu = false;
+    this.exibeConfirmExclusao = false;
+    this.exibeConfirmCanceladoPeloUsuario = false;
   }
 
   protected readonly ColorUtils = ColorUtils;

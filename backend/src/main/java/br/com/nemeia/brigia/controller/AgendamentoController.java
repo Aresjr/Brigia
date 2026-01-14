@@ -51,7 +51,7 @@ public class AgendamentoController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteAgendamento(@PathVariable Long id) {
-        log.info("DELETE /agendamentos - excluindo convênio ID {}", id);
+        log.info("DELETE /agendamentos - excluindo agendamento ID {}", id);
         service.delete(id, false);
         return ResponseEntity.noContent().build();
     }
@@ -81,6 +81,22 @@ public class AgendamentoController {
     public ResponseEntity<Void> cancelarPorToken(@PathVariable String token) {
         log.info("PATCH /agendamentos/token/{}/cancelar - cancelando agendamento por token", token);
         service.cancelarPorToken(token);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/nao-compareceu")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
+    public ResponseEntity<Void> marcarNaoCompareceu(@PathVariable Long id) {
+        log.info("PATCH /agendamentos/{}/nao-compareceu - marcando agendamento como não compareceu", id);
+        service.marcarNaoCompareceu(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/cancelado-pelo-usuario")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('ADMIN')")
+    public ResponseEntity<Void> marcarCanceladoPeloUsuario(@PathVariable Long id) {
+        log.info("PATCH /agendamentos/{}/cancelado-pelo-usuario - marcando agendamento como cancelado pelo usuário", id);
+        service.marcarCanceladoPeloUsuario(id);
         return ResponseEntity.noContent().build();
     }
 }
