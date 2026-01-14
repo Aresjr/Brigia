@@ -78,6 +78,7 @@ public class ProfissionalService {
         return repository.save(profissional);
     }
 
+    //TODO - migrar para MapStruct
     public Profissional editProfissional(Long id, ProfissionalRequest request) {
         Profissional profissional = getById(id);
         Profissional profissionalEdicao = mapper.toEntity(request);
@@ -91,7 +92,7 @@ public class ProfissionalService {
         profissionalEdicao.setId(id);
         profissionalEdicao.setUnidade(profissional.getUnidade());
         profissionalEdicao.setUsuario(profissional.getUsuario());
-        return repository.save(profissional);
+        return repository.save(profissionalEdicao);
     }
 
     public void reenviarConvite(Long id) throws BadRequestException {

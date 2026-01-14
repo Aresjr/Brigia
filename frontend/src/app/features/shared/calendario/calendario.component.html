@@ -13,7 +13,7 @@
         data-tip="Anterior"
         mwlCalendarPreviousView
         (click)="dateChanged()"
-        [view]="view"
+        [view]="getCalendarView()"
         [(viewDate)]="currentDate"
         (viewDateChange)="closeOpenMonthViewDay()" >
         <lucide-icon name="chevron-left" class="w-6 h-6"></lucide-icon>
@@ -23,7 +23,7 @@
         data-tip="Próximo"
         mwlCalendarNextView
         (click)="dateChanged()"
-        [view]="view"
+        [view]="getCalendarView()"
         [(viewDate)]="currentDate"
         (viewDateChange)="closeOpenMonthViewDay()" >
         <lucide-icon name="chevron-right" class="w-6 h-6"></lucide-icon>
@@ -41,27 +41,35 @@
     <div>
       <button
         class="px-4 py-1 font-bold border-b-4 hover:text-primary/60 tooltip"
-        (click)="setView(CalendarView.Day)"
-        [class.active]="view === CalendarView.Day"
-        [ngClass]="view === CalendarView.Day ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'"
+        (click)="setView(CustomCalendarView.Day)"
+        [class.active]="view === CustomCalendarView.Day"
+        [ngClass]="view === CustomCalendarView.Day ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'"
         data-tip="Visão do Dia">
         Dia
       </button>
       <button
         class="px-4 py-1 font-bold border-b-4 hover:text-primary/60 tooltip"
-        (click)="setView(CalendarView.Week)"
-        [class.active]="view === CalendarView.Week"
-        [ngClass]="view === CalendarView.Week ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'"
+        (click)="setView(CustomCalendarView.Week)"
+        [class.active]="view === CustomCalendarView.Week"
+        [ngClass]="view === CustomCalendarView.Week ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'"
         data-tip="Visão Semanal">
         Semana
       </button>
       <button
         class="px-4 py-1 font-bold border-b-4 hover:text-primary/60 tooltip"
-        (click)="setView(CalendarView.Month)"
-        [class.active]="view === CalendarView.Month"
-        [ngClass]="view === CalendarView.Month ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'"
+        (click)="setView(CustomCalendarView.Month)"
+        [class.active]="view === CustomCalendarView.Month"
+        [ngClass]="view === CustomCalendarView.Month ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'"
         data-tip="Visão Mensal">
         Mês
+      </button>
+      <button
+        class="px-4 py-1 font-bold border-b-4 hover:text-primary/60 tooltip"
+        (click)="setView(CustomCalendarView.List)"
+        [class.active]="view === CustomCalendarView.List"
+        [ngClass]="view === CustomCalendarView.List ? 'text-primary border-primary' : 'text-base-content/50 border-base-100'"
+        data-tip="Visão em Lista">
+        Lista
       </button>
     </div>
   </div>
@@ -76,7 +84,7 @@
 
     <mwl-calendar-month-view
       class="rounded-lg"
-      *ngSwitchCase="CalendarView.Month"
+      *ngSwitchCase="CustomCalendarView.Month"
       [viewDate]="currentDate"
       [events]="events"
       [refresh]="refresh"
@@ -88,7 +96,7 @@
     </mwl-calendar-month-view>
     <mwl-calendar-week-view
       class="rounded-lg"
-      *ngSwitchCase="CalendarView.Week"
+      *ngSwitchCase="CustomCalendarView.Week"
       [viewDate]="currentDate"
       [events]="events"
       [refresh]="refresh"
@@ -102,7 +110,7 @@
     </mwl-calendar-week-view>
     <mwl-calendar-day-view
       class="rounded-lg"
-      *ngSwitchCase="CalendarView.Day"
+      *ngSwitchCase="CustomCalendarView.Day"
       [viewDate]="currentDate"
       [events]="events"
       [refresh]="refresh"
@@ -114,5 +122,62 @@
       (load)="formatTimeLabels()"
       locale='pt'>
     </mwl-calendar-day-view>
+
+    <!-- List View -->
+    <div *ngSwitchCase="CustomCalendarView.List" class="bg-base-100 rounded-lg p-4">
+      @if(getSortedEvents().length === 0) {
+        <div class="text-center py-16 text-base-content/60">
+          <lucide-icon name="calendar-off" class="w-16 h-16 mx-auto mb-4 opacity-50"></lucide-icon>
+          <p class="text-lg">Nenhum agendamento encontrado</p>
+        </div>
+      } @else {
+        <div class="space-y-2">
+          @for (event of getSortedEvents(); track event.id) {
+            <div
+              class="card bg-base-200 hover:bg-base-300 cursor-pointer transition-colors duration-200 shadow-sm"
+              (click)="verAgendamento(event)">
+              <div class="card-body p-4">
+                <div class="flex items-start justify-between gap-4">
+                  <div class="flex-1">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="w-1 h-12 rounded-full"
+                        [style.backgroundColor]="event.color?.primary || '#60a5fa'">
+                      </div>
+                      <div class="flex-1">
+                        <h3 class="font-semibold text-lg">{{ getEventTime(event) }} - {{ event.meta?.paciente?.nome }}</h3>
+                        <div class="flex items-center gap-4 text-sm text-base-content/70 mt-1">
+                          <div class="flex items-center gap-1">
+                            <lucide-icon name="calendar" class="w-4 h-4"></lucide-icon>
+                            <span>{{ getEventDate(event) }}</span>
+                          </div>
+
+                          <div class="flex items-center gap-2">
+                            <lucide-icon name="stethoscope" class="w-4 h-4"></lucide-icon>
+                            <span><strong>Profissional:</strong> {{ event.meta?.profissional?.nome }}</span>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="flex flex-col items-end gap-2">
+                    @if(event.meta && event.meta.status !== undefined) {
+                      <div
+                        class="badge badge-sm px-3 py-2 text-white font-medium"
+                        [style.backgroundColor]="getStatusInfo(event.meta.status).cor">
+                        {{ getStatusInfo(event.meta.status).descricao }}
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
 
   </div>

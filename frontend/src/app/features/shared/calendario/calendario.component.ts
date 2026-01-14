@@ -1,6 +1,5 @@
 import {
   AfterContentInit,
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef, EventEmitter,
@@ -17,7 +16,15 @@ import {
 import { Subject } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
-import { Agendamento } from '../../agenda-diaria/agendamento.interface';
+import { Agendamento, StatusAgendamento } from '../../agenda-diaria/agendamento.interface';
+
+// Extend CalendarView with custom List view
+export enum CustomCalendarView {
+  Month = 'month',
+  Week = 'week',
+  Day = 'day',
+  List = 'list'
+}
 
 @Component({
   selector: 'app-calendario',
@@ -41,8 +48,8 @@ export class CalendarioComponent implements AfterContentInit {
   @Output() dataAlterada = new EventEmitter<Date>();
   @Output() recarrega = new EventEmitter<void>();
 
-  view: CalendarView = CalendarView.Week;
-  CalendarView = CalendarView;
+  view: CustomCalendarView = CustomCalendarView.Week;
+  CustomCalendarView = CustomCalendarView;
   currentDate: Date = new Date();
   hourSegments: number = 2;
   refresh = new Subject<void>();
@@ -52,11 +59,7 @@ export class CalendarioComponent implements AfterContentInit {
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent<Agendamento>[] }): void {
     if (this.isSameMonth(date, this.currentDate)) {
-      if ((this.isSameDay(this.currentDate, date) && this.activeDayIsOpen) || events.length === 0) {
-        this.activeDayIsOpen = false;
-      } else {
-        this.activeDayIsOpen = true;
-      }
+      this.activeDayIsOpen = !((this.isSameDay(this.currentDate, date) && this.activeDayIsOpen) || events.length === 0);
       this.currentDate = date;
     }
     this.diaClicado.emit(date);
@@ -83,7 +86,7 @@ export class CalendarioComponent implements AfterContentInit {
     return date1.getDate() == date2.getDate();
   }
 
-  setView(view: CalendarView) {
+  setView(view: CustomCalendarView) {
     this.view = view;
     this.cdr.detectChanges();
     //this.formatTimeLabels();
@@ -128,5 +131,50 @@ export class CalendarioComponent implements AfterContentInit {
   recarregar() {
     this.recarrega.emit();
     this.formatTimeLabels();
+  }
+
+  getSortedEvents(): CalendarEvent<Agendamento>[] {
+    return [...this.events].sort((a, b) => {
+      const dateA = a.start ? new Date(a.start).getTime() : 0;
+      const dateB = b.start ? new Date(b.start).getTime() : 0;
+      return dateA - dateB;
+    });
+  }
+
+  getEventTime(event: CalendarEvent<Agendamento>): string {
+    if (!event.start) return '';
+    const start = new Date(event.start);
+    const end = event.end ? new Date(event.end) : null;
+    const startTime = start.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    const endTime = end ? end.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
+    return endTime ? `${startTime} - ${endTime}` : startTime;
+  }
+
+  getEventDate(event: CalendarEvent<Agendamento>): string {
+    if (!event.start) return '';
+    return new Date(event.start).toLocaleDateString('pt-BR', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
+  getStatusInfo(status: number) {
+    return StatusAgendamento[status as keyof typeof StatusAgendamento] || { descricao: 'Desconhecido', cor: '#666' };
+  }
+
+  getCalendarView(): CalendarView {
+    // Convert CustomCalendarView to CalendarView for angular-calendar directives
+    switch (this.view) {
+      case CustomCalendarView.Month:
+        return CalendarView.Month;
+      case CustomCalendarView.Week:
+        return CalendarView.Week;
+      case CustomCalendarView.Day:
+        return CalendarView.Day;
+      default:
+        return CalendarView.Week;
+    }
   }
 }

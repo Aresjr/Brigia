@@ -1,7 +1,7 @@
 import { Entidade, EntidadeRequest } from '../shared/entidade.interface';
 import { Paciente } from '../pacientes/paciente.interface';
 import { Profissional } from '../profissionais/profissional.interface';
-import { Agendamento, StatusAgendamentoEnum } from '../agenda-diaria/agendamento.interface';
+import { Agendamento } from '../agenda-diaria/agendamento.interface';
 import { Convenio } from '../convenio/convenio.interface';
 import { Empresa } from '../empresa/empresa.interface';
 import { Especialidade } from '../especialidade/especialidade.interface';
