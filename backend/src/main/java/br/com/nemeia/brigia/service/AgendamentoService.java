@@ -12,8 +12,6 @@ import br.com.nemeia.brigia.repository.AgendamentoRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -73,7 +71,6 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         this.notificacaoService = notificacaoService;
     }
 
-    @Cacheable(value = "agendamentos", key = "#userId + '-' + #mes + '-' + #ano")
     public Page<Agendamento> getByDate(Long userId, Integer mes, Integer ano, int page, int size) {
         if (mes == null) {
             mes = LocalDate.now().getMonthValue();
@@ -95,7 +92,6 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     }
 
     @Transactional
-    @CacheEvict(value = {"agendamentos"}, allEntries = true)
     public Agendamento createAgendamento(AgendamentoRequest request) {
         Agendamento agendamento = mapper.toEntity(request);
         setEntidades(request, agendamento);
@@ -125,7 +121,6 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         return agendamentoNovo;
     }
 
-    @CacheEvict(value = {"agendamentos"}, allEntries = true)
     public Agendamento editAgendamento(Long id, AgendamentoRequest request) {
         Agendamento original = getById(id);
         boolean deveMandarEmail = deveMandarEmail(original, request);
@@ -182,7 +177,6 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         pacienteService.update(paciente);
     }
 
-    @CacheEvict(value = "agendamentos", allEntries = true)
     public void updateStatus(Agendamento agendamento, StatusAgendamento statusAgendamento) {
         agendamento.setStatus(statusAgendamento);
         repository.save(agendamento);
@@ -219,7 +213,6 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
     }
 
     @Transactional
-    @CacheEvict(value = {"agendamentos"}, allEntries = true)
     public void cancelarPorToken(String token) {
         Agendamento agendamento = getByToken(token);
         
