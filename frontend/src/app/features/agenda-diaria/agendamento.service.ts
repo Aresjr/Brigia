@@ -43,4 +43,26 @@ export class AgendamentoService extends BaseService<Agendamento, AgendamentoRequ
       })
     );
   }
+
+  marcarNaoCompareceu(id: number): Observable<void> {
+    this.limparCache();
+    return this.backend.patch<void>(`${this.path}/${id}/nao-compareceu`, null).pipe(
+      catchError((e) => {
+        const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || 'Erro ao marcar como não compareceu';
+        this.toastr.error(errorMessage);
+        return throwError(() => e);
+      })
+    );
+  }
+
+  marcarCanceladoPeloUsuario(id: number): Observable<void> {
+    this.limparCache();
+    return this.backend.patch<void>(`${this.path}/${id}/cancelado-pelo-usuario`, null).pipe(
+      catchError((e) => {
+        const errorMessage: string = e.error?.messages?.join('; ') || e.error?.message || 'Erro ao marcar como cancelado pelo usuário';
+        this.toastr.error(errorMessage);
+        return throwError(() => e);
+      })
+    );
+  }
 }

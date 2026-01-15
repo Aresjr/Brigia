@@ -235,6 +235,8 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     this.exibeForm = false;
     // Atualizar lista da fila de espera caso tenha sido adicionado um novo registro
     this.carregarFilaEspera();
+    // Recarregar agendamentos para refletir mudanças de status
+    this.carregarAgendamentos();
   }
 
   salvar(agendamento: Partial<AgendamentoRequest>) {
