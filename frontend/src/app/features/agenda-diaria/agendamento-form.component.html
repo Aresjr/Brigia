@@ -17,7 +17,12 @@
               <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
                 <lucide-icon name="ellipsis-vertical" class="inline w-5 h-5" />
               </label>
-              <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-48 z-[1] font-semibold">
+              <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-[9999] font-semibold">
+                <li>
+                  <a class="text-sm text-neutral hover:bg-base-200" (click)="onEdit()" *ngIf="podeEditar()">
+                    Editar
+                  </a>
+                </li>
                 <li>
                   <a class="text-sm text-neutral hover:bg-base-200" (click)="marcarNaoCompareceu()">
                     Não compareceu
@@ -35,9 +40,6 @@
                 </li>
               </ul>
             </div>
-        </button>
-        <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" title="Editar" (click)="onEdit()" *ngIf="podeEditar()">
-          <lucide-icon name="pencil" class="inline w-5 h-5"/>
         </button>
         <button type="button" class="btn btn-sm btn-ghost btn-circle" title="Fechar" (click)="fechar()">
           <lucide-icon name="x" class="inline w-5 h-5"/>
