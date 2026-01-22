@@ -16,6 +16,7 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,17 +29,19 @@ public class UsuarioService extends BaseService<Usuario, UsuarioRepository> {
     private final UsuarioMapper mapper;
     private final UnidadeRepository unidadeRepository;
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${app.base-url}")
     private String baseUrl;
 
     public UsuarioService(UsuarioRepository repository, UsuarioMapper mapper, UnidadeRepository unidadeRepository,
-            EmailService emailService) {
+            EmailService emailService, PasswordEncoder passwordEncoder) {
         super(repository);
         this.repository = repository;
         this.mapper = mapper;
         this.unidadeRepository = unidadeRepository;
         this.emailService = emailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Optional<Usuario> getByEmail(String email) {
@@ -51,8 +54,18 @@ public class UsuarioService extends BaseService<Usuario, UsuarioRepository> {
 
         Usuario usuario = mapper.toEntity(request);
         usuario.setUnidade(unidade);
+
+        // Criptografa a senha se foi fornecida
+        if (request.senha() != null && !request.senha().isBlank()) {
+            usuario.setSenha(passwordEncoder.encode(request.senha()));
+        }
+
         usuario = repository.save(usuario);
-        sendEmail(usuario);
+
+        // Só envia email se a senha não foi cadastrada
+        if (usuario.getSenha() == null) {
+            sendEmail(usuario);
+        }
 
         return usuario;
     }
@@ -84,7 +97,7 @@ public class UsuarioService extends BaseService<Usuario, UsuarioRepository> {
     }
 
     public Usuario edit(Long id, UsuarioRequest request) {
-        getById(id);
+        Usuario usuarioExistente = getById(id);
         Usuario usuario = mapper.toEntity(request);
 
         Unidade unidade = unidadeRepository.findById(request.unidadeId())
@@ -92,6 +105,18 @@ public class UsuarioService extends BaseService<Usuario, UsuarioRepository> {
 
         usuario.setUnidade(unidade);
         usuario.setId(id);
+
+        // Criptografa a senha se foi fornecida, caso contrário mantém a senha existente
+        if (request.senha() != null && !request.senha().isBlank()) {
+            usuario.setSenha(passwordEncoder.encode(request.senha()));
+        } else {
+            usuario.setSenha(usuarioExistente.getSenha());
+        }
+
+        // Preservar token e expiração
+        usuario.setTokenPublico(usuarioExistente.getTokenPublico());
+        usuario.setTokenExpiracao(usuarioExistente.getTokenExpiracao());
+
         return repository.save(usuario);
     }
 
