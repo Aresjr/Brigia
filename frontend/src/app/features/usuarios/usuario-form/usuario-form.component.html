@@ -35,6 +35,18 @@
               }
         </div>
 
+        <div>
+          <label class="label-campo">
+            Senha
+          </label>
+          <input type="password" formControlName="senha" name="senha"
+             class="campo" [ngClass]="classesCampo('senha')"
+             placeholder="Deixe em branco para enviar convite por e-mail" >
+          <p class="text-xs text-gray-500 mt-1">
+            Se informada, o usuário poderá fazer login imediatamente. Caso contrário, será enviado um convite por e-mail.
+          </p>
+        </div>
+
         <div class="flex space-x-4">
           <div class="w-60">
             <div>

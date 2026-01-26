@@ -15,4 +15,5 @@ export interface UsuarioRequest extends EntidadeRequest {
   nome: string;
   unidadeId: number;
   roles: Role[];
+  senha?: string;
 }

@@ -31,6 +31,7 @@ export class UsuarioFormComponent extends FormComponent<Usuario, UsuarioRequest>
       email: [null, Validators.required],
       role: [null, Validators.required],
       unidadeId: [null, Validators.required],
+      senha: [null],
     });
   }
 

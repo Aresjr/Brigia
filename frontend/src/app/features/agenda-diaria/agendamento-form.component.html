@@ -5,41 +5,34 @@
     <div class="flex justify-between items-center">
       <div class="flex items-center gap-4 justify-between">
         <h2 class="text-lg font-semibold">{{ titulo }}</h2>
-        <div *ngIf="agendamentoDetalhes" class="badge font-semibold p-3 text-base-100"
+
+        <!-- Badge estático quando não está em modo de edição -->
+        <div *ngIf="agendamentoDetalhes && !modoSalvar" class="badge font-semibold p-3 text-base-100"
           [ngClass]="'bg-['+ StatusAgendamento[agendamentoDetalhes.status].cor +']'">
           {{ StatusAgendamento[agendamentoDetalhes.status].descricao }}
         </div>
+
+        <!-- Dropdown de status quando está em modo de edição -->
+        <ng-select *ngIf="agendamentoDetalhes && modoSalvar"
+          [formControl]="$any(form.get('status'))"
+          [clearable]="false"
+          [searchable]="false"
+          placeholder="Selecione o status"
+          class="custom-ng-select w-56">
+          <ng-option *ngFor="let status of getStatusOptions()" [value]="status.value">
+            <div class="flex items-center">
+              <span class="badge font-semibold text-base-100 text-xs px-3 py-1"
+                [style.background-color]="status.cor">
+                {{ status.descricao }}
+              </span>
+            </div>
+          </ng-option>
+        </ng-select>
       </div>
 
       <div>
-        <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" title="Opções">
-            <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
-              <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
-                <lucide-icon name="ellipsis-vertical" class="inline w-5 h-5" />
-              </label>
-              <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-[9999] font-semibold">
-                <li>
-                  <a class="text-sm text-neutral hover:bg-base-200" (click)="onEdit()" *ngIf="podeEditar()">
-                    Editar
-                  </a>
-                </li>
-                <li>
-                  <a class="text-sm text-neutral hover:bg-base-200" (click)="marcarNaoCompareceu()">
-                    Não compareceu
-                  </a>
-                </li>
-                <li>
-                  <a class="text-sm text-neutral hover:bg-base-200" (click)="marcarCanceladoPeloUsuario()">
-                    Cancelado Pelo Usuário
-                  </a>
-                </li>
-                <li>
-                  <a class="text-sm text-neutral text-error hover:bg-error/50" (click)="excluirAgendamento()">
-                    Excluir
-                  </a>
-                </li>
-              </ul>
-            </div>
+        <button type="button" class="btn btn-sm btn-ghost btn-circle mr-1" title="Editar" (click)="onEdit()" *ngIf="podeEditar()">
+          <lucide-icon name="pencil" class="inline w-5 h-5" />
         </button>
         <button type="button" class="btn btn-sm btn-ghost btn-circle" title="Fechar" (click)="fechar()">
           <lucide-icon name="x" class="inline w-5 h-5"/>

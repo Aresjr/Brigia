@@ -123,7 +123,7 @@ public class ProfissionalService {
 
     private void criarUsuarioParaProfissional(Profissional profissional) {
         UsuarioRequest usuarioRequest = new UsuarioRequest(profissional.getEmail(), profissional.getNome(),
-                null, RoleUsuario.MEDICO, SecurityHolder.getLoggedUserUnidadeId());
+                null, RoleUsuario.MEDICO, SecurityHolder.getLoggedUserUnidadeId(), null);
         Usuario usuario = usuarioService.create(usuarioRequest);
         profissional.setUsuario(usuario);
         log.info("Usuário criado automaticamente para o profissional: {}", profissional.getNome());

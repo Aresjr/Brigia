@@ -72,6 +72,7 @@ export interface AgendamentoRequest extends EntidadeRequest {
     quantiaPaga: number | null;
     procedimentos: ProcedimentoAgendamentoRequest[];
     filaEspera: boolean;
+    status: StatusAgendamentoEnum | null;
 }
 
 export interface ProcedimentoAgendamentoRequest {

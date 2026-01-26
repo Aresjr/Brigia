@@ -1,6 +1,7 @@
 package br.com.nemeia.brigia.dto.request;
 
 import br.com.nemeia.brigia.model.FormaPagamento;
+import br.com.nemeia.brigia.model.StatusAgendamento;
 import br.com.nemeia.brigia.model.TipoAgendamento;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -16,5 +17,5 @@ public record AgendamentoRequest(@NotNull(message = "Paciente é obrigatório") 
         Long procedimentoId, Long empresaId, Long convenioId, FormaPagamento formaPagamento, BigDecimal valor,
         BigDecimal desconto, @NotNull(message = "Duração é obrigatória") Integer duracao, String observacoes,
         Boolean precoAlterado, Boolean encaixe, Boolean pago, BigDecimal quantiaPaga,
-        List<ProcedimentoAgendamentoRequest> procedimentos) {
+        List<ProcedimentoAgendamentoRequest> procedimentos, StatusAgendamento status) {
 }
