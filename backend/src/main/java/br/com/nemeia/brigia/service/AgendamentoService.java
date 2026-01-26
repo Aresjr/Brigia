@@ -137,6 +137,11 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         Agendamento agendamentoUpdate = mapper.updateEntity(original, request);
         setEntidades(request, agendamentoUpdate);
 
+        // Atualizar status se fornecido
+        if (request.status() != null) {
+            agendamentoUpdate.setStatus(request.status());
+        }
+
         // Remover procedimentos antigos e adicionar novos
         agendamentoUpdate.getProcedimentos().clear();
         if (request.procedimentos() != null && !request.procedimentos().isEmpty()) {

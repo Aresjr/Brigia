@@ -24,6 +24,7 @@ import {
   AgendamentoRequest, podeAbrirAtendimento,
   podeEditarAgendamento,
   StatusAgendamento,
+  StatusAgendamentoEnum,
   TIPO_AGENDAMENTO
 } from './agendamento.interface';
 import { AgendamentoService } from './agendamento.service';
@@ -100,6 +101,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   exibeConfirmExclusao: boolean = false;
   exibeConfirmCanceladoPeloUsuario: boolean = false;
 
+  protected readonly StatusAgendamento = StatusAgendamento;
+  protected readonly StatusAgendamentoEnum = StatusAgendamentoEnum;
   protected readonly autoResize = autoResize;
   protected readonly limitLength = limitLength;
 
@@ -133,6 +136,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       pago: [true],
       quantiaPaga: [null],
       filaEspera: [false],
+      status: [null],
     };
     this.form = this.fb.group({
       ...form,
@@ -317,6 +321,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         procedimentoId: this.agendamentoDetalhes.procedimento?.id,
         convenioId: this.agendamentoDetalhes.convenio?.id,
         empresaId: this.agendamentoDetalhes.empresa?.id,
+        status: this.agendamentoDetalhes.status,
       });
 
       // Definir tipo de pagamento
@@ -938,7 +943,16 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     this.exibeConfirmCanceladoPeloUsuario = false;
   }
 
+  getStatusOptions() {
+    return Object.keys(StatusAgendamentoEnum)
+      .filter(key => !isNaN(Number(key)))
+      .map(key => ({
+        value: Number(key) as StatusAgendamentoEnum,
+        descricao: StatusAgendamento[Number(key) as StatusAgendamentoEnum].descricao,
+        cor: StatusAgendamento[Number(key) as StatusAgendamentoEnum].cor
+      }));
+  }
+
   protected readonly ColorUtils = ColorUtils;
-  protected readonly StatusAgendamento = StatusAgendamento;
   protected readonly abrirDatePicker = abrirDatePicker;
 }
