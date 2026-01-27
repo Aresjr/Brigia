@@ -107,6 +107,9 @@
                 <input type="time" formControlName="horaFinal"
                        class="input input-sm input-bordered w-28"
                        placeholder="Fim">
+                <input type="number" formControlName="intervalo" min="1"
+                       class="input input-sm input-bordered w-20"
+                       placeholder="min" title="Intervalo em minutos">
               </div>
             </div>
           </div>
@@ -123,6 +126,15 @@
                  emptyToNull maxlength="8" placeholder="00,00"
                  mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0">
         </label>
+      </div>
+
+      <div class="mb-4 tooltip text-left" data-tip="Cria registros de disponibilidade para cada intervalo dentro do horário">
+        <label class="label-campo" for="intervalo">
+          Intervalo (minutos)
+        </label>
+        <input type="number" formControlName="intervalo" id="intervalo"
+               min="1" placeholder="Ex: 20, 30, 60"
+               emptyToNull class="campo" [ngClass]="classesCampo('intervalo')">
       </div>
 
       <div class="flex justify-between mt-6">

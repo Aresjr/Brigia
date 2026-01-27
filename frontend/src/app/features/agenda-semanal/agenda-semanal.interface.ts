@@ -7,6 +7,7 @@ export interface AgendaSemanal extends Entidade {
   horaInicial: string;
   horaFinal: string;
   valorAdicional?: number;
+  intervalo?: number;
 }
 
 export interface AgendaSemanalRequest extends EntidadeRequest {
@@ -15,6 +16,7 @@ export interface AgendaSemanalRequest extends EntidadeRequest {
   horaInicial: string;
   horaFinal: string;
   valorAdicional?: number;
+  intervalo?: number;
 }
 
 export interface HorarioSemana {

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,15 +37,28 @@ public class DisponibilidadeService extends BaseService<Disponibilidade, Disponi
     }
 
     public Disponibilidade createDisponibilidade(DisponibilidadeRequest request) {
-        Disponibilidade disponibilidade = mapper.toEntity(request);
         Profissional profissional = profissionalService.getById(request.profissionalId());
-        disponibilidade.setProfissional(profissional);
 
-        // Verifica se há conflito de horário
-        verificarConflitoHorario(request.profissionalId(), request.dia(), request.horaInicial(), request.horaFinal(),
-                null);
+        // Se não há intervalo, criar um único registro
+        if (request.intervalo() == null || request.intervalo() <= 0) {
+            Disponibilidade disponibilidade = mapper.toEntity(request);
+            disponibilidade.setProfissional(profissional);
 
-        return repository.save(disponibilidade);
+            // Verifica se há conflito de horário
+            verificarConflitoHorario(request.profissionalId(), request.dia(), request.horaInicial(), request.horaFinal(),
+                    null);
+
+            return repository.save(disponibilidade);
+        } else {
+            // Se há intervalo, criar múltiplos registros
+            List<Disponibilidade> disponibilidades = gerarDisponibilidadesPorIntervalo(request, profissional);
+            
+            // Salvar todos os registros
+            repository.saveAll(disponibilidades);
+            
+            // Retornar o primeiro registro criado
+            return disponibilidades.get(0);
+        }
     }
 
     public Disponibilidade editDisponibilidade(Long id, DisponibilidadeRequest request) {
@@ -100,5 +114,41 @@ public class DisponibilidadeService extends BaseService<Disponibilidade, Disponi
         if (!conflitos.isEmpty()) {
             throw new ConflitoBlocoHorarioException();
         }
+    }
+
+    private List<Disponibilidade> gerarDisponibilidadesPorIntervalo(DisponibilidadeRequest request, Profissional profissional) {
+        List<Disponibilidade> disponibilidades = new ArrayList<>();
+        LocalTime horaAtual = request.horaInicial();
+        Integer intervalo = request.intervalo();
+
+        while (horaAtual.isBefore(request.horaFinal())) {
+            // Calcular a hora final do intervalo
+            LocalTime horaFim = horaAtual.plusMinutes(intervalo);
+            
+            // Se a hora final do intervalo ultrapassar a hora final da disponibilidade,
+            // usar a hora final
+            if (horaFim.isAfter(request.horaFinal())) {
+                horaFim = request.horaFinal();
+            }
+
+            // Verificar conflito para este intervalo
+            verificarConflitoHorario(request.profissionalId(), request.dia(), horaAtual, horaFim, null);
+
+            // Criar disponibilidade para este intervalo
+            Disponibilidade disponibilidade = new Disponibilidade();
+            disponibilidade.setProfissional(profissional);
+            disponibilidade.setDia(request.dia());
+            disponibilidade.setHoraInicial(horaAtual);
+            disponibilidade.setHoraFinal(horaFim);
+            disponibilidade.setValorAdicional(request.valorAdicional());
+            disponibilidade.setIntervalo(intervalo);
+
+            disponibilidades.add(disponibilidade);
+
+            // Avançar para o próximo intervalo
+            horaAtual = horaFim;
+        }
+
+        return disponibilidades;
     }
 }

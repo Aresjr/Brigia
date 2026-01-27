@@ -31,4 +31,7 @@ public class Disponibilidade extends BaseModel {
 
     @Column(name = "valor_adicional", precision = 10, scale = 2)
     private java.math.BigDecimal valorAdicional;
+
+    @Column(name = "intervalo")
+    private Integer intervalo;
 }

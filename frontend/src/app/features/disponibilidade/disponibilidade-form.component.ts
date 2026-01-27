@@ -65,7 +65,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
       dia: [null, Validators.required],
       horaInicial: [null, Validators.required],
       horaFinal: [null, Validators.required],
-      valorAdicional: [null]
+      valorAdicional: [null],
+      intervalo: [null]
     };
     this.form = this.fb.group(form);
     this.form.addControl('horariosSemana', this.fb.array([]));
@@ -82,7 +83,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
         diaSemana: [dia.valor],
         ativo: [false],
         horaInicial: [''],
-        horaFinal: ['']
+        horaFinal: [''],
+        intervalo: [null]
       }));
     });
   }
@@ -147,7 +149,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
             // Preencher form com dados da agenda semanal
             this.form.patchValue({
               profissionalId: this.disponibilidadeDetalhes.profissional.id,
-              valorAdicional: this.disponibilidadeDetalhes.valorAdicional
+              valorAdicional: this.disponibilidadeDetalhes.valorAdicional,
+              intervalo: this.disponibilidadeDetalhes.intervalo
             });
 
             // Marcar o dia da semana específico como ativo e preencher horários
@@ -157,7 +160,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
               horarioControl.patchValue({
                 ativo: true,
                 horaInicial: this.disponibilidadeDetalhes.horaInicial,
-                horaFinal: this.disponibilidadeDetalhes.horaFinal
+                horaFinal: this.disponibilidadeDetalhes.horaFinal,
+                intervalo: this.disponibilidadeDetalhes.intervalo
               });
             }
           } else {
@@ -167,7 +171,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
               dia: this.disponibilidadeDetalhes.dia,
               horaInicial: this.disponibilidadeDetalhes.horaInicial,
               horaFinal: this.disponibilidadeDetalhes.horaFinal,
-              valorAdicional: this.disponibilidadeDetalhes.valorAdicional
+              valorAdicional: this.disponibilidadeDetalhes.valorAdicional,
+              intervalo: this.disponibilidadeDetalhes.intervalo
             });
           }
 
@@ -293,6 +298,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   salvarAgendaSemanal() {
     const profissionalId = this.form.value.profissionalId;
     const valorAdicional = this.form.value.valorAdicional;
+    const intervalo = this.form.value.intervalo;
     const horariosAtivos = this.horariosSemana.controls
       .filter((control: any) => control.value.ativo)
       .map((control: any) => control.value);
@@ -304,7 +310,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
         diaSemana: horario.diaSemana,
         horaInicial: horario.horaInicial,
         horaFinal: horario.horaFinal,
-        valorAdicional: valorAdicional
+        valorAdicional: valorAdicional,
+        intervalo: horario.intervalo || intervalo
       });
     });
 
