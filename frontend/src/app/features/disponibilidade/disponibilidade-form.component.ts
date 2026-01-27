@@ -9,6 +9,7 @@ import { Disponibilidade, DisponibilidadeRequest } from './disponibilidade.inter
 import { Profissional } from '../profissionais/profissional.interface';
 import { ProfissionalService } from '../profissionais/profissional.service';
 import { NgSelectComponent, NgNotFoundTemplateDirective } from '@ng-select/ng-select';
+import { NgxMaskDirective } from 'ngx-mask';
 import { forkJoin, map, tap } from 'rxjs';
 import { EmptyToNullDirective } from '../../core/directives/empty-to-null-directive';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
@@ -29,7 +30,8 @@ import { DiasSemana } from '../../core/constans';
     NgSelectComponent,
     NgNotFoundTemplateDirective,
     EmptyToNullDirective,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    NgxMaskDirective
   ]
 })
 export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade, DisponibilidadeRequest> implements OnInit {
@@ -58,7 +60,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
     private disponibilidadeService: DisponibilidadeService
   ) {
     super(fb, toastr);
-    this.hoje = new Date().toISOString().split('T')[0];
+    const hoje = new Date().toISOString().split('T')[0];
+    this.hoje = this.formatarDataParaBR(hoje);
 
     const form: IForm<DisponibilidadeRequest> = {
       profissionalId: [null, Validators.required],
@@ -87,6 +90,20 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
         intervalo: [null]
       }));
     });
+  }
+
+  formatarDataParaBR(dataISO: string): string {
+    // Converte yyyy-MM-dd para dd/MM/yyyy
+    if (!dataISO) return '';
+    const [ano, mes, dia] = dataISO.split('-');
+    return `${dia}/${mes}/${ano}`;
+  }
+
+  formatarDataParaISO(dataBR: string): string {
+    // Converte dd/MM/yyyy para yyyy-MM-dd
+    if (!dataBR || dataBR.length < 10) return '';
+    const [dia, mes, ano] = dataBR.split('/');
+    return `${ano}-${mes}-${dia}`;
   }
 
   setTipoAgenda(semanal: boolean) {
@@ -129,7 +146,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
 
     let dia = this.hoje;
     if (this.dataDisponibilidade) {
-      dia = this.dataDisponibilidade.toISOString().split('T')[0];
+      const diaISO = this.dataDisponibilidade.toISOString().split('T')[0];
+      dia = this.formatarDataParaBR(diaISO);
     }
 
     this.form.patchValue({
@@ -168,7 +186,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
             // Preencher form com dados da disponibilidade diária
             this.form.patchValue({
               profissionalId: this.disponibilidadeDetalhes.profissional.id,
-              dia: this.disponibilidadeDetalhes.dia,
+              dia: this.formatarDataParaBR(this.disponibilidadeDetalhes.dia),
               horaInicial: this.disponibilidadeDetalhes.horaInicial,
               horaFinal: this.disponibilidadeDetalhes.horaFinal,
               valorAdicional: this.disponibilidadeDetalhes.valorAdicional,
@@ -213,6 +231,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
     const horaFinal = this.form.value.horaFinal;
 
     if (horaInicial && horaFinal && horaInicial >= horaFinal) {
+      console.log('Hora inicial:', horaInicial, 'Hora final:', horaFinal);
       this.toastr.warning('A hora final deve ser maior que a hora inicial');
       return false;
     }
@@ -244,9 +263,15 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   }
 
   salvarDisponibilidade(disponibilidade: Partial<DisponibilidadeRequest>) {
+    // Converter data de dd/MM/yyyy para yyyy-MM-dd
+    const disponibilidadeParaEnviar = {
+      ...disponibilidade,
+      dia: disponibilidade.dia ? this.formatarDataParaISO(disponibilidade.dia) : disponibilidade.dia
+    };
+
     if (this.disponibilidadeDetalhes) {
       // Atualizar disponibilidade existente
-      this.disponibilidadeService.atualizar(this.disponibilidadeDetalhes.id, disponibilidade).subscribe({
+      this.disponibilidadeService.atualizar(this.disponibilidadeDetalhes.id, disponibilidadeParaEnviar).subscribe({
         next: () => {
           this.toastr.success('Disponibilidade atualizada');
           this.saved.emit();
@@ -254,7 +279,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
       });
     } else {
       // Criar nova disponibilidade
-      this.disponibilidadeService.criar(disponibilidade).subscribe({
+      this.disponibilidadeService.criar(disponibilidadeParaEnviar).subscribe({
         next: () => {
           this.toastr.success('Disponibilidade criada');
           this.saved.emit();
@@ -287,6 +312,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
         return false;
       }
       if (horario.horaInicial >= horario.horaFinal) {
+        console.log('Hora inicial:', horario.horaInicial, 'Hora final:', horario.horaFinal);
         this.toastr.warning('A hora final deve ser maior que a hora inicial');
         return false;
       }
@@ -396,7 +422,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
       this.usarHorario.emit({
         profissionalId,
         horaInicial,
-        data: dia
+        data: this.formatarDataParaISO(dia)
       });
     }
   }

@@ -60,26 +60,29 @@
       <div *ngIf="!agendaSemanal" class="flex gap-4 mb-4">
         <label class="label-campo" for="dia">
           Dia <span aria-hidden="true" class="text-error">*</span>
-          <input type="date" formControlName="dia" required id="dia" [min]="hoje"
-                 class="campo" [ngClass]="classesCampo('dia')" >
+          <input type="text" formControlName="dia" required id="dia"
+                 class="campo" [ngClass]="classesCampo('dia')"
+                 mask="d0/M0/0000" placeholder="dd/mm/aaaa" maxlength="10">
           <div *ngIf="isInvalid('dia')" class="text-error text-sm">
             Obrigatório
           </div>
         </label>
 
-        <label class="label-campo" for="horaInicial">
-          Hora Inicial <span aria-hidden="true" class="text-error">*</span>
-          <input type="time" formControlName="horaInicial" id="horaInicial" required
-                 emptyToNull class="campo" [ngClass]="classesCampo('horaInicial')">
-          <div *ngIf="isInvalid('horaInicial')" class="text-error text-sm">
-            Obrigatório
-          </div>
-        </label>
+          <label class="label-campo" for="horaInicial">
+            Horário <span aria-hidden="true" class="text-error">*</span>
+            <input type="text" formControlName="horaInicial" maxlength="5" id="horaInicial" required
+                   mask="00:00" emptyToNull class="campo p-[7px]"
+                   [ngClass]="classesCampo('horaInicial')">
+            <div *ngIf="isInvalid('horaInicial')" class="text-error text-sm">
+              Obrigatório
+            </div>
+          </label>
 
         <label class="label-campo" for="horaFinal">
           Hora Final <span aria-hidden="true" class="text-error">*</span>
-          <input type="time" formControlName="horaFinal" id="horaFinal" required
-                 emptyToNull class="campo" [ngClass]="classesCampo('horaFinal')">
+          <input type="text" formControlName="horaFinal" id="horaFinal" required
+                 emptyToNull class="campo" [ngClass]="classesCampo('horaFinal')"
+                 mask="00:00" placeholder="00:00" maxlength="5">
           <div *ngIf="isInvalid('horaFinal')" class="text-error text-sm">
             Obrigatório
           </div>
@@ -100,13 +103,13 @@
               </label>
 
               <div *ngIf="horario.get('ativo')?.value" class="flex gap-2">
-                <input type="time" formControlName="horaInicial"
+                <input type="text" formControlName="horaInicial"
                        class="input input-sm input-bordered w-28"
-                       placeholder="Início">
+                       mask="00:00" maxlength="5">
                 <span class="self-center">até</span>
-                <input type="time" formControlName="horaFinal"
+                <input type="text" formControlName="horaFinal"
                        class="input input-sm input-bordered w-28"
-                       placeholder="Fim">
+                       mask="00:00" maxlength="5">
                 <input type="number" formControlName="intervalo" min="1"
                        class="input input-sm input-bordered w-20"
                        placeholder="min" title="Intervalo em minutos">
@@ -116,25 +119,27 @@
         </div>
       </div>
 
-      <div class="mb-4 tooltip text-left" data-tip="Valor adicional do dia (ex: transporte, alimentação, etc)">
-        <label class="label-campo" for="valorAdicional">
-          Valor Adicional
-        </label>
-        <label class="input input-sm input-bordered flex items-center h-[2.4rem] max-w-32" [ngClass]="classesCampo('valorAdicional')">
-          R$
-          <input type="text" formControlName="valorAdicional" min="0" id="valorAdicional"
-                 emptyToNull maxlength="8" placeholder="00,00"
-                 mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0">
-        </label>
-      </div>
+      <div class="flex gap-4 mb-4">
+        <div class="tooltip text-left" data-tip="Valor adicional do dia (ex: transporte, alimentação, etc)">
+          <label class="label-campo" for="valorAdicional">
+            Valor Adicional
+          </label>
+          <label class="input input-sm input-bordered flex items-center h-[2.4rem] max-w-32" [ngClass]="classesCampo('valorAdicional')">
+            R$
+            <input type="text" formControlName="valorAdicional" min="0" id="valorAdicional"
+                  emptyToNull maxlength="8" placeholder="00,00"
+                  mask="separator.2" thousandSeparator="" decimalMarker="," class="campo border-0">
+          </label>
+        </div>
 
-      <div class="mb-4 tooltip text-left" data-tip="Cria registros de disponibilidade para cada intervalo dentro do horário">
-        <label class="label-campo" for="intervalo">
-          Intervalo (minutos)
-        </label>
-        <input type="number" formControlName="intervalo" id="intervalo"
-               min="1" placeholder="Ex: 20, 30, 60"
-               emptyToNull class="campo" [ngClass]="classesCampo('intervalo')">
+        <div class="tooltip text-left w-28" data-tip="Cria registros de disponibilidade para cada intervalo dentro do horário">
+          <label class="label-campo" for="intervalo">
+            Intervalo (min)
+          </label>
+          <input type="number" formControlName="intervalo" id="intervalo"
+                min="1" placeholder="Ex: 20, 30, 60"
+                emptyToNull class="campo" [ngClass]="classesCampo('intervalo')">
+        </div>
       </div>
 
       <div class="flex justify-between mt-6">
