@@ -347,7 +347,7 @@
         <div class="w-full">
           <div class="flex justify-start items-center mb-2 gap-4">
             <h3 class="text-base font-medium">Procedimentos Adicionais</h3>
-            @if (modoSalvar) {
+            @if (modoSalvar && !userService.isMedico()) {
               <button type="button" class="btn btn-primary btn-xs" (click)="adicionarProcedimento()">
                 <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
                 Adicionar
@@ -361,7 +361,9 @@
               <div class="grid grid-cols-[6rem_1fr_8rem_1rem] gap-3 p-3 font-medium text-sm">
                 <div>Quantidade</div>
                 <div>Procedimento</div>
-                <div>Valor</div>
+                @if (!userService.isMedico()) {
+                  <div>Valor</div>
+                }
                 <div></div>
               </div>
             } @else {
@@ -388,10 +390,12 @@
                 </ng-template>
               </ng-select>
 
-              <input [id]="'valor_' + i" type="hidden" formControlName="valor" class="hidden" readonly>
-              <input [id]="'valor_exibicao_' + i" type="text" formControlName="valorExibicao" class="campo mt-0 p-2" placeholder="R$ 0,00" mask="separator.2" thousandSeparator="." separatorLimit="9999999" [dropSpecialCharacters]="false" prefix="R$ " readonly>
+              @if (!userService.isMedico()) {
+                <input [id]="'valor_' + i" type="hidden" formControlName="valor" class="hidden" readonly>
+                <input [id]="'valor_exibicao_' + i" type="text" formControlName="valorExibicao" class="campo mt-0 p-2" placeholder="R$ 0,00" mask="separator.2" thousandSeparator="." separatorLimit="9999999" [dropSpecialCharacters]="false" prefix="R$ " readonly>
+              }
 
-              @if (modoSalvar) {
+              @if (modoSalvar && !userService.isMedico()) {
                 <button type="button" class="btn btn-ghost btn-circle btn-sm" (click)="removerProcedimento(i)" title="Excluir procedimento">
                   <lucide-icon name="trash" class="h-5 text-error"></lucide-icon>
                 </button>
@@ -402,12 +406,14 @@
       </div>
 
       <!-- Valor total -->
+      @if (!userService.isMedico()) {
       <div class="flex justify-between items-center mt-6 p-4 bg-primary/10 rounded-lg">
         <span class="text-lg font-semibold">Valor Total</span>
         <span class="text-xl font-bold text-primary">
           {{ valorTotalAgendamento | currency:'BRL':'symbol':'1.2-2' }}
         </span>
       </div>
+      }
 
       <div class="flex justify-between mt-6">
         <button type="button" class="btn btn-sm" (click)="fechar()" >
