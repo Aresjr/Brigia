@@ -887,6 +887,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         quantiaPaga: 0
       });
     }
+    // Recalcular a quantia faltante ao mudar o tipo de pagamento
+    this.calcularQuantiaFaltante();
   }
 
   marcarNaoCompareceu() {
