@@ -100,11 +100,16 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   exibeConfirmNaoCompareceu: boolean = false;
   exibeConfirmExclusao: boolean = false;
   exibeConfirmCanceladoPeloUsuario: boolean = false;
+  statusOptions: Array<{value: number, descricao: string, cor: string}> = [];
 
   protected readonly StatusAgendamento = StatusAgendamento;
   protected readonly StatusAgendamentoEnum = StatusAgendamentoEnum;
   protected readonly autoResize = autoResize;
   protected readonly limitLength = limitLength;
+
+  get statusControl() {
+    return this.form.get('status') as any;
+  }
 
   constructor(protected override fb: FormBuilder, protected override toastr: ToastrService,
               private pacienteService: PacienteService, private convenioService: ConvenioService,
@@ -145,6 +150,9 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   override ngOnInit(): void {
+    // Inicializa opções de status
+    this.statusOptions = this.getStatusOptions();
+
     let data = this.hoje;
     let hora = null;
     if (this.dataAgendamento) {
@@ -951,6 +959,14 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         descricao: StatusAgendamento[Number(key) as StatusAgendamentoEnum].descricao,
         cor: StatusAgendamento[Number(key) as StatusAgendamentoEnum].cor
       }));
+  }
+
+  onStatusChange(statusValue: any) {
+    if (statusValue && statusValue.value !== undefined) {
+      this.form.patchValue({ status: statusValue.value });
+    } else {
+      this.form.patchValue({ status: statusValue });
+    }
   }
 
   protected readonly ColorUtils = ColorUtils;

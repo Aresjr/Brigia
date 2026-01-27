@@ -14,19 +14,21 @@
 
         <!-- Dropdown de status quando está em modo de edição -->
         <ng-select *ngIf="agendamentoDetalhes && modoSalvar"
-          [formControl]="$any(form.get('status'))"
-          [clearable]="false"
-          [searchable]="false"
+          [formControl]="statusControl"
           placeholder="Selecione o status"
           class="custom-ng-select w-56">
-          <ng-option *ngFor="let status of getStatusOptions()" [value]="status.value">
-            <div class="flex items-center">
-              <span class="badge font-semibold text-base-100 text-xs px-3 py-1"
-                [style.background-color]="status.cor">
-                {{ status.descricao }}
-              </span>
-            </div>
+          <ng-option *ngFor="let status of statusOptions" [value]="status.value">
+            <span class="badge font-semibold text-base-100 px-3 inline-block"
+              [style.background-color]="status.cor">
+              {{ status.descricao }}
+            </span>
           </ng-option>
+          <ng-template ng-label-tmp let-item="item">
+            <span class="badge font-semibold text-base-100 px-3 py-1"
+              [style.background-color]="item.cor">
+              {{ item.descricao }}
+            </span>
+          </ng-template>
         </ng-select>
       </div>
 
