@@ -294,6 +294,34 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     }
   }
 
+  abrirAgendamentoComDisponibilidade(evento: { profissionalId: number; horaInicial: string; data: string }) {
+    // Fechar o formulário de disponibilidade
+    this.exibeFormDisponibilidade = false;
+
+    // Preparar data e hora para o agendamento
+    const [ano, mes, dia] = evento.data.split('-');
+    const [hora, minuto] = evento.horaInicial.split(':');
+    const dataAgendamento = new Date(
+      parseInt(ano),
+      parseInt(mes) - 1,
+      parseInt(dia),
+      parseInt(hora),
+      parseInt(minuto)
+    );
+
+    // Resetar dados do agendamento
+    this.agendamentoDetalhes = null;
+    this.pacienteId = null;
+    this.filaEsperaSelecionada = null;
+
+    // Definir a data do agendamento e o profissional
+    this.dataAgendamento = dataAgendamento;
+    this.profissionalFiltro = evento.profissionalId;
+
+    // Abrir o formulário de agendamento
+    this.exibeForm = true;
+  }
+
   selectProfissional(profissionalId: number) {
     this.profissionalFiltro = profissionalId;
     this.filtrarProfissional();

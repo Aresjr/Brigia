@@ -129,12 +129,17 @@
         <button type="button" class="btn btn-sm" (click)="fechar()" >
           Fechar
         </button>
-        <button type="button" *ngIf="readonly" class="btn btn-error btn-sm" (click)="solicitarExclusao()">
-          Excluir
-        </button>
-        <button *ngIf="!readonly" type="submit" class="btn btn-success btn-sm">
-          Salvar
-        </button>
+        <div class="flex gap-2">
+          <button *ngIf="readonly && !agendaSemanal" type="button" class="btn btn-info btn-sm" (click)="abrirComHorario()" title="Usar este horário para criar um agendamento">
+            Usar Horário
+          </button>
+          <button type="button" *ngIf="readonly" class="btn btn-error btn-sm" (click)="solicitarExclusao()">
+            Excluir
+          </button>
+          <button *ngIf="!readonly" type="submit" class="btn btn-success btn-sm">
+            Salvar
+          </button>
+        </div>
       </div>
     </form>
 
