@@ -72,7 +72,7 @@ class DisponibilidadeServiceTest {
         LocalTime horaInicial = LocalTime.of(8, 0);
         LocalTime horaFinal = LocalTime.of(12, 0);
 
-        DisponibilidadeRequest request = new DisponibilidadeRequest(1L, dia, horaInicial, horaFinal, null);
+        DisponibilidadeRequest request = new DisponibilidadeRequest(1L, dia, horaInicial, horaFinal, null, null);
 
         Disponibilidade novaDisponibilidade = new Disponibilidade();
         novaDisponibilidade.setProfissional(profissional);
@@ -106,7 +106,7 @@ class DisponibilidadeServiceTest {
         LocalTime horaInicial = LocalTime.of(10, 0);
         LocalTime horaFinal = LocalTime.of(14, 0);
 
-        DisponibilidadeRequest request = new DisponibilidadeRequest(1L, dia, horaInicial, horaFinal, null);
+        DisponibilidadeRequest request = new DisponibilidadeRequest(1L, dia, horaInicial, horaFinal, null, null);
 
         Disponibilidade novaDisponibilidade = new Disponibilidade();
         novaDisponibilidade.setProfissional(profissional);
@@ -139,7 +139,7 @@ class DisponibilidadeServiceTest {
         LocalTime horaInicial = LocalTime.of(14, 0);
         LocalTime horaFinal = LocalTime.of(18, 0);
 
-        DisponibilidadeRequest request = new DisponibilidadeRequest(1L, dia, horaInicial, horaFinal, null);
+        DisponibilidadeRequest request = new DisponibilidadeRequest(1L, dia, horaInicial, horaFinal, null, null);
 
         Disponibilidade novaDisponibilidade = new Disponibilidade();
         novaDisponibilidade.setProfissional(profissional);
@@ -183,7 +183,7 @@ class DisponibilidadeServiceTest {
         LocalTime horaInicial = LocalTime.of(8, 0);
         LocalTime horaFinal = LocalTime.of(12, 0);
 
-        DisponibilidadeRequest request = new DisponibilidadeRequest(1L, dia, horaInicial, horaFinal, null);
+        DisponibilidadeRequest request = new DisponibilidadeRequest(1L, dia, horaInicial, horaFinal, null, null);
 
         Disponibilidade disponibilidadeExistente = new Disponibilidade();
         disponibilidadeExistente.setId(1L);
@@ -236,6 +236,7 @@ class DisponibilidadeServiceTest {
                 dia,
                 LocalTime.of(10, 0), // Conflita com disponibilidade1 (8h-12h)
                 LocalTime.of(16, 0),
+                null,
                 null
         );
 

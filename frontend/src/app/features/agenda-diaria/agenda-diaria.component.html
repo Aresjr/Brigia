@@ -113,6 +113,7 @@
     [profissionalId]="profissionalFiltro !== 0 ? profissionalFiltro : null"
     (saved)="exibeFormDisponibilidade = false; carregarAgendamentos();"
     (deleted)="exibeFormDisponibilidade = false; carregarAgendamentos();"
+    (usarHorario)="abrirAgendamentoComDisponibilidade($event)"
     (cancel)="fecharFormDisponibilidade()">
   </app-disponibilidade-form>
 }

@@ -9,6 +9,7 @@ import { Disponibilidade, DisponibilidadeRequest } from './disponibilidade.inter
 import { Profissional } from '../profissionais/profissional.interface';
 import { ProfissionalService } from '../profissionais/profissional.service';
 import { NgSelectComponent, NgNotFoundTemplateDirective } from '@ng-select/ng-select';
+import { NgxMaskDirective } from 'ngx-mask';
 import { forkJoin, map, tap } from 'rxjs';
 import { EmptyToNullDirective } from '../../core/directives/empty-to-null-directive';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
@@ -29,7 +30,8 @@ import { DiasSemana } from '../../core/constans';
     NgSelectComponent,
     NgNotFoundTemplateDirective,
     EmptyToNullDirective,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    NgxMaskDirective
   ]
 })
 export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade, DisponibilidadeRequest> implements OnInit {
@@ -38,6 +40,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   @Input() disponibilidadeDetalhes: any = null;
   @Output() saved = new EventEmitter<void>();
   @Output() deleted = new EventEmitter<void>();
+  @Output() usarHorario = new EventEmitter<{ profissionalId: number; horaInicial: string; data: string }>();
 
   titulo: string = 'Nova Agenda do Médico';
   hoje: string;
@@ -57,14 +60,16 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
     private disponibilidadeService: DisponibilidadeService
   ) {
     super(fb, toastr);
-    this.hoje = new Date().toISOString().split('T')[0];
+    const hoje = new Date().toISOString().split('T')[0];
+    this.hoje = this.formatarDataParaBR(hoje);
 
     const form: IForm<DisponibilidadeRequest> = {
       profissionalId: [null, Validators.required],
       dia: [null, Validators.required],
       horaInicial: [null, Validators.required],
       horaFinal: [null, Validators.required],
-      valorAdicional: [null]
+      valorAdicional: [null],
+      intervalo: [null]
     };
     this.form = this.fb.group(form);
     this.form.addControl('horariosSemana', this.fb.array([]));
@@ -81,9 +86,24 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
         diaSemana: [dia.valor],
         ativo: [false],
         horaInicial: [''],
-        horaFinal: ['']
+        horaFinal: [''],
+        intervalo: [null]
       }));
     });
+  }
+
+  formatarDataParaBR(dataISO: string): string {
+    // Converte yyyy-MM-dd para dd/MM/yyyy
+    if (!dataISO) return '';
+    const [ano, mes, dia] = dataISO.split('-');
+    return `${dia}/${mes}/${ano}`;
+  }
+
+  formatarDataParaISO(dataBR: string): string {
+    // Converte dd/MM/yyyy para yyyy-MM-dd
+    if (!dataBR || dataBR.length < 10) return '';
+    const [dia, mes, ano] = dataBR.split('/');
+    return `${ano}-${mes}-${dia}`;
   }
 
   setTipoAgenda(semanal: boolean) {
@@ -126,7 +146,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
 
     let dia = this.hoje;
     if (this.dataDisponibilidade) {
-      dia = this.dataDisponibilidade.toISOString().split('T')[0];
+      const diaISO = this.dataDisponibilidade.toISOString().split('T')[0];
+      dia = this.formatarDataParaBR(diaISO);
     }
 
     this.form.patchValue({
@@ -146,7 +167,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
             // Preencher form com dados da agenda semanal
             this.form.patchValue({
               profissionalId: this.disponibilidadeDetalhes.profissional.id,
-              valorAdicional: this.disponibilidadeDetalhes.valorAdicional
+              valorAdicional: this.disponibilidadeDetalhes.valorAdicional,
+              intervalo: this.disponibilidadeDetalhes.intervalo
             });
 
             // Marcar o dia da semana específico como ativo e preencher horários
@@ -156,17 +178,19 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
               horarioControl.patchValue({
                 ativo: true,
                 horaInicial: this.disponibilidadeDetalhes.horaInicial,
-                horaFinal: this.disponibilidadeDetalhes.horaFinal
+                horaFinal: this.disponibilidadeDetalhes.horaFinal,
+                intervalo: this.disponibilidadeDetalhes.intervalo
               });
             }
           } else {
             // Preencher form com dados da disponibilidade diária
             this.form.patchValue({
               profissionalId: this.disponibilidadeDetalhes.profissional.id,
-              dia: this.disponibilidadeDetalhes.dia,
+              dia: this.formatarDataParaBR(this.disponibilidadeDetalhes.dia),
               horaInicial: this.disponibilidadeDetalhes.horaInicial,
               horaFinal: this.disponibilidadeDetalhes.horaFinal,
-              valorAdicional: this.disponibilidadeDetalhes.valorAdicional
+              valorAdicional: this.disponibilidadeDetalhes.valorAdicional,
+              intervalo: this.disponibilidadeDetalhes.intervalo
             });
           }
 
@@ -207,6 +231,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
     const horaFinal = this.form.value.horaFinal;
 
     if (horaInicial && horaFinal && horaInicial >= horaFinal) {
+      console.log('Hora inicial:', horaInicial, 'Hora final:', horaFinal);
       this.toastr.warning('A hora final deve ser maior que a hora inicial');
       return false;
     }
@@ -238,9 +263,15 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   }
 
   salvarDisponibilidade(disponibilidade: Partial<DisponibilidadeRequest>) {
+    // Converter data de dd/MM/yyyy para yyyy-MM-dd
+    const disponibilidadeParaEnviar = {
+      ...disponibilidade,
+      dia: disponibilidade.dia ? this.formatarDataParaISO(disponibilidade.dia) : disponibilidade.dia
+    };
+
     if (this.disponibilidadeDetalhes) {
       // Atualizar disponibilidade existente
-      this.disponibilidadeService.atualizar(this.disponibilidadeDetalhes.id, disponibilidade).subscribe({
+      this.disponibilidadeService.atualizar(this.disponibilidadeDetalhes.id, disponibilidadeParaEnviar).subscribe({
         next: () => {
           this.toastr.success('Disponibilidade atualizada');
           this.saved.emit();
@@ -248,7 +279,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
       });
     } else {
       // Criar nova disponibilidade
-      this.disponibilidadeService.criar(disponibilidade).subscribe({
+      this.disponibilidadeService.criar(disponibilidadeParaEnviar).subscribe({
         next: () => {
           this.toastr.success('Disponibilidade criada');
           this.saved.emit();
@@ -281,6 +312,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
         return false;
       }
       if (horario.horaInicial >= horario.horaFinal) {
+        console.log('Hora inicial:', horario.horaInicial, 'Hora final:', horario.horaFinal);
         this.toastr.warning('A hora final deve ser maior que a hora inicial');
         return false;
       }
@@ -292,6 +324,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   salvarAgendaSemanal() {
     const profissionalId = this.form.value.profissionalId;
     const valorAdicional = this.form.value.valorAdicional;
+    const intervalo = this.form.value.intervalo;
     const horariosAtivos = this.horariosSemana.controls
       .filter((control: any) => control.value.ativo)
       .map((control: any) => control.value);
@@ -303,7 +336,8 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
         diaSemana: horario.diaSemana,
         horaInicial: horario.horaInicial,
         horaFinal: horario.horaFinal,
-        valorAdicional: valorAdicional
+        valorAdicional: valorAdicional,
+        intervalo: horario.intervalo || intervalo
       });
     });
 
@@ -377,5 +411,19 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
 
   cancelarExclusao() {
     this.exibeConfirmExclusao = false;
+  }
+
+  abrirComHorario() {
+    const profissionalId = this.form.get('profissionalId')?.value;
+    const horaInicial = this.form.get('horaInicial')?.value;
+    const dia = this.form.get('dia')?.value;
+
+    if (profissionalId && horaInicial && dia) {
+      this.usarHorario.emit({
+        profissionalId,
+        horaInicial,
+        data: this.formatarDataParaISO(dia)
+      });
+    }
   }
 }

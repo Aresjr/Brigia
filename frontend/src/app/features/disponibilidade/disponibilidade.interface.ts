@@ -7,6 +7,7 @@ export interface Disponibilidade extends Entidade {
   horaInicial: string;
   horaFinal: string;
   valorAdicional?: number;
+  intervalo?: number;
 }
 
 export interface DisponibilidadeRequest extends EntidadeRequest {
@@ -15,6 +16,7 @@ export interface DisponibilidadeRequest extends EntidadeRequest {
   horaInicial: string;
   horaFinal: string;
   valorAdicional?: number;
+  intervalo?: number;
 }
 
 export interface HorarioSemana {
@@ -22,4 +24,5 @@ export interface HorarioSemana {
   horaInicial: string;
   horaFinal: string;
   ativo: boolean;
+  intervalo?: number;
 }

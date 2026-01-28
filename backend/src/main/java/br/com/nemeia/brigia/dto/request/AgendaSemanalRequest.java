@@ -4,5 +4,5 @@ import java.math.BigDecimal;
 import java.time.LocalTime;
 
 public record AgendaSemanalRequest(Long profissionalId, Integer diaSemana, LocalTime horaInicial, LocalTime horaFinal,
-        BigDecimal valorAdicional) {
+        BigDecimal valorAdicional, Integer intervalo) {
 }

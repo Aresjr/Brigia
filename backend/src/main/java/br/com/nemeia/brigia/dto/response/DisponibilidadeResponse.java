@@ -11,5 +11,5 @@ public record DisponibilidadeResponse(Long id, ProfissionalResponse profissional
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate dia,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm") LocalTime horaInicial,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm") LocalTime horaFinal, BigDecimal valorAdicional,
-        LocalDateTime criadoEm, Boolean excluido) {
+        Integer intervalo, LocalDateTime criadoEm, Boolean excluido) {
 }

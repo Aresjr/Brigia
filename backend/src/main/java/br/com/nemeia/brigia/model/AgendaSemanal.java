@@ -33,4 +33,7 @@ public class AgendaSemanal extends BaseModel {
 
     @Column(name = "valor_adicional")
     private BigDecimal valorAdicional;
+
+    @Column(name = "intervalo")
+    private Integer intervalo;
 }

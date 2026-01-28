@@ -114,7 +114,9 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             agendamentoNovo = repository.save(agendamentoNovo);
         }
 
-        contaReceberService.createContaReceberFromAgendamento(agendamentoNovo);
+        // Sincronizar conta a receber considerando status de pagamento
+        contaReceberService.sincronizarContaReceberComAgendamento(agendamentoNovo.getId(), agendamentoNovo, 
+            request.pago(), request.quantiaPaga());
 
         sendEmail(agendamentoNovo, "Agendamento Realizado!", "agendamento-cadastrado");
 
