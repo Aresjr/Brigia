@@ -30,7 +30,7 @@ import {
 import { AgendamentoService } from './agendamento.service';
 import { IForm } from '../shared/form.interface';
 import { LucideAngularModule } from 'lucide-angular';
-import { abrirDatePicker, autoResize, isDataNoFuturo, limitLength } from '../../core/util-methods';
+import { autoResize, limitLength } from '../../core/util-methods';
 import {
   FORMAS_PAGAMENTO
 } from '../../core/constans';
@@ -120,7 +120,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
               private rascunhoService: AgendamentoRascunhoService, private filaEsperaService: FilaEsperaService,
               private agendamentoService: AgendamentoService) {
     super(fb, toastr);
-    this.hoje = new Date().toISOString().split('T')[0];
+    const hoje = new Date().toISOString().split('T')[0];
+    this.hoje = this.formatarDataParaBR(hoje);
     const form: IForm<AgendamentoRequest> = {
       pacienteId: [null, {nonNullable: true}],
       data: [null, {nonNullable: true}],
@@ -149,6 +150,20 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     });
   }
 
+  formatarDataParaBR(dataISO: string): string {
+    // Converte yyyy-MM-dd para dd/MM/yyyy
+    if (!dataISO) return '';
+    const [ano, mes, dia] = dataISO.split('-');
+    return `${dia}/${mes}/${ano}`;
+  }
+
+  formatarDataParaISO(dataBR: string): string {
+    // Converte dd/MM/yyyy para yyyy-MM-dd
+    if (!dataBR || dataBR.length < 10) return '';
+    const [dia, mes, ano] = dataBR.split('/');
+    return `${ano}-${mes}-${dia}`;
+  }
+
   override ngOnInit(): void {
     // Inicializa opções de status
     this.statusOptions = this.getStatusOptions();
@@ -156,7 +171,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     let data = this.hoje;
     let hora = null;
     if (this.dataAgendamento) {
-      data = this.dataAgendamento.toISOString().split('T')[0];
+      const dataISO = this.dataAgendamento.toISOString().split('T')[0];
+      data = this.formatarDataParaBR(dataISO);
       const horas = String(this.dataAgendamento.getHours()).padStart(2, '0');
       const minutos = String(this.dataAgendamento.getMinutes()).padStart(2, '0');
       hora = `${horas}:${minutos}`;
@@ -214,13 +230,18 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   carregarDadosRascunho(rascunho: any) {
+    // Converter data para formato brasileiro se estiver em formato ISO
+    const dataBR = rascunho.data && rascunho.data.includes('-')
+      ? this.formatarDataParaBR(rascunho.data)
+      : rascunho.data;
+
     this.form.patchValue({
       pacienteId: rascunho.pacienteId,
       profissionalId: rascunho.profissionalId,
       empresaId: rascunho.empresaId,
       especialidadeId: rascunho.especialidadeId,
       convenioId: rascunho.convenioId,
-      data: rascunho.data,
+      data: dataBR,
       hora: rascunho.horaInicio,
       duracao: rascunho.duracao,
       tipoAgendamento: rascunho.tipoAgendamento,
@@ -321,8 +342,12 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
   carregaDadosAgendamento() {
     if (this.agendamentoDetalhes) {
+      // Converter data para formato brasileiro antes de exibir
+      const dataBR = this.formatarDataParaBR(this.agendamentoDetalhes.data);
+
       this.form.patchValue(this.agendamentoDetalhes);
       this.form.patchValue({
+        data: dataBR,
         pacienteId: this.agendamentoDetalhes.paciente.id,
         profissionalId: this.agendamentoDetalhes.profissional.id,
         especialidadeId: this.agendamentoDetalhes.especialidade.id,
@@ -434,7 +459,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       convenioId: this.pacienteSelecionado?.convenio ? this.pacienteSelecionado.convenio.id : null,
       empresaId: this.pacienteSelecionado?.empresa ? this.pacienteSelecionado.empresa.id : null
     });
-    this.selectEmpresa(this.pacienteSelecionado ? this.pacienteSelecionado?.empresa : null);
+    this.selectEmpresa(this.pacienteSelecionado?.empresa ?? null);
   }
 
   selectEmpresa(empresa: Empresa | null) {
@@ -676,7 +701,14 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         // Limpar rascunho ao salvar definitivamente
         this.rascunhoService.limparRascunho();
         // Usar getRawValue() para incluir campos desabilitados (valor, desconto)
-        this.save.emit(this.form.getRawValue());
+        const formData = this.form.getRawValue();
+
+        // Converter data de dd/MM/yyyy para yyyy-MM-dd antes de enviar
+        if (formData.data) {
+          formData.data = this.formatarDataParaISO(formData.data);
+        }
+
+        this.save.emit(formData);
       } else {
         Object.keys(this.form.controls).forEach(field => {
           const control = this.form.get(field);
@@ -760,7 +792,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       return;
     }
 
-    const procedimentoControl = procedimentoPrincipal ? this.form : this.procedimentosLancados.at(index);
+    const procedimentoControl = procedimentoPrincipal ? this.form : this.procedimentosLancados.at(index!);
     const procedimentoId = procedimentoPrincipal ? procedimentoPrincipalSelecionado : procedimentoControl.get('procedimentoId')?.value;
 
     if (!procedimentoId) {
@@ -988,5 +1020,4 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   protected readonly ColorUtils = ColorUtils;
-  protected readonly abrirDatePicker = abrirDatePicker;
 }

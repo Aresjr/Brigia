@@ -51,18 +51,12 @@
         <div class="w-[7rem] mr-4" >
           <label class="label-campo" for="data">
             Data <span aria-hidden="true" class="text-error">*</span>
-
-            <div class="relative">
-              <input #dataAgendamento type="date" formControlName="data" required id="data" [min]="hoje"
-                     class="campo" [ngClass]="classesCampo('data')" >
-              <button type="button" class="absolute right-0.5 top-4 -translate-y-1/2" (click)="abrirDatePicker(dataAgendamento)">
-                <lucide-icon name="calendar" class="inline h-4"/>
-              </button>
-              <div *ngIf="isInvalid('data')" class="text-error text-sm">
-                Obrigatório
-              </div>
+            <input type="text" formControlName="data" required id="data"
+                   class="campo" [ngClass]="classesCampo('data')" [dropSpecialCharacters]="false"
+                   mask="d0/M0/0000" placeholder="dd/mm/aaaa" maxlength="10">
+            <div *ngIf="isInvalid('data')" class="text-error text-sm">
+              Obrigatório
             </div>
-
 
           </label>
         </div>

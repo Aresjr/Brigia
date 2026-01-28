@@ -61,7 +61,7 @@
         <label class="label-campo" for="dia">
           Dia <span aria-hidden="true" class="text-error">*</span>
           <input type="text" formControlName="dia" required id="dia"
-                 class="campo" [ngClass]="classesCampo('dia')"
+                 class="campo" [ngClass]="classesCampo('dia')" [dropSpecialCharacters]="false"
                  mask="d0/M0/0000" placeholder="dd/mm/aaaa" maxlength="10">
           <div *ngIf="isInvalid('dia')" class="text-error text-sm">
             Obrigatório
@@ -69,9 +69,9 @@
         </label>
 
           <label class="label-campo" for="horaInicial">
-            Horário <span aria-hidden="true" class="text-error">*</span>
+            Hora Inicial <span aria-hidden="true" class="text-error">*</span>
             <input type="text" formControlName="horaInicial" maxlength="5" id="horaInicial" required
-                   mask="00:00" emptyToNull class="campo p-[7px]"
+                   mask="00:00" emptyToNull class="campo p-[7px]" [dropSpecialCharacters]="false"
                    [ngClass]="classesCampo('horaInicial')">
             <div *ngIf="isInvalid('horaInicial')" class="text-error text-sm">
               Obrigatório
@@ -81,6 +81,7 @@
         <label class="label-campo" for="horaFinal">
           Hora Final <span aria-hidden="true" class="text-error">*</span>
           <input type="text" formControlName="horaFinal" id="horaFinal" required
+                [dropSpecialCharacters]="false"
                  emptyToNull class="campo" [ngClass]="classesCampo('horaFinal')"
                  mask="00:00" placeholder="00:00" maxlength="5">
           <div *ngIf="isInvalid('horaFinal')" class="text-error text-sm">
