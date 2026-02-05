@@ -105,7 +105,7 @@ public class AgendamentoController {
 
     @GetMapping("/horarios-disponiveis")
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
-    public List<String> obterHorariosDisponiveis(
+    public List<?> obterHorariosDisponiveis(
             @RequestParam Long profissionalId,
             @RequestParam String data) {
         log.info("GET /agendamentos/horarios-disponiveis - buscando horários disponíveis para profissional {} na data {}", profissionalId, data);

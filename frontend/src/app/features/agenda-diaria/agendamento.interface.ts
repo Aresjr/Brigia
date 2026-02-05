@@ -7,6 +7,11 @@ import { Convenio } from '../convenio/convenio.interface';
 import { Empresa } from '../empresa/empresa.interface';
 import { Unidade } from '../unidade/unidade.interface';
 
+export interface HorarioDisponivel {
+  horaInicial: string;
+  horaFinal: string;
+}
+
 export interface Agendamento extends Entidade {
     descricao: string | null;
     data: string;

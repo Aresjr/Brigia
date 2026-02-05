@@ -25,7 +25,8 @@ import {
   podeEditarAgendamento,
   StatusAgendamento,
   StatusAgendamentoEnum,
-  TIPO_AGENDAMENTO
+  TIPO_AGENDAMENTO,
+  HorarioDisponivel
 } from './agendamento.interface';
 import { AgendamentoService } from './agendamento.service';
 import { IForm } from '../shared/form.interface';
@@ -74,7 +75,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   profissionaisFiltrados: Profissional[] = [];
   empresas: Empresa[] = [];
   procedimentos: Procedimento[] = [];
-  horariosDisponiveis: string[] = [];
+  horariosDisponiveis: HorarioDisponivel[] = [];
+  mapaHorariosDisponiveis: Map<string, HorarioDisponivel> = new Map();
   pacienteSelecionado?: Paciente | null;
   empresaSelecionada?: Empresa | null;
   convenioSelecionado?: Convenio | null;
@@ -561,6 +563,11 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     this.agendamentoService.obterHorariosDisponiveis(profissionalId, dataISO).subscribe({
       next: (horarios) => {
         this.horariosDisponiveis = horarios;
+        // Criar mapa para acesso rápido aos horários finais
+        this.mapaHorariosDisponiveis.clear();
+        horarios.forEach(h => {
+          this.mapaHorariosDisponiveis.set(h.horaInicial, h);
+        });
         // Se houver horários e nenhum estiver selecionado, limpar a seleção
         if (horarios.length === 0) {
           this.form.patchValue({ hora: null });
@@ -569,8 +576,29 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       error: (err) => {
         console.error('Erro ao carregar horários disponíveis', err);
         this.horariosDisponiveis = [];
+        this.mapaHorariosDisponiveis.clear();
       }
     });
+  }
+
+  onSelectHora() {
+    const horaInicial = this.form.get('hora')?.value;
+    if (horaInicial && this.mapaHorariosDisponiveis.has(horaInicial)) {
+      const horarioDisponivel = this.mapaHorariosDisponiveis.get(horaInicial);
+      if (horarioDisponivel) {
+        // Calcular duração em minutos
+        const [horaInicio, minInicio] = horaInicial.split(':').map(Number);
+        const [horaFim, minFim] = horarioDisponivel.horaFinal.split(':').map(Number);
+        
+        const minutosInicio = horaInicio * 60 + minInicio;
+        const minutosFim = horaFim * 60 + minFim;
+        const duracao = minutosFim - minutosInicio;
+        
+        this.form.patchValue({
+          duracao: duracao
+        });
+      }
+    }
   }
 
   solicitarHabilitacaoValor() {

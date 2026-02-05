@@ -4,6 +4,7 @@ import br.com.nemeia.brigia.utils.DbUtil;
 import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.AgendamentoRequest;
 import br.com.nemeia.brigia.dto.request.ProcedimentoAgendamentoRequest;
+import br.com.nemeia.brigia.dto.response.HorarioDisponvelResponse;
 import br.com.nemeia.brigia.exception.DisponibilidadeNaoEncontradaException;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.AgendamentoMapper;
@@ -342,9 +343,8 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         agendamento.setStatus(StatusAgendamento.CANCELADO_USUARIO);
         repository.save(agendamento);
     }
-
-    public List<String> obterHorariosDisponiveis(Long profissionalId, LocalDate data) {
-        List<String> horariosDisponiveis = new ArrayList<>();
+    public List<HorarioDisponvelResponse> obterHorariosDisponiveis(Long profissionalId, LocalDate data) {
+        List<HorarioDisponvelResponse> horariosDisponiveis = new ArrayList<>();
         
         // Buscar disponibilidades específicas (data específica)
         List<Disponibilidade> disponibilidadesEspecificas = disponibilidadeService.obterDisponibilidadesPorData(profissionalId, data);
@@ -368,7 +368,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             
             while (horaAtual.isBefore(horaFim)) {
                 final LocalTime horaAtualFinal = horaAtual;
-                final LocalTime proximaHoraFinal = horaAtual.plusHours(1);
+                final LocalTime proximaHoraFinal = horaFim;
                 
                 // Verificar se há algum agendamento neste horário
                 boolean temAgendamento = agendamentosExistentes.stream()
@@ -381,8 +381,11 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
                 if (!temAgendamento) {
                     // Adicionar apenas se ainda não está na lista
                     String horaFormatada = String.format("%02d:%02d", horaAtualFinal.getHour(), horaAtualFinal.getMinute());
-                    if (!horariosDisponiveis.contains(horaFormatada)) {
-                        horariosDisponiveis.add(horaFormatada);
+                    String horaFimFormatada = String.format("%02d:%02d", proximaHoraFinal.getHour(), proximaHoraFinal.getMinute());
+                    
+                    // Verificar se já existe
+                    if (horariosDisponiveis.stream().noneMatch(h -> h.getHoraInicial().equals(horaFormatada))) {
+                        horariosDisponiveis.add(new HorarioDisponvelResponse(horaFormatada, horaFimFormatada));
                     }
                 }
                 
@@ -391,7 +394,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         }
         
         // Ordenar os horários
-        horariosDisponiveis.sort(String::compareTo);
+        horariosDisponiveis.sort((a, b) -> a.getHoraInicial().compareTo(b.getHoraInicial()));
         
         return horariosDisponiveis;
     }

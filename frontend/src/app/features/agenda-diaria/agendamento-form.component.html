@@ -116,8 +116,9 @@
             Horário <span aria-hidden="true" class="text-error">*</span>
             <ng-select formControlName="hora" id="hora" required class="campo-select"
                        [ngClass]="classesCampo('hora')" placeholder="Selecione"
-                       [items]="horariosDisponiveis" labelForId="hora"
-                       [disabled]="!podeCarregarHorarios()">
+                       [items]="horariosDisponiveis" bindLabel="horaInicial" bindValue="horaInicial" labelForId="hora"
+                       [disabled]="!podeCarregarHorarios()"
+                       (change)="onSelectHora()">
               <ng-template ng-notfound-tmp>
                 <span class="text-xs p-1 w-[12rem]">Nenhum - Verifique data e profissional selecionado</span>
               </ng-template>
