@@ -14,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @RestController
 @RequestMapping("/agendamentos")
 @RequiredArgsConstructor
@@ -98,5 +101,15 @@ public class AgendamentoController {
         log.info("PATCH /agendamentos/{}/cancelado-pelo-usuario - marcando agendamento como cancelado pelo usuário", id);
         service.marcarCanceladoPeloUsuario(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/horarios-disponiveis")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
+    public List<String> obterHorariosDisponiveis(
+            @RequestParam Long profissionalId,
+            @RequestParam String data) {
+        log.info("GET /agendamentos/horarios-disponiveis - buscando horários disponíveis para profissional {} na data {}", profissionalId, data);
+        LocalDate dataLocal = LocalDate.parse(data);
+        return service.obterHorariosDisponiveis(profissionalId, dataLocal);
     }
 }

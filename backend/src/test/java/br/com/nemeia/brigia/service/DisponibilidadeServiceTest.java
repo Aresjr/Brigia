@@ -338,19 +338,22 @@ class DisponibilidadeServiceTest {
         // Arrange
         Long profissionalId = 1L;
         LocalDate dia = LocalDate.of(2025, 10, 20);
-        LocalTime hora = LocalTime.of(9, 0);
+        LocalTime horaInicial = LocalTime.of(9, 0);
+        Integer duracao = 20;
+        LocalTime horaFinal = horaInicial.plusMinutes(duracao);
 
         // Mock do repository
         when(disponibilidadeRepository.findByProfissionalAndDiaAndHora(
                 eq(profissionalId),
                 eq(dia),
-                eq(hora),
+                eq(horaInicial),
+                eq(horaFinal),
                 eq(1L)))
                 .thenReturn(Optional.of(disponibilidade));
 
         // Act
         Optional<Disponibilidade> resultado =
-            disponibilidadeService.findByProfissionalAndDiaAndHora(profissionalId, dia, hora);
+            disponibilidadeService.findByProfissionalAndDiaAndHora(profissionalId, dia, horaInicial, duracao);
 
         // Assert
         assertTrue(resultado.isPresent());
@@ -358,7 +361,8 @@ class DisponibilidadeServiceTest {
         verify(disponibilidadeRepository, times(1)).findByProfissionalAndDiaAndHora(
             eq(profissionalId),
             eq(dia),
-            eq(hora),
+            eq(horaInicial),
+            eq(horaFinal),
             eq(1L));
     }
 
@@ -367,26 +371,30 @@ class DisponibilidadeServiceTest {
         // Arrange
         Long profissionalId = 1L;
         LocalDate dia = LocalDate.of(2025, 10, 20);
-        LocalTime hora = LocalTime.of(15, 0);
+        Integer duracao = 20;
+        LocalTime horaInicial = LocalTime.of(15, 0);
+        LocalTime hotaFinal = horaInicial.plusMinutes(duracao);
 
         // Mock do repository
         when(disponibilidadeRepository.findByProfissionalAndDiaAndHora(
                 eq(profissionalId),
                 eq(dia),
-                eq(hora),
+                eq(horaInicial),
+                eq(hotaFinal),
                 eq(1L)))
                 .thenReturn(Optional.empty());
 
         // Act
         Optional<Disponibilidade> resultado =
-            disponibilidadeService.findByProfissionalAndDiaAndHora(profissionalId, dia, hora);
+            disponibilidadeService.findByProfissionalAndDiaAndHora(profissionalId, dia, horaInicial, duracao);
 
         // Assert
         assertFalse(resultado.isPresent());
         verify(disponibilidadeRepository, times(1)).findByProfissionalAndDiaAndHora(
             eq(profissionalId),
             eq(dia),
-            eq(hora),
+            eq(horaInicial),
+            eq(hotaFinal),
             eq(1L));
     }
 }

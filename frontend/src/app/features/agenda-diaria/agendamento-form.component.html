@@ -47,13 +47,63 @@
     </div>
 
     <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6" [ngClass]="{ 'visualizacao': !modoSalvar }">
+
       <div class="flex">
-        <div class="w-[7rem] mr-4" >
+        <div class="mr-4 w-[20rem]" >
+          <label class="label-campo" for="especialidadeId">
+            Especialidade <span aria-hidden="true" class="text-error">*</span>
+            <ng-select formControlName="especialidadeId" required class="campo-select"
+                       labelForId="especialidadeId" [ngClass]="classesCampo('especialidadeId')"
+                       [items]="especialidadesFiltradas" bindValue="id" bindLabel="nome" placeholder="Selecione"
+                       (change)="selectEspecialidade($event)" (clear)="selectEspecialidade(null)">
+              <ng-template ng-notfound-tmp>
+                <span class="text-sm p-6">Nenhum resultado</span>
+              </ng-template>
+            </ng-select>
+            <div *ngIf="isInvalid('especialidadeId')" class="text-error text-sm">
+              Obrigatório
+            </div>
+          </label>
+        </div>
+
+        <div class="w-[21rem] mr-4" >
+          <label class="label-campo" for="profissionalId">
+            Profissional <span aria-hidden="true" class="text-error">*</span>
+            <ng-select formControlName="profissionalId" required class="campo-select"
+                       [ngClass]="classesCampo('profissionalId')" placeholder="Selecione"
+                       [items]="profissionaisFiltrados" bindValue="id" bindLabel="nome" labelForId="profissionalId"
+                       (change)="selectProfissional($event.id)" (clear)="selectProfissional(null)">
+              <ng-template ng-notfound-tmp>
+                <span class="text-sm p-6">Nenhum resultado</span><br/>
+                <span class="text-sm p-6">Verifique a especialidade selecionada</span>
+              </ng-template>
+            </ng-select>
+            <div *ngIf="isInvalid('profissionalId')" class="text-error text-sm">
+              Obrigatório
+            </div>
+          </label>
+        </div>
+
+        <div class="w-[12rem]">
+          <label class="label-campo" for="convenioId">Convênio</label>
+          <ng-select formControlName="convenioId" class="campo-select"
+                     [ngClass]="classesCampo('convenioId')" placeholder="Selecione"
+                     [items]="convenios" bindValue="id" bindLabel="nome" labelForId="convenioId"
+                     (change)="selectConvenio($event)" (clear)="selectConvenio(null)">
+            <ng-template ng-notfound-tmp>
+              <span class="text-sm p-6">Nenhum resultado</span>
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="flex mt-2">
+        <div class="w-[8rem] mr-4" >
           <label class="label-campo" for="data">
             Data <span aria-hidden="true" class="text-error">*</span>
-            <input type="text" formControlName="data" required id="data"
-                   class="campo" [ngClass]="classesCampo('data')" [dropSpecialCharacters]="false"
-                   mask="d0/M0/0000" placeholder="dd/mm/aaaa" maxlength="10">
+            <input type="date" formControlName="data" required id="data"
+                   class="campo" [ngClass]="classesCampo('data')" lang="pt-BR"
+                   placeholder="dd/mm/aaaa">
             <div *ngIf="isInvalid('data')" class="text-error text-sm">
               Obrigatório
             </div>
@@ -61,12 +111,17 @@
           </label>
         </div>
 
-        <div class="w-[4rem] mr-4 group tooltip text-left" data-tip="Horário inicial do agendamento">
+        <div class="w-[6rem] mr-4 group tooltip text-left" data-tip="Horário - Selecione primeiro data e profissional">
           <label class="label-campo" for="hora">
             Horário <span aria-hidden="true" class="text-error">*</span>
-            <input type="text" formControlName="hora" maxlength="5" id="hora" required
-                   mask="00:00" emptyToNull class="campo p-[7px]" [dropSpecialCharacters]="false"
-                   [ngClass]="classesCampo('hora')">
+            <ng-select formControlName="hora" id="hora" required class="campo-select"
+                       [ngClass]="classesCampo('hora')" placeholder="Selecione"
+                       [items]="horariosDisponiveis" labelForId="hora"
+                       [disabled]="!podeCarregarHorarios()">
+              <ng-template ng-notfound-tmp>
+                <span class="text-xs p-1 w-[12rem]">Nenhum - Verifique data e profissional selecionado</span>
+              </ng-template>
+            </ng-select>
             <div *ngIf="isInvalid('hora')" class="text-error text-sm">
               Obrigatório
             </div>
@@ -84,7 +139,7 @@
             </div>
           </label>
         </div>
-        <div class="w-[19rem] mr-4" >
+        <div class="w-[17rem] mr-4" >
           <label class="label-campo" for="pacienteId">
             Paciente <span aria-hidden="true" class="text-error">*</span>
               <ng-select formControlName="pacienteId" class="campo-select"
@@ -127,58 +182,9 @@
           </label>
         </div>
 
-        <div class="w-[5rem] tooltip text-left" data-tip="Caso marcado, possibilita cadastrar agendamento fora do horário disponível do médico">
+        <div class="w-[4rem] tooltip text-left" data-tip="Caso marcado, possibilita cadastrar agendamento fora do horário disponível do médico">
           <label class="label-campo rounded-lg px-1.5" for="encaixe">
             Encaixe <br/><input type="checkbox" id="encaixe" formControlName="encaixe" class="campo my-1.5 mx-3 checkbox checkbox-primary" />
-          </label>
-        </div>
-      </div>
-
-      <div class="flex mt-2">
-        <div class="w-[12rem] mr-4">
-          <label class="label-campo" for="convenioId">Convênio</label>
-          <ng-select formControlName="convenioId" class="campo-select"
-                     [ngClass]="classesCampo('convenioId')" placeholder="Selecione"
-                     [items]="convenios" bindValue="id" bindLabel="nome" labelForId="convenioId"
-                     (change)="selectConvenio($event)" (clear)="selectConvenio(null)">
-            <ng-template ng-notfound-tmp>
-              <span class="text-sm p-6">Nenhum resultado</span>
-            </ng-template>
-          </ng-select>
-        </div>
-
-        <div class="mr-4 w-[20rem]" >
-          <label class="label-campo" for="especialidadeId">
-            Especialidade <span aria-hidden="true" class="text-error">*</span>
-            <ng-select formControlName="especialidadeId" required class="campo-select"
-                       labelForId="especialidadeId" [ngClass]="classesCampo('especialidadeId')"
-                       [items]="especialidadesFiltradas" bindValue="id" bindLabel="nome" placeholder="Selecione"
-                       (change)="selectEspecialidade($event)" (clear)="selectEspecialidade(null)">
-              <ng-template ng-notfound-tmp>
-                <span class="text-sm p-6">Nenhum resultado</span>
-              </ng-template>
-            </ng-select>
-            <div *ngIf="isInvalid('especialidadeId')" class="text-error text-sm">
-              Obrigatório
-            </div>
-          </label>
-        </div>
-
-        <div class="w-[21rem]" >
-          <label class="label-campo" for="profissionalId">
-            Profissional <span aria-hidden="true" class="text-error">*</span>
-            <ng-select formControlName="profissionalId" required class="campo-select"
-                       [ngClass]="classesCampo('profissionalId')" placeholder="Selecione"
-                       [items]="profissionaisFiltrados" bindValue="id" bindLabel="nome" labelForId="profissionalId"
-                       (change)="selectProfissional($event.id)" (clear)="selectProfissional(null)">
-              <ng-template ng-notfound-tmp>
-                <span class="text-sm p-6">Nenhum resultado</span><br/>
-                <span class="text-sm p-6">Verifique a especialidade selecionada</span>
-              </ng-template>
-            </ng-select>
-            <div *ngIf="isInvalid('profissionalId')" class="text-error text-sm">
-              Obrigatório
-            </div>
           </label>
         </div>
       </div>

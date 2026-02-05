@@ -19,10 +19,11 @@ public interface DisponibilidadeRepository extends BaseRepository<Disponibilidad
             @Param("endDate") LocalDate endDate, @Param("unidadeId") Long unidadeId);
 
     @Query("SELECT d FROM Disponibilidade d WHERE d.profissional.id = :profissionalId AND d.dia = :dia "
-            + "AND d.horaInicial <= :hora AND d.horaFinal >= :hora AND d.unidade.id = :unidadeId "
+            + "AND d.horaInicial <= :horaInicial AND d.horaFinal >= :horaFinal AND d.unidade.id = :unidadeId "
             + "AND (d.excluido IS NULL OR d.excluido = false)")
     java.util.Optional<Disponibilidade> findByProfissionalAndDiaAndHora(@Param("profissionalId") Long profissionalId,
-            @Param("dia") LocalDate dia, @Param("hora") LocalTime hora, @Param("unidadeId") Long unidadeId);
+            @Param("dia") LocalDate dia, @Param("horaInicial") LocalTime horaInicial,
+            @Param("horaFinal") LocalTime horaFinal, @Param("unidadeId") Long unidadeId);
 
     @Query("SELECT d FROM Disponibilidade d WHERE d.profissional.id = :profissionalId AND d.dia = :dia "
             + "AND d.unidade.id = :unidadeId AND (d.excluido IS NULL OR d.excluido = false) "

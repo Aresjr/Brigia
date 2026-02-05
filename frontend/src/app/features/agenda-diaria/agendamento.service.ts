@@ -65,4 +65,13 @@ export class AgendamentoService extends BaseService<Agendamento, AgendamentoRequ
       })
     );
   }
+
+  obterHorariosDisponiveis(profissionalId: number, data: string): Observable<string[]> {
+    return this.backend.get<string[]>(`${this.path}/horarios-disponiveis?profissionalId=${profissionalId}&data=${data}`).pipe(
+      catchError((e) => {
+        console.error('Erro ao carregar horários disponíveis', e);
+        return throwError(() => e);
+      })
+    );
+  }
 }

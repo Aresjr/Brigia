@@ -33,4 +33,9 @@ public interface AgendamentoRepository extends BaseRepository<Agendamento> {
     List<Agendamento> findAgendamentosConflitantes(@Param("profissionalId") Long profissionalId,
             @Param("data") LocalDate data, @Param("horaInicio") LocalTime horaInicio,
             @Param("horaFim") LocalTime horaFim, @Param("agendamentoId") Long agendamentoId);
+
+    @Query("SELECT a FROM Agendamento a WHERE a.profissional.id = :profissionalId AND a.data = :data "
+            + "AND (a.excluido IS NULL OR a.excluido = false)")
+    List<Agendamento> findAgendamentosPorProfissionalEDia(@Param("profissionalId") Long profissionalId,
+            @Param("data") LocalDate data);
 }

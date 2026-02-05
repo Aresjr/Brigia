@@ -291,7 +291,7 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         // profissional no horário solicitado
         // Primeiro verifica na disponibilidade específica (data específica)
         boolean temDisponibilidadeEspecifica = disponibilidadeService.findByProfissionalAndDiaAndHora(
-                request.profissionalId(), request.data(), request.hora().plusMinutes(request.duracao())).isPresent();
+                request.profissionalId(), request.data(), request.hora(), request.duracao()).isPresent();
 
         // Se não encontrou disponibilidade específica, verifica na agenda semanal
         // (recorrente)
@@ -341,6 +341,59 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         Agendamento agendamento = getById(id);
         agendamento.setStatus(StatusAgendamento.CANCELADO_USUARIO);
         repository.save(agendamento);
+    }
+
+    public List<String> obterHorariosDisponiveis(Long profissionalId, LocalDate data) {
+        List<String> horariosDisponiveis = new ArrayList<>();
+        
+        // Buscar disponibilidades específicas (data específica)
+        List<Disponibilidade> disponibilidadesEspecificas = disponibilidadeService.obterDisponibilidadesPorData(profissionalId, data);
+        
+        // Buscar agenda semanal (recorrente)
+        List<Disponibilidade> horariosAgendaSemanal = agendaSemanalService.obterHorariosParaDiaDaSemana(profissionalId, data);
+        
+        // Combinar os horários
+        List<Disponibilidade> todasDisponibilidades = new ArrayList<>();
+        todasDisponibilidades.addAll(disponibilidadesEspecificas);
+        todasDisponibilidades.addAll(horariosAgendaSemanal);
+        
+        // Buscar agendamentos já marcados para o profissional neste dia
+        List<Agendamento> agendamentosExistentes = repository.findAgendamentosPorProfissionalEDia(profissionalId, data);
+        
+        // Gerar lista de horários disponíveis (em intervalos de 1 hora)
+        // Extrair todos os intervalos das disponibilidades e subtrair os agendamentos já existentes
+        for (Disponibilidade disp : todasDisponibilidades) {
+            LocalTime horaAtual = disp.getHoraInicial();
+            LocalTime horaFim = disp.getHoraFinal();
+            
+            while (horaAtual.isBefore(horaFim)) {
+                final LocalTime horaAtualFinal = horaAtual;
+                final LocalTime proximaHoraFinal = horaAtual.plusHours(1);
+                
+                // Verificar se há algum agendamento neste horário
+                boolean temAgendamento = agendamentosExistentes.stream()
+                    .anyMatch(a -> {
+                        LocalTime horaAgendamento = a.getHora();
+                        LocalTime horaFimAgendamento = horaAgendamento.plusMinutes(a.getDuracao());
+                        return !horaAgendamento.isAfter(horaAtualFinal) && !horaFimAgendamento.isBefore(proximaHoraFinal);
+                    });
+                
+                if (!temAgendamento) {
+                    // Adicionar apenas se ainda não está na lista
+                    String horaFormatada = String.format("%02d:%02d", horaAtualFinal.getHour(), horaAtualFinal.getMinute());
+                    if (!horariosDisponiveis.contains(horaFormatada)) {
+                        horariosDisponiveis.add(horaFormatada);
+                    }
+                }
+                
+                horaAtual = proximaHoraFinal;
+            }
+        }
+        
+        // Ordenar os horários
+        horariosDisponiveis.sort(String::compareTo);
+        
+        return horariosDisponiveis;
     }
 
     @Override
