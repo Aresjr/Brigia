@@ -91,9 +91,13 @@ public class DisponibilidadeService extends BaseService<Disponibilidade, Disponi
     }
 
     public Optional<Disponibilidade> findByProfissionalAndDiaAndHora(Long profissionalId, LocalDate dia,
-            LocalTime hora) {
-        return repository.findByProfissionalAndDiaAndHora(profissionalId, dia, hora,
+            LocalTime horaInicial, Integer duracao) {
+        return repository.findByProfissionalAndDiaAndHora(profissionalId, dia, horaInicial, horaInicial.plusMinutes(duracao),
                 SecurityHolder.getLoggedUserUnidadeId());
+    }
+
+    public List<Disponibilidade> obterDisponibilidadesPorData(Long profissionalId, LocalDate data) {
+        return repository.findDisponibilidadesDia(profissionalId, data, SecurityHolder.getLoggedUserUnidadeId());
     }
 
     @Override

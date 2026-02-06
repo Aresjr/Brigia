@@ -4,6 +4,7 @@ import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.AgendaSemanalRequest;
 import br.com.nemeia.brigia.mapper.AgendaSemanalMapper;
 import br.com.nemeia.brigia.model.AgendaSemanal;
+import br.com.nemeia.brigia.model.Disponibilidade;
 import br.com.nemeia.brigia.model.Profissional;
 import br.com.nemeia.brigia.repository.AgendaSemanalRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -65,6 +66,25 @@ public class AgendaSemanalService extends BaseService<AgendaSemanal, AgendaSeman
 
         return repository.findByProfissionalAndDiaSemanaAndHora(profissionalId, diaSemana, hora,
                 SecurityHolder.getLoggedUserUnidadeId());
+    }
+
+    public List<Disponibilidade> obterHorariosParaDiaDaSemana(Long profissionalId, LocalDate data) {
+        int diaSemanaJava = data.getDayOfWeek().getValue(); // 1 = Segunda, 7 = Domingo
+        int diaSemana = (diaSemanaJava == 7) ? 0 : diaSemanaJava; // Converte para 0 = Domingo
+
+        List<AgendaSemanal> agendasSemana = repository.findByProfissionalIdAndDiaSemana(profissionalId, diaSemana,
+                SecurityHolder.getLoggedUserUnidadeId());
+
+        // Converter AgendaSemanal para Disponibilidade
+        return agendasSemana.stream().map(as -> {
+            Disponibilidade disp = new Disponibilidade();
+            disp.setProfissional(as.getProfissional());
+            disp.setDia(data);
+            disp.setHoraInicial(as.getHoraInicial());
+            disp.setHoraFinal(as.getHoraFinal());
+            disp.setIntervalo(as.getIntervalo());
+            return disp;
+        }).toList();
     }
 
     @Override

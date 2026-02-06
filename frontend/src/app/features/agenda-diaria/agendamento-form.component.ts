@@ -25,7 +25,8 @@ import {
   podeEditarAgendamento,
   StatusAgendamento,
   StatusAgendamentoEnum,
-  TIPO_AGENDAMENTO
+  TIPO_AGENDAMENTO,
+  HorarioDisponivel
 } from './agendamento.interface';
 import { AgendamentoService } from './agendamento.service';
 import { IForm } from '../shared/form.interface';
@@ -74,6 +75,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   profissionaisFiltrados: Profissional[] = [];
   empresas: Empresa[] = [];
   procedimentos: Procedimento[] = [];
+  horariosDisponiveis: HorarioDisponivel[] = [];
+  mapaHorariosDisponiveis: Map<string, HorarioDisponivel> = new Map();
   pacienteSelecionado?: Paciente | null;
   empresaSelecionada?: Empresa | null;
   convenioSelecionado?: Convenio | null;
@@ -121,7 +124,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
               private agendamentoService: AgendamentoService) {
     super(fb, toastr);
     const hoje = new Date().toISOString().split('T')[0];
-    this.hoje = this.formatarDataParaBR(hoje);
+    this.hoje = hoje;//this.formatarDataParaBR(hoje);
     const form: IForm<AgendamentoRequest> = {
       pacienteId: [null, {nonNullable: true}],
       data: [null, {nonNullable: true}],
@@ -150,19 +153,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     });
   }
 
-  formatarDataParaBR(dataISO: string): string {
-    // Converte yyyy-MM-dd para dd/MM/yyyy
-    if (!dataISO) return '';
-    const [ano, mes, dia] = dataISO.split('-');
-    return `${dia}/${mes}/${ano}`;
-  }
 
-  formatarDataParaISO(dataBR: string): string {
-    // Converte dd/MM/yyyy para yyyy-MM-dd
-    if (!dataBR || dataBR.length < 10) return '';
-    const [dia, mes, ano] = dataBR.split('/');
-    return `${ano}-${mes}-${dia}`;
-  }
 
   override ngOnInit(): void {
     // Inicializa opções de status
@@ -172,7 +163,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     let hora = null;
     if (this.dataAgendamento) {
       const dataISO = this.dataAgendamento.toISOString().split('T')[0];
-      data = this.formatarDataParaBR(dataISO);
+      data = dataISO;//this.formatarDataParaBR(dataISO);
       const horas = String(this.dataAgendamento.getHours()).padStart(2, '0');
       const minutos = String(this.dataAgendamento.getMinutes()).padStart(2, '0');
       hora = `${horas}:${minutos}`;
@@ -226,14 +217,17 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       }
       this.isLoading = false;
       this.calcularValorTotal();
+
+      // Observar mudanças no campo de data para recarregar horários disponíveis
+      this.form.get('data')?.valueChanges.subscribe(() => {
+        this.carregarHorariosDisponiveis();
+      });
     });
   }
 
   carregarDadosRascunho(rascunho: any) {
-    // Converter data para formato brasileiro se estiver em formato ISO
-    const dataBR = rascunho.data && rascunho.data.includes('-')
-      ? this.formatarDataParaBR(rascunho.data)
-      : rascunho.data;
+    // Manter data no formato ISO (yyyy-MM-dd) para input type="date"
+    const dataISO = rascunho.data;
 
     this.form.patchValue({
       pacienteId: rascunho.pacienteId,
@@ -241,7 +235,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       empresaId: rascunho.empresaId,
       especialidadeId: rascunho.especialidadeId,
       convenioId: rascunho.convenioId,
-      data: dataBR,
+      data: dataISO,
       hora: rascunho.horaInicio,
       duracao: rascunho.duracao,
       tipoAgendamento: rascunho.tipoAgendamento,
@@ -343,11 +337,11 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   carregaDadosAgendamento() {
     if (this.agendamentoDetalhes) {
       // Converter data para formato brasileiro antes de exibir
-      const dataBR = this.formatarDataParaBR(this.agendamentoDetalhes.data);
+      //const dataBR = this.formatarDataParaBR(this.agendamentoDetalhes.data);
 
       this.form.patchValue(this.agendamentoDetalhes);
       this.form.patchValue({
-        data: dataBR,
+        data: this.agendamentoDetalhes.data,
         pacienteId: this.agendamentoDetalhes.paciente.id,
         profissionalId: this.agendamentoDetalhes.profissional.id,
         especialidadeId: this.agendamentoDetalhes.especialidade.id,
@@ -506,6 +500,9 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         especialidadeId: null
       });
     }
+
+    // Carregar horários disponíveis
+    this.carregarHorariosDisponiveis();
   }
 
   salvarNovoPaciente(paciente: Partial<Paciente>) {
@@ -545,6 +542,63 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     this.procedimentosLancados.controls.forEach((_, index) => {
       this.calcularValorProcedimento(index);
     });
+  }
+
+  podeCarregarHorarios(): boolean {
+    const profissionalId = this.form.get('profissionalId')?.value;
+    const data = this.form.get('data')?.value;
+    return !!profissionalId && !!data;
+  }
+
+  carregarHorariosDisponiveis() {
+    if (!this.podeCarregarHorarios()) {
+      this.horariosDisponiveis = [];
+      this.form.patchValue({ hora: null });
+      return;
+    }
+
+    const profissionalId = this.form.get('profissionalId')?.value;
+    const dataISO = this.form.get('data')?.value;
+
+    this.agendamentoService.obterHorariosDisponiveis(profissionalId, dataISO).subscribe({
+      next: (horarios) => {
+        this.horariosDisponiveis = horarios;
+        // Criar mapa para acesso rápido aos horários finais
+        this.mapaHorariosDisponiveis.clear();
+        horarios.forEach(h => {
+          this.mapaHorariosDisponiveis.set(h.horaInicial, h);
+        });
+        // Se houver horários e nenhum estiver selecionado, limpar a seleção
+        if (horarios.length === 0) {
+          this.form.patchValue({ hora: null });
+        }
+      },
+      error: (err) => {
+        console.error('Erro ao carregar horários disponíveis', err);
+        this.horariosDisponiveis = [];
+        this.mapaHorariosDisponiveis.clear();
+      }
+    });
+  }
+
+  onSelectHora() {
+    const horaInicial = this.form.get('hora')?.value;
+    if (horaInicial && this.mapaHorariosDisponiveis.has(horaInicial)) {
+      const horarioDisponivel = this.mapaHorariosDisponiveis.get(horaInicial);
+      if (horarioDisponivel) {
+        // Calcular duração em minutos
+        const [horaInicio, minInicio] = horaInicial.split(':').map(Number);
+        const [horaFim, minFim] = horarioDisponivel.horaFinal.split(':').map(Number);
+        
+        const minutosInicio = horaInicio * 60 + minInicio;
+        const minutosFim = horaFim * 60 + minFim;
+        const duracao = minutosFim - minutosInicio;
+        
+        this.form.patchValue({
+          duracao: duracao
+        });
+      }
+    }
   }
 
   solicitarHabilitacaoValor() {
@@ -703,10 +757,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         // Usar getRawValue() para incluir campos desabilitados (valor, desconto)
         const formData = this.form.getRawValue();
 
-        // Converter data de dd/MM/yyyy para yyyy-MM-dd antes de enviar
-        if (formData.data) {
-          formData.data = this.formatarDataParaISO(formData.data);
-        }
+        // Input type="date" já fornece data em formato ISO (yyyy-MM-dd)
+        // Não precisa converter
 
         this.save.emit(formData);
       } else {
