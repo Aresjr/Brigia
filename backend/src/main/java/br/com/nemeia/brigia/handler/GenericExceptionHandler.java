@@ -4,6 +4,7 @@ import br.com.nemeia.brigia.dto.response.ErrorResponse;
 import br.com.nemeia.brigia.exception.DisponibilidadeNaoEncontradaException;
 import br.com.nemeia.brigia.exception.InvalidCredentialsException;
 import br.com.nemeia.brigia.exception.NotFoundException;
+import br.com.nemeia.brigia.exception.RepasseJaExistenteException;
 import br.com.nemeia.brigia.exception.ValorRecebidoUltrapassadoException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class GenericExceptionHandler extends BaseExceptionHandler {
         return buildErrorResponse(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
-    @ExceptionHandler({ValorRecebidoUltrapassadoException.class, DisponibilidadeNaoEncontradaException.class})
+    @ExceptionHandler({ValorRecebidoUltrapassadoException.class, DisponibilidadeNaoEncontradaException.class, RepasseJaExistenteException.class})
     public ResponseEntity<ErrorResponse> handleBadRequestException(RuntimeException ex, HttpServletRequest request) {
         log.error("Mapped BadRequest: {}", ex.getMessage());
         return buildErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST, request);
