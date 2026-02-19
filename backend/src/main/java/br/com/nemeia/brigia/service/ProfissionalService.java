@@ -3,11 +3,14 @@ package br.com.nemeia.brigia.service;
 import br.com.nemeia.brigia.utils.DbUtil;
 import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.ProfissionalRequest;
+import br.com.nemeia.brigia.dto.request.RepasseProfissionalRequest;
+import br.com.nemeia.brigia.dto.request.RepasseRequest;
 import br.com.nemeia.brigia.dto.request.UsuarioRequest;
 import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ProfissionalMapper;
 import br.com.nemeia.brigia.model.Especialidade;
 import br.com.nemeia.brigia.model.Profissional;
+import br.com.nemeia.brigia.model.Repasse;
 import br.com.nemeia.brigia.model.RoleUsuario;
 import br.com.nemeia.brigia.model.Usuario;
 import br.com.nemeia.brigia.repository.ProfissionalRepository;
@@ -32,6 +35,7 @@ public class ProfissionalService {
     private final EspecialidadeService especialidadeService;
     private final UsuarioService usuarioService;
     private final UnidadeService unidadeService;
+    private final RepasseService repasseService;
 
     public Page<Profissional> getPaged(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, DbUtil.DEFAULT_SORT);
@@ -75,7 +79,14 @@ public class ProfissionalService {
             criarUsuarioParaProfissional(profissional);
         }
 
-        return repository.save(profissional);
+        Profissional profissionalSalvo = repository.save(profissional);
+
+        // Processar repasses
+        if (request.repasses() != null && !request.repasses().isEmpty()) {
+            processarRepasses(profissionalSalvo.getId(), request.repasses());
+        }
+
+        return profissionalSalvo;
     }
 
     //TODO - migrar para MapStruct
@@ -92,7 +103,14 @@ public class ProfissionalService {
         profissionalEdicao.setId(id);
         profissionalEdicao.setUnidade(profissional.getUnidade());
         profissionalEdicao.setUsuario(profissional.getUsuario());
-        return repository.save(profissionalEdicao);
+        Profissional profissionalSalvo = repository.save(profissionalEdicao);
+
+        // Processar repasses
+        if (request.repasses() != null) {
+            processarRepasses(profissionalSalvo.getId(), request.repasses());
+        }
+
+        return profissionalSalvo;
     }
 
     public void reenviarConvite(Long id) throws BadRequestException {
@@ -119,6 +137,42 @@ public class ProfissionalService {
         }
         
         log.info("Convite reenviado para o profissional: {}", profissional.getNome());
+    }
+
+    private void processarRepasses(Long profissionalId, List<RepasseProfissionalRequest> repassesRequest) {
+        // Buscar repasses existentes do profissional
+        List<Repasse> repassesExistentes = repasseService.findByProfissional(profissionalId);
+
+        // Processar cada repasse do request
+        for (var repasseReq : repassesRequest) {
+            // Buscar se já existe repasse para essa combinação
+            var repasseExistente = repassesExistentes.stream()
+                .filter(r -> r.getUnidade().getId().equals(repasseReq.unidadeId()) &&
+                           r.getConvenio().getId().equals(repasseReq.convenioId()) &&
+                           r.getProcedimento().getId().equals(repasseReq.procedimentoId()))
+                .findFirst();
+
+            if (repasseExistente.isPresent()) {
+                // Atualizar repasse existente
+                var repasse = repasseExistente.get();
+                repasse.setValor(repasseReq.valor());
+                repasseService.save(repasse);
+            } else {
+                // Criar novo repasse
+                var repasseRequest = new RepasseRequest(
+                    repasseReq.procedimentoId(),
+                    repasseReq.unidadeId(),
+                    repasseReq.convenioId(),
+                    profissionalId,
+                    repasseReq.valor(),
+                    null,
+                    null
+                );
+                repasseService.createRepasse(repasseRequest);
+            }
+        }
+
+        log.info("Repasses processados para o profissional ID: {}", profissionalId);
     }
 
     private void criarUsuarioParaProfissional(Profissional profissional) {

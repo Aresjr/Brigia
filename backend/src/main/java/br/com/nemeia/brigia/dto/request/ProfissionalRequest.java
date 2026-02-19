@@ -16,5 +16,7 @@ public record ProfissionalRequest(@NotBlank(message = "Nome é obrigatório") St
         String urlImagem,
         String crm,
         String rqe,
-        @Nullable BigDecimal valorHora, List<Long> especialidades) {
+        @Nullable BigDecimal valorHora, List<Long> especialidades,
+        @Nullable List<RepasseProfissionalRequest> repasses) {
 }
+

@@ -119,6 +119,71 @@
           }
         </div>
 
+        <!-- Seção de Repasses -->
+        <div class="mt-6">
+          <div class="mb-4">
+            <h3 class="text-lg font-medium">Repasses por Unidade</h3>
+            <p class="text-sm text-gray-500">Defina os valores de repasse para cada procedimento por unidade e convênio</p>
+          </div>
+
+          <div class="space-y-2">
+            <div *ngFor="let unidade of unidades" class="border border-base-300 rounded-lg">
+              <!-- Header da Unidade (Collapsible) -->
+              <div class="flex items-center justify-between p-3 cursor-pointer bg-base-200 hover:bg-base-300"
+                   [ngClass]="{'rounded-t-lg': isUnidadeExpandida(unidade.id), 'rounded-lg': !isUnidadeExpandida(unidade.id)}"
+                   (click)="toggleUnidade(unidade.id)">
+                <h4 class="font-medium">{{ unidade.nome }}</h4>
+                <lucide-icon
+                  [name]="isUnidadeExpandida(unidade.id) ? 'chevron-down' : 'chevron-right'"
+                  class="inline w-5 h-5">
+                </lucide-icon>
+              </div>
+
+              <!-- Conteúdo Expandido da Unidade -->
+              <div *ngIf="isUnidadeExpandida(unidade.id)" class="p-3 space-y-2">
+
+                <!-- Para cada Convênio -->
+                <div *ngFor="let convenio of getConveniosPorUnidade(unidade.id)" class="border border-base-300 rounded-lg">
+                  <div class="flex items-center justify-between p-2 cursor-pointer bg-base-100 hover:bg-base-200"
+                       [ngClass]="{'rounded-t-lg': isConvenioExpandido(unidade.id + '_' + convenio.id), 'rounded-lg': !isConvenioExpandido(unidade.id + '_' + convenio.id)}"
+                       (click)="toggleConvenio(unidade.id + '_' + convenio.id)">
+                    <h5 class="font-medium text-sm">{{ convenio.nome }}</h5>
+                    <lucide-icon
+                      [name]="isConvenioExpandido(unidade.id + '_' + convenio.id) ? 'chevron-down' : 'chevron-right'"
+                      class="inline w-4 h-4">
+                    </lucide-icon>
+                  </div>
+
+                  <div *ngIf="isConvenioExpandido(unidade.id + '_' + convenio.id)" class="p-2" formArrayName="repasses">
+                    <!-- Header da Tabela -->
+                    <div class="grid grid-cols-[1fr_8rem] gap-3 pb-2 font-medium text-xs">
+                      <div>Procedimento</div>
+                      <div>Valor Repasse</div>
+                    </div>
+
+                    <!-- Linhas de Repasses -->
+                    <div class="space-y-1">
+                      <ng-container *ngFor="let repasse of getRepassesPorUnidadeEConvenio(unidade.id, convenio.id); let i = index">
+                        <div [formGroupName]="repasses.controls.indexOf(repasse)"
+                             class="grid grid-cols-[1fr_8rem] gap-3 py-1 items-center hover:bg-base-100 rounded-lg">
+
+                          <div class="text-sm">{{repasse.get('procedimentoNome')?.value}}</div>
+
+                          <input type="text" formControlName="valor"
+                                 mask="separator.2" thousandSeparator="" decimalMarker=","
+                                 class="campo mt-0 p-1 text-right" min="0" max="99999" step="1"
+                                 placeholder="0,00">
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="flex justify-between space-x-3 mt-6">
           <button type="button" (click)="onCancel()" class="btn btn-sm" >
             Fechar

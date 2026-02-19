@@ -25,4 +25,12 @@ export interface ProfissionalRequest extends EntidadeRequest {
     valorHora: number | null;
     urlImagem: string | null;
     especialidades?: Especialidade[];
+    repasses?: RepasseProfissionalRequest[];
+}
+
+export interface RepasseProfissionalRequest {
+    unidadeId: number;
+    convenioId: number;
+    procedimentoId: number;
+    valor: number;
 }
