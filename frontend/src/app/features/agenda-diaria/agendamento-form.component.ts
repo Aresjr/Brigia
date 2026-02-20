@@ -9,7 +9,7 @@ import { Profissional } from '../profissionais/profissional.interface';
 import { Especialidade } from '../especialidade/especialidade.interface';
 import { EspecialidadeService } from '../especialidade/especialidade.service';
 import { ProfissionalService } from '../profissionais/profissional.service';
-import { CurrencyPipe, DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { CurrencyPipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { EmptyToNullDirective } from '../../core/directives/empty-to-null-directive';
 import { NgxMaskDirective } from 'ngx-mask';
 import { Empresa } from '../empresa/empresa.interface';
@@ -55,7 +55,7 @@ import { FilaEspera, FilaEsperaRequest } from '../fila-espera/fila-espera.interf
     ReactiveFormsModule, NgClass,
     EmptyToNullDirective, NgxMaskDirective,
     PacienteFormComponent, NgNotFoundTemplateDirective,
-    DatePipe, NgIf, NgFor, LucideAngularModule, ConfirmDialogComponent, AdminCredentialsDialogComponent, CurrencyPipe
+    NgIf, NgFor, LucideAngularModule, ConfirmDialogComponent, AdminCredentialsDialogComponent, CurrencyPipe
   ]
 })
 export class AgendamentoFormComponent extends FormComponent<Agendamento, AgendamentoRequest> implements OnInit {
@@ -68,6 +68,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   titulo: string = 'Novo Agendamento';
   hoje: string;
   pacientes: Paciente[] = [];
+  pacientesFiltrados: Paciente[] = [];
   convenios: Convenio[] = [];
   especialidades: Especialidade[] = [];
   especialidadesFiltradas: Especialidade[] = [];
@@ -374,7 +375,9 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   carregarPacientes(): Observable<Paciente[]> {
     return this.pacienteService.listar().pipe(
       map(response => response.items),
-      tap(pacientes => this.pacientes = pacientes));
+      tap(pacientes => {
+        this.pacientes = pacientes;
+      }));
   }
 
   carregarConvenios(): Observable<Convenio[]> {
@@ -454,6 +457,23 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       empresaId: this.pacienteSelecionado?.empresa ? this.pacienteSelecionado.empresa.id : null
     });
     this.selectEmpresa(this.pacienteSelecionado?.empresa ?? null);
+  }
+
+  onSearch(event: { term: string; items: any[] }) {
+    const searchTerm = event.term?.toLowerCase() || '';
+
+    if (!searchTerm) {
+      this.pacientesFiltrados = this.pacientes;
+      return;
+    }
+
+    this.pacientesFiltrados = this.pacientes.filter(paciente => {
+      const nome = paciente.nome?.toLowerCase() || '';
+      const cpf = paciente.cpf || '';
+
+      return nome.includes(searchTerm) ||
+             cpf.includes(searchTerm);
+    });
   }
 
   selectEmpresa(empresa: Empresa | null) {
@@ -589,11 +609,11 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         // Calcular duração em minutos
         const [horaInicio, minInicio] = horaInicial.split(':').map(Number);
         const [horaFim, minFim] = horarioDisponivel.horaFinal.split(':').map(Number);
-        
+
         const minutosInicio = horaInicio * 60 + minInicio;
         const minutosFim = horaFim * 60 + minFim;
         const duracao = minutosFim - minutosInicio;
-        
+
         this.form.patchValue({
           duracao: duracao
         });
