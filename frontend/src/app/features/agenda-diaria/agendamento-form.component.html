@@ -145,7 +145,7 @@
             Paciente <span aria-hidden="true" class="text-error">*</span>
               <ng-select formControlName="pacienteId" class="campo-select"
                          [ngClass]="classesCampo('pacienteId')" labelForId="pacienteId" placeholder="Selecione"
-                         [items]="pacientesFiltrados" bindValue="id" bindLabel="nome"
+                         [items]="pacientesFiltrados" bindValue="id" bindLabel="displayLabel"
                          (search)="onSearch($event)"
                          (change)="selectPaciente($event)" (clear)="selectPaciente(null)" required >
                 <ng-template ng-notfound-tmp>

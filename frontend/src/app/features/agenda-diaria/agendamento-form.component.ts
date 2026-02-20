@@ -69,6 +69,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   hoje: string;
   pacientes: Paciente[] = [];
   pacientesFiltrados: Paciente[] = [];
+  pacientesParaExibicao: Array<Paciente & { displayLabel?: string }> = [];
   convenios: Convenio[] = [];
   especialidades: Especialidade[] = [];
   especialidadesFiltradas: Especialidade[] = [];
@@ -209,7 +210,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
           this.toastr.info('Rascunho carregado');
         } else {
           if (this.pacienteId) {
-            this.selectPaciente(this.pacienteId);
+            const pacienteSelecionado = [...this.pacientes.filter(e => e.id === this.pacienteId)].at(0);
+            this.selectPaciente(pacienteSelecionado);
           }
           if (this.profissionalId) {
             this.selectProfissional(this.profissionalId);
@@ -315,7 +317,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       });
 
       // Atualizar seleções
-      this.selectPaciente(filaEspera.paciente.id);
+      this.selectPaciente(filaEspera.paciente);
 
       if (filaEspera.profissional?.id) {
         this.selectProfissional(filaEspera.profissional.id);
@@ -377,6 +379,12 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       map(response => response.items),
       tap(pacientes => {
         this.pacientes = pacientes;
+        // Criar versão com display label
+        this.pacientesParaExibicao = pacientes.map(p => ({
+          ...p,
+          displayLabel: this.formatarPacienteDisplay(p)
+        }));
+        this.pacientesFiltrados = this.pacientesParaExibicao.slice(0, 20);
       }));
   }
 
@@ -448,8 +456,9 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     this.modoSalvar = true;
   }
 
-  selectPaciente(id: number | null) {
-    this.pacienteSelecionado = id ? [...this.pacientes.filter(e => e.id === id)].at(0) : null;
+  selectPaciente(paciente: Paciente | null | undefined) {
+
+    this.pacienteSelecionado = paciente ? paciente : null;
 
     this.form.patchValue({
       pacienteId: this.pacienteSelecionado ? this.pacienteSelecionado.id : null,
@@ -463,17 +472,41 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     const searchTerm = event.term?.toLowerCase() || '';
 
     if (!searchTerm) {
-      this.pacientesFiltrados = this.pacientes;
+      this.pacientesFiltrados = this.pacientesParaExibicao;
       return;
     }
 
-    this.pacientesFiltrados = this.pacientes.filter(paciente => {
+    this.pacientesFiltrados = this.pacientesParaExibicao.filter(paciente => {
       const nome = paciente.nome?.toLowerCase() || '';
-      const cpf = paciente.cpf || '';
+      const cpf = paciente.cpf ? paciente.cpf : '';
 
-      return nome.includes(searchTerm) ||
-             cpf.includes(searchTerm);
+      return nome.includes(searchTerm) || cpf.includes(searchTerm);
     });
+  }
+
+  formatarPacienteDisplay(paciente: Paciente): string {
+    if (!paciente) return '';
+
+    const nome = paciente.nome || '';
+    const dataNascimento = paciente.dataNascimento ? this.formatarData(paciente.dataNascimento) : '';
+    const cpf = paciente.cpf ? paciente.cpf.replace(/\D/g, '') : '';
+
+    return `${nome}${dataNascimento ? ' - ' + dataNascimento : ''}${cpf ? ' - ' + cpf : ''}`;
+  }
+
+  private formatarData(data: string | Date): string {
+    if (!data) return '';
+
+    const date = typeof data === 'string' ? new Date(data) : data;
+
+    // Ajustar timezone para evitar problemas com datas
+    const adjustedDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+
+    const dia = String(adjustedDate.getDate()).padStart(2, '0');
+    const mes = String(adjustedDate.getMonth() + 1).padStart(2, '0');
+    const ano = adjustedDate.getFullYear();
+
+    return `${dia}/${mes}/${ano}`;
   }
 
   selectEmpresa(empresa: Empresa | null) {
@@ -533,7 +566,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         this.toastr.success('Paciente cadastrado');
         this.carregarPacientes().subscribe({
           next: () => {
-            this.selectPaciente(paciente.id);
+            this.selectPaciente(paciente);
             this.isLoading = false;
           }
         });
