@@ -147,7 +147,7 @@
                          [ngClass]="classesCampo('pacienteId')" labelForId="pacienteId" placeholder="Selecione"
                          (change)="selectPaciente($event)" (clear)="selectPaciente(null)" required >
                   @for(paciente of pacientes; track paciente.id) {
-                    <ng-option [value]="paciente.id" class="b-0">{{ paciente.nome }} - {{ paciente.dataNascimento | date:'dd/MM/yyyy' }}</ng-option>
+                    <ng-option [value]="paciente.id" class="b-0">{{ paciente.nome }} - {{ paciente.dataNascimento | date:'dd/MM/yyyy' }} - {{ paciente.cpf }}</ng-option>
                   }
                 <ng-template ng-notfound-tmp>
                   <div class="p-2 flex items-center justify-between gap-4">
