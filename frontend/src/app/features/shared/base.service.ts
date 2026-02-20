@@ -27,7 +27,7 @@ export class BaseService<Entid extends Entidade, Request extends EntidadeRequest
       return this.cache$;
     }
 
-    this.cache$ = this.backend.get<PagedResponse<Entid>>(`${this.path}?mostrarExcluidos=${mostrarExcluidos}&size=9999`).pipe(
+    this.cache$ = this.backend.get<PagedResponse<Entid>>(`${this.path}?mostrarExcluidos=${mostrarExcluidos}&size=999999`).pipe(
       shareReplay(1),
       catchError((e) => {
         return throwError(() => e);
