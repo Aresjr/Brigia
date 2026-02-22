@@ -9,7 +9,7 @@ import { Profissional } from '../profissionais/profissional.interface';
 import { Especialidade } from '../especialidade/especialidade.interface';
 import { EspecialidadeService } from '../especialidade/especialidade.service';
 import { ProfissionalService } from '../profissionais/profissional.service';
-import { CurrencyPipe, DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { CurrencyPipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { EmptyToNullDirective } from '../../core/directives/empty-to-null-directive';
 import { NgxMaskDirective } from 'ngx-mask';
 import { Empresa } from '../empresa/empresa.interface';
@@ -55,7 +55,7 @@ import { FilaEspera, FilaEsperaRequest } from '../fila-espera/fila-espera.interf
     ReactiveFormsModule, NgClass,
     EmptyToNullDirective, NgxMaskDirective,
     PacienteFormComponent, NgNotFoundTemplateDirective,
-    DatePipe, NgIf, NgFor, LucideAngularModule, ConfirmDialogComponent, AdminCredentialsDialogComponent, CurrencyPipe
+    NgIf, NgFor, LucideAngularModule, ConfirmDialogComponent, AdminCredentialsDialogComponent, CurrencyPipe
   ]
 })
 export class AgendamentoFormComponent extends FormComponent<Agendamento, AgendamentoRequest> implements OnInit {
@@ -68,6 +68,9 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   titulo: string = 'Novo Agendamento';
   hoje: string;
   pacientes: Paciente[] = [];
+  pacientesFiltrados: Paciente[] = [];
+  pacientesParaExibicao: Array<Paciente & { displayLabel?: string }> = [];
+  searchCache: Map<string, Array<Paciente & { displayLabel?: string }>> = new Map();
   convenios: Convenio[] = [];
   especialidades: Especialidade[] = [];
   especialidadesFiltradas: Especialidade[] = [];
@@ -208,7 +211,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
           this.toastr.info('Rascunho carregado');
         } else {
           if (this.pacienteId) {
-            this.selectPaciente(this.pacienteId);
+            const pacienteSelecionado = [...this.pacientes.filter(e => e.id === this.pacienteId)].at(0);
+            this.selectPaciente(pacienteSelecionado);
           }
           if (this.profissionalId) {
             this.selectProfissional(this.profissionalId);
@@ -314,7 +318,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       });
 
       // Atualizar seleções
-      this.selectPaciente(filaEspera.paciente.id);
+      this.selectPaciente(filaEspera.paciente);
 
       if (filaEspera.profissional?.id) {
         this.selectProfissional(filaEspera.profissional.id);
@@ -374,7 +378,15 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   carregarPacientes(): Observable<Paciente[]> {
     return this.pacienteService.listar().pipe(
       map(response => response.items),
-      tap(pacientes => this.pacientes = pacientes));
+      tap(pacientes => {
+        this.pacientes = pacientes;
+        // Criar versão com display label
+        this.pacientesParaExibicao = pacientes.map(p => ({
+          ...p,
+          displayLabel: this.formatarPacienteDisplay(p)
+        }));
+        this.pacientesFiltrados = this.pacientesParaExibicao.slice(0, 50);
+      }));
   }
 
   carregarConvenios(): Observable<Convenio[]> {
@@ -445,8 +457,9 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     this.modoSalvar = true;
   }
 
-  selectPaciente(id: number | null) {
-    this.pacienteSelecionado = id ? [...this.pacientes.filter(e => e.id === id)].at(0) : null;
+  selectPaciente(paciente: Paciente | null | undefined) {
+
+    this.pacienteSelecionado = paciente ? paciente : null;
 
     this.form.patchValue({
       pacienteId: this.pacienteSelecionado ? this.pacienteSelecionado.id : null,
@@ -454,6 +467,74 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       empresaId: this.pacienteSelecionado?.empresa ? this.pacienteSelecionado.empresa.id : null
     });
     this.selectEmpresa(this.pacienteSelecionado?.empresa ?? null);
+  }
+
+  onSearch(event: { term: string; items: any[] }) {
+    const searchTerm = event.term?.toLowerCase().trim() || '';
+
+    // Se não há termo de busca, mostrar apenas primeiros 50
+    if (!searchTerm) {
+      this.pacientesFiltrados = this.pacientesParaExibicao.slice(0, 50);
+      return;
+    }
+
+    // Verificar se já temos o resultado no cache
+    if (this.searchCache.has(searchTerm)) {
+      this.pacientesFiltrados = this.searchCache.get(searchTerm)!;
+      return;
+    }
+
+    // Filtrar com limite de resultados para melhor performance
+    const MAX_RESULTS = 100;
+    const resultados: Array<Paciente & { displayLabel?: string }> = [];
+
+    for (let i = 0; i < this.pacientesParaExibicao.length && resultados.length < MAX_RESULTS; i++) {
+      const paciente = this.pacientesParaExibicao[i];
+      const nome = paciente.nome?.toLowerCase() || '';
+      const cpf = paciente.cpf ? paciente.cpf : '';
+
+      if (nome.includes(searchTerm) || cpf.includes(searchTerm)) {
+        resultados.push(paciente);
+      }
+    }
+
+    // Guardar no cache
+    this.searchCache.set(searchTerm, resultados);
+
+    // Limpar cache antigo se ficar muito grande (manter últimos 50 buscas)
+    if (this.searchCache.size > 50) {
+      const firstKey = this.searchCache.keys().next().value as string;
+      if (firstKey !== undefined) {
+        this.searchCache.delete(firstKey);
+      }
+    }
+
+    this.pacientesFiltrados = resultados;
+  }
+
+  formatarPacienteDisplay(paciente: Paciente): string {
+    if (!paciente) return '';
+
+    const nome = paciente.nome || '';
+    const dataNascimento = paciente.dataNascimento ? this.formatarData(paciente.dataNascimento) : '';
+    const cpf = paciente.cpf ? paciente.cpf.replace(/\D/g, '') : '';
+
+    return `${nome}${dataNascimento ? ' - ' + dataNascimento : ''}${cpf ? ' - ' + cpf : ''}`;
+  }
+
+  private formatarData(data: string | Date): string {
+    if (!data) return '';
+
+    const date = typeof data === 'string' ? new Date(data) : data;
+
+    // Ajustar timezone para evitar problemas com datas
+    const adjustedDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+
+    const dia = String(adjustedDate.getDate()).padStart(2, '0');
+    const mes = String(adjustedDate.getMonth() + 1).padStart(2, '0');
+    const ano = adjustedDate.getFullYear();
+
+    return `${dia}/${mes}/${ano}`;
   }
 
   selectEmpresa(empresa: Empresa | null) {
@@ -513,7 +594,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         this.toastr.success('Paciente cadastrado');
         this.carregarPacientes().subscribe({
           next: () => {
-            this.selectPaciente(paciente.id);
+            this.selectPaciente(paciente);
             this.isLoading = false;
           }
         });
@@ -589,11 +670,11 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         // Calcular duração em minutos
         const [horaInicio, minInicio] = horaInicial.split(':').map(Number);
         const [horaFim, minFim] = horarioDisponivel.horaFinal.split(':').map(Number);
-        
+
         const minutosInicio = horaInicio * 60 + minInicio;
         const minutosFim = horaFim * 60 + minFim;
         const duracao = minutosFim - minutosInicio;
-        
+
         this.form.patchValue({
           duracao: duracao
         });
