@@ -70,6 +70,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   pacientes: Paciente[] = [];
   pacientesFiltrados: Paciente[] = [];
   pacientesParaExibicao: Array<Paciente & { displayLabel?: string }> = [];
+  searchCache: Map<string, Array<Paciente & { displayLabel?: string }>> = new Map();
   convenios: Convenio[] = [];
   especialidades: Especialidade[] = [];
   especialidadesFiltradas: Especialidade[] = [];
@@ -384,7 +385,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
           ...p,
           displayLabel: this.formatarPacienteDisplay(p)
         }));
-        this.pacientesFiltrados = this.pacientesParaExibicao.slice(0, 20);
+        this.pacientesFiltrados = this.pacientesParaExibicao.slice(0, 50);
       }));
   }
 
@@ -469,19 +470,46 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   onSearch(event: { term: string; items: any[] }) {
-    const searchTerm = event.term?.toLowerCase() || '';
+    const searchTerm = event.term?.toLowerCase().trim() || '';
 
+    // Se não há termo de busca, mostrar apenas primeiros 50
     if (!searchTerm) {
-      this.pacientesFiltrados = this.pacientesParaExibicao;
+      this.pacientesFiltrados = this.pacientesParaExibicao.slice(0, 50);
       return;
     }
 
-    this.pacientesFiltrados = this.pacientesParaExibicao.filter(paciente => {
+    // Verificar se já temos o resultado no cache
+    if (this.searchCache.has(searchTerm)) {
+      this.pacientesFiltrados = this.searchCache.get(searchTerm)!;
+      return;
+    }
+
+    // Filtrar com limite de resultados para melhor performance
+    const MAX_RESULTS = 100;
+    const resultados: Array<Paciente & { displayLabel?: string }> = [];
+
+    for (let i = 0; i < this.pacientesParaExibicao.length && resultados.length < MAX_RESULTS; i++) {
+      const paciente = this.pacientesParaExibicao[i];
       const nome = paciente.nome?.toLowerCase() || '';
       const cpf = paciente.cpf ? paciente.cpf : '';
 
-      return nome.includes(searchTerm) || cpf.includes(searchTerm);
-    });
+      if (nome.includes(searchTerm) || cpf.includes(searchTerm)) {
+        resultados.push(paciente);
+      }
+    }
+
+    // Guardar no cache
+    this.searchCache.set(searchTerm, resultados);
+
+    // Limpar cache antigo se ficar muito grande (manter últimos 50 buscas)
+    if (this.searchCache.size > 50) {
+      const firstKey = this.searchCache.keys().next().value as string;
+      if (firstKey !== undefined) {
+        this.searchCache.delete(firstKey);
+      }
+    }
+
+    this.pacientesFiltrados = resultados;
   }
 
   formatarPacienteDisplay(paciente: Paciente): string {

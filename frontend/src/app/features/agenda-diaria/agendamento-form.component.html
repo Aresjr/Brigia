@@ -146,6 +146,8 @@
               <ng-select formControlName="pacienteId" class="campo-select"
                          [ngClass]="classesCampo('pacienteId')" labelForId="pacienteId" placeholder="Selecione"
                          [items]="pacientesFiltrados" bindValue="id" bindLabel="displayLabel"
+                         [virtualScroll]="true"
+                         [loading]="isLoading"
                          (search)="onSearch($event)"
                          (change)="selectPaciente($event)" (clear)="selectPaciente(null)" required >
                 <ng-template ng-notfound-tmp>
