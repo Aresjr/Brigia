@@ -280,7 +280,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
           quantidade: [proc.quantidade, [Validators.required, Validators.min(1)]],
           procedimentoId: [proc.procedimentoId, Validators.required],
           valor: [proc.valor],
-          valorExibicao: [proc.valor]
+          valorExibicao: [proc.valor],
+          desconto: [proc.desconto ?? 0]
         });
         this.procedimentosLancados.push(procedimento);
       });
@@ -365,7 +366,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
             quantidade: [proc.quantidade, [Validators.required, Validators.min(1)]],
             procedimentoId: [proc.procedimento.id, Validators.required],
             valor: [proc.valor ?? 0],
-            valorExibicao: [proc.valor ?? 0]
+            valorExibicao: [proc.valor ?? 0],
+            desconto: [proc.desconto ?? 0]
           });
           this.procedimentosLancados.push(procedimento);
         });
@@ -906,6 +908,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       procedimentoId: [null, Validators.required],
       valor: [null],
       valorExibicao: [null],
+      desconto: [null],
     });
 
     this.procedimentosLancados.push(procedimento);
@@ -971,7 +974,8 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
     this.procedimentosLancados.controls.forEach(control => {
       const quantidade = control.get('quantidade')?.value || 0;
       const valor = control.get('valor')?.value || 0;
-      total += quantidade * valor;
+      const descontoProcedimento = control.get('desconto')?.value || 0;
+      total += (quantidade * valor) - descontoProcedimento;
     });
 
     this.valorTotalAgendamento = total - desconto;

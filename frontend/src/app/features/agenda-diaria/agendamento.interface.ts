@@ -30,6 +30,7 @@ export interface Agendamento extends Entidade {
     tipoAgendamento: number | null;
     formaPagamento: number | null;
     valor: number;
+    desconto: number | null;
     valorTotal: number;
     status: StatusAgendamentoEnum;
     observacoes?: string;
@@ -83,6 +84,7 @@ export interface AgendamentoRequest extends EntidadeRequest {
 export interface ProcedimentoAgendamentoRequest {
     procedimentoId: number;
     quantidade: number;
+    desconto: number | null;
 }
 
 export interface ProcedimentoAgendamento {
@@ -90,6 +92,7 @@ export interface ProcedimentoAgendamento {
     quantidade: number;
     valor: number | null;
     valorRepasse: number | null;
+    desconto: number | null;
 }
 
 export enum StatusAgendamentoEnum {

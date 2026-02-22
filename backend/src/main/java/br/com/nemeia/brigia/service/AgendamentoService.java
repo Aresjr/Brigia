@@ -320,6 +320,9 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
             // Calcular valor e valor de repasse usando a mesma regra do frontend
             calcularValoresProcedimento(agendamentoProcedimento, agendamento);
 
+            // Setar o desconto se fornecido
+            agendamentoProcedimento.setDesconto(procReq.desconto());
+
             agendamento.getProcedimentos().add(agendamentoProcedimento);
         }
     }

@@ -62,7 +62,7 @@ public class AgendamentoMapper {
 
     private ProcedimentoAgendamentoResponse toProcedimentoAgendamentoResponse(AgendamentoProcedimento ap) {
         return new ProcedimentoAgendamentoResponse(ap.getId(), procedimentoMapper.toResponse(ap.getProcedimento()),
-                ap.getQuantidade(), ap.getValor(), ap.getValorRepasse());
+                ap.getQuantidade(), ap.getValor(), ap.getValorRepasse(), ap.getDesconto());
     }
 
     public AgendamentoDetalhesResponse toDetalhesResponse(Agendamento agendamento) {

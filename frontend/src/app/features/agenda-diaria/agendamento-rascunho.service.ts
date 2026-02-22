@@ -22,6 +22,7 @@ interface AgendamentoRascunho {
     procedimentoId: number;
     quantidade: number;
     valor: number;
+    desconto: number;
   }>;
   timestamp: number;
 }
