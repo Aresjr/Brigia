@@ -49,23 +49,6 @@
     <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-6" [ngClass]="{ 'visualizacao': !modoSalvar }">
 
       <div class="flex">
-        <div class="mr-4 w-[20rem]" >
-          <label class="label-campo" for="especialidadeId">
-            Especialidade <span aria-hidden="true" class="text-error">*</span>
-            <ng-select formControlName="especialidadeId" required class="campo-select"
-                       labelForId="especialidadeId" [ngClass]="classesCampo('especialidadeId')"
-                       [items]="especialidadesFiltradas" bindValue="id" bindLabel="nome" placeholder="Selecione"
-                       (change)="selectEspecialidade($event)" (clear)="selectEspecialidade(null)">
-              <ng-template ng-notfound-tmp>
-                <span class="text-sm p-6">Nenhum resultado</span>
-              </ng-template>
-            </ng-select>
-            <div *ngIf="isInvalid('especialidadeId')" class="text-error text-sm">
-              Obrigatório
-            </div>
-          </label>
-        </div>
-
         <div class="w-[21rem] mr-4" >
           <label class="label-campo" for="profissionalId">
             Profissional <span aria-hidden="true" class="text-error">*</span>
@@ -79,6 +62,23 @@
               </ng-template>
             </ng-select>
             <div *ngIf="isInvalid('profissionalId')" class="text-error text-sm">
+              Obrigatório
+            </div>
+          </label>
+        </div>
+
+        <div class="mr-4 w-[20rem]" >
+          <label class="label-campo" for="especialidadeId">
+            Especialidade <span aria-hidden="true" class="text-error">*</span>
+            <ng-select formControlName="especialidadeId" required class="campo-select"
+                       labelForId="especialidadeId" [ngClass]="classesCampo('especialidadeId')"
+                       [items]="especialidadesFiltradas" bindValue="id" bindLabel="nome" placeholder="Selecione"
+                       (change)="selectEspecialidade($event)" (clear)="selectEspecialidade(null)">
+              <ng-template ng-notfound-tmp>
+                <span class="text-sm p-6">Nenhum resultado</span>
+              </ng-template>
+            </ng-select>
+            <div *ngIf="isInvalid('especialidadeId')" class="text-error text-sm">
               Obrigatório
             </div>
           </label>
