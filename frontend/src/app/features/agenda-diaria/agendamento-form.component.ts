@@ -968,13 +968,13 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   calcularValorTotal() {
-    let total = this.form.get('valor')?.value || 0;
-    const desconto = this.form.get('desconto')?.value || 0;
+    let total = this.converterParaNumero(this.form.get('valor')?.value);
+    const desconto = this.converterParaNumero(this.form.get('desconto')?.value);
 
     this.procedimentosLancados.controls.forEach(control => {
-      const quantidade = control.get('quantidade')?.value || 0;
-      const valor = control.get('valor')?.value || 0;
-      const descontoProcedimento = control.get('desconto')?.value || 0;
+      const quantidade = this.converterParaNumero(control.get('quantidade')?.value);
+      const valor = this.converterParaNumero(control.get('valor')?.value);
+      const descontoProcedimento = this.converterParaNumero(control.get('desconto')?.value);
       total += (quantidade * valor) - descontoProcedimento;
     });
 
@@ -991,7 +991,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
   }
 
   calcularQuantiaFaltante() {
-    const quantiaPaga = this.form.get('quantiaPaga')?.value || 0;
+    const quantiaPaga = this.converterParaNumero(this.form.get('quantiaPaga')?.value);
     this.quantiaFaltante = Math.max(0, this.valorTotalAgendamento - quantiaPaga);
   }
 
@@ -1031,6 +1031,25 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
         duracao: duracaoTotal
       }, { emitEvent: false });
     }
+  }
+
+  private converterParaNumero(valor: any): number {
+    if (valor === null || valor === undefined || valor === '') {
+      return 0;
+    }
+
+    // Se já for número, retorna
+    if (typeof valor === 'number') {
+      return valor;
+    }
+
+    // Se for string, remove pontos (separador de milhar) e troca vírgula por ponto
+    if (typeof valor === 'string') {
+      const valorLimpo = valor.replace(/\./g, '').replace(',', '.');
+      return parseFloat(valorLimpo) || 0;
+    }
+
+    return 0;
   }
 
   alterouValor($event: Event) {
