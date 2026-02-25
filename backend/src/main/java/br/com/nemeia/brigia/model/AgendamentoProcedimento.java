@@ -34,6 +34,9 @@ public class AgendamentoProcedimento {
     @Column(name = "valor_repasse")
     private BigDecimal valorRepasse;
 
+    @Column(name = "desconto")
+    private BigDecimal desconto;
+
     public AgendamentoProcedimento(Agendamento agendamento, Procedimento procedimento, Integer quantidade) {
         this.agendamento = agendamento;
         this.procedimento = procedimento;

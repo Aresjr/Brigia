@@ -142,8 +142,9 @@ public class ContaReceberService {
         if (agendamento.getProcedimentos() != null) {
             for (var proc : agendamento.getProcedimentos()) {
                 BigDecimal valorProc = proc.getValor() != null ? proc.getValor() : BigDecimal.ZERO;
+                BigDecimal descontoProc = proc.getDesconto() != null ? proc.getDesconto() : BigDecimal.ZERO;
                 BigDecimal quantidade = BigDecimal.valueOf(proc.getQuantidade());
-                valorTotal = valorTotal.add(valorProc.multiply(quantidade));
+                valorTotal = valorTotal.add(valorProc.multiply(quantidade).subtract(descontoProc));
             }
         }
 
