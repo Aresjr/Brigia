@@ -155,4 +155,22 @@ public class DisponibilidadeService extends BaseService<Disponibilidade, Disponi
 
         return disponibilidades;
     }
+
+    public void marcarComoIndisponivel(Long profissionalId, LocalDate dia, LocalTime horaInicial, Integer duracao) {
+        var disponibilidade = findByProfissionalAndDiaAndHora(profissionalId, dia, horaInicial, duracao);
+        if (disponibilidade.isPresent()) {
+            Disponibilidade disp = disponibilidade.get();
+            disp.setDisponivel(false);
+            repository.save(disp);
+        }
+    }
+
+    public void marcarComoDisponivel(Long profissionalId, LocalDate dia, LocalTime horaInicial, Integer duracao) {
+        var disponibilidade = findByProfissionalAndDiaAndHora(profissionalId, dia, horaInicial, duracao);
+        if (disponibilidade.isPresent()) {
+            Disponibilidade disp = disponibilidade.get();
+            disp.setDisponivel(true);
+            repository.save(disp);
+        }
+    }
 }

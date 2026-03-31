@@ -119,6 +119,12 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         contaReceberService.sincronizarContaReceberComAgendamento(agendamentoNovo.getId(), agendamentoNovo, 
             request.pago(), request.quantiaPaga());
 
+        // Marcar disponibilidade como indisponível (se não for encaixe)
+        if (Boolean.FALSE.equals(request.encaixe())) {
+            disponibilidadeService.marcarComoIndisponivel(request.profissionalId(), request.data(), 
+                request.hora(), request.duracao());
+        }
+
         sendEmail(agendamentoNovo, "Agendamento Realizado!", "agendamento-cadastrado");
 
         return agendamentoNovo;
@@ -156,6 +162,17 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         // Sincronizar Conta a Receber com lógica dos 3 cenários
         contaReceberService.sincronizarContaReceberComAgendamento(id, agendamentoAtualizado, request.pago(),
                 request.quantiaPaga());
+
+        // Gerenciar disponibilidades se o horário mudou
+        if (horarioMudou && Boolean.FALSE.equals(request.encaixe())) {
+            // Liberar disponibilidade anterior
+            disponibilidadeService.marcarComoDisponivel(original.getProfissional().getId(), 
+                original.getData(), original.getHora(), original.getDuracao());
+            
+            // Ocupar nova disponibilidade
+            disponibilidadeService.marcarComoIndisponivel(request.profissionalId(), request.data(), 
+                request.hora(), request.duracao());
+        }
 
         if (deveMandarEmail) {
             sendEmail(agendamentoAtualizado, "Agendamento Atualizado!", "agendamento-atualizado");
@@ -339,12 +356,24 @@ public class AgendamentoService extends BaseService<Agendamento, AgendamentoRepo
         Agendamento agendamento = getById(id);
         agendamento.setStatus(StatusAgendamento.NAO_COMPARECEU);
         repository.save(agendamento);
+        
+        // Marcar disponibilidade como disponível novamente (se não for encaixe)
+        if (Boolean.FALSE.equals(agendamento.getEncaixe())) {
+            disponibilidadeService.marcarComoDisponivel(agendamento.getProfissional().getId(), 
+                agendamento.getData(), agendamento.getHora(), agendamento.getDuracao());
+        }
     }
 
     public void marcarCanceladoPeloUsuario(Long id) {
         Agendamento agendamento = getById(id);
         agendamento.setStatus(StatusAgendamento.CANCELADO_USUARIO);
         repository.save(agendamento);
+        
+        // Marcar disponibilidade como disponível novamente (se não for encaixe)
+        if (Boolean.FALSE.equals(agendamento.getEncaixe())) {
+            disponibilidadeService.marcarComoDisponivel(agendamento.getProfissional().getId(), 
+                agendamento.getData(), agendamento.getHora(), agendamento.getDuracao());
+        }
     }
     public List<HorarioDisponvelResponse> obterHorariosDisponiveis(Long profissionalId, LocalDate data) {
         List<HorarioDisponvelResponse> horariosDisponiveis = new ArrayList<>();

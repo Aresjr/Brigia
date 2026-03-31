@@ -1,0 +1,1 @@
+ALTER TABLE disponibilidade ADD COLUMN disponivel BOOLEAN NOT NULL DEFAULT TRUE;
