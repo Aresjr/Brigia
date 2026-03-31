@@ -28,21 +28,21 @@ public class ContaReceberController {
     private final ContaReceberMapper mapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
     public PagedResponse<ContaReceberResponse> getAllContasReceber(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         return mapper.toPagedResponse(service.getPaged(page, size));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
     public ContaReceberResponse getContaReceberById(@PathVariable Long id) {
         log.info("GET /contas-receber/{} - buscando conta a receber pelo ID", id);
         return mapper.toResponse(service.getById(id));
     }
 
     @PostMapping("/registrar-recebimento/{contaReceberId}")
-    @PreAuthorize("hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
     public ContaReceberResponse registrarRecebimento(@PathVariable Long contaReceberId,
             @Valid @RequestBody RecebimentoRequest request) {
         log.info("POST /agendamentos/registrar-recebimento/{}", contaReceberId);
@@ -50,7 +50,7 @@ public class ContaReceberController {
     }
 
     @PostMapping("/gerar-pdf")
-    @PreAuthorize("hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
     public ResponseEntity<byte[]> gerarPDF(@RequestBody Map<String, List<Long>> request) {
         log.info("POST /contas-receber/gerar-pdf - ids: {}", request.get("ids"));
         List<Long> ids = request.get("ids");
@@ -64,7 +64,7 @@ public class ContaReceberController {
     }
 
     @PatchMapping("/{id}/desconto")
-    @PreAuthorize("hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('FATURAMENTO') or hasAuthority('ADMIN')")
     public ContaReceberResponse atualizarDesconto(@PathVariable Long id, @Valid @RequestBody DescontoRequest request) {
         log.info("PATCH /contas-receber/{}/desconto - atualizando desconto para: {}", id, request.desconto());
         return mapper.toResponse(service.atualizarDesconto(id, request.desconto()));

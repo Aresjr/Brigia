@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsuarioService } from './usuario.service';
-import { Usuario, UsuarioRequest } from './usuario.interface';
+import { Usuario } from './usuario.interface';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -34,8 +34,9 @@ export class UsuariosComponent extends BaseListComponent<Usuario> implements OnI
     super(usuarioService, toastr);
   }
 
-  cadastraUsuarioNovo(usuarioNovo: Partial<UsuarioRequest>) {
-    console.log('cadastraUsuarioNovo', usuarioNovo);
+  override searchTermFilter(usuario: Usuario, searchTerm: string): boolean | undefined {
+    return usuario.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      usuario.email?.includes(searchTerm);
   }
 
   reenviarConvite(event: Event, usuario: Usuario): void {

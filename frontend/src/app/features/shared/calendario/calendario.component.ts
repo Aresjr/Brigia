@@ -51,7 +51,7 @@ export class CalendarioComponent implements AfterContentInit {
   view: CustomCalendarView = CustomCalendarView.Week;
   CustomCalendarView = CustomCalendarView;
   currentDate: Date = new Date();
-  hourSegments: number = 2;
+  hourSegments: number = 12;
   refresh = new Subject<void>();
   activeDayIsOpen: boolean = true;
 
