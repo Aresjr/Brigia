@@ -90,6 +90,21 @@ public class DisponibilidadeService extends BaseService<Disponibilidade, Disponi
         return repository.findAllByDateRange(pageable, startDate, endDate, SecurityHolder.getLoggedUserUnidadeId());
     }
 
+    public Page<Disponibilidade> getByDateAndProfissional(Integer mes, Integer ano, Long profissionalId, int page, int size) {
+        if (mes == null) {
+            mes = LocalDate.now().getMonthValue();
+        }
+        if (ano == null) {
+            ano = LocalDate.now().getYear();
+        }
+        LocalDate startDate = LocalDate.of(ano, mes, 1).minusMonths(1);
+        LocalDate endDate = LocalDate.of(ano, mes, 1).plusMonths(2).minusDays(1);
+
+        Pageable pageable = PageRequest.of(page, size, DbUtil.DEFAULT_SORT);
+
+        return repository.findAllByDateRangeAndProfissional(pageable, startDate, endDate, SecurityHolder.getLoggedUserUnidadeId(), profissionalId);
+    }
+
     public Optional<Disponibilidade> findByProfissionalAndDiaAndHora(Long profissionalId, LocalDate dia,
             LocalTime horaInicial, Integer duracao) {
         return repository.findByProfissionalAndDiaAndHora(profissionalId, dia, horaInicial, horaInicial.plusMinutes(duracao),

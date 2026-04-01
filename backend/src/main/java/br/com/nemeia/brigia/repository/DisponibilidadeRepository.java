@@ -36,4 +36,9 @@ public interface DisponibilidadeRepository extends BaseRepository<Disponibilidad
             + "AND d.unidade.id = :unidadeId AND d.disponivel = true")
     List<Disponibilidade> findDisponibilidadesDia(@Param("profissionalId") Long profissionalId,
             @Param("dia") LocalDate dia, @Param("unidadeId") Long unidadeId);
+
+    @Query("SELECT d FROM Disponibilidade d WHERE d.dia BETWEEN :startDate AND :endDate "
+            + "AND d.unidade.id = :unidadeId AND d.profissional.id = :profissionalId AND d.disponivel = true")
+    Page<Disponibilidade> findAllByDateRangeAndProfissional(Pageable pageable, @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate, @Param("unidadeId") Long unidadeId, @Param("profissionalId") Long profissionalId);
 }
