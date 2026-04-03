@@ -40,7 +40,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   @Input() disponibilidadeDetalhes: any = null;
   @Output() saved = new EventEmitter<void>();
   @Output() deleted = new EventEmitter<void>();
-  @Output() usarHorario = new EventEmitter<{ profissionalId: number; horaInicial: string; data: string }>();
+  @Output() usarHorario = new EventEmitter<{ profissionalId: number; horaInicial: string; horaFinal: string; data: string }>();
 
   titulo: string = 'Nova Agenda do Médico';
   hoje: string;
@@ -416,12 +416,14 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   abrirComHorario() {
     const profissionalId = this.form.get('profissionalId')?.value;
     const horaInicial = this.form.get('horaInicial')?.value;
+    const horaFinal = this.form.get('horaFinal')?.value;
     const dia = this.form.get('dia')?.value;
 
-    if (profissionalId && horaInicial && dia) {
+    if (profissionalId && horaInicial && horaFinal && dia) {
       this.usarHorario.emit({
         profissionalId,
         horaInicial,
+        horaFinal,
         data: this.formatarDataParaISO(dia)
       });
     }

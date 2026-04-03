@@ -61,6 +61,7 @@ import { FilaEspera, FilaEsperaRequest } from '../fila-espera/fila-espera.interf
 export class AgendamentoFormComponent extends FormComponent<Agendamento, AgendamentoRequest> implements OnInit {
   @Input() agendamentoDetalhes: Agendamento | null = null;
   @Input() dataAgendamento: Date | null = null;
+  @Input() duracaoDisponibilidade: number | null = null;
   @Input() pacienteId!: number | null;
   @Input() profissionalId: number | null = null;
   @Input() filaEspera: FilaEspera | null = null;
@@ -164,6 +165,7 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
 
     let data = this.hoje;
     let hora = null;
+    let duracao = null;
     if (this.dataAgendamento) {
       const dataISO = this.dataAgendamento.toISOString().split('T')[0];
       data = dataISO;//this.formatarDataParaBR(dataISO);
@@ -172,9 +174,14 @@ export class AgendamentoFormComponent extends FormComponent<Agendamento, Agendam
       hora = `${horas}:${minutos}`;
     }
 
+    if (this.duracaoDisponibilidade !== null) {
+      duracao = this.duracaoDisponibilidade;
+    }
+
     this.form.patchValue({
       data: data,
-      hora: hora
+      hora: hora,
+      duracao: duracao
     });
     this.form.markAsPristine();
 

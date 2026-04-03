@@ -51,6 +51,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
 export class AgendaDiariaComponent implements OnInit, OnDestroy {
   agendamentoDetalhes: Agendamento | null = null;
   dataAgendamento: Date | null = null;
+  duracaoDisponibilidade: number | null = null;
   eventosExibicao: CalendarEvent<Agendamento>[] = [];
   eventosInternos: CalendarEvent<Agendamento>[] = [];
   profissionais: Profissional[] = [];
@@ -294,7 +295,7 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     }
   }
 
-  abrirAgendamentoComDisponibilidade(evento: { profissionalId: number; horaInicial: string; data: string }) {
+  abrirAgendamentoComDisponibilidade(evento: { profissionalId: number; horaInicial: string; horaFinal: string; data: string }) {
     // Fechar o formulário de disponibilidade
     this.exibeFormDisponibilidade = false;
 
@@ -309,14 +310,21 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
       parseInt(minuto)
     );
 
+    // Calcular duração em minutos
+    const [horaFinal, minutoFinal] = evento.horaFinal.split(':');
+    const horaFinalMinutos = parseInt(horaFinal) * 60 + parseInt(minutoFinal);
+    const horaInicialMinutos = parseInt(hora) * 60 + parseInt(minuto);
+    const duracao = horaFinalMinutos - horaInicialMinutos;
+
     // Resetar dados do agendamento
     this.agendamentoDetalhes = null;
     this.pacienteId = null;
     this.filaEsperaSelecionada = null;
 
-    // Definir a data do agendamento e o profissional
+    // Definir a data do agendamento, o profissional e a duração
     this.dataAgendamento = dataAgendamento;
     this.profissionalFiltro = evento.profissionalId;
+    this.duracaoDisponibilidade = duracao;
 
     // Abrir o formulário de agendamento
     this.exibeForm = true;
