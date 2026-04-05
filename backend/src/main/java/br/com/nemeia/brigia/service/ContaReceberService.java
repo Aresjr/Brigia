@@ -9,6 +9,7 @@ import br.com.nemeia.brigia.exception.NotFoundException;
 import br.com.nemeia.brigia.mapper.ContaReceberMapper;
 import br.com.nemeia.brigia.model.Agendamento;
 import br.com.nemeia.brigia.model.ContaReceber;
+import br.com.nemeia.brigia.repository.AgendamentoRepository;
 import br.com.nemeia.brigia.repository.ContaReceberRepository;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -40,6 +41,7 @@ public class ContaReceberService {
 
     private final ContaReceberRepository repository;
     private final ContaReceberMapper mapper;
+    private final AgendamentoRepository agendamentoRepository;
 
     @Transactional(readOnly = true)
     public Page<ContaReceber> getPaged(int page, int size) {
@@ -165,6 +167,10 @@ public class ContaReceberService {
         // Marcar como atualizado manualmente ao registrar recebimento
         contaReceber.setAtualizadoManual(true);
 
+
+        // 🔄 Sincronizar pagamento com o Agendamento
+        sincronizarPagamentoComAgendamento(contaReceber);
+
         repository.save(contaReceber);
         return contaReceber;
     }
@@ -201,7 +207,38 @@ public class ContaReceberService {
         }
 
         repository.save(contaReceber);
+
+        // 🔄 Sincronizar pagamento com o Agendamento quando o desconto é alterado
+        sincronizarPagamentoComAgendamento(contaReceber);
+
         return contaReceber;
+    }
+
+    @Transactional
+    private void sincronizarPagamentoComAgendamento(ContaReceber contaReceber) {
+        if (contaReceber.getAgendamento() == null) {
+            log.warn("ContaReceber ID: {} não possui agendamento associado", contaReceber.getId());
+            return;
+        }
+
+        Agendamento agendamento = contaReceber.getAgendamento();
+        log.info("Sincronizando pagamento do agendamento ID: {} - Valor recebido: {}, Status: {}",
+                agendamento.getId(), contaReceber.getValorRecebido(), contaReceber.getStatus());
+
+        // Atualizar o valor pago no agendamento
+        agendamento.setQuantiaPaga(contaReceber.getValorRecebido());
+
+        // Marcar como pago se o pagamento está completo
+        if (contaReceber.getStatus() == StatusContaReceber.PAGO) {
+            agendamento.setPago(true);
+            log.info("Agendamento ID: {} marcado como PAGO", agendamento.getId());
+        } else if (contaReceber.getStatus() == StatusContaReceber.PARCIAL) {
+            agendamento.setPago(false);
+            log.info("Agendamento ID: {} marcado como PARCIALMENTE PAGO", agendamento.getId());
+        }
+
+        agendamentoRepository.save(agendamento);
+        log.info("Agendamento ID: {} sincronizado com sucesso", agendamento.getId());
     }
 
     @Transactional(readOnly = true)
