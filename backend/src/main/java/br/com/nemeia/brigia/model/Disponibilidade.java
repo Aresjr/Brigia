@@ -34,4 +34,7 @@ public class Disponibilidade extends BaseModel {
 
     @Column(name = "intervalo")
     private Integer intervalo;
+
+    @Column(name = "disponivel", nullable = false)
+    private Boolean disponivel = true;
 }

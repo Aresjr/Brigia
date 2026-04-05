@@ -16,6 +16,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
 import { AgendaSemanalService } from '../agenda-semanal/agenda-semanal.service';
 import { DisponibilidadeService } from './disponibilidade.service';
 import { DiasSemana } from '../../core/constans';
+import { UserService } from '../../core/user.service';
 
 @Component({
   selector: 'app-disponibilidade-form',
@@ -40,7 +41,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   @Input() disponibilidadeDetalhes: any = null;
   @Output() saved = new EventEmitter<void>();
   @Output() deleted = new EventEmitter<void>();
-  @Output() usarHorario = new EventEmitter<{ profissionalId: number; horaInicial: string; data: string }>();
+  @Output() usarHorario = new EventEmitter<{ profissionalId: number; horaInicial: string; horaFinal: string; data: string }>();
 
   titulo: string = 'Nova Agenda do Médico';
   hoje: string;
@@ -55,6 +56,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   constructor(
     protected override fb: FormBuilder,
     protected override toastr: ToastrService,
+    protected userService: UserService,
     private profissionalService: ProfissionalService,
     private agendaSemanalService: AgendaSemanalService,
     private disponibilidadeService: DisponibilidadeService
@@ -416,12 +418,14 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   abrirComHorario() {
     const profissionalId = this.form.get('profissionalId')?.value;
     const horaInicial = this.form.get('horaInicial')?.value;
+    const horaFinal = this.form.get('horaFinal')?.value;
     const dia = this.form.get('dia')?.value;
 
-    if (profissionalId && horaInicial && dia) {
+    if (profissionalId && horaInicial && horaFinal && dia) {
       this.usarHorario.emit({
         profissionalId,
         horaInicial,
+        horaFinal,
         data: this.formatarDataParaISO(dia)
       });
     }

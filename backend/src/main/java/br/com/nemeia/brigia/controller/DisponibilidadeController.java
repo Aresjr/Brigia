@@ -1,9 +1,12 @@
 package br.com.nemeia.brigia.controller;
 
+import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.DisponibilidadeRequest;
 import br.com.nemeia.brigia.dto.response.*;
 import br.com.nemeia.brigia.mapper.DisponibilidadeMapper;
+import br.com.nemeia.brigia.model.RoleUsuario;
 import br.com.nemeia.brigia.service.DisponibilidadeService;
+import br.com.nemeia.brigia.service.ProfissionalService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +22,7 @@ public class DisponibilidadeController {
 
     private final DisponibilidadeService service;
     private final DisponibilidadeMapper mapper;
+    private final ProfissionalService profissionalService;
 
     @GetMapping
     @PreAuthorize("hasAuthority('RECEPCIONISTA') or hasAuthority('MEDICO') or hasAuthority('ADMIN')")
@@ -26,6 +30,14 @@ public class DisponibilidadeController {
             @RequestParam(defaultValue = "false") Boolean mostrarExcluidos, @RequestParam(required = false) Integer mes,
             @RequestParam(required = false) Integer ano, @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
+        
+        // Se o usuário é um médico, buscar apenas suas disponibilidades
+        if (SecurityHolder.getLoggedUserRoles().contains(RoleUsuario.MEDICO.name())) {
+            Long profissionalId = profissionalService.getByUsuarioId(SecurityHolder.getLoggedUserId()).getId();
+            return mapper.toPagedResponse(service.getByDateAndProfissional(mes, ano, profissionalId, page, size));
+        }
+        
+        // Caso contrário, buscar todas as disponibilidades
         return mapper.toPagedResponse(service.getByDate(mes, ano, page, size));
     }
 
