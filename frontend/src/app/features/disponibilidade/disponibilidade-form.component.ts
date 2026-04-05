@@ -16,6 +16,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
 import { AgendaSemanalService } from '../agenda-semanal/agenda-semanal.service';
 import { DisponibilidadeService } from './disponibilidade.service';
 import { DiasSemana } from '../../core/constans';
+import { UserService } from '../../core/user.service';
 
 @Component({
   selector: 'app-disponibilidade-form',
@@ -55,6 +56,7 @@ export class DisponibilidadeFormComponent extends FormComponent<Disponibilidade,
   constructor(
     protected override fb: FormBuilder,
     protected override toastr: ToastrService,
+    protected userService: UserService,
     private profissionalService: ProfissionalService,
     private agendaSemanalService: AgendaSemanalService,
     private disponibilidadeService: DisponibilidadeService

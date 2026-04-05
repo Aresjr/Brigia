@@ -4,6 +4,7 @@ import br.com.nemeia.brigia.auth.SecurityHolder;
 import br.com.nemeia.brigia.dto.request.DisponibilidadeRequest;
 import br.com.nemeia.brigia.dto.response.*;
 import br.com.nemeia.brigia.mapper.DisponibilidadeMapper;
+import br.com.nemeia.brigia.model.RoleUsuario;
 import br.com.nemeia.brigia.service.DisponibilidadeService;
 import br.com.nemeia.brigia.service.ProfissionalService;
 import jakarta.validation.Valid;
@@ -31,7 +32,7 @@ public class DisponibilidadeController {
             @RequestParam(defaultValue = "20") int size) {
         
         // Se o usuário é um médico, buscar apenas suas disponibilidades
-        if (SecurityHolder.getLoggedUserRoles().contains("MEDICO")) {
+        if (SecurityHolder.getLoggedUserRoles().contains(RoleUsuario.MEDICO.name())) {
             Long profissionalId = profissionalService.getByUsuarioId(SecurityHolder.getLoggedUserId()).getId();
             return mapper.toPagedResponse(service.getByDateAndProfissional(mes, ano, profissionalId, page, size));
         }
