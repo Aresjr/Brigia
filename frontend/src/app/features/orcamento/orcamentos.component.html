@@ -1,0 +1,97 @@
+<div class="mt-4">
+
+  <app-top-bar (search)="onSearch($event)" title="Orçamentos"></app-top-bar>
+
+  @if (isLoading) {
+    <app-loading-spinner></app-loading-spinner>
+  } @else if (itensExibicao.length === 0) {
+    <div class="text-center py-8 w-full bg-base-100 rounded-lg shadow-md">
+      <p>Nenhum registro encontrado.</p>
+    </div>
+  } @else {
+    <div class="min-h-[36rem]">
+      <div class="titulo-listagem grid-cols-[7rem_6rem_1fr_10rem_10rem_10rem_32px]">
+        <div (click)="ordenar('data')" class="cabecalho-listagem rounded-tl-lg">
+          <lucide-icon *ngIf="getSortIcon('data')" [name]="getSortIcon('data')" class="icone-ordenacao"/>
+          Data
+        </div>
+        <div (click)="ordenar('hora')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('hora')" [name]="getSortIcon('hora')" class="icone-ordenacao"/>
+          Hora
+        </div>
+        <div (click)="ordenar('paciente')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('paciente')" [name]="getSortIcon('paciente')" class="icone-ordenacao"/>
+          Paciente
+        </div>
+        <div (click)="ordenar('especialidade')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('especialidade')" [name]="getSortIcon('especialidade')" class="icone-ordenacao"/>
+          Especialidade
+        </div>
+        <div (click)="ordenar('procedimento')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('procedimento')" [name]="getSortIcon('procedimento')" class="icone-ordenacao"/>
+          Procedimento
+        </div>
+        <div (click)="ordenar('valor')" class="cabecalho-listagem">
+          <lucide-icon *ngIf="getSortIcon('valor')" [name]="getSortIcon('valor')" class="icone-ordenacao"/>
+          Valor
+        </div>
+        <div class="cabecalho-listagem p-0 rounded-tr-lg"></div>
+      </div>
+
+      <div class="itens-listagem">
+        @for (orcamento of getItensPaginados(); track orcamento.id) {
+          <div class="item-listagem grid-cols-[7rem_6rem_1fr_10rem_10rem_10rem_32px]"
+               [class.bg-error]="orcamento.excluido"
+               [class.bg-opacity-50]="orcamento.excluido"
+               (click)="selecionar(orcamento);">
+            <div class="celula-listagem">{{orcamento.data | date:'dd/MM/yyyy' }}</div>
+            <div class="celula-listagem">{{orcamento.hora}}</div>
+            <div class="celula-listagem">{{orcamento.paciente.nome }}</div>
+            <div class="celula-listagem">{{orcamento.especialidade?.nome || '-' }}</div>
+            <div class="celula-listagem">{{orcamento.procedimento?.nome || '-' }}</div>
+            <div class="celula-listagem">{{ orcamento.valor | currency:'BRL':'symbol':'1.2-2' }}</div>
+            <div class="p-0 text-right">
+              <div class="dropdown dropdown-end" (click)="$event.stopPropagation()">
+                <label tabindex="0" class="btn btn-ghost btn-sm m-0 p-0">
+                  <lucide-icon name="ellipsis-vertical" class="h-5" />
+                </label>
+                <ul tabindex="0" class="dropdown-content menu p-1 shadow-lg bg-base-100 rounded-lg w-40 z-[1] font-semibold">
+                  <li *ngIf="!orcamento.excluido">
+                    <a (click)="editar(orcamento)"
+                       class="text-sm text-neutral hover:bg-base-200">
+                      Editar
+                    </a>
+                  </li>
+                  <li *ngIf="!orcamento.excluido">
+                    <a (click)="perguntaExcluir($event, orcamento)"
+                       class="text-error hover:bg-error/50">
+                      Excluir
+                    </a>
+                  </li>
+                  <li *ngIf="orcamento.excluido">
+                    <a (click)="restaurar($event, orcamento)"
+                       class="text-success hover:bg-success/20">
+                      Restaurar
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <app-pagination [items]="itensExibicao" [totalPaginas]="totalPaginas" (pageChange)="pageChange($event)"></app-pagination>
+  }
+
+  @if (mostrarFormularioNovo) {
+    <app-orcamento-form
+      [orcamentoDetalhes]="itemEdicao"
+      [dataOrcamento]="dataOrcamento"
+      [duracaoDisponibilidade]="duracaoDisponibilidade"
+      [pacienteId]="pacienteId"
+      (save)="salvar($event)"
+      (cancel)="cancelarNovo()"
+    ></app-orcamento-form>
+  }

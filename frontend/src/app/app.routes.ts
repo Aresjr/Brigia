@@ -18,6 +18,7 @@ import { UsuariosComponent } from './features/usuarios/usuarios.component';
 import { CadastrarSenhaComponent } from './features/auth/cadastrar-senha/cadastrar-senha.component';
 import { HonorariosComponent } from './features/honorarios/honorarios.component';
 import { ProntuarioEletronicoComponent } from './features/prontuario-eletronico/prontuario-eletronico.component';
+import { OrcamentosComponent } from './features/orcamento/orcamentos.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -63,6 +64,16 @@ export const routes: Routes = [
         data: {
           roles: [Role.ADMIN, Role.MEDICO],
           title: 'Atendimentos'
+        },
+      },
+      {
+        path: 'orcamentos',
+        component: OrcamentosComponent,
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        data: {
+          roles: [Role.RECEPCIONISTA, Role.ADMIN, Role.FATURAMENTO, Role.MEDICO],
+          title: 'Orçamentos'
         },
       },
       {
