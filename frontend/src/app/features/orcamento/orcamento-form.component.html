@@ -1,0 +1,316 @@
+<div *ngIf="exibeConfirmCancelamento" class="overlay-formulario"></div>
+
+<div class="formulario-modal">
+  <div class="titulo-modal flex justify-between items-center">
+    <h2>{{ titulo }}</h2>
+    <button type="button" class="btn btn-ghost btn-sm" (click)="onCancel()">
+    <lucide-icon name="x" class="h-5 w-5"></lucide-icon>
+    </button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-conteudo">
+    <!-- Paciente -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="paciente" class="form-label required">Paciente</label>
+        <ng-select
+          id="paciente"
+          [items]="pacientesParaExibicao"
+          bindLabel="nome"
+          bindValue="id"
+          placeholder="Selecione um paciente"
+          
+          (change)="selectPaciente($event)"
+          [clearable]="true"
+          [searchable]="true"
+          (search)="onSearchPaciente($event)"
+          formControlName="pacienteId"
+          class="ng-select-custom"
+          [ngClass]="classesCampo('pacienteId')">
+          <ng-template ng-label-tmp let-value="value">
+            {{ pacienteSelecionado?.nome }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-index="index">
+            <span>{{ item.nome }}</span>
+            <span class="text-gray-400 text-sm">({{ item.documento }})</span>
+          </ng-template>
+          <ng-template ng-not-found-tmp>
+            <div class="ng-option">Nenhum paciente encontrado</div>
+          </ng-template>
+        </ng-select>
+        <span class="erro-campo" *ngIf="isInvalid('pacienteId')">Paciente é obrigatório</span>
+      </div>
+    </div>
+
+    <!-- Data, Hora e Duração -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="data" class="form-label required">Data</label>
+        <input type="date" formControlName="data" id="data" class="campo"
+               [ngClass]="classesCampo('data')" [min]="hoje" />
+        <span class="erro-campo" *ngIf="isInvalid('data')">Data é obrigatória</span>
+      </div>
+      <div class="form-group">
+        <label for="hora" class="form-label required">Hora</label>
+        <input type="time" formControlName="hora" id="hora" class="campo"
+               [ngClass]="classesCampo('hora')" />
+        <span class="erro-campo" *ngIf="isInvalid('hora')">Hora é obrigatória</span>
+      </div>
+      <div class="form-group">
+        <label for="duracao" class="form-label required">Duração (min)</label>
+        <input type="number" formControlName="duracao" id="duracao" class="campo"
+               [ngClass]="classesCampo('duracao')" min="1" max="999" />
+        <span class="erro-campo" *ngIf="isInvalid('duracao')">Duração é obrigatória (2-3 dígitos)</span>
+      </div>
+    </div>
+
+    <!-- Especialidade e Procedimento -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="especialidade" class="form-label required">Especialidade</label>
+        <ng-select
+          id="especialidade"
+          [items]="especialidades"
+          bindLabel="nome"
+          bindValue="id"
+          placeholder="Selecione uma especialidade"
+          (change)="selectEspecialidade($event)"
+          [clearable]="true"
+          [searchable]="true"
+          formControlName="especialidadeId"
+          class="ng-select-custom"
+          [ngClass]="classesCampo('especialidadeId')">
+          <ng-template ng-not-found-tmp>
+            <div class="ng-option">Nenhuma especialidade encontrada</div>
+          </ng-template>
+        </ng-select>
+        <span class="erro-campo" *ngIf="isInvalid('especialidadeId')">Especialidade é obrigatória</span>
+      </div>
+      <div class="form-group">
+        <label for="procedimento" class="form-label required">Procedimento Principal</label>
+        <ng-select
+          id="procedimento"
+          [items]="procedimentosLista"
+          bindLabel="nome"
+          bindValue="id"
+          placeholder="Selecione um procedimento"
+          (change)="selectProcedimento($event)"
+          [clearable]="true"
+          [searchable]="true"
+          formControlName="procedimentoId"
+          class="ng-select-custom"
+          [ngClass]="classesCampo('procedimentoId')">
+          <ng-template ng-not-found-tmp>
+            <div class="ng-option">Nenhum procedimento encontrado</div>
+          </ng-template>
+        </ng-select>
+        <span class="erro-campo" *ngIf="isInvalid('procedimentoId')">Procedimento é obrigatório</span>
+      </div>
+    </div>
+
+    <!-- Convênio e Empresa -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="convenio" class="form-label">Convênio</label>
+        <ng-select
+          id="convenio"
+          [items]="convenios"
+          bindLabel="nome"
+          bindValue="id"
+          placeholder="Selecione um convênio"
+          (change)="selectConvenio($event)"
+          [clearable]="true"
+          [searchable]="true"
+          formControlName="convenioId"
+          class="ng-select-custom">
+          <ng-template ng-not-found-tmp>
+            <div class="ng-option">Nenhum convênio encontrado</div>
+          </ng-template>
+        </ng-select>
+      </div>
+      <div class="form-group">
+        <label for="empresa" class="form-label">Empresa</label>
+        <ng-select
+          id="empresa"
+          [items]="empresas"
+          bindLabel="nome"
+          bindValue="id"
+          placeholder="Selecione uma empresa"
+          (change)="selectEmpresa($event)"
+          [clearable]="true"
+          [searchable]="true"
+          formControlName="empresaId"
+          class="ng-select-custom">
+          <ng-template ng-not-found-tmp>
+            <div class="ng-option">Nenhuma empresa encontrada</div>
+          </ng-template>
+        </ng-select>
+      </div>
+    </div>
+
+    <!-- Tipo de Agendamento -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="tipoAgendamento" class="form-label required">Tipo de Orçamento</label>
+        <ng-select
+          id="tipoAgendamento"
+          [items]="tipoAgendamento"
+          bindLabel="label"
+          bindValue="value"
+          placeholder="Selecione o tipo"
+          [clearable]="true"
+          formControlName="tipoAgendamento"
+          class="ng-select-custom"
+          [ngClass]="classesCampo('tipoAgendamento')">
+          <ng-template ng-not-found-tmp>
+            <div class="ng-option">Nenhuma opção encontrada</div>
+          </ng-template>
+        </ng-select>
+        <span class="erro-campo" *ngIf="isInvalid('tipoAgendamento')">Tipo é obrigatório</span>
+      </div>
+      <div class="form-group">
+        <label for="formaPagamento" class="form-label">Forma de Pagamento</label>
+        <ng-select
+          id="formaPagamento"
+          [items]="formasPagamento"
+          bindLabel="label"
+          bindValue="value"
+          placeholder="Selecione a forma de pagamento"
+          [clearable]="true"
+          formControlName="formaPagamento"
+          class="ng-select-custom">
+          <ng-template ng-not-found-tmp>
+            <div class="ng-option">Nenhuma forma encontrada</div>
+          </ng-template>
+        </ng-select>
+      </div>
+    </div>
+
+    <!-- Procedimentos Adicionais -->
+    <div class="form-group mt-6">
+      <div class="flex justify-between items-center mb-4">
+        <label class="form-label">Procedimentos Adicionais</label>
+        <button type="button" class="btn btn-info btn-sm" (click)="adicionarProcedimento()">
+          <lucide-icon name="plus" class="h-4 w-4"></lucide-icon>
+          Adicionar
+        </button>
+      </div>
+
+      @if (procedimentos.length > 0) {
+        <div class="overflow-x-auto bg-base-100 rounded-lg">
+          <table class="tabela-procedimentos">
+            <thead>
+              <tr>
+                <th>Procedimento</th>
+                <th>Quantidade</th>
+                <th>Valor</th>
+                <th>Desconto</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (proc of procedimentos.controls; track $index; let i = $index) {
+                <tr [formGroup]="$any(proc)">
+                  <td>
+                    <ng-select
+                      [items]="procedimentosLista"
+                      bindLabel="nome"
+                      bindValue="id"
+                      placeholder="Procedimento"
+                      [clearable]="true"
+                      formControlName="procedimentoId"
+                      class="ng-select-sm">
+                    </ng-select>
+                  </td>
+                  <td>
+                    <input type="number" formControlName="quantidade" class="campo-sm" min="1" />
+                  </td>
+                  <td>
+                    <input type="number" formControlName="valor" class="campo-sm" step="0.01" />
+                  </td>
+                  <td>
+                    <input type="number" formControlName="desconto" class="campo-sm" step="0.01" />
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-error btn-sm" (click)="removerProcedimento(i)">
+                      <lucide-icon name="trash-2" class="h-4 w-4"></lucide-icon>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+
+    <!-- Valor e Desconto -->
+    <div class="form-row mt-6">
+      <div class="form-group">
+        <label for="valor" class="form-label">Valor (R$)</label>
+        <input type="number" formControlName="valor" id="valor" placeholder="0,00"
+               class="campo" [ngClass]="classesCampo('valor')"
+               step="0.01" min="0" emptyToNull
+               (change)="calcularValorTotal()" />
+      </div>
+      <div class="form-group">
+        <label for="desconto" class="form-label">Desconto (R$)</label>
+        <input type="number" formControlName="desconto" id="desconto" placeholder="0,00"
+               class="campo" [ngClass]="classesCampo('desconto')"
+               step="0.01" min="0" emptyToNull
+               (change)="calcularValorTotal()" />
+      </div>
+    </div>
+
+    <!-- Valor Total -->
+    <div class="form-row bg-base-100 p-4 rounded-lg mt-6">
+      <div class="flex justify-between items-center">
+        <span class="text-lg font-semibold">Valor Total:</span>
+        <span class="text-lg font-bold text-success">{{ valorTotalOrcamento | currency:'BRL':'symbol':'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <!-- Observações -->
+    <div class="form-group mt-6">
+      <label for="observacoes" class="form-label">Observações</label>
+      <textarea
+        formControlName="observacoes"
+        id="observacoes"
+        placeholder="Adicione observações sobre o orçamento..."
+        class="campo"
+        [ngClass]="classesCampo('observacoes')"
+        rows="4"
+        (input)="autoResize($event)"></textarea>
+    </div>
+
+    <!-- Botões de Ação -->
+    <div class="form-row mt-8 gap-4 justify-end">
+      <button type="button" class="btn btn-outline"
+              (click)="perguntaCancelamento()">
+        Cancelar
+      </button>
+      <button type="submit" class="btn btn-success"
+              *ngIf="modoSalvar"
+              [disabled]="!form.valid">
+        Salvar Orçamento
+      </button>
+      <button type="button" class="btn btn-warning"
+              *ngIf="!modoSalvar"
+              (click)="onCancel()">
+        Fechar
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Modal de Confirmação de Cancelamento -->
+@if (exibeConfirmCancelamento) {
+  <app-confirm-dialog
+    titulo="Descartar Orçamento"
+    mensagem="Tem certeza que deseja descartar este orçamento?"
+    textoBotaoPrincipal="Descartar"
+    textoBotaoSecundario="Voltar"
+    (confirmar)="onCancel()"
+    (cancelar)="exibeConfirmCancelamento = false">
+  </app-confirm-dialog>
+}
