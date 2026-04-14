@@ -56,6 +56,10 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
   eventosInternos: CalendarEvent<Agendamento>[] = [];
   profissionais: Profissional[] = [];
   pacientes: Paciente[] = [];
+  pacientesFiltrados: Paciente[] = [];
+  pacientesParaExibicao: Array<Paciente & { displayLabel?: string }> = [];
+  searchCachePacientes: Map<string, Array<Paciente & { displayLabel?: string }>> = new Map();
+  isLoadingPacientes: boolean = false;
   exibeForm: boolean = false;
   exibeFormDisponibilidade: boolean = false;
   exibeFormHonorarios: boolean = false;
@@ -186,6 +190,12 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     this.pacienteService.listar().subscribe({
       next: value => {
         this.pacientes = value.items;
+        // Criar versão com display label para o dropdown performático
+        this.pacientesParaExibicao = value.items.map(p => ({
+          ...p,
+          displayLabel: this.formatarPacienteDisplay(p)
+        }));
+        this.pacientesFiltrados = this.pacientesParaExibicao.slice(0, 50);
       }
     });
   }
@@ -335,8 +345,8 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
     this.filtrarProfissional();
   }
 
-  selectPaciente(pacienteId: number) {
-    this.pacienteFiltro = pacienteId;
+  selectPaciente(paciente: Paciente) {
+    this.pacienteFiltro = paciente.id;
     this.filtrarPaciente();
   }
 
@@ -384,6 +394,74 @@ export class AgendaDiariaComponent implements OnInit, OnDestroy {
       this.dataExibicao = data;
       this.carregarAgendamentos();
     }
+  }
+
+  onSearchPaciente(event: { term: string; items: any[] }) {
+    const searchTerm = event.term?.toLowerCase().trim() || '';
+
+    // Se não há termo de busca, mostrar apenas primeiros 50
+    if (!searchTerm) {
+      this.pacientesFiltrados = this.pacientesParaExibicao.slice(0, 50);
+      return;
+    }
+
+    // Verificar se já temos o resultado no cache
+    if (this.searchCachePacientes.has(searchTerm)) {
+      this.pacientesFiltrados = this.searchCachePacientes.get(searchTerm)!;
+      return;
+    }
+
+    // Filtrar com limite de resultados para melhor performance
+    const MAX_RESULTS = 100;
+    const resultados: Array<Paciente & { displayLabel?: string }> = [];
+
+    for (let i = 0; i < this.pacientesParaExibicao.length && resultados.length < MAX_RESULTS; i++) {
+      const paciente = this.pacientesParaExibicao[i];
+      const nome = paciente.nome?.toLowerCase() || '';
+      const cpf = paciente.cpf ? paciente.cpf : '';
+
+      if (nome.includes(searchTerm) || cpf.includes(searchTerm)) {
+        resultados.push(paciente);
+      }
+    }
+
+    // Guardar no cache
+    this.searchCachePacientes.set(searchTerm, resultados);
+
+    // Limpar cache antigo se ficar muito grande (manter últimos 50 buscas)
+    if (this.searchCachePacientes.size > 50) {
+      const firstKey = this.searchCachePacientes.keys().next().value as string;
+      if (firstKey !== undefined) {
+        this.searchCachePacientes.delete(firstKey);
+      }
+    }
+
+    this.pacientesFiltrados = resultados;
+  }
+
+  formatarPacienteDisplay(paciente: Paciente): string {
+    if (!paciente) return '';
+
+    const nome = paciente.nome || '';
+    const dataNascimento = paciente.dataNascimento ? this.formatarData(paciente.dataNascimento) : '';
+    const cpf = paciente.cpf ? paciente.cpf.replace(/\D/g, '') : '';
+
+    return `${nome}${dataNascimento ? ' - ' + dataNascimento : ''}${cpf ? ' - ' + cpf : ''}`;
+  }
+
+  private formatarData(data: string | Date): string {
+    if (!data) return '';
+
+    const date = typeof data === 'string' ? new Date(data) : data;
+
+    // Ajustar timezone para evitar problemas com datas
+    const adjustedDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+
+    const dia = String(adjustedDate.getDate()).padStart(2, '0');
+    const mes = String(adjustedDate.getMonth() + 1).padStart(2, '0');
+    const ano = adjustedDate.getFullYear();
+
+    return `${dia}/${mes}/${ano}`;
   }
 
   ngOnDestroy() {
